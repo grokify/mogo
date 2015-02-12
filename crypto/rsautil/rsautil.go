@@ -7,29 +7,30 @@ import (
 	"encoding/base64"
 	"errors"
 	"hash"
+	"io/ioutil"
 )
 
-type EncryptorOAEP struct {
-	Md5           hash.Hash
+type CryptorOAEP struct {
+	Hash          hash.Hash
 	RsaPrivateKey *rsa.PrivateKey
 	RsaPublicKey  *rsa.PublicKey
 }
 
-func NewEncryptorOAEP() EncryptorOAEP {
-	enc := EncryptorOAEP{}
-	enc.Md5 = md5.New()
+func NewCryptorOAEP() CryptorOAEP {
+	enc := CryptorOAEP{}
+	enc.Hash = md5.New()
 	return enc
 }
 
-func (enc *EncryptorOAEP) DecryptOAEP(ciphertextBytes []byte, label []byte) ([]byte, error) {
+func (enc *CryptorOAEP) DecryptOAEP(ciphertextBytes []byte, label []byte) ([]byte, error) {
 	if enc.RsaPrivateKey == nil {
 		err := errors.New("401: RSA Private Key Not Set")
 		return []byte{}, err
 	}
-	return rsa.DecryptOAEP(enc.Md5, rand.Reader, enc.RsaPrivateKey, ciphertextBytes, label)
+	return rsa.DecryptOAEP(enc.Hash, rand.Reader, enc.RsaPrivateKey, ciphertextBytes, label)
 }
 
-func (enc *EncryptorOAEP) DecryptOAEPBase64String(ciphertextBase64 string, label []byte) ([]byte, error) {
+func (enc *CryptorOAEP) DecryptOAEPBase64String(ciphertextBase64 string, label []byte) ([]byte, error) {
 	ciphertextBytes, err := base64.StdEncoding.DecodeString(ciphertextBase64)
 	if err != nil {
 		return []byte(""), err
@@ -37,15 +38,23 @@ func (enc *EncryptorOAEP) DecryptOAEPBase64String(ciphertextBase64 string, label
 	return enc.DecryptOAEP(ciphertextBytes, label)
 }
 
-func (enc *EncryptorOAEP) EncryptOAEP(plaintextBytes []byte, label []byte) ([]byte, error) {
+func (enc *CryptorOAEP) DecryptOAEPBase64StringFromPath(ciphertextBase64Path string, label []byte) ([]byte, error) {
+	ciphertextBase64Bytes, err := ioutil.ReadFile(ciphertextBase64Path)
+	if err != nil {
+		return []byte(""), err
+	}
+	return enc.DecryptOAEPBase64String(string(ciphertextBase64Bytes), label)
+}
+
+func (enc *CryptorOAEP) EncryptOAEP(plaintextBytes []byte, label []byte) ([]byte, error) {
 	if enc.RsaPublicKey == nil {
 		err := errors.New("402: RSA Public Key Not Set")
 		return []byte{}, err
 	}
-	return rsa.EncryptOAEP(enc.Md5, rand.Reader, enc.RsaPublicKey, plaintextBytes, label)
+	return rsa.EncryptOAEP(enc.Hash, rand.Reader, enc.RsaPublicKey, plaintextBytes, label)
 }
 
-func (enc *EncryptorOAEP) EncryptOAEPToBase64String(plaintextBytes []byte, label []byte) (string, error) {
+func (enc *CryptorOAEP) EncryptOAEPToBase64String(plaintextBytes []byte, label []byte) (string, error) {
 	ciphertextBytes, err := enc.EncryptOAEP(plaintextBytes, label)
 	if err != nil {
 		return "", err
