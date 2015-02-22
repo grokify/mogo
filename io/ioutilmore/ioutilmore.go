@@ -111,13 +111,17 @@ func DirFromPath(path string) (string, error) {
 	return dir, nil
 }
 
-func IsDir(path string) (bool, error) {
+func GetFileInfo(path string) (os.FileInfo, error) {
 	f, err := os.Open(path)
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 	defer f.Close()
-	fi, err := f.Stat()
+	return f.Stat()
+}
+
+func IsDir(path string) (bool, error) {
+	fi, err := GetFileInfo(path)
 	if err != nil {
 		return false, err
 	}
@@ -131,12 +135,7 @@ func IsDir(path string) (bool, error) {
 }
 
 func IsFile(path string) (bool, error) {
-	f, err := os.Open(path)
-	if err != nil {
-		return false, err
-	}
-	defer f.Close()
-	fi, err := f.Stat()
+	fi, err := GetFileInfo(path)
 	if err != nil {
 		return false, err
 	}
@@ -147,6 +146,21 @@ func IsFile(path string) (bool, error) {
 		return true, nil
 	}
 	return false, nil
+}
+
+func IsFileWithSizeGtZero(path string) (bool, error) {
+	fi, err := GetFileInfo(path)
+	if err != nil {
+		return false, err
+	} else {
+		if fi.Mode().IsRegular() == false {
+			err = errors.New("400: file path is not a file.")
+			return false, err
+		} else if fi.Size() < 0 {
+			return false, nil
+		}
+	}
+	return true, nil
 }
 
 func RemoveAllChildren(dir string) error {
