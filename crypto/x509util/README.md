@@ -9,10 +9,11 @@ Certificate Formats
 This library handles certificates using the PKCS standards. Key formats
 supported include PKCS #1 for private keys and PKCS #8 for public keys.
 
-Below is some information to convert keys to these formats.
-
 Converting OpenSSH key formats to PKCS key formats
 --------------------------------------------------
+
+This section includes commands on converting OpenSSH key file formats
+to the PKCS formats used by this library.
 
 ### Converting Private Keys from OpenSSH to PKCS #1
 
