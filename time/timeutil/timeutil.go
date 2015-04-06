@@ -18,6 +18,20 @@ func Dt8ForInts(yyyy int, mm int, dd int) int32 {
 	return int32(iDt8)
 }
 
+func DurationForNowSubDt8(dt8 int32) (time.Duration, error) {
+	t, err := TimeForDt8(dt8)
+	if err != nil {
+		var d time.Duration
+		return d, err
+	}
+	now := time.Now()
+	return now.Sub(t), nil
+}
+
+func TimeForDt8(dt8 int32) (time.Time, error) {
+	return time.Parse("20060102", strconv.FormatInt(int64(dt8), 10))
+}
+
 func Dt14NowUtc() int64 {
 	tm := time.Now()
 	tm = tm.UTC()
