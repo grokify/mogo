@@ -1,9 +1,5 @@
 package stringsutil
 
-import (
-	"fmt"
-)
-
 func PadRight(str string, pad string, length int) string {
 	for {
 		str += pad
@@ -16,7 +12,6 @@ func PadRight(str string, pad string, length int) string {
 func PadLeft(str string, pad string, length int) string {
 	for {
 		str = pad + str
-		fmt.Println(str)
 		if len(str) >= length {
 			return str[0:length]
 		}
