@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"code.google.com/p/go.crypto/ssh"
-
 	"github.com/pkg/sftp"
 )
 
