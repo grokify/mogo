@@ -18,6 +18,14 @@ func (sf64 *SliceFloat64) AddElement(num float64) {
 	sf64.Elements = append(sf64.Elements, num)
 }
 
+func (sf64 *SliceFloat64) Count() int {
+	return sf64.Len()
+}
+
+func (sf64 *SliceFloat64) Len() int {
+	return len(sf64.Elements)
+}
+
 func (sf64 *SliceFloat64) Min() (float64, error) {
 	if len(sf64.Elements) == 0 {
 		return 0, errors.New("List is empty")
