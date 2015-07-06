@@ -18,14 +18,6 @@ func (sint *SliceInt) AddInt(num int) {
 	sint.Elements = append(sint.Elements, num)
 }
 
-func (sint *SliceInt) AddInt32(num int32) {
-	sint.Elements = append(sint.Elements, int(num))
-}
-
-func (sint *SliceInt) AddInt64(num int64) {
-	sint.Elements = append(sint.Elements, int(num))
-}
-
 func (sint *SliceInt) Count() int {
 	return sint.Len()
 }
