@@ -24,7 +24,7 @@ t, err := NowDowDeltaStrings("Sunday", -2, false, false)
 
 */
 
-func NowDowDeltaStrings(wantDowS string, deltaUnits int, inclusive bool, startOfDay bool) (time.Time, error) {
+func NowDowDeltaStrings(wantDowS string, deltaUnits int, wantInclusive bool, wantStartOfDay bool) (time.Time, error) {
 	now := time.Now()
 	deltaUnitsAbs := deltaUnits
 	if deltaUnitsAbs < 1 {
@@ -32,13 +32,13 @@ func NowDowDeltaStrings(wantDowS string, deltaUnits int, inclusive bool, startOf
 	}
 	deltaDays := int(0)
 	if deltaUnits < 0 {
-		deltaDaysTry, err := DaysAgoDowStrings(now.Weekday().String(), wantDowS, inclusive)
+		deltaDaysTry, err := DaysAgoDowStrings(now.Weekday().String(), wantDowS, wantInclusive)
 		if err != nil {
 			return now, err
 		}
 		deltaDays = deltaDaysTry
 	} else if deltaUnits > 0 {
-		deltaDaysTry, err := DaysToDowStrings(now.Weekday().String(), wantDowS, inclusive)
+		deltaDaysTry, err := DaysToDowStrings(now.Weekday().String(), wantDowS, wantInclusive)
 		if err != nil {
 			return now, err
 		}
@@ -52,14 +52,14 @@ func NowDowDeltaStrings(wantDowS string, deltaUnits int, inclusive bool, startOf
 		deltaDays *= -1
 	}
 	t1 := now.AddDate(0, 0, deltaDays)
-	if !startOfDay {
+	if !wantStartOfDay {
 		return t1, nil
 	}
 	t2 := time.Date(t1.Year(), t1.Month(), t1.Day(), 0, 0, 0, 0, t1.Location())
 	return t2, nil
 }
 
-func DaysAgoDowStrings(baseDowS string, wantDowS string, inclusive bool) (int, error) {
+func DaysAgoDowStrings(baseDowS string, wantDowS string, wantInclusive bool) (int, error) {
 	days_ago := int(0)
 	baseDow, err := ParseDayOfWeek(baseDowS)
 	if err != nil {
@@ -69,10 +69,10 @@ func DaysAgoDowStrings(baseDowS string, wantDowS string, inclusive bool) (int, e
 	if err != nil {
 		return days_ago, err
 	}
-	return DaysAgoDow(baseDow, wantDow, inclusive)
+	return DaysAgoDow(baseDow, wantDow, wantInclusive)
 }
 
-func DaysAgoDow(baseDow int, wantDow int, inclusive bool) (int, error) {
+func DaysAgoDow(baseDow int, wantDow int, wantInclusive bool) (int, error) {
 	if baseDow < 0 || baseDow > 6 || wantDow < 0 || wantDow > 6 {
 		return int(0), errors.New("Day of week is not in [0-6]")
 	}
@@ -81,13 +81,13 @@ func DaysAgoDow(baseDow int, wantDow int, inclusive bool) (int, error) {
 	if deltaDays2 < 0 {
 		deltaDays2 = 7 + deltaDays2
 	}
-	if inclusive == false && deltaDays2 == 0 {
+	if wantInclusive == false && deltaDays2 == 0 {
 		deltaDays2 = 7
 	}
 	return deltaDays2, nil
 }
 
-func DaysToDowStrings(baseDowS string, wantDowS string, inclusive bool) (int, error) {
+func DaysToDowStrings(baseDowS string, wantDowS string, wantInclusive bool) (int, error) {
 	days_ago := int(0)
 	baseDow, err := ParseDayOfWeek(baseDowS)
 	if err != nil {
@@ -97,10 +97,10 @@ func DaysToDowStrings(baseDowS string, wantDowS string, inclusive bool) (int, er
 	if err != nil {
 		return days_ago, err
 	}
-	return DaysToDow(baseDow, wantDow, inclusive)
+	return DaysToDow(baseDow, wantDow, wantInclusive)
 }
 
-func DaysToDow(baseDow int, wantDow int, inclusive bool) (int, error) {
+func DaysToDow(baseDow int, wantDow int, wantInclusive bool) (int, error) {
 	if baseDow < 0 || baseDow > 6 || wantDow < 0 || wantDow > 6 {
 		return int(0), errors.New("Day of week is not in [0-6]")
 	}
@@ -109,7 +109,7 @@ func DaysToDow(baseDow int, wantDow int, inclusive bool) (int, error) {
 	if deltaDays2 < 0 {
 		deltaDays2 = 7 + deltaDays2
 	}
-	if inclusive == false && deltaDays2 == 0 {
+	if wantInclusive == false && deltaDays2 == 0 {
 		deltaDays2 = 7
 	}
 	return deltaDays2, nil
