@@ -24,7 +24,7 @@ t, err := NowDowDeltaStrings("Sunday", -2, false, false)
 
 */
 
-func NowDowDeltaStrings(wantDowS string, deltaUnits int, wantInclusive bool, wantStartOfDay bool) (time.Time, error) {
+func NowDowDeltaString(wantDowS string, deltaUnits int, wantInclusive bool, wantStartOfDay bool) (time.Time, error) {
 	now := time.Now()
 	deltaUnitsAbs := deltaUnits
 	if deltaUnitsAbs < 1 {
