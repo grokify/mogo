@@ -79,7 +79,7 @@ func DaysAgoDow(baseDow int, wantDow int, wantInclusive bool) (int, error) {
 	deltaDays1 := baseDow - wantDow
 	deltaDays2 := deltaDays1
 	if deltaDays2 < 0 {
-		deltaDays2 = 7 + deltaDays2
+		deltaDays2 += 7
 	}
 	if wantInclusive == false && deltaDays2 == 0 {
 		deltaDays2 = 7
@@ -107,7 +107,7 @@ func DaysToDow(baseDow int, wantDow int, wantInclusive bool) (int, error) {
 	deltaDays1 := wantDow - baseDow
 	deltaDays2 := deltaDays1
 	if deltaDays2 < 0 {
-		deltaDays2 = 7 + deltaDays2
+		deltaDays2 += 7
 	}
 	if wantInclusive == false && deltaDays2 == 0 {
 		deltaDays2 = 7
