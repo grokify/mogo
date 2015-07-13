@@ -2,6 +2,7 @@ package ioutilmore
 
 import (
 	"bufio"
+	"encoding/json"
 	"errors"
 	"io"
 	"io/ioutil"
@@ -194,6 +195,26 @@ func RemoveAllChildren(dir string) error {
 		}
 	}
 	return nil
+}
+
+func WriteJson(filepath string, data interface{}, perm os.FileMode, wantPretty bool) error {
+	bytes := []byte{}
+	if wantPretty {
+		bytesTry, err := json.MarshalIndent(data, "", "  ")
+		if err != nil {
+			return err
+		} else {
+			bytes = bytesTry
+		}
+	} else {
+		bytesTry, err := json.Marshal(data)
+		if err != nil {
+			return err
+		} else {
+			bytes = bytesTry
+		}
+	}
+	return ioutil.WriteFile(filepath, bytes, perm)
 }
 
 type FileWriter struct {
