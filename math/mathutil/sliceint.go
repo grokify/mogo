@@ -82,3 +82,49 @@ func (sint *SliceInt) Median() (int, error) {
 	mid := int64(float64(len(sint.Elements)) / 2)
 	return sint.Elements[mid], nil
 }
+
+func (sint *SliceInt) Stats() SliceIntStats {
+	stats := NewSliceIntStats()
+	stats.Len = sint.Len()
+	max, err := sint.Max()
+	if err == nil {
+		stats.Max = max
+	}
+	min, err := sint.Min()
+	if err == nil {
+		stats.Min = min
+	}
+	mean, err := sint.Mean()
+	if err == nil {
+		stats.Mean = mean
+	}
+	median, err := sint.Median()
+	if err == nil {
+		stats.Median = median
+	}
+	sum, err := sint.Sum()
+	if err == nil {
+		stats.Sum = sum
+	}
+	return stats
+}
+
+type SliceIntStats struct {
+	Len    int
+	Max    int
+	Mean   float64
+	Median int
+	Min    int
+	Sum    int
+}
+
+func NewSliceIntStats() SliceIntStats {
+	stats := SliceIntStats{
+		Len:    0,
+		Max:    0,
+		Mean:   0,
+		Median: 0,
+		Min:    0,
+		Sum:    0}
+	return stats
+}

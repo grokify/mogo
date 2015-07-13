@@ -82,3 +82,49 @@ func (sf64 *SliceFloat64) Median() (float64, error) {
 	mid := int64(float64(len(sf64.Elements)) / 2)
 	return sf64.Elements[mid], nil
 }
+
+func (sf64 *SliceFloat64) Stats() SliceFloat64Stats {
+	stats := NewSliceFloat64Stats()
+	stats.Len = sf64.Len()
+	max, err := sf64.Max()
+	if err == nil {
+		stats.Max = max
+	}
+	min, err := sf64.Min()
+	if err == nil {
+		stats.Min = min
+	}
+	mean, err := sf64.Mean()
+	if err == nil {
+		stats.Mean = mean
+	}
+	median, err := sf64.Median()
+	if err == nil {
+		stats.Median = median
+	}
+	sum, err := sf64.Sum()
+	if err == nil {
+		stats.Sum = sum
+	}
+	return stats
+}
+
+type SliceFloat64Stats struct {
+	Len    int
+	Max    float64
+	Mean   float64
+	Median float64
+	Min    float64
+	Sum    float64
+}
+
+func NewSliceFloat64Stats() SliceFloat64Stats {
+	stats := SliceFloat64Stats{
+		Len:    0,
+		Max:    0,
+		Mean:   0,
+		Median: 0,
+		Min:    0,
+		Sum:    0}
+	return stats
+}
