@@ -50,6 +50,8 @@ func TimeDeltaDowInt(base time.Time, wantDow int, deltaUnits int, wantInclusive 
 			return base, err
 		}
 		deltaDays = deltaDaysTry
+	} else {
+		return base, errors.New("Delta units cannot be 0")
 	}
 	if deltaUnitsAbs > 1 {
 		additional := deltaUnitsAbs - 1
