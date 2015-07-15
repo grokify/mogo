@@ -46,7 +46,10 @@ func Dt8ForTime(t time.Time) int32 {
 	s := u.Format("20060102")
 	iDt8, _ := strconv.ParseInt(s, 10, 32)
 	return int32(iDt8)
-	//return Dt8ForInts(u.Year(), int(u.Month()), u.Day())
+}
+
+func TimeForDt8(dt8 int32) (time.Time, error) {
+	return time.Parse("20060102", strconv.FormatInt(int64(dt8), 10))
 }
 
 func DurationForNowSubDt8(dt8 int32) (time.Duration, error) {
@@ -57,10 +60,6 @@ func DurationForNowSubDt8(dt8 int32) (time.Duration, error) {
 	}
 	now := time.Now()
 	return now.Sub(t), nil
-}
-
-func TimeForDt8(dt8 int32) (time.Time, error) {
-	return time.Parse("20060102", strconv.FormatInt(int64(dt8), 10))
 }
 
 func Dt14Now() int64 {
@@ -87,7 +86,6 @@ func Dt14ForTime(t time.Time) int64 {
 	s := u.Format("20060102150405")
 	iDt14, _ := strconv.ParseInt(s, 10, 64)
 	return int64(iDt14)
-	//return Dt14ForInts(u.Year(), int(u.Month()), u.Day(), u.Hour(), u.Minute(), u.Second())
 }
 
 func TimeForDt14(dt14 int64) (time.Time, error) {
