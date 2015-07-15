@@ -8,36 +8,44 @@ import (
 
 /*
 
-TimeDeltaDowStringFromTime is designed to retrieve a time object x days of week in the past or the future.
+TimeDeltaDowString is designed to retrieve a time object x days of week in the past or the future.
 
 // Two Sundays in the future, including today, at 00:00:00
-t, err := TimeDeltaDowStringFromTime(time.Now(), "Sunday", 2, true, true)
+t, err := TimeDeltaDowString(time.Now(), "Sunday", 2, true, true)
 
 // Two Sundays in the future, including today, at present time
-t, err := TimeDeltaDowStringFromTime(time.Now(), "Sunday", 2, true, false)
+t, err := TimeDeltaDowString(time.Now(), "Sunday", 2, true, false)
 
 // Two Sundays ago, not including today, at 00:00:00
-t, err := TimeDeltaDowStringFromTime(time.Now(), "Sunday", -2, false, true)
+t, err := TimeDeltaDowString(time.Now(), "Sunday", -2, false, true)
 
 // Two Sundays ago, not including today, at present time
-t, err := TimeDeltaDowStringFromTime(time.Now(), "Sunday", -2, false, false)
+t, err := TimeDeltaDowString(time.Now(), "Sunday", -2, false, false)
 
 */
 
-func TimeDeltaDowStringFromTime(base time.Time, wantDowS string, deltaUnits int, wantInclusive bool, wantStartOfDay bool) (time.Time, error) {
+func TimeDeltaDowString(base time.Time, wantDowS string, deltaUnits int, wantInclusive bool, wantStartOfDay bool) (time.Time, error) {
+	wantDow, err := ParseDayOfWeek(wantDowS)
+	if err != nil {
+		return time.Now(), err
+	}
+	return TimeDeltaDowInt(base, wantDow, deltaUnits, wantInclusive, wantStartOfDay)
+}
+
+func TimeDeltaDowInt(base time.Time, wantDow int, deltaUnits int, wantInclusive bool, wantStartOfDay bool) (time.Time, error) {
 	deltaUnitsAbs := deltaUnits
 	if deltaUnitsAbs < 1 {
 		deltaUnitsAbs *= -1
 	}
 	deltaDays := int(0)
 	if deltaUnits < 0 {
-		deltaDaysTry, err := DaysAgoDowStrings(base.Weekday().String(), wantDowS, wantInclusive)
+		deltaDaysTry, err := DaysAgoDow(int(base.Weekday()), wantDow, wantInclusive)
 		if err != nil {
 			return base, err
 		}
 		deltaDays = deltaDaysTry
 	} else if deltaUnits > 0 {
-		deltaDaysTry, err := DaysToDowStrings(base.Weekday().String(), wantDowS, wantInclusive)
+		deltaDaysTry, err := DaysToDow(int(base.Weekday()), wantDow, wantInclusive)
 		if err != nil {
 			return base, err
 		}
