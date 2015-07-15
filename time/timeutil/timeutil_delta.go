@@ -8,39 +8,38 @@ import (
 
 /*
 
-NowDowDeltaStrings is designed to retrieve a time object x days of week in the past or the future.
+TimeDeltaDowStringFromTime is designed to retrieve a time object x days of week in the past or the future.
 
 // Two Sundays in the future, including today, at 00:00:00
-t, err := NowDowDeltaStrings("Sunday", 2, true, true)
+t, err := TimeDeltaDowStringFromTime(time.Now(), "Sunday", 2, true, true)
 
 // Two Sundays in the future, including today, at present time
-t, err := NowDowDeltaStrings("Sunday", 2, true, false)
+t, err := TimeDeltaDowStringFromTime(time.Now(), "Sunday", 2, true, false)
 
 // Two Sundays ago, not including today, at 00:00:00
-t, err := NowDowDeltaStrings("Sunday", -2, false, true)
+t, err := TimeDeltaDowStringFromTime(time.Now(), "Sunday", -2, false, true)
 
 // Two Sundays ago, not including today, at present time
-t, err := NowDowDeltaStrings("Sunday", -2, false, false)
+t, err := TimeDeltaDowStringFromTime(time.Now(), "Sunday", -2, false, false)
 
 */
 
-func NowDowDeltaString(wantDowS string, deltaUnits int, wantInclusive bool, wantStartOfDay bool) (time.Time, error) {
-	now := time.Now()
+func TimeDeltaDowStringFromTime(base time.Time, wantDowS string, deltaUnits int, wantInclusive bool, wantStartOfDay bool) (time.Time, error) {
 	deltaUnitsAbs := deltaUnits
 	if deltaUnitsAbs < 1 {
 		deltaUnitsAbs *= -1
 	}
 	deltaDays := int(0)
 	if deltaUnits < 0 {
-		deltaDaysTry, err := DaysAgoDowStrings(now.Weekday().String(), wantDowS, wantInclusive)
+		deltaDaysTry, err := DaysAgoDowStrings(base.Weekday().String(), wantDowS, wantInclusive)
 		if err != nil {
-			return now, err
+			return base, err
 		}
 		deltaDays = deltaDaysTry
 	} else if deltaUnits > 0 {
-		deltaDaysTry, err := DaysToDowStrings(now.Weekday().String(), wantDowS, wantInclusive)
+		deltaDaysTry, err := DaysToDowStrings(base.Weekday().String(), wantDowS, wantInclusive)
 		if err != nil {
-			return now, err
+			return base, err
 		}
 		deltaDays = deltaDaysTry
 	}
@@ -51,7 +50,7 @@ func NowDowDeltaString(wantDowS string, deltaUnits int, wantInclusive bool, want
 	if deltaUnits < 0 {
 		deltaDays *= -1
 	}
-	t1 := now.AddDate(0, 0, deltaDays)
+	t1 := base.AddDate(0, 0, deltaDays)
 	if !wantStartOfDay {
 		return t1, nil
 	}
