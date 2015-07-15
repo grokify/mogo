@@ -6,6 +6,11 @@ import (
 	"time"
 )
 
+const (
+	DT14 = "20060102150405"
+	DT8  = "20060102"
+)
+
 func IsGreaterThan(timeLeft time.Time, timeRight time.Time) bool {
 	durDelta := timeLeft.Sub(timeRight)
 	if durZero, _ := time.ParseDuration("0ns"); durDelta > durZero {
@@ -43,13 +48,13 @@ func Dt8ForInts(yyyy int, mm int, dd int) int32 {
 
 func Dt8ForTime(t time.Time) int32 {
 	u := t.UTC()
-	s := u.Format("20060102")
+	s := u.Format(DT8)
 	iDt8, _ := strconv.ParseInt(s, 10, 32)
 	return int32(iDt8)
 }
 
 func TimeForDt8(dt8 int32) (time.Time, error) {
-	return time.Parse("20060102", strconv.FormatInt(int64(dt8), 10))
+	return time.Parse(DT8, strconv.FormatInt(int64(dt8), 10))
 }
 
 func DurationForNowSubDt8(dt8 int32) (time.Duration, error) {
@@ -83,11 +88,11 @@ func Dt14ForInts(yyyy int, mm int, dd int, hr int, mn int, dy int) int64 {
 
 func Dt14ForTime(t time.Time) int64 {
 	u := t.UTC()
-	s := u.Format("20060102150405")
+	s := u.Format(DT14)
 	iDt14, _ := strconv.ParseInt(s, 10, 64)
 	return int64(iDt14)
 }
 
 func TimeForDt14(dt14 int64) (time.Time, error) {
-	return time.Parse("20060102150405", strconv.FormatInt(dt14, 10))
+	return time.Parse(DT14, strconv.FormatInt(dt14, 10))
 }
