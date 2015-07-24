@@ -5,12 +5,11 @@ import (
 	"fmt"
 )
 
-func PrintJson(in interface{}) {
+func PrintJson(in interface{}) error {
 	j, err := json.MarshalIndent(in, "", "  ")
 	if err != nil {
-		jerr, _ := json.MarshalIndent(err, "", "  ")
-		fmt.Printf("%+v\n", string(jerr))
-	} else {
-		fmt.Printf("%+v\n", string(j))
+		return err
 	}
+	fmt.Printf("%+v\n", string(j))
+	return nil
 }
