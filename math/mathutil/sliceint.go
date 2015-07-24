@@ -14,7 +14,7 @@ func NewSliceInt() SliceInt {
 	return sint
 }
 
-func (sint *SliceInt) AddElement(num int) {
+func (sint *SliceInt) Append(num int) {
 	sint.Elements = append(sint.Elements, num)
 }
 

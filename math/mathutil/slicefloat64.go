@@ -14,7 +14,7 @@ func NewSliceFloat64() SliceFloat64 {
 	return sf64
 }
 
-func (sf64 *SliceFloat64) AddElement(num float64) {
+func (sf64 *SliceFloat64) Append(num float64) {
 	sf64.Elements = append(sf64.Elements, num)
 }
 
