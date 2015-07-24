@@ -1,11 +1,11 @@
-package dumputil
+package fmtutil
 
 import (
 	"encoding/json"
 	"fmt"
 )
 
-func DumpJson(in interface{}) {
+func PrintJson(in interface{}) {
 	j, err := json.MarshalIndent(in, "", "  ")
 	if err != nil {
 		jerr, _ := json.MarshalIndent(err, "", "  ")
