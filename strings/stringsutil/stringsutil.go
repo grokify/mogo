@@ -1,7 +1,7 @@
 package stringsutil
 
-// PadLeft enables prepending a string to a base string until
-// the string length is greater or equal to the desired length.
+// PadLeft prepends a string to a base string until the string
+// length is greater or equal to the desired length.
 func PadLeft(str string, pad string, length int) string {
 	for {
 		str = pad + str
@@ -11,8 +11,8 @@ func PadLeft(str string, pad string, length int) string {
 	}
 }
 
-// PadRight enables appending a string with base string until
-// the string length is greater or equal to the desired length.
+// PadRight appends a string to a base string until the string
+// length is greater or equal to the desired length.
 func PadRight(str string, pad string, length int) string {
 	for {
 		str += pad
