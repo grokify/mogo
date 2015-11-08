@@ -7,7 +7,9 @@ import (
 	"os"
 )
 
-func GetWriteFile(url string, filepath string, perm os.FileMode) error {
+// GetWriteFile performs a HTTP GET request and saves the response body
+// to the file path specified
+func GetWriteFile(url string, filename string, perm os.FileMode) error {
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
@@ -16,10 +18,11 @@ func GetWriteFile(url string, filepath string, perm os.FileMode) error {
 	if err != nil {
 		return err
 	}
-	err = ioutil.WriteFile(filepath, bytes, perm)
+	err = ioutil.WriteFile(filename, bytes, perm)
 	return err
 }
 
+// ResponseBody returns the body as a byte array
 func ResponseBody(res *http.Response) ([]byte, error) {
 	defer res.Body.Close()
 	contents, err := ioutil.ReadAll(res.Body)
@@ -30,6 +33,7 @@ func ResponseBody(res *http.Response) ([]byte, error) {
 	}
 }
 
+// ResponseBodyJsonMapIndent returns the body as a generic JSON dictionary
 func ResponseBodyJsonMapIndent(res *http.Response, prefix string, indent string) ([]byte, error) {
 	body, err := ResponseBody(res)
 	if err != nil {
