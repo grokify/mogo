@@ -1,3 +1,6 @@
+// timeutil provides a set of time utilities including comparisons,
+// conversion to "DT8" int32 and "DT14" int64 formats and other
+// capabilities.
 package timeutil
 
 import (
@@ -11,6 +14,8 @@ const (
 	DT8  = "20060102"
 )
 
+// IsGreaterThan compares two times and returns true if the left
+// time is greater than the right time.
 func IsGreaterThan(timeLeft time.Time, timeRight time.Time) bool {
 	durDelta := timeLeft.Sub(timeRight)
 	if durZero, _ := time.ParseDuration("0ns"); durDelta > durZero {
@@ -19,6 +24,8 @@ func IsGreaterThan(timeLeft time.Time, timeRight time.Time) bool {
 	return false
 }
 
+// IsLessThan compares two times and returns true if the left
+// time is less than the right time.
 func IsLessThan(timeLeft time.Time, timeRight time.Time) bool {
 	durDelta := timeLeft.Sub(timeRight)
 	if durZero, _ := time.ParseDuration("0ns"); durDelta < durZero {
@@ -27,6 +34,7 @@ func IsLessThan(timeLeft time.Time, timeRight time.Time) bool {
 	return false
 }
 
+// Dt8Now returns DT8 for the current time.
 func Dt8Now() int32 {
 	return Dt8ForTime(time.Now())
 }
