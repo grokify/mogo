@@ -6,6 +6,19 @@ import (
 	"net/http"
 )
 
+func GetStore(url string, filepath string, perm os.FileMode) error {
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	bytes, err := ResponseBody(resp)
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(filepath, bytes, perm)
+	return err
+}
+
 func ResponseBody(res *http.Response) ([]byte, error) {
 	defer res.Body.Close()
 	contents, err := ioutil.ReadAll(res.Body)
