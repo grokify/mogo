@@ -1,3 +1,5 @@
+// aesutil provides AES crypto utilities including writing and reading
+// AES encrypted files
 package aesutil
 
 import (
@@ -12,6 +14,8 @@ import (
 	"path"
 )
 
+// EncryptAes provides a ciphertext byte array given a plaintext
+// bytearray and key.
 func EncryptAes(plaintext []byte, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
