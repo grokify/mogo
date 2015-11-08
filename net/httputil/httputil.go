@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func GetStore(url string, filepath string, perm os.FileMode) error {
+func GetWriteFile(url string, filepath string, perm os.FileMode) error {
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
