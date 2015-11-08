@@ -11,7 +11,26 @@ to make programming Go a bit faster.
 
 In terms of scope, `gotilla` is designed to cover all common areas.
 
-Contributing
-------------
+## Documentation
+
+Documentation is provided using godoc and available on [GoDoc.org](https://godoc.org/github.com/grokify/gotilla).
+
+## Installation
+
+Installing any of the packages will install the entire library. For example:
+
+```bash
+$ go get github.com/grokify/gotilla/crypto/aesutil
+```
+
+## Contributing
 
 Features, Issues, and Pull Requests are always welcome.
+
+Please report these on [Github](https://github.com/grokify/gotilla)
+
+## License
+
+Gotilla is available under an MIT-style license. See [LICENSE](LICENSE) for details.
+
+Gotilla &copy; 2015 by John Wang
