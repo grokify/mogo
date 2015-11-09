@@ -7,7 +7,9 @@ import (
 )
 
 // UrlMore provides additional URL parsing and reconstruction capabilties
-// above and beyond URL.
+// above and beyond URL. Specifically it can parse out the port number and
+// return URLs that strip off the target fragment as well as the query
+// string.
 
 type UrlMore struct {
 	Url                  *url.URL
@@ -22,6 +24,9 @@ func NewUrlMore() UrlMore {
 		UrlWoFragment:        ""}
 	return urlMore
 }
+
+// Parse uses `url.Parse()` to create a URL object. When using an already
+// created URL object, simply set the `Url` property and then call `Inflate`.
 
 func (urlMore *UrlMore) Parse(rawurl string) error {
 	myUrl, err := url.Parse(rawurl)
