@@ -1,6 +1,11 @@
 Gotilla
 =======
 
+[![Docs][docs-godoc-svg]][docs-godoc-link]
+[![License][license-svg]][license-link]
+
+## Overview
+
 The `gotilla` package provides a collection of Go utilities for common tasks.
 
 Go is a small language which is useful from a development and maintenance
@@ -34,3 +39,8 @@ Please report these on [Github](https://github.com/grokify/gotilla)
 Gotilla is available under an MIT-style license. See [LICENSE](LICENSE) for details.
 
 Gotilla &copy; 2015 by John Wang
+
+ [docs-godoc-svg]: https://img.shields.io/badge/docs-godoc-blue.svg
+ [docs-godoc-link]: https://godoc.org/github.com/grokify/gotilla
+ [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
+ [license-link]: https://github.com/grokify/gotilla/blob/master/LICENSE
