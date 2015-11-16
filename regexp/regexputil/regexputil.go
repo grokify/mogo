@@ -6,9 +6,8 @@ import (
 
 // McReplaceAllString is a single line MustCompile regexp for ReplaceAllString
 
-func McReplaceAllString(match string, source string, replacement string) string {
-	rx := regexp.MustCompile(match)
-	return rx.ReplaceAllString(source, replacement)
+func McReplaceAllString(pattern string, s string, repl string) string {
+	return regexp.MustCompile(pattern).ReplaceAllString(s, repl)
 }
 
 // RegexpSet is a struct that holds compiled regular expressions.
