@@ -4,6 +4,13 @@ import (
 	"regexp"
 )
 
+// McReplaceAllString is a single line MustCompile regexp for ReplaceAllString
+
+func McReplaceAllString(match string, source string, replacement string) string {
+	rx := regexp.MustCompile(match)
+	return rx.ReplaceAllString(source, replacement)
+}
+
 // RegexpSet is a struct that holds compiled regular expressions.
 // Primary goals of this struct is to reduce MustCompile regular
 // expressions into a single function call and to store the compiled
