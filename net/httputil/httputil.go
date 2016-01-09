@@ -10,17 +10,17 @@ import (
 // GetWriteFile performs a HTTP GET request and saves the response body
 // to the file path specified
 
-func GetWriteFile(url string, filename string, perm os.FileMode) error {
+func GetWriteFile(url string, filename string, perm os.FileMode) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		return err
+		return []byte{}, err
 	}
 	bytes, err := ResponseBody(resp)
 	if err != nil {
-		return err
+		return []byte{}, err
 	}
 	err = ioutil.WriteFile(filename, bytes, perm)
-	return err
+	return bytes, err
 }
 
 // ResponseBody returns the body as a byte array
