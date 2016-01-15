@@ -26,6 +26,10 @@ func (sint *SliceInt) Len() int {
 	return len(sint.Elements)
 }
 
+func (sint *SliceInt) Sort() {
+	sort.Ints(sint.Elements)
+}
+
 func (sint *SliceInt) Min() (int, error) {
 	if len(sint.Elements) == 0 {
 		return 0, errors.New("List is empty")
