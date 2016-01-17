@@ -38,7 +38,7 @@ Please report these on [Github](https://github.com/grokify/gotilla)
 
 Gotilla is available under an MIT-style license. See [LICENSE](LICENSE) for details.
 
-Gotilla &copy; 2015 by John Wang
+Gotilla &copy; 2015-2016 by John Wang
 
  [docs-godoc-svg]: https://img.shields.io/badge/docs-godoc-blue.svg
  [docs-godoc-link]: https://godoc.org/github.com/grokify/gotilla

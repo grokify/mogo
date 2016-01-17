@@ -7,6 +7,7 @@ import (
 
 type SliceInt struct {
 	Elements []int
+	Stats    SliceIntStats
 }
 
 func NewSliceInt() SliceInt {
@@ -87,7 +88,7 @@ func (sint *SliceInt) Median() (int, error) {
 	return sint.Elements[mid], nil
 }
 
-func (sint *SliceInt) Stats() (SliceIntStats, error) {
+func (sint *SliceInt) BuildStats() (SliceIntStats, error) {
 	stats := NewSliceIntStats()
 	stats.Len = sint.Len()
 	max, err := sint.Max()
@@ -115,6 +116,7 @@ func (sint *SliceInt) Stats() (SliceIntStats, error) {
 		return stats, err
 	}
 	stats.Sum = sum
+	sint.Stats = stats
 	return stats, nil
 }
 
