@@ -7,6 +7,7 @@ import (
 
 type SliceFloat64 struct {
 	Elements []float64
+	Stats    SliceFloat64Stats
 }
 
 func NewSliceFloat64() SliceFloat64 {
@@ -83,7 +84,7 @@ func (sf64 *SliceFloat64) Median() (float64, error) {
 	return sf64.Elements[mid], nil
 }
 
-func (sf64 *SliceFloat64) Stats() (SliceFloat64Stats, error) {
+func (sf64 *SliceFloat64) BuildStats() (SliceFloat64Stats, error) {
 	stats := NewSliceFloat64Stats()
 	stats.Len = sf64.Len()
 	max, err := sf64.Max()
@@ -111,6 +112,7 @@ func (sf64 *SliceFloat64) Stats() (SliceFloat64Stats, error) {
 		return stats, err
 	}
 	stats.Sum = sum
+	sf64.Stats = stats
 	return stats, nil
 }
 
