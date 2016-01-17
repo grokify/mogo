@@ -25,7 +25,7 @@ Documentation is provided using godoc and available on [GoDoc.org](https://godoc
 Installing any of the packages will install the entire library. For example:
 
 ```bash
-$ go get github.com/grokify/gotilla/crypto/aesutil
+$ go get github.com/grokify/gotilla
 ```
 
 ## Contributing
