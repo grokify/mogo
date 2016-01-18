@@ -38,7 +38,7 @@ func IsLessThan(timeLeft time.Time, timeRight time.Time) bool {
 
 // Dt6ForDt14 returns the Dt6 value for Dt14
 func Dt6ForDt14(dt14 int64) int32 {
-	dt16f := float64(dt14) / float64(10000000)
+	dt16f := float64(dt14) / float64(1000000)
 	return int32(dt16f)
 }
 
