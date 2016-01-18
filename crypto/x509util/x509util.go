@@ -37,7 +37,7 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyPath(prvKeyPKCS1Path string) (*rsa.Privat
 	if err != nil {
 		return prvKey, err
 	} else if isFileGtZero == false {
-		return prvKey, errors.New("400: key file path is zero size.")
+		return prvKey, errors.New("400: key file path is zero size")
 	}
 
 	prvKeyPkcs1Bytes, err := ioutil.ReadFile(prvKeyPKCS1Path)

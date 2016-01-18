@@ -153,13 +153,12 @@ func IsFileWithSizeGtZero(path string) (bool, error) {
 	fi, err := GetFileInfo(path)
 	if err != nil {
 		return false, err
-	} else {
-		if fi.Mode().IsRegular() == false {
-			err = errors.New("400: file path is not a file")
-			return false, err
-		} else if fi.Size() <= 0 {
-			return false, nil
-		}
+	}
+	if fi.Mode().IsRegular() == false {
+		err = errors.New("400: file path is not a file")
+		return false, err
+	} else if fi.Size() <= 0 {
+		return false, nil
 	}
 	return true, nil
 }

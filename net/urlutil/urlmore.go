@@ -18,7 +18,7 @@ type URLMore struct {
 	Port                 int
 }
 
-func NewUrlMore() URLMore {
+func NewURLMore() URLMore {
 	urlMore := URLMore{
 		URLWoQueryWoFragment: "",
 		URLWoFragment:        ""}
@@ -29,25 +29,25 @@ func NewUrlMore() URLMore {
 // created URL object, simply set the `Url` property and then call `Inflate`.
 
 func (urlMore *URLMore) Parse(rawurl string) error {
-	myUrl, err := url.Parse(rawurl)
+	myURL, err := url.Parse(rawurl)
 	if err != nil {
 		return err
 	}
-	urlMore.URL = myUrl
+	urlMore.URL = myURL
 	urlMore.Inflate()
 	return nil
 }
 
 func (urlMore *URLMore) Inflate() {
-	myUrl := urlMore.URL
-	urlMore.URLWoQueryWoFragment = myUrl.Scheme + "://" + myUrl.Host + myUrl.Path
-	if len(myUrl.RawQuery) > 0 {
-		urlMore.URLWoFragment = urlMore.URLWoQueryWoFragment + "?" + myUrl.RawQuery
+	myURL := urlMore.URL
+	urlMore.URLWoQueryWoFragment = myURL.Scheme + "://" + myURL.Host + myURL.Path
+	if len(myURL.RawQuery) > 0 {
+		urlMore.URLWoFragment = urlMore.URLWoQueryWoFragment + "?" + myURL.RawQuery
 	} else {
 		urlMore.URLWoFragment = urlMore.URLWoQueryWoFragment
 	}
 	rx := regexp.MustCompile(`:([0-9]+)$`)
-	rs := rx.FindStringSubmatch(myUrl.Host)
+	rs := rx.FindStringSubmatch(myURL.Host)
 	if len(rs) > 0 {
 		port, err := strconv.Atoi(rs[1])
 		if err == nil {

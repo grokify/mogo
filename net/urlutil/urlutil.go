@@ -7,17 +7,17 @@ import (
 	"net/url"
 )
 
-func BuildURL(sUrlBase string, dParams map[string]string) string {
+func BuildURL(sURLBase string, dParams map[string]string) string {
 	if len(dParams) < 1 {
-		return sUrlBase
+		return sURLBase
 	}
 	vals := url.Values{}
 	for key, val := range dParams {
 		vals.Set(key, val)
 	}
 	qryString := vals.Encode()
-	sUrlFull := sUrlBase + "?" + qryString
-	return sUrlFull
+	sURLFull := sURLBase + "?" + qryString
+	return sURLFull
 }
 
 func GetURLBody(sUrl string) ([]byte, error) {
