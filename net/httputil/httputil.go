@@ -30,14 +30,13 @@ func ResponseBody(res *http.Response) ([]byte, error) {
 	contents, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return []byte{}, err
-	} else {
-		return contents, nil
 	}
+	return contents, nil
 }
 
-// ResponseBodyJsonMapIndent returns the body as a generic JSON dictionary
+// ResponseBodyJSONMapIndent returns the body as a generic JSON dictionary
 
-func ResponseBodyJsonMapIndent(res *http.Response, prefix string, indent string) ([]byte, error) {
+func ResponseBodyJSONMapIndent(res *http.Response, prefix string, indent string) ([]byte, error) {
 	body, err := ResponseBody(res)
 	if err != nil {
 		return body, err

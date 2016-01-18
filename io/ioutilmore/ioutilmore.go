@@ -155,7 +155,7 @@ func IsFileWithSizeGtZero(path string) (bool, error) {
 		return false, err
 	} else {
 		if fi.Mode().IsRegular() == false {
-			err = errors.New("400: file path is not a file.")
+			err = errors.New("400: file path is not a file")
 			return false, err
 		} else if fi.Size() <= 0 {
 			return false, nil
@@ -197,22 +197,20 @@ func RemoveAllChildren(dir string) error {
 	return nil
 }
 
-func WriteJson(filepath string, data interface{}, perm os.FileMode, wantPretty bool) error {
+func WriteJSON(filepath string, data interface{}, perm os.FileMode, wantPretty bool) error {
 	bytes := []byte{}
 	if wantPretty {
 		bytesTry, err := json.MarshalIndent(data, "", "  ")
 		if err != nil {
 			return err
-		} else {
-			bytes = bytesTry
 		}
+		bytes = bytesTry
 	} else {
 		bytesTry, err := json.Marshal(data)
 		if err != nil {
 			return err
-		} else {
-			bytes = bytesTry
 		}
+		bytes = bytesTry
 	}
 	return ioutil.WriteFile(filepath, bytes, perm)
 }

@@ -5,8 +5,8 @@ import (
 	"fmt"
 )
 
-// PrintJson pretty prints anything using a default indentation
-func PrintJson(in interface{}) error {
+// PrintJSON pretty prints anything using a default indentation
+func PrintJSON(in interface{}) error {
 	j, err := json.MarshalIndent(in, "", "  ")
 	if err != nil {
 		return err

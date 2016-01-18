@@ -23,7 +23,7 @@ func StringKeysSorted(mp interface{}) []string {
 
 func StringKeysToLowerSorted(mp interface{}) []string {
 	keysArr := StringKeys(mp)
-	for i, _ := range keysArr {
+	for i := range keysArr {
 		keysArr[i] = strings.ToLower(keysArr[i])
 	}
 	sort.Strings(keysArr)

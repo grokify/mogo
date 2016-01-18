@@ -69,14 +69,14 @@ func TimeDeltaDowInt(base time.Time, wantDow int, deltaUnits int, wantInclusive 
 }
 
 func DaysAgoDowStrings(baseDowS string, wantDowS string, wantInclusive bool) (int, error) {
-	days_ago := int(0)
+	daysAgo := int(0)
 	baseDow, err := ParseDayOfWeek(baseDowS)
 	if err != nil {
-		return days_ago, err
+		return daysAgo, err
 	}
 	wantDow, err := ParseDayOfWeek(wantDowS)
 	if err != nil {
-		return days_ago, err
+		return daysAgo, err
 	}
 	return DaysAgoDow(baseDow, wantDow, wantInclusive)
 }
@@ -97,14 +97,14 @@ func DaysAgoDow(baseDow int, wantDow int, wantInclusive bool) (int, error) {
 }
 
 func DaysToDowStrings(baseDowS string, wantDowS string, wantInclusive bool) (int, error) {
-	days_ago := int(0)
+	daysAgo := int(0)
 	baseDow, err := ParseDayOfWeek(baseDowS)
 	if err != nil {
-		return days_ago, err
+		return daysAgo, err
 	}
 	wantDow, err := ParseDayOfWeek(wantDowS)
 	if err != nil {
-		return days_ago, err
+		return daysAgo, err
 	}
 	return DaysToDow(baseDow, wantDow, wantInclusive)
 }

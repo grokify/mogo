@@ -7,7 +7,7 @@ import (
 	"net/url"
 )
 
-func BuildUrl(sUrlBase string, dParams map[string]string) string {
+func BuildURL(sUrlBase string, dParams map[string]string) string {
 	if len(dParams) < 1 {
 		return sUrlBase
 	}
@@ -20,7 +20,7 @@ func BuildUrl(sUrlBase string, dParams map[string]string) string {
 	return sUrlFull
 }
 
-func GetUrlBody(sUrl string) ([]byte, error) {
+func GetURLBody(sUrl string) ([]byte, error) {
 	req, err := http.NewRequest("GET", sUrl, nil)
 	cli := &http.Client{}
 	res, err := cli.Do(req)
@@ -31,7 +31,7 @@ func GetUrlBody(sUrl string) ([]byte, error) {
 	return ioutil.ReadAll(res.Body)
 }
 
-func GetUrlPostBody(url string, bodyType string, reqBody io.Reader) ([]byte, error) {
+func GetURLPostBody(url string, bodyType string, reqBody io.Reader) ([]byte, error) {
 	client := &http.Client{}
 	res, err := client.Post(url, bodyType, reqBody)
 	if err != nil {
