@@ -17,7 +17,7 @@ func NewSliceInt() SliceInt {
 	return sint
 }
 
-// Append adds an integer to the elements slice.
+// Append adds an element to the integer slice.
 func (sint *SliceInt) Append(num int) {
 	sint.Elements = append(sint.Elements, num)
 }
@@ -43,7 +43,7 @@ func (sint *SliceInt) Min() (int, error) {
 	return sint.Elements[0], nil
 }
 
-// Min returns the maximum element value in the integer slice.
+// Max returns the maximum element value in the integer slice.
 func (sint *SliceInt) Max() (int, error) {
 	if len(sint.Elements) == 0 {
 		return 0, errors.New("List is empty")
