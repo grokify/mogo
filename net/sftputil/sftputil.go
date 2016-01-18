@@ -9,8 +9,12 @@ import (
 	"strconv"
 	"strings"
 
-	"code.google.com/p/go.crypto/ssh"
 	"github.com/pkg/sftp"
+	"golang.org/x/crypto/ssh"
+)
+
+const (
+	DefaultPort = int64(22)
 )
 
 type SftpClient struct {
