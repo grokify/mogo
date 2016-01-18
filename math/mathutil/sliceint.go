@@ -5,32 +5,34 @@ import (
 	"sort"
 )
 
+// SliceInt represets a slice of integers and provides functions on that slice.
 type SliceInt struct {
 	Elements []int
 	Stats    SliceIntStats
 }
 
+// NewSliceInt creates and returns an empty SliceInt struct.
 func NewSliceInt() SliceInt {
 	sint := SliceInt{Elements: []int{}}
 	return sint
 }
 
+// Append adds an integer to the elements slice.
 func (sint *SliceInt) Append(num int) {
 	sint.Elements = append(sint.Elements, num)
 }
 
-func (sint *SliceInt) Count() int {
-	return sint.Len()
-}
-
+// Len returns the number of items in the integer slice.
 func (sint *SliceInt) Len() int {
 	return len(sint.Elements)
 }
 
+// Sort sorts the elements in the integer slice.
 func (sint *SliceInt) Sort() {
 	sort.Ints(sint.Elements)
 }
 
+// Min returns the minimum element value in the integer slice.
 func (sint *SliceInt) Min() (int, error) {
 	if len(sint.Elements) == 0 {
 		return 0, errors.New("List is empty")
@@ -41,6 +43,7 @@ func (sint *SliceInt) Min() (int, error) {
 	return sint.Elements[0], nil
 }
 
+// Min returns the maximum element value in the integer slice.
 func (sint *SliceInt) Max() (int, error) {
 	if len(sint.Elements) == 0 {
 		return 0, errors.New("List is empty")
@@ -51,6 +54,7 @@ func (sint *SliceInt) Max() (int, error) {
 	return sint.Elements[len(sint.Elements)-1], nil
 }
 
+// Sum returns sum of all the elements in the integer slice.
 func (sint *SliceInt) Sum() (int, error) {
 	if len(sint.Elements) == 0 {
 		return 0, errors.New("List is empty")
@@ -62,10 +66,12 @@ func (sint *SliceInt) Sum() (int, error) {
 	return sum, nil
 }
 
+// Alias for Mean.
 func (sint *SliceInt) Average() (float64, error) {
 	return sint.Mean()
 }
 
+// Mean returns the arithmetic mean of the integer slice.
 func (sint *SliceInt) Mean() (float64, error) {
 	if len(sint.Elements) == 0 {
 		return 0, errors.New("List is empty")
@@ -77,6 +83,7 @@ func (sint *SliceInt) Mean() (float64, error) {
 	return float64(sum) / float64(len(sint.Elements)), nil
 }
 
+// Median returns the median or middle value of the sorted integer slice.
 func (sint *SliceInt) Median() (int, error) {
 	if len(sint.Elements) == 0 {
 		return 0, errors.New("List is empty")
@@ -88,6 +95,7 @@ func (sint *SliceInt) Median() (int, error) {
 	return sint.Elements[mid], nil
 }
 
+// BuildStats builds a stats struct for current integer slice elements.
 func (sint *SliceInt) BuildStats() (SliceIntStats, error) {
 	stats := NewSliceIntStats()
 	stats.Len = sint.Len()
@@ -120,6 +128,7 @@ func (sint *SliceInt) BuildStats() (SliceIntStats, error) {
 	return stats, nil
 }
 
+// SliceIntStats represents a set of statistics for a set of integers.
 type SliceIntStats struct {
 	Len    int
 	Max    int
@@ -129,6 +138,7 @@ type SliceIntStats struct {
 	Sum    int
 }
 
+// NewSliceIntStats returns a new initialized SliceIntStats struct.
 func NewSliceIntStats() SliceIntStats {
 	stats := SliceIntStats{
 		Len:    0,
