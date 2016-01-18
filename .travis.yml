@@ -8,11 +8,11 @@ sudo: true
 before_install:
   - sudo apt-get update -qq > apt-get.out 2>&1  || (cat apt-get.out && exit 1)
   - sudo apt-get install libgmp-dev -qq > apt-get.out 2>&1 || (cat apt-get.out && exit 1)
-  - go get golang.org/x/tools/cmd/cover
+#  - go get golang.org/x/tools/cmd/cover
 install:
   - go get -t -v ./...
 script:
   - go test -v ./...
-  - sh ./go.test.sh
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+#   - sh ./go.test.sh
+# after_success:
+#   - bash <(curl -s https://codecov.io/bash)
