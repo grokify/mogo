@@ -13,6 +13,6 @@ install:
   - go get -t -v ./...
 script:
   - go test -v ./...
-  - ./go.test.sh
+  - sh ./go.test.sh
 after_success:
   - bash <(curl -s https://codecov.io/bash)
