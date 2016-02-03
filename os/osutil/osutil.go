@@ -3,6 +3,7 @@ package osutil
 import (
 	"io/ioutil"
 	"os"
+	"time"
 )
 
 // checks whether a given filepath exists, file or dir
@@ -33,4 +34,16 @@ func EmptyAll(path string) error {
 		}
 	}
 	return nil
+}
+
+func FileModAge(filepath string) (time.Duration, error) {
+	stat, err := os.Stat(filepath)
+	if err != nil {
+		dur0, _ := time.ParseDuration("0s")
+		return dur0, err
+	}
+	mod := stat.ModTime()
+	dt := time.Now()
+	dur := dt.Sub(mod)
+	return dur, nil
 }
