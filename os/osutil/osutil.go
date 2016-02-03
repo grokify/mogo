@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-// checks whether a given filepath exists, file or dir
-
+// Exists checks whether a given filepath exists or not for
+// a file or directory.
 func Exists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -19,6 +19,9 @@ func Exists(path string) (bool, error) {
 	return true, err
 }
 
+// EmptyAll will delete all contents of a directory, leaving
+// the provided directory. This is different from os.Remove
+// which also removes the directory provided.
 func EmptyAll(path string) error {
 	aEntries, err := ioutil.ReadDir(path)
 	if err != nil {
@@ -36,6 +39,9 @@ func EmptyAll(path string) error {
 	return nil
 }
 
+// FileModAge returns a time.Duration struct and error representing
+// the duration from the duration from the provided file's
+// FileInfo.ModTime() to the current time.
 func FileModAge(filepath string) (time.Duration, error) {
 	stat, err := os.Stat(filepath)
 	if err != nil {
