@@ -39,11 +39,10 @@ func EmptyAll(path string) error {
 	return nil
 }
 
-// FileModAge returns a time.Duration struct and error representing
-// the duration from the duration from the provided file's
-// FileInfo.ModTime() to the current time.
-func FileModAge(filepath string) (time.Duration, error) {
-	stat, err := os.Stat(filepath)
+// FileModAge returns a time.Duration representing the age
+// of the named file from FileInfo.ModTime().
+func FileModAge(name string) (time.Duration, error) {
+	stat, err := os.Stat(name)
 	if err != nil {
 		dur0, _ := time.ParseDuration("0s")
 		return dur0, err
