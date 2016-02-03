@@ -48,8 +48,5 @@ func FileModAge(filepath string) (time.Duration, error) {
 		dur0, _ := time.ParseDuration("0s")
 		return dur0, err
 	}
-	mod := stat.ModTime()
-	dt := time.Now()
-	dur := dt.Sub(mod)
-	return dur, nil
+	return time.Now().Sub(stat.ModTime()), nil
 }
