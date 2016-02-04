@@ -1,6 +1,4 @@
-// Package osutil provides platform-independent interfaces
-// to operating system functionality.
-
+// Package osutil implements some OS utility functions.
 package osutil
 
 import (
