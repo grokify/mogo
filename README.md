@@ -33,7 +33,15 @@ $ go get github.com/grokify/gotilla
 
 Features, Issues, and Pull Requests are always welcome.
 
-Please report these on [Github](https://github.com/grokify/gotilla)
+To contribute:
+
+1. Fork it ( http://github.com/grokify/gotilla/fork )
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
+Please report issues and feature requests on [Github](https://github.com/grokify/gotilla).
 
 ## License
 
