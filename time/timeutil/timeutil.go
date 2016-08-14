@@ -121,3 +121,12 @@ func Dt14ForTime(t time.Time) int64 {
 func TimeForDt14(dt14 int64) (time.Time, error) {
 	return time.Parse(DT14, strconv.FormatInt(dt14, 10))
 }
+
+func FromTo(timeStringSrc string, fromFormat string, toFormat string) (string, error) {
+	t, err := time.Parse(fromFormat, timeStringSrc)
+	if err != nil {
+		return "", err
+	}
+	timeStringOut := t.Format(toFormat)
+	return timeStringOut, nil
+}
