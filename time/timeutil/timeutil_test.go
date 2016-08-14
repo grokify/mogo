@@ -38,6 +38,7 @@ func TestDt8ForString(t *testing.T) {
 	}
 }
 
+/*
 var fromToTests = []struct {
 	v    string
 	want string
@@ -55,3 +56,4 @@ func FromToTest(t *testing.T) {
 		}
 	}
 }
+*/
