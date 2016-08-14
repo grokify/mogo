@@ -37,3 +37,21 @@ func TestDt8ForString(t *testing.T) {
 		}
 	}
 }
+
+var fromToTests = []struct {
+	v    string
+	want string
+}{
+	{"Wed, 25 May 2016 11:07:20 +0000", "2016-05-25T11:07:20Z"}}
+
+func FromToTest(t *testing.T) {
+	for _, tt := range fromToTests {
+		got, err := FromTo(tt.v, time.RFC1123Z, time.RFC3339)
+		if err != nil {
+			t.Errorf("FromTo(%v): want %v, error ", tt.v, tt.want, err)
+		}
+		if got != tt.want {
+			t.Errorf("FromTo(%v): want %v, got %v", tt.v, tt.want, got)
+		}
+	}
+}
