@@ -1,6 +1,7 @@
 language: go
 go_import_path: github.com/grokify/gotilla
 go:
+  - 1.6.3
   - 1.5.3
   - 1.4.3
   - tip
