@@ -50,3 +50,16 @@ func FileModAge(name string) (time.Duration, error) {
 	}
 	return time.Now().Sub(stat.ModTime()), nil
 }
+
+func FileModAgeFromInfo(fi os.FileInfo) time.Duration {
+	return time.Now().Sub(fi.ModTime())
+}
+
+func GetFileInfo(path string) (os.FileInfo, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	return f.Stat()
+}
