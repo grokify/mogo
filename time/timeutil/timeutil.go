@@ -14,7 +14,6 @@ const (
 	DT6      = "200601"
 	DT8      = "20060102"
 	ISO8601Z = "2006-01-02T15:04:05-07:00"
-	//         2006-01-02T15:04:05Z07:00
 )
 
 // IsGreaterThan compares two times and returns true if the left
