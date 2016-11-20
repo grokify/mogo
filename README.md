@@ -2,6 +2,7 @@ Gotilla
 =======
 
 [![Build Status][build-status-svg]][build-status-link]
+[![Code Climate][codeclimate-status-svg]][codeclimate-status-link]
 [![Docs][docs-godoc-svg]][docs-godoc-link]
 [![License][license-svg]][license-link]
 
@@ -51,6 +52,8 @@ Gotilla &copy; 2015-2016 by John Wang
 
  [build-status-svg]: https://api.travis-ci.org/grokify/gotilla.svg?branch=master
  [build-status-link]: https://travis-ci.org/grokify/gotilla
+ [codeclimate-status-svg]: https://codeclimate.com/github/grokify/gotilla/badges/gpa.svg
+ [codeclimate-status-link]: https://codeclimate.com/github/grokify/gotilla
  [docs-godoc-svg]: https://img.shields.io/badge/docs-godoc-blue.svg
  [docs-godoc-link]: https://godoc.org/github.com/grokify/gotilla
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
