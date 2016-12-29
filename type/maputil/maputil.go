@@ -29,3 +29,14 @@ func StringKeysToLowerSorted(mp interface{}) []string {
 	sort.Strings(keysArr)
 	return keysArr
 }
+
+func MapSSMerge(first map[string]string, second map[string]string) map[string]string {
+	newMap := map[string]string{}
+	for k1, v1 := range first {
+		newMap[k1] = v1
+	}
+	for k2, v2 := range second {
+		newMap[k2] = v2
+	}
+	return newMap
+}

@@ -7,21 +7,27 @@ import (
 	"net/url"
 )
 
-func BuildURL(sURLBase string, dParams map[string]string) string {
-	if len(dParams) < 1 {
-		return sURLBase
+func BuildURLFromMap(baseUrl string, queryParams map[string]string) string {
+	if len(queryParams) < 1 {
+		return baseUrl
 	}
-	vals := url.Values{}
-	for key, val := range dParams {
-		vals.Set(key, val)
+	queryValues := url.Values{}
+	for key, val := range queryParams {
+		queryValues.Set(key, val)
 	}
-	qryString := vals.Encode()
-	sURLFull := sURLBase + "?" + qryString
-	return sURLFull
+	return BuildURL(baseUrl, queryValues)
 }
 
-func GetURLBody(sUrl string) ([]byte, error) {
-	req, err := http.NewRequest("GET", sUrl, nil)
+func BuildURL(baseUrl string, queryValues url.Values) string {
+	qryString := queryValues.Encode()
+	if len(qryString) > 0 {
+		return baseUrl + "?" + qryString
+	}
+	return baseUrl
+}
+
+func GetURLBody(absoluteUrl string) ([]byte, error) {
+	req, err := http.NewRequest("GET", absoluteUrl, nil)
 	cli := &http.Client{}
 	res, err := cli.Do(req)
 	if err != nil {
@@ -31,9 +37,9 @@ func GetURLBody(sUrl string) ([]byte, error) {
 	return ioutil.ReadAll(res.Body)
 }
 
-func GetURLPostBody(url string, bodyType string, reqBody io.Reader) ([]byte, error) {
+func GetURLPostBody(absoluteUrl string, bodyType string, reqBody io.Reader) ([]byte, error) {
 	client := &http.Client{}
-	res, err := client.Post(url, bodyType, reqBody)
+	res, err := client.Post(absoluteUrl, bodyType, reqBody)
 	if err != nil {
 		return []byte{}, err
 	}
