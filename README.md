@@ -2,6 +2,7 @@ Gotilla
 =======
 
 [![Build Status][build-status-svg]][build-status-link]
+[![Go Report Card][goreport-svg]][goreport-link]
 [![Code Climate][codeclimate-status-svg]][codeclimate-status-link]
 [![Docs][docs-godoc-svg]][docs-godoc-link]
 [![License][license-svg]][license-link]
@@ -48,10 +49,12 @@ Please report issues and feature requests on [Github](https://github.com/grokify
 
 Gotilla is available under an MIT-style license. See [LICENSE](LICENSE) for details.
 
-Gotilla &copy; 2015-2016 by John Wang
+Gotilla &copy; 2015-2017 by John Wang
 
  [build-status-svg]: https://api.travis-ci.org/grokify/gotilla.svg?branch=master
  [build-status-link]: https://travis-ci.org/grokify/gotilla
+ [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/gotilla
+ [goreport-link]: https://goreportcard.com/report/github.com/grokify/gotilla
  [codeclimate-status-svg]: https://codeclimate.com/github/grokify/gotilla/badges/gpa.svg
  [codeclimate-status-link]: https://codeclimate.com/github/grokify/gotilla
  [docs-godoc-svg]: https://img.shields.io/badge/docs-godoc-blue.svg
