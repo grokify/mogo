@@ -2,6 +2,7 @@ package stringsutil
 
 import (
 	"regexp"
+	"strings"
 )
 
 // PadLeft prepends a string to a base string until the string
@@ -34,14 +35,27 @@ func CondenseString(content string, join_lines bool) string {
 	rx_mid := regexp.MustCompile(`\n[\s\t\r]*\n`)
 	rx_pre := regexp.MustCompile(`\n[\s\t\r]*`)
 	rx_spc := regexp.MustCompile(`\s+`)
+	if join_lines {
+		rx_join := regexp.MustCompile(`\n`)
+		content = rx_join.ReplaceAllString(content, " ")
+	}
 	content = rx_beg.ReplaceAllString(content, "")
 	content = rx_end.ReplaceAllString(content, "")
 	content = rx_mid.ReplaceAllString(content, "\n")
 	content = rx_pre.ReplaceAllString(content, "\n")
 	content = rx_spc.ReplaceAllString(content, " ")
-	if join_lines {
-		rx_join := regexp.MustCompile(`\n`)
-		content = rx_join.ReplaceAllString(content, " ")
+	return strings.TrimSpace(content)
+}
+
+func TrimSentenceLength(sentenceInput string, maxLength int) string {
+	if len(sentenceInput) <= maxLength {
+		return sentenceInput
 	}
-	return content
+	sentenceLen := string(sentenceInput[0:maxLength]) // first350 := string(s[0:350])
+	rx_end := regexp.MustCompile(`[[:punct:]][^[[:punct:]]]*$`)
+	sentencePunct := rx_end.ReplaceAllString(sentenceLen, "")
+	if len(sentencePunct) >= 2 {
+		return sentencePunct
+	}
+	return sentenceLen
 }
