@@ -3,6 +3,8 @@ package stringsutil
 import (
 	"regexp"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 )
 
 // PadLeft prepends a string to a base string until the string
@@ -25,6 +27,24 @@ func PadRight(str string, pad string, length int) string {
 			return str[0:length]
 		}
 	}
+}
+
+// ToLowerFirst lower cases the first letter in the string
+func ToLowerFirst(s string) string {
+	if s == "" {
+		return ""
+	}
+	r, n := utf8.DecodeRuneInString(s)
+	return string(unicode.ToLower(r)) + s[n:]
+}
+
+// ToUpperFirst upper cases the first letter in the string
+func ToUpperFirst(s string) string {
+	if s == "" {
+		return ""
+	}
+	r, n := utf8.DecodeRuneInString(s)
+	return string(unicode.ToUpper(r)) + s[n:]
 }
 
 // CondenseString trims whitespace at the ends of the string
