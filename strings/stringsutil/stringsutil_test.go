@@ -1,7 +1,5 @@
 package stringsutil
 
-package gotilla
-
 import (
 	"testing"
 )
@@ -23,7 +21,7 @@ func TestToLowerFirst(t *testing.T) {
 	}
 }
 
-var toLowerFirstTests = []struct {
+var toUpperFirstTests = []struct {
 	v    string
 	want string
 }{
@@ -31,7 +29,7 @@ var toLowerFirstTests = []struct {
 	{"helloWorld", "HelloWorld"}}
 
 func TestToUpperFirst(t *testing.T) {
-	for _, tt := range toLowerUpperTests {
+	for _, tt := range toUpperFirstTests {
 		try := tt.v
 		got := ToUpperFirst(try)
 		if got != tt.want {
