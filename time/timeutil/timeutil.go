@@ -5,6 +5,7 @@ package timeutil
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"time"
 )
@@ -131,4 +132,19 @@ func FromTo(timeStringSrc string, fromFormat string, toFormat string) (string, e
 	}
 	timeStringOut := t.Format(toFormat)
 	return timeStringOut, nil
+}
+
+func DurationStringMinutesSeconds(durationSeconds int64) (string, error) {
+	if durationSeconds <= 0 {
+		return "0 sec", nil
+	}
+	dur, err := time.ParseDuration(fmt.Sprintf("%vs", durationSeconds))
+	if err != nil {
+		return "", err
+	}
+	modSeconds := math.Mod(float64(durationSeconds), float64(60))
+	if dur.Minutes() < 1 {
+		return fmt.Sprintf("%v sec", modSeconds), nil
+	}
+	return fmt.Sprintf("%v min %v sec", int(dur.Minutes()), modSeconds), nil
 }
