@@ -25,7 +25,7 @@ const (
 
 // ParseDuration adds days (d), weeks (w), years (y)
 func ParseDuration(s string) (time.Duration, error) {
-	rx := regexp.MustCompile(`(?i)^\s*(\d+)(d|w|y)\s*$`)
+	rx := regexp.MustCompile(`(?i)^\s*(-?\d+)(d|w|y)\s*$`)
 	rs := rx.FindStringSubmatch(s)
 
 	if len(rs) > 0 {
@@ -47,6 +47,20 @@ func ParseDuration(s string) (time.Duration, error) {
 		}
 	}
 	return time.ParseDuration(s)
+}
+
+func NowDeltaDuration(d time.Duration) time.Time {
+	t := time.Now()
+	return t.Add(d)
+}
+
+func NowDeltaParseDuration(s string) (time.Time, error) {
+	d, err := ParseDuration(s)
+	if err != nil {
+		return time.Now(), err
+	}
+	t := time.Now()
+	return t.Add(d), nil
 }
 
 // IsGreaterThan compares two times and returns true if the left
