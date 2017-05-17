@@ -4,18 +4,50 @@
 package timeutil
 
 import (
+	"errors"
 	"fmt"
 	"math"
+	"regexp"
 	"strconv"
+	"strings"
 	"time"
 )
 
 const (
-	DT14     = "20060102150405"
-	DT6      = "200601"
-	DT8      = "20060102"
-	ISO8601Z = "2006-01-02T15:04:05-07:00"
+	DT14        = "20060102150405"
+	DT6         = "200601"
+	DT8         = "20060102"
+	ISO8601Z    = "2006-01-02T15:04:05-07:00"
+	YEARSECONDS = (365 * 24 * 60 * 60) + (6 * 60 * 60)
+	WEEKSECONDS = 7 * 24 * 60 * 60
+	DAYSECONDS  = 24 * 60 * 60
 )
+
+// ParseDuration adds days (d), weeks (w), years (y)
+func ParseDuration(s string) (time.Duration, error) {
+	rx := regexp.MustCompile(`(?i)^\s*(\d+)(d|w|y)\s*$`)
+	rs := rx.FindStringSubmatch(s)
+
+	if len(rs) > 0 {
+		zeroDuration, _ := time.ParseDuration("0s")
+		quantity := rs[1]
+		units := strings.ToLower(rs[2])
+		i, err := strconv.Atoi(quantity)
+		if err != nil {
+			return zeroDuration, err
+		}
+		if units == "d" {
+			s = fmt.Sprintf("%vs", i*DAYSECONDS)
+		} else if units == "w" {
+			s = fmt.Sprintf("%vs", i*WEEKSECONDS)
+		} else if units == "y" {
+			s = fmt.Sprintf("%vs", i*YEARSECONDS)
+		} else {
+			return zeroDuration, errors.New("timeutil.ParseDuration Parse Error")
+		}
+	}
+	return time.ParseDuration(s)
+}
 
 // IsGreaterThan compares two times and returns true if the left
 // time is greater than the right time.
