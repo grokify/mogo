@@ -21,9 +21,10 @@ const (
 	YEARSECONDS = (365 * 24 * 60 * 60) + (6 * 60 * 60)
 	WEEKSECONDS = 7 * 24 * 60 * 60
 	DAYSECONDS  = 24 * 60 * 60
+	MONTHS_EN   = `["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]`
 )
 
-// ParseDuration adds days (d), weeks (w), years (y)
+// ParseDuration adds days (d), weeks (w), years (y).
 func ParseDuration(s string) (time.Duration, error) {
 	rx := regexp.MustCompile(`(?i)^\s*(-?\d+)(d|w|y)\s*$`)
 	rs := rx.FindStringSubmatch(s)
@@ -83,10 +84,15 @@ func IsLessThan(timeLeft time.Time, timeRight time.Time) bool {
 	return false
 }
 
-// Dt6ForDt14 returns the Dt6 value for Dt14
+// Dt6ForDt14 returns the Dt6 value for Dt14.
 func Dt6ForDt14(dt14 int64) int32 {
 	dt16f := float64(dt14) / float64(1000000)
 	return int32(dt16f)
+}
+
+// TimeForDt6 returns a time.Time value given a Dt6 value.
+func TimeForDt6(dt6 int32) (time.Time, error) {
+	return time.Parse(DT6, strconv.FormatInt(int64(dt6), 10))
 }
 
 // Dt8Now returns Dt8 value for the current time.
