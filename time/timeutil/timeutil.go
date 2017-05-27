@@ -98,8 +98,6 @@ func TimeForDt6(dt6 int32) (time.Time, error) {
 func ParseDt6(dt6 int32) (int16, int8) {
 	year := dt6 / 100
 	month := int(dt6) - (int(year) * 100)
-
-	fmt.Printf("DT6 %v YEAR %v MONTH %v\n", dt6, int16(year), month)
 	return int16(year), int8(month)
 }
 
