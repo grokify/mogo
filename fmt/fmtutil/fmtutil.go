@@ -3,11 +3,13 @@ package fmtutil
 
 import (
 	"encoding/json"
+	"errors"
 	"expvar"
 	"fmt"
 )
 
 var (
+	JSONPretty bool   = true
 	JSONPrefix string = ""
 	JSONIndent string = "  "
 )
@@ -20,7 +22,13 @@ func init() {
 
 // PrintJSON pretty prints anything using a default indentation
 func PrintJSON(in interface{}) error {
-	j, err := json.MarshalIndent(in, JSONPrefix, JSONIndent)
+	j := []byte{}
+	err := errors.New("")
+	if JSONPretty {
+		j, err = json.MarshalIndent(in, JSONPrefix, JSONIndent)
+	} else {
+		j, err = json.Marshal(in)
+	}
 	if err != nil {
 		return err
 	}

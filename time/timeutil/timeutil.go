@@ -95,6 +95,51 @@ func TimeForDt6(dt6 int32) (time.Time, error) {
 	return time.Parse(DT6, strconv.FormatInt(int64(dt6), 10))
 }
 
+func ParseDt6(dt6 int32) (int16, int8) {
+	year := dt6 / 100
+	month := int(dt6) - (int(year) * 100)
+
+	fmt.Printf("DT6 %v YEAR %v MONTH %v\n", dt6, int16(year), month)
+	return int16(year), int8(month)
+}
+
+func PrevDt6(dt6 int32) int32 {
+	year, month := ParseDt6(dt6)
+	if month == 1 {
+		month = 12
+		year = year - 1
+	} else {
+		month = month - 1
+	}
+	return int32(year)*100 + int32(month)
+}
+
+func NextDt6(dt6 int32) int32 {
+	year, month := ParseDt6(dt6)
+	if month == 12 {
+		month = 1
+		year += 1
+	} else {
+		month += 1
+	}
+	return int32(year)*100 + int32(month)
+}
+
+func Dt6MinMaxSlice(minDt6 int32, maxDt6 int32) []int32 {
+	if maxDt6 < minDt6 {
+		tmpDt6 := maxDt6
+		maxDt6 = minDt6
+		minDt6 = tmpDt6
+	}
+	dt6Range := []int32{}
+	curDt6 := minDt6
+	for curDt6 < maxDt6+1 {
+		dt6Range = append(dt6Range, curDt6)
+		curDt6 = NextDt6(curDt6)
+	}
+	return dt6Range
+}
+
 // Dt8Now returns Dt8 value for the current time.
 func Dt8Now() int32 {
 	return Dt8ForTime(time.Now())
