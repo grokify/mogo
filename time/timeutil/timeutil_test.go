@@ -30,7 +30,7 @@ func TestDt8ForString(t *testing.T) {
 	for _, tt := range dt8ForStringTests {
 		got, err := Dt8ForString(time.RFC3339, tt.v)
 		if err != nil {
-			t.Errorf("Dt8ForString(%v): want %v, error ", tt.v, tt.want, err)
+			t.Errorf("Dt8ForString(%v): want %v, error %v", tt.v, tt.want, err)
 		}
 		if got != tt.want {
 			t.Errorf("Dt8ForString(%v): want %v, got %v", tt.v, tt.want, got)
