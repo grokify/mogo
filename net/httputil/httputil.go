@@ -7,6 +7,10 @@ import (
 	"os"
 )
 
+const (
+	ContentTypeJSONUTF8 string = "application/json; charset=utf-8"
+)
+
 // GetWriteFile performs a HTTP GET request and saves the response body
 // to the file path specified
 func GetWriteFile(url string, filename string, perm os.FileMode) ([]byte, error) {

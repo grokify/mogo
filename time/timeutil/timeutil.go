@@ -4,6 +4,7 @@
 package timeutil
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
@@ -242,4 +243,10 @@ func DurationStringMinutesSeconds(durationSeconds int64) (string, error) {
 		return fmt.Sprintf("%v sec", modSeconds), nil
 	}
 	return fmt.Sprintf("%v min %v sec", int(dur.Minutes()), modSeconds), nil
+}
+
+func MonthNames() []string {
+	data := []string{}
+	json.Unmarshal([]byte(MONTHS_EN), &data)
+	return data
 }
