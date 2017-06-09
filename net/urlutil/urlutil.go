@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// ToSlug creates a slug byte array from an input byte array
 func ToSlug(src []byte) []byte {
 	rxp := regexp.MustCompile(`[\*\s]+`)
 	out := rxp.ReplaceAll(src, []byte("-"))
@@ -21,6 +22,7 @@ func ToSlug(src []byte) []byte {
 	return out
 }
 
+// ToSlugLowerString creates a lower-cased slug string
 func ToSlugLowerString(s string) string {
 	return string(ToSlug([]byte(strings.ToLower(s))))
 }

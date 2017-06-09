@@ -10,7 +10,6 @@ import (
 // above and beyond URL. Specifically it can parse out the port number and
 // return URLs that strip off the target fragment as well as the query
 // string.
-
 type URLMore struct {
 	URL                  *url.URL
 	URLWoQueryWoFragment string
@@ -27,7 +26,6 @@ func NewURLMore() URLMore {
 
 // Parse uses `url.Parse()` to create a URL object. When using an already
 // created URL object, simply set the `Url` property and then call `Inflate`.
-
 func (urlMore *URLMore) Parse(rawurl string) error {
 	myURL, err := url.Parse(rawurl)
 	if err != nil {
