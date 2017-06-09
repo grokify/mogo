@@ -9,6 +9,8 @@ import (
 )
 
 var SymbolMap = map[string]string{
+	"AFN": "؋",
+	"ARS": "$",
 	"AWG": "ƒ",
 	"BRL": "R$",
 	"CAD": "$",
@@ -18,18 +20,28 @@ var SymbolMap = map[string]string{
 	"CUP": "₱",
 	"EGP": "£",
 	"EUR": "€",
+	"FKP": "£",
 	"GBP": "£",
-	"KRW": "₩",
+	"ILS": "₪",
+	"IRR": "﷼",
 	"JPY": "¥",
 	"KHR": "៛",
 	"KLR": "₨",
+	"KPW": "₩",
+	"KRW": "₩",
+	"MNT": "₮",
 	"NGN": "₦",
 	"NOK": "kr",
+	"PHP": "₱",
 	"PLN": "zł",
+	"RUB": "₽",
 	"SAR": "﷼",
+	"THB": "฿",
 	"UAH": "₴",
 	"USD": "$",
-	"UZS": "лв"}
+	"UZS": "лв",
+	"VND": "₫",
+	"YER": "﷼"}
 
 func Symbol(iso4217 string) (string, error) {
 	iso4217 = strings.ToUpper(strings.TrimSpace(iso4217))
