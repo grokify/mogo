@@ -13,11 +13,9 @@ import (
 func ToSlug(src []byte) []byte {
 	rxp := regexp.MustCompile(`[\*\s]+`)
 	out := rxp.ReplaceAll(src, []byte("-"))
-	rxm := regexp.MustCompile(`-+`)
-	out = rxm.ReplaceAll(out, []byte("-"))
-	rxb := regexp.MustCompile(`^[\s-]+`)
+	rxb := regexp.MustCompile(`^-+`)
 	out = rxb.ReplaceAll(out, []byte{})
-	rxe := regexp.MustCompile(`[\s-]+$`)
+	rxe := regexp.MustCompile(`-+$`)
 	out = rxe.ReplaceAll(out, []byte{})
 	return out
 }
