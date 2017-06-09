@@ -11,13 +11,9 @@ import (
 
 // ToSlug creates a slug byte array from an input byte array
 func ToSlug(src []byte) []byte {
-	rxp := regexp.MustCompile(`[\*\s]+`)
-	out := rxp.ReplaceAll(src, []byte{45}) // string([]byte{45}) = "-"
-	rxb := regexp.MustCompile(`^-+`)
-	out = rxb.ReplaceAll(out, []byte{})
-	rxe := regexp.MustCompile(`-+$`)
-	out = rxe.ReplaceAll(out, []byte{})
-	return out
+	out := regexp.MustCompile(`[\*\s]+`).ReplaceAll(src, []byte{45}) // string([]byte{45}) = "-"
+	out = regexp.MustCompile(`^-+`).ReplaceAll(out, []byte{})
+	return regexp.MustCompile(`-+$`).ReplaceAll(out, []byte{})
 }
 
 // ToSlugLowerString creates a lower-cased slug string
