@@ -5,7 +5,25 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"regexp"
+	"strings"
 )
+
+func ToSlug(src []byte) []byte {
+	rxp := regexp.MustCompile(`[\*\s]+`)
+	out := rxp.ReplaceAll(src, []byte("-"))
+	rxm := regexp.MustCompile(`-+`)
+	out = rxm.ReplaceAll(out, []byte("-"))
+	rxb := regexp.MustCompile(`^[\s-]+`)
+	out = rxb.ReplaceAll(out, []byte{})
+	rxe := regexp.MustCompile(`[\s-]+$`)
+	out = rxe.ReplaceAll(out, []byte{})
+	return out
+}
+
+func ToSlugLowerString(s string) string {
+	return string(ToSlug([]byte(strings.ToLower(s))))
+}
 
 func BuildURLFromMap(baseUrl string, queryParams map[string]string) string {
 	if len(queryParams) < 1 {
