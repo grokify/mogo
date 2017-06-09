@@ -12,7 +12,7 @@ import (
 // ToSlug creates a slug byte array from an input byte array
 func ToSlug(src []byte) []byte {
 	rxp := regexp.MustCompile(`[\*\s]+`)
-	out := rxp.ReplaceAll(src, []byte("-"))
+	out := rxp.ReplaceAll(src, []byte{45}) // string([]byte{45}) = "-"
 	rxb := regexp.MustCompile(`^-+`)
 	out = rxb.ReplaceAll(out, []byte{})
 	rxe := regexp.MustCompile(`-+$`)

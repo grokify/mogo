@@ -10,7 +10,7 @@ var toSlugLowerStringTests = []struct {
 }{
 	{"HelloWorld", "helloworld"},
 	{"  hello World  ", "hello-world"},
-	{"---   hello World 中文---   ", "hello-world-中文"}}
+	{" ---   hello World 中文---   ", "hello-world-中文"}}
 
 func TestToSlugLowerString(t *testing.T) {
 	for _, tt := range toSlugLowerStringTests {
