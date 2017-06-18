@@ -9,11 +9,13 @@ import (
 	"strings"
 )
 
-// ToSlug creates a slug byte array from an input byte array
-func ToSlug(src []byte) []byte {
-	out := regexp.MustCompile(`[\*\s]+`).ReplaceAll(src, []byte{45}) // string([]byte{45}) = "-"
-	out = regexp.MustCompile(`^-+`).ReplaceAll(out, []byte{})
-	return regexp.MustCompile(`-+$`).ReplaceAll(out, []byte{})
+// ToSlug creates a slug byte array from an input byte array.
+// Slugs have words separated by a hyphen with no punctuation
+// or spaces.
+func ToSlug(slug []byte) []byte {
+	// Convert punctuation and spaces to hyphens: string([]byte{45}) = "-"
+	slug = regexp.MustCompile(`[\*\s]+`).ReplaceAll(slug, []byte{45})
+	return regexp.MustCompile(`(^-+|-+$)`).ReplaceAll(slug, []byte{})
 }
 
 // ToSlugLowerString creates a lower-cased slug string

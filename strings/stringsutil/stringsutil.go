@@ -50,20 +50,24 @@ func ToUpperFirst(s string) string {
 // CondenseString trims whitespace at the ends of the string
 // as well as in between.
 func CondenseString(content string, join_lines bool) string {
-	rx_beg := regexp.MustCompile(`^\s+`)
-	rx_end := regexp.MustCompile(`\s+$`)
-	rx_mid := regexp.MustCompile(`\n[\s\t\r]*\n`)
-	rx_pre := regexp.MustCompile(`\n[\s\t\r]*`)
-	rx_spc := regexp.MustCompile(`\s+`)
 	if join_lines {
-		rx_join := regexp.MustCompile(`\n`)
-		content = rx_join.ReplaceAllString(content, " ")
+		content = regexp.MustCompile(`\n`).ReplaceAllString(content, " ")
 	}
-	content = rx_beg.ReplaceAllString(content, "")
-	content = rx_end.ReplaceAllString(content, "")
-	content = rx_mid.ReplaceAllString(content, "\n")
-	content = rx_pre.ReplaceAllString(content, "\n")
-	content = rx_spc.ReplaceAllString(content, " ")
+	//rx_beg := regexp.MustCompile(`^\s+`)
+	//rx_end := regexp.MustCompile(`\s+$`)
+	//rx_mid := regexp.MustCompile(`\n[\s\t\r]*\n`)
+	//rx_pre := regexp.MustCompile(`\n[\s\t\r]*`)
+	//rx_spc := regexp.MustCompile(`\s+`)
+	// Begining
+	content = regexp.MustCompile(`^\s+`).ReplaceAllString(content, "")
+	// End
+	content = regexp.MustCompile(`\s+$`).ReplaceAllString(content, "")
+	// Middle
+	content = regexp.MustCompile(`\n[\s\t\r]*\n`).ReplaceAllString(content, "\n")
+	// Indentation
+	content = regexp.MustCompile(`\n[\s\t\r]*`).ReplaceAllString(content, "\n")
+	// Collapse
+	content = regexp.MustCompile(`\s+`).ReplaceAllString(content, " ")
 	return strings.TrimSpace(content)
 }
 

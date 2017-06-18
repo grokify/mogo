@@ -1,6 +1,8 @@
 package mailutil
 
 import (
+	"errors"
+	"net/mail"
 	"regexp"
 	"strings"
 
@@ -87,4 +89,38 @@ func DomainIsValidSingleChar(domain string) bool {
 		return true
 	}
 	return false
+}
+
+type MailAddress struct {
+	SMTPUser string
+	SMTPHost string
+	Address  *mail.Address
+}
+
+func ParseAddress(address string) (MailAddress, error) {
+	ma := MailAddress{}
+	addr, err := mail.ParseAddress(address)
+	if err != nil {
+		return ma, err
+	}
+	addr.Address = strings.ToLower(strings.TrimSpace(addr.Address))
+	ma.Address = addr
+
+	if len(addr.Address) > 2 {
+		user, host, err := ParseAddressSpec(addr.Address)
+		if err == nil {
+			ma.SMTPUser = user
+			ma.SMTPHost = host
+		}
+	}
+	return ma, nil
+}
+
+// ParseAddressSpec parses RFC 5322 Addr-Spec Specification
+func ParseAddressSpec(addrSpec string) (string, string, error) {
+	rs := regexp.MustCompile(`^([^@]+)@([^@]+)$`).FindStringSubmatch(addrSpec)
+	if len(rs) < 1 {
+		return "", "", errors.New("RFC 5322 Address Spec not found.")
+	}
+	return rs[1], rs[2], nil
 }
