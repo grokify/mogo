@@ -85,6 +85,12 @@ func IsLessThan(timeLeft time.Time, timeRight time.Time) bool {
 	return false
 }
 
+// Dt6ForTime returns the Dt6 value for time.Time.
+func Dt6ForTime(dt time.Time) int32 {
+	dt = dt.UTC()
+	return int32(dt.Year()*100 + int(dt.Month()))
+}
+
 // Dt6ForDt14 returns the Dt6 value for Dt14.
 func Dt6ForDt14(dt14 int64) int32 {
 	dt16f := float64(dt14) / float64(1000000)
