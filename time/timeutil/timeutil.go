@@ -257,26 +257,35 @@ func MonthNames() []string {
 	return data
 }
 
+// WeekStart takes a time.Time object and returns the
+// beginning of the week specified by the dow day of week
+// as an int, e.g. int(time.Monday)
 func WeekStart(dt time.Time, dow int) (time.Time, error) {
 	dt = dt.UTC()
 	return TimeDeltaDowInt(dt, dow, -1, true, true)
 }
 
+// MonthStart returns a time.Time for the beginning of the
+// month in UTC time.
 func MonthStart(dt time.Time) (time.Time, error) {
 	dt = dt.UTC()
 	return TimeForDt6(Dt6ForTime(dt))
 }
 
+// QuarterStart returns a time.Time for the beginning of the
+// quarter in UTC time.
 func QuarterStart(dt time.Time) (time.Time, error) {
 	dt = dt.UTC()
 	qm := QuarterToMonth(MonthToQuarter(int(dt.Month())))
 	return TimeForDt6(int32(dt.Year()*100 + qm))
 }
 
+// MonthToQuarter converts a month to a calendar quarter.
 func MonthToQuarter(month int) int {
 	return int(math.Ceil(float64(month) / 3))
 }
 
+// QuarterToMonth converts a calendar quarter to a month.
 func QuarterToMonth(quarter int) int {
 	return quarter*3 - 2
 }
