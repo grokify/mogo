@@ -38,6 +38,39 @@ func TestDt8ForString(t *testing.T) {
 	}
 }
 
+var monthToQuarterTests = []struct {
+	v    int
+	want int
+}{
+	{1, 1}, {2, 1}, {3, 1},
+	{4, 2}, {5, 2}, {6, 2},
+	{7, 3}, {8, 3}, {9, 3},
+	{10, 4}, {11, 4}, {12, 4}}
+
+func TestMonthToQuarter(t *testing.T) {
+	for _, tt := range monthToQuarterTests {
+		got := MonthToQuarter(tt.v)
+		if got != tt.want {
+			t.Errorf("MonthToQuarter(%v): want %v, got %v", tt.v, tt.want, got)
+		}
+	}
+}
+
+var quarterToMonthTests = []struct {
+	v    int
+	want int
+}{
+	{1, 1}, {2, 4}, {3, 7}, {4, 10}}
+
+func TestQuarterToMonth(t *testing.T) {
+	for _, tt := range quarterToMonthTests {
+		got := QuarterToMonth(tt.v)
+		if got != tt.want {
+			t.Errorf("QuarterToMonth(%v): want %v, got %v", tt.v, tt.want, got)
+		}
+	}
+}
+
 /*
 var fromToTests = []struct {
 	v    string

@@ -256,3 +256,27 @@ func MonthNames() []string {
 	json.Unmarshal([]byte(MONTHS_EN), &data)
 	return data
 }
+
+func WeekStart(dt time.Time, dow int) (time.Time, error) {
+	dt = dt.UTC()
+	return TimeDeltaDowInt(dt, dow, -1, true, true)
+}
+
+func MonthStart(dt time.Time) (time.Time, error) {
+	dt = dt.UTC()
+	return TimeForDt6(Dt6ForTime(dt))
+}
+
+func QuarterStart(dt time.Time) (time.Time, error) {
+	dt = dt.UTC()
+	qm := QuarterToMonth(MonthToQuarter(int(dt.Month())))
+	return TimeForDt6(int32(dt.Year()*100 + qm))
+}
+
+func MonthToQuarter(month int) int {
+	return int(math.Ceil(float64(month) / 3))
+}
+
+func QuarterToMonth(quarter int) int {
+	return quarter*3 - 2
+}
