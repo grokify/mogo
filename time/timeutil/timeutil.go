@@ -257,12 +257,11 @@ func MonthNames() []string {
 	return data
 }
 
-// WeekStart takes a time.Time object and returns the
-// beginning of the week specified by the dow day of week
-// as an int, e.g. int(time.Monday)
-func WeekStart(dt time.Time, dow int) (time.Time, error) {
+// WeekStart takes a time.Time object and a week start day
+// in the time.Weekday format.
+func WeekStart(dt time.Time, dow time.Weekday) (time.Time, error) {
 	dt = dt.UTC()
-	return TimeDeltaDowInt(dt, dow, -1, true, true)
+	return TimeDeltaDowInt(dt, int(dow), -1, true, true)
 }
 
 // MonthStart returns a time.Time for the beginning of the
