@@ -58,7 +58,7 @@ func CondenseString(content string, join_lines bool) string {
 	//rx_mid := regexp.MustCompile(`\n[\s\t\r]*\n`)
 	//rx_pre := regexp.MustCompile(`\n[\s\t\r]*`)
 	//rx_spc := regexp.MustCompile(`\s+`)
-	// Begining
+	// Beginning
 	content = regexp.MustCompile(`^\s+`).ReplaceAllString(content, "")
 	// End
 	content = regexp.MustCompile(`\s+$`).ReplaceAllString(content, "")
