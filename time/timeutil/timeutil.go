@@ -52,8 +52,7 @@ func ParseDuration(s string) (time.Duration, error) {
 }
 
 func NowDeltaDuration(d time.Duration) time.Time {
-	t := time.Now()
-	return t.Add(d)
+	return time.Now().Add(d)
 }
 
 func NowDeltaParseDuration(s string) (time.Time, error) {
@@ -61,8 +60,7 @@ func NowDeltaParseDuration(s string) (time.Time, error) {
 	if err != nil {
 		return time.Now(), err
 	}
-	t := time.Now()
-	return t.Add(d), nil
+	return time.Now().Add(d), nil
 }
 
 // IsGreaterThan compares two times and returns true if the left
@@ -260,15 +258,13 @@ func MonthNames() []string {
 // WeekStart takes a time.Time object and a week start day
 // in the time.Weekday format.
 func WeekStart(dt time.Time, dow time.Weekday) (time.Time, error) {
-	dt = dt.UTC()
-	return TimeDeltaDowInt(dt, int(dow), -1, true, true)
+	return TimeDeltaDowInt(dt.UTC(), int(dow), -1, true, true)
 }
 
 // MonthStart returns a time.Time for the beginning of the
 // month in UTC time.
 func MonthStart(dt time.Time) (time.Time, error) {
-	dt = dt.UTC()
-	return TimeForDt6(Dt6ForTime(dt))
+	return TimeForDt6(Dt6ForTime(dt.UTC()))
 }
 
 // QuarterStart returns a time.Time for the beginning of the
@@ -280,8 +276,7 @@ func QuarterStart(dt time.Time) (time.Time, error) {
 }
 
 func YearStart(dt time.Time) (time.Time, error) {
-	dt = dt.UTC()
-	return TimeForDt6(int32(dt.Year()*100 + 1))
+	return TimeForDt6(int32(dt.UTC().Year()*100 + 1))
 }
 
 // MonthToQuarter converts a month to a calendar quarter.
