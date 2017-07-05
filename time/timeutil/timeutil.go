@@ -279,6 +279,11 @@ func QuarterStart(dt time.Time) (time.Time, error) {
 	return TimeForDt6(int32(dt.Year()*100 + qm))
 }
 
+func YearStart(dt time.Time) (time.Time, error) {
+	dt = dt.UTC()
+	return TimeForDt6(int32(dt.Year()*100 + 1))
+}
+
 // MonthToQuarter converts a month to a calendar quarter.
 func MonthToQuarter(month int) int {
 	return int(math.Ceil(float64(month) / 3))
