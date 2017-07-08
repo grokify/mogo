@@ -4,10 +4,10 @@ import (
 	"strings"
 )
 
-func StringToBool(value string) bool {
-	value = strings.TrimSpace(value)
-	value = strings.ToLower(value)
-	if value == "true" {
+// StringToBool converts a string to a boolean value
+// looking for the string "true" in any case.
+func StringToBool(v string) bool {
+	if strings.TrimSpace(strings.ToLower(v)) == "true" {
 		return true
 	}
 	return false
