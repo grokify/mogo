@@ -1,5 +1,7 @@
 CHANGELOG
 ---------
+- **2017-07-08**
+  - Add `stringsutil.JoinInterface`
 - **2016-11-19**
   - Add `stringsutil.CondenseString`
 - **2016-11-13**
