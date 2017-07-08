@@ -1,6 +1,7 @@
 package stringsutil
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 	"unicode"
@@ -53,11 +54,6 @@ func CondenseString(content string, join_lines bool) string {
 	if join_lines {
 		content = regexp.MustCompile(`\n`).ReplaceAllString(content, " ")
 	}
-	//rx_beg := regexp.MustCompile(`^\s+`)
-	//rx_end := regexp.MustCompile(`\s+$`)
-	//rx_mid := regexp.MustCompile(`\n[\s\t\r]*\n`)
-	//rx_pre := regexp.MustCompile(`\n[\s\t\r]*`)
-	//rx_spc := regexp.MustCompile(`\s+`)
 	// Beginning
 	content = regexp.MustCompile(`^\s+`).ReplaceAllString(content, "")
 	// End
@@ -82,4 +78,12 @@ func TrimSentenceLength(sentenceInput string, maxLength int) string {
 		return sentencePunct
 	}
 	return sentenceLen
+}
+
+func JoinInterface(arr []interface{}, sep string) string {
+	parts := []string{}
+	for _, el := range arr {
+		parts = append(parts, fmt.Sprintf("%v", el))
+	}
+	return strings.Join(parts, sep)
 }
