@@ -66,7 +66,7 @@ func (sint *SliceInt) Sum() (int, error) {
 	return sum, nil
 }
 
-// Alias for Mean.
+// Average is an alias for Mean.
 func (sint *SliceInt) Average() (float64, error) {
 	return sint.Mean()
 }

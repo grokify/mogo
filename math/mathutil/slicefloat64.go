@@ -66,7 +66,7 @@ func (sf64 *SliceFloat64) Sum() (float64, error) {
 	return sum, nil
 }
 
-// Alias for Mean.
+// Average is an alias for Mean.
 func (sf64 *SliceFloat64) Average() (float64, error) {
 	return sf64.Mean()
 }

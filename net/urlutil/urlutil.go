@@ -23,6 +23,8 @@ func ToSlugLowerString(s string) string {
 	return string(ToSlug([]byte(strings.ToLower(s))))
 }
 
+// BuildURLFromMap returns a URL as a string from a base URL and a
+// set of query parameters as a map[string]string{}
 func BuildURLFromMap(baseUrl string, queryParams map[string]string) string {
 	if len(queryParams) < 1 {
 		return baseUrl
@@ -34,6 +36,7 @@ func BuildURLFromMap(baseUrl string, queryParams map[string]string) string {
 	return BuildURL(baseUrl, queryValues)
 }
 
+// BuildURL returns a URL string from a base URL and url.Values.
 func BuildURL(baseUrl string, queryValues url.Values) string {
 	qryString := queryValues.Encode()
 	if len(qryString) > 0 {
@@ -42,6 +45,8 @@ func BuildURL(baseUrl string, queryValues url.Values) string {
 	return baseUrl
 }
 
+// GetURLBody returns an HTTP response byte array body from
+// a URL.
 func GetURLBody(absoluteUrl string) ([]byte, error) {
 	req, err := http.NewRequest("GET", absoluteUrl, nil)
 	cli := &http.Client{}
@@ -53,6 +58,8 @@ func GetURLBody(absoluteUrl string) ([]byte, error) {
 	return ioutil.ReadAll(res.Body)
 }
 
+// GetURLPostBody returns a HTTP post body as a byte array from a
+// URL, body type and an io.Reader.
 func GetURLPostBody(absoluteUrl string, bodyType string, reqBody io.Reader) ([]byte, error) {
 	client := &http.Client{}
 	res, err := client.Post(absoluteUrl, bodyType, reqBody)

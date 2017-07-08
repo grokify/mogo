@@ -51,10 +51,13 @@ func FileModAge(name string) (time.Duration, error) {
 	return time.Now().Sub(stat.ModTime()), nil
 }
 
+// FileModAgeFromInfo returns the file last modification
+// age as a time.Duration.
 func FileModAgeFromInfo(fi os.FileInfo) time.Duration {
 	return time.Now().Sub(fi.ModTime())
 }
 
+// GetFileInfo returns an os.FileInfo from a filepath.
 func GetFileInfo(path string) (os.FileInfo, error) {
 	f, err := os.Open(path)
 	if err != nil {
