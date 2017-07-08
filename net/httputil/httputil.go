@@ -8,6 +8,8 @@ import (
 )
 
 const (
+	// ContentTypeJSONUTF8 represents the HTTP Content-Type header
+	// value for UTF-8 encoded JSON.
 	ContentTypeJSONUTF8 string = "application/json; charset=utf-8"
 )
 
@@ -43,6 +45,8 @@ func ResponseBodyJSONMapIndent(res *http.Response, prefix string, indent string)
 	return json.MarshalIndent(any, prefix, indent)
 }
 
+// GetResponseAndBytes retreives a URL and returns the response body
+// as a byte array in addition to the *http.Response.
 func GetResponseAndBytes(url string) (*http.Response, []byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
