@@ -8,9 +8,11 @@ import (
 )
 
 const (
-	// ContentTypeJSONUTF8 represents the HTTP Content-Type header
+	// ContentTypeHeader is the content type header name
+	ContentTypeHeader = "Content-Type"
+	// ContentTypeValueJSONUTF8 represents the HTTP Content-Type header
 	// value for UTF-8 encoded JSON.
-	ContentTypeJSONUTF8 string = "application/json; charset=utf-8"
+	ContentTypeValueJSONUTF8 string = "application/json; charset=utf-8"
 )
 
 // GetWriteFile performs a HTTP GET request and saves the response body
