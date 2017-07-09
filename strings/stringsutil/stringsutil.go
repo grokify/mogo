@@ -67,6 +67,7 @@ func CondenseString(content string, join_lines bool) string {
 	return strings.TrimSpace(content)
 }
 
+// TrimSentenceLength trims a string by a max length at word boundaries.
 func TrimSentenceLength(sentenceInput string, maxLength int) string {
 	if len(sentenceInput) <= maxLength {
 		return sentenceInput
@@ -80,10 +81,18 @@ func TrimSentenceLength(sentenceInput string, maxLength int) string {
 	return sentenceLen
 }
 
-func JoinInterface(arr []interface{}, sep string) string {
+// JoinInterface joins an interface and returns a string. It takes
+// a join separator, boolean to replace the join separator in the
+// string parts and a separator alternate.
+func JoinInterface(arr []interface{}, sep string, stripSep bool, alt string) string {
 	parts := []string{}
+	rx := regexp.MustCompile(sep)
 	for _, el := range arr {
-		parts = append(parts, fmt.Sprintf("%v", el))
+		part := fmt.Sprintf("%v", el)
+		if stripSep {
+			part = rx.ReplaceAllString(part, alt)
+		}
+		parts = append(parts, part)
 	}
 	return strings.Join(parts, sep)
 }

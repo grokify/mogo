@@ -2,7 +2,10 @@ package csvutil
 
 import (
 	"encoding/csv"
+	"fmt"
 	"os"
+
+	"github.com/grokify/gotilla/strings/stringsutil"
 )
 
 /*
@@ -32,4 +35,41 @@ func NewReader(path string, comma rune, stripBom bool) (*csv.Reader, *os.File, e
 	csvReader = csv.NewReader(file)
 	csvReader.Comma = comma
 	return csvReader, file, nil
+}
+
+// Writer is a struct for a CSV/TSV writer.
+type Writer struct {
+	Separator        string
+	ReplaceSeparator bool
+	SeparatorAlt     string
+	File             *os.File
+}
+
+// NewWriter returns a Writer with the separator params set.
+func NewWriter(sep string, replaceSeparator bool, alt string) Writer {
+	return Writer{
+		Separator:        sep,
+		ReplaceSeparator: replaceSeparator,
+		SeparatorAlt:     alt}
+}
+
+// Open opens a filepath.
+func (w *Writer) Open(filepath string) error {
+	f, err := os.Create(filepath)
+	if err != nil {
+		return err
+	}
+	w.File = f
+	return nil
+}
+
+// AddLine adds an []interface{} to the file.
+func (w *Writer) AddLine(cells []interface{}) {
+	fmt.Fprintf(w.File, "%s\n", stringsutil.JoinInterface(
+		cells, w.Separator, w.ReplaceSeparator, w.SeparatorAlt))
+}
+
+// Close closes the file.
+func (w *Writer) Close() {
+	w.File.Close()
 }
