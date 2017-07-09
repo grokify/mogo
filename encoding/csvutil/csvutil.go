@@ -65,8 +65,10 @@ func (w *Writer) Open(filepath string) error {
 
 // AddLine adds an []interface{} to the file.
 func (w *Writer) AddLine(cells []interface{}) {
-	fmt.Fprintf(w.File, "%s\n", stringsutil.JoinInterface(
-		cells, w.Separator, w.ReplaceSeparator, w.SeparatorAlt))
+	fmt.Fprintf(
+		w.File,
+		"%s\n",
+		stringsutil.JoinInterface(cells, w.Separator, w.ReplaceSeparator, w.SeparatorAlt))
 }
 
 // Close closes the file.
