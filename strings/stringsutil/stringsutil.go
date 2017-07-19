@@ -83,16 +83,24 @@ func TrimSentenceLength(sentenceInput string, maxLength int) string {
 
 // JoinInterface joins an interface and returns a string. It takes
 // a join separator, boolean to replace the join separator in the
-// string parts and a separator alternate.
-func JoinInterface(arr []interface{}, sep string, stripSep bool, alt string) string {
+// string parts and a separator alternate. `stripEmbeddedSep` strips
+// separator string found within parts. `stripRepeatedSep` strips
+// repeating separators. This flexibility is designed to support
+// joining data for both CSVs and paths.
+func JoinInterface(arr []interface{}, sep string, stripRepeatedSep bool, stripEmbeddedSep bool, altSep string) string {
 	parts := []string{}
 	rx := regexp.MustCompile(sep)
 	for _, el := range arr {
 		part := fmt.Sprintf("%v", el)
-		if stripSep {
-			part = rx.ReplaceAllString(part, alt)
+		if stripEmbeddedSep {
+			part = rx.ReplaceAllString(part, altSep)
 		}
 		parts = append(parts, part)
 	}
-	return strings.Join(parts, sep)
+	joined := strings.Join(parts, sep)
+	if stripRepeatedSep {
+		joined = regexp.MustCompile(fmt.Sprintf("%s+", sep)).
+			ReplaceAllString(joined, sep)
+	}
+	return joined
 }
