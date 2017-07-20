@@ -40,6 +40,7 @@ func NewReader(path string, comma rune, stripBom bool) (*csv.Reader, *os.File, e
 // Writer is a struct for a CSV/TSV writer.
 type Writer struct {
 	Separator        string
+	StripRepeatedSep bool
 	ReplaceSeparator bool
 	SeparatorAlt     string
 	File             *os.File
@@ -49,6 +50,7 @@ type Writer struct {
 func NewWriter(sep string, replaceSeparator bool, alt string) Writer {
 	return Writer{
 		Separator:        sep,
+		StripRepeatedSep: false,
 		ReplaceSeparator: replaceSeparator,
 		SeparatorAlt:     alt}
 }
@@ -68,7 +70,7 @@ func (w *Writer) AddLine(cells []interface{}) {
 	fmt.Fprintf(
 		w.File,
 		"%s\n",
-		stringsutil.JoinInterface(cells, w.Separator, w.ReplaceSeparator, w.SeparatorAlt))
+		stringsutil.JoinInterface(cells, w.Separator, false, w.ReplaceSeparator, w.SeparatorAlt))
 }
 
 // Close closes the file.

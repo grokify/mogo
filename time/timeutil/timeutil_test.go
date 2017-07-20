@@ -71,6 +71,32 @@ func TestQuarterToMonth(t *testing.T) {
 	}
 }
 
+var quarterStartTests = []struct {
+	v    string
+	want string
+}{
+	{"2017-01-01T00:00:00Z", "2017-01-01T00:00:00Z"},
+	{"2017-06-30T23:00:00Z", "2017-04-01T00:00:00Z"},
+	{"2017-07-06T00:00:00Z", "2017-07-01T00:00:00Z"}}
+
+func TestQuarterStart(t *testing.T) {
+	for _, tt := range quarterStartTests {
+		dt, err := time.Parse(time.RFC3339, tt.v)
+		if err != nil {
+			t.Errorf("time.Parse(%v): want %v, err %v", tt.v, tt.want, err)
+			continue
+		}
+		got, err := QuarterStart(dt)
+		if err != nil {
+			t.Errorf("QuarterStart(%v): want %v, err %v", tt.v, tt.want, err)
+			continue
+		}
+		if got.Format(time.RFC3339) != tt.want {
+			t.Errorf("QuarterStart(%v): want %v, got %v", tt.v, tt.want, got.Format(time.RFC3339))
+		}
+	}
+}
+
 /*
 var fromToTests = []struct {
 	v    string

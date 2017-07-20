@@ -288,3 +288,41 @@ func MonthToQuarter(month int) int {
 func QuarterToMonth(quarter int) int {
 	return quarter*3 - 2
 }
+
+// TimeMeta is a struct for holding various times related
+// to a current time, including year start, quarter start,
+// month start, and week start.
+type TimeMeta struct {
+	This         time.Time
+	YearStart    time.Time
+	QuarterStart time.Time
+	MonthStart   time.Time
+	WeekStart    time.Time
+}
+
+// NewTimeMeta returns a TimeMeta struct given `time.Time`
+// and `time.Weekday` parameters.
+func NewTimeMeta(dt time.Time, dow time.Weekday) (TimeMeta, error) {
+	meta := TimeMeta{This: dt}
+	year, err := YearStart(dt)
+	if err != nil {
+		return meta, err
+	}
+	meta.YearStart = year
+	quarter, err := QuarterStart(dt)
+	if err != nil {
+		return meta, err
+	}
+	meta.QuarterStart = quarter
+	month, err := MonthStart(dt)
+	if err != nil {
+		return meta, err
+	}
+	meta.MonthStart = month
+	week, err := WeekStart(dt, dow)
+	if err != nil {
+		return meta, err
+	}
+	meta.WeekStart = week
+	return meta, nil
+}
