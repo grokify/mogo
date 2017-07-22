@@ -15,14 +15,15 @@ import (
 )
 
 const (
-	DT14        = "20060102150405"
-	DT6         = "200601"
-	DT8         = "20060102"
-	ISO8601Z    = "2006-01-02T15:04:05-07:00"
-	YEARSECONDS = (365 * 24 * 60 * 60) + (6 * 60 * 60)
-	WEEKSECONDS = 7 * 24 * 60 * 60
-	DAYSECONDS  = 24 * 60 * 60
-	MONTHS_EN   = `["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]`
+	DT14            = "20060102150405"
+	DT6             = "200601"
+	DT8             = "20060102"
+	ISO8601Z        = "2006-01-02T15:04:05-07:00"
+	YearSeconds     = (365 * 24 * 60 * 60) + (6 * 60 * 60)
+	WeekSeconds     = 7 * 24 * 60 * 60
+	DaySeconds      = 24 * 60 * 60
+	MonthsEN        = `["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]`
+	TimeNullRFC3339 = "0001-01-01T00:00:00Z"
 )
 
 // ParseDuration adds days (d), weeks (w), years (y).
@@ -39,11 +40,11 @@ func ParseDuration(s string) (time.Duration, error) {
 			return zeroDuration, err
 		}
 		if units == "d" {
-			s = fmt.Sprintf("%vs", i*DAYSECONDS)
+			s = fmt.Sprintf("%vs", i*DaySeconds)
 		} else if units == "w" {
-			s = fmt.Sprintf("%vs", i*WEEKSECONDS)
+			s = fmt.Sprintf("%vs", i*WeekSeconds)
 		} else if units == "y" {
-			s = fmt.Sprintf("%vs", i*YEARSECONDS)
+			s = fmt.Sprintf("%vs", i*YearSeconds)
 		} else {
 			return zeroDuration, errors.New("timeutil.ParseDuration Parse Error")
 		}
@@ -251,7 +252,7 @@ func DurationStringMinutesSeconds(durationSeconds int64) (string, error) {
 
 func MonthNames() []string {
 	data := []string{}
-	json.Unmarshal([]byte(MONTHS_EN), &data)
+	json.Unmarshal([]byte(MonthsEN), &data)
 	return data
 }
 
