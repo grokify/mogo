@@ -15,16 +15,28 @@ import (
 )
 
 const (
-	DT14            = "20060102150405"
-	DT6             = "200601"
-	DT8             = "20060102"
-	ISO8601Z        = "2006-01-02T15:04:05-07:00"
-	YearSeconds     = (365 * 24 * 60 * 60) + (6 * 60 * 60)
-	WeekSeconds     = 7 * 24 * 60 * 60
-	DaySeconds      = 24 * 60 * 60
-	MonthsEN        = `["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]`
-	TimeNullRFC3339 = "0001-01-01T00:00:00Z"
+	DT14                            = "20060102150405"
+	DT6                             = "200601"
+	DT8                             = "20060102"
+	ISO8601Z                        = "2006-01-02T15:04:05-07:00"
+	YearSeconds                     = (365 * 24 * 60 * 60) + (6 * 60 * 60)
+	WeekSeconds                     = 7 * 24 * 60 * 60
+	DaySeconds                      = 24 * 60 * 60
+	MonthsEN                        = `["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]`
+	TimeMinRFC3339                  = "0000-01-01T00:00:00Z"
+	TimeZeroRFC3339                 = "0001-01-01T00:00:00Z"
+	MillisToNanoMultiplier          = 1000000
+	Year                   Interval = iota
+	Quarter
+	Month
+	Week
+	Day
+	Hour
+	Minute
+	Second
 )
+
+type Interval int
 
 // ParseDuration adds days (d), weeks (w), years (y).
 func ParseDuration(s string) (time.Duration, error) {
@@ -84,6 +96,12 @@ func IsLessThan(timeLeft time.Time, timeRight time.Time) bool {
 	return false
 }
 
+// TimeForEpochMillis returns the time.Time value for an epoch
+// in milliseconds
+func UnixMillis(epochMillis int64) time.Time {
+	return time.Unix(0, epochMillis*MillisToNanoMultiplier)
+}
+
 // Dt6ForTime returns the Dt6 value for time.Time.
 func Dt6ForTime(dt time.Time) int32 {
 	dt = dt.UTC()
@@ -127,6 +145,18 @@ func NextDt6(dt6 int32) int32 {
 		month += 1
 	}
 	return int32(year)*100 + int32(month)
+}
+
+func TimeDt6AddNMonths(dt time.Time, numMonths int) time.Time {
+	dt6 := Dt6ForTime(dt)
+	for i := 0; i < numMonths; i++ {
+		dt6 = NextDt6(dt6)
+	}
+	dt6NextMonth, err := TimeForDt6(dt6)
+	if err != nil {
+		panic(fmt.Sprintf("Cannot find next month for time: %v\n", dt.Format(time.RFC3339)))
+	}
+	return dt6NextMonth
 }
 
 func Dt6MinMaxSlice(minDt6 int32, maxDt6 int32) []int32 {
