@@ -15,18 +15,24 @@ import (
 )
 
 const (
-	DT14                            = "20060102150405"
-	DT6                             = "200601"
-	DT8                             = "20060102"
-	ISO8601Z                        = "2006-01-02T15:04:05-07:00"
-	YearSeconds                     = (365 * 24 * 60 * 60) + (6 * 60 * 60)
-	WeekSeconds                     = 7 * 24 * 60 * 60
-	DaySeconds                      = 24 * 60 * 60
-	MonthsEN                        = `["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]`
-	TimeMinRFC3339                  = "0000-01-01T00:00:00Z"
-	TimeZeroRFC3339                 = "0001-01-01T00:00:00Z"
-	MillisToNanoMultiplier          = 1000000
-	Year                   Interval = iota
+	DT14                   = "20060102150405"
+	DT6                    = "200601"
+	DT8                    = "20060102"
+	ISO8601Z               = "2006-01-02T15:04:05-07:00"
+	YearSeconds            = (365 * 24 * 60 * 60) + (6 * 60 * 60)
+	WeekSeconds            = 7 * 24 * 60 * 60
+	DaySeconds             = 24 * 60 * 60
+	MonthsEN               = `["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]`
+	TimeMinRFC3339         = "0000-01-01T00:00:00Z"
+	TimeZeroRFC3339        = "0001-01-01T00:00:00Z"
+	MillisToNanoMultiplier = 1000000
+)
+
+type Interval int
+
+const (
+	Decade Interval = iota
+	Year
 	Quarter
 	Month
 	Week
@@ -34,9 +40,37 @@ const (
 	Hour
 	Minute
 	Second
+	Millisecond
+	Microsecond
+	Nanosecond
 )
 
-type Interval int
+var intervals = [...]string{
+	"decade",
+	"year",
+	"quarter",
+	"month",
+	"week",
+	"day",
+	"hour",
+	"minute",
+	"second",
+	"millisecond",
+	"microsecond",
+	"nanosecond",
+}
+
+func (i Interval) String() string { return intervals[i] }
+
+func ParseInterval(src string) (Interval, error) {
+	canonical := strings.ToLower(strings.TrimSpace(src))
+	for i, try := range intervals {
+		if canonical == try {
+			return Interval(i), nil
+		}
+	}
+	return Year, errors.New(fmt.Sprintf("Interval [%v] not found.", src))
+}
 
 // ParseDuration adds days (d), weeks (w), years (y).
 func ParseDuration(s string) (time.Duration, error) {
@@ -78,9 +112,12 @@ func NowDeltaParseDuration(s string) (time.Time, error) {
 
 // IsGreaterThan compares two times and returns true if the left
 // time is greater than the right time.
-func IsGreaterThan(timeLeft time.Time, timeRight time.Time) bool {
+func IsGreaterThan(timeLeft time.Time, timeRight time.Time, orEqual bool) bool {
+	durZero, _ := time.ParseDuration("0ns")
 	durDelta := timeLeft.Sub(timeRight)
-	if durZero, _ := time.ParseDuration("0ns"); durDelta > durZero {
+	if durDelta > durZero {
+		return true
+	} else if orEqual && durDelta == durZero {
 		return true
 	}
 	return false
@@ -88,9 +125,12 @@ func IsGreaterThan(timeLeft time.Time, timeRight time.Time) bool {
 
 // IsLessThan compares two times and returns true if the left
 // time is less than the right time.
-func IsLessThan(timeLeft time.Time, timeRight time.Time) bool {
+func IsLessThan(timeLeft time.Time, timeRight time.Time, orEqual bool) bool {
+	durZero, _ := time.ParseDuration("0ns")
 	durDelta := timeLeft.Sub(timeRight)
-	if durZero, _ := time.ParseDuration("0ns"); durDelta < durZero {
+	if durDelta < durZero {
+		return true
+	} else if orEqual && durDelta == durZero {
 		return true
 	}
 	return false
@@ -157,6 +197,10 @@ func TimeDt6AddNMonths(dt time.Time, numMonths int) time.Time {
 		panic(fmt.Sprintf("Cannot find next month for time: %v\n", dt.Format(time.RFC3339)))
 	}
 	return dt6NextMonth
+}
+
+func TimeDt4AddNYears(dt time.Time, numYears int) time.Time {
+	return time.Date(dt.UTC().Year()+numYears, time.January, 1, 0, 0, 0, 0, time.UTC)
 }
 
 func Dt6MinMaxSlice(minDt6 int32, maxDt6 int32) []int32 {
@@ -306,8 +350,25 @@ func QuarterStart(dt time.Time) (time.Time, error) {
 	return TimeForDt6(int32(dt.Year()*100 + qm))
 }
 
-func YearStart(dt time.Time) (time.Time, error) {
-	return TimeForDt6(int32(dt.UTC().Year()*100 + 1))
+// YearStart returns a a time.Time for the beginning of the year
+// in UTC time.
+func YearStart(dt time.Time) time.Time {
+	return time.Date(dt.UTC().Year(), time.January, 1, 0, 0, 0, 0, time.UTC)
+}
+
+func IntervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time, error) {
+	switch interval.String() {
+	case "year":
+		return YearStart(dt), nil
+	case "quarter":
+		return QuarterStart(dt)
+	case "month":
+		return MonthStart(dt)
+	case "week":
+		return WeekStart(dt, dow)
+	default:
+		return time.Time{}, errors.New(fmt.Sprintf("Interval [%v] not supported in timeutil.IntervalStart.", interval))
+	}
 }
 
 // MonthToQuarter converts a month to a calendar quarter.
@@ -335,11 +396,8 @@ type TimeMeta struct {
 // and `time.Weekday` parameters.
 func NewTimeMeta(dt time.Time, dow time.Weekday) (TimeMeta, error) {
 	meta := TimeMeta{This: dt}
-	year, err := YearStart(dt)
-	if err != nil {
-		return meta, err
-	}
-	meta.YearStart = year
+
+	meta.YearStart = YearStart(dt)
 	quarter, err := QuarterStart(dt)
 	if err != nil {
 		return meta, err
