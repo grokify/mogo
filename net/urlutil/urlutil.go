@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"path"
 	"regexp"
 	"strings"
 )
@@ -68,4 +69,8 @@ func GetURLPostBody(absoluteUrl string, bodyType string, reqBody io.Reader) ([]b
 	}
 	defer res.Body.Close()
 	return ioutil.ReadAll(res.Body)
+}
+
+func JoinAbsolute(elem ...string) string {
+	return regexp.MustCompile(`^([A-Za-z]+:)`).ReplaceAllString(path.Join(elem...), "${1}/")
 }

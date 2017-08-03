@@ -12,7 +12,9 @@ const (
 	ContentTypeHeader = "Content-Type"
 	// ContentTypeValueJSONUTF8 represents the HTTP Content-Type header
 	// value for UTF-8 encoded JSON.
-	ContentTypeValueJSONUTF8 string = "application/json; charset=utf-8"
+	ContentTypeValueJSONUTF8 = "application/json; charset=utf-8"
+	// HTTPS Scheme
+	SchemeHTTPS = "https"
 )
 
 // GetWriteFile performs a HTTP GET request and saves the response body
