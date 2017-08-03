@@ -72,5 +72,5 @@ func GetURLPostBody(absoluteUrl string, bodyType string, reqBody io.Reader) ([]b
 }
 
 func JoinAbsolute(elem ...string) string {
-	return regexp.MustCompile(`^([A-Za-z]+:)`).ReplaceAllString(path.Join(elem...), "${1}/")
+	return regexp.MustCompile(`^([A-Za-z]+:/)`).ReplaceAllString(path.Join(elem...), "${1}/")
 }
