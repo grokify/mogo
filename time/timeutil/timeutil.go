@@ -199,6 +199,18 @@ func TimeDt6AddNMonths(dt time.Time, numMonths int) time.Time {
 	return dt6NextMonth
 }
 
+func TimeDt6SubNMonths(dt time.Time, numMonths int) time.Time {
+	dt6 := Dt6ForTime(dt)
+	for i := 0; i < numMonths; i++ {
+		dt6 = PrevDt6(dt6)
+	}
+	dt6NextMonth, err := TimeForDt6(dt6)
+	if err != nil {
+		panic(fmt.Sprintf("Cannot find next month for time: %v\n", dt.Format(time.RFC3339)))
+	}
+	return dt6NextMonth
+}
+
 func TimeDt4AddNYears(dt time.Time, numYears int) time.Time {
 	return time.Date(dt.UTC().Year()+numYears, time.January, 1, 0, 0, 0, 0, time.UTC)
 }
@@ -354,6 +366,34 @@ func QuarterStart(dt time.Time) (time.Time, error) {
 // in UTC time.
 func YearStart(dt time.Time) time.Time {
 	return time.Date(dt.UTC().Year(), time.January, 1, 0, 0, 0, 0, time.UTC)
+}
+
+func QuarterStartString(dt time.Time) (string, error) {
+	dtStart, err := QuarterStart(dt)
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("%v Q%v", dtStart.Year(), MonthToQuarter(int(dtStart.Month()))), nil
+}
+
+func PrevQuarter(dt time.Time) (time.Time, error) {
+	dtStart, err := QuarterStart(dt)
+	if err != nil {
+		return time.Time{}, err
+	}
+	if 1 == 0 {
+		prevYr := dtStart.Year()
+		prevQt := MonthToQuarter(int(dtStart.Month()))
+		if prevQt == 1 {
+			prevYr = prevYr - 1
+			prevQt = 4
+		} else {
+			prevQt = prevQt - 1
+		}
+		prevMn := QuarterToMonth(prevQt)
+		return time.Date(prevYr, time.Month(prevMn), 1, 0, 0, 0, 0, time.UTC), nil
+	}
+	return TimeDt6SubNMonths(dtStart, 3), nil
 }
 
 func IntervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time, error) {
