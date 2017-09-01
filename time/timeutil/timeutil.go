@@ -379,23 +379,19 @@ func QuarterStartString(dt time.Time) (string, error) {
 }
 
 func PrevQuarter(dt time.Time) (time.Time, error) {
-	dtStart, err := QuarterStart(dt)
+	dtBeg, err := QuarterStart(dt)
 	if err != nil {
-		return time.Time{}, err
+		return dt, err
 	}
-	if 1 == 0 {
-		prevYr := dtStart.Year()
-		prevQt := MonthToQuarter(int(dtStart.Month()))
-		if prevQt == 1 {
-			prevYr = prevYr - 1
-			prevQt = 4
-		} else {
-			prevQt = prevQt - 1
-		}
-		prevMn := QuarterToMonth(prevQt)
-		return time.Date(prevYr, time.Month(prevMn), 1, 0, 0, 0, 0, time.UTC), nil
+	return TimeDt6SubNMonths(dtBeg, 3), nil
+}
+
+func NextQuarter(dt time.Time) (time.Time, error) {
+	dtBeg, err := QuarterStart(dt)
+	if err != nil {
+		return dt, err
 	}
-	return TimeDt6SubNMonths(dtStart, 3), nil
+	return TimeDt6AddNMonths(dtBeg, 3), nil
 }
 
 func IntervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time, error) {

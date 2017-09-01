@@ -48,6 +48,19 @@ func ToUpperFirst(s string) string {
 	return string(unicode.ToUpper(r)) + s[n:]
 }
 
+// SliceTrimSpace removes leading and trailing spaces per
+// string and also removes empty strings.
+func SliceTrimSpace(slice []string) []string {
+	trimmed := []string{}
+	for _, part := range slice {
+		part := strings.TrimSpace(part)
+		if len(part) > 0 {
+			trimmed = append(trimmed, part)
+		}
+	}
+	return trimmed
+}
+
 // CondenseString trims whitespace at the ends of the string
 // as well as in between.
 func CondenseString(content string, join_lines bool) string {
