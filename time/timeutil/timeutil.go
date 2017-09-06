@@ -18,15 +18,16 @@ const (
 	DT14                   = "20060102150405"
 	DT6                    = "200601"
 	DT8                    = "20060102"
-	Dt6RFC3339             = "2006-01"
-	Dt8RFC3339             = "2006-01-02"
-	ISO8601Z               = "2006-01-02T15:04:05-07:00"
+	RFC3339Min             = "0000-01-01T00:00:00Z"
+	RFC3339Zero            = "0001-01-01T00:00:00Z"
+	RFC3339YMD             = "2006-01-02"
+	ISO8601YM              = "2006-01"
+	ISO8601TZ2             = "2006-01-02T15:04:05-07"
+	ISO8601TZ4             = "2006-01-02T15:04:05-0700"
 	YearSeconds            = (365 * 24 * 60 * 60) + (6 * 60 * 60)
 	WeekSeconds            = 7 * 24 * 60 * 60
 	DaySeconds             = 24 * 60 * 60
 	MonthsEN               = `["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]`
-	TimeMinRFC3339         = "0000-01-01T00:00:00Z"
-	TimeZeroRFC3339        = "0001-01-01T00:00:00Z"
 	MillisToNanoMultiplier = 1000000
 )
 
