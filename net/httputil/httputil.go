@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+
+	"github.com/grokify/gotilla/strconv/strconvutil"
 )
 
 const (
@@ -58,4 +60,35 @@ func GetResponseAndBytes(url string) (*http.Response, []byte, error) {
 	}
 	bytes, err := ResponseBody(resp)
 	return resp, bytes, err
+}
+
+// RateLimitInfo is a structure for holding parsed rate limit info.
+// It uses headers from the GitHub, RingCentral and Twitter APIs.
+type RateLimitInfo struct {
+	StatusCode          int
+	RetryAfter          int
+	XRateLimitLimit     int
+	XRateLimitRemaining int
+	XRateLimitReset     int
+	XRateLimitWindow    int
+}
+
+// NewResponseRateLimitInfo returns a RateLimitInfo from a http.Response.
+func NewResponseRateLimitInfo(resp *http.Response, useXrlHyphen bool) RateLimitInfo {
+	rlstat := RateLimitInfo{
+		StatusCode: resp.StatusCode,
+		RetryAfter: strconvutil.AtoiWithDefault(resp.Header.Get("Retry-After"), 0)}
+
+	if useXrlHyphen {
+		rlstat.XRateLimitLimit = strconvutil.AtoiWithDefault(resp.Header.Get("X-Rate-Limit-Limit"), 0)
+		rlstat.XRateLimitRemaining = strconvutil.AtoiWithDefault(resp.Header.Get("X-Rate-Limit-Remaining"), 0)
+		rlstat.XRateLimitReset = strconvutil.AtoiWithDefault(resp.Header.Get("X-Rate-Limit-Reset"), 0)
+		rlstat.XRateLimitWindow = strconvutil.AtoiWithDefault(resp.Header.Get("X-Rate-Limit-Window"), 0)
+	} else {
+		rlstat.XRateLimitLimit = strconvutil.AtoiWithDefault(resp.Header.Get("X-RateLimit-Limit"), 0)
+		rlstat.XRateLimitRemaining = strconvutil.AtoiWithDefault(resp.Header.Get("X-RateLimit-Remaining"), 0)
+		rlstat.XRateLimitReset = strconvutil.AtoiWithDefault(resp.Header.Get("X-RateLimit-Reset"), 0)
+		rlstat.XRateLimitWindow = strconvutil.AtoiWithDefault(resp.Header.Get("X-RateLimit-Window"), 0)
+	}
+	return rlstat
 }

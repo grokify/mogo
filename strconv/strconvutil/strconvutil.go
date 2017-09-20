@@ -4,6 +4,16 @@ import (
 	"strconv"
 )
 
+// AtoiWithDefault is like Atoi but takes a default value
+// which it returns in the event of a parse error.
+func AtoiWithDefault(s string, def int) int {
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		return def
+	}
+	return i
+}
+
 // Commify takes an int64 and adds comma for every thousand
 // Stack Overflow: http://stackoverflow.com/users/1705598/icza
 // URL: http://stackoverflow.com/questions/13020308/how-to-fmt-printf-an-integer-with-thousands-comma

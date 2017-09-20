@@ -1,5 +1,8 @@
 CHANGELOG
 ---------
+- **2017-09-19**
+  - Add `httputil.RateLimitInfo` and `httputil.NewResponseRateLimitInfo`
+  - Add `strconvtuil.AtoiWithDefault`
 - **2017-07-08**
   - Add `stringsutil.JoinInterface`
 - **2016-11-19**
