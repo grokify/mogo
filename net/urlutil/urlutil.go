@@ -71,6 +71,38 @@ func GetURLPostBody(absoluteUrl string, bodyType string, reqBody io.Reader) ([]b
 	return ioutil.ReadAll(res.Body)
 }
 
+// URLInfo is an structure to represent a URL.
+type URLInfo struct {
+	Scheme      string
+	Hostname    string
+	Port        int
+	Path        string
+	QueryValues url.Values
+	Anchor      string
+}
+
+// String converts URLInfo into a string URL.
+func (ui *URLInfo) String() string {
+	wipURL := ""
+	if ui.Port > 0 {
+		wipURL = fmt.Sprintf("%v://%v:%v", ui.Scheme, ui.Hostname, ui.Port)
+	} else {
+		wipURL = fmt.Sprintf("%v://%v", ui.Scheme, ui.Hostname)
+	}
+	ui.Path = strings.TrimSpace(ui.Path)
+	if len(ui.Path) > 0 {
+		wipUrl = JoinAbsolute(wipUrl, ui.Path)
+	}
+	wipURL = BuildURL(wipURL, ui.QueryValues)
+
+	ui.Anchor = strings.TrimSpace(ui.Anchor)
+	if len(ui.Anchor) > 0 {
+		wipURL = strings.Join([]string{wipURL, ui.Anchor}, "#")
+	}
+	return wipURL
+}
+
+// JoinAbsolute performs a path.Join() while preserving two slashes after the scheme.
 func JoinAbsolute(elem ...string) string {
 	return regexp.MustCompile(`^([A-Za-z]+:/)`).ReplaceAllString(path.Join(elem...), "${1}/")
 }
