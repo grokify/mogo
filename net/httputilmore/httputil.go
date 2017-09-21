@@ -1,9 +1,11 @@
-package httputil
+package httputilmore
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
 	"os"
 
 	"github.com/grokify/gotilla/strconv/strconvutil"
@@ -60,6 +62,32 @@ func GetResponseAndBytes(url string) (*http.Response, []byte, error) {
 	}
 	bytes, err := ResponseBody(resp)
 	return resp, bytes, err
+}
+
+func PrintRequestOut(req *http.Request, includeBody, panicOnError bool) error {
+	reqBytes, err := httputil.DumpRequestOut(req, includeBody)
+	if err != nil {
+		if panicOnError {
+			panic(err)
+		} else {
+			return err
+		}
+	}
+	fmt.Println(string(reqBytes))
+	return nil
+}
+
+func PrintResponse(resp *http.Response, includeBody, panicOnError bool) error {
+	respBytes, err := httputil.DumpResponse(resp, includeBody)
+	if err != nil {
+		if panicOnError {
+			panic(err)
+		} else {
+			return err
+		}
+	}
+	fmt.Println(string(respBytes))
+	return nil
 }
 
 // RateLimitInfo is a structure for holding parsed rate limit info.

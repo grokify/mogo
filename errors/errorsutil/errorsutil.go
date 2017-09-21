@@ -9,3 +9,10 @@ import (
 func Append(err error, str string) error {
 	return errors.New(fmt.Sprint(err) + str)
 }
+
+// PanicOnErr is a syntactic sugar function to panic on error.
+func PanicOnErr(err error) {
+	if err != nil {
+		panic(err)
+	}
+}

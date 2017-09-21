@@ -1,6 +1,7 @@
 package urlutil
 
 import (
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -91,7 +92,7 @@ func (ui *URLInfo) String() string {
 	}
 	ui.Path = strings.TrimSpace(ui.Path)
 	if len(ui.Path) > 0 {
-		wipUrl = JoinAbsolute(wipUrl, ui.Path)
+		wipURL = JoinAbsolute(wipURL, ui.Path)
 	}
 	wipURL = BuildURL(wipURL, ui.QueryValues)
 

@@ -1,9 +1,13 @@
 CHANGELOG
 ---------
 - **2017-09-20**
-  - Add `multipartutil.MultipartBuilder` and `urlutil.URLInfo`
+  - Add `multipartutil.MultipartBuilder`
+  - Add `urlutil.URLInfo`
+  - Add `errorsutil.PanicOnErr`
+  - Change `httputil` to `httputilmore`
 - **2017-09-19**
-  - Add `httputil.RateLimitInfo` and `httputil.NewResponseRateLimitInfo`
+  - Add `httputil.RateLimitInfo`
+  - Add `httputil.NewResponseRateLimitInfo`
   - Add `strconvtuil.AtoiWithDefault`
 - **2017-07-08**
   - Add `stringsutil.JoinInterface`
