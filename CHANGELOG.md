@@ -1,5 +1,7 @@
 CHANGELOG
 ---------
+- **2017-09-20**
+  - Add `multipartutil.MultipartBuilder` and `urlutil.URLInfo`
 - **2017-09-19**
   - Add `httputil.RateLimitInfo` and `httputil.NewResponseRateLimitInfo`
   - Add `strconvtuil.AtoiWithDefault`
