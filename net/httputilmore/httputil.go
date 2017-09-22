@@ -64,27 +64,31 @@ func GetResponseAndBytes(url string) (*http.Response, []byte, error) {
 	return resp, bytes, err
 }
 
-func PrintRequestOut(req *http.Request, includeBody, panicOnError bool) error {
+// UnmarshalResponseJSON unmarshal a `*http.Response` JSON body into
+// a data pointer.
+func UnmarshalResponseJSON(resp *http.Response, data interface{}) error {
+	bytes, err := ResponseBody(resp)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(bytes, data)
+}
+
+// PrintRequestOut prints a http.Request using `httputil.DumpRequestOut`.
+func PrintRequestOut(req *http.Request, includeBody bool) error {
 	reqBytes, err := httputil.DumpRequestOut(req, includeBody)
 	if err != nil {
-		if panicOnError {
-			panic(err)
-		} else {
-			return err
-		}
+		return err
 	}
 	fmt.Println(string(reqBytes))
 	return nil
 }
 
-func PrintResponse(resp *http.Response, includeBody, panicOnError bool) error {
+// PrintResponse prints a http.Response using `httputil.DumpResponse`.
+func PrintResponse(resp *http.Response, includeBody bool) error {
 	respBytes, err := httputil.DumpResponse(resp, includeBody)
 	if err != nil {
-		if panicOnError {
-			panic(err)
-		} else {
-			return err
-		}
+		return err
 	}
 	fmt.Println(string(respBytes))
 	return nil
