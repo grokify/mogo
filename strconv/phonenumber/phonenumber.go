@@ -84,8 +84,8 @@ func (a2g *AreaCodeToGeo) ReadCsvPath(csvpath string) error {
 			err = errors.New(fmt.Sprintf("Bad LatLon Data: %v\n", rec))
 			break
 		}
-		aci, err := NewAreaCodeInfoStrings(rec[0], rec[1], rec[2])
-		if err != nil {
+		aci, errx := NewAreaCodeInfoStrings(rec[0], rec[1], rec[2])
+		if errx != nil {
 			err = errx
 			break
 		}

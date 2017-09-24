@@ -1,5 +1,8 @@
 CHANGELOG
 ---------
+- **2017-09-24**
+  - Add `phonenumber.AreaCodeToGeo`
+  - Add `timeutil.TimeRange`
 - **2017-09-20**
   - Add `multipartutil.MultipartBuilder`
   - Add `urlutil.URLInfo`
