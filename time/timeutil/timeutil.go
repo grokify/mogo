@@ -139,6 +139,40 @@ func IsLessThan(timeLeft time.Time, timeRight time.Time, orEqual bool) bool {
 	return false
 }
 
+// TimeRange represents a time range with a max and min value.
+type TimeRange struct {
+	HaveMax bool
+	HaveMin bool
+	Max     time.Time
+	Min     time.Time
+}
+
+// Insert updates a time range min and max values for a given time.
+func (tr *TimeRange) Insert(t time.Time) {
+	tr.InsertMax(t)
+	tr.InsertMin(t)
+}
+
+// InsertMax updates a time range max value for a given time.
+func (tr *TimeRange) InsertMax(t time.Time) {
+	if !tr.HaveMax {
+		tr.Max = t
+		tr.HaveMax = true
+	} else if IsGreaterThan(t, tr.Max, false) {
+		tr.Max = t
+	}
+}
+
+// InsertMin updates a time range min value for a given time.
+func (tr *TimeRange) InsertMin(t time.Time) {
+	if !tr.HaveMin {
+		tr.Min = t
+		tr.HaveMin = true
+	} else if IsLessThan(t, tr.Min, false) {
+		tr.Min = t
+	}
+}
+
 // TimeForEpochMillis returns the time.Time value for an epoch
 // in milliseconds
 func UnixMillis(epochMillis int64) time.Time {

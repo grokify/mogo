@@ -124,3 +124,5 @@ func NewResponseRateLimitInfo(resp *http.Response, useXrlHyphen bool) RateLimitI
 	}
 	return rlstat
 }
+
+type FnLogRateLimitInfo func(RateLimitInfo)

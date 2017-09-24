@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	log "github.com/sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 )
 
 var (
@@ -33,40 +33,30 @@ func NewHttpClient() *http.Client {
 	return netClient
 }
 
-func GetRequestRateLimited(client *http.Client, reqURL string) (*http.Response, error) {
+func GetRequestRateLimited(client *http.Client, reqURL string, useXrlHyphen bool, fn FnLogRateLimitInfo) (*http.Response, error) {
 	req, err := http.NewRequest("GET", reqURL, nil)
 	if err != nil {
 		return &http.Response{}, err
 	}
-	return DoRequestRateLimited(client, req)
+	return DoRequestRateLimited(client, req, useXrlHyphen, fn)
 }
 
-func DoRequestRateLimited(client *http.Client, req *http.Request) (*http.Response, error) {
+// DoRequestRateLimited will pause a request for the time specified in the
+// HTTP response headers.
+func DoRequestRateLimited(client *http.Client, req *http.Request, useXrlHyphen bool, fnLog FnLogRateLimitInfo) (*http.Response, error) {
 	resp, err := client.Do(req)
 	if err != nil {
 		return resp, err
 	}
 
-	rlstat := NewResponseRateLimitInfo(resp, true)
+	rlstat := NewResponseRateLimitInfo(resp, useXrlHyphen)
 
 	if rlstat.XRateLimitRemaining <= 0 {
-		log.WithFields(log.Fields{
-			"action":                 "http_rate_limited",
-			"status_code":            rlstat.StatusCode,
-			"retry-after":            rlstat.RetryAfter,
-			"x-rate-limit-remaining": rlstat.XRateLimitRemaining,
-			"x-rate-limit-window":    rlstat.XRateLimitWindow,
-		}).Info("Request has been rated limited.")
+		fnLog(rlstat)
 		time.Sleep(time.Duration(rlstat.XRateLimitWindow) * time.Second)
 		return resp, nil
 	} else if rlstat.StatusCode == 429 {
-		log.WithFields(log.Fields{
-			"action":                 "http_rate_limited",
-			"status_code":            rlstat.StatusCode,
-			"retry-after":            rlstat.RetryAfter,
-			"x-rate-limit-remaining": rlstat.XRateLimitRemaining,
-			"x-rate-limit-window":    rlstat.XRateLimitWindow,
-		}).Info("Request has been rated limited.")
+		fnLog(rlstat)
 		if rlstat.RetryAfter > 0 {
 			time.Sleep(time.Duration(rlstat.RetryAfter) * time.Second)
 		} else if rlstat.XRateLimitWindow > 0 {
@@ -77,4 +67,14 @@ func DoRequestRateLimited(client *http.Client, req *http.Request) (*http.Respons
 		return client.Do(req)
 	}
 	return resp, nil
+}
+
+func LogRequestRateLimited(rlstat RateLimitInfo) {
+	log.WithFields(log.Fields{
+		"action":                 "http_rate_limited",
+		"status_code":            rlstat.StatusCode,
+		"retry-after":            rlstat.RetryAfter,
+		"x-rate-limit-remaining": rlstat.XRateLimitRemaining,
+		"x-rate-limit-window":    rlstat.XRateLimitWindow,
+	}).Info("Request has been rated limited.")
 }
