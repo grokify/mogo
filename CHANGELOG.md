@@ -1,7 +1,8 @@
 CHANGELOG
 ---------
 - **2017-09-27**
-  - Add `timeutil.GetFormat`
+  - Add `reflectutil.GetFieldsFormatted()`
+  - Add `timeutil.GetFormat()`
 - **2017-09-24**
   - Add `phonenumber.AreaCodeToGeo`
   - Add `timeutil.TimeRange`
