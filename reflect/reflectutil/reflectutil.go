@@ -81,16 +81,15 @@ func FormatString(s string, options []string) string {
 func GetFieldFormatted(item interface{}, f FieldInfo) (interface{}, error) {
 	var wip interface{}
 	var err error
-	namePath := strings.Split(strings.TrimSpace(f.Name), ".")
-	if len(namePath) > 1 {
-		wip, err = GetFieldRecurse(item, namePath[:len(namePath)-1])
-	} else {
-		wip = item
-	}
-	val, err := reflections.GetField(wip, namePath[len(namePath)-1])
+
+	val, err := GetFieldRecurse(
+		item,
+		strings.Split(strings.TrimSpace(f.Name), "."))
+
 	if err != nil {
 		return wip, err
 	}
+
 	typePath := strings.Split(strings.TrimSpace(f.Type), ".")
 	if len(typePath) > 0 {
 		switch strings.TrimSpace(typePath[0]) {
