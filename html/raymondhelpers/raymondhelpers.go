@@ -12,12 +12,20 @@ import (
 // RegisterAll registers helpers for the Raymond Handlebars template
 // engine.
 func RegisterAll() {
+	RegisterString()
+	RegisterTime()
+}
+
+func RegisterTime() {
 	raymond.RegisterHelper("timeRfc3339", func(t time.Time) string {
 		return t.Format(time.RFC3339)
 	})
 	raymond.RegisterHelper("timeRfc3339ymd", func(t time.Time) string {
 		return t.Format(timeutil.RFC3339YMD)
 	})
+}
+
+func RegisterString() {
 	raymond.RegisterHelper("spaceToHyphen", func(s string) string {
 		return regexp.MustCompile(`[\s-]+`).ReplaceAllString(s, "-")
 	})
