@@ -12,27 +12,27 @@ import (
 // RegisterAll registers helpers for the Raymond Handlebars template
 // engine.
 func RegisterAll() {
-	RegisterString()
-	RegisterTime()
+	RegisterStringSafe()
+	RegisterTimeSafe()
 }
 
-func RegisterTime() {
-	raymond.RegisterHelper("timeRfc3339", func(t time.Time) string {
-		return t.Format(time.RFC3339)
+func RegisterTimeSafe() {
+	raymond.RegisterHelper("timeRfc3339", func(t time.Time) raymond.SafeString {
+		return raymond.SafeString(t.Format(time.RFC3339))
 	})
-	raymond.RegisterHelper("timeRfc3339ymd", func(t time.Time) string {
-		return t.Format(timeutil.RFC3339YMD)
+	raymond.RegisterHelper("timeRfc3339ymd", func(t time.Time) raymond.SafeString {
+		return raymond.SafeString(t.Format(timeutil.RFC3339YMD))
 	})
 }
 
-func RegisterString() {
-	raymond.RegisterHelper("spaceToHyphen", func(s string) string {
-		return regexp.MustCompile(`[\s-]+`).ReplaceAllString(s, "-")
+func RegisterStringSafe() {
+	raymond.RegisterHelper("spaceToHyphen", func(s string) raymond.SafeString {
+		return raymond.SafeString(regexp.MustCompile(`[\s-]+`).ReplaceAllString(s, "-"))
 	})
-	raymond.RegisterHelper("spaceToUnderscore", func(s string) string {
-		return regexp.MustCompile(`[\s_]+`).ReplaceAllString(s, "_")
+	raymond.RegisterHelper("spaceToUnderscore", func(s string) raymond.SafeString {
+		return raymond.SafeString(regexp.MustCompile(`[\s_]+`).ReplaceAllString(s, "_"))
 	})
-	raymond.RegisterHelper("toLower", func(s string) string {
-		return strings.ToLower(s)
+	raymond.RegisterHelper("toLower", func(s string) raymond.SafeString {
+		return raymond.SafeString(strings.ToLower(s))
 	})
 }
