@@ -24,8 +24,7 @@ func Execute(pattern string, item interface{}) string {
 
 	fields := []FieldInfo{}
 	for _, mi := range m {
-		fieldsi := ParseFieldInfoString(mi[1])
-		fields = append(fields, fieldsi...)
+		fields = append(fields, ParseFieldInfoString(mi[1])...)
 	}
 
 	return fmt.Sprintf(
