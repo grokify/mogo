@@ -1,7 +1,9 @@
 CHANGELOG
 ---------
 - **2017-09-27**
-  - Add `reflectutil.GetFieldsFormatted()`
+  - Add `raymondhelpers.Register()`
+  - Add `reflectutil.GetField()`
+  - Add `template.Execute()`
   - Add `timeutil.GetFormat()`
 - **2017-09-24**
   - Add `phonenumber.AreaCodeToGeo`
