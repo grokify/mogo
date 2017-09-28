@@ -8,6 +8,12 @@ import (
 	"unicode/utf8"
 )
 
+const (
+	StringToLower     = "StringToLower"
+	SpaceToHyphen     = "SpaceToHyphen"
+	SpaceToUnderscore = "SpaceToUnderscore"
+)
+
 // PadLeft prepends a string to a base string until the string
 // length is greater or equal to the desired length.
 func PadLeft(str string, pad string, length int) string {
@@ -116,4 +122,18 @@ func JoinInterface(arr []interface{}, sep string, stripRepeatedSep bool, stripEm
 			ReplaceAllString(joined, sep)
 	}
 	return joined
+}
+
+func FormatString(s string, options []string) string {
+	for _, opt := range options {
+		switch strings.TrimSpace(opt) {
+		case StringToLower:
+			s = strings.ToLower(s)
+		case SpaceToHyphen:
+			s = regexp.MustCompile(`[\s-]+`).ReplaceAllString(s, "-")
+		case SpaceToUnderscore:
+			s = regexp.MustCompile(`[\s_]+`).ReplaceAllString(s, "_")
+		}
+	}
+	return s
 }
