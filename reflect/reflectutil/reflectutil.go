@@ -17,13 +17,13 @@ func Set(i interface{}, key string, value interface{}) {
 	field.Set(reflect.ValueOf(value))
 }
 
-func GetField(item interface{}, namePath ...string) (interface{}, error) {
-	if namePath == nil || len(namePath) == 0 {
+func GetField(item interface{}, fieldPath ...string) (interface{}, error) {
+	if fieldPath == nil || len(fieldPath) == 0 {
 		return item, nil
 	}
-	nextItem, err := reflections.GetField(item, strings.TrimSpace(namePath[0]))
-	if err != nil || len(namePath) == 1 {
+	nextItem, err := reflections.GetField(item, strings.TrimSpace(fieldPath[0]))
+	if err != nil || len(fieldPath) == 1 {
 		return nextItem, err
 	}
-	return GetField(nextItem, namePath[1:]...)
+	return GetField(nextItem, fieldPath[1:]...)
 }
