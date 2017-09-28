@@ -11,10 +11,10 @@ import (
 	"github.com/grokify/gotilla/time/timeutil"
 )
 
-// ExecuteTemplate takes a template string and an interface{}
+// Execute takes a template string and an interface{}
 // struct, substituting struct values for the variables.
 // Field names can be nested.
-func ExecuteTemplate(pattern string, item interface{}) string {
+func Execute(pattern string, item interface{}) string {
 	r := regexp.MustCompile(`{{(.*?)}}`)
 	m := r.FindAllStringSubmatch(pattern, -1)
 
