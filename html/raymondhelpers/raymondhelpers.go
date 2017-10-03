@@ -35,4 +35,10 @@ func RegisterStringSafe() {
 	raymond.RegisterHelper("toLower", func(s string) raymond.SafeString {
 		return raymond.SafeString(strings.ToLower(s))
 	})
+	raymond.RegisterHelper("defaultUnknown", func(s string) raymond.SafeString {
+		if len(strings.TrimSpace(s)) == 0 {
+			return raymond.SafeString("unknown")
+		}
+		return raymond.SafeString(s)
+	})
 }
