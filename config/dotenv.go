@@ -7,7 +7,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var EnvPathVars = []string{"ENV_PATH", "ENV_PATHS"}
+var EnvPathVars = []string{"ENV_PATH", "."}
 
 func LoadDotEnv() error {
 	envPathsSet := []string{}
