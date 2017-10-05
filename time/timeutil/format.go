@@ -36,3 +36,7 @@ func GetFormat(formatName string) (string, error) {
 	}
 	return format, nil
 }
+
+func FormatQuarter(t time.Time) string {
+	return fmt.Sprintf("%d Q%d", t.Year(), MonthToQuarter(int(t.Month())))
+}
