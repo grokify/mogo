@@ -7,12 +7,47 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"io"
 	"io/ioutil"
 	"os"
 	"path"
+
+	"github.com/itchyny/base58-go"
 )
+
+func EncryptAesBase58Json(plainitem interface{}, key []byte, encoding *base58.Encoding) ([]byte, error) {
+	plaintext, err := json.Marshal(plainitem)
+	if err != nil {
+		return plaintext, err
+	}
+	return EncryptAesBase58(plaintext, key, encoding)
+}
+
+func DecryptAesBase58Json(ciphertext []byte, key []byte, encoding *base58.Encoding, item interface{}) error {
+	plaintext, err := DecryptAesBase58(ciphertext, key, encoding)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(plaintext, item)
+}
+
+func EncryptAesBase58(plaintext []byte, key []byte, encoding *base58.Encoding) ([]byte, error) {
+	bytes, err := EncryptAes(plaintext, key)
+	if err != nil {
+		return bytes, err
+	}
+	return encoding.Encode(bytes)
+}
+
+func DecryptAesBase58(ciphertext []byte, key []byte, encoding *base58.Encoding) ([]byte, error) {
+	bytes, err := encoding.Decode(ciphertext)
+	if err != nil {
+		return bytes, err
+	}
+	return DecryptAes(bytes, key)
+}
 
 // EncryptAes provides a ciphertext byte array given a plaintext
 // bytearray and key.
