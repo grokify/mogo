@@ -1,6 +1,7 @@
 package main
 
 import (
+	//"errors"
 	"fmt"
 
 	"github.com/grokify/gotilla/strconv/phonenumber"
@@ -24,25 +25,16 @@ func GcdGoogle() {
 	fmt.Printf("Great circle distance NYC to SFO: %v\n", dist)
 }
 
-func GcdAreaCode() {
+func main() {
+	GcdGoogle()
+
 	a2g := phonenumber.NewAreaCodeToGeo()
 	a2g.ReadData()
 
-	acNYC, ok := a2g.AreaCodeInfos[AREACODE_USNYC]
-	if !ok {
-		panic(fmt.Sprintf("AreaCode %v Not Found.", AREACODE_USNYC))
+	dist, err := a2g.GcdAreaCodes(AREACODE_USNYC, AREACODE_USSFO)
+	if err != nil {
+		panic(err)
 	}
-	acSFO, ok := a2g.AreaCodeInfos[AREACODE_USSFO]
-	if !ok {
-		panic(fmt.Sprintf("AreaCode %v Not Found.", AREACODE_USSFO))
-	}
-
-	dist2 := acNYC.Point.GreatCircleDistance(acSFO.Point)
-	fmt.Printf("Great circle distance %v to %v: %v\n", AREACODE_USNYC, AREACODE_USSFO, dist2)
-}
-
-func main() {
-	GcdGoogle()
-	GcdAreaCode()
+	fmt.Printf("Great circle distance %v to %v: %v\n", AREACODE_USNYC, AREACODE_USSFO, dist)
 	fmt.Println("DONE")
 }

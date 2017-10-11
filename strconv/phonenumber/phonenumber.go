@@ -134,6 +134,20 @@ func (a2g *AreaCodeToGeo) GetDistanceMatrix() map[int]map[int]float64 {
 	return distanceMatrix
 }
 
+func (a2g *AreaCodeToGeo) GcdAreaCodes(ac1Int int, ac2Int int) (float64, error) {
+	ac1, ok := a2g.AreaCodeInfos[ac1Int]
+	if !ok {
+		return 0, errors.New(fmt.Sprintf("AreaCode %v Not Found.", ac1Int))
+	}
+	ac2, ok := a2g.AreaCodeInfos[ac2Int]
+	if !ok {
+		return 0, errors.New(fmt.Sprintf("AreaCode %v Not Found.", ac2Int))
+	}
+
+	dist2 := ac1.Point.GreatCircleDistance(ac2.Point)
+	return dist2, nil
+}
+
 // A2gCsvFullPath reads data from:
 // https://github.com/ravisorg/Area-Code-Geolocation-Database
 func A2gCsvFullPath() string {
