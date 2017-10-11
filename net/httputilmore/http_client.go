@@ -1,6 +1,8 @@
 package httputilmore
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"net"
 	"net/http"
@@ -92,8 +94,6 @@ func (cm *ClientMore) PostToJSON(postURL string, body interface{}) (*http.Respon
 	if err != nil {
 		return &http.Response{}, err
 	}
-	req.Header.Set(
-		httputilmore.ContentTypeHeader,
-		httputilmore.ContentTypeValueJSONUTF8)
+	req.Header.Set(ContentTypeHeader, ContentTypeValueJSONUTF8)
 	return cm.Client.Do(req)
 }
