@@ -4,21 +4,29 @@ import (
 	"os"
 	"strings"
 
+	"github.com/grokify/gotilla/os/osutil"
 	"github.com/joho/godotenv"
 )
 
-var EnvPathVars = []string{"ENV_PATH", "."}
+var DefaultPaths = []string{"ENV_PATH", "."}
 
-func LoadDotEnv() error {
+func LoadDotEnv(paths ...string) error {
+	if len(paths) == 0 {
+		paths = DefaultPaths
+	}
+
 	envPathsSet := []string{}
-	for _, envPathVar := range EnvPathVars {
+	for _, envPathVar := range paths {
 		envPath := strings.TrimSpace(os.Getenv(envPathVar))
 		if len(envPath) > 0 {
 			envPaths := strings.Split(envPath, ",")
 			for _, envPath := range envPaths {
 				envPath = strings.TrimSpace(envPath)
 				if len(envPath) > 0 {
-					envPathsSet = append(envPathsSet, envPath)
+					exists, err := osutil.Exists(envPath)
+					if err == nil && exists {
+						envPathsSet = append(envPathsSet, envPath)
+					}
 				}
 			}
 		}
