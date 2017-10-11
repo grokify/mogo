@@ -78,3 +78,22 @@ func LogRequestRateLimited(rlstat RateLimitInfo) {
 		"x-rate-limit-window":    rlstat.XRateLimitWindow,
 	}).Info("Request has been rated limited.")
 }
+
+type ClientMore struct {
+	Client *http.Client
+}
+
+func (cm *ClientMore) PostToJSON(postURL string, body interface{}) (*http.Response, error) {
+	jsonBytes, err := json.Marshal(body)
+	if err != nil {
+		return &http.Response{}, err
+	}
+	req, err := http.NewRequest("POST", postURL, bytes.NewBuffer(jsonBytes))
+	if err != nil {
+		return &http.Response{}, err
+	}
+	req.Header.Set(
+		httputilmore.ContentTypeHeader,
+		httputilmore.ContentTypeValueJSONUTF8)
+	return cm.Client.Do(req)
+}
