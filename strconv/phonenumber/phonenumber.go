@@ -107,6 +107,14 @@ func (a2g *AreaCodeToGeo) AreaCodeSlice() []AreaCodeInfo {
 	return acSlice
 }
 
+func (a2g *AreaCodeToGeo) AreaCodes() []int {
+	acSlice := []int{}
+	for _, aci := range a2g.AreaCodeInfos {
+		acSlice = append(acSlice, aci.AreaCode)
+	}
+	return acSlice
+}
+
 func (a2g *AreaCodeToGeo) Inflate() {
 	a2g.DistanceMatrix = a2g.GetDistanceMatrix()
 }
