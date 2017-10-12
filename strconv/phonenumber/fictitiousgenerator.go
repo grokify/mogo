@@ -11,16 +11,14 @@ const (
 )
 
 type FakeNumberGenerator struct {
-	AreaCodeToGeo AreaCodeToGeo
-	AreaCodes     []int
-	Rand          *rand.Rand
+	AreaCodes []int
+	Rand      *rand.Rand
 }
 
-func NewFakeNumberGenerator(a2g AreaCodeToGeo) FakeNumberGenerator {
+func NewFakeNumberGenerator(areacodes []int) FakeNumberGenerator {
 	fng := FakeNumberGenerator{
-		AreaCodeToGeo: a2g,
-		AreaCodes:     a2g.AreaCodes(),
-		Rand:          rand.New(rand.NewSource(time.Now().Unix())),
+		AreaCodes: areacodes,
+		Rand:      rand.New(rand.NewSource(time.Now().Unix())),
 	}
 	return fng
 }
