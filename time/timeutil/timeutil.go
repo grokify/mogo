@@ -420,6 +420,20 @@ func NextQuarter(dt time.Time) (time.Time, error) {
 	return TimeDt6AddNMonths(dtBeg, 3), nil
 }
 
+// QuarterDuration returns a time.Duration representing the
+// calendar quarter for the time provided.
+func QuarterDuration(dt time.Time) (time.Duration, error) {
+	start, err := QuarterStart(dt)
+	if err != nil {
+		return dt.Sub(dt), err
+	}
+	end, err := NextQuarter(start)
+	if err != nil {
+		return dt.Sub(dt), err
+	}
+	return end.Sub(start), nil
+}
+
 func IntervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time, error) {
 	switch interval.String() {
 	case "year":
