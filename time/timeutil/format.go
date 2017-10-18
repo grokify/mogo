@@ -40,3 +40,8 @@ func GetFormat(formatName string) (string, error) {
 func FormatQuarter(t time.Time) string {
 	return fmt.Sprintf("%d Q%d", t.Year(), MonthToQuarter(int(t.Month())))
 }
+
+func TimeRFC3339Zero() time.Time {
+	t0, _ := time.Parse(time.RFC3339, RFC3339Zero)
+	return t0
+}
