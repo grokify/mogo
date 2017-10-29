@@ -45,3 +45,20 @@ func TimeRFC3339Zero() time.Time {
 	t0, _ := time.Parse(time.RFC3339, RFC3339Zero)
 	return t0
 }
+
+type RFC3339YMDTime struct {
+	time.Time
+}
+
+func (t *RFC3339YMDTime) UnmarshalJSON(buf []byte) error {
+	tt, err := time.Parse(RFC3339YMD, strings.Trim(string(buf), `"`))
+	if err != nil {
+		return err
+	}
+	t.Time = tt
+	return nil
+}
+
+func (t RFC3339YMDTime) MarshalJSON() ([]byte, error) {
+	return []byte(`"` + t.Time.Format(RFC3339YMD) + `"`), nil
+}
