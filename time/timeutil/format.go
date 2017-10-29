@@ -51,7 +51,10 @@ type RFC3339YMDTime struct {
 }
 
 func (t *RFC3339YMDTime) UnmarshalJSON(buf []byte) error {
-	tt, err := time.Parse(RFC3339YMD, strings.Trim(string(buf), `"`))
+	if str == "null" || str == "\"\"" {
+		return nil
+	}
+	tt, err := time.Parse(RFC3339YMD, strings.Trim(str, `"`))
 	if err != nil {
 		return err
 	}

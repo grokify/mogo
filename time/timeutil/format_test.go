@@ -9,7 +9,10 @@ var rfc3339YMDTimeTests = []struct {
 	v    string
 	want string
 }{
-	{`{"MyTime":"2001-02-03"}`, `{"MyTime":"2001-02-03"}`}}
+	{`{"MyTime":"2001-02-03"}`, `{"MyTime":"2001-02-03"}`},
+	{`{"MyTime":"0001-01-01"}`, `{"MyTime":"0001-01-01"}`},
+	{`{"MyTime":""}`, `{"MyTime":"0001-01-01"}`},
+	{`{}`, `{"MyTime":"0001-01-01"}`}}
 
 type myStruct struct {
 	MyTime RFC3339YMDTime
