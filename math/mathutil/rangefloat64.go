@@ -31,7 +31,7 @@ func (rf *RangeFloat64) CellIndexForValue(v float64) (int32, error) {
 	return rf.binarySearch(v, 0, rf.Cells-1)
 }
 
-func (rf *RangeFloat64) binarySearch(v float64, l int32, r int32) (int32, error) {
+func (rf *RangeFloat64) binarySearch(v float64, l, r int32) (int32, error) {
 	rf.iter += 1
 	if rf.iter > MaxTries {
 		return int32(0), errors.New(fmt.Sprintf("Too many (%v) binary search iterations.", MaxTries))
