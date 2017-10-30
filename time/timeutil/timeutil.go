@@ -130,6 +130,14 @@ func IsLessThan(timeLeft time.Time, timeRight time.Time, orEqual bool) bool {
 	return false
 }
 
+// MinMax takes two times and returns the earlier time first.
+func MinMax(min, max time.Time) (time.Time, time.Time) {
+	if timeutil.IsGreaterThan(min, max, false) {
+		return max, min
+	}
+	return min, max
+}
+
 // TimeRange represents a time range with a max and min value.
 type TimeRange struct {
 	HaveMax bool
