@@ -1,5 +1,8 @@
 CHANGELOG
 ---------
+- **2017-10-30**
+  - Add `mathutil.RangeInt64` and `mathutil.RangeFloat64`
+  - Add `timeutil.MinMax()` and `timeutil.RFC3339YMDTime`
 - **2017-09-27**
   - Add `raymondhelpers.Register()`
   - Add `reflectutil.GetField()`
