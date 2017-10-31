@@ -79,10 +79,10 @@ func (rf *RangeFloat64) CellMinMax(idx int32) (float64, float64, error) {
 	if err != nil {
 		return float64(0), float64(0), err
 	}
-	cellMin := float64(idx) * cellRange
+	cellMin := float64(idx)*cellRange + rng.Min
 	cellMax := rf.Max
 	if idx < (rf.Cells - 1) {
-		cellMax = (float64(idx) + 1) * cellRange
+		cellMax = (float64(idx)+1)*cellRange + rng.Min
 	}
 	return cellMin, cellMax, nil
 }

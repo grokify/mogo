@@ -77,10 +77,10 @@ func (rng *RangeInt64) CellMinMax(idx int32) (int64, int64, error) {
 	if err != nil {
 		return int64(0), int64(0), err
 	}
-	cellMin := int64(idx) * cellRange
+	cellMin := int64(idx)*cellRange + rng.Min
 	cellMax := rng.Max
 	if idx < (rng.Cells - 1) {
-		cellMax = (int64(idx) + 1) * cellRange
+		cellMax = (int64(idx)+1)*cellRange + rng.Min
 	}
 	return cellMin, cellMax, nil
 }
