@@ -19,69 +19,69 @@ type RangeFloat64 struct {
 }
 
 // CellIndexForValue returns a cell index for a requested value.
-func (rf *RangeFloat64) CellIndexForValue(v float64) (int32, error) {
-	err := rf.isInitialized()
+func (rng *RangeFloat64) CellIndexForValue(v float64) (int32, error) {
+	err := rng.isInitialized()
 	if err != nil {
 		return int32(0), err
 	}
-	if v < rf.Min || v > rf.Max {
-		return int32(0), errors.New(fmt.Sprintf("Value (%v) out of range [%v,%v]", v, rf.Min, rf.Max))
+	if v < rng.Min || v > rng.Max {
+		return int32(0), errors.New(fmt.Sprintf("Value (%v) out of range [%v,%v]", v, rng.Min, rng.Max))
 	}
-	rf.iter = 0
-	return rf.binarySearch(v, 0, rf.Cells-1)
+	rng.iter = 0
+	return rng.binarySearch(v, 0, rng.Cells-1)
 }
 
-func (rf *RangeFloat64) binarySearch(v float64, l, r int32) (int32, error) {
-	rf.iter += 1
-	if rf.iter > MaxTries {
+func (rng *RangeFloat64) binarySearch(v float64, l, r int32) (int32, error) {
+	rng.iter += 1
+	if rng.iter > MaxTries {
 		return int32(0), errors.New(fmt.Sprintf("Too many (%v) binary search iterations.", MaxTries))
 	}
 
 	m := int32(float32(l) + (float32(r)-float32(l))/2.0)
-	min, max, err := rf.CellMinMax(m)
+	min, max, err := rng.CellMinMax(m)
 	if err != nil {
 		return int32(0), pkgerr.Wrap(err, "CellMinMax() failed")
 	}
 	//fmt.Printf("{\"iter\":%v,\"val\":%v,\"l\":%v,\"r\":%v,\"m\":%v,\"minv\":%v,\"maxv\":%v}\n", rf.iter, v, l, r, m, min, max)
 
-	if v >= min && (v < max || max == rf.Max) {
+	if v >= min && (v < max || max == rng.Max) {
 		return m, nil
 	}
 	if v < min {
-		return rf.binarySearch(v, l, m-1)
+		return rng.binarySearch(v, l, m-1)
 	}
-	return rf.binarySearch(v, m+1, r)
+	return rng.binarySearch(v, m+1, r)
 }
 
-func (rf *RangeFloat64) isInitialized() error {
-	if rf.Min > rf.Max {
-		return errors.New(fmt.Sprintf("Start (%v) is less than End (%v)", rf.Min, rf.Max))
-	} else if rf.Cells <= 0 {
-		return errors.New(fmt.Sprintf("Num cells is <= 0 (%v)", rf.Cells))
+func (rng *RangeFloat64) isInitialized() error {
+	if rng.Min > rng.Max {
+		return errors.New(fmt.Sprintf("Start (%v) is less than End (%v)", rng.Min, rng.Max))
+	} else if rng.Cells <= 0 {
+		return errors.New(fmt.Sprintf("Num cells is <= 0 (%v)", rng.Cells))
 	}
 	return nil
 }
 
-func (rf *RangeFloat64) cellRange() (float64, error) {
-	err := rf.isInitialized()
+func (rng *RangeFloat64) cellRange() (float64, error) {
+	err := rng.isInitialized()
 	if err != nil {
 		return float64(0), err
 	}
-	return ((rf.Max - rf.Min) / float64(rf.Cells)), nil
+	return ((rng.Max - rng.Min) / float64(rng.Cells)), nil
 }
 
-func (rf *RangeFloat64) CellMinMax(idx int32) (float64, float64, error) {
-	err := rf.isInitialized()
+func (rng *RangeFloat64) CellMinMax(idx int32) (float64, float64, error) {
+	err := rng.isInitialized()
 	if err != nil {
 		return float64(0), float64(0), err
 	}
-	cellRange, err := rf.cellRange()
+	cellRange, err := rng.cellRange()
 	if err != nil {
 		return float64(0), float64(0), err
 	}
 	cellMin := float64(idx)*cellRange + rng.Min
-	cellMax := rf.Max
-	if idx < (rf.Cells - 1) {
+	cellMax := rng.Max
+	if idx < (rng.Cells - 1) {
 		cellMax = (float64(idx)+1)*cellRange + rng.Min
 	}
 	return cellMin, cellMax, nil
