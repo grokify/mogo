@@ -8,10 +8,11 @@ import (
 )
 
 const (
-	AREACODE_USNYC = 212
-	AREACODE_USSFO = 415
+	USNYC_AREACODE = 212
 	USNYC_LAT_GOOG = 40.6976684
 	USNYC_LON_GOOG = -74.2605588
+
+	USSFO_AREACODE = 415
 	USSFO_LAT_GOOG = 37.7578149
 	USSFO_LON_GOOG = -122.5078121
 )
@@ -30,10 +31,10 @@ func main() {
 	a2g := phonenumber.NewAreaCodeToGeo()
 	a2g.ReadData()
 
-	dist, err := a2g.GcdAreaCodes(AREACODE_USNYC, AREACODE_USSFO)
+	dist, err := a2g.GcdAreaCodes(USNYC_AREACODE, USSFO_AREACODE)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("Great circle distance %v to %v: %v\n", AREACODE_USNYC, AREACODE_USSFO, dist)
+	fmt.Printf("Great circle distance %v to %v: %v\n", USNYC_AREACODE, USSFO_AREACODE, dist)
 	fmt.Println("DONE")
 }
