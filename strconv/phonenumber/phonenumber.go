@@ -17,7 +17,7 @@ const (
 )
 
 type AreaCodeInfo struct {
-	AreaCode int
+	AreaCode uint16
 	Point    *geo.Point
 }
 
@@ -32,7 +32,7 @@ func NewAreaCodeInfoStrings(ac, lat, lon string) (AreaCodeInfo, error) {
 	if i < 100 || i > 999 {
 		return aci, errors.New(fmt.Sprintf("Invalid Area Code %v", i))
 	}
-	aci.AreaCode = i
+	aci.AreaCode = uint16(i)
 	geo, err := NewPointString(lat, lon)
 	if err != nil {
 		return aci, err
@@ -55,12 +55,12 @@ func NewPointString(lat string, lon string) (*geo.Point, error) {
 }
 
 type AreaCodeToGeo struct {
-	AreaCodeInfos  map[int]AreaCodeInfo
-	DistanceMatrix map[int]map[int]float64
+	AreaCodeInfos  map[uint16]AreaCodeInfo
+	DistanceMatrix map[uint16]map[uint16]float64
 }
 
 func NewAreaCodeToGeo() AreaCodeToGeo {
-	return AreaCodeToGeo{AreaCodeInfos: map[int]AreaCodeInfo{}}
+	return AreaCodeToGeo{AreaCodeInfos: map[uint16]AreaCodeInfo{}}
 }
 
 func (a2g *AreaCodeToGeo) ReadData() error {
@@ -107,8 +107,8 @@ func (a2g *AreaCodeToGeo) AreaCodeSlice() []AreaCodeInfo {
 	return acSlice
 }
 
-func (a2g *AreaCodeToGeo) AreaCodes() []int {
-	acSlice := []int{}
+func (a2g *AreaCodeToGeo) AreaCodes() []uint16 {
+	acSlice := []uint16{}
 	for _, aci := range a2g.AreaCodeInfos {
 		acSlice = append(acSlice, aci.AreaCode)
 	}
@@ -119,9 +119,9 @@ func (a2g *AreaCodeToGeo) Inflate() {
 	a2g.DistanceMatrix = a2g.GetDistanceMatrix()
 }
 
-func (a2g *AreaCodeToGeo) GetDistanceMatrix() map[int]map[int]float64 {
+func (a2g *AreaCodeToGeo) GetDistanceMatrix() map[uint16]map[uint16]float64 {
 	acis := a2g.AreaCodeSlice()
-	distanceMatrix := map[int]map[int]float64{}
+	distanceMatrix := map[uint16]map[uint16]float64{}
 
 	l := len(acis)
 	for i := 0; i < l; i++ {
@@ -130,11 +130,11 @@ func (a2g *AreaCodeToGeo) GetDistanceMatrix() map[int]map[int]float64 {
 			ac2 := acis[j]
 			gcd := ac1.Point.GreatCircleDistance(ac2.Point)
 			if _, ok := distanceMatrix[ac1.AreaCode]; !ok {
-				distanceMatrix[ac1.AreaCode] = map[int]float64{}
+				distanceMatrix[ac1.AreaCode] = map[uint16]float64{}
 			}
 			distanceMatrix[ac1.AreaCode][ac2.AreaCode] = gcd
 			if _, ok := distanceMatrix[ac2.AreaCode]; !ok {
-				distanceMatrix[ac2.AreaCode] = map[int]float64{}
+				distanceMatrix[ac2.AreaCode] = map[uint16]float64{}
 			}
 			distanceMatrix[ac2.AreaCode][ac1.AreaCode] = gcd
 		}
@@ -142,7 +142,7 @@ func (a2g *AreaCodeToGeo) GetDistanceMatrix() map[int]map[int]float64 {
 	return distanceMatrix
 }
 
-func (a2g *AreaCodeToGeo) GcdAreaCodes(ac1Int int, ac2Int int) (float64, error) {
+func (a2g *AreaCodeToGeo) GcdAreaCodes(ac1Int uint16, ac2Int uint16) (float64, error) {
 	ac1, ok := a2g.AreaCodeInfos[ac1Int]
 	if !ok {
 		return 0, errors.New(fmt.Sprintf("AreaCode %v Not Found.", ac1Int))
