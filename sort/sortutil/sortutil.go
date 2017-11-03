@@ -40,3 +40,15 @@ func InArrayStringCaseInsensitive(haystack []string, needle string) (string, err
 	}
 	return "", errors.New("String not found")
 }
+
+// Uint16Slice attaches the methods of Interface to []uint16, sorting in increasing order.
+type Uint16Slice []uint16
+
+func (p Uint16Slice) Len() int           { return len(p) }
+func (p Uint16Slice) Less(i, j int) bool { return p[i] < p[j] }
+func (p Uint16Slice) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
+
+// Sort is a convenience method.
+func (p Uint16Slice) Sort() { sort.Sort(p) }
+
+func Uint16s(a []uint16) { sort.Sort(Uint16Slice(a)) }

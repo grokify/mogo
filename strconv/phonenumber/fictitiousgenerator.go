@@ -30,16 +30,23 @@ func (fng *FakeNumberGenerator) RandomAreaCode() uint16 {
 
 // RandomLineNumber generates a random line number
 func (fng *FakeNumberGenerator) RandomLineNumber() uint16 {
-	return uint16(fng.Rand.Intn(int(fakeLineNumberMax)-int(fakeLineNumberMin))) +
-		fakeLineNumberMin
+	return fng.RandomLineNumberMinMax(fakeLineNumberMin, fakeLineNumberMax)
+}
+
+// RandomLineNumber generates a random line number
+func (fng *FakeNumberGenerator) RandomLineNumberMinMax(min, max uint16) uint16 {
+	return uint16(fng.Rand.Intn(int(max)-int(min))) + min
 }
 
 // RandomLocalNumberUS returns a US E.164 number
 // AreaCode + Prefix + Line Number
 func (fng *FakeNumberGenerator) RandomLocalNumberUS() uint64 {
-	ac := uint64(fng.RandomAreaCode())
-	ln := uint64(fng.RandomLineNumber())
-	return 10000000000 + (ac * 10000000) + (5550000) + ln
+	return fng.LocalNumberUS(fng.RandomAreaCode(), fng.RandomLineNumber())
+}
+
+// LocalNumberUS returns a US E.164 number given an areacode and line number
+func (fng *FakeNumberGenerator) LocalNumberUS(ac uint16, ln uint16) uint64 {
+	return 10000000000 + (uint64(ac) * 10000000) + (5550000) + uint64(ln)
 }
 
 // RandomLocalNumberUS returns a US E.164 number
