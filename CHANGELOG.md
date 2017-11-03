@@ -1,5 +1,7 @@
 CHANGELOG
 ---------
+- **2017-11-02**
+  - Add `timeutil.XOXTimes` `timeutil.YOYTimes` `timeutil.QOQTimes`
 - **2017-10-30**
   - Add `mathutil.RangeInt64` and `mathutil.RangeFloat64`
   - Add `timeutil.MinMax()` and `timeutil.RFC3339YMDTime`

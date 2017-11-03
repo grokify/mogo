@@ -9,6 +9,8 @@ import (
 	"mime/multipart"
 	"net/textproto"
 	"os"
+
+	"github.com/grokify/gotilla/net/httputilmore"
 )
 
 // MultipartBuilder is a multipart helper.
@@ -35,7 +37,7 @@ func (builder *MultipartBuilder) WriteFieldAsJSON(partName string, data interfac
 
 	header := textproto.MIMEHeader{}
 	header.Add("Content-Disposition", fmt.Sprintf(`form-data; name="%v"`, partName))
-	header.Add("Content-Type", "application/json; charset=UTF-8")
+	header.Add(httputilmore.ContentTypeHeader, httputilmore.ContentTypeValueJSONUTF8)
 	if base64Encode {
 		header.Add("Content-Transfer-Encoding", "base64")
 	}
