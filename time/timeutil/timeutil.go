@@ -386,16 +386,17 @@ func WeekStart(dt time.Time, dow time.Weekday) (time.Time, error) {
 
 // MonthStart returns a time.Time for the beginning of the
 // month in UTC time.
-func MonthStart(dt time.Time) (time.Time, error) {
-	return TimeForDt6(Dt6ForTime(dt.UTC()))
+func MonthStart(dt time.Time) time.Time {
+	dt = dt.UTC()
+	return time.Date(dt.Year(), dt.Month(), 1, 0, 0, 0, 0, time.UTC)
 }
 
 // QuarterStart returns a time.Time for the beginning of the
 // quarter in UTC time.
-func QuarterStart(dt time.Time) (time.Time, error) {
+func QuarterStart(dt time.Time) time.Time {
 	dt = dt.UTC()
 	qm := QuarterToMonth(MonthToQuarter(int(dt.Month())))
-	return TimeForDt6(int32(dt.Year()*100 + qm))
+	return time.Date(dt.Year(), time.Month(qm), 1, 0, 0, 0, 0, time.UTC)
 }
 
 // YearStart returns a a time.Time for the beginning of the year
@@ -404,42 +405,25 @@ func YearStart(dt time.Time) time.Time {
 	return time.Date(dt.UTC().Year(), time.January, 1, 0, 0, 0, 0, time.UTC)
 }
 
-func QuarterStartString(dt time.Time) (string, error) {
-	dtStart, err := QuarterStart(dt)
-	if err != nil {
-		return "", err
-	}
-	return fmt.Sprintf("%v Q%v", dtStart.Year(), MonthToQuarter(int(dtStart.Month()))), nil
+func QuarterStartString(dt time.Time) string {
+	dtStart := QuarterStart(dt)
+	return fmt.Sprintf("%v Q%v", dtStart.Year(), MonthToQuarter(int(dtStart.Month())))
 }
 
-func PrevQuarter(dt time.Time) (time.Time, error) {
-	dtBeg, err := QuarterStart(dt)
-	if err != nil {
-		return dt, err
-	}
-	return TimeDt6SubNMonths(dtBeg, 3), nil
+func PrevQuarter(dt time.Time) time.Time {
+	return TimeDt6SubNMonths(QuarterStart(dt), 3)
 }
 
-func NextQuarter(dt time.Time) (time.Time, error) {
-	dtBeg, err := QuarterStart(dt)
-	if err != nil {
-		return dt, err
-	}
-	return TimeDt6AddNMonths(dtBeg, 3), nil
+func NextQuarter(dt time.Time) time.Time {
+	return TimeDt6AddNMonths(QuarterStart(dt), 3)
 }
 
 // QuarterDuration returns a time.Duration representing the
 // calendar quarter for the time provided.
-func QuarterDuration(dt time.Time) (time.Duration, error) {
-	start, err := QuarterStart(dt)
-	if err != nil {
-		return dt.Sub(dt), err
-	}
-	end, err := NextQuarter(start)
-	if err != nil {
-		return dt.Sub(dt), err
-	}
-	return end.Sub(start), nil
+func QuarterDuration(dt time.Time) time.Duration {
+	start := QuarterStart(dt)
+	end := NextQuarter(start)
+	return end.Sub(start)
 }
 
 func IntervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time, error) {
@@ -447,9 +431,9 @@ func IntervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time
 	case "year":
 		return YearStart(dt), nil
 	case "quarter":
-		return QuarterStart(dt)
+		return QuarterStart(dt), nil
 	case "month":
-		return MonthStart(dt)
+		return MonthStart(dt), nil
 	case "week":
 		return WeekStart(dt, dow)
 	default:
@@ -481,19 +465,13 @@ type TimeMeta struct {
 // NewTimeMeta returns a TimeMeta struct given `time.Time`
 // and `time.Weekday` parameters.
 func NewTimeMeta(dt time.Time, dow time.Weekday) (TimeMeta, error) {
-	meta := TimeMeta{This: dt}
+	dt = dt.UTC()
+	meta := TimeMeta{
+		This:         dt,
+		YearStart:    YearStart(dt),
+		QuarterStart: QuarterStart(dt),
+		MonthStart:   MonthStart(dt)}
 
-	meta.YearStart = YearStart(dt)
-	quarter, err := QuarterStart(dt)
-	if err != nil {
-		return meta, err
-	}
-	meta.QuarterStart = quarter
-	month, err := MonthStart(dt)
-	if err != nil {
-		return meta, err
-	}
-	meta.MonthStart = month
 	week, err := WeekStart(dt, dow)
 	if err != nil {
 		return meta, err
