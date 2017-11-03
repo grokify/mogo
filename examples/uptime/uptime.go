@@ -44,10 +44,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	rangeDur, err := timeutil.QuarterDuration(dt)
-	if err != nil {
-		panic(err)
-	}
+	rangeDur := timeutil.QuarterDuration(dt)
 	fmt.Println(rangeDur.String())
 
 	getIncident(
