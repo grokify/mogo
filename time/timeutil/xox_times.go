@@ -14,14 +14,14 @@ type XOXTimes struct {
 	PreviousStart time.Time
 }
 
-func QOQTimes(thisTime time.Time) (XOXTimes, error) {
+func QOQTimes(thisTime time.Time) XOXTimes {
 	xox := XOXTimes{CurrentTime: thisTime.UTC()}
 	xox.CurrentStart = QuarterStart(xox.CurrentTime)
 	xox.PreviousStart = PrevQuarter(xox.CurrentStart)
 
 	dur := xox.CurrentTime.Sub(xox.CurrentStart)
 	xox.PreviousTime = xox.PreviousStart.Add(dur)
-	return xox, nil
+	return xox
 }
 
 func YOYTimes(thisTime time.Time) XOXTimes {

@@ -86,11 +86,7 @@ func TestQuarterStart(t *testing.T) {
 			t.Errorf("time.Parse(%v): want %v, err %v", tt.v, tt.want, err)
 			continue
 		}
-		got, err := QuarterStart(dt)
-		if err != nil {
-			t.Errorf("QuarterStart(%v): want %v, err %v", tt.v, tt.want, err)
-			continue
-		}
+		got := QuarterStart(dt)
 		if got.Format(time.RFC3339) != tt.want {
 			t.Errorf("QuarterStart(%v): want %v, got %v", tt.v, tt.want, got.Format(time.RFC3339))
 		}
