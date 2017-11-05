@@ -15,7 +15,8 @@ func NewTLSConfig() TLSConfig {
 	return TLSConfig{
 		Config: &tls.Config{
 			Certificates: []tls.Certificate{},
-			RootCAs:      x509.NewCertPool()}}
+		},
+	}
 }
 
 func (tc *TLSConfig) LoadX509KeyPair(cert_filepath, key_filepath string) error {
@@ -32,6 +33,10 @@ func (tc *TLSConfig) LoadCACert(ca_cert_filepath string) error {
 	if err != nil {
 		return err
 	}
+	if tc.Config.RootCAs == nil {
+		tc.Config.RootCAs = x509.NewCertPool()
+	}
+
 	ok := tc.Config.RootCAs.AppendCertsFromPEM(cert)
 	if !ok {
 		return fmt.Errorf("Cannot add Root CA cert %v", ca_cert_filepath)
