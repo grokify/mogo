@@ -4,23 +4,23 @@
 package timeutil
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 	"time"
 )
 
 const (
-	DT14            = "20060102150405"
-	DT6             = "200601"
-	DT8             = "20060102"
-	RFC3339Min      = "0000-01-01T00:00:00Z"
-	RFC3339Zero     = "0001-01-01T00:00:00Z"
-	RFC3339YMD      = "2006-01-02"
-	ISO8601YM       = "2006-01"
-	ISO8601Z2       = "2006-01-02T15:04:05-07"
-	ISO8601Z4       = "2006-01-02T15:04:05-0700"
-	ISO8601ZCompact = "20060102T150405Z"
+	DT14             = "20060102150405"
+	DT6              = "200601"
+	DT8              = "20060102"
+	RFC3339Min       = "0000-01-01T00:00:00Z"
+	RFC3339Zero      = "0001-01-01T00:00:00Z"
+	RFC3339YMD       = "2006-01-02"
+	ISO8601YM        = "2006-01"
+	ISO8601Z2        = "2006-01-02T15:04:05-07"
+	ISO8601Z4        = "2006-01-02T15:04:05-0700"
+	ISO8601ZCompact  = "20060102T150405Z"
+	ISO8601NoTzMilli = "2006-01-02T15:04:05.000"
 )
 
 var FormatMap = map[string]string{
@@ -32,7 +32,7 @@ var FormatMap = map[string]string{
 func GetFormat(formatName string) (string, error) {
 	format, ok := FormatMap[strings.TrimSpace(formatName)]
 	if !ok {
-		return "", errors.New(fmt.Sprintf("Format Not Found: %v", format))
+		return "", fmt.Errorf("Format Not Found: %v", format)
 	}
 	return format, nil
 }
@@ -46,17 +46,13 @@ func TimeRFC3339Zero() time.Time {
 	return t0
 }
 
-type RFC3339YMDTime struct {
-	time.Time
-}
+type RFC3339YMDTime struct{ time.Time }
+
+type ISO8601NoTzMilliTime struct{ time.Time }
 
 func (t *RFC3339YMDTime) UnmarshalJSON(buf []byte) error {
-	str := string(buf)
-	if str == "null" || str == "\"\"" {
-		return nil
-	}
-	tt, err := time.Parse(RFC3339YMD, strings.Trim(str, `"`))
-	if err != nil {
+	tt, isNil, err := timeUnmarshalJSON(buf, RFC3339YMD)
+	if err != nil || isNil {
 		return err
 	}
 	t.Time = tt
@@ -64,5 +60,35 @@ func (t *RFC3339YMDTime) UnmarshalJSON(buf []byte) error {
 }
 
 func (t RFC3339YMDTime) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + t.Time.Format(RFC3339YMD) + `"`), nil
+	return timeMarshalJSON(t.Time, RFC3339YMD)
+}
+
+func (t *ISO8601NoTzMilliTime) UnmarshalJSON(buf []byte) error {
+	tt, isNil, err := timeUnmarshalJSON(buf, ISO8601NoTzMilli)
+	if err != nil || isNil {
+		return err
+	}
+	t.Time = tt
+	return nil
+}
+
+func (t ISO8601NoTzMilliTime) MarshalJSON() ([]byte, error) {
+	return timeMarshalJSON(t.Time, ISO8601NoTzMilli)
+}
+
+func timeUnmarshalJSON(buf []byte, format string) (time.Time, bool, error) {
+	str := string(buf)
+	isNil := true
+	if str == "null" || str == "\"\"" {
+		return time.Time{}, isNil, nil
+	}
+	tt, err := time.Parse(format, strings.Trim(str, `"`))
+	if err != nil {
+		return time.Time{}, false, err
+	}
+	return tt, false, nil
+}
+
+func timeMarshalJSON(t time.Time, format string) ([]byte, error) {
+	return []byte(`"` + t.Format(format) + `"`), nil
 }

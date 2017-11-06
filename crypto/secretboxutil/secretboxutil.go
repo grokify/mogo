@@ -3,7 +3,7 @@ package secretboxutil
 import (
 	"crypto/rand"
 	"encoding/base32"
-	"errors"
+	"fmt"
 	"io"
 
 	"golang.org/x/crypto/nacl/secretbox"
@@ -51,7 +51,7 @@ func OpenBox(ciphertext []byte, secretKeyBytes []byte) ([]byte, error) {
 	copy(nonce[:], ciphertext[:24])
 	plaintext, ok := secretbox.Open(nil, ciphertext[24:], &nonce, &secretKey)
 	if !ok {
-		return []byte(""), errors.New("Cannot decrypt")
+		return []byte(""), fmt.Errorf("Cannot decrypt")
 	}
 	return plaintext, nil
 }

@@ -63,7 +63,7 @@ func ParseInterval(src string) (Interval, error) {
 			return Interval(i), nil
 		}
 	}
-	return Year, errors.New(fmt.Sprintf("Interval [%v] not found.", src))
+	return Year, fmt.Errorf("Interval [%v] not found.", src)
 }
 
 // ParseDuration adds days (d), weeks (w), years (y).
@@ -437,7 +437,7 @@ func IntervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time
 	case "week":
 		return WeekStart(dt, dow)
 	default:
-		return time.Time{}, errors.New(fmt.Sprintf("Interval [%v] not supported in timeutil.IntervalStart.", interval))
+		return time.Time{}, fmt.Errorf("Interval [%v] not supported in timeutil.IntervalStart.", interval)
 	}
 }
 
