@@ -19,8 +19,6 @@ func InArrayStringCaseInsensitive(haystack []string, needle string) (string, err
 	return "", errors.New("String not found")
 }
 
-func Int64s(a []int64) { sort.Sort(Int64Slice(a)) }
-
 // Int64Slice attaches the methods of Interface to []iint64, sorting in increasing order.
 type Int64Slice []int64
 
@@ -41,4 +39,10 @@ func (p Uint16Slice) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
 // Sort is a convenience method.
 func (p Uint16Slice) Sort() { sort.Sort(p) }
 
+// Convenience wrappers for common cases
+
+// Int64s sorts a slice of int64s in increasing order.
+func Int64s(a []int64) { sort.Sort(Int64Slice(a)) }
+
+// Uint16s sorts a slice of uint16s in increasing order.
 func Uint16s(a []uint16) { sort.Sort(Uint16Slice(a)) }
