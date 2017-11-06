@@ -4,7 +4,6 @@
 package timeutil
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -33,7 +32,7 @@ var FormatMap = map[string]string{
 func GetFormat(formatName string) (string, error) {
 	format, ok := FormatMap[strings.TrimSpace(formatName)]
 	if !ok {
-		return "", errors.New(fmt.Sprintf("Format Not Found: %v", format))
+		return "", fmt.Errorf("Format Not Found: %v", format)
 	}
 	return format, nil
 }
