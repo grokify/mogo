@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/grokify/gotilla/encoding/csvutil"
+	"github.com/grokify/gotilla/sort/sortutil"
 	"github.com/kellydunn/golang-geo"
 )
 
@@ -113,6 +114,12 @@ func (a2g *AreaCodeToGeo) AreaCodes() []uint16 {
 		acSlice = append(acSlice, aci.AreaCode)
 	}
 	return acSlice
+}
+
+func (a2g *AreaCodeToGeo) AreaCodesSorted() []uint16 {
+	acs := a2g.AreaCodes()
+	sortutil.Uint16s(acs)
+	return acs
 }
 
 func (a2g *AreaCodeToGeo) Inflate() {
