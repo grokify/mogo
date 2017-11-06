@@ -19,7 +19,7 @@ func InArrayStringCaseInsensitive(haystack []string, needle string) (string, err
 	return "", errors.New("String not found")
 }
 
-// Int64Slice attaches the methods of Interface to []iint64, sorting in increasing order.
+// Int64Slice attaches the methods of Interface to []int64, sorting in increasing order.
 type Int64Slice []int64
 
 func (p Int64Slice) Len() int           { return len(p) }
