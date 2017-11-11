@@ -11,14 +11,7 @@ type TransportWithHeaders struct {
 	Override  bool
 }
 
-// THe default logging transport that wraps http.DefaultTransport.
-var DefaultTransportWithHeaders = &TransportWithHeaders{
-	Header:    http.Header{},
-	Transport: http.DefaultTransport,
-}
-
-// RoundTrip is the core part of this module and implements http.RoundTripper.
-// Executes HTTP request with request/response logging.
+// RoundTrip adds the additional headers per request implements http.RoundTripper.
 func (t TransportWithHeaders) RoundTrip(req *http.Request) (*http.Response, error) {
 	req.Header = MergeHeader(req.Header, t.Header, t.Override)
 
