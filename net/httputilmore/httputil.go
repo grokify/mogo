@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"os"
+	"strings"
 
 	"github.com/grokify/gotilla/strconv/strconvutil"
 )
@@ -92,6 +93,24 @@ func PrintResponse(resp *http.Response, includeBody bool) error {
 	}
 	fmt.Println(string(respBytes))
 	return nil
+}
+
+// MergeHeader merges two http.Header adding the values of the second
+// to the first.
+func MergeHeader(base, extra http.Header, overwrite bool) http.Header {
+	for k, vals := range extra {
+		if overwrite {
+			base.Del(k)
+		}
+
+		for _, v := range vals {
+			v = strings.TrimSpace(v)
+			if len(v) > 0 {
+				base.Add(k, v)
+			}
+		}
+	}
+	return base
 }
 
 // RateLimitInfo is a structure for holding parsed rate limit info.
