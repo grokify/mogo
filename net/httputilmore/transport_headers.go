@@ -4,7 +4,11 @@ import (
 	"net/http"
 )
 
-// TransportWithHeaders implements http.RoundTripper. When set as Transport of http.Client, it adds HTTP headers to requests. No field is mandatory. Can be implemented with http.Client as: client.Transport = httputilmore.TransportWithHeaders{Transport:client.Transport, Header:myHeader}
+// TransportWithHeaders implements http.RoundTripper.
+// When set as Transport of http.Client, it adds HTTP headers to requests.
+// No field is mandatory. Can be implemented with http.Client as:
+// client.Transport = httputilmore.TransportWithHeaders{
+// Transport:client.Transport, Header:myHeader}
 type TransportWithHeaders struct {
 	Transport http.RoundTripper
 	Header    http.Header
