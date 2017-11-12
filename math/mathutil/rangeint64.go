@@ -60,7 +60,7 @@ func (rng *RangeInt64) isInitialized() error {
 	return nil
 }
 
-func (rng *RangeInt64) cellRange() (int64, error) {
+func (rng *RangeInt64) CellRange() (int64, error) {
 	err := rng.isInitialized()
 	if err != nil {
 		return int64(0), err
@@ -73,7 +73,7 @@ func (rng *RangeInt64) CellMinMax(idx int32) (int64, int64, error) {
 	if err != nil {
 		return int64(0), int64(0), err
 	}
-	cellRange, err := rng.cellRange()
+	cellRange, err := rng.CellRange()
 	if err != nil {
 		return int64(0), int64(0), err
 	}

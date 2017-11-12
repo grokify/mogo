@@ -395,8 +395,16 @@ func MonthStart(dt time.Time) time.Time {
 // quarter in UTC time.
 func QuarterStart(dt time.Time) time.Time {
 	dt = dt.UTC()
-	qm := QuarterToMonth(MonthToQuarter(int(dt.Month())))
+	qm := QuarterToMonth(MonthToQuarter(uint8(dt.Month())))
 	return time.Date(dt.Year(), time.Month(qm), 1, 0, 0, 0, 0, time.UTC)
+}
+
+// QuarterEnd returns a time.Time for the end of the
+// quarter by second in UTC time.
+func QuarterEnd(dt time.Time) time.Time {
+	qs := QuarterStart(dt.UTC())
+	qn := TimeDt6AddNMonths(qs, 3)
+	return time.Date(qn.Year(), qn.Month(), 0, 23, 59, 59, 0, time.UTC)
 }
 
 // YearStart returns a a time.Time for the beginning of the year
@@ -407,7 +415,7 @@ func YearStart(dt time.Time) time.Time {
 
 func QuarterStartString(dt time.Time) string {
 	dtStart := QuarterStart(dt)
-	return fmt.Sprintf("%v Q%v", dtStart.Year(), MonthToQuarter(int(dtStart.Month())))
+	return fmt.Sprintf("%v Q%v", dtStart.Year(), MonthToQuarter(uint8(dtStart.Month())))
 }
 
 func PrevQuarter(dt time.Time) time.Time {
@@ -442,12 +450,12 @@ func IntervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time
 }
 
 // MonthToQuarter converts a month to a calendar quarter.
-func MonthToQuarter(month int) int {
-	return int(math.Ceil(float64(month) / 3))
+func MonthToQuarter(month uint8) uint8 {
+	return uint8(math.Ceil(float64(month) / 3))
 }
 
 // QuarterToMonth converts a calendar quarter to a month.
-func QuarterToMonth(quarter int) int {
+func QuarterToMonth(quarter uint8) uint8 {
 	return quarter*3 - 2
 }
 
