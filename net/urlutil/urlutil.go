@@ -15,7 +15,7 @@ import (
 // or spaces.
 func ToSlug(slug []byte) []byte {
 	// Convert punctuation and spaces to hyphens: string([]byte{45}) = "-"
-	slug = regexp.MustCompile(`[\*\s]+`).ReplaceAll(slug, []byte{45})
+	slug = regexp.MustCompile(`[[:punct:]\s_]+`).ReplaceAll(slug, []byte{45})
 	slug = regexp.MustCompile(`["']+`).ReplaceAll(slug, []byte{})
 	return regexp.MustCompile(`(^-+|-+$)`).ReplaceAll(slug, []byte{})
 }
