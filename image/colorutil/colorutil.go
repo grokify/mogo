@@ -30,11 +30,10 @@ var ChartColor1 = [...]string{
 	"#3B3EAC",
 }
 
-func GoogleSlidesRgbColorParseHex(hexColor string) (slides.RgbColor, error) {
-	rgbColor := slides.RgbColor{}
+func GoogleSlidesRgbColorParseHex(hexColor string) (*slides.RgbColor, error) {
 	c, err := colorful.Hex(hexColor)
 	if err != nil {
-		return rgbColor, err
+		return nil, err
 	}
-	return slides.RgbColor{Red: c.R, Green: c.G, Blue: c.B}, nil
+	return &slides.RgbColor{Red: c.R, Green: c.G, Blue: c.B}, nil
 }
