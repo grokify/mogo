@@ -1,5 +1,8 @@
 CHANGELOG
 ---------
+- **2017-11-17**
+  - Add `jsonutil.PrettyPrint()`
+  - Update `urlutil.ToSlug()`
 - **2017-11-02**
   - Add `timeutil.XOXTimes` `timeutil.YOYTimes()` `timeutil.QOQTimes()`
   - Add `sortutil.Uint16s()`
