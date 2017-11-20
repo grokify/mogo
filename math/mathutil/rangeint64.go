@@ -1,7 +1,6 @@
 package mathutil
 
 import (
-	"errors"
 	"fmt"
 
 	pkgerr "github.com/pkg/errors"
@@ -23,7 +22,7 @@ func (rng *RangeInt64) CellIndexForValue(v int64) (int32, error) {
 		return int32(0), err
 	}
 	if v < rng.Min || v > rng.Max {
-		return int32(0), errors.New(fmt.Sprintf("Value (%v) out of range [%v,%v]", v, rng.Min, rng.Max))
+		return int32(0), fmt.Errorf("RangeInt64 Value (%v) out of range [%v,%v]", v, rng.Min, rng.Max)
 	}
 	rng.iter = 0
 	return rng.binarySearch(v, 0, rng.Cells-1)
@@ -32,7 +31,7 @@ func (rng *RangeInt64) CellIndexForValue(v int64) (int32, error) {
 func (rng *RangeInt64) binarySearch(v int64, l, r int32) (int32, error) {
 	rng.iter += 1
 	if rng.iter > MaxTries {
-		return int32(0), errors.New(fmt.Sprintf("Too many (%v) binary search iterations.", MaxTries))
+		return int32(0), fmt.Errorf("RangeInt64 Too many (%v) binary search iterations.", MaxTries)
 	}
 
 	m := int32(float32(l) + (float32(r)-float32(l))/2.0)
@@ -53,9 +52,9 @@ func (rng *RangeInt64) binarySearch(v int64, l, r int32) (int32, error) {
 
 func (rng *RangeInt64) isInitialized() error {
 	if rng.Min > rng.Max {
-		return errors.New(fmt.Sprintf("Start (%v) is less than End (%v)", rng.Min, rng.Max))
+		return fmt.Errorf("Start (%v) is less than End (%v)", rng.Min, rng.Max)
 	} else if rng.Cells <= 0 {
-		return errors.New(fmt.Sprintf("Num cells is <= 0 (%v)", rng.Cells))
+		return fmt.Errorf("Num cells is <= 0 (%v)", rng.Cells)
 	}
 	return nil
 }
