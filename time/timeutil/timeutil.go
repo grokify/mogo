@@ -130,6 +130,38 @@ func IsLessThan(timeLeft time.Time, timeRight time.Time, orEqual bool) bool {
 	return false
 }
 
+// MinTime returns minTime if time in question is less than min time.
+func MinTime(t, minTime time.Time) time.Time {
+	if IsLessThan(t, minTime, false) {
+		return minTime
+	}
+	return t
+}
+
+// MaxTime returns maxTime if time in question is greater than max time.
+func MaxTime(t, maxTime time.Time) time.Time {
+	if IsGreaterThan(t, maxTime, false) {
+		return maxTime
+	}
+	return t
+}
+
+// GreaterTime returns the greater of two times.
+func GreaterTime(t1, t2 time.Time) time.Time {
+	if IsGreaterThan(t1, t2, false) {
+		return t1
+	}
+	return t2
+}
+
+// LesserTime returns the lesser of two times.
+func LesserTime(t1, t2 time.Time) time.Time {
+	if IsLessThan(t1, t2, false) {
+		return t1
+	}
+	return t2
+}
+
 // MinMax takes two times and returns the earlier time first.
 func MinMax(min, max time.Time) (time.Time, time.Time) {
 	if IsGreaterThan(min, max, false) {
