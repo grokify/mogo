@@ -17,9 +17,7 @@ type CryptorOAEP struct {
 }
 
 func NewCryptorOAEP() CryptorOAEP {
-	enc := CryptorOAEP{}
-	enc.Hash = md5.New()
-	return enc
+	return CryptorOAEP{Hash: md5.New()}
 }
 
 func (enc *CryptorOAEP) DecryptOAEP(ciphertextBytes []byte, label []byte) ([]byte, error) {
