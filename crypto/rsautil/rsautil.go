@@ -22,8 +22,7 @@ func NewCryptorOAEP() CryptorOAEP {
 
 func (enc *CryptorOAEP) DecryptOAEP(ciphertextBytes []byte, label []byte) ([]byte, error) {
 	if enc.RsaPrivateKey == nil {
-		err := errors.New("401: RSA Private Key Not Set")
-		return []byte{}, err
+		return []byte{}, errors.New("401: RSA Private Key Not Set")
 	}
 	return rsa.DecryptOAEP(enc.Hash, rand.Reader, enc.RsaPrivateKey, ciphertextBytes, label)
 }
