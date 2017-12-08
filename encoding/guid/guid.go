@@ -30,9 +30,8 @@ func GuidToBigInt(guid string) (*big.Int, error) {
 	if !ValidGuidHex(guid) {
 		return nil, fmt.Errorf("Not a valid Guid: %v\n", guid)
 	}
-	hexstr := rxHyphen.ReplaceAllString(guid, "")
 	bi := big.NewInt(0)
-	bi.SetString(hexstr, 16)
+	bi.SetString(rxHyphen.ReplaceAllString(guid, ""), 16)
 	return bi, nil
 }
 
