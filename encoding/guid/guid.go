@@ -10,6 +10,7 @@ import (
 )
 
 const (
+	// GuidPattern is a regexp pattern for GUIDs.
 	GuidPattern = `^([0-9a-fA-F]{8})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{12})$`
 	guidReplace = "${1}-${2}-${3}-${4}-${5}"
 )
