@@ -2,27 +2,32 @@ package timeutil
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 	"time"
 )
 
 /*
 
-TimeDeltaDowString is designed to retrieve a time object x days of week in the past or the future.
+TimeDeltaDow is designed to retrieve a time object x days of week in the past or the future.
 
 // Two Sundays in the future, including today, at 00:00:00
-t, err := TimeDeltaDowString(time.Now(), "Sunday", 2, true, true)
+t, err := TimeDeltaDow(time.Now(), time.Sunday, 2, true, true)
 
 // Two Sundays in the future, including today, at present time
-t, err := TimeDeltaDowString(time.Now(), "Sunday", 2, true, false)
+t, err := TimeDeltaDow(time.Now(), time.Sunday, 2, true, false)
 
 // Two Sundays ago, not including today, at 00:00:00
-t, err := TimeDeltaDowString(time.Now(), "Sunday", -2, false, true)
+t, err := TimeDeltaDow(time.Now(), time.Sunday, -2, false, true)
 
 // Two Sundays ago, not including today, at present time
-t, err := TimeDeltaDowString(time.Now(), "Sunday", -2, false, false)
+t, err := TimeDeltaDow(time.Now(), time.Sunday, -2, false, false)
 
 */
+
+func TimeDeltaDow(base time.Time, wantDow time.Weekday, deltaUnits int, wantInclusive bool, wantStartOfDay bool) (time.Time, error) {
+	return TimeDeltaDowInt(base, int(wantDow), deltaUnits, wantInclusive, wantStartOfDay)
+}
 
 func TimeDeltaDowString(base time.Time, wantDowS string, deltaUnits int, wantInclusive bool, wantStartOfDay bool) (time.Time, error) {
 	wantDow, err := ParseDayOfWeek(wantDowS)
@@ -82,9 +87,12 @@ func DaysAgoDowStrings(baseDowS string, wantDowS string, wantInclusive bool) (in
 }
 
 func DaysAgoDow(baseDow int, wantDow int, wantInclusive bool) (int, error) {
-	if baseDow < 0 || baseDow > 6 || wantDow < 0 || wantDow > 6 {
-		return int(0), errors.New("Day of week is not in [0-6]")
+	if baseDow < 0 || baseDow > 6 {
+		return int(0), fmt.Errorf("Base Day of Week is not in [0-6]: %v")
+	} else if wantDow < 0 || wantDow > 6 {
+		return int(0), fmt.Errorf("Want Day of Week is not in [0-6]: %v")
 	}
+
 	deltaDays1 := baseDow - wantDow
 	deltaDays2 := deltaDays1
 	if deltaDays2 < 0 {
@@ -110,8 +118,10 @@ func DaysToDowStrings(baseDowS string, wantDowS string, wantInclusive bool) (int
 }
 
 func DaysToDow(baseDow int, wantDow int, wantInclusive bool) (int, error) {
-	if baseDow < 0 || baseDow > 6 || wantDow < 0 || wantDow > 6 {
-		return int(0), errors.New("Day of week is not in [0-6]")
+	if baseDow < 0 || baseDow > 6 {
+		return int(0), fmt.Errorf("Base Day of Week is not in [0-6]: %v")
+	} else if wantDow < 0 || wantDow > 6 {
+		return int(0), fmt.Errorf("Want Day of Week is not in [0-6]: %v")
 	}
 	deltaDays1 := wantDow - baseDow
 	deltaDays2 := deltaDays1
@@ -125,14 +135,14 @@ func DaysToDow(baseDow int, wantDow int, wantInclusive bool) (int, error) {
 }
 
 func ParseDayOfWeek(value string) (int, error) {
-	value = strings.ToLower(value)
+	valueLc := strings.ToLower(value)
 	days := []string{"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"}
 	mapping := map[string]int{}
 	for i, dow := range days {
 		mapping[dow] = int(i)
 	}
-	if dow, ok := mapping[value]; ok {
+	if dow, ok := mapping[valueLc]; ok {
 		return dow, nil
 	}
-	return -1, errors.New("English name of day not found")
+	return -1, fmt.Errorf("English name of day not found: %v", value)
 }
