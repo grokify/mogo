@@ -38,8 +38,9 @@ func GetFormat(formatName string) (string, error) {
 	return format, nil
 }
 
+// FormatQuarter takes quarter time and formats it using "Q# YYYY".
 func FormatQuarter(t time.Time) string {
-	return fmt.Sprintf("%d Q%d", t.Year(), MonthToQuarter(uint8(t.Month())))
+	return fmt.Sprintf("Q%d %d", MonthToQuarter(uint8(t.Month())), t.Year())
 }
 
 func TimeRFC3339Zero() time.Time {
