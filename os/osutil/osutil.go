@@ -4,6 +4,7 @@ package osutil
 import (
 	"io/ioutil"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -65,4 +66,24 @@ func GetFileInfo(path string) (os.FileInfo, error) {
 	}
 	defer f.Close()
 	return f.Stat()
+}
+
+type EnvVar struct {
+	Key   string
+	Value string
+}
+
+func Env() []EnvVar {
+	envs := []EnvVar{}
+	for _, e := range os.Environ() {
+		pair := strings.Split(e, "=")
+		if len(pair) > 0 {
+			env := EnvVar{Key: pair[0]}
+			if len(pair) > 1 {
+				env.Value = strings.Join(pair[1:], "=")
+			}
+			envs = append(envs, env)
+		}
+	}
+	return envs
 }
