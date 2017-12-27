@@ -78,11 +78,14 @@ func Env() []EnvVar {
 	for _, e := range os.Environ() {
 		pair := strings.Split(e, "=")
 		if len(pair) > 0 {
-			env := EnvVar{Key: pair[0]}
-			if len(pair) > 1 {
-				env.Value = strings.Join(pair[1:], "=")
+			key := strings.TrimSpace(pair[0])
+			if len(key) > 0 {
+				env := EnvVar{Key: key}
+				if len(pair) > 1 {
+					env.Value = strings.Join(pair[1:], "=")
+				}
+				envs = append(envs, env)
 			}
-			envs = append(envs, env)
 		}
 	}
 	return envs
