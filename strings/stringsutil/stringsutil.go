@@ -67,6 +67,17 @@ func SliceTrimSpace(slice []string) []string {
 	return trimmed
 }
 
+// SplitTrimSpace splits a string and trims spaces on
+// remaining elements.
+func SplitTrimSpace(s, sep string) []string {
+	split := strings.Split(s, sep)
+	strs := []string{}
+	for _, str := range split {
+		strs = append(strs, strings.TrimSpace(str))
+	}
+	return strs
+}
+
 // CondenseString trims whitespace at the ends of the string
 // as well as in between.
 func CondenseString(content string, join_lines bool) string {
