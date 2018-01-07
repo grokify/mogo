@@ -22,6 +22,16 @@ const (
 	MillisToNanoMultiplier = 1000000
 )
 
+var days = [...]string{
+	"Sunday",
+	"Monday",
+	"Tuesday",
+	"Wednesday",
+	"Thursday",
+	"Friday",
+	"Saturday",
+}
+
 type Interval int
 
 const (
@@ -90,6 +100,14 @@ func ParseDuration(s string) (time.Duration, error) {
 		}
 	}
 	return time.ParseDuration(s)
+}
+
+func MustParseDuration(s string) time.Duration {
+	dur, err := time.ParseDuration(s)
+	if err != nil {
+		panic(err)
+	}
+	return dur
 }
 
 func NowDeltaDuration(d time.Duration) time.Time {
@@ -423,6 +441,15 @@ func MonthToQuarter(month uint8) uint8 {
 // QuarterToMonth converts a calendar quarter to a month.
 func QuarterToMonth(quarter uint8) uint8 {
 	return quarter*3 - 2
+}
+
+func ParseWeekday(s string) (time.Weekday, error) {
+	for i, day := range days {
+		if strings.ToLower(strings.TrimSpace(s)) == strings.ToLower(day) {
+			return time.Weekday(i), nil
+		}
+	}
+	return time.Weekday(0), fmt.Errorf("Cannot parse weekday: %s", s)
 }
 
 // TimeMeta is a struct for holding various times related

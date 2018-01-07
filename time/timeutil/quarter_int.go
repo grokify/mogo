@@ -5,6 +5,7 @@ package timeutil
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 )
 
@@ -28,6 +29,14 @@ func QuarterInt32Start(yyyyq int32) (time.Time, error) {
 	qm := QuarterToMonth(q)
 	t := time.Date(int(yyyy), time.Month(qm), 1, 0, 0, 0, 0, time.UTC)
 	return t, nil
+}
+
+func ParseQuarterStartString(yyyyqStr string) (time.Time, error) {
+	yyyyq, err := strconv.Atoi(yyyyqStr)
+	if err != nil {
+		return time.Now(), err
+	}
+	return QuarterInt32Start(int32(yyyyq))
 }
 
 func QuarterInt32End(yyyyq int32) (time.Time, error) {
