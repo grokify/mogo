@@ -36,6 +36,14 @@ func MustMarshalString(i interface{}, embedError bool) string {
 	return string(MustMarshal(i, embedError))
 }
 
+func MustMarshalIndent(i interface{}, prefix, indent string, embedError bool) []byte {
+	bytes, err := json.MarshalIndent(i, prefix, indent)
+	if err != nil {
+		panic(err)
+	}
+	return bytes
+}
+
 func PrettyPrint(b []byte) ([]byte, error) {
 	var out bytes.Buffer
 	err := json.Indent(&out, b, MarshalPrefix, MarshalIndent)

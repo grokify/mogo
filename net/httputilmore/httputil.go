@@ -68,7 +68,8 @@ func GetResponseAndBytes(url string) (*http.Response, []byte, error) {
 // UnmarshalResponseJSON unmarshal a `*http.Response` JSON body into
 // a data pointer.
 func UnmarshalResponseJSON(resp *http.Response, data interface{}) error {
-	bytes, err := ResponseBody(resp)
+	//bytes, err := ResponseBody(resp)
+	bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return err
 	}
