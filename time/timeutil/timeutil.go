@@ -402,6 +402,13 @@ func QuarterStartString(dt time.Time) string {
 	return fmt.Sprintf("%v Q%v", dtStart.Year(), MonthToQuarter(uint8(dtStart.Month())))
 }
 
+func PrevQuarters(dt time.Time, n int) time.Time {
+	for i := 0; i < n; i++ {
+		dt = PrevQuarter(dt)
+	}
+	return dt
+}
+
 func PrevQuarter(dt time.Time) time.Time {
 	return TimeDt6SubNMonths(QuarterStart(dt), 3)
 }
@@ -416,6 +423,33 @@ func QuarterDuration(dt time.Time) time.Duration {
 	start := QuarterStart(dt)
 	end := NextQuarter(start)
 	return end.Sub(start)
+}
+
+func IsQuarterStart(t time.Time) bool {
+	t = t.UTC()
+	if t.Second() == 0 &&
+		t.Minute() == 0 &&
+		t.Hour() == 0 &&
+		t.Day() == 1 &&
+		(t.Month() == time.January ||
+			t.Month() == time.April ||
+			t.Month() == time.July ||
+			t.Month() == time.October) {
+		return true
+	}
+	return false
+}
+
+func IsYearStart(t time.Time) bool {
+	t = t.UTC()
+	if t.Second() == 0 &&
+		t.Minute() == 0 &&
+		t.Hour() == 0 &&
+		t.Day() == 1 &&
+		t.Month() == time.January {
+		return true
+	}
+	return false
 }
 
 func IntervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time, error) {
