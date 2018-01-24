@@ -417,6 +417,13 @@ func NextQuarter(dt time.Time) time.Time {
 	return TimeDt6AddNMonths(QuarterStart(dt), 3)
 }
 
+func NextQuarters(dt time.Time, num int) time.Time {
+	for i := 0; i < num; i++ {
+		dt = NextQuarter(dt)
+	}
+	return dt
+}
+
 // QuarterDuration returns a time.Duration representing the
 // calendar quarter for the time provided.
 func QuarterDuration(dt time.Time) time.Duration {
