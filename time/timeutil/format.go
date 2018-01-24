@@ -23,6 +23,7 @@ const (
 	ISO8601Z4          = "2006-01-02T15:04:05-0700"
 	ISO8601ZCompact    = "20060102T150405Z"
 	ISO8601NoTzMilli   = "2006-01-02T15:04:05.000"
+	DateMDYSlash       = "01/02/2006"
 )
 
 var FormatMap = map[string]string{
