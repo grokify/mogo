@@ -43,7 +43,7 @@ func (uv *URLValidator) ValidateURL(u *url.URL) (*url.URL, error) {
 
 func (uv *URLValidator) RequiredSchemesSorted() []string {
 	schemes := []string{}
-	for scheme, _ := range uv.RequiredSchemes {
+	for scheme := range uv.RequiredSchemes {
 		schemes = append(schemes, scheme)
 	}
 	sort.Strings(schemes)
