@@ -8,6 +8,8 @@ import (
 	"path"
 	"regexp"
 	"strings"
+
+	"github.com/google/go-querystring/query"
 )
 
 // ToSlug creates a slug byte array from an input byte array.
@@ -41,6 +43,15 @@ func BuildURLFromMap(baseUrl string, queryParams map[string]string) string {
 // BuildURL returns a URL string from a base URL and url.Values.
 func BuildURL(baseUrl string, queryValues url.Values) string {
 	qryString := queryValues.Encode()
+	if len(qryString) > 0 {
+		return baseUrl + "?" + qryString
+	}
+	return baseUrl
+}
+
+func BuildURLQueryString(baseUrl string, qry interface{}) string {
+	v, _ := query.Values(qry)
+	qryString := v.Encode()
 	if len(qryString) > 0 {
 		return baseUrl + "?" + qryString
 	}

@@ -9,7 +9,7 @@ go:
   - tip
 matrix:
   allow_failures:
-    - go: 1.5.4
+    - go: 1.7.6
     - go: tip
 sudo: true
 before_install:

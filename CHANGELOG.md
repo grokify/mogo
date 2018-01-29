@@ -1,5 +1,7 @@
 CHANGELOG
 ---------
+- **2018-01-28**
+  - Deprecate `1.7.6` and `1.6.4`: `../../pkg/sftp/packet-manager.go:44: undefined: sort.Slice`
 - **2017-11-17**
   - Add `jsonutil.PrettyPrint()`
   - Update `urlutil.ToSlug()`
