@@ -7,11 +7,15 @@ import (
 	"github.com/grokify/gotilla/strings/stringsutil"
 )
 
-func GetReqHeader(req *http.Request, headerName string) string {
-	return strings.TrimSpace(req.Header.Get(headerName))
+// https://stackoverflow.com/questions/15407719/in-gos-http-package-how-do-i-get-the-query-string-on-a-post-request
+
+func GetReqQueryParam(req *http.Request, headerName string) string {
+	return strings.TrimSpace(req.URL.Query().Get(headerName))
 }
 
-func GetSplitReqHeader(req *http.Request, headerName, sep string) []string {
+func GetSplitReqQueryParam(req *http.Request, headerName, sep string) []string {
 	return stringsutil.SliceTrimSpace(strings.Split(
-		string(req.Header.Get(headerName)), sep))
+		string(
+			GetReqQueryParam(req, headerName),
+		), sep))
 }
