@@ -88,9 +88,9 @@ func DaysAgoDowStrings(baseDowS string, wantDowS string, wantInclusive bool) (in
 
 func DaysAgoDow(baseDow int, wantDow int, wantInclusive bool) (int, error) {
 	if baseDow < 0 || baseDow > 6 {
-		return int(0), fmt.Errorf("Base Day of Week is not in [0-6]: %v")
+		return int(0), fmt.Errorf("Base Day of Week is not in [0-6]: %v", baseDow)
 	} else if wantDow < 0 || wantDow > 6 {
-		return int(0), fmt.Errorf("Want Day of Week is not in [0-6]: %v")
+		return int(0), fmt.Errorf("Want Day of Week is not in [0-6]: %v", wantDow)
 	}
 
 	deltaDays1 := baseDow - wantDow
@@ -119,9 +119,9 @@ func DaysToDowStrings(baseDowS string, wantDowS string, wantInclusive bool) (int
 
 func DaysToDow(baseDow int, wantDow int, wantInclusive bool) (int, error) {
 	if baseDow < 0 || baseDow > 6 {
-		return int(0), fmt.Errorf("Base Day of Week is not in [0-6]: %v")
+		return int(0), fmt.Errorf("Base Day of Week is not in [0-6]: %v", baseDow)
 	} else if wantDow < 0 || wantDow > 6 {
-		return int(0), fmt.Errorf("Want Day of Week is not in [0-6]: %v")
+		return int(0), fmt.Errorf("Want Day of Week is not in [0-6]: %v", wantDow)
 	}
 	deltaDays1 := wantDow - baseDow
 	deltaDays2 := deltaDays1
