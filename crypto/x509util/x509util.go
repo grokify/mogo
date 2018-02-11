@@ -5,6 +5,7 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
+	"fmt"
 	"io/ioutil"
 
 	"github.com/grokify/gotilla/io/ioutilmore"
@@ -33,45 +34,55 @@ import (
 // GetRsaPrivateKeyForPkcs1PrivateKeyPath returns a *rsa.PrivateKey
 // for a given PKCS#1 private key file path without a password
 func GetRsaPrivateKeyForPkcs1PrivateKeyPath(prvKeyPKCS1Path string) (*rsa.PrivateKey, error) {
-	var prvKey *rsa.PrivateKey
-
 	isFileGtZero, err := ioutilmore.IsFileWithSizeGtZero(prvKeyPKCS1Path)
 	if err != nil {
-		return prvKey, err
+		return nil, err
 	} else if isFileGtZero == false {
-		return prvKey, errors.New("400: key file path is zero size")
+		return nil, errors.New("400: key file path is zero size")
 	}
 
 	prvKeyPkcs1Bytes, err := ioutil.ReadFile(prvKeyPKCS1Path)
 	if err != nil {
-		return prvKey, err
+		return nil, err
 	}
 
-	block, _ := pem.Decode(prvKeyPkcs1Bytes)
+	return GetRsaPrivateKeyForPkcs1PrivateKeyBytes(prvKeyPkcs1Bytes)
+}
+
+func GetRsaPrivateKeyForPkcs1PrivateKeyBytes(prvKeyPkcs1Bytes []byte) (*rsa.PrivateKey, error) {
+	block, rest := pem.Decode(prvKeyPkcs1Bytes)
+	if len(rest) > 0 {
+		return nil, fmt.Errorf("Extra data included in key len: %v", len(rest))
+	}
 	return x509.ParsePKCS1PrivateKey(block.Bytes)
 }
 
 // GetRsaPrivateKeyForPkcs1PrivateKeyPathWithPassword returns a *rsa.PrivateKey
 // for a given PKCS#1 private key file path and password
 func GetRsaPrivateKeyForPkcs1PrivateKeyPathWithPassword(prvKeyPKCS1Path string, password []byte) (*rsa.PrivateKey, error) {
-	var prvKey *rsa.PrivateKey
-
 	isFileGtZero, err := ioutilmore.IsFileWithSizeGtZero(prvKeyPKCS1Path)
 	if err != nil {
-		return prvKey, err
+		return nil, err
 	} else if isFileGtZero == false {
-		return prvKey, errors.New("400: key file path is zero size")
+		return nil, errors.New("400: key file path is zero size")
 	}
 
 	prvKeyPkcs1BytesEnc, err := ioutil.ReadFile(prvKeyPKCS1Path)
 	if err != nil {
-		return prvKey, err
+		return nil, err
 	}
 
-	block, _ := pem.Decode(prvKeyPkcs1BytesEnc)
+	return GetRsaPrivateKeyForPkcs1PrivateKeyBytesWithPassword(prvKeyPkcs1BytesEnc, password)
+}
+
+func GetRsaPrivateKeyForPkcs1PrivateKeyBytesWithPassword(prvKeyPkcs1BytesEnc []byte, password []byte) (*rsa.PrivateKey, error) {
+	block, rest := pem.Decode(prvKeyPkcs1BytesEnc)
+	if len(rest) > 0 {
+		return nil, fmt.Errorf("Extra data included in key len: %v", len(rest))
+	}
 	prvKeyBytes, err := x509.DecryptPEMBlock(block, password)
 	if err != nil {
-		return prvKey, err
+		return nil, err
 	}
 	return x509.ParsePKCS1PrivateKey(prvKeyBytes)
 }

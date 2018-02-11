@@ -2,6 +2,7 @@ package ioutilmore
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
 	"errors"
 	"io"
@@ -194,6 +195,13 @@ func RemoveAllChildren(dir string) error {
 		}
 	}
 	return nil
+}
+
+// ReaderToBytes reads from an io.Reader, e.g. io.ReadCloser
+func ReaderToBytes(ior io.Reader) []byte {
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(ior)
+	return buf.Bytes()
 }
 
 func WriteJSON(filepath string, data interface{}, perm os.FileMode, wantPretty bool) error {

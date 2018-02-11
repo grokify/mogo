@@ -2,6 +2,7 @@ package jsonutil
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 )
 
@@ -48,4 +49,12 @@ func PrettyPrint(b []byte) ([]byte, error) {
 	var out bytes.Buffer
 	err := json.Indent(&out, b, MarshalPrefix, MarshalIndent)
 	return out.Bytes(), err
+}
+
+func MarshalBase64(i interface{}) (string, error) {
+	data, err := json.Marshal(i)
+	if err != nil {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(data), nil
 }

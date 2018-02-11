@@ -1,7 +1,9 @@
 package strconvutil
 
 import (
+	"regexp"
 	"strconv"
+	"strings"
 )
 
 // AtoiWithDefault is like Atoi but takes a default value
@@ -34,4 +36,24 @@ func Commify(n int64) string {
 			out[j] = ','
 		}
 	}
+}
+
+var RxPlus = regexp.MustCompile(`^\+`)
+
+func MustParseE164ToInt(s string) int {
+	s = strings.TrimSpace(s)
+	s = RxPlus.ReplaceAllString(s, "")
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		panic(err)
+	}
+	return i
+}
+
+func MustParseInt(s string) int {
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		panic(err)
+	}
+	return i
 }
