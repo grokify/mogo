@@ -8,7 +8,28 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var DefaultPaths = []string{"ENV_PATH", ".env"}
+const (
+	EnvPathVar = "ENV_PATH"
+	LocalPath  = "./.env"
+)
+
+var DefaultPaths = []string{os.Getenv(EnvPathVar), "./.env"}
+
+func LoadEnvDefaults() error {
+	envPathsSet := []string{}
+
+	for _, defaultPath := range DefaultPaths {
+		exists, err := osutil.Exists(defaultPath)
+		if err == nil && exists {
+			envPathsSet = append(envPathsSet, defaultPath)
+		}
+	}
+
+	if len(envPathsSet) > 0 {
+		return godotenv.Load(envPathsSet...)
+	}
+	return godotenv.Load()
+}
 
 func LoadDotEnv(paths ...string) error {
 	if len(paths) == 0 {
