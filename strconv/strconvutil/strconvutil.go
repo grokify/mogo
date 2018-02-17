@@ -57,3 +57,11 @@ func MustParseInt(s string) int {
 	}
 	return i
 }
+
+func MustParseBool(s string) bool {
+	parsed, err := strconv.ParseBool(s)
+	if err != nil {
+		return false
+	}
+	return parsed
+}
