@@ -13,11 +13,13 @@ import (
 )
 
 const (
-	// ContentTypeHeader is the content type header name
-	ContentTypeHeader = "Content-Type"
+	HeaderAuthorization = "Authorization"
+	HeaderContentLength = "Content-Length"
+	HeaderContentType   = "Content-Type"
 	// ContentTypeValueJSONUTF8 represents the HTTP Content-Type header
 	// value for UTF-8 encoded JSON.
-	ContentTypeValueJSONUTF8 = "application/json; charset=utf-8"
+	HeaderContentTypeValueJSONUTF8      = "application/json; charset=utf-8"
+	HeaderContenTypeValueFormURLEncoded = "application/x-www-form-urlencoded"
 	// HTTPS Scheme
 	SchemeHTTPS = "https"
 )

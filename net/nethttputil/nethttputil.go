@@ -19,3 +19,11 @@ func GetSplitReqQueryParam(req *http.Request, headerName, sep string) []string {
 			GetReqQueryParam(req, headerName),
 		), sep))
 }
+
+type RequestUtil struct {
+	Request *http.Request
+}
+
+func (ru *RequestUtil) QueryParamString(headerName string) string {
+	return strings.TrimSpace(ru.Request.URL.Query().Get(headerName))
+}
