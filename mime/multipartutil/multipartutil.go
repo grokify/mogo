@@ -37,7 +37,7 @@ func (builder *MultipartBuilder) WriteFieldAsJSON(partName string, data interfac
 
 	header := textproto.MIMEHeader{}
 	header.Add("Content-Disposition", fmt.Sprintf(`form-data; name="%v"`, partName))
-	header.Add(httputilmore.ContentTypeHeader, httputilmore.ContentTypeValueJSONUTF8)
+	header.Add(httputilmore.HeaderContentType, httputilmore.HeaderContentTypeValueJSONUTF8)
 	if base64Encode {
 		header.Add("Content-Transfer-Encoding", "base64")
 	}
