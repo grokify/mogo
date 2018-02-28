@@ -4,21 +4,24 @@ import (
 	"os"
 	"strings"
 
+	im "github.com/grokify/gotilla/io/ioutilmore"
 	"github.com/grokify/gotilla/os/osutil"
 	"github.com/joho/godotenv"
 )
 
-const (
+var (
 	EnvPathVar = "ENV_PATH"
 	LocalPath  = "./.env"
 )
 
-var DefaultPaths = []string{os.Getenv(EnvPathVar), "./.env"}
+func DefaultPaths() []string {
+	return []string{os.Getenv(EnvPathVar), LocalPath}
+}
 
 func LoadEnvDefaults() error {
 	envPathsSet := []string{}
 
-	for _, defaultPath := range DefaultPaths {
+	for _, defaultPath := range DefaultPaths() {
 		exists, err := osutil.Exists(defaultPath)
 		if err == nil && exists {
 			envPathsSet = append(envPathsSet, defaultPath)
@@ -31,26 +34,27 @@ func LoadEnvDefaults() error {
 	return godotenv.Load()
 }
 
-func LoadDotEnv(paths ...string) error {
+func LoadDotEnvSkipEmpty(paths ...string) error {
 	if len(paths) == 0 {
-		paths = DefaultPaths
+		paths = DefaultPaths()
 	}
 
-	envPathsSet := []string{}
-	for _, envPathVar := range paths {
-		envPath := strings.TrimSpace(os.Getenv(envPathVar))
-		if len(envPath) > 0 {
-			envPaths := strings.Split(envPath, ",")
-			for _, envPath := range envPaths {
-				envPath = strings.TrimSpace(envPath)
-				if len(envPath) > 0 {
-					exists, err := osutil.Exists(envPath)
-					if err == nil && exists {
-						envPathsSet = append(envPathsSet, envPath)
-					}
-				}
+	envPaths := []string{}
+
+	for _, envPathVal := range paths {
+		envPathVals := strings.Split(envPathVal, ",")
+		for _, envPath := range envPathVals {
+			envPath = strings.TrimSpace(envPath)
+
+			good, err := im.IsFileWithSizeGtZero(envPath)
+			if err == nil && good {
+				envPaths = append(envPaths, envPath)
 			}
 		}
 	}
-	return godotenv.Load(envPathsSet...)
+
+	if len(envPaths) > 0 {
+		return godotenv.Load(envPaths...)
+	}
+	return nil
 }
