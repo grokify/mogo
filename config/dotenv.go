@@ -1,7 +1,9 @@
 package config
 
 import (
+	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 
 	im "github.com/grokify/gotilla/io/ioutilmore"
@@ -57,4 +59,15 @@ func LoadDotEnvSkipEmpty(paths ...string) error {
 		return godotenv.Load(envPaths...)
 	}
 	return nil
+}
+
+// GetDotEnvVal retrieves a single var from a `.env` file path
+func GetDotEnvVal(envPath, varName string) (string, error) {
+	cmd := fmt.Sprintf("grep %s '%s' | rev | cut -d= -f1 | rev", varName, envPath)
+
+	out, err := exec.Command("bash", "-c", cmd).Output()
+	if err != nil {
+		return "", fmt.Errorf("Failed to execute command: %s", cmd)
+	}
+	return string(out), nil
 }
