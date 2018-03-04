@@ -14,6 +14,8 @@ const (
 	SpaceToUnderscore = "SpaceToUnderscore"
 )
 
+var rxSpaces = regexp.MustCompile(`\s+`)
+
 // PadLeft prepends a string to a base string until the string
 // length is greater or equal to the desired length.
 func PadLeft(str string, pad string, length int) string {
@@ -123,6 +125,10 @@ func TrimSentenceLength(sentenceInput string, maxLength int) string {
 		return sentencePunct
 	}
 	return sentenceLen
+}
+
+func JoinTrimSpace(strs []string) string {
+	return rxSpaces.ReplaceAllString(strings.Join(strs, " "), " ")
 }
 
 // JoinInterface joins an interface and returns a string. It takes
