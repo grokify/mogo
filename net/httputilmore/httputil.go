@@ -13,9 +13,11 @@ import (
 )
 
 const (
-	HeaderAuthorization = "Authorization"
-	HeaderContentLength = "Content-Length"
-	HeaderContentType   = "Content-Type"
+	HeaderAuthorization           = "Authorization"
+	HeaderContentDisposition      = "Content-Disposition"
+	HeaderContentLength           = "Content-Length"
+	HeaderContentTransferEncoding = "Content-Transfer-Encoding"
+	HeaderContentType             = "Content-Type"
 	// ContentTypeValueJSONUTF8 represents the HTTP Content-Type header
 	// value for UTF-8 encoded JSON.
 	HeaderContentTypeValueJSONUTF8      = "application/json; charset=utf-8"
