@@ -5,11 +5,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
 	"path"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -81,6 +83,31 @@ func DirAndFileFromPath(path string) (string, string, error) {
 		file = rs1[2]
 	}
 	return dir, file, nil
+}
+
+// DirFilesSubmatchGreatest takes a directory, regular expression and boolean to indicate
+// whether to include zero size files and returns the greatest of a single match in the
+// regular expression.
+func DirFilesSubmatchGreatest(dir string, rx1 *regexp.Regexp, nonZeroFilesOnly bool) (string, error) {
+	filesAll, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return "", err
+	}
+	strs := []string{}
+	for _, f := range filesAll {
+		if nonZeroFilesOnly && f.Size() <= int64(0) {
+			continue
+		}
+		rs1 := rx1.FindStringSubmatch(f.Name())
+		if len(rs1) > 1 {
+			strs = append(strs, rs1[1])
+		}
+	}
+	sort.Strings(strs)
+	if len(strs) == 0 {
+		return "", fmt.Errorf("No matches found")
+	}
+	return strs[len(strs)-1], nil
 }
 
 func DirFromPath(path string) (string, error) {
