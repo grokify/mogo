@@ -9,6 +9,12 @@ import (
 	"time"
 )
 
+func QuarterInt32ForTime(dt time.Time) int32 {
+	dt = dt.UTC()
+	q := MonthToQuarter(uint8(dt.Month()))
+	return (int32(dt.Year()) * int32(10)) + int32(q)
+}
+
 func ParseQuarterInt32(yyyyq int32) (int32, uint8, error) {
 	yyyy := int32(float32(yyyyq) / 10.0)
 	q := yyyyq - 10*yyyy
@@ -21,22 +27,29 @@ func ParseQuarterInt32(yyyyq int32) (int32, uint8, error) {
 	return yyyy, uint8(q), nil
 }
 
-func QuarterInt32Start(yyyyq int32) (time.Time, error) {
+func QuarterInt32StartTime(yyyyq int32) (time.Time, error) {
 	yyyy, q, err := ParseQuarterInt32(yyyyq)
 	if err != nil {
 		return time.Now(), err
 	}
 	qm := QuarterToMonth(q)
-	t := time.Date(int(yyyy), time.Month(qm), 1, 0, 0, 0, 0, time.UTC)
-	return t, nil
+	return time.Date(int(yyyy), time.Month(qm), 1, 0, 0, 0, 0, time.UTC), nil
 }
 
-func ParseQuarterStartString(yyyyqStr string) (time.Time, error) {
+func QuarterInt32EndTime(yyyyq int32) (time.Time, error) {
+	qtrBeg, err := QuarterInt32StartTime(yyyyq)
+	if err != nil {
+		return qtrBeg, err
+	}
+	return QuarterEnd(qtrBeg), nil
+}
+
+func ParseQuarterStringStartTime(yyyyqStr string) (time.Time, error) {
 	yyyyq, err := strconv.Atoi(yyyyqStr)
 	if err != nil {
 		return time.Now(), err
 	}
-	return QuarterInt32Start(int32(yyyyq))
+	return QuarterInt32StartTime(int32(yyyyq))
 }
 
 func QuarterInt32End(yyyyq int32) (time.Time, error) {
@@ -50,8 +63,7 @@ func QuarterInt32End(yyyyq int32) (time.Time, error) {
 		q += 1
 	}
 	qm := QuarterToMonth(q)
-	t := time.Date(int(yyyy), time.Month(qm), 0, 23, 59, 59, 0, time.UTC)
-	return t, nil
+	return time.Date(int(yyyy), time.Month(qm), 0, 23, 59, 59, 0, time.UTC), nil
 }
 
 func ParseHalf(yyyyh int32) (int32, uint8, error) {
