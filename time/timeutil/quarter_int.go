@@ -9,6 +9,20 @@ import (
 	"time"
 )
 
+func InQuarter(dt time.Time, yyyyq int32) (bool, error) {
+	qtrStart, err := QuarterInt32StartTime(yyyyq)
+	if err != nil {
+		return false, err
+	}
+	return (IsGreaterThan(dt, qtrStart, true) &&
+		IsLessThan(dt, QuarterEnd(qtrStart), true)), nil
+}
+
+func InQuarterTime(dt, qtr time.Time) bool {
+	return IsGreaterThan(dt, QuarterStart(qtr), true) &&
+		IsLessThan(dt, QuarterEnd(qtr), true)
+}
+
 func QuarterInt32ForTime(dt time.Time) int32 {
 	dt = dt.UTC()
 	q := MonthToQuarter(uint8(dt.Month()))
