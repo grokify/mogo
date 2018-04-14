@@ -397,6 +397,11 @@ func YearStart(dt time.Time) time.Time {
 	return time.Date(dt.UTC().Year(), time.January, 1, 0, 0, 0, 0, time.UTC)
 }
 
+// YearEnd returns a a time.Time for the end of the year in UTC time.
+func YearEnd(dt time.Time) time.Time {
+	return time.Date(dt.UTC().Year(), time.December, 31, 23, 59, 59, 999999999, time.UTC)
+}
+
 func QuarterStartString(dt time.Time) string {
 	dtStart := QuarterStart(dt)
 	return fmt.Sprintf("%v Q%v", dtStart.Year(), MonthToQuarter(uint8(dtStart.Month())))

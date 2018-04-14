@@ -18,6 +18,15 @@ func InQuarter(dt time.Time, yyyyq int32) (bool, error) {
 		IsLessThan(dt, QuarterEnd(qtrStart), true)), nil
 }
 
+func MustInQuarter(dt time.Time, yyyyq int32) bool {
+	qtrStart, err := QuarterInt32StartTime(yyyyq)
+	if err != nil {
+		panic(err)
+	}
+	return (IsGreaterThan(dt, qtrStart, true) &&
+		IsLessThan(dt, QuarterEnd(qtrStart), true))
+}
+
 func InQuarterTime(dt, qtr time.Time) bool {
 	return IsGreaterThan(dt, QuarterStart(qtr), true) &&
 		IsLessThan(dt, QuarterEnd(qtr), true)
