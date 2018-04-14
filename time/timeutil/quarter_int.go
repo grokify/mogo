@@ -32,6 +32,10 @@ func InQuarterTime(dt, qtr time.Time) bool {
 		IsLessThan(dt, QuarterEnd(qtr), true)
 }
 
+func EqualQuarter(dt1, dt2 time.Time) bool {
+	return QuarterInt32ForTime(dt1) == QuarterInt32ForTime(dt2)
+}
+
 func QuarterInt32ForTime(dt time.Time) int32 {
 	dt = dt.UTC()
 	q := MonthToQuarter(uint8(dt.Month()))
