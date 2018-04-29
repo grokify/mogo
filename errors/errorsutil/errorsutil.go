@@ -16,3 +16,11 @@ func PanicOnErr(err error) {
 		panic(err)
 	}
 }
+
+type ErrorInfo struct {
+	Error   error
+	Code    string
+	Display string
+	Input   string
+	Correct string
+}
