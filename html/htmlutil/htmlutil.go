@@ -30,3 +30,12 @@ type Link struct {
 	Href      string
 	InnerHtml string
 }
+
+const (
+	Color2GreenHex       = "#00FF2A"
+	Color2YellowHex      = "#DFDD13"
+	Color2RedHex         = "#FF0000"
+	RingCentralOrangeHex = "#FF8800"
+	RingCentralBlueHex   = "#0073AE"
+	RingCentralGreyHex   = "#585858"
+)
