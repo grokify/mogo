@@ -80,6 +80,33 @@ func SplitTrimSpace(s, sep string) []string {
 	return strs
 }
 
+func SliceCondenseRegexps(texts []string, regexps []*regexp.Regexp, replacement string) []string {
+	parts := []string{}
+	for _, part := range texts {
+		for _, rx := range regexps {
+			part = rx.ReplaceAllString(part, replacement)
+		}
+		part = strings.TrimSpace(part)
+		if len(part) > 0 {
+			parts = append(parts, part)
+		}
+	}
+	return parts
+}
+
+func SliceCondensePunctuation(texts []string) []string {
+	parts := []string{}
+	for _, part := range texts {
+		part = regexp.MustCompile(`[^a-zA-Z0-9]+`).ReplaceAllString(part, " ")
+		part = regexp.MustCompile(`\s+`).ReplaceAllString(part, " ")
+		part = strings.TrimSpace(part)
+		if len(part) > 0 {
+			parts = append(parts, part)
+		}
+	}
+	return parts
+}
+
 // SplitCondenseSpace splits a string and trims spaces on
 // remaining elements, removing empty elements.
 func SplitCondenseSpace(s, sep string) []string {
