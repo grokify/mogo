@@ -107,6 +107,21 @@ func SliceCondensePunctuation(texts []string) []string {
 	return parts
 }
 
+func SliceCondenseAndQuoteSpace(items []string, quoteLeft, quoteRight string) []string {
+	return SliceCondenseAndQuote(items, " ", " ", quoteLeft, quoteRight)
+}
+
+func SliceCondenseAndQuote(items []string, trimLeft, trimRight, quoteLeft, quoteRight string) []string {
+	newItems := []string{}
+	for _, item := range items {
+		item = strings.TrimLeft(item, trimLeft)
+		item = strings.TrimRight(item, trimRight)
+		item = quoteLeft + item + quoteRight
+		newItems = append(newItems, item)
+	}
+	return newItems
+}
+
 // SplitCondenseSpace splits a string and trims spaces on
 // remaining elements, removing empty elements.
 func SplitCondenseSpace(s, sep string) []string {
