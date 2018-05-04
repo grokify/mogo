@@ -69,17 +69,6 @@ func SliceTrimSpace(slice []string) []string {
 	return trimmed
 }
 
-// SplitTrimSpace splits a string and trims spaces on
-// remaining elements.
-func SplitTrimSpace(s, sep string) []string {
-	split := strings.Split(s, sep)
-	strs := []string{}
-	for _, str := range split {
-		strs = append(strs, strings.TrimSpace(str))
-	}
-	return strs
-}
-
 func SliceCondenseRegexps(texts []string, regexps []*regexp.Regexp, replacement string) []string {
 	parts := []string{}
 	for _, part := range texts {
@@ -120,6 +109,17 @@ func SliceCondenseAndQuote(items []string, trimLeft, trimRight, quoteLeft, quote
 		newItems = append(newItems, item)
 	}
 	return newItems
+}
+
+// SplitTrimSpace splits a string and trims spaces on
+// remaining elements.
+func SplitTrimSpace(s, sep string) []string {
+	split := strings.Split(s, sep)
+	strs := []string{}
+	for _, str := range split {
+		strs = append(strs, strings.TrimSpace(str))
+	}
+	return strs
 }
 
 // SplitCondenseSpace splits a string and trims spaces on
