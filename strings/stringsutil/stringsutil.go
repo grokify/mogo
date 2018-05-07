@@ -105,8 +105,10 @@ func SliceCondenseAndQuote(items []string, trimLeft, trimRight, quoteLeft, quote
 	for _, item := range items {
 		item = strings.TrimLeft(item, trimLeft)
 		item = strings.TrimRight(item, trimRight)
-		item = quoteLeft + item + quoteRight
-		newItems = append(newItems, item)
+		if len(item) > 0 {
+			item = quoteLeft + item + quoteRight
+			newItems = append(newItems, item)
+		}
 	}
 	return newItems
 }
@@ -195,6 +197,37 @@ func JoinInterface(arr []interface{}, sep string, stripRepeatedSep bool, stripEm
 			ReplaceAllString(joined, sep)
 	}
 	return joined
+}
+
+func JoinLiterary(slice []string, sep, joinWord string) string {
+	switch len(slice) {
+	case 0:
+		return ""
+	case 1:
+		return slice[0]
+	case 2:
+		return slice[0] + " " + joinWord + " " + slice[1]
+	default:
+		last, rest := slice[len(slice)-1], slice[:len(slice)-1]
+		rest = append(rest, joinWord+" "+last)
+		return strings.Join(rest, sep+" ")
+	}
+}
+
+func JoinLiteraryQuote(slice []string, leftQuote, rightQuote, sep, joinWord string) string {
+	newSlice := SliceCondenseAndQuoteSpace(slice, leftQuote, rightQuote)
+	switch len(newSlice) {
+	case 0:
+		return ""
+	case 1:
+		return newSlice[0]
+	case 2:
+		return newSlice[0] + " " + joinWord + " " + newSlice[1]
+	default:
+		last, rest := newSlice[len(newSlice)-1], newSlice[:len(newSlice)-1]
+		rest = append(rest, joinWord+" "+last)
+		return strings.Join(rest, sep+" ")
+	}
 }
 
 func FormatString(s string, options []string) string {
