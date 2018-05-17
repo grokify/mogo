@@ -47,16 +47,18 @@ type Writer struct {
 }
 
 // NewWriter returns a Writer with the separator params set.
-func NewWriter(sep string, replaceSeparator bool, alt string) Writer {
-	return Writer{
+func NewWriter(filepath, sep string, replaceSeparator bool, alt string) (Writer, error) {
+	w := Writer{
 		Separator:        sep,
 		StripRepeatedSep: false,
 		ReplaceSeparator: replaceSeparator,
 		SeparatorAlt:     alt}
+	err := w.open(filepath)
+	return w, err
 }
 
 // Open opens a filepath.
-func (w *Writer) Open(filepath string) error {
+func (w *Writer) open(filepath string) error {
 	f, err := os.Create(filepath)
 	if err != nil {
 		return err
