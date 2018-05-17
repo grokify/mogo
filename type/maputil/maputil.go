@@ -40,3 +40,10 @@ func MapSSMerge(first map[string]string, second map[string]string) map[string]st
 	}
 	return newMap
 }
+
+func MapSSValOrEmpty(data map[string]string, key string) string {
+	if val, ok := data[key]; ok {
+		return val
+	}
+	return ""
+}
