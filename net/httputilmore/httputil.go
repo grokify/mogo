@@ -18,13 +18,10 @@ const (
 	HeaderContentLength           = "Content-Length"
 	HeaderContentTransferEncoding = "Content-Transfer-Encoding"
 	HeaderContentType             = "Content-Type"
-	// ContentTypeValueJSONUTF8 represents the HTTP Content-Type header
-	// value for UTF-8 encoded JSON.
-	HeaderContentTypeValueJSONUTF8         = "application/json; charset=utf-8"
-	HeaderContentTypeValueFormURLEncoded   = "application/x-www-form-urlencoded"
-	HeaderContentTypeValueTextPlainUsAscii = "text/plain; charset=us-ascii"
-	// HTTPS Scheme
-	SchemeHTTPS = "https"
+	ContentTypeAppJsonUtf8        = "application/json; charset=utf-8"
+	ContentTypeAppFormUrlEncoded  = "application/x-www-form-urlencoded"
+	ContentTypeTextPlainUsAscii   = "text/plain; charset=us-ascii"
+	SchemeHTTPS                   = "https"
 )
 
 // GetWriteFile performs a HTTP GET request and saves the response body

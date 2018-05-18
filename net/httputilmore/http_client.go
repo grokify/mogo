@@ -94,6 +94,6 @@ func (cm *ClientMore) PostToJSON(postURL string, body interface{}) (*http.Respon
 	if err != nil {
 		return &http.Response{}, err
 	}
-	req.Header.Set(HeaderContentType, HeaderContentTypeValueJSONUTF8)
+	req.Header.Set(HeaderContentType, ContentTypeAppJsonUtf8)
 	return cm.Client.Do(req)
 }
