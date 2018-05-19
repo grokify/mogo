@@ -13,11 +13,11 @@ type ResponseInfo struct {
 
 // ToJson returns ResponseInfo as a JSON byte array, embedding json.Marshal
 // errors if encountered.
-func (eresp *ResponseInfo) ToJson() []byte {
-	bytes, err := json.Marshal(eresp)
+func (resIn *ResponseInfo) ToJson() []byte {
+	bytes, err := json.Marshal(resIn)
 	if err != nil {
-		eresp2 := ResponseInfo{StatusCode: 500, Message: err.Error()}
-		bytes, _ := json.Marshal(eresp2)
+		resIn2 := ResponseInfo{StatusCode: 500, Message: err.Error()}
+		bytes, _ := json.Marshal(resIn2)
 		return bytes
 	}
 	return bytes
