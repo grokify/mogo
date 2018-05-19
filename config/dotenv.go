@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"strings"
 
 	im "github.com/grokify/gotilla/io/ioutilmore"
 	"github.com/grokify/gotilla/os/osutil"
@@ -41,22 +40,23 @@ func LoadDotEnvSkipEmpty(paths ...string) error {
 		paths = DefaultPaths()
 	}
 
-	envPaths := []string{}
-
-	for _, envPathVal := range paths {
-		envPathVals := strings.Split(envPathVal, ",")
-		for _, envPath := range envPathVals {
-			envPath = strings.TrimSpace(envPath)
-
-			good, err := im.IsFileWithSizeGtZero(envPath)
-			if err == nil && good {
-				envPaths = append(envPaths, envPath)
-			}
-		}
-	}
+	envPaths := im.FilterFilenamesSizeGtZero(paths...)
 
 	if len(envPaths) > 0 {
 		return godotenv.Load(envPaths...)
+	}
+	return nil
+}
+
+func LoadDotEnvFirst(paths ...string) error {
+	if len(paths) == 0 {
+		paths = DefaultPaths()
+	}
+
+	envPaths := im.FilterFilenamesSizeGtZero(paths...)
+
+	if len(envPaths) > 0 {
+		return godotenv.Load(envPaths[0])
 	}
 	return nil
 }

@@ -191,6 +191,23 @@ func IsFileWithSizeGtZero(path string) (bool, error) {
 	return true, nil
 }
 
+func FilterFilenamesSizeGtZero(filepaths ...string) []string {
+	filepathsExist := []string{}
+
+	for _, envPathVal := range filepaths {
+		envPathVals := strings.Split(envPathVal, ",")
+		for _, envPath := range envPathVals {
+			envPath = strings.TrimSpace(envPath)
+
+			good, err := IsFileWithSizeGtZero(envPath)
+			if err == nil && good {
+				filepathsExist = append(filepathsExist, envPath)
+			}
+		}
+	}
+	return filepathsExist
+}
+
 func RemoveAllChildren(dir string) error {
 	isDir, err := IsDir(dir)
 	if err != nil {
