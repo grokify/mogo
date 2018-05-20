@@ -10,7 +10,8 @@ var hashTests = []struct {
 	salt  string
 	want  string
 }{
-	{"My Secret Password",
+	{
+		"My Secret Password",
 		"6368616e676520746869732070617373776f726420746f206120736563726574",
 		"1XESZ8F6OGV200JDNXED8BAPU79UG5JA3KTJW7VMJCICX482S8"}}
 
