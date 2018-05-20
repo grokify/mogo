@@ -89,7 +89,7 @@ func (builder *MultipartBuilder) WriteFileHeader(partName string, fileHeader *mu
 	return builder.WriteFileReader(partName, fileHeader.Filename, file)
 }
 
-// WriteFileReader adds a file part given a filename and io.Reader.
+// WriteFileReader adds a file part given a filename and `io.Reader`.
 func (builder *MultipartBuilder) WriteFileReader(partName, filename string, src io.Reader) error {
 	fw, err := builder.Writer.CreateFormFile(partName, filename)
 	if err != nil {
@@ -99,6 +99,12 @@ func (builder *MultipartBuilder) WriteFileReader(partName, filename string, src 
 	return err
 }
 
+// Close closes the `multipart.Writer`.
 func (builder *MultipartBuilder) Close() error {
 	return builder.Writer.Close()
+}
+
+// ContentType returns the content type for the `Content-Type` header.
+func (builder *MultipartBuilder) ContentType() string {
+	return builder.Writer.FormDataContentType()
 }
