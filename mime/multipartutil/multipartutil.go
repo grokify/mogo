@@ -9,6 +9,7 @@ import (
 	"mime/multipart"
 	"net/textproto"
 	"os"
+	"path/filepath"
 
 	hum "github.com/grokify/gotilla/net/httputilmore"
 )
@@ -26,6 +27,11 @@ func NewMultipartBuilder() MultipartBuilder {
 	builder.Buffer = &b
 	builder.Writer = multipart.NewWriter(&b)
 	return builder
+}
+
+// WriteFieldString adds a text part.
+func (builder *MultipartBuilder) WriteFieldString(partName string, data string) error {
+	return builder.Writer.WriteField(partName, data)
 }
 
 // WriteFieldAsJSON adds a JSON part.
@@ -56,18 +62,36 @@ func (builder *MultipartBuilder) WriteFieldAsJSON(partName string, data interfac
 	return err
 }
 
-// WriteFile adds a file part.
-func (builder *MultipartBuilder) WriteFile(partName, file string) error {
-	f, err := os.Open(file)
+// WriteFilePath adds a file part given a filename.
+func (builder *MultipartBuilder) WriteFilePath(partName, srcFilepath string) error {
+	f, err := os.Open(srcFilepath)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	fw, err := builder.Writer.CreateFormFile(partName, file)
+	_, filename := filepath.Split(srcFilepath)
+	return builder.WriteFileReader(partName, filename, f)
+}
+
+// WriteFileHeader adds a file part given a part name and *multipart.FileHeader.
+// See more at http://sanatgersappa.blogspot.com/2013/03/handling-multiple-file-uploads-in-go.html
+// and https://gist.github.com/sanatgersappa/5127317#file-app-go
+func (builder *MultipartBuilder) WriteFileHeader(partName string, fileHeader *multipart.FileHeader) error {
+	file, err := fileHeader.Open()
 	if err != nil {
 		return err
 	}
-	_, err = io.Copy(fw, f)
+	defer file.Close()
+	return builder.WriteFileReader(partName, fileHeader.Filename, file)
+}
+
+// WriteFileReader adds a file part given a filename and io.Reader.
+func (builder *MultipartBuilder) WriteFileReader(partName, filename string, src io.Reader) error {
+	fw, err := builder.Writer.CreateFormFile(partName, filename)
+	if err != nil {
+		return err
+	}
+	_, err = io.Copy(fw, src)
 	return err
 }
 
