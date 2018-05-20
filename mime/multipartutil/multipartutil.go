@@ -68,13 +68,13 @@ func (builder *MultipartBuilder) WriteFieldAsJSON(partName string, data interfac
 
 // WriteFilePath adds a file part given a filename.
 func (builder *MultipartBuilder) WriteFilePath(partName, srcFilepath string) error {
-	f, err := os.Open(srcFilepath)
+	file, err := os.Open(srcFilepath)
 	if err != nil {
 		return err
 	}
-	defer f.Close()
+	defer file.Close()
 	_, filename := filepath.Split(srcFilepath)
-	return builder.WriteFileReader(partName, filename, f)
+	return builder.WriteFileReader(partName, filename, file)
 }
 
 // WriteFileHeader adds a file part given a part name and *multipart.FileHeader.
