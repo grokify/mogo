@@ -36,6 +36,26 @@ func FromTo(timeStringSrc, fromFormat, toFormat string) (string, error) {
 	return t.Format(toFormat), nil
 }
 
+// ParseFirst attempts to parse a string with a set of formats.
+func ParseFirst(input string, formats ...string) (time.Time, error) {
+	input = strings.TrimSpace(input)
+	if len(formats) == 0 {
+		return time.Now(), fmt.Errorf(
+			"Requires value [%v] and at least one format [%v]", input, strings.Join(formats, ","))
+	}
+	for _, format := range formats {
+		format = strings.TrimSpace(format)
+		if len(format) == 0 {
+			continue
+		}
+		if dt, err := time.Parse(input, format); err == nil {
+			return dt, nil
+		}
+	}
+	return time.Now(), fmt.Errorf("Cannot parse time [%v] with formats [%v]",
+		input, strings.Join(formats, ","))
+}
+
 var FormatMap = map[string]string{
 	"RFC3339":    time.RFC3339,
 	"RFC3339YMD": RFC3339YMD,
