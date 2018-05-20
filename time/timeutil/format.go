@@ -33,8 +33,7 @@ func FromTo(timeStringSrc, fromFormat, toFormat string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	timeStringOut := t.Format(toFormat)
-	return timeStringOut, nil
+	return t.Format(toFormat), nil
 }
 
 var FormatMap = map[string]string{
