@@ -70,3 +70,7 @@ func (builder *MultipartBuilder) WriteFile(partName, file string) error {
 	_, err = io.Copy(fw, f)
 	return err
 }
+
+func (builder *MultipartBuilder) Close() error {
+	return builder.Writer.Close()
+}
