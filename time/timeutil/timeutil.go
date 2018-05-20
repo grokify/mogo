@@ -331,16 +331,6 @@ func TimeForDt14(dt14 int64) (time.Time, error) {
 	return time.Parse(DT14, strconv.FormatInt(dt14, 10))
 }
 
-// Reformat a time string from one format to another
-func FromTo(timeStringSrc string, fromFormat string, toFormat string) (string, error) {
-	t, err := time.Parse(fromFormat, timeStringSrc)
-	if err != nil {
-		return "", err
-	}
-	timeStringOut := t.Format(toFormat)
-	return timeStringOut, nil
-}
-
 func DurationStringMinutesSeconds(durationSeconds int64) (string, error) {
 	if durationSeconds <= 0 {
 		return "0 sec", nil

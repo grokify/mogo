@@ -24,7 +24,18 @@ const (
 	ISO8601ZCompact    = "20060102T150405Z"
 	ISO8601NoTzMilli   = "2006-01-02T15:04:05.000"
 	DateMDYSlash       = "01/02/2006"
+	DMYHM2             = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
 )
+
+// Reformat a time string from one format to another
+func FromTo(timeStringSrc string, fromFormat string, toFormat string) (string, error) {
+	t, err := time.Parse(fromFormat, strings.TrimSpace(timeStringSrc))
+	if err != nil {
+		return "", err
+	}
+	timeStringOut := t.Format(toFormat)
+	return timeStringOut, nil
+}
 
 var FormatMap = map[string]string{
 	"RFC3339":    time.RFC3339,
