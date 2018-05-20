@@ -28,32 +28,32 @@ const (
 )
 
 // Reformat a time string from one format to another
-func FromTo(timeStringSrc, fromFormat, toFormat string) (string, error) {
-	t, err := time.Parse(fromFormat, strings.TrimSpace(timeStringSrc))
+func FromTo(value, fromLayout, toLayout string) (string, error) {
+	t, err := time.Parse(fromLayout, strings.TrimSpace(value))
 	if err != nil {
 		return "", err
 	}
-	return t.Format(toFormat), nil
+	return t.Format(toLayout), nil
 }
 
-// ParseFirst attempts to parse a string with a set of formats.
-func ParseFirst(input string, formats ...string) (time.Time, error) {
-	input = strings.TrimSpace(input)
-	if len(formats) == 0 {
+// ParseFirst attempts to parse a string with a set of layouts.
+func ParseFirst(layouts []string, value string) (time.Time, error) {
+	value = strings.TrimSpace(value)
+	if len(value) == 0 || len(layouts) == 0 {
 		return time.Now(), fmt.Errorf(
-			"Requires value [%v] and at least one format [%v]", input, strings.Join(formats, ","))
+			"Requires value [%v] and at least one layout [%v]", value, strings.Join(layouts, ","))
 	}
-	for _, format := range formats {
-		format = strings.TrimSpace(format)
-		if len(format) == 0 {
+	for _, layout := range layouts {
+		layout = strings.TrimSpace(layout)
+		if len(layout) == 0 {
 			continue
 		}
-		if dt, err := time.Parse(input, format); err == nil {
+		if dt, err := time.Parse(layout, value); err == nil {
 			return dt, nil
 		}
 	}
-	return time.Now(), fmt.Errorf("Cannot parse time [%v] with formats [%v]",
-		input, strings.Join(formats, ","))
+	return time.Now(), fmt.Errorf("Cannot parse time [%v] with layouts [%v]",
+		value, strings.Join(layouts, ","))
 }
 
 var FormatMap = map[string]string{
@@ -110,19 +110,19 @@ func (t ISO8601NoTzMilliTime) MarshalJSON() ([]byte, error) {
 	return timeMarshalJSON(t.Time, ISO8601NoTzMilli)
 }
 
-func timeUnmarshalJSON(buf []byte, format string) (time.Time, bool, error) {
+func timeUnmarshalJSON(buf []byte, layout string) (time.Time, bool, error) {
 	str := string(buf)
 	isNil := true
 	if str == "null" || str == "\"\"" {
 		return time.Time{}, isNil, nil
 	}
-	tt, err := time.Parse(format, strings.Trim(str, `"`))
+	tt, err := time.Parse(layout, strings.Trim(str, `"`))
 	if err != nil {
 		return time.Time{}, false, err
 	}
 	return tt, false, nil
 }
 
-func timeMarshalJSON(t time.Time, format string) ([]byte, error) {
-	return []byte(`"` + t.Format(format) + `"`), nil
+func timeMarshalJSON(t time.Time, layout string) ([]byte, error) {
+	return []byte(`"` + t.Format(layout) + `"`), nil
 }
