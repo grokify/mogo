@@ -1,3 +1,7 @@
+// Package multipartutil provides helper functionality for using multipart.Writer.
+// Steps are to call NewMultipartBuilder(), write parts, call builder.Close(), and
+// retrieve Content-Type header from builder.Writer.FormDataContentType().
+
 package multipartutil
 
 import (
