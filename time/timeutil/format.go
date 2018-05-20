@@ -28,7 +28,7 @@ const (
 )
 
 // Reformat a time string from one format to another
-func FromTo(timeStringSrc string, fromFormat string, toFormat string) (string, error) {
+func FromTo(timeStringSrc, fromFormat, toFormat string) (string, error) {
 	t, err := time.Parse(fromFormat, strings.TrimSpace(timeStringSrc))
 	if err != nil {
 		return "", err
