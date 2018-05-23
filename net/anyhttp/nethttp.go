@@ -1,0 +1,110 @@
+package anyhttp
+
+import (
+	"io"
+	"io/ioutil"
+	"mime/multipart"
+	"net/http"
+	"net/url"
+
+	hum "github.com/grokify/gotilla/net/httputilmore"
+)
+
+type RequestNetHttp struct {
+	Raw                 *http.Request
+	allArgs             *ArgsUrlValues
+	postArgs            *ArgsUrlValues
+	multipartForm       *multipart.Form
+	multipartFormParsed bool
+	simpleFormParsed    bool
+}
+
+func NewRequestNetHttp(req *http.Request) *RequestNetHttp {
+	return &RequestNetHttp{
+		Raw:      req,
+		allArgs:  &ArgsUrlValues{req.Form},
+		postArgs: &ArgsUrlValues{req.PostForm}}
+}
+
+func (r *RequestNetHttp) ParseForm() error {
+	if r.simpleFormParsed {
+		return nil
+	}
+	r.simpleFormParsed = true
+	if err := r.Raw.ParseForm(); err != nil {
+		return err
+	}
+	r.allArgs = &ArgsUrlValues{r.Raw.Form}
+	r.postArgs = &ArgsUrlValues{r.Raw.PostForm}
+	return nil
+}
+func (r RequestNetHttp) AllArgs() Args       { return r.allArgs }
+func (r RequestNetHttp) QueryArgs() Args     { return r.allArgs }
+func (r RequestNetHttp) PostArgs() Args      { return r.postArgs }
+func (r RequestNetHttp) Method() []byte      { return []byte(r.Raw.Method) }
+func (r RequestNetHttp) Header() http.Header { return r.Raw.Header }
+func (r RequestNetHttp) Form() url.Values    { return r.Raw.Form }
+
+func (r *RequestNetHttp) MultipartForm() (*multipart.Form, error) {
+	if !r.multipartFormParsed {
+		r.multipartFormParsed = true
+		if err := r.Raw.ParseMultipartForm(100000); err != nil {
+			return nil, err
+		}
+	}
+	return r.Raw.MultipartForm, nil
+}
+
+type ResponseNetHttp struct {
+	Raw http.ResponseWriter
+}
+
+func NewResponseNetHttp(w http.ResponseWriter) ResponseNetHttp {
+	return ResponseNetHttp{Raw: w}
+}
+
+func (w ResponseNetHttp) SetStatusCode(code int) { w.Raw.WriteHeader(code) }
+func (w ResponseNetHttp) SetContentType(ct string) {
+	w.Raw.Header().Set(hum.HeaderContentType, ct)
+}
+func (w ResponseNetHttp) SetBodyBytes(body []byte) (int, error) {
+	w.Raw.Write(body)
+	return -1, nil
+}
+func (w ResponseNetHttp) SetBodyStream(bodyStream io.Reader, bodySize int) error {
+	bytes, err := ioutil.ReadAll(bodyStream)
+	if err != nil {
+		return err
+	}
+	w.Raw.Write(bytes)
+	return nil
+}
+
+type ArgsUrlValues struct{ Raw url.Values }
+
+func NewArgsUrlValues(args url.Values) ArgsUrlValues {
+	return ArgsUrlValues{Raw: args}
+}
+
+func (args ArgsUrlValues) GetBytes(key string) []byte { return []byte(args.Raw.Get(key)) }
+func (args ArgsUrlValues) GetBytesSlice(key string) [][]byte {
+	newSlice := [][]byte{}
+	if slice, ok := args.Raw[key]; ok {
+		for _, item := range slice {
+			newSlice = append(newSlice, []byte(item))
+		}
+	}
+	return newSlice
+}
+
+func (args ArgsUrlValues) GetString(key string) string { return args.Raw.Get(key) }
+func (args ArgsUrlValues) GetStringSlice(key string) []string {
+	if slice, ok := args.Raw[key]; ok {
+		return slice
+	}
+	return []string{}
+}
+
+func NewResReqNetHttp(res http.ResponseWriter, req *http.Request) (ResponseNetHttp, *RequestNetHttp) {
+	return NewResponseNetHttp(res), NewRequestNetHttp(req)
+}
