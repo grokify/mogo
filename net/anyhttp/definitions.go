@@ -3,6 +3,7 @@ package anyhttp
 import (
 	"io"
 	"mime/multipart"
+	"net/url"
 
 	hum "github.com/grokify/gotilla/net/httputilmore"
 )
@@ -60,7 +61,9 @@ func NewArgsMapStringString(args MapStringString) ArgsMapStringString {
 
 func (args ArgsMapStringString) GetBytes(key string) []byte { return []byte(args.Raw.Get(key)) }
 func (args ArgsMapStringString) GetBytesSlice(key string) [][]byte {
-	return [][]byte(args.GetBytes(key))
+	output := make([][]byte, 1)
+	output[0] = args.GetBytes(key)
+	return output
 }
 func (args ArgsMapStringString) GetString(key string) string        { return args.Raw.Get(key) }
 func (args ArgsMapStringString) GetStringSlice(key string) []string { return args.Raw.GetSlice(key) }
