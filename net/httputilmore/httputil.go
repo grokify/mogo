@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/grokify/gotilla/strconv/strconvutil"
@@ -114,6 +115,15 @@ func MergeHeader(base, extra http.Header, overwrite bool) http.Header {
 		}
 	}
 	return base
+}
+
+func ParseMultipartFormDataBoundaryFromHeader(contentType string) string {
+	rx := regexp.MustCompile(`^multipart/form-data.+boundary="?([^;"]+)`)
+	m := rx.FindStringSubmatch(contentType)
+	if len(m) > 0 {
+		return m[1]
+	}
+	return ""
 }
 
 // RateLimitInfo is a structure for holding parsed rate limit info.
