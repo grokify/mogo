@@ -6,9 +6,9 @@ import (
 
 // ResponseInfo is a generic struct to handle response info.
 type ResponseInfo struct {
-	StatusCode int               `json:"statusCode,omitempty"`
-	Headers    map[string]string `json:"headers,omitempty"`
-	Message    string            `json:"message,omitempty"`
+	StatusCode int               `json:"statusCode"`
+	Headers    map[string]string `json:"headers"`
+	Message    string            `json:"body"`
 }
 
 // ToJson returns ResponseInfo as a JSON byte array, embedding json.Marshal
