@@ -15,22 +15,22 @@ type RequestNetHttp struct {
 	allArgs             *ArgsUrlValues
 	postArgs            *ArgsUrlValues
 	multipartForm       *multipart.Form
-	multipartFormParsed bool
-	simpleFormParsed    bool
+	parsedMultipartForm bool
+	parsedFormArgs      bool
 }
 
 func NewRequestNetHttp(req *http.Request) *RequestNetHttp {
 	return &RequestNetHttp{
 		Raw:      req,
-		allArgs:  &ArgsUrlValues{req.Form},
-		postArgs: &ArgsUrlValues{req.PostForm}}
+		allArgs:  &ArgsUrlValues{Raw: req.Form},
+		postArgs: &ArgsUrlValues{Raw: req.PostForm}}
 }
 
 func (r *RequestNetHttp) ParseForm() error {
-	if r.simpleFormParsed {
+	if r.parsedFormArgs {
 		return nil
 	}
-	r.simpleFormParsed = true
+	r.parsedFormArgs = true
 	if err := r.Raw.ParseForm(); err != nil {
 		return err
 	}
@@ -46,8 +46,8 @@ func (r RequestNetHttp) Header() http.Header { return r.Raw.Header }
 func (r RequestNetHttp) Form() url.Values    { return r.Raw.Form }
 
 func (r *RequestNetHttp) MultipartForm() (*multipart.Form, error) {
-	if !r.multipartFormParsed {
-		r.multipartFormParsed = true
+	if !r.parsedMultipartForm {
+		r.parsedMultipartForm = true
 		if err := r.Raw.ParseMultipartForm(100000); err != nil {
 			return nil, err
 		}
@@ -78,31 +78,6 @@ func (w ResponseNetHttp) SetBodyStream(bodyStream io.Reader, bodySize int) error
 	}
 	w.Raw.Write(bytes)
 	return nil
-}
-
-type ArgsUrlValues struct{ Raw url.Values }
-
-func NewArgsUrlValues(args url.Values) ArgsUrlValues {
-	return ArgsUrlValues{Raw: args}
-}
-
-func (args ArgsUrlValues) GetBytes(key string) []byte { return []byte(args.Raw.Get(key)) }
-func (args ArgsUrlValues) GetBytesSlice(key string) [][]byte {
-	newSlice := [][]byte{}
-	if slice, ok := args.Raw[key]; ok {
-		for _, item := range slice {
-			newSlice = append(newSlice, []byte(item))
-		}
-	}
-	return newSlice
-}
-
-func (args ArgsUrlValues) GetString(key string) string { return args.Raw.Get(key) }
-func (args ArgsUrlValues) GetStringSlice(key string) []string {
-	if slice, ok := args.Raw[key]; ok {
-		return slice
-	}
-	return []string{}
 }
 
 func NewResReqNetHttp(res http.ResponseWriter, req *http.Request) (ResponseNetHttp, *RequestNetHttp) {
