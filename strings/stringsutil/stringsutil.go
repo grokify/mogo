@@ -3,6 +3,7 @@ package stringsutil
 import (
 	"fmt"
 	"regexp"
+	"sort"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -228,6 +229,18 @@ func JoinLiteraryQuote(slice []string, leftQuote, rightQuote, sep, joinWord stri
 		rest = append(rest, joinWord+" "+last)
 		return strings.Join(rest, sep+" ")
 	}
+}
+
+func JoinStringsTrimSpaceToLowerSort(strs []string, sep string) string {
+	wip := []string{}
+	for _, s := range strs {
+		s = strings.ToLower(strings.TrimSpace(s))
+		if len(s) > 0 {
+			wip = append(wip, s)
+		}
+	}
+	sort.Strings(wip)
+	return strings.Join(wip, sep)
 }
 
 func FormatString(s string, options []string) string {
