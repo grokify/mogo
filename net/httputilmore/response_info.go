@@ -2,6 +2,10 @@ package httputilmore
 
 import (
 	"encoding/json"
+	"fmt"
+	"net/http"
+
+	"github.com/pkg/errors"
 )
 
 // ResponseInfo is a generic struct to handle response info.
@@ -21,4 +25,16 @@ func (resIn *ResponseInfo) ToJson() []byte {
 		return bytes
 	}
 	return bytes
+}
+
+func ConsolidateErrorRespCodeGte300(resp *http.Response, err error, msg string) error {
+	if err != nil {
+		return errors.Wrap(err, msg)
+	} else if resp.StatusCode >= 300 {
+		if len(msg) > 0 {
+			msg += ": "
+		}
+		return fmt.Errorf("%sStatusCode [%v]", msg, resp.StatusCode)
+	}
+	return nil
 }
