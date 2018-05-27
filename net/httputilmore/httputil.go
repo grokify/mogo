@@ -19,6 +19,7 @@ const (
 	HeaderContentLength           = "Content-Length"
 	HeaderContentTransferEncoding = "Content-Transfer-Encoding"
 	HeaderContentType             = "Content-Type"
+	HeaderUserAgent               = "User-Agent"
 	ContentTypeAppJsonUtf8        = "application/json; charset=utf-8"
 	ContentTypeAppFormUrlEncoded  = "application/x-www-form-urlencoded"
 	ContentTypeTextPlainUsAscii   = "text/plain; charset=us-ascii"
