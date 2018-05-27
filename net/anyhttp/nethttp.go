@@ -4,6 +4,7 @@ import (
 	"io"
 	"io/ioutil"
 	"mime/multipart"
+	"net"
 	"net/http"
 	"net/url"
 
@@ -38,12 +39,18 @@ func (r *RequestNetHttp) ParseForm() error {
 	r.postArgs = &ArgsUrlValues{r.Raw.PostForm}
 	return nil
 }
-func (r RequestNetHttp) AllArgs() Args       { return r.allArgs }
-func (r RequestNetHttp) QueryArgs() Args     { return r.allArgs }
-func (r RequestNetHttp) PostArgs() Args      { return r.postArgs }
-func (r RequestNetHttp) Method() []byte      { return []byte(r.Raw.Method) }
-func (r RequestNetHttp) Header() http.Header { return r.Raw.Header }
-func (r RequestNetHttp) Form() url.Values    { return r.Raw.Form }
+
+func (r RequestNetHttp) RemoteAddr() net.Addr {
+	return Addr{Protocol: "tcp", Address: r.Raw.RemoteAddr}
+}
+func (r RequestNetHttp) RemoteAddress() string { return r.Raw.RemoteAddr }
+func (r RequestNetHttp) UserAgent() []byte     { return []byte(r.Raw.UserAgent()) }
+func (r RequestNetHttp) AllArgs() Args         { return r.allArgs }
+func (r RequestNetHttp) QueryArgs() Args       { return r.allArgs }
+func (r RequestNetHttp) PostArgs() Args        { return r.postArgs }
+func (r RequestNetHttp) Method() []byte        { return []byte(r.Raw.Method) }
+func (r RequestNetHttp) Header() http.Header   { return r.Raw.Header }
+func (r RequestNetHttp) Form() url.Values      { return r.Raw.Form }
 
 func (r *RequestNetHttp) MultipartForm() (*multipart.Form, error) {
 	if !r.parsedMultipartForm {
@@ -78,6 +85,10 @@ func (w ResponseNetHttp) SetBodyStream(bodyStream io.Reader, bodySize int) error
 	}
 	w.Raw.Write(bytes)
 	return nil
+}
+
+func (w ResponseNetHttp) SetCookie(cookie *Cookie) {
+	http.SetCookie(w.Raw, cookie.ToNetHttp())
 }
 
 func NewResReqNetHttp(res http.ResponseWriter, req *http.Request) (ResponseNetHttp, *RequestNetHttp) {

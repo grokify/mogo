@@ -19,9 +19,11 @@ const (
 	HeaderContentLength           = "Content-Length"
 	HeaderContentTransferEncoding = "Content-Transfer-Encoding"
 	HeaderContentType             = "Content-Type"
+	HeaderRemoteAddr              = "REMOTE_ADDR"
 	HeaderUserAgent               = "User-Agent"
 	ContentTypeAppJsonUtf8        = "application/json; charset=utf-8"
 	ContentTypeAppFormUrlEncoded  = "application/x-www-form-urlencoded"
+	ContentTypeTextHtmlUtf8       = "text/html; charset=utf-8"
 	ContentTypeTextPlainUsAscii   = "text/plain; charset=us-ascii"
 	SchemeHTTPS                   = "https"
 )

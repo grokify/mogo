@@ -3,6 +3,7 @@ package anyhttp
 import (
 	"io"
 	"mime/multipart"
+	"net"
 	"strings"
 
 	"github.com/valyala/fasthttp"
@@ -30,6 +31,9 @@ func (r RequestFastHttp) QueryArgs() Args                         { return r.que
 func (r RequestFastHttp) PostArgs() Args                          { return r.postArgs }
 func (r RequestFastHttp) Method() []byte                          { return r.Raw.Method() }
 func (r RequestFastHttp) MultipartForm() (*multipart.Form, error) { return r.Raw.MultipartForm() }
+func (r RequestFastHttp) RemoteAddr() net.Addr                    { return r.Raw.RemoteAddr() }
+func (r RequestFastHttp) RemoteAddress() string                   { return r.Raw.RemoteAddr().String() }
+func (r RequestFastHttp) UserAgent() []byte                       { return r.Raw.UserAgent() }
 
 type ResponseFastHttp struct {
 	Raw *fasthttp.RequestCtx
@@ -48,6 +52,9 @@ func (w ResponseFastHttp) SetBodyBytes(body []byte) (int, error) {
 func (w ResponseFastHttp) SetBodyStream(bodyStream io.Reader, bodySize int) error {
 	w.Raw.SetBodyStream(bodyStream, bodySize)
 	return nil
+}
+func (w ResponseFastHttp) SetCookie(cookie *Cookie) {
+	w.Raw.Response.Header.SetCookie(cookie.ToFastHttp())
 }
 
 type ArgsFastHttp struct{ Raw *fasthttp.Args }

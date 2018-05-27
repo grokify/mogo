@@ -3,12 +3,16 @@ package anyhttp
 import (
 	"io"
 	"mime/multipart"
+	"net"
 	"net/url"
 
 	hum "github.com/grokify/gotilla/net/httputilmore"
 )
 
 type Request interface {
+	RemoteAddr() net.Addr
+	RemoteAddress() string
+	UserAgent() []byte
 	Method() []byte
 	ParseForm() error
 	AllArgs() Args
@@ -27,6 +31,7 @@ type Args interface {
 type Response interface {
 	SetStatusCode(int)
 	SetContentType(string)
+	SetCookie(cookie *Cookie)
 	SetBodyBytes([]byte) (int, error)
 	SetBodyStream(bodyStream io.Reader, bodySize int) error
 }
@@ -92,3 +97,11 @@ func (args ArgsUrlValues) GetStringSlice(key string) []string {
 	}
 	return []string{}
 }
+
+type Addr struct {
+	Protocol string
+	Address  string
+}
+
+func (addr Addr) Network() string { return addr.Protocol }
+func (addr Addr) String() string  { return addr.Address }
