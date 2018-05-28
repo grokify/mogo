@@ -32,6 +32,7 @@ type Response interface {
 	SetStatusCode(int)
 	SetContentType(string)
 	SetCookie(cookie *Cookie)
+	GetHeader(key string) []byte
 	SetHeader(key, val string)
 	SetBodyBytes([]byte) (int, error)
 	SetBodyStream(bodyStream io.Reader, bodySize int) error

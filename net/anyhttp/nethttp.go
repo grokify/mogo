@@ -70,8 +70,9 @@ func NewResponseNetHttp(w http.ResponseWriter) ResponseNetHttp {
 	return ResponseNetHttp{Raw: w}
 }
 
-func (w ResponseNetHttp) SetHeader(k, v string)  { w.Raw.Header().Set(k, v) }
-func (w ResponseNetHttp) SetStatusCode(code int) { w.Raw.WriteHeader(code) }
+func (w ResponseNetHttp) GetHeader(k string) []byte { return []byte(w.Raw.Header().Get(k)) }
+func (w ResponseNetHttp) SetHeader(k, v string)     { w.Raw.Header().Set(k, v) }
+func (w ResponseNetHttp) SetStatusCode(code int)    { w.Raw.WriteHeader(code) }
 func (w ResponseNetHttp) SetContentType(ct string) {
 	w.Raw.Header().Set(hum.HeaderContentType, ct)
 }
