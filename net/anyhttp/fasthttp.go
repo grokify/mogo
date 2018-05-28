@@ -43,6 +43,7 @@ func NewResponseFastHttp(ctx *fasthttp.RequestCtx) ResponseFastHttp {
 	return ResponseFastHttp{Raw: ctx}
 }
 
+func (w ResponseFastHttp) SetHeader(k, v string)    { w.Raw.Response.Header.Set(k, v) }
 func (w ResponseFastHttp) SetStatusCode(code int)   { w.Raw.SetStatusCode(code) }
 func (w ResponseFastHttp) SetContentType(ct string) { w.Raw.SetContentType(ct) }
 func (w ResponseFastHttp) SetBodyBytes(body []byte) (int, error) {

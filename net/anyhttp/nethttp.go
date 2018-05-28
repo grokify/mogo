@@ -70,10 +70,12 @@ func NewResponseNetHttp(w http.ResponseWriter) ResponseNetHttp {
 	return ResponseNetHttp{Raw: w}
 }
 
+func (w ResponseNetHttp) SetHeader(k, v string)  { w.Raw.Header().Set(k, v) }
 func (w ResponseNetHttp) SetStatusCode(code int) { w.Raw.WriteHeader(code) }
 func (w ResponseNetHttp) SetContentType(ct string) {
 	w.Raw.Header().Set(hum.HeaderContentType, ct)
 }
+
 func (w ResponseNetHttp) SetBodyBytes(body []byte) (int, error) {
 	w.Raw.Write(body)
 	return -1, nil
