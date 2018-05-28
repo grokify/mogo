@@ -21,7 +21,7 @@ func RegisterTimeSafe() {
 		return raymond.SafeString(t.Format(time.RFC3339))
 	})
 	raymond.RegisterHelper("timeRfc3339ymd", func(t time.Time) raymond.SafeString {
-		return raymond.SafeString(t.Format(timeutil.RFC3339YMD))
+		return raymond.SafeString(t.Format(timeutil.RFC3339FullDate))
 	})
 }
 

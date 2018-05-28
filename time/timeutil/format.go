@@ -11,20 +11,20 @@ import (
 
 const (
 	DT14               = "20060102150405"
-	DT6                = "200601"
 	DT8                = "20060102"
+	DT6                = "200601"
+	RFC3339FullDate    = "2006-01-02"
+	ISO8601YM          = "2006-01"
+	ISO8601ZHour       = "2006-01-02T15:04:05-07"
+	ISO8601Z           = "2006-01-02T15:04:05-0700"
+	ISO8601ZCompact    = "20060102T150405Z"
+	ISO8601MilliNoTz   = "2006-01-02T15:04:05.000"
+	DateMDYSlash       = "01/02/2006"
+	DMYHM2             = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
 	RFC3339Min         = "0000-01-01T00:00:00Z"
 	RFC3339Max         = "9999-12-31T23:59:59Z"
 	RFC3339Zero        = "0001-01-01T00:00:00Z"
-	RFC3339YMD         = "2006-01-02"
 	RFC3339YMDZeroUnix = int64(-62135596800)
-	ISO8601YM          = "2006-01"
-	ISO8601Z2          = "2006-01-02T15:04:05-07"
-	ISO8601Z4          = "2006-01-02T15:04:05-0700"
-	ISO8601ZCompact    = "20060102T150405Z"
-	ISO8601NoTzMilli   = "2006-01-02T15:04:05.000"
-	DateMDYSlash       = "01/02/2006"
-	DMYHM2             = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
 )
 
 // Reformat a time string from one format to another
@@ -58,7 +58,7 @@ func ParseFirst(layouts []string, value string) (time.Time, error) {
 
 var FormatMap = map[string]string{
 	"RFC3339":    time.RFC3339,
-	"RFC3339YMD": RFC3339YMD,
+	"RFC3339YMD": RFC3339FullDate,
 	"ISO8601YM":  ISO8601YM,
 }
 
@@ -85,7 +85,7 @@ type RFC3339YMDTime struct{ time.Time }
 type ISO8601NoTzMilliTime struct{ time.Time }
 
 func (t *RFC3339YMDTime) UnmarshalJSON(buf []byte) error {
-	tt, isNil, err := timeUnmarshalJSON(buf, RFC3339YMD)
+	tt, isNil, err := timeUnmarshalJSON(buf, RFC3339FullDate)
 	if err != nil || isNil {
 		return err
 	}
@@ -94,11 +94,11 @@ func (t *RFC3339YMDTime) UnmarshalJSON(buf []byte) error {
 }
 
 func (t RFC3339YMDTime) MarshalJSON() ([]byte, error) {
-	return timeMarshalJSON(t.Time, RFC3339YMD)
+	return timeMarshalJSON(t.Time, RFC3339FullDate)
 }
 
 func (t *ISO8601NoTzMilliTime) UnmarshalJSON(buf []byte) error {
-	tt, isNil, err := timeUnmarshalJSON(buf, ISO8601NoTzMilli)
+	tt, isNil, err := timeUnmarshalJSON(buf, ISO8601MilliNoTz)
 	if err != nil || isNil {
 		return err
 	}
@@ -107,7 +107,7 @@ func (t *ISO8601NoTzMilliTime) UnmarshalJSON(buf []byte) error {
 }
 
 func (t ISO8601NoTzMilliTime) MarshalJSON() ([]byte, error) {
-	return timeMarshalJSON(t.Time, ISO8601NoTzMilli)
+	return timeMarshalJSON(t.Time, ISO8601MilliNoTz)
 }
 
 func timeUnmarshalJSON(buf []byte, layout string) (time.Time, bool, error) {
