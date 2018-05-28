@@ -33,6 +33,7 @@ func (r RequestFastHttp) Method() []byte                          { return r.Raw
 func (r RequestFastHttp) MultipartForm() (*multipart.Form, error) { return r.Raw.MultipartForm() }
 func (r RequestFastHttp) RemoteAddr() net.Addr                    { return r.Raw.RemoteAddr() }
 func (r RequestFastHttp) RemoteAddress() string                   { return r.Raw.RemoteAddr().String() }
+func (r RequestFastHttp) RequestURI() []byte                      { return r.Raw.RequestURI() }
 func (r RequestFastHttp) UserAgent() []byte                       { return r.Raw.UserAgent() }
 
 type ResponseFastHttp struct {

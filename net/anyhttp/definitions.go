@@ -19,6 +19,7 @@ type Request interface {
 	QueryArgs() Args
 	PostArgs() Args
 	MultipartForm() (*multipart.Form, error)
+	RequestURI() []byte
 }
 
 type Args interface {

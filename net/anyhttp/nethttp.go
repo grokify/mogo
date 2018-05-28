@@ -51,6 +51,7 @@ func (r RequestNetHttp) PostArgs() Args        { return r.postArgs }
 func (r RequestNetHttp) Method() []byte        { return []byte(r.Raw.Method) }
 func (r RequestNetHttp) Header() http.Header   { return r.Raw.Header }
 func (r RequestNetHttp) Form() url.Values      { return r.Raw.Form }
+func (r RequestNetHttp) RequestURI() []byte    { return []byte(r.Raw.RequestURI) }
 
 func (r *RequestNetHttp) MultipartForm() (*multipart.Form, error) {
 	if !r.parsedMultipartForm {
