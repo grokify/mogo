@@ -21,6 +21,7 @@ const (
 	HeaderContentType             = "Content-Type"
 	HeaderLocation                = "Location"
 	HeaderUserAgent               = "User-Agent"
+	HeaderXContentTypeOptions     = "X-Content-Type-Options"
 	ContentTypeAppJsonUtf8        = "application/json; charset=utf-8"
 	ContentTypeAppFormUrlEncoded  = "application/x-www-form-urlencoded"
 	ContentTypeTextHtmlUtf8       = "text/html; charset=utf-8"
