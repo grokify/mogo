@@ -1,6 +1,7 @@
 Gotilla
 =======
 
+[![Used By][used-by-svg]][used-by-link]
 [![Build Status][build-status-svg]][build-status-link]
 [![Go Report Card][goreport-svg]][goreport-link]
 [![Docs][docs-godoc-svg]][docs-godoc-link]
@@ -48,6 +49,10 @@ Gotilla is available under an MIT-style license. See [LICENSE](LICENSE) for deta
 
 Gotilla &copy; 2015-2018 by John Wang
 
+[![Sourcegraph](https://sourcegraph.com/github.com/graph-gophers/graphql-go/-/badge.svg)](https://sourcegraph.com/github.com/graph-gophers/graphql-go?badge)
+
+ [used-by-svg]: https://sourcegraph.com/github.com/grokify/gotilla/-/badge.svg
+ [used-by-link]: https://sourcegraph.com/github.com/grokify/gotilla?badge
  [build-status-svg]: https://api.travis-ci.org/grokify/gotilla.svg?branch=master
  [build-status-link]: https://travis-ci.org/grokify/gotilla
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/gotilla
