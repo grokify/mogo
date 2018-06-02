@@ -11,17 +11,18 @@ import (
 
 // More predefined layouts for use in Time.Format and time.Parse.
 const (
-	DT14             = "20060102150405"
-	DT8              = "20060102"
-	DT6              = "200601"
-	RFC3339FullDate  = "2006-01-02"
-	ISO8601YM        = "2006-01"
-	ISO8601ZHour     = "2006-01-02T15:04:05-07"
-	ISO8601Z         = "2006-01-02T15:04:05-0700"
-	ISO8601ZCompact  = "20060102T150405Z"
-	ISO8601MilliNoTz = "2006-01-02T15:04:05.000"
-	DateMDYSlash     = "01/02/2006"
-	DateDMYHM2       = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
+	DT14                = "20060102150405"
+	DT8                 = "20060102"
+	DT6                 = "200601"
+	RFC3339FullDate     = "2006-01-02"
+	ISO8601YM           = "2006-01"
+	ISO8601ZHour        = "2006-01-02T15:04:05-07"
+	ISO8601Z            = "2006-01-02T15:04:05-0700"
+	ISO8601ZCompact     = "20060102T150405Z"
+	ISO8601CompactLocal = "20060102T150405"
+	ISO8601MilliNoTz    = "2006-01-02T15:04:05.000"
+	DateMDYSlash        = "01/02/2006"
+	DateDMYHM2          = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
 )
 
 const (

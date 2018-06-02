@@ -14,20 +14,21 @@ import (
 )
 
 const (
-	HeaderAuthorization           = "Authorization"
-	HeaderContentDisposition      = "Content-Disposition"
-	HeaderContentLength           = "Content-Length"
-	HeaderContentTransferEncoding = "Content-Transfer-Encoding"
-	HeaderContentType             = "Content-Type"
-	HeaderLocation                = "Location"
-	HeaderUserAgent               = "User-Agent"
-	HeaderXContentTypeOptions     = "X-Content-Type-Options"
-	ContentTypeAppJsonUtf8        = "application/json; charset=utf-8"
-	ContentTypeAppFormUrlEncoded  = "application/x-www-form-urlencoded"
-	ContentTypeTextHtmlUtf8       = "text/html; charset=utf-8"
-	ContentTypeTextPlainUsAscii   = "text/plain; charset=us-ascii"
-	ContentTypeTextPlainUtf8      = "text/plain; charset=utf-8"
-	SchemeHTTPS                   = "https"
+	HeaderAuthorization                = "Authorization"
+	HeaderContentDisposition           = "Content-Disposition"
+	HeaderContentLength                = "Content-Length"
+	HeaderContentTransferEncoding      = "Content-Transfer-Encoding"
+	HeaderContentType                  = "Content-Type"
+	HeaderLocation                     = "Location"
+	HeaderUserAgent                    = "User-Agent"
+	HeaderXContentTypeOptions          = "X-Content-Type-Options"
+	ContentTypeAppJsonUtf8             = "application/json; charset=utf-8"
+	ContentTypeAppFormUrlEncoded       = "application/x-www-form-urlencoded"
+	ContentTypeTextCalendarUtf8Request = `text/calendar; charset="utf-8"; method=REQUEST`
+	ContentTypeTextHtmlUtf8            = "text/html; charset=utf-8"
+	ContentTypeTextPlainUsAscii        = "text/plain; charset=us-ascii"
+	ContentTypeTextPlainUtf8           = "text/plain; charset=utf-8"
+	SchemeHTTPS                        = "https"
 )
 
 // GetWriteFile performs a HTTP GET request and saves the response body
