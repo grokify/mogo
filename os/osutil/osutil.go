@@ -4,6 +4,9 @@ package osutil
 import (
 	"io/ioutil"
 	"os"
+	"os/user"
+	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -89,4 +92,25 @@ func Env() []EnvVar {
 		}
 	}
 	return envs
+}
+
+func AbsFilepath(path string) (string, error) {
+	path = strings.TrimSpace(path)
+	if filepath.IsAbs(path) {
+		return path, nil
+	} else if path == "~" || path == "~/" {
+		if usr, err := user.Current(); err != nil {
+			return path, err
+		} else {
+			return usr.HomeDir, nil
+		}
+	} else if strings.Index(path, "~/") == 0 {
+		if usr, err := user.Current(); err != nil {
+			return path, err
+		} else {
+			return regexp.MustCompile(`^~/`).ReplaceAllString(path, usr.HomeDir+"/"), nil
+		}
+	} else {
+		return filepath.Abs(path)
+	}
 }
