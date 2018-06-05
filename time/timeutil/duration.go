@@ -98,6 +98,6 @@ func SumDurations(durations ...time.Duration) time.Duration {
 	for _, dur := range durations {
 		seconds += dur.Nanoseconds()
 	}
-	dur, _ := time.ParseDuration(fmt.Sprintf("%vns", seconds))
+	dur, _ := time.ParseDuration(fmt.Sprintf("%dns", seconds))
 	return dur
 }
