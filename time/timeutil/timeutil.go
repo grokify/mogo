@@ -5,10 +5,8 @@ package timeutil
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"math"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -74,52 +72,6 @@ func ParseInterval(src string) (Interval, error) {
 		}
 	}
 	return Year, fmt.Errorf("Interval [%v] not found.", src)
-}
-
-// ParseDuration adds days (d), weeks (w), years (y).
-func ParseDuration(s string) (time.Duration, error) {
-	rx := regexp.MustCompile(`(?i)^\s*(-?\d+)(d|w|y)\s*$`)
-	rs := rx.FindStringSubmatch(s)
-
-	if len(rs) > 0 {
-		zeroDuration, _ := time.ParseDuration("0s")
-		quantity := rs[1]
-		units := strings.ToLower(rs[2])
-		i, err := strconv.Atoi(quantity)
-		if err != nil {
-			return zeroDuration, err
-		}
-		if units == "d" {
-			s = fmt.Sprintf("%vs", i*DaySeconds)
-		} else if units == "w" {
-			s = fmt.Sprintf("%vs", i*WeekSeconds)
-		} else if units == "y" {
-			s = fmt.Sprintf("%vs", i*YearSeconds)
-		} else {
-			return zeroDuration, errors.New("timeutil.ParseDuration Parse Error")
-		}
-	}
-	return time.ParseDuration(s)
-}
-
-func MustParseDuration(s string) time.Duration {
-	dur, err := time.ParseDuration(s)
-	if err != nil {
-		panic(err)
-	}
-	return dur
-}
-
-func NowDeltaDuration(d time.Duration) time.Time {
-	return time.Now().Add(d)
-}
-
-func NowDeltaParseDuration(s string) (time.Time, error) {
-	d, err := ParseDuration(s)
-	if err != nil {
-		return time.Now(), err
-	}
-	return time.Now().Add(d), nil
 }
 
 // TimeRange represents a time range with a max and min value.
@@ -285,17 +237,6 @@ func TimeForDt8(dt8 int32) (time.Time, error) {
 	return time.Parse(DT8, strconv.FormatInt(int64(dt8), 10))
 }
 
-// DurationForNowSubDt8 returns a duartion struct between a Dt8 value and the current time.
-func DurationForNowSubDt8(dt8 int32) (time.Duration, error) {
-	t, err := TimeForDt8(dt8)
-	if err != nil {
-		var d time.Duration
-		return d, err
-	}
-	now := time.Now()
-	return now.Sub(t), nil
-}
-
 // Dt14Now returns a Dt14 value for the current time.
 func Dt14Now() int64 {
 	return Dt14ForTime(time.Now())
@@ -329,21 +270,6 @@ func Dt14ForTime(t time.Time) int64 {
 // TimeForDt14 returns a time.Time value given a Dt14 value.
 func TimeForDt14(dt14 int64) (time.Time, error) {
 	return time.Parse(DT14, strconv.FormatInt(dt14, 10))
-}
-
-func DurationStringMinutesSeconds(durationSeconds int64) (string, error) {
-	if durationSeconds <= 0 {
-		return "0 sec", nil
-	}
-	dur, err := time.ParseDuration(fmt.Sprintf("%vs", durationSeconds))
-	if err != nil {
-		return "", err
-	}
-	modSeconds := math.Mod(float64(durationSeconds), float64(60))
-	if dur.Minutes() < 1 {
-		return fmt.Sprintf("%v sec", modSeconds), nil
-	}
-	return fmt.Sprintf("%v min %v sec", int(dur.Minutes()), modSeconds), nil
 }
 
 func MonthNames() []string {
@@ -417,14 +343,6 @@ func NextQuarters(dt time.Time, num int) time.Time {
 		dt = NextQuarter(dt)
 	}
 	return dt
-}
-
-// QuarterDuration returns a time.Duration representing the
-// calendar quarter for the time provided.
-func QuarterDuration(dt time.Time) time.Duration {
-	start := QuarterStart(dt)
-	end := NextQuarter(start)
-	return end.Sub(start)
 }
 
 func IsQuarterStart(t time.Time) bool {
