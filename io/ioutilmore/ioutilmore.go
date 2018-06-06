@@ -32,6 +32,30 @@ func Copy(src string, dst string) error {
 	return err
 }
 
+func ReadDirSplit(dirname string, skipDotDirs bool) ([]os.FileInfo, []os.FileInfo, error) {
+	all, err := ioutil.ReadDir(dirname)
+	if err != nil {
+		return []os.FileInfo{}, []os.FileInfo{}, err
+	}
+	subdirs, regular := FileInfosSplit(all, skipDotDirs)
+	return subdirs, regular, nil
+}
+
+func FileInfosSplit(all []os.FileInfo, skipDotDirs bool) ([]os.FileInfo, []os.FileInfo) {
+	subdirs := []os.FileInfo{}
+	regular := []os.FileInfo{}
+	for _, f := range all {
+		if f.Mode().IsDir() {
+			if !skipDotDirs || (f.Name() != "." && f.Name() != "..") {
+				subdirs = append(subdirs, f)
+			}
+		} else {
+			regular = append(regular, f)
+		}
+	}
+	return subdirs, regular
+}
+
 func DirEntriesReSizeGt0(dir string, rx1 *regexp.Regexp) ([]os.FileInfo, error) {
 	filesMatch := []os.FileInfo{}
 	filesAll, e := ioutil.ReadDir(dir)
@@ -50,39 +74,6 @@ func DirEntriesReSizeGt0(dir string, rx1 *regexp.Regexp) ([]os.FileInfo, error) 
 		}
 	}
 	return filesMatch, nil
-}
-
-// http://stackoverflow.com/questions/8824571/golang-determining-whether-file-points-to-file-or-directory
-func DirAndFileFromPath(path string) (string, string, error) {
-	path = strings.TrimRight(path, "/\\")
-	f, err := os.Open(path)
-	if err != nil {
-		return "", "", err
-	}
-	defer f.Close()
-	fi, err := f.Stat()
-	if err != nil {
-		return "", "", err
-	}
-	isFile := false
-	switch mode := fi.Mode(); {
-	case mode.IsDir():
-		return "", "", errors.New("Path is Dir")
-	case mode.IsRegular():
-		isFile = true
-	}
-	if isFile == false {
-		return "", "", errors.New("Is not a file")
-	}
-	rx1 := regexp.MustCompile(`^(.+)[/\\]([^/\\]+)`)
-	rs1 := rx1.FindStringSubmatch(path)
-	dir := ""
-	file := ""
-	if len(rs1) > 1 {
-		dir = rs1[1]
-		file = rs1[2]
-	}
-	return dir, file, nil
 }
 
 // DirFilesSubmatchGreatest takes a directory, regular expression and boolean to indicate
@@ -278,10 +269,8 @@ func NewFileWriter(path string) (FileWriter, error) {
 		return fw, err
 	}
 
-	w := bufio.NewWriter(file)
-
 	fw.File = file
-	fw.Writer = w
+	fw.Writer = bufio.NewWriter(file)
 
 	return fw, nil
 }
