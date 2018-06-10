@@ -25,6 +25,8 @@ func NewRequestFastHttp(ctx *fasthttp.RequestCtx) *RequestFastHttp {
 	}
 }
 
+func (r RequestFastHttp) Header(s string) []byte                  { return r.Raw.Request.Header.Peek(s) }
+func (r RequestFastHttp) HeaderString(s string) string            { return string(r.Raw.Request.Header.Peek(s)) }
 func (r RequestFastHttp) ParseForm() error                        { return nil }
 func (r RequestFastHttp) AllArgs() Args                           { return r.allArgs }
 func (r RequestFastHttp) QueryArgs() Args                         { return r.queryArgs }
@@ -35,6 +37,7 @@ func (r RequestFastHttp) RemoteAddr() net.Addr                    { return r.Raw
 func (r RequestFastHttp) RemoteAddress() string                   { return r.Raw.RemoteAddr().String() }
 func (r RequestFastHttp) RequestURI() []byte                      { return r.Raw.RequestURI() }
 func (r RequestFastHttp) UserAgent() []byte                       { return r.Raw.UserAgent() }
+func (r RequestFastHttp) PostBody() ([]byte, error)               { return r.Raw.PostBody(), nil }
 
 type ResponseFastHttp struct {
 	Raw *fasthttp.RequestCtx

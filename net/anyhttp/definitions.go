@@ -10,6 +10,8 @@ import (
 )
 
 type Request interface {
+	Header(s string) []byte
+	HeaderString(s string) string
 	RemoteAddr() net.Addr
 	RemoteAddress() string
 	UserAgent() []byte
@@ -20,6 +22,7 @@ type Request interface {
 	PostArgs() Args
 	MultipartForm() (*multipart.Form, error)
 	RequestURI() []byte
+	PostBody() ([]byte, error)
 }
 
 type Args interface {
