@@ -240,7 +240,7 @@ func ReaderToBytes(ior io.Reader) []byte {
 }
 
 func WriteJSON(filepath string, data interface{}, perm os.FileMode, wantPretty bool) error {
-	bytes := []byte{}
+	var bytes []byte
 	if wantPretty {
 		bytesTry, err := json.MarshalIndent(data, "", "  ")
 		if err != nil {

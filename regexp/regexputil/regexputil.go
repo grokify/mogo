@@ -33,7 +33,7 @@ func (set *RegexpSet) GetRegexp(pattern string, useStore bool, key string) *rege
 		if len(key) == 0 {
 			key = pattern
 		}
-		ok := false
+		var ok bool
 		rx, ok = set.Regexps[key]
 		if !ok {
 			rx = regexp.MustCompile(pattern)

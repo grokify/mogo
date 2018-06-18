@@ -62,6 +62,9 @@ func BuildURLQueryString(baseUrl string, qry interface{}) string {
 // a URL.
 func GetURLBody(absoluteUrl string) ([]byte, error) {
 	req, err := http.NewRequest("GET", absoluteUrl, nil)
+	if err != nil {
+		return []byte{}, err
+	}
 	cli := &http.Client{}
 	res, err := cli.Do(req)
 	if err != nil {
