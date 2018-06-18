@@ -18,9 +18,11 @@ const (
 	ISO8601YM           = "2006-01"
 	ISO8601ZHour        = "2006-01-02T15:04:05-07"
 	ISO8601Z            = "2006-01-02T15:04:05-0700"
-	ISO8601ZCompact     = "20060102T150405Z"
-	ISO8601CompactLocal = "20060102T150405"
+	InsightlyApiQuery   = "_1/_2/2006 _3:04:05 PM"
+	InsightlyApiObject  = "2006-01-02 15:04:05"
 	ISO8601MilliNoTz    = "2006-01-02T15:04:05.000"
+	ISO8601CompactZ     = "20060102T150405Z"
+	ISO8601CompactLocal = "20060102T150405"
 	DateMDYSlash        = "01/02/2006"
 	DateDMYHM2          = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
 )
