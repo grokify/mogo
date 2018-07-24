@@ -267,7 +267,7 @@ func CommonInitialismsMap() map[string]bool {
 	for _, ci := range commonInitialisms {
 		ciMap[ci] = true
 	}
-	return commonInitialisms
+	return ciMap
 }
 
 // StringToConstant is used to generate constant names for code generation.
