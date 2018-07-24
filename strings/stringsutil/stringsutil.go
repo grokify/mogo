@@ -256,3 +256,33 @@ func FormatString(s string, options []string) string {
 	}
 	return s
 }
+
+// CommonInitialisms is the listed by Go Lint.
+const CommonInitialisms = "ACL,API,ASCII,CPU,CSS,DNS,EOF,GUID,HTML,HTTP,HTTPS,ID,IP,JSON,LHS,QPS,RAM,RHS,RPC,SLA,SMTP,SQL,SSH,TCP,TLS,TTL,UDP,UI,UID,UUID,URI,URL,UTF8,VM,XML,XMPP,XSRF,XSS"
+
+// CommonInitialismsMap returns map[string]bool of upper case initialisms.
+func CommonInitialismsMap() map[string]bool {
+	ciMap := map[string]bool{}
+	commonInitialisms := strings.Split(CommonInitialisms, ",")
+	for _, ci := range commonInitialisms {
+		ciMap[ci] = true
+	}
+	return commonInitialisms
+}
+
+// StringToConstant is used to generate constant names for code generation.
+// It uses the commonInitialisms in Go Lint.
+func StringToConstant(s string) string {
+	newParts := []string{}
+	parts := strings.Split(s, "_")
+	ciMap := CommonInitialismsMap()
+	for _, p := range parts {
+		pUp := strings.ToUpper(p)
+		if _, ok := ciMap[pUp]; ok {
+			newParts = append(newParts, pUp)
+		} else {
+			newParts = append(newParts, ToUpperFirst(strings.ToLower(p)))
+		}
+	}
+	return strings.Join(newParts, "")
+}
