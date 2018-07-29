@@ -161,9 +161,7 @@ func CondenseString(content string, join_lines bool) string {
 	return strings.TrimSpace(content)
 }
 
-func StripControl(s string) string {
-	return rxControl.ReplaceAllString(s, "")
-}
+func StripControl(s string) string { return rxControl.ReplaceAllString(s, "") }
 
 // TrimSentenceLength trims a string by a max length at word boundaries.
 func TrimSentenceLength(sentenceInput string, maxLength int) string {
