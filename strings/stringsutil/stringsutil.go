@@ -15,7 +15,10 @@ const (
 	SpaceToUnderscore = "SpaceToUnderscore"
 )
 
-var rxSpaces = regexp.MustCompile(`\s+`)
+var (
+	rxControl = regexp.MustCompile(`[[:cntrl:]]`)
+	rxSpaces  = regexp.MustCompile(`\s+`)
+)
 
 // PadLeft prepends a string to a base string until the string
 // length is greater or equal to the desired length.
@@ -157,6 +160,8 @@ func CondenseString(content string, join_lines bool) string {
 	content = regexp.MustCompile(`\s+`).ReplaceAllString(content, " ")
 	return strings.TrimSpace(content)
 }
+
+func StripControl(s string) string { return rxControl.ReplaceAllString(s, "") }
 
 // TrimSentenceLength trims a string by a max length at word boundaries.
 func TrimSentenceLength(sentenceInput string, maxLength int) string {
