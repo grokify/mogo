@@ -114,6 +114,13 @@ func UnixMillis(epochMillis int64) time.Time {
 	return time.Unix(0, epochMillis*MillisToNanoMultiplier)
 }
 
+// UnixToDay converst an epoch in seconds to a time.Time for the
+// day.
+func UnixToDay(epoch int64) time.Time {
+	t := time.Unix(epoch, 0).UTC()
+	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.UTC)
+}
+
 // Dt6ForTime returns the Dt6 value for time.Time.
 func Dt6ForTime(dt time.Time) int32 {
 	dt = dt.UTC()
