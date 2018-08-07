@@ -94,15 +94,12 @@ func DirFilesRegexpSubmatchGreatest(dir string, rx1 *regexp.Regexp, nonZeroFiles
 			continue
 		}
 
-		rs1 := rx1.FindStringSubmatch(f.Name())
-		if len(rs1) > 1 {
+		if rs1 := rx1.FindStringSubmatch(f.Name()); len(rs1) > 1 {
 			extract := rs1[1]
 			if _, ok := files[extract]; !ok {
 				files[extract] = []os.FileInfo{}
 			}
 			files[extract] = append(files[extract], f)
-			//strs = append(strs, rs1[1])
-			//filesMatch = append(filesMatch, f)
 		}
 	}
 	keysSorted := maputil.StringKeysSorted(files)
