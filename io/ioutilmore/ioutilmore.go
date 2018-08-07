@@ -13,6 +13,8 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+
+	"github.com/grokify/gotilla/type/maputil"
 )
 
 func Copy(src string, dst string) error {
@@ -76,10 +78,42 @@ func DirEntriesReSizeGt0(dir string, rx1 *regexp.Regexp) ([]os.FileInfo, error) 
 	return filesMatch, nil
 }
 
-// DirFilesSubmatchGreatest takes a directory, regular expression and boolean to indicate
+// DirEntriesRegexpGreatest takes a directory, regular expression and boolean to indicate
 // whether to include zero size files and returns the greatest of a single match in the
 // regular expression.
-func DirFilesSubmatchGreatest(dir string, rx1 *regexp.Regexp, nonZeroFilesOnly bool) (string, error) {
+func DirFilesRegexpSubmatchGreatest(dir string, rx1 *regexp.Regexp, nonZeroFilesOnly bool) ([]os.FileInfo, error) {
+	files := map[string][]os.FileInfo{}
+
+	filesAll, e := ioutil.ReadDir(dir)
+	if e != nil {
+		return []os.FileInfo{}, e
+	}
+	for _, f := range filesAll {
+		if f.Name() == "." || f.Name() == ".." ||
+			(nonZeroFilesOnly && f.Size() <= int64(0)) {
+			continue
+		}
+
+		rs1 := rx1.FindStringSubmatch(f.Name())
+		if len(rs1) > 1 {
+			extract := rs1[1]
+			if _, ok := files[extract]; !ok {
+				files[extract] = []os.FileInfo{}
+			}
+			files[extract] = append(files[extract], f)
+			//strs = append(strs, rs1[1])
+			//filesMatch = append(filesMatch, f)
+		}
+	}
+	keysSorted := maputil.StringKeysSorted(files)
+	greatest := keysSorted[len(keysSorted)-1]
+	return files[greatest], nil
+}
+
+// DirFilesRegexpSubmatchGreatestSubmatch takes a directory, regular expression and boolean to indicate
+// whether to include zero size files and returns the greatest of a single match in the
+// regular expression.
+func DirFilesRegexpSubmatchGreatestSubmatch(dir string, rx1 *regexp.Regexp, nonZeroFilesOnly bool) (string, error) {
 	filesAll, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return "", err
