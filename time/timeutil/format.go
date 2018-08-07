@@ -19,7 +19,7 @@ const (
 	ISO8601ZHour        = "2006-01-02T15:04:05-07"
 	ISO8601Z            = "2006-01-02T15:04:05-0700"
 	InsightlyApiQuery   = "_1/_2/2006 _3:04:05 PM"
-	InsightlyApiObject  = "2006-01-02 15:04:05"
+	SQLTimestamp        = "2006-01-02 15:04:05" // MySQL, BigQuery, etc.
 	ISO8601MilliNoTz    = "2006-01-02T15:04:05.000"
 	ISO8601CompactZ     = "20060102T150405Z"
 	ISO8601CompactLocal = "20060102T150405"
