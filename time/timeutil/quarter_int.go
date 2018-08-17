@@ -42,6 +42,14 @@ func QuarterInt32ForTime(dt time.Time) int32 {
 	return (int32(dt.Year()) * int32(10)) + int32(q)
 }
 
+func PraseQuarterInt32StartEndTimes(yyyyq int32) (time.Time, time.Time, error) {
+	start, err := QuarterInt32StartTime(yyyyq)
+	if err != nil {
+		return start, start, err
+	}
+	return start, QuarterEnd(start), nil
+}
+
 func ParseQuarterInt32(yyyyq int32) (int32, uint8, error) {
 	yyyy := int32(float32(yyyyq) / 10.0)
 	q := yyyyq - 10*yyyy
