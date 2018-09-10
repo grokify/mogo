@@ -15,7 +15,7 @@ func InQuarter(dt time.Time, yyyyq int32) (bool, error) {
 		return false, err
 	}
 	return (IsGreaterThan(dt, qtrStart, true) &&
-		IsLessThan(dt, QuarterEnd(qtrStart), true)), nil
+		IsLessThan(dt, NextQuarter(qtrStart), false)), nil
 }
 
 func MustInQuarter(dt time.Time, yyyyq int32) bool {
@@ -112,3 +112,5 @@ func ParseHalf(yyyyh int32) (int32, uint8, error) {
 	}
 	return yyyy, uint8(h), nil
 }
+
+func QuarterInt32ToYear(yyyyq int32) int32 { return int32(float32(yyyyq) / 10) }

@@ -33,6 +33,10 @@ func IsLessThan(timeLeft time.Time, timeRight time.Time, orEqual bool) bool {
 	return false
 }
 
+func TimeWithin(this, beg, end time.Time, eqBeg, eqEnd bool) bool {
+	return IsGreaterThan(this, beg, eqBeg) && IsLessThan(this, end, eqEnd)
+}
+
 // MinTime returns minTime if time in question is less than min time.
 func MinTime(t, min time.Time) time.Time {
 	if IsLessThan(t, min, false) {
