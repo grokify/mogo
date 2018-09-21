@@ -54,7 +54,7 @@ type MapInt64Int64 map[int64]int64
 
 func (m MapInt64Int64) KeysSorted() []int64 {
 	keys := []int64{}
-	for k, _ := range m {
+	for k := range m {
 		keys = append(keys, k)
 	}
 	sort.Sort(sortutil.Int64Slice(keys))
