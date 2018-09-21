@@ -114,3 +114,12 @@ func ParseHalf(yyyyh int32) (int32, uint8, error) {
 }
 
 func QuarterInt32ToYear(yyyyq int32) int32 { return int32(float32(yyyyq) / 10) }
+
+func NextQuarterInt32(yyyyq int32) (int32, error) {
+	t, err := QuarterInt32StartTime(yyyyq)
+	if err != nil {
+		return int32(0), err
+	}
+	tNext := NextQuarter(t)
+	return QuarterInt32ForTime(tNext), nil
+}

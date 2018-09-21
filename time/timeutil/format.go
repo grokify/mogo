@@ -31,6 +31,7 @@ const (
 	RFC3339Min         = "0000-01-01T00:00:00Z"
 	RFC3339Max         = "9999-12-31T23:59:59Z"
 	RFC3339Zero        = "0001-01-01T00:00:00Z"
+	RFC3339ZeroUnix    = "1970-01-01T00:00:00Z"
 	RFC3339YMDZeroUnix = int64(-62135596800)
 )
 
@@ -82,9 +83,28 @@ func FormatQuarter(t time.Time) string {
 	return fmt.Sprintf("Q%d %d", MonthToQuarter(uint8(t.Month())), t.Year())
 }
 
+func TimeRFC3339Min() time.Time {
+	t0, _ := time.Parse(time.RFC3339, RFC3339Min)
+	return t0
+}
+
 func TimeRFC3339Zero() time.Time {
 	t0, _ := time.Parse(time.RFC3339, RFC3339Zero)
 	return t0
+}
+
+func TimeRFC3339ZeroUnix() time.Time {
+	t0, _ := time.Parse(time.RFC3339, RFC3339ZeroUnix)
+	return t0
+}
+
+func TimeIsZeroAny(u time.Time) bool {
+	if u.Equal(TimeRFC3339Zero()) ||
+		u.Equal(TimeRFC3339Min()) ||
+		u.Equal(TimeRFC3339ZeroUnix()) {
+		return true
+	}
+	return false
 }
 
 type RFC3339YMDTime struct{ time.Time }

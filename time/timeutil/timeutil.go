@@ -358,7 +358,8 @@ func NextQuarters(dt time.Time, num int) time.Time {
 
 func IsQuarterStart(t time.Time) bool {
 	t = t.UTC()
-	if t.Second() == 0 &&
+	if t.Nanosecond() == 0 &&
+		t.Second() == 0 &&
 		t.Minute() == 0 &&
 		t.Hour() == 0 &&
 		t.Day() == 1 &&
@@ -373,7 +374,8 @@ func IsQuarterStart(t time.Time) bool {
 
 func IsYearStart(t time.Time) bool {
 	t = t.UTC()
-	if t.Second() == 0 &&
+	if t.Nanosecond() == 0 &&
+		t.Second() == 0 &&
 		t.Minute() == 0 &&
 		t.Hour() == 0 &&
 		t.Day() == 1 &&

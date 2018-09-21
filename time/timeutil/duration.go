@@ -101,3 +101,27 @@ func SumDurations(durations ...time.Duration) time.Duration {
 	dur, _ := time.ParseDuration(fmt.Sprintf("%dns", seconds))
 	return dur
 }
+
+func DurationDays(dur time.Duration) int64 { return int64(dur.Hours()/24.0) + 1 }
+
+func DurationIsZero(dur time.Duration) bool {
+	if dur.Nanoseconds() == 0 {
+		return true
+	}
+	return false
+}
+
+func DurationZero() time.Duration {
+	dur, _ := time.ParseDuration("0s")
+	return dur
+}
+
+func MaxDuration(durs []time.Duration) time.Duration {
+	max, _ := time.ParseDuration("0s")
+	for _, dur := range durs {
+		if dur.Nanoseconds() > max.Nanoseconds() {
+			max = dur
+		}
+	}
+	return max
+}
