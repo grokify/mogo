@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"sort"
 	"strings"
+
+	"github.com/grokify/gotilla/sort/sortutil"
 )
 
 func StringKeys(mp interface{}) []string {
@@ -46,4 +48,24 @@ func MapSSValOrEmpty(data map[string]string, key string) string {
 		return val
 	}
 	return ""
+}
+
+type MapInt64Int64 map[int64]int64
+
+func (m MapInt64Int64) KeysSorted() []int64 {
+	keys := []int64{}
+	for k, _ := range m {
+		keys = append(keys, k)
+	}
+	sort.Sort(sortutil.Int64Slice(keys))
+	return keys
+}
+
+func (m MapInt64Int64) ValuesSortedByKeys() []int64 {
+	vals := []int64{}
+	keys := m.KeysSorted()
+	for _, k := range keys {
+		vals = append(vals, k)
+	}
+	return vals
 }
