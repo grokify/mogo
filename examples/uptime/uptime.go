@@ -50,7 +50,7 @@ func main() {
 	getIncident(
 		"2017-09-04T09:15:00-0700",
 		"2017-09-05T12:11:04-0600",
-		timeutil.ISO8601Z, rangeDur, 140, 6577)
+		timeutil.ISO8601, rangeDur, 140, 6577)
 
 	getIncident(
 		"2017-09-29T17:09:00Z",
