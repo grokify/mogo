@@ -11,20 +11,20 @@ import (
 
 // More predefined layouts for use in Time.Format and time.Parse.
 const (
-	DT14                = "20060102150405"
-	DT8                 = "20060102"
-	DT6                 = "200601"
-	RFC3339FullDate     = "2006-01-02"
-	ISO8601YM           = "2006-01"
-	ISO8601ZHour        = "2006-01-02T15:04:05-07"
-	ISO8601Z            = "2006-01-02T15:04:05-0700"
-	InsightlyApiQuery   = "_1/_2/2006 _3:04:05 PM"
-	SQLTimestamp        = "2006-01-02 15:04:05" // MySQL, BigQuery, etc.
-	ISO8601MilliNoTz    = "2006-01-02T15:04:05.000"
-	ISO8601CompactZ     = "20060102T150405Z"
-	ISO8601CompactLocal = "20060102T150405"
-	DateMDYSlash        = "01/02/2006"
-	DateDMYHM2          = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
+	DT14               = "20060102150405"
+	DT8                = "20060102"
+	DT6                = "200601"
+	RFC3339FullDate    = "2006-01-02"
+	ISO8601            = "2006-01-02T15:04:05Z0700"
+	ISO8601TZHour      = "2006-01-02T15:04:05Z07"
+	ISO8601MilliNoTZ   = "2006-01-02T15:04:05.000"
+	ISO8601CompactZ    = "20060102T150405Z0700"
+	ISO8601CompactNoTZ = "20060102T150405"
+	ISO8601YM          = "2006-01"
+	InsightlyApiQuery  = "_1/_2/2006 _3:04:05 PM"
+	SQLTimestamp       = "2006-01-02 15:04:05" // MySQL, BigQuery, etc.
+	DateMDYSlash       = "01/02/2006"
+	DateDMYHM2         = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
 )
 
 const (
@@ -125,7 +125,7 @@ func (t RFC3339YMDTime) MarshalJSON() ([]byte, error) {
 }
 
 func (t *ISO8601NoTzMilliTime) UnmarshalJSON(buf []byte) error {
-	tt, isNil, err := timeUnmarshalJSON(buf, ISO8601MilliNoTz)
+	tt, isNil, err := timeUnmarshalJSON(buf, ISO8601MilliNoTZ)
 	if err != nil || isNil {
 		return err
 	}
@@ -134,7 +134,7 @@ func (t *ISO8601NoTzMilliTime) UnmarshalJSON(buf []byte) error {
 }
 
 func (t ISO8601NoTzMilliTime) MarshalJSON() ([]byte, error) {
-	return timeMarshalJSON(t.Time, ISO8601MilliNoTz)
+	return timeMarshalJSON(t.Time, ISO8601MilliNoTZ)
 }
 
 func timeUnmarshalJSON(buf []byte, layout string) (time.Time, bool, error) {

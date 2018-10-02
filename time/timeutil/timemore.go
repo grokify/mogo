@@ -18,6 +18,22 @@ func NewTimeMore(thisTime time.Time, dow time.Weekday) TimeMore {
 		dow:      dow}
 }
 
+func NewTimeMoreQuarterStartString(yyyyqStr string, dow time.Weekday) (TimeMore, error) {
+	dt, err := QuarterStringStartTime(yyyyqStr)
+	if err != nil {
+		return TimeMore{}, err
+	}
+	return NewTimeMore(dt, dow), nil
+}
+
+func NewTimeMoreQuarterEndString(yyyyqStr string, dow time.Weekday) (TimeMore, error) {
+	dt, err := QuarterStringEndTime(yyyyqStr)
+	if err != nil {
+		return TimeMore{}, err
+	}
+	return NewTimeMore(dt, dow), nil
+}
+
 func (tm *TimeMore) Time() time.Time         { return tm.thisTime }
 func (tm *TimeMore) DOW() time.Weekday       { return tm.dow }
 func (tm *TimeMore) MonthStart() time.Time   { return MonthStart(tm.thisTime) }

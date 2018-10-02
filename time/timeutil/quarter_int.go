@@ -5,7 +5,9 @@ package timeutil
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -42,6 +44,8 @@ func QuarterInt32ForTime(dt time.Time) int32 {
 	return (int32(dt.Year()) * int32(10)) + int32(q)
 }
 
+func QuarterInt32Now() int32 { return QuarterInt32ForTime(time.Now()) }
+
 func PraseQuarterInt32StartEndTimes(yyyyq int32) (time.Time, time.Time, error) {
 	start, err := QuarterInt32StartTime(yyyyq)
 	if err != nil {
@@ -60,6 +64,22 @@ func ParseQuarterInt32(yyyyq int32) (int32, uint8, error) {
 		return int32(0), uint8(0), fmt.Errorf("Quarter '%v' is not valid", q)
 	}
 	return yyyy, uint8(q), nil
+}
+
+func QuarterStringStartTime(yyyyqStr string) (time.Time, error) {
+	yyyyq, err := strconv.Atoi(yyyyqStr)
+	if err != nil {
+		return time.Now(), err
+	}
+	return QuarterInt32StartTime(int32(yyyyq))
+}
+
+func QuarterStringEndTime(yyyyqStr string) (time.Time, error) {
+	yyyyq, err := strconv.Atoi(yyyyqStr)
+	if err != nil {
+		return time.Now(), err
+	}
+	return QuarterInt32EndTime(int32(yyyyq))
 }
 
 func QuarterInt32StartTime(yyyyq int32) (time.Time, error) {
@@ -122,4 +142,37 @@ func NextQuarterInt32(yyyyq int32) (int32, error) {
 	}
 	tNext := NextQuarter(t)
 	return QuarterInt32ForTime(tNext), nil
+}
+
+// AnyStringToQuarterTime returns the current time if in the
+// current quarter or the end of any previous quarter.
+func AnyStringToQuarterTime(yyyyqSrcStr string) time.Time {
+	yyyyqSrcStr = strings.TrimSpace(yyyyqSrcStr)
+	// If not a string, return now time.
+	if len(yyyyqSrcStr) != 5 {
+		return time.Now().UTC()
+	}
+	// If not a yyyyq pattern, return now time.
+	rx := regexp.MustCompile(`^[0-9]{4}[1-4]$`)
+	m := rx.FindString(strings.TrimSpace(yyyyqSrcStr))
+	if len(m) != 5 {
+		return time.Now().UTC()
+	}
+	// If cannot parse to integer, return now time.
+	yyyyqSrc, err := strconv.Atoi(yyyyqSrcStr)
+	if err != nil {
+		return time.Now().UTC()
+	}
+	// Have good yyyyq
+	// If yyyySrc == yyyyNow, return now time.
+	yyyyqNow := QuarterInt32ForTime(time.Now().UTC())
+	if int32(yyyyqSrc) == yyyyqNow {
+		return time.Now().UTC()
+	}
+	// return quarter end time
+	dtQtrEnd, err := QuarterInt32EndTime(int32(yyyyqSrc))
+	if err != nil {
+		return time.Now().UTC()
+	}
+	return dtQtrEnd.UTC()
 }
