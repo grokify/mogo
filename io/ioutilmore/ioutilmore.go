@@ -292,6 +292,15 @@ func ReaderToBytes(ior io.Reader) []byte {
 	return buf.Bytes()
 }
 
+// ReadFileJSON reads and unmarshals a file.
+func ReadFileJSON(file string, v interface{}) error {
+	bytes, err := io.ReadFile(file)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(bytes, v)
+}
+
 func WriteJSON(filepath string, data interface{}, perm os.FileMode, wantPretty bool) error {
 	var bytes []byte
 	if wantPretty {
