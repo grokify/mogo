@@ -2,7 +2,6 @@ package csvutil
 
 import (
 	"encoding/csv"
-	"fmt"
 	"os"
 
 	"github.com/grokify/gotilla/strings/stringsutil"
@@ -53,8 +52,7 @@ func NewWriter(filepath, sep string, replaceSeparator bool, alt string) (Writer,
 		StripRepeatedSep: false,
 		ReplaceSeparator: replaceSeparator,
 		SeparatorAlt:     alt}
-	err := w.open(filepath)
-	return w, err
+	return w, w.open(filepath)
 }
 
 // Open opens a filepath.
@@ -68,14 +66,17 @@ func (w *Writer) open(filepath string) error {
 }
 
 // AddLine adds an []interface{} to the file.
-func (w *Writer) AddLine(cells []interface{}) {
-	fmt.Fprintf(
-		w.File,
-		"%s\n",
-		stringsutil.JoinInterface(cells, w.Separator, false, w.ReplaceSeparator, w.SeparatorAlt))
+func (w *Writer) AddLine(cells []interface{}) error {
+	_, err := w.File.WriteString(
+		stringsutil.JoinInterface(
+			cells, w.Separator, false, w.ReplaceSeparator, w.SeparatorAlt) + "\n")
+	if err != nil {
+		return err
+	}
+	return w.File.Sync()
 }
 
 // Close closes the file.
-func (w *Writer) Close() {
-	w.File.Close()
+func (w *Writer) Close() error {
+	return w.File.Close()
 }
