@@ -26,7 +26,7 @@ func FirstDayOfISOWeek(year int, week int, timezone *time.Location) time.Time {
 	// iterate forward to the first day of the given week
 	for isoWeek < week {
 		date = date.AddDate(0, 0, 7)
-		isoYear, isoWeek = date.ISOWeek()
+		//isoYear, isoWeek = date.ISOWeek()
 	}
 
 	return date
