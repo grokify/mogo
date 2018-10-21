@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
-	im "github.com/grokify/gotilla/io/ioutilmore"
+	iom "github.com/grokify/gotilla/io/ioutilmore"
 	"github.com/grokify/gotilla/os/osutil"
 	"github.com/joho/godotenv"
 )
@@ -40,7 +41,7 @@ func LoadDotEnvSkipEmpty(paths ...string) error {
 		paths = DefaultPaths()
 	}
 
-	envPaths := im.FilterFilenamesSizeGtZero(paths...)
+	envPaths := iom.FilterFilenamesSizeGtZero(paths...)
 
 	if len(envPaths) > 0 {
 		return godotenv.Load(envPaths...)
@@ -53,7 +54,7 @@ func LoadDotEnvFirst(paths ...string) error {
 		paths = DefaultPaths()
 	}
 
-	envPaths := im.FilterFilenamesSizeGtZero(paths...)
+	envPaths := iom.FilterFilenamesSizeGtZero(paths...)
 
 	if len(envPaths) > 0 {
 		return godotenv.Load(envPaths[0])
@@ -70,4 +71,40 @@ func GetDotEnvVal(envPath, varName string) (string, error) {
 		return "", fmt.Errorf("Failed to execute command: %s", cmd)
 	}
 	return string(out), nil
+}
+
+// LoadEnvPaths attempts to load an explicit, env and current path.
+// It returns an error ifexplicit/env paths are present but do not
+// exist or are empty. This is was designed to flexibly handle common
+// .env file paths in a prioritzed and differentiated order.
+func LoadEnvPathsPrioritized(fixedPath, envPath string) error {
+	if goodPath, err := checkEnvPathsPrioritized(fixedPath, envPath); err != nil {
+		return err
+	} else if len(goodPath) > 0 {
+		return godotenv.Load(goodPath)
+	}
+	return nil
+}
+
+func checkEnvPathsPrioritized(fixedPath, envPath string) (string, error) {
+	fixedPath = strings.TrimSpace(fixedPath)
+	if len(fixedPath) > 0 {
+		return fixedPath, iom.IsFileWithSizeGtZero(fixedPath)
+	}
+
+	envPath = strings.TrimSpace(envPath)
+	if len(fixedPath) > 0 {
+		return envPath, iom.IsFileWithSizeGtZero(envPath)
+	}
+
+	thisDirPath := "./.env"
+	err := iom.IsFileWithSizeGtZero(thisDirPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return "", nil
+		} else {
+			return thisDirPath, err
+		}
+	}
+	return thisDirPath, nil
 }

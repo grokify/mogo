@@ -21,5 +21,5 @@ func EnvFileToJSONFile(data interface{}, filepathENV, filepathJSON string, perm 
 		return err
 	}
 
-	return iom.WriteJSON(filepathJSON, data, perm, pretty)
+	return iom.WriteFileJSON(filepathJSON, data, perm, pretty)
 }

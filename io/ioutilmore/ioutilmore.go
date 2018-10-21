@@ -221,18 +221,20 @@ func IsFile(path string) (bool, error) {
 	return false, nil
 }
 
-func IsFileWithSizeGtZero(path string) (bool, error) {
-	fi, err := GetFileInfo(path)
+// IsFileWithSizeGtZero verifies a path exists, is a file and is not empty,
+// returning an error otherwise. An os file not exists check can be done
+// with os.IsNotExist(err) which acts on error from os.Stat()
+func IsFileWithSizeGtZero(path string) error {
+	fi, err := os.Stat(path)
 	if err != nil {
-		return false, err
+		return err
 	}
 	if fi.Mode().IsRegular() == false {
-		err = errors.New("400: file path is not a file")
-		return false, err
+		return fmt.Errorf("Filepath [%v] exists but is not a file.", path)
 	} else if fi.Size() <= 0 {
-		return false, nil
+		return fmt.Errorf("Filepath [%v] exists but is empty with size [%v].", path, fi.Size())
 	}
-	return true, nil
+	return nil
 }
 
 func FilterFilenamesSizeGtZero(filepaths ...string) []string {
@@ -243,8 +245,7 @@ func FilterFilenamesSizeGtZero(filepaths ...string) []string {
 		for _, envPath := range envPathVals {
 			envPath = strings.TrimSpace(envPath)
 
-			good, err := IsFileWithSizeGtZero(envPath)
-			if err == nil && good {
+			if err := IsFileWithSizeGtZero(envPath); err == nil {
 				filepathsExist = append(filepathsExist, envPath)
 			}
 		}
