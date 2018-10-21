@@ -66,3 +66,14 @@ func (set *RegexpSet) FindStringSubmatch(pattern string, s string, useStore bool
 	rs := rx.FindStringSubmatch(s)
 	return rs
 }
+
+func FindStringSubmatchNamedMap(rx *regexp.Regexp, s string) map[string]string {
+	match := rx.FindStringSubmatch(s)
+	result := make(map[string]string)
+	for i, name := range rx.SubexpNames() {
+		if i != 0 && name != "" {
+			result[name] = match[i]
+		}
+	}
+	return result
+}
