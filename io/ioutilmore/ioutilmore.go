@@ -225,11 +225,9 @@ func IsFile(path string) (bool, error) {
 // returning an error otherwise. An os file not exists check can be done
 // with os.IsNotExist(err) which acts on error from os.Stat()
 func IsFileWithSizeGtZero(path string) error {
-	fi, err := os.Stat(path)
-	if err != nil {
+	if fi, err := os.Stat(path); err != nil {
 		return err
-	}
-	if fi.Mode().IsRegular() == false {
+	} else if fi.Mode().IsRegular() == false {
 		return fmt.Errorf("Filepath [%v] exists but is not a file.", path)
 	} else if fi.Size() <= 0 {
 		return fmt.Errorf("Filepath [%v] exists but is empty with size [%v].", path, fi.Size())
