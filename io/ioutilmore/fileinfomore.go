@@ -11,7 +11,7 @@ type FileInfoMore struct {
 }
 
 func NewFileInfoMoreFromPath(path string) (FileInfoMore, error) {
-	fi, err := GetFileInfo(path)
+	fi, err := os.Stat(path)
 	if err != nil {
 		return FileInfoMore{}, err
 	}
@@ -30,7 +30,7 @@ func GetFileModAge(fi os.FileInfo) (time.Duration, error) {
 }
 
 func GetFilepathModAge(path string) (time.Duration, error) {
-	fi, err := GetFileInfo(path)
+	fi, err := os.Stat(path)
 	if err != nil {
 		dur, _ := time.ParseDuration("0s")
 		return dur, err

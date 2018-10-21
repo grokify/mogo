@@ -184,38 +184,19 @@ func DirFromPath(path string) (string, error) {
 	return dir, nil
 }
 
-func GetFileInfo(path string) (os.FileInfo, error) {
-	f, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-	return f.Stat()
-}
-
-func IsDir(path string) (bool, error) {
-	fi, err := GetFileInfo(path)
-	if err != nil {
+func IsDir(name string) (bool, error) {
+	if fi, err := os.Stat(name); err != nil {
 		return false, err
-	}
-	switch mode := fi.Mode(); {
-	case mode.IsDir():
+	} else if fi.Mode().IsDir() {
 		return true, nil
-	case mode.IsRegular():
-		return false, nil
 	}
 	return false, nil
 }
 
-func IsFile(path string) (bool, error) {
-	fi, err := GetFileInfo(path)
-	if err != nil {
+func IsFile(name string) (bool, error) {
+	if fi, err := os.Stat(name); err != nil {
 		return false, err
-	}
-	switch mode := fi.Mode(); {
-	case mode.IsDir():
-		return false, nil
-	case mode.IsRegular():
+	} else if fi.Mode().IsRegular() {
 		return true, nil
 	}
 	return false, nil
@@ -224,13 +205,13 @@ func IsFile(path string) (bool, error) {
 // IsFileWithSizeGtZero verifies a path exists, is a file and is not empty,
 // returning an error otherwise. An os file not exists check can be done
 // with os.IsNotExist(err) which acts on error from os.Stat()
-func IsFileWithSizeGtZero(path string) error {
-	if fi, err := os.Stat(path); err != nil {
+func IsFileWithSizeGtZero(name string) error {
+	if fi, err := os.Stat(name); err != nil {
 		return err
-	} else if fi.Mode().IsRegular() == false {
-		return fmt.Errorf("Filepath [%v] exists but is not a file.", path)
+	} else if !fi.Mode().IsRegular() {
+		return fmt.Errorf("Filepath [%v] exists but is not a file.", name)
 	} else if fi.Size() <= 0 {
-		return fmt.Errorf("Filepath [%v] exists but is empty with size [%v].", path, fi.Size())
+		return fmt.Errorf("Filepath [%v] exists but is empty with size [%v].", name, fi.Size())
 	}
 	return nil
 }
