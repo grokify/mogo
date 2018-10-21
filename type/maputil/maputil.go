@@ -50,6 +50,20 @@ func MapSSValOrEmpty(data map[string]string, key string) string {
 	return ""
 }
 
+func MapSSEqual(a, b map[string]string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	for k, v := range a {
+		if w, ok := b[k]; !ok || v != w {
+			return false
+		}
+	}
+
+	return true
+}
+
 type MapInt64Int64 map[int64]int64
 
 func (m MapInt64Int64) KeysSorted() []int64 {
