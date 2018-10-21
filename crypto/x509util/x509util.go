@@ -34,11 +34,9 @@ import (
 // GetRsaPrivateKeyForPkcs1PrivateKeyPath returns a *rsa.PrivateKey
 // for a given PKCS#1 private key file path without a password
 func GetRsaPrivateKeyForPkcs1PrivateKeyPath(prvKeyPKCS1Path string) (*rsa.PrivateKey, error) {
-	isFileGtZero, err := ioutilmore.IsFileWithSizeGtZero(prvKeyPKCS1Path)
+	err := ioutilmore.IsFileWithSizeGtZero(prvKeyPKCS1Path)
 	if err != nil {
 		return nil, err
-	} else if isFileGtZero == false {
-		return nil, errors.New("400: key file path is zero size")
 	}
 
 	prvKeyPkcs1Bytes, err := ioutil.ReadFile(prvKeyPKCS1Path)
@@ -60,11 +58,9 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyBytes(prvKeyPkcs1Bytes []byte) (*rsa.Priv
 // GetRsaPrivateKeyForPkcs1PrivateKeyPathWithPassword returns a *rsa.PrivateKey
 // for a given PKCS#1 private key file path and password
 func GetRsaPrivateKeyForPkcs1PrivateKeyPathWithPassword(prvKeyPKCS1Path string, password []byte) (*rsa.PrivateKey, error) {
-	isFileGtZero, err := ioutilmore.IsFileWithSizeGtZero(prvKeyPKCS1Path)
+	err := ioutilmore.IsFileWithSizeGtZero(prvKeyPKCS1Path)
 	if err != nil {
 		return nil, err
-	} else if isFileGtZero == false {
-		return nil, errors.New("400: key file path is zero size")
 	}
 
 	prvKeyPkcs1BytesEnc, err := ioutil.ReadFile(prvKeyPKCS1Path)
@@ -92,11 +88,9 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyBytesWithPassword(prvKeyPkcs1BytesEnc []b
 func GetRsaPublicKeyForPkcs8PublicKeyPath(pubKeyPkcs8Path string) (*rsa.PublicKey, error) {
 	var pubKey *rsa.PublicKey
 
-	isFileGtZero, err := ioutilmore.IsFileWithSizeGtZero(pubKeyPkcs8Path)
+	err := ioutilmore.IsFileWithSizeGtZero(pubKeyPkcs8Path)
 	if err != nil {
 		return pubKey, err
-	} else if isFileGtZero == false {
-		return pubKey, errors.New("400: key file path is zero size")
 	}
 
 	pubKeyPkcs8Bytes, err := ioutil.ReadFile(pubKeyPkcs8Path)
