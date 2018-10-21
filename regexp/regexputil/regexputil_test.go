@@ -20,8 +20,7 @@ func TestFindStringSubmatchNamedMap(t *testing.T) {
 		rx := regexp.MustCompile(tt.v)
 		resMss := FindStringSubmatchNamedMap(rx, tt.v2)
 
-		eq := reflect.DeepEqual(tt.want, resMss)
-		if !eq {
+		if eq := reflect.DeepEqual(tt.want, resMss); !eq {
 			t.Errorf("regepxutil.FindStringSubmatchNamedMap() Error: with [%v][%v], want [%v], got [%v]",
 				tt.v, tt.v2, tt.want, resMss)
 		}
