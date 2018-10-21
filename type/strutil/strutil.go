@@ -44,3 +44,12 @@ func ToUpperFirst(s1 string) string {
 	a1[0] = unicode.ToUpper(a1[0])
 	return string(a1)
 }
+
+func InterfaceToSliceString(s interface{}) []string {
+	ss := s.([]interface{})
+	a := []string{}
+	for _, i := range ss {
+		a = append(a, i.(string))
+	}
+	return a
+}
