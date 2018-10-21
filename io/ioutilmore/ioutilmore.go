@@ -187,19 +187,19 @@ func DirFromPath(path string) (string, error) {
 func IsDir(name string) (bool, error) {
 	if fi, err := os.Stat(name); err != nil {
 		return false, err
-	} else if fi.Mode().IsDir() {
-		return true, nil
+	} else if !fi.Mode().IsDir() {
+		return false, nil
 	}
-	return false, nil
+	return true, nil
 }
 
 func IsFile(name string) (bool, error) {
 	if fi, err := os.Stat(name); err != nil {
 		return false, err
-	} else if fi.Mode().IsRegular() {
-		return true, nil
+	} else if !fi.Mode().IsRegular() {
+		return false, nil
 	}
-	return false, nil
+	return true, nil
 }
 
 // IsFileWithSizeGtZero verifies a path exists, is a file and is not empty,
