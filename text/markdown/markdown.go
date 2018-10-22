@@ -5,6 +5,9 @@ import (
 	"regexp"
 )
 
+// BoldText bodifies the identified text. It looks for start of words
+// using a word boundary and will arbirarily end to match words with
+// different suffixes.
 func BoldText(haystack, needle string) string {
 	output := haystack
 	return regexp.MustCompile(`(?i)\b(`+regexp.QuoteMeta(needle)+`)`).ReplaceAllString(output, "**$1**")
