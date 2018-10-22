@@ -94,6 +94,19 @@ func Env() []EnvVar {
 	return envs
 }
 
+// EnvFiltered returns a map[string]string of environment
+// variables that match a regular expression.
+func EnvFiltered(rx *regexp.Regexp) map[string]string {
+	res := map[string]string{}
+	for _, e := range os.Environ() {
+		pair := strings.Split(e, "=")
+		if rx.MatchString(pair[0]) {
+			res[pair[0]] = pair[1]
+		}
+	}
+	return res
+}
+
 func AbsFilepath(path string) (string, error) {
 	path = strings.TrimSpace(path)
 	if filepath.IsAbs(path) {
