@@ -34,7 +34,7 @@ func NewMultipartReaderForHttpResponse(resp *http.Response) (*multipart.Reader, 
 		return nil, fmt.Errorf("MediaType is not multipart [%v]", mediaType)
 	}
 	if boundary, ok := params["boundary"]; !ok {
-		return nil, fmt.Errorf("Mime Boundary not found in Content-Type header [%v]", contentType)
+		return nil, fmt.Errorf("MIME Boundary not found in Content-Type header [%v]", contentType)
 	} else {
 		return multipart.NewReader(resp.Body, boundary), nil
 	}
