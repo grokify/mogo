@@ -66,6 +66,5 @@ func UnmarshalIoReader(r io.Reader, i interface{}) ([]byte, error) {
 	if err != nil {
 		return b, err
 	}
-	err = json.Unmarshal(b, i)
-	return b, err
+	return b, json.Unmarshal(b, i)
 }
