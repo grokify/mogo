@@ -47,14 +47,6 @@ func MustMarshalIndent(i interface{}, prefix, indent string, embedError bool) []
 	return bytes
 }
 
-func UnmarshalIoReader(r io.Reader, data interface{}) error {
-	b, err := ioutil.ReadAll(r)
-	if err != nil {
-		return err
-	}
-	return json.Unmarshal(b, data)
-}
-
 func PrettyPrint(b []byte) ([]byte, error) {
 	var out bytes.Buffer
 	err := json.Indent(&out, b, MarshalPrefix, MarshalIndent)
@@ -67,4 +59,12 @@ func MarshalBase64(i interface{}) (string, error) {
 		return "", err
 	}
 	return base64.StdEncoding.EncodeToString(data), nil
+}
+
+func UnmarshalIoReader(r io.Reader, data interface{}) error {
+	b, err := ioutil.ReadAll(r)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(b, data)
 }
