@@ -61,10 +61,11 @@ func MarshalBase64(i interface{}) (string, error) {
 	return base64.StdEncoding.EncodeToString(data), nil
 }
 
-func UnmarshalIoReader(r io.Reader, i interface{}) error {
+func UnmarshalIoReader(r io.Reader, i interface{}) ([]byte, error) {
 	b, err := ioutil.ReadAll(r)
 	if err != nil {
-		return err
+		return b, err
 	}
-	return json.Unmarshal(b, i)
+	err = json.Unmarshal(b, i)
+	return b, err
 }
