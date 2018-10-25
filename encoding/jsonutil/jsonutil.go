@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"io"
+	"io/ioutil"
 )
 
 var (
@@ -43,6 +45,14 @@ func MustMarshalIndent(i interface{}, prefix, indent string, embedError bool) []
 		panic(err)
 	}
 	return bytes
+}
+
+func UnmarshalIoReader(r io.Reader, data interface{}) error {
+	b, err := ioutil.ReadAll(r)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(b, data)
 }
 
 func PrettyPrint(b []byte) ([]byte, error) {
