@@ -2,6 +2,7 @@ package regexputil
 
 import (
 	"regexp"
+	"strings"
 )
 
 // McReplaceAllString is a single line MustCompile regexp for ReplaceAllString
@@ -68,7 +69,8 @@ func FindStringSubmatchNamedMap(rx *regexp.Regexp, s string) map[string]string {
 	match := rx.FindStringSubmatch(s)
 	result := make(map[string]string)
 	for i, name := range rx.SubexpNames() {
-		if i != 0 && name != "" {
+		name = strings.TrimSpace(name)
+		if i != 0 && i < len(match) && name != "" {
 			result[name] = match[i]
 		}
 	}
