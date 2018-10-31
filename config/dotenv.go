@@ -89,22 +89,32 @@ func LoadEnvPathsPrioritized(fixedPath, envPath string) error {
 func checkEnvPathsPrioritized(fixedPath, envPath string) (string, error) {
 	fixedPath = strings.TrimSpace(fixedPath)
 	if len(fixedPath) > 0 {
-		return fixedPath, iom.IsFileWithSizeGtZero(fixedPath)
+		isFile, err := iom.IsFileWithSizeGtZero(fixedPath)
+		if err != nil {
+			return fixedPath, err
+		} else if !isFile {
+			return fixedPath, fmt.Errorf("Path is not a file or is 0 size [%v]", fixedPath)
+		}
+		return fixedPath, nil
 	}
 
 	envPath = strings.TrimSpace(envPath)
-	if len(fixedPath) > 0 {
-		return envPath, iom.IsFileWithSizeGtZero(envPath)
+	if len(envPath) > 0 {
+		isFile, err := iom.IsFileWithSizeGtZero(fixedPath)
+		if err != nil {
+			return envPath, err
+		} else if !isFile {
+			return envPath, fmt.Errorf("Path is not a file or is 0 size [%v]", envPath)
+		}
+		return envPath, nil
 	}
 
 	thisDirPath := "./.env"
-	err := iom.IsFileWithSizeGtZero(thisDirPath)
+	isFile, err := iom.IsFileWithSizeGtZero(thisDirPath)
 	if err != nil {
-		if os.IsNotExist(err) {
-			return "", nil
-		} else {
-			return thisDirPath, err
-		}
+		return thisDirPath, err
+	} else if !isFile {
+		return thisDirPath, fmt.Errorf("Path is not a file or is 0 size [%v]", thisDirPath)
 	}
 	return thisDirPath, nil
 }
