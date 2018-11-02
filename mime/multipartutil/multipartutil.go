@@ -94,14 +94,15 @@ func (builder *MultipartBuilder) WriteFieldAsJSON(partName string, data interfac
 // use like `req, err := http.NewRequest("POST", url, builder.Buffer)`
 func (builder *MultipartBuilder) WriteFilePathPlus(partName, srcFilepath string, base64Encode bool) error {
 	_, filename := filepath.Split(srcFilepath)
-	ext := filepath.Ext(srcFilepath)
-	mimeType := mime.TypeByExtension(ext)
+	mimeType := mime.TypeByExtension(filepath.Ext(srcFilepath))
 
 	header := textproto.MIMEHeader{}
 	header.Add(hum.HeaderContentDisposition,
 		fmt.Sprintf(`form-data; name="%s"; filename="%s"`,
 			partName, filename))
-	header.Add(hum.HeaderContentType, mimeType)
+	if len(mimeType) > 0 {
+		header.Add(hum.HeaderContentType, mimeType)
+	}
 	if base64Encode {
 		header.Add(hum.HeaderContentTransferEncoding, "base64")
 	}
