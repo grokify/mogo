@@ -90,7 +90,8 @@ func (builder *MultipartBuilder) WriteFieldAsJSON(partName string, data interfac
 }
 
 // WriteFilepathPlus adds a file part given a filename with the Content Type and
-// other associated headers as needed.
+// other associated headers as needed. After builder.Close() has been called,
+// use like `req, err := http.NewRequest("POST", url, builder.Buffer)`
 func (builder *MultipartBuilder) WriteFilePathPlus(partName, srcFilepath string, base64Encode bool) error {
 	_, filename := filepath.Split(srcFilepath)
 	ext := filepath.Ext(srcFilepath)
