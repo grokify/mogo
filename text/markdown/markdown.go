@@ -10,6 +10,9 @@ import (
 // different suffixes.
 func BoldText(haystack, needle string) string {
 	output := haystack
+	if len(needle) == 0 {
+		return "**" + haystack + "**"
+	}
 	return regexp.MustCompile(`(?i)\b(`+regexp.QuoteMeta(needle)+`)`).ReplaceAllString(output, "**$1**")
 }
 
