@@ -120,7 +120,6 @@ func (builder *MultipartBuilder) WriteFilePathPlus(partName, srcFilepath string,
 		_, err = bytes.NewBuffer([]byte(str)).WriteTo(partWriter)
 	} else {
 		_, err = bytes.NewBuffer(fileBytes).WriteTo(partWriter)
-
 	}
 	return err
 }
