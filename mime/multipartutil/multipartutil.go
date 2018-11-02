@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"mime"
 	"mime/multipart"
 	"net/http"
@@ -84,6 +85,42 @@ func (builder *MultipartBuilder) WriteFieldAsJSON(partName string, data interfac
 		_, err = bytes.NewBuffer([]byte(str)).WriteTo(partWriter)
 	} else {
 		_, err = bytes.NewBuffer(jsonBytes).WriteTo(partWriter)
+	}
+	return err
+}
+
+// WriteFilepathPlus adds a file part given a filename with the Content Type and
+// other associated headers as needed.
+func (builder *MultipartBuilder) WriteFilePathPlus(partName, srcFilepath string, base64Encode bool) error {
+	_, filename := filepath.Split(srcFilepath)
+	ext := filepath.Ext(srcFilepath)
+	mimeType := mime.TypeByExtension(ext)
+
+	header := textproto.MIMEHeader{}
+	header.Add(hum.HeaderContentDisposition,
+		fmt.Sprintf(`form-data; name="%s"; filename="%s"`,
+			partName, filename))
+	header.Add(hum.HeaderContentType, mimeType)
+	if base64Encode {
+		header.Add(hum.HeaderContentTransferEncoding, "base64")
+	}
+
+	partWriter, err := builder.Writer.CreatePart(header)
+	if err != nil {
+		return err
+	}
+
+	fileBytes, err := ioutil.ReadFile(srcFilepath)
+	if err != nil {
+		return err
+	}
+
+	if base64Encode {
+		str := base64.StdEncoding.EncodeToString(fileBytes)
+		_, err = bytes.NewBuffer([]byte(str)).WriteTo(partWriter)
+	} else {
+		_, err = bytes.NewBuffer(fileBytes).WriteTo(partWriter)
+
 	}
 	return err
 }
