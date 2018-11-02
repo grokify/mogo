@@ -98,8 +98,7 @@ func (builder *MultipartBuilder) WriteFilePathPlus(partName, srcFilepath string,
 
 	header := textproto.MIMEHeader{}
 	header.Add(hum.HeaderContentDisposition,
-		fmt.Sprintf(`form-data; name="%s"; filename="%s"`,
-			partName, filename))
+		fmt.Sprintf(`form-data; name="%s"; filename="%s"`, partName, filename))
 	if len(mimeType) > 0 {
 		header.Add(hum.HeaderContentType, mimeType)
 	}
