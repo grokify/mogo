@@ -91,14 +91,25 @@ func (builder *MultipartBuilder) WriteFieldAsJSON(partName string, data interfac
 
 // WriteFilepathPlus adds a file part given a filename with the Content Type and
 // other associated headers as needed. After builder.Close() has been called,
-// use like `req, err := http.NewRequest("POST", url, builder.Buffer)`
+// use like `req, err := http.NewRequest("POST", url, builder.Buffer)`.
+// Content-Dispostion uses optional attribute as defined here:
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
 func (builder *MultipartBuilder) WriteFilePathPlus(partName, srcFilepath string, base64Encode bool) error {
+	partName = strings.TrimSpace(partName)
 	_, filename := filepath.Split(srcFilepath)
+	filename = strings.TrimSpace(filename)
 	mimeType := mime.TypeByExtension(filepath.Ext(srcFilepath))
 
 	header := textproto.MIMEHeader{}
-	header.Add(hum.HeaderContentDisposition,
-		fmt.Sprintf(`form-data; name="%s"; filename="%s"`, partName, filename))
+	cd := []string{"form-data"}
+	if len(partName) > 0 {
+		cd = append(cd, fmt.Sprintf(`name="%s"`, partName))
+	}
+	if len(filename) > 0 {
+		cd = append(cd, fmt.Sprintf(`filename="%s"`, filename))
+	}
+	header.Add(hum.HeaderContentDisposition, strings.Join(cd, "; "))
+
 	if len(mimeType) > 0 {
 		header.Add(hum.HeaderContentType, mimeType)
 	}
