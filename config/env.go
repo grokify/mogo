@@ -28,7 +28,7 @@ func EnvFileToJSONFile(data interface{}, filepathENV, filepathJSON string, perm 
 
 // Return a merged environment var which is split into multiple
 // vars. This is useful when the system has a size limit on
-// environment variables, like AWS Lambda's limit at 256 characters.
+// environment variables.
 func JoinEnvNumbered(prefix, delimiter string, startInt uint8, includeBase bool) string {
 	vals := []string{}
 	if includeBase {
