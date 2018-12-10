@@ -92,7 +92,7 @@ func (builder *MultipartBuilder) WriteFieldAsJSON(partName string, data interfac
 // WriteFilepathPlus adds a file part given a filename with the Content Type and
 // other associated headers as needed. After builder.Close() has been called,
 // use like `req, err := http.NewRequest("POST", url, builder.Buffer)`.
-// Content-Dispostion uses optional attribute as defined here:
+// Content-Disposition uses optional attribute as defined here:
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
 func (builder *MultipartBuilder) WriteFilePathPlus(partName, srcFilepath string, base64Encode bool) error {
 	partName = strings.TrimSpace(partName)
