@@ -1,6 +1,7 @@
 package strconvutil
 
 import (
+	"fmt"
 	"regexp"
 	"sort"
 	"strconv"
@@ -89,4 +90,40 @@ func SliceStringToIntSort(strings []string) ([]int, error) {
 	intSlice := sort.IntSlice(ints)
 	intSlice.Sort()
 	return intSlice, nil
+}
+
+func FormatFloat64ToIntStringFunnel(v float64) string {
+	return FormatFloat64ToAnyStringFunnel(v, `%0.0f%%`)
+}
+
+// FormatFloat64ToAnyStringFunnel is used for funnels.
+func FormatFloat64ToAnyStringFunnel(v float64, pattern string) string {
+	return fmt.Sprintf(pattern, ChangeToFunnelPct(v))
+}
+
+func FormatFloat64ToIntString(v float64) string {
+	return FormatFloat64ToAnyString(v, `%0.0f%%`)
+}
+
+// FormatFloat64ToAnyString is used for XoX growth.
+func FormatFloat64ToAnyString(v float64, pattern string) string {
+	return fmt.Sprintf(pattern, ChangeToXoXPct(v))
+}
+
+// ChangeToXoXPct converts a 1.0 == 100% based `float64` to a
+// XoX percentage `float64`.
+func ChangeToXoXPct(v float64) float64 {
+	if v < 1.0 {
+		return -1 * 100.0 * (1.0 - v)
+	}
+	return 100.0 * (v - 1.0)
+}
+
+// ChangeToFunnelPct converts a 1.0 == 100% based `float64` to a
+// Funnel percentage `float64`.
+func ChangeToFunnelPct(v float64) float64 {
+	if v < 1.0 {
+		return 100.0 - (100.0 * (1.0 - v))
+	}
+	return 100.0 + (100.0 * (v - 1.0))
 }
