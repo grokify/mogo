@@ -83,6 +83,11 @@ func FormatQuarter(t time.Time) string {
 	return fmt.Sprintf("Q%d %d", MonthToQuarter(uint8(t.Month())), t.Year())
 }
 
+// FormatQuarter takes quarter time and formats it using "Q# YYYY".
+func FormatQuarterYYYYQ(t time.Time) string {
+	return fmt.Sprintf("%d Q%d", t.Year(), MonthToQuarter(uint8(t.Month())))
+}
+
 func TimeRFC3339Min() time.Time {
 	t0, _ := time.Parse(time.RFC3339, RFC3339Min)
 	return t0
