@@ -121,9 +121,4 @@ func ChangeToXoXPct(v float64) float64 {
 
 // ChangeToFunnelPct converts a 1.0 == 100% based `float64` to a
 // Funnel percentage `float64`.
-func ChangeToFunnelPct(v float64) float64 {
-	if v < 1.0 {
-		return 100.0 - (100.0 * (1.0 - v))
-	}
-	return 100.0 + (100.0 * (v - 1.0))
-}
+func ChangeToFunnelPct(v float64) float64 { return v * 100.0 }
