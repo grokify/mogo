@@ -224,9 +224,12 @@ func Dt8ForString(layout, value string) (int32, error) {
 }
 
 // Dt8ForInts returns a Dt8 value for year, month, and day.
-func Dt8ForInts(yyyy int, mm int, dd int) int32 {
+func Dt8ForInts(yyyy, mm, dd int) int32 {
 	sDt8 := fmt.Sprintf("%04d%02d%02d", yyyy, mm, dd)
-	iDt8, _ := strconv.ParseInt(sDt8, 10, 32)
+	iDt8, err := strconv.ParseInt(sDt8, 10, 32)
+	if err != nil {
+		panic(err)
+	}
 	return int32(iDt8)
 }
 
@@ -234,7 +237,10 @@ func Dt8ForInts(yyyy int, mm int, dd int) int32 {
 func Dt8ForTime(t time.Time) int32 {
 	u := t.UTC()
 	s := u.Format(DT8)
-	iDt8, _ := strconv.ParseInt(s, 10, 32)
+	iDt8, err := strconv.ParseInt(s, 10, 32)
+	if err != nil {
+		panic(err)
+	}
 	return int32(iDt8)
 }
 
@@ -259,9 +265,12 @@ func Dt14ForString(layout, value string) (int64, error) {
 }
 
 // Dt8ForInts returns a Dt8 value for a UTC year, month, day, hour, minute and second.
-func Dt14ForInts(yyyy int, mm int, dd int, hr int, mn int, dy int) int64 {
+func Dt14ForInts(yyyy, mm, dd, hr, mn, dy int) int64 {
 	sDt14 := fmt.Sprintf("%04d%02d%02d%02d%02d%02d", yyyy, mm, dd, hr, mn, dy)
-	iDt14, _ := strconv.ParseInt(sDt14, 10, 64)
+	iDt14, err := strconv.ParseInt(sDt14, 10, 64)
+	if err != nil {
+		panic(err)
+	}
 	return int64(iDt14)
 }
 
@@ -269,7 +278,10 @@ func Dt14ForInts(yyyy int, mm int, dd int, hr int, mn int, dy int) int64 {
 func Dt14ForTime(t time.Time) int64 {
 	u := t.UTC()
 	s := u.Format(DT14)
-	iDt14, _ := strconv.ParseInt(s, 10, 64)
+	iDt14, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		panic(err)
+	}
 	return int64(iDt14)
 }
 
