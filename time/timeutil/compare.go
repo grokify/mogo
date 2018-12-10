@@ -10,11 +10,9 @@ import (
 // IsGreaterThan compares two times and returns true if the left
 // time is greater than the right time.
 func IsGreaterThan(timeLeft time.Time, timeRight time.Time, orEqual bool) bool {
-	durZero, _ := time.ParseDuration("0ns")
-	durDelta := timeLeft.Sub(timeRight)
-	if durDelta > durZero {
+	if timeLeft.After(timeRight) {
 		return true
-	} else if orEqual && durDelta == durZero {
+	} else if orEqual && timeLeft.Equal(timeRight) {
 		return true
 	}
 	return false
@@ -23,11 +21,9 @@ func IsGreaterThan(timeLeft time.Time, timeRight time.Time, orEqual bool) bool {
 // IsLessThan compares two times and returns true if the left
 // time is less than the right time.
 func IsLessThan(timeLeft time.Time, timeRight time.Time, orEqual bool) bool {
-	durZero, _ := time.ParseDuration("0ns")
-	durDelta := timeLeft.Sub(timeRight)
-	if durDelta < durZero {
+	if timeLeft.Before(timeRight) {
 		return true
-	} else if orEqual && durDelta == durZero {
+	} else if orEqual && timeLeft.Equal(timeRight) {
 		return true
 	}
 	return false
