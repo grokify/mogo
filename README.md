@@ -47,7 +47,7 @@ Please report issues and feature requests on [Github](https://github.com/grokify
 
 Gotilla is available under an MIT-style license. See [LICENSE](LICENSE) for details.
 
-Gotilla &copy; 2015-2018 by John Wang
+Gotilla &copy; 2015-2019 by John Wang
 
  [used-by-svg]: https://sourcegraph.com/github.com/grokify/gotilla/-/badge.svg
  [used-by-link]: https://sourcegraph.com/github.com/grokify/gotilla?badge
