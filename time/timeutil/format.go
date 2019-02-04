@@ -44,6 +44,15 @@ func FromTo(value, fromLayout, toLayout string) (string, error) {
 	return t.Format(toLayout), nil
 }
 
+// ParseOrZero returns a parsed time.Time or the RFC-3339 zero time.
+func ParseOrZero(layout, value string) time.Time {
+	t, err := time.Parse(layout, value)
+	if err != nil {
+		return TimeRFC3339Zero()
+	}
+	return t
+}
+
 // ParseFirst attempts to parse a string with a set of layouts.
 func ParseFirst(layouts []string, value string) (time.Time, error) {
 	value = strings.TrimSpace(value)
