@@ -12,6 +12,27 @@ import (
 )
 
 func InQuarter(dt time.Time, yyyyq int32) (bool, error) {
+	thsQtrStart, err := QuarterInt32StartTime(yyyyq)
+	if err != nil {
+		return false, err
+	}
+	nxtQtrStart := NextQuarter(thsQtrStart)
+	return (thsQtrStart.Before(dt) || thsQtrStart.Equal(dt)) &&
+		nxtQtrStart.After(dt), nil
+}
+
+func MustInQuarter(dt time.Time, yyyyq int32) bool {
+	thsQtrStart, err := QuarterInt32StartTime(yyyyq)
+	if err != nil {
+		panic(err)
+	}
+	nxtQtrStart := NextQuarter(thsQtrStart)
+	return (thsQtrStart.Before(dt) || thsQtrStart.Equal(dt)) &&
+		nxtQtrStart.After(dt)
+}
+
+/*
+func InQuarterOld(dt time.Time, yyyyq int32) (bool, error) {
 	qtrStart, err := QuarterInt32StartTime(yyyyq)
 	if err != nil {
 		return false, err
@@ -20,7 +41,7 @@ func InQuarter(dt time.Time, yyyyq int32) (bool, error) {
 		IsLessThan(dt, NextQuarter(qtrStart), false)), nil
 }
 
-func MustInQuarter(dt time.Time, yyyyq int32) bool {
+func MustInQuarterOld(dt time.Time, yyyyq int32) bool {
 	qtrStart, err := QuarterInt32StartTime(yyyyq)
 	if err != nil {
 		panic(err)
@@ -28,6 +49,7 @@ func MustInQuarter(dt time.Time, yyyyq int32) bool {
 	return (IsGreaterThan(dt, qtrStart, true) &&
 		IsLessThan(dt, QuarterEnd(qtrStart), true))
 }
+*/
 
 func InQuarterTime(dt, qtr time.Time) bool {
 	return IsGreaterThan(dt, QuarterStart(qtr), true) &&
