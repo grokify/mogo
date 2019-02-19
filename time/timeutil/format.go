@@ -112,6 +112,8 @@ func TimeRFC3339ZeroUnix() time.Time {
 	return t0
 }
 
+func IsZeroAny(u time.Time) bool { return TimeIsZeroAny(u) }
+
 func TimeIsZeroAny(u time.Time) bool {
 	if u.Equal(TimeRFC3339Zero()) ||
 		u.Equal(TimeRFC3339Min()) ||
