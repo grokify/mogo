@@ -34,3 +34,19 @@ func PrintJSON(in interface{}) error {
 	fmt.Printf("%+v\n", string(j))
 	return nil
 }
+
+// PrintJSON pretty prints anything using a default indentation
+func PrintJSONMin(in interface{}) error {
+	//var j []byte
+	//var err error
+	//if JSONPretty {
+	//		j, err = json.MarshalIndent(in, JSONPrefix, JSONIndent)
+	//	} else {
+	j, err := json.Marshal(in)
+	//	}
+	if err != nil {
+		return err
+	}
+	fmt.Printf("%+v\n", string(j))
+	return nil
+}
