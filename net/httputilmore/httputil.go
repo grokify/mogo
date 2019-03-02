@@ -125,8 +125,14 @@ func ParseHeader(s string) http.Header {
 
 // MergeHeader merges two http.Header adding the values of the second
 // to the first.
-func MergeHeader(base, extra http.Header, overwrite bool) http.Header {
-	for k, vals := range extra {
+func MergeHeader(base, more http.Header, overwrite bool) http.Header {
+	if base == nil {
+		base = http.Header{}
+	}
+	if more == nil {
+		return base
+	}
+	for k, vals := range more {
 		if overwrite {
 			base.Del(k)
 		}
