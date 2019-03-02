@@ -11,9 +11,8 @@ import (
 
 func main() {
 	zones := timeutil.ZonesSystem(timeutil.DefaultZoneDirs())
-	zones, err := timeutil.ZonesPortable()
-	if err != nil {
-		log.Fatal(err)
+	if 1 == 1 {
+		zones = timeutil.ZonesPortable()
 	}
 	fmtutil.PrintJSON(zones)
 	fmtutil.PrintJSONMin(zones)

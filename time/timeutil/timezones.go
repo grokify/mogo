@@ -18,10 +18,10 @@ func DefaultZoneDirs() []string {
 	return strings.Split(DefaultZoneDirsString, ",")
 }
 
-func ZonesPortable() ([]string, error) {
+func ZonesPortable() []string {
 	zones := []string{}
-	err := json.Unmarshal([]byte(PortableZones), &zones)
-	return zones, err
+	json.Unmarshal([]byte(PortableZones), &zones)
+	return zones
 }
 
 // GetZones treturns a list of timezones.
