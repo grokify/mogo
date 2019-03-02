@@ -105,6 +105,24 @@ func PrintResponse(resp *http.Response, includeBody bool) error {
 	return nil
 }
 
+// ParseHeader converts a raw strign to a header struct.
+func ParseHeader(s string) http.Header {
+	h := http.Header{}
+	lines := strings.Split(s, "\n")
+	rx := regexp.MustCompile(`^([^\s+]+):\s*(.*)$`)
+	for _, line := range lines {
+		m := rx.FindStringSubmatch(line)
+		if len(m) == 3 {
+			key := strings.TrimSpace(m[1])
+			val := strings.TrimSpace(m[2])
+			if len(key) > 0 {
+				h.Add(key, val)
+			}
+		}
+	}
+	return h
+}
+
 // MergeHeader merges two http.Header adding the values of the second
 // to the first.
 func MergeHeader(base, extra http.Header, overwrite bool) http.Header {
