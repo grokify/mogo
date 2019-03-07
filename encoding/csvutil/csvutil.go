@@ -16,7 +16,8 @@ If you encounter this close the file and call again with stripBom = true
 */
 
 // NewReader will create a csv.Reader and optionally strip off the
-// byte order mark (BOM) if requested.
+// byte order mark (BOM) if requested. Close file reader with
+// `defer f.Close()`.
 func NewReader(path string, comma rune, stripBom bool) (*csv.Reader, *os.File, error) {
 	var csvReader *csv.Reader
 	var file *os.File
