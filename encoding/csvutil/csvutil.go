@@ -81,3 +81,15 @@ func (w *Writer) AddLine(cells []interface{}) error {
 func (w *Writer) Close() error {
 	return w.File.Close()
 }
+
+func NewWriterFile(filename string) (*csv.Writer, *os.File, error) {
+	file, err := os.Create(filename)
+	if err != nil {
+		return nil, file, err
+	}
+	//defer file.Close()
+
+	writer := csv.NewWriter(file)
+	//defer writer.Flush()
+	return writer, file, nil
+}
