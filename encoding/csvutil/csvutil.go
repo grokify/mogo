@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/grokify/gotilla/strings/stringsutil"
+	"github.com/grokify/gotilla/type/stringsutil"
 )
 
 /*
@@ -108,20 +108,20 @@ func (ch *CSVHeader) Index(want string) int {
 	return -1
 }
 
-func (ch *CSVHeader) RowMatch(row []string, andFilter map[string]string) bool {
-	for key, val := range andFilter {
-		idx := ch.Index(key)
+func (ch *CSVHeader) RowMatch(row []string, andFilter map[string]stringsutil.MatchInfo) bool {
+	for colName, matchInfo := range andFilter {
+		idx := ch.Index(colName)
 		if idx >= len(row) {
 			return false
 		}
-		if val != row[idx] {
+		if !stringsutil.Match(row[idx], matchInfo) {
 			return false
 		}
 	}
 	return true
 }
 
-func FilterCSVFile(inPath, outPath string, inComma rune, inStripBom bool, andFilter map[string]string) error {
+func FilterCSVFile(inPath, outPath string, inComma rune, inStripBom bool, andFilter map[string]stringsutil.MatchInfo) error {
 	reader, inFile, err := NewReader(inPath, inComma, inStripBom)
 	if err != nil {
 		return err
@@ -138,7 +138,7 @@ func FilterCSVFile(inPath, outPath string, inComma rune, inStripBom bool, andFil
 
 // MergeFilterCSVFiles can merge and filter multiple CSV files. It expects row definitions to be the same
 // across all input files.
-func MergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStripBom bool, andFilter map[string]string) error {
+func MergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStripBom bool, andFilter map[string]stringsutil.MatchInfo) error {
 	writer, outFile, err := NewWriterFile(outPath)
 	if err != nil {
 		return err
@@ -167,7 +167,7 @@ func MergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStrip
 
 // WriteCSVFiltered filters an existing CSV and writes the matching lines
 // to a *csv.Writer.
-func WriteCSVFiltered(reader *csv.Reader, writer *csv.Writer, andFilter map[string]string, writeHeader bool) error {
+func WriteCSVFiltered(reader *csv.Reader, writer *csv.Writer, andFilter map[string]stringsutil.MatchInfo, writeHeader bool) error {
 	csvHeader := CSVHeader{}
 	i := -1
 	for {

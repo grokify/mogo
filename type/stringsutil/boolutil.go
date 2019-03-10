@@ -1,4 +1,4 @@
-package boolutil
+package stringsutil
 
 import (
 	"strings"
@@ -6,7 +6,7 @@ import (
 
 // StringToBool converts a string to a boolean value
 // looking for the string "true" in any case.
-func StringToBool(v string) bool {
+func ToBool(v string) bool {
 	if strings.TrimSpace(strings.ToLower(v)) == "true" {
 		return true
 	}

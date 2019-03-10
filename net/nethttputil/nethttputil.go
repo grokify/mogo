@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/grokify/gotilla/strings/stringsutil"
+	"github.com/grokify/gotilla/type/stringsutil"
 )
 
 // https://stackoverflow.com/questions/15407719/in-gos-http-package-how-do-i-get-the-query-string-on-a-post-request

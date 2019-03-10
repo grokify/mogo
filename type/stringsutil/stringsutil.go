@@ -6,7 +6,6 @@ import (
 	"sort"
 	"strings"
 	"unicode"
-	"unicode/utf8"
 )
 
 const (
@@ -42,22 +41,39 @@ func PadRight(str string, pad string, length int) string {
 	}
 }
 
+// Capitalize returns a string with the first character
+// capitalized and the rest lower cased.
+func Capitalize(s1 string) string {
+	s2 := strings.ToLower(s1)
+	return ToUpperFirst(s2)
+}
+
 // ToLowerFirst lower cases the first letter in the string
-func ToLowerFirst(s string) string {
-	if s == "" {
-		return ""
-	}
-	r, n := utf8.DecodeRuneInString(s)
-	return string(unicode.ToLower(r)) + s[n:]
+func ToLowerFirst(s1 string) string {
+	a1 := []rune(s1)
+	a1[0] = unicode.ToLower(a1[0])
+	return string(a1)
+	/*
+		if s == "" {
+			return ""
+		}
+		r, n := utf8.DecodeRuneInString(s)
+		return string(unicode.ToLower(r)) + s[n:]
+	*/
 }
 
 // ToUpperFirst upper cases the first letter in the string
-func ToUpperFirst(s string) string {
-	if s == "" {
-		return ""
-	}
-	r, n := utf8.DecodeRuneInString(s)
-	return string(unicode.ToUpper(r)) + s[n:]
+func ToUpperFirst(s1 string) string {
+	a1 := []rune(s1)
+	a1[0] = unicode.ToUpper(a1[0])
+	return string(a1)
+	/*
+			if s == "" {
+			return ""
+		}
+		r, n := utf8.DecodeRuneInString(s)
+		return string(unicode.ToUpper(r)) + s[n:]
+	*/
 }
 
 // SliceTrimSpace removes leading and trailing spaces per

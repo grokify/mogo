@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/grokify/gotilla/reflect/reflectutil"
-	"github.com/grokify/gotilla/strings/stringsutil"
 	"github.com/grokify/gotilla/time/timeutil"
+	"github.com/grokify/gotilla/type/stringsutil"
 )
 
 // Execute takes a template string and an interface{}
