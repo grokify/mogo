@@ -4,8 +4,10 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"io"
+	"io/ioutil"
 	"os"
 
+	"github.com/grokify/gotilla/encoding/jsonutil"
 	"github.com/grokify/gotilla/type/stringsutil"
 )
 
@@ -179,6 +181,72 @@ func MergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStrip
 		}
 	}
 	return nil
+}
+
+type JsonRecordsInfo struct {
+	Meta    JsonRecordsInfoMeta `json:"meta"`
+	Records []map[string]string `json:"records"`
+}
+
+type JsonRecordsInfoMeta struct {
+	Count int `json:"count"`
+}
+
+func ReadMergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStripBom bool, andFilter map[string]stringsutil.MatchInfo) (JsonRecordsInfo, error) {
+	data := JsonRecordsInfo{Records: []map[string]string{}}
+
+	for _, inPath := range inPaths {
+		reader, inFile, err := NewReader(inPath, inComma, inStripBom)
+		if err != nil {
+			return data, err
+		}
+
+		csvHeader := CSVHeader{}
+		j := -1
+
+		for {
+			line, err := reader.Read()
+			if err == io.EOF {
+				break
+			} else if err != nil {
+				return data, err
+			}
+			j += 1
+
+			if j == 0 {
+				csvHeader.Columns = line
+				continue
+			}
+			match, err := csvHeader.RecordMatch(line, andFilter)
+			if err != nil {
+				return data, err
+			}
+			if !match {
+				continue
+			}
+
+			mss := csvHeader.RecordToMSS(line)
+			data.Records = append(data.Records, mss)
+		}
+		err = inFile.Close()
+		if err != nil {
+			return data, err
+		}
+	}
+	data.Meta.Count = len(data.Records)
+	return data, nil
+}
+
+func MergeFilterCSVFilesToJSON(inPaths []string, outPath string, inComma rune, inStripBom bool, perm os.FileMode, andFilter map[string]stringsutil.MatchInfo) error {
+	data, err := ReadMergeFilterCSVFiles(inPaths, outPath, inComma, inStripBom, andFilter)
+	if err != nil {
+		return err
+	}
+	bytes, err := jsonutil.MarshalSimple(data, "", "  ")
+	if err != nil {
+		return err
+	}
+	return ioutil.WriteFile(outPath, bytes, perm)
 }
 
 func MergeFilterCSVFilesToJSONL(inPaths []string, outPath string, inComma rune, inStripBom bool, andFilter map[string]stringsutil.MatchInfo) error {
