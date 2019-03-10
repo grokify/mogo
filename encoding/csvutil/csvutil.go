@@ -2,6 +2,7 @@ package csvutil
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"io"
 	"os"
 
@@ -108,7 +109,7 @@ func (ch *CSVHeader) Index(want string) int {
 	return -1
 }
 
-func (ch *CSVHeader) RowMatch(row []string, andFilter map[string]stringsutil.MatchInfo) bool {
+func (ch *CSVHeader) RecordMatch(row []string, andFilter map[string]stringsutil.MatchInfo) bool {
 	for colName, matchInfo := range andFilter {
 		idx := ch.Index(colName)
 		if idx >= len(row) {
@@ -119,6 +120,17 @@ func (ch *CSVHeader) RowMatch(row []string, andFilter map[string]stringsutil.Mat
 		}
 	}
 	return true
+}
+
+func (ch *CSVHeader) RecordToMSS(row []string) map[string]string {
+	mss := map[string]string{}
+	l := len(row)
+	for i, key := range ch.Columns {
+		if i < l {
+			mss[key] = row[i]
+		}
+	}
+	return mss
 }
 
 func FilterCSVFile(inPath, outPath string, inComma rune, inStripBom bool, andFilter map[string]stringsutil.MatchInfo) error {
@@ -165,6 +177,62 @@ func MergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStrip
 	return nil
 }
 
+func MergeFilterCSVFilesToJSONL(inPaths []string, outPath string, inComma rune, inStripBom bool, andFilter map[string]stringsutil.MatchInfo) error {
+	outFh, err := os.Create(outPath)
+	if err != nil {
+		return err
+	}
+
+	for _, inPath := range inPaths {
+		reader, inFile, err := NewReader(inPath, inComma, inStripBom)
+		if err != nil {
+			return err
+		}
+
+		csvHeader := CSVHeader{}
+		j := -1
+
+		for {
+			line, err := reader.Read()
+			if err == io.EOF {
+				break
+			} else if err != nil {
+				return err
+			}
+			j += 1
+
+			if j == 0 {
+				csvHeader.Columns = line
+				continue
+			}
+			if !csvHeader.RecordMatch(line, andFilter) {
+				continue
+			}
+
+			mss := csvHeader.RecordToMSS(line)
+
+			bytes, err := json.Marshal(mss)
+			if err != nil {
+				return err
+			}
+			_, err = outFh.Write(bytes)
+			if err != nil {
+				return err
+			}
+			_, err = outFh.Write([]byte("\n"))
+			if err != nil {
+				return err
+			}
+			outFh.Sync()
+		}
+		err = inFile.Close()
+		if err != nil {
+			return err
+		}
+	}
+	return outFh.Close()
+}
+
 // WriteCSVFiltered filters an existing CSV and writes the matching lines
 // to a *csv.Writer.
 func WriteCSVFiltered(reader *csv.Reader, writer *csv.Writer, andFilter map[string]stringsutil.MatchInfo, writeHeader bool) error {
@@ -188,7 +256,7 @@ func WriteCSVFiltered(reader *csv.Reader, writer *csv.Writer, andFilter map[stri
 			}
 			continue
 		}
-		if csvHeader.RowMatch(line, andFilter) {
+		if csvHeader.RecordMatch(line, andFilter) {
 			err := writer.Write(line)
 			if err != nil {
 				return err
