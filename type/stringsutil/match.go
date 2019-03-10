@@ -79,7 +79,7 @@ func Match(s string, matchInfo MatchInfo) (bool, error) {
 		if err != nil {
 			return false, err
 		}
-		if t.Before(matchInfo.TimeMin) {
+		if t.Before(matchInfo.TimeMax) {
 			return true, nil
 		} else {
 			return false, nil
@@ -89,7 +89,7 @@ func Match(s string, matchInfo MatchInfo) (bool, error) {
 		if err != nil {
 			return false, err
 		}
-		if t.Before(matchInfo.TimeMin) || t.Equal(matchInfo.TimeMin) {
+		if t.Before(matchInfo.TimeMax) || t.Equal(matchInfo.TimeMax) {
 			return true, nil
 		} else {
 			return false, nil
