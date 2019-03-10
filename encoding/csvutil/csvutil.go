@@ -2,6 +2,7 @@ package csvutil
 
 import (
 	"encoding/csv"
+	"io"
 	"os"
 
 	"github.com/grokify/gotilla/strings/stringsutil"
@@ -92,4 +93,107 @@ func NewWriterFile(filename string) (*csv.Writer, *os.File, error) {
 	writer := csv.NewWriter(file)
 	//defer writer.Flush()
 	return writer, file, nil
+}
+
+type CSVHeader struct {
+	Columns []string
+}
+
+func (ch *CSVHeader) Index(want string) int {
+	for i, try := range ch.Columns {
+		if want == try {
+			return i
+		}
+	}
+	return -1
+}
+
+func (ch *CSVHeader) RowMatch(row []string, andFilter map[string]string) bool {
+	for key, val := range andFilter {
+		idx := ch.Index(key)
+		if idx >= len(row) {
+			return false
+		}
+		if val != row[idx] {
+			return false
+		}
+	}
+	return true
+}
+
+func FilterCSVFile(inPath, outPath string, inComma rune, inStripBom bool, andFilter map[string]string) error {
+	reader, inFile, err := NewReader(inPath, inComma, inStripBom)
+	if err != nil {
+		return err
+	}
+	defer inFile.Close()
+	writer, outFile, err := NewWriterFile(outPath)
+	if err != nil {
+		return err
+	}
+	defer writer.Flush()
+	defer outFile.Close()
+	return WriteCSVFiltered(reader, writer, andFilter, true)
+}
+
+// MergeFilterCSVFiles can merge and filter multiple CSV files. It expects row definitions to be the same
+// across all input files.
+func MergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStripBom bool, andFilter map[string]string) error {
+	writer, outFile, err := NewWriterFile(outPath)
+	if err != nil {
+		return err
+	}
+	defer writer.Flush()
+	defer outFile.Close()
+
+	for i, inPath := range inPaths {
+		reader, inFile, err := NewReader(inPath, inComma, inStripBom)
+		if err != nil {
+			return err
+		}
+		defer inFile.Close()
+
+		writeHeader := false
+		if i == 0 {
+			writeHeader = true
+		}
+		err = WriteCSVFiltered(reader, writer, andFilter, writeHeader)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// WriteCSVFiltered filters an existing CSV and writes the matching lines
+// to a *csv.Writer.
+func WriteCSVFiltered(reader *csv.Reader, writer *csv.Writer, andFilter map[string]string, writeHeader bool) error {
+	csvHeader := CSVHeader{}
+	i := -1
+	for {
+		line, err := reader.Read()
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			return err
+		}
+		i += 1
+		if i == 0 {
+			csvHeader.Columns = line
+			if writeHeader {
+				err := writer.Write(line)
+				if err != nil {
+					return err
+				}
+			}
+			continue
+		}
+		if csvHeader.RowMatch(line, andFilter) {
+			err := writer.Write(line)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
