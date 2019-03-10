@@ -109,17 +109,21 @@ func (ch *CSVHeader) Index(want string) int {
 	return -1
 }
 
-func (ch *CSVHeader) RecordMatch(row []string, andFilter map[string]stringsutil.MatchInfo) bool {
+func (ch *CSVHeader) RecordMatch(row []string, andFilter map[string]stringsutil.MatchInfo) (bool, error) {
 	for colName, matchInfo := range andFilter {
 		idx := ch.Index(colName)
 		if idx >= len(row) {
-			return false
+			return false, nil
 		}
-		if !stringsutil.Match(row[idx], matchInfo) {
-			return false
+		match, err := stringsutil.Match(row[idx], matchInfo)
+		if err != nil {
+			return false, err
+		}
+		if !match {
+			return false, nil
 		}
 	}
-	return true
+	return true, nil
 }
 
 func (ch *CSVHeader) RecordToMSS(row []string) map[string]string {
@@ -205,7 +209,11 @@ func MergeFilterCSVFilesToJSONL(inPaths []string, outPath string, inComma rune, 
 				csvHeader.Columns = line
 				continue
 			}
-			if !csvHeader.RecordMatch(line, andFilter) {
+			match, err := csvHeader.RecordMatch(line, andFilter)
+			if err != nil {
+				return err
+			}
+			if !match {
 				continue
 			}
 
@@ -256,7 +264,11 @@ func WriteCSVFiltered(reader *csv.Reader, writer *csv.Writer, andFilter map[stri
 			}
 			continue
 		}
-		if csvHeader.RecordMatch(line, andFilter) {
+		match, err := csvHeader.RecordMatch(line, andFilter)
+		if err != nil {
+			return err
+		}
+		if match {
 			err := writer.Write(line)
 			if err != nil {
 				return err
