@@ -13,7 +13,9 @@ const (
 	TrimSpace
 	TrimSpaceLower
 	Regexp
+	TimeGT
 	TimeGTE
+	TimeLT
 	TimeLTE
 )
 
@@ -52,12 +54,42 @@ func Match(s string, matchInfo MatchInfo) (bool, error) {
 			return false, nil
 		}
 		return matchInfo.Regexp.MatchString(s), nil
+	case TimeGT:
+		t, err := time.Parse(matchInfo.TimeLayout, s)
+		if err != nil {
+			return false, err
+		}
+		if t.After(matchInfo.TimeMin) {
+			return true, nil
+		} else {
+			return false, nil
+		}
 	case TimeGTE:
 		t, err := time.Parse(matchInfo.TimeLayout, s)
 		if err != nil {
 			return false, err
 		}
 		if t.After(matchInfo.TimeMin) || t.Equal(matchInfo.TimeMin) {
+			return true, nil
+		} else {
+			return false, nil
+		}
+	case TimeLT:
+		t, err := time.Parse(matchInfo.TimeLayout, s)
+		if err != nil {
+			return false, err
+		}
+		if t.Before(matchInfo.TimeMin) {
+			return true, nil
+		} else {
+			return false, nil
+		}
+	case TimeLTE:
+		t, err := time.Parse(matchInfo.TimeLayout, s)
+		if err != nil {
+			return false, err
+		}
+		if t.Before(matchInfo.TimeMin) || t.Equal(matchInfo.TimeMin) {
 			return true, nil
 		} else {
 			return false, nil
