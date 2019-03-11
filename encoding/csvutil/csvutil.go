@@ -3,13 +3,18 @@ package csvutil
 import (
 	"encoding/csv"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
+	"strings"
 
+	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/gotilla/encoding/jsonutil"
 	"github.com/grokify/gotilla/type/stringsutil"
 )
+
+var DebugReadCSV = false // should not need to edit
 
 /*
 
@@ -183,6 +188,7 @@ func MergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStrip
 	return nil
 }
 
+/*
 type JsonRecordsInfo struct {
 	Meta    JsonRecordsInfoMeta `json:"meta"`
 	Records []map[string]string `json:"records"`
@@ -190,10 +196,11 @@ type JsonRecordsInfo struct {
 
 type JsonRecordsInfoMeta struct {
 	Count int `json:"count"`
-}
+}*/
 
-func ReadMergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStripBom bool, andFilter map[string]stringsutil.MatchInfo) (JsonRecordsInfo, error) {
-	data := JsonRecordsInfo{Records: []map[string]string{}}
+func ReadMergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStripBom bool, andFilter map[string]stringsutil.MatchInfo) (table.DocumentsSet, error) {
+	//data := JsonRecordsInfo{Records: []map[string]string{}}
+	data := table.NewDocumentsSet()
 
 	for _, inPath := range inPaths {
 		reader, inFile, err := NewReader(inPath, inComma, inStripBom)
@@ -226,14 +233,14 @@ func ReadMergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inS
 			}
 
 			mss := csvHeader.RecordToMSS(line)
-			data.Records = append(data.Records, mss)
+			data.Documents = append(data.Documents, mss)
 		}
 		err = inFile.Close()
 		if err != nil {
 			return data, err
 		}
 	}
-	data.Meta.Count = len(data.Records)
+	data.Inflate()
 	return data, nil
 }
 
@@ -344,4 +351,42 @@ func WriteCSVFiltered(reader *csv.Reader, writer *csv.Writer, andFilter map[stri
 		}
 	}
 	return nil
+}
+
+// NewTableDataFileCSV reads in a CSV file and returns a TableData struct.
+func NewTableDataFileCSV(path string, comma rune, stripBom bool) (table.TableData, error) {
+	tbl := table.NewTableData()
+	csvReader, f, err := NewReader(path, comma, stripBom)
+	if err != nil {
+		return tbl, err
+	}
+	defer f.Close()
+	if DebugReadCSV {
+		i := -1
+		for {
+			line, err := csvReader.Read()
+			if err == io.EOF {
+				break
+			} else if err != nil {
+				return tbl, err
+			}
+			i += 1
+			if i == 0 {
+				tbl.Columns = line
+				continue
+			}
+			tbl.Records = append(tbl.Records, line)
+			if i > 2500 {
+				fmt.Printf("[%v] %v\n", i, strings.Join(line, ","))
+			}
+		}
+
+	} else {
+		lines, err := csvReader.ReadAll()
+		if err != nil {
+			return tbl, err
+		}
+		tbl.LoadMergedRows(lines)
+	}
+	return tbl, nil
 }
