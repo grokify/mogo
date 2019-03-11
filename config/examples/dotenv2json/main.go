@@ -31,7 +31,7 @@ func main() {
 
 	cfg := &AppConfig{}
 
-	err = config.EnvFileToJSONFile(cfg, opts.InputFile, opts.Outputfile, 0644, true)
+	err = config.EnvFileToJSONFile(cfg, opts.InputFile, opts.Outputfile, 0644, "", "  ")
 	if err != nil {
 		panic(err)
 	}
