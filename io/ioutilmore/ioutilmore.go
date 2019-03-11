@@ -14,6 +14,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/grokify/gotilla/encoding/jsonutil"
 	"github.com/grokify/gotilla/type/maputil"
 )
 
@@ -283,21 +284,26 @@ func ReadFileJSON(file string, v interface{}) error {
 	return json.Unmarshal(bytes, v)
 }
 
-func WriteFileJSON(filepath string, data interface{}, perm os.FileMode, wantPretty bool) error {
+func WriteFileJSON(filepath string, data interface{}, perm os.FileMode, prefix, indent string) error {
 	var bytes []byte
-	if wantPretty {
-		bytesTry, err := json.MarshalIndent(data, "", "  ")
-		if err != nil {
-			return err
-		}
-		bytes = bytesTry
-	} else {
-		bytesTry, err := json.Marshal(data)
-		if err != nil {
-			return err
-		}
-		bytes = bytesTry
+	bytes, err := jsonutil.MarshalSimple(data, prefix, indent)
+	if err != nil {
+		return err
 	}
+	/*
+		if wantPretty {
+			bytesTry, err := json.MarshalIndent(data, "", "  ")
+			if err != nil {
+				return err
+			}
+			bytes = bytesTry
+		} else {
+			bytesTry, err := json.Marshal(data)
+			if err != nil {
+				return err
+			}
+			bytes = bytesTry
+		}*/
 	return ioutil.WriteFile(filepath, bytes, perm)
 }
 
