@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -15,9 +14,6 @@ var urlToPatternTests = []struct {
 func TestURLToPattern(t *testing.T) {
 	ut := NewURLTransformer()
 	ut.LoadPaths([]string{"/pets", "/pets/{petId}"})
-
-	fmt.Printf("Num_Direct [%v]\n", len(ut.ExactPaths))
-	fmt.Printf("Num_Regexp [%v]\n", len(ut.RegexpPaths))
 
 	for _, tt := range urlToPatternTests {
 		got := ut.URLActualToPattern(tt.v)

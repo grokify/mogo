@@ -9,7 +9,8 @@ const rxMatchParameterPattern = `{[^\{\}]*}`
 const rxMatchParameterActual = `[^\{\}]*`
 
 // URLTransformer is useful for reading log files and converting actual
-// request URls into pattners, such as those used in the OpenAPI Spec.
+// request URls into pattners, such as those used in the OpenAPI Spec for
+// reporting and categorization purposes.
 type URLTransformer struct {
 	ExactPaths     []string
 	RegexpPaths    map[string]*regexp.Regexp
@@ -18,6 +19,7 @@ type URLTransformer struct {
 	rxStripQuery   *regexp.Regexp
 }
 
+// NewURLTransformer creates a new URLTransformer instance.
 func NewURLTransformer() URLTransformer {
 	return URLTransformer{
 		ExactPaths:     []string{},
@@ -27,7 +29,7 @@ func NewURLTransformer() URLTransformer {
 		rxStripQuery:   regexp.MustCompile(`\?.*$`)}
 }
 
-// LoadPaths to lost config data. See the test file for an example.
+// LoadPaths loads multiple spec URL patterns. See the test file for an example.
 func (t *URLTransformer) LoadPaths(paths []string) error {
 	for _, path := range paths {
 		err := t.LoadPath(path)
@@ -38,6 +40,7 @@ func (t *URLTransformer) LoadPaths(paths []string) error {
 	return nil
 }
 
+// LoadPath loads a single spec URL pattern.
 func (t *URLTransformer) LoadPath(path string) error {
 	path = t.rxStripQuery.ReplaceAllString(path, "")
 	i1 := strings.Index(path, "{")
@@ -57,7 +60,7 @@ func (t *URLTransformer) LoadPath(path string) error {
 }
 
 // URLActualToPattern is the "runtime" API that is called over and over
-// for RUL classification purposes.
+// for URL classification purposes.
 func (t *URLTransformer) URLActualToPattern(s string) string {
 	s = t.rxStripQuery.ReplaceAllString(s, "")
 	for _, try := range t.ExactPaths {
