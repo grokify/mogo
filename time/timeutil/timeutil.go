@@ -62,6 +62,14 @@ var intervals = [...]string{
 	"nanosecond",
 }
 
+func MustParse(layout, value string) time.Time {
+	t, err := time.Parse(layout, value)
+	if err != nil {
+		panic(err)
+	}
+	return t
+}
+
 func (i Interval) String() string { return intervals[i] }
 
 func ParseInterval(src string) (Interval, error) {
@@ -345,9 +353,13 @@ func QuarterStartString(dt time.Time) string {
 	return fmt.Sprintf("%v Q%v", dtStart.Year(), MonthToQuarter(uint8(dtStart.Month())))
 }
 
-func PrevQuarters(dt time.Time, n int) time.Time {
-	for i := 0; i < n; i++ {
-		dt = PrevQuarter(dt)
+func NextQuarter(dt time.Time) time.Time {
+	return TimeDt6AddNMonths(QuarterStart(dt), 3)
+}
+
+func NextQuarters(dt time.Time, num int) time.Time {
+	for i := 0; i < num; i++ {
+		dt = NextQuarter(dt)
 	}
 	return dt
 }
@@ -356,13 +368,9 @@ func PrevQuarter(dt time.Time) time.Time {
 	return TimeDt6SubNMonths(QuarterStart(dt), 3)
 }
 
-func NextQuarter(dt time.Time) time.Time {
-	return TimeDt6AddNMonths(QuarterStart(dt), 3)
-}
-
-func NextQuarters(dt time.Time, num int) time.Time {
-	for i := 0; i < num; i++ {
-		dt = NextQuarter(dt)
+func PrevQuarters(dt time.Time, n int) time.Time {
+	for i := 0; i < n; i++ {
+		dt = PrevQuarter(dt)
 	}
 	return dt
 }
