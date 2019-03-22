@@ -368,8 +368,8 @@ func PrevQuarter(dt time.Time) time.Time {
 	return TimeDt6SubNMonths(QuarterStart(dt), 3)
 }
 
-func PrevQuarters(dt time.Time, n int) time.Time {
-	for i := 0; i < n; i++ {
+func PrevQuarters(dt time.Time, num int) time.Time {
+	for i := 0; i < num; i++ {
 		dt = PrevQuarter(dt)
 	}
 	return dt
