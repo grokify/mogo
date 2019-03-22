@@ -66,3 +66,5 @@ func SplitCount(slice []string, size int) [][]string {
 	}
 	return slices
 }
+
+func Unshift(a []string, x string) []string { return append([]string{x}, a...) }

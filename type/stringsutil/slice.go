@@ -18,6 +18,10 @@ func SliceTrimSpace(slice []string) []string {
 	return trimmed
 }
 
+func JoinCondenseTrimSpace(slice []string, sep string) string {
+	return strings.Join(SliceTrimSpace(slice), sep)
+}
+
 func SliceCondenseRegexps(texts []string, regexps []*regexp.Regexp, replacement string) []string {
 	parts := []string{}
 	for _, part := range texts {
