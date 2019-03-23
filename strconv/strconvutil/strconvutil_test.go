@@ -21,7 +21,8 @@ func TestChangeToXoXPctTests(t *testing.T) {
 	for _, tt := range changeToXoXPctTests {
 		// without math.Round, we end up with:
 		// Error: with [0.9], want [-10], got [-9.999999999999998]
-		try := mathutil.Round(ChangeToXoXPct(tt.v), 0.5, 0.0)
+		try := mathutil.RoundMore(ChangeToXoXPct(tt.v), 0.5, 0.0)
+		// try := mathutil.Round(ChangeToXoXPct(tt.v))
 		if try != tt.want {
 			t.Errorf("strconvutil.ChangeToXoXPct() Error: with [%v], want [%v], got [%v]",
 				tt.v, tt.want, try)
@@ -48,7 +49,8 @@ func TestChangeToFunnelPctTests(t *testing.T) {
 	for _, tt := range changeToFunnelPctTests {
 		// without math.Round, we end up with:
 		// Error: with [0.9], want [-10], got [-9.999999999999998]
-		try := mathutil.Round(ChangeToFunnelPct(tt.v), 0.5, 0.0)
+		try := mathutil.RoundMore(ChangeToFunnelPct(tt.v), 0.5, 0.0)
+		// try := mathutil.Round(ChangeToXoXPct(tt.v))
 		if try != tt.want {
 			t.Errorf("strconvutil.ChangeToFunnelPct() Error: with [%v], want [%v], got [%v]",
 				tt.v, tt.want, try)
