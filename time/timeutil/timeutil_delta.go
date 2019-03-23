@@ -135,7 +135,7 @@ func DaysToDow(baseDow int, wantDow int, wantInclusive bool) (int, error) {
 }
 
 func ParseDayOfWeek(value string) (int, error) {
-	valueLc := strings.ToLower(value)
+	valueLc := strings.ToLower(strings.TrimSpace(value))
 	days := []string{"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"}
 	mapping := map[string]int{}
 	for i, dow := range days {
