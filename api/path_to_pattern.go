@@ -5,8 +5,10 @@ import (
 	"strings"
 )
 
-const rxMatchParameterPattern = `{[^\{\}]*}`
-const rxMatchParameterActual = `[^\{\}]*`
+const (
+	rxMatchParameterPattern = `{[^\{\}/]*?}`
+	rxMatchParameterActual  = `[^\{\}/]*?`
+)
 
 // URLTransformer is useful for reading log files and converting actual
 // request URls into pattners, such as those used in the OpenAPI Spec for

@@ -9,11 +9,15 @@ var urlToPatternTests = []struct {
 	want string
 }{
 	{"/pets", "/pets"},
-	{"/pets/dog", "/pets/{petId}"}}
+	{"/pets/dog", "/pets/{petId}"},
+	{"/pets/dog/vacinations", "/pets/{petId}/vacinations"}}
 
 func TestURLToPattern(t *testing.T) {
 	ut := NewURLTransformer()
-	ut.LoadPaths([]string{"/pets", "/pets/{petId}"})
+	ut.LoadPaths([]string{
+		"/pets",
+		"/pets/{petId}",
+		"/pets/{petId}/vacinations"})
 
 	for _, tt := range urlToPatternTests {
 		got := ut.URLActualToPattern(tt.v)
