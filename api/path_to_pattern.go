@@ -3,6 +3,8 @@ package api
 import (
 	"regexp"
 	"strings"
+
+	"github.com/grokify/gotilla/type/stringsutil"
 )
 
 const (
@@ -32,9 +34,9 @@ func NewURLTransformer() URLTransformer {
 }
 
 // LoadPaths loads multiple spec URL patterns. See the test file for an example.
-func (t *URLTransformer) LoadPaths(paths []string) error {
+func (ut *URLTransformer) LoadPaths(paths []string) error {
 	for _, path := range paths {
-		err := t.LoadPath(path)
+		err := ut.LoadPath(path)
 		if err != nil {
 			return err
 		}
@@ -43,37 +45,42 @@ func (t *URLTransformer) LoadPaths(paths []string) error {
 }
 
 // LoadPath loads a single spec URL pattern.
-func (t *URLTransformer) LoadPath(path string) error {
-	path = t.rxStripQuery.ReplaceAllString(path, "")
+func (ut *URLTransformer) LoadPath(path string) error {
+	path = ut.rxStripQuery.ReplaceAllString(path, "")
 	i1 := strings.Index(path, "{")
 	i2 := strings.Index(path, "}")
 	if i1 < 0 && i2 < 0 {
-		t.ExactPaths = append(t.ExactPaths, path)
+		ut.ExactPaths = append(ut.ExactPaths, path)
 		return nil
 	}
-	linkPattern := t.rxMatchPattern.ReplaceAllString(path, rxMatchParameterActual)
+	linkPattern := ut.rxMatchPattern.ReplaceAllString(path, rxMatchParameterActual)
 	linkPattern = `^` + linkPattern + `$`
 	rx, err := regexp.Compile(linkPattern)
 	if err != nil {
 		return err
 	}
-	t.RegexpPaths[path] = rx
+	ut.RegexpPaths[path] = rx
 	return nil
 }
 
 // URLActualToPattern is the "runtime" API that is called over and over
 // for URL classification purposes.
-func (t *URLTransformer) URLActualToPattern(s string) string {
-	s = t.rxStripQuery.ReplaceAllString(s, "")
-	for _, try := range t.ExactPaths {
+func (ut *URLTransformer) URLActualToPattern(s string) string {
+	s = ut.rxStripQuery.ReplaceAllString(s, "")
+	for _, try := range ut.ExactPaths {
 		if s == try {
 			return s
 		}
 	}
-	for pattern, rx := range t.RegexpPaths {
+	for pattern, rx := range ut.RegexpPaths {
 		if rx.MatchString(s) {
 			return pattern
 		}
 	}
 	return s
+}
+
+func (ut *URLTransformer) BuildReverseEndpointPattern(method, actualURL string) string {
+	pattern := ut.URLActualToPattern(actualURL)
+	return stringsutil.JoinCondenseTrimSpace([]string{method, pattern}, " ")
 }
