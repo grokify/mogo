@@ -82,5 +82,5 @@ func (ut *URLTransformer) URLActualToPattern(s string) string {
 
 func (ut *URLTransformer) BuildReverseEndpointPattern(method, actualURL string) string {
 	pattern := ut.URLActualToPattern(actualURL)
-	return stringsutil.JoinCondenseTrimSpace([]string{method, pattern}, " ")
+	return stringsutil.JoinCondenseTrimSpace([]string{pattern, method}, " ")
 }
