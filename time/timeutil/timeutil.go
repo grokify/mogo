@@ -438,6 +438,13 @@ func ParseWeekday(s string) (time.Weekday, error) {
 	return time.Weekday(0), fmt.Errorf("Cannot parse weekday: %s", s)
 }
 
+func ToMonthStart(t time.Time) time.Time {
+	return time.Date(
+		t.Year(), t.Month(), 1,
+		0, 0, 0, 0,
+		t.Location())
+}
+
 // TimeMeta is a struct for holding various times related
 // to a current time, including year start, quarter start,
 // month start, and week start.
