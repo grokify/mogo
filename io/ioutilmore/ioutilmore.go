@@ -268,6 +268,14 @@ func RemoveAllChildren(dir string) error {
 	return nil
 }
 
+func FileinfosNames(fis []os.FileInfo) []string {
+	s := []string{}
+	for _, e := range fis {
+		s = append(s, e.Name())
+	}
+	return s
+}
+
 // ReaderToBytes reads from an io.Reader, e.g. io.ReadCloser
 func ReaderToBytes(ior io.Reader) []byte {
 	buf := new(bytes.Buffer)
