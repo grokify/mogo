@@ -12,6 +12,16 @@ import (
 	"github.com/google/go-querystring/query"
 )
 
+// AppendURLValues appends one url.Values to another url.Values.
+func AppendURLValues(v1, v2 url.Values) url.Values {
+	for key, vals := range v2 {
+		for _, val := range vals {
+			v1.Add(key, val)
+		}
+	}
+	return v1
+}
+
 // ToSlug creates a slug byte array from an input byte array.
 // Slugs have words separated by a hyphen with no punctuation
 // or spaces.
