@@ -36,10 +36,15 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	convertType := convertutil.PDFFormat
+	if opts.Format == "kindle" {
+		convertType = convertutil.KindleFormat
+	}
+
 	err = convertutil.ReformatImages(
 		opts.InDir,
 		opts.OutDir,
-		convertutil.KindleFormat)
+		convertType)
 	if err != nil {
 		log.Fatal(err)
 	}
