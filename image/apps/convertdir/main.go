@@ -9,7 +9,7 @@ import (
 	"github.com/jessevdk/go-flags"
 )
 
-// go get github.com/grokify/image/apps/convertdir
+// go get github.com/grokify/gotilla/image/apps/convertdir
 
 type Options struct {
 	InDir  string `short:"i" long:"indir" description:"Input Directory" required:"true"`
