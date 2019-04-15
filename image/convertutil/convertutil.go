@@ -106,7 +106,7 @@ func ConvertToPDF(sourcePath, outputPath string) (bytes.Buffer, bytes.Buffer, er
 	command := ConvertCommand(ConvertParams{
 		SourcePath:        sourcePath,
 		OutputPath:        outputPath,
-		OutputWidth:       KindleWidth,
+		OutputWidth:       PdfWidth,
 		OutputHeight:      0,
 		ResolutionDensity: PressDpi,
 		ResolutionUnits:   ResolutionPixelsPerInch})
