@@ -10,6 +10,11 @@ import (
 	"github.com/grokify/gotilla/io/ioutilmore"
 )
 
+const (
+	PDFSpecs    = "1950pxw300dpi"
+	KindleSpecs = "600pxw300dpi"
+)
+
 type CopyType int
 
 const (
