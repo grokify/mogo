@@ -57,21 +57,25 @@ func CopyFile(src, dst string) (err error) {
 	return
 }
 
-func ReadDirSplit(dirname string, skipDotDirs bool) ([]os.FileInfo, []os.FileInfo, error) {
+func ReadDirSplit(dirname string, inclDotDirs bool) ([]os.FileInfo, []os.FileInfo, error) {
 	all, err := ioutil.ReadDir(dirname)
 	if err != nil {
 		return []os.FileInfo{}, []os.FileInfo{}, err
 	}
-	subdirs, regular := FileInfosSplit(all, skipDotDirs)
+	subdirs, regular := FileInfosSplit(all, inclDotDirs)
 	return subdirs, regular, nil
 }
 
-func FileInfosSplit(all []os.FileInfo, skipDotDirs bool) ([]os.FileInfo, []os.FileInfo) {
+func FileInfosSplit(all []os.FileInfo, inclDotDirs bool) ([]os.FileInfo, []os.FileInfo) {
 	subdirs := []os.FileInfo{}
 	regular := []os.FileInfo{}
 	for _, f := range all {
 		if f.Mode().IsDir() {
-			if !skipDotDirs || (f.Name() != "." && f.Name() != "..") {
+			if f.Name() == "." && f.Name() == ".." {
+				if inclDotDirs {
+					subdirs = append(subdirs, f)
+				}
+			} else {
 				subdirs = append(subdirs, f)
 			}
 		} else {
