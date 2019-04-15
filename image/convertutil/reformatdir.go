@@ -17,6 +17,8 @@ const (
 	KindleFormat                 // 1 convert cli value
 )
 
+// ReformatImages converts images in one dir to another using default
+// formats for Kindle and PDF.
 func ReformatImages(baseSrcDir, baseOutDir string, copyType CopyType) error {
 	var err error
 	baseSrcDir, err = filepath.Abs(strings.TrimSpace(baseSrcDir))
