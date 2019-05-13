@@ -110,7 +110,6 @@ func ConvertToPDF(sourcePath, outputPath string) (bytes.Buffer, bytes.Buffer, er
 		OutputHeight:      0,
 		ResolutionDensity: PressDpi,
 		ResolutionUnits:   ResolutionPixelsPerInch})
-	fmt.Println(command)
 	return cmdutil.ExecSimple(command)
 }
 

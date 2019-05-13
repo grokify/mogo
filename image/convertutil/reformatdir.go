@@ -24,7 +24,7 @@ const (
 
 // ReformatImages converts images in one dir to another using default
 // formats for Kindle and PDF.
-func ReformatImages(baseSrcDir, baseOutDir string, copyType CopyType) error {
+func ReformatImages(baseSrcDir, baseOutDir string, copyType CopyType, rewrite bool) error {
 	var err error
 	baseSrcDir, err = filepath.Abs(strings.TrimSpace(baseSrcDir))
 	if err != nil {
@@ -34,10 +34,10 @@ func ReformatImages(baseSrcDir, baseOutDir string, copyType CopyType) error {
 	if err != nil {
 		return err
 	}
-	return reformatImagesSubdir(baseSrcDir, baseOutDir, "", copyType)
+	return reformatImagesSubdir(baseSrcDir, baseOutDir, "", copyType, rewrite)
 }
 
-func reformatImagesSubdir(baseSrcDir, baseOutDir, dirPart string, copyType CopyType) error {
+func reformatImagesSubdir(baseSrcDir, baseOutDir, dirPart string, copyType CopyType, rewrite bool) error {
 	thisSrcDir := baseSrcDir
 	thisOutDir := baseOutDir
 	dirPart = strings.TrimSpace(dirPart)
@@ -68,6 +68,12 @@ func reformatImagesSubdir(baseSrcDir, baseOutDir, dirPart string, copyType CopyT
 		if !imageutil.IsImageExt(thisSrcFile) {
 			continue
 		}
+		if !rewrite {
+			isFile, err := ioutilmore.IsFile(thisOutFile)
+			if err == nil && isFile {
+				continue
+			}
+		}
 		switch copyType {
 		case PDFFormat:
 			_, stderr, err := ConvertToPDF(thisSrcFile, thisOutFile)
@@ -88,7 +94,7 @@ func reformatImagesSubdir(baseSrcDir, baseOutDir, dirPart string, copyType CopyT
 		if len(dirPart) > 0 {
 			subDir = filepath.Join(dirPart, subDir)
 		}
-		err := reformatImagesSubdir(baseSrcDir, baseOutDir, subDir, copyType)
+		err := reformatImagesSubdir(baseSrcDir, baseOutDir, subDir, copyType, rewrite)
 		if err != nil {
 			return err
 		}
