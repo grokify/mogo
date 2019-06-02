@@ -8,6 +8,7 @@ import (
 
 	"github.com/grokify/gotilla/image/imageutil"
 	"github.com/grokify/gotilla/io/ioutilmore"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -74,12 +75,12 @@ func reformatImagesSubdir(baseSrcDir, baseOutDir, dirPart string, copyType CopyT
 				continue
 			}
 		}
+
 		switch copyType {
 		case PDFFormat:
-			_, stderr, err := ConvertToPDF(thisSrcFile, thisOutFile)
-			err = CheckError(err, stderr)
+			_, _, err := ConvertToPDF(thisSrcFile, thisOutFile)
 			if err != nil {
-				return err
+				return errors.Wrap(err, fmt.Sprintf("ConvertToPDF failed for [%s]", thisSrcFile))
 			}
 		case KindleFormat:
 			_, stderr, err := ConvertToKindle(thisSrcFile, thisOutFile)
