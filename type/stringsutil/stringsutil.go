@@ -85,6 +85,16 @@ func ToBool(v string) bool {
 	return false
 }
 
+func SubstringIsSuffix(s1, s2 string) bool {
+	len1 := len(s1)
+	len2 := len(s2)
+	idx := strings.Index(s1, s2)
+	if len1 >= len2 && idx > -1 && idx == (len1-len2) {
+		return true
+	}
+	return false
+}
+
 // SplitCondenseSpace splits a string and trims spaces on
 // remaining elements, removing empty elements.
 func SplitCondenseSpace(s, sep string) []string {
