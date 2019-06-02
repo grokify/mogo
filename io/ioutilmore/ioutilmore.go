@@ -207,6 +207,14 @@ func IsFile(name string) (bool, error) {
 	return true, nil
 }
 
+func Exists(name string) (bool, error) {
+	_, err := os.Stat(name)
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return err != nil, err
+}
+
 // IsFileWithSizeGtZero verifies a path exists, is a file and is not empty,
 // returning an error otherwise. An os file not exists check can be done
 // with os.IsNotExist(err) which acts on error from os.Stat()
