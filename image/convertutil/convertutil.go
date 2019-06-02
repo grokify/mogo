@@ -7,6 +7,9 @@ import (
 	"strings"
 
 	"github.com/grokify/gotilla/cmd/cmdutil"
+	"github.com/grokify/gotilla/image/imageutil"
+	"github.com/grokify/gotilla/math/mathutil"
+	"github.com/grokify/gotilla/type/stringsutil"
 )
 
 /*
@@ -18,7 +21,8 @@ brew install imagemagick
 */
 
 const (
-	PdfWidth                      = 1950
+	PdfWidth                      = 1950 // Ideal max image width
+	PdfHeight                     = 2350 // Ideal max image height
 	KindleWidth                   = 1400 // 600
 	PressDpi                      = 300
 	WebDpi                        = 72
@@ -102,7 +106,7 @@ func ConvertToKindle(sourcePath, outputPath string) (bytes.Buffer, bytes.Buffer,
 	return cmdutil.ExecSimple(command)
 }
 
-func ConvertToPDF(sourcePath, outputPath string) (bytes.Buffer, bytes.Buffer, error) {
+func ConvertToPDFSimple(sourcePath, outputPath string) (bytes.Buffer, bytes.Buffer, error) {
 	command := ConvertCommand(ConvertParams{
 		SourcePath:        sourcePath,
 		OutputPath:        outputPath,
@@ -111,6 +115,37 @@ func ConvertToPDF(sourcePath, outputPath string) (bytes.Buffer, bytes.Buffer, er
 		ResolutionDensity: PressDpi,
 		ResolutionUnits:   ResolutionPixelsPerInch})
 	return cmdutil.ExecSimple(command)
+}
+
+func ConvertToPDF(sourcePath, outputPath string) (bytes.Buffer, bytes.Buffer, error) {
+	buf := bytes.NewBufferString("")
+	w, h, err := imageutil.ReadImageDimensions(sourcePath)
+	if err != nil {
+		return *buf, *buf, err
+	}
+
+	outputWidth := 0
+	outputHeight := 0
+	_, calcY := mathutil.RatioInt(w, h, PdfWidth, 0)
+	if calcY >= PdfHeight {
+		outputHeight = PdfHeight
+	} else {
+		outputWidth = PdfWidth
+	}
+
+	command := ConvertCommand(ConvertParams{
+		SourcePath:        sourcePath,
+		OutputPath:        outputPath,
+		OutputWidth:       outputWidth,
+		OutputHeight:      outputHeight,
+		ResolutionDensity: PressDpi,
+		ResolutionUnits:   ResolutionPixelsPerInch})
+	stdout, stderr, err := cmdutil.ExecSimple(command)
+	fmt.Printf("STDERR: %s\n", stderr.String())
+	fmt.Printf("GOLERR: %s\n", err.Error())
+	fmt.Printf("INDEX: %v\n", strings.Index(stderr.String(), convertError))
+	return stdout, stderr, err
+	//return cmdutil.ExecSimple(command)
 }
 
 const (
@@ -123,6 +158,9 @@ const (
 func CheckError(err error, stderr bytes.Buffer) error {
 	if err.Error() == convertErrorStatus &&
 		strings.Index(stderr.String(), convertError) > -1 {
+		return nil
+	}
+	if stringsutil.SubstringIsSuffix(err.Error(), convertErrorStatus) {
 		return nil
 	}
 	return err
