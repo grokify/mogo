@@ -9,26 +9,24 @@ import (
 	"github.com/jessevdk/go-flags"
 )
 
-// go get github.com/grokify/gotilla/image/apps/convertdir
-
 type Options struct {
 	InDir      string `short:"i" long:"indir" description:"Input Directory" required:"true"`
 	OutDir     string `short:"o" long:"outdir" description:"Output Directory" required:"true"`
-	SrcFormat  string `short:"f" long:"format" description:"Image Format" required:"true"`
+	Format     string `short:"f" long:"format" description:"Image Format" required:"true"`
 	SrcRewrite []bool `short:"r" long:"rewrite" description:"Rewrite Images"`
 }
 
 func (o *Options) Validate() error {
-	o.SrcFormat = strings.ToLower(strings.TrimSpace(o.SrcFormat))
-	if o.SrcFormat != "kindle" && o.SrcFormat != "pdf" {
-		return fmt.Errorf("Invalid Output Format [%s]", o.SrcFormat)
+	o.Format = strings.ToLower(strings.TrimSpace(o.Format))
+	if o.Format != "kindle" && o.Format != "pdf" {
+		return fmt.Errorf("Invalid Output Format [%s]", o.Format)
 	}
 	return nil
 }
 
-func (o *Options) Format() convertutil.CopyType {
+func (o *Options) TypeFormat() convertutil.CopyType {
 	format := convertutil.PDFFormat
-	if o.SrcFormat == "kindle" {
+	if o.Format == "kindle" {
 		format = convertutil.KindleFormat
 	}
 	return format
@@ -52,11 +50,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	err = convertutil.ReformatImages(
 		opts.InDir,
 		opts.OutDir,
-		opts.Format(),
+		opts.TypeFormat(),
 		opts.Rewrite())
 	if err != nil {
 		log.Fatal(err)
