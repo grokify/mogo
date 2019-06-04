@@ -1,7 +1,9 @@
 package stringsutil
 
 import (
+	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -16,6 +18,24 @@ func SliceTrimSpace(slice []string) []string {
 		}
 	}
 	return trimmed
+}
+
+// JoinAny takes an array of interface{} and converts
+// each value to a string using fmt.Sprintf("%v")
+func JoinAny(a []interface{}, sep string) string {
+	strs := []string{}
+	for _, item := range a {
+		strs = append(strs, fmt.Sprintf("%v", item))
+	}
+	return strings.Join(strs, sep)
+}
+
+func JoinInt(a []int, sep string) string {
+	strs := []string{}
+	for _, i := range a {
+		strs = append(strs, strconv.Itoa(i))
+	}
+	return strings.Join(strs, sep)
 }
 
 func JoinCondenseTrimSpace(slice []string, sep string) string {
@@ -75,4 +95,17 @@ func SplitTrimSpace(s, sep string) []string {
 		strs = append(strs, strings.TrimSpace(str))
 	}
 	return strs
+}
+
+// SliceToSingleIntOrNeg converts a single element slice
+// with a string to an integer or `-1`
+func SliceToSingleIntOrNeg(vals []string) int {
+	if len(vals) != 1 {
+		return -1
+	}
+	num, err := strconv.Atoi(vals[0])
+	if err != nil {
+		return -1
+	}
+	return num
 }

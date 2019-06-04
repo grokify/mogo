@@ -57,21 +57,25 @@ func CopyFile(src, dst string) (err error) {
 	return
 }
 
-func ReadDirSplit(dirname string, skipDotDirs bool) ([]os.FileInfo, []os.FileInfo, error) {
+func ReadDirSplit(dirname string, inclDotDirs bool) ([]os.FileInfo, []os.FileInfo, error) {
 	all, err := ioutil.ReadDir(dirname)
 	if err != nil {
 		return []os.FileInfo{}, []os.FileInfo{}, err
 	}
-	subdirs, regular := FileInfosSplit(all, skipDotDirs)
+	subdirs, regular := FileInfosSplit(all, inclDotDirs)
 	return subdirs, regular, nil
 }
 
-func FileInfosSplit(all []os.FileInfo, skipDotDirs bool) ([]os.FileInfo, []os.FileInfo) {
+func FileInfosSplit(all []os.FileInfo, inclDotDirs bool) ([]os.FileInfo, []os.FileInfo) {
 	subdirs := []os.FileInfo{}
 	regular := []os.FileInfo{}
 	for _, f := range all {
 		if f.Mode().IsDir() {
-			if !skipDotDirs || (f.Name() != "." && f.Name() != "..") {
+			if f.Name() == "." && f.Name() == ".." {
+				if inclDotDirs {
+					subdirs = append(subdirs, f)
+				}
+			} else {
 				subdirs = append(subdirs, f)
 			}
 		} else {
@@ -203,6 +207,14 @@ func IsFile(name string) (bool, error) {
 	return true, nil
 }
 
+func Exists(name string) (bool, error) {
+	_, err := os.Stat(name)
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return err != nil, err
+}
+
 // IsFileWithSizeGtZero verifies a path exists, is a file and is not empty,
 // returning an error otherwise. An os file not exists check can be done
 // with os.IsNotExist(err) which acts on error from os.Stat()
@@ -266,6 +278,14 @@ func RemoveAllChildren(dir string) error {
 		}
 	}
 	return nil
+}
+
+func FileinfosNames(fis []os.FileInfo) []string {
+	s := []string{}
+	for _, e := range fis {
+		s = append(s, e.Name())
+	}
+	return s
 }
 
 // ReaderToBytes reads from an io.Reader, e.g. io.ReadCloser
