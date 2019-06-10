@@ -43,6 +43,8 @@ func GetWriteFile(url string, filename string, perm os.FileMode) ([]byte, error)
 	return bytes, err
 }
 
+// PostJsonSimple performs a HTTP POST request converting a body interface{} to
+// JSON and adding the appropriate JSON Content-Type header.
 func PostJsonSimple(requrl string, body interface{}) (*http.Response, error) {
 	bodyBytes, err := json.Marshal(body)
 	if err != nil {
