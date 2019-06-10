@@ -1,6 +1,7 @@
 package httputilmore
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -40,6 +41,22 @@ func GetWriteFile(url string, filename string, perm os.FileMode) ([]byte, error)
 	}
 	err = ioutil.WriteFile(filename, bytes, perm)
 	return bytes, err
+}
+
+func PostJsonSimple(requrl string, body interface{}) (*http.Response, error) {
+	bodyBytes, err := json.Marshal(body)
+	if err != nil {
+		return &http.Response{}, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, requrl, bytes.NewBuffer(bodyBytes))
+	if err != nil {
+		return &http.Response{}, err
+	}
+	req.Header.Set(HeaderContentType, ContentTypeAppJsonUtf8)
+
+	client := &http.Client{}
+	return client.Do(req)
 }
 
 // ResponseBody returns the body as a byte array
