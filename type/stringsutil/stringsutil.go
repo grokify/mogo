@@ -6,7 +6,6 @@ import (
 	"sort"
 	"strings"
 	"unicode"
-	"unicode/utf8"
 )
 
 const (
@@ -42,90 +41,58 @@ func PadRight(str string, pad string, length int) string {
 	}
 }
 
+// Capitalize returns a string with the first character
+// capitalized and the rest lower cased.
+func Capitalize(s1 string) string {
+	s2 := strings.ToLower(s1)
+	return ToUpperFirst(s2)
+}
+
 // ToLowerFirst lower cases the first letter in the string
-func ToLowerFirst(s string) string {
-	if s == "" {
-		return ""
-	}
-	r, n := utf8.DecodeRuneInString(s)
-	return string(unicode.ToLower(r)) + s[n:]
+func ToLowerFirst(s1 string) string {
+	a1 := []rune(s1)
+	a1[0] = unicode.ToLower(a1[0])
+	return string(a1)
+	/*
+		if s == "" {
+			return ""
+		}
+		r, n := utf8.DecodeRuneInString(s)
+		return string(unicode.ToLower(r)) + s[n:]
+	*/
 }
 
 // ToUpperFirst upper cases the first letter in the string
-func ToUpperFirst(s string) string {
-	if s == "" {
-		return ""
-	}
-	r, n := utf8.DecodeRuneInString(s)
-	return string(unicode.ToUpper(r)) + s[n:]
-}
-
-// SliceTrimSpace removes leading and trailing spaces per
-// string and also removes empty strings.
-func SliceTrimSpace(slice []string) []string {
-	trimmed := []string{}
-	for _, part := range slice {
-		part := strings.TrimSpace(part)
-		if len(part) > 0 {
-			trimmed = append(trimmed, part)
+func ToUpperFirst(s1 string) string {
+	a1 := []rune(s1)
+	a1[0] = unicode.ToUpper(a1[0])
+	return string(a1)
+	/*
+			if s == "" {
+			return ""
 		}
-	}
-	return trimmed
+		r, n := utf8.DecodeRuneInString(s)
+		return string(unicode.ToUpper(r)) + s[n:]
+	*/
 }
 
-func SliceCondenseRegexps(texts []string, regexps []*regexp.Regexp, replacement string) []string {
-	parts := []string{}
-	for _, part := range texts {
-		for _, rx := range regexps {
-			part = rx.ReplaceAllString(part, replacement)
-		}
-		part = strings.TrimSpace(part)
-		if len(part) > 0 {
-			parts = append(parts, part)
-		}
+// ToBool converts a string to a boolean value
+// looking for the string "true" in any case.
+func ToBool(v string) bool {
+	if strings.TrimSpace(strings.ToLower(v)) == "true" {
+		return true
 	}
-	return parts
+	return false
 }
 
-func SliceCondensePunctuation(texts []string) []string {
-	parts := []string{}
-	for _, part := range texts {
-		part = regexp.MustCompile(`[^a-zA-Z0-9]+`).ReplaceAllString(part, " ")
-		part = regexp.MustCompile(`\s+`).ReplaceAllString(part, " ")
-		part = strings.TrimSpace(part)
-		if len(part) > 0 {
-			parts = append(parts, part)
-		}
+func SubstringIsSuffix(s1, s2 string) bool {
+	len1 := len(s1)
+	len2 := len(s2)
+	idx := strings.Index(s1, s2)
+	if len1 >= len2 && idx > -1 && idx == (len1-len2) {
+		return true
 	}
-	return parts
-}
-
-func SliceCondenseAndQuoteSpace(items []string, quoteLeft, quoteRight string) []string {
-	return SliceCondenseAndQuote(items, " ", " ", quoteLeft, quoteRight)
-}
-
-func SliceCondenseAndQuote(items []string, trimLeft, trimRight, quoteLeft, quoteRight string) []string {
-	newItems := []string{}
-	for _, item := range items {
-		item = strings.TrimLeft(item, trimLeft)
-		item = strings.TrimRight(item, trimRight)
-		if len(item) > 0 {
-			item = quoteLeft + item + quoteRight
-			newItems = append(newItems, item)
-		}
-	}
-	return newItems
-}
-
-// SplitTrimSpace splits a string and trims spaces on
-// remaining elements.
-func SplitTrimSpace(s, sep string) []string {
-	split := strings.Split(s, sep)
-	strs := []string{}
-	for _, str := range split {
-		strs = append(strs, strings.TrimSpace(str))
-	}
-	return strs
+	return false
 }
 
 // SplitCondenseSpace splits a string and trims spaces on

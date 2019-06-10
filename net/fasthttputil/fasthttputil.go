@@ -3,7 +3,7 @@ package fasthttputil
 import (
 	"strings"
 
-	"github.com/grokify/gotilla/strings/stringsutil"
+	"github.com/grokify/gotilla/type/stringsutil"
 	"github.com/valyala/fasthttp"
 )
 

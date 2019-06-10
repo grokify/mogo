@@ -17,6 +17,13 @@ type mustMarhshalError struct {
 	MustMarhshalError string `json:"must_marshal_error"`
 }
 
+func MarshalSimple(v interface{}, prefix, indent string) ([]byte, error) {
+	if prefix == "" && indent == "" {
+		return json.Marshal(v)
+	}
+	return json.MarshalIndent(v, prefix, indent)
+}
+
 func MustMarshal(i interface{}, embedError bool) []byte {
 	bytes, err := json.Marshal(i)
 	if err != nil {
