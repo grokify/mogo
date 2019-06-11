@@ -8,6 +8,7 @@ var emoji2AsciiTests = []struct {
 	v    string
 	want string
 }{
+	{`:+1:`, `+1`},
 	{`:sweat_smile:`, `':)`},
 	{`:confused: :sweat_smile:`, `>:\ ':)`},
 }

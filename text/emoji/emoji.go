@@ -5,7 +5,9 @@ import (
 	"strings"
 )
 
-const gomojiRaw string = `:angry:	:@
+const gomojiRaw string = `
+:+1: +1
+:angry:	:@
 :broken_heart:	</3
 :confused:	>:\
 :cry:	:'(
@@ -45,7 +47,7 @@ func GetEmojiToAsciiMap() map[string]Emoji {
 			emoji := Emoji{
 				Emoji: parts[0],
 				Ascii: parts[1],
-				Regex: regexp.MustCompile(parts[0])}
+				Regex: regexp.MustCompile(regexp.QuoteMeta(parts[0]))}
 			data[parts[0]] = emoji
 		}
 	}
@@ -67,11 +69,11 @@ func NewConverter() Converter {
 }
 
 func (conv *Converter) EmojiToAscii(input string) string {
-	rx := regexp.MustCompile(`:[a-z_]+:`)
+	rx := regexp.MustCompile(`:\+?[0-9a-z_]+:`)
 	matches := rx.FindAllString(input, -1)
 	output := input
-	for _, emoji := range matches {
-		if einfo, ok := conv.data[emoji]; ok {
+	for _, emo := range matches {
+		if einfo, ok := conv.data[emo]; ok {
 			output = einfo.Regex.ReplaceAllString(output, einfo.Ascii)
 		}
 	}
