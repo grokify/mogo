@@ -28,3 +28,17 @@ func UrlToMarkdownLinkHostname(url string) string {
 	}
 	return url
 }
+
+// SkypeToMarkdown converts Skype markup to Markdown. This is specifically
+// useful for converting Slack messages to Markdown.
+func SkypeToMarkdown(input string) string {
+	output := input
+	rx := regexp.MustCompile(`<([^><\|]*?)\|([^>]*?)>`)
+	m := rx.FindAllStringSubmatch(input, -1)
+	for _, n := range m {
+		mkdn := fmt.Sprintf("[%s](%s)", n[2], n[1])
+		rxlink := regexp.MustCompile(regexp.QuoteMeta(n[0]))
+		output = rxlink.ReplaceAllString(output, mkdn)
+	}
+	return output
+}
