@@ -1,5 +1,11 @@
 package emoji
 
+/*
+https://emojipedia.org/github/
+http://emojicodes.com/
+https://unicode.org/emoji/charts/full-emoji-list.html
+*/
+
 import (
 	"regexp"
 	"strings"
@@ -16,7 +22,7 @@ const gomojiRaw string = `
 :expressionless:	-_-
 :fearful:	D:
 :flushed:	:$
-:frowning: :(
+:frowning: :( 🙁
 :heart:	<3
 :innocent:	O:)
 :joy:	:')
@@ -27,13 +33,14 @@ const gomojiRaw string = `
 :open_mouth:	>:O
 :persevere:	>.<
 :slight_smile:	:)
+:smile: :) 😀
 :smiley:	:D
 :stuck_out_tongue:	:P
 :stuck_out_tongue_winking_eye:	>:P
 :sunglasses:	B)
 :sweat:	':(
 :sweat_smile:	':)
-:wink:	;)`
+:wink: ;) 😉`
 
 func GetEmojiToAsciiMap() map[string]Emoji {
 	data := map[string]Emoji{}
@@ -43,29 +50,36 @@ func GetEmojiToAsciiMap() map[string]Emoji {
 		line = strings.TrimSpace(line)
 		line = rx.ReplaceAllString(line, " ")
 		parts := strings.Split(line, " ")
-		if len(parts) == 2 {
-			emoji := Emoji{
-				Emoji: parts[0],
-				Ascii: parts[1],
-				Regex: regexp.MustCompile(regexp.QuoteMeta(parts[0]))}
-			data[parts[0]] = emoji
+		if len(parts) == 2 || len(parts) == 3 {
+			emo := Emoji{
+				Shortcode:   strings.TrimSpace(parts[0]),
+				Ascii:       strings.TrimSpace(parts[1]),
+				ShortcodeRx: regexp.MustCompile(regexp.QuoteMeta(parts[0]))}
+			if len(parts) == 3 {
+				emo.Unicode = strings.TrimSpace(parts[2])
+			}
+			data[parts[0]] = emo
 		}
 	}
 	return data
 }
 
 type Emoji struct {
-	Ascii string
-	Emoji string
-	Regex *regexp.Regexp
+	Ascii       string
+	Shortcode   string
+	Unicode     string
+	ShortcodeRx *regexp.Regexp
 }
 
 type Converter struct {
-	data map[string]Emoji
+	data       map[string]Emoji
+	UseUnicode bool
 }
 
 func NewConverter() Converter {
-	return Converter{data: GetEmojiToAsciiMap()}
+	return Converter{
+		data:       GetEmojiToAsciiMap(),
+		UseUnicode: true}
 }
 
 func (conv *Converter) EmojiToAscii(input string) string {
@@ -74,7 +88,11 @@ func (conv *Converter) EmojiToAscii(input string) string {
 	output := input
 	for _, emo := range matches {
 		if einfo, ok := conv.data[emo]; ok {
-			output = einfo.Regex.ReplaceAllString(output, einfo.Ascii)
+			if conv.UseUnicode && len(einfo.Unicode) > 0 {
+				output = einfo.ShortcodeRx.ReplaceAllString(output, einfo.Unicode)
+			} else {
+				output = einfo.ShortcodeRx.ReplaceAllString(output, einfo.Ascii)
+			}
 		}
 	}
 	return output
