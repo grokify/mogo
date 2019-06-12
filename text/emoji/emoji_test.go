@@ -5,20 +5,25 @@ import (
 )
 
 var emoji2AsciiTests = []struct {
-	v    string
-	want string
+	v           string
+	wantAscii   string
+	wantUnicode string
 }{
-	{`:+1:`, `+1`},
-	{`:sweat_smile:`, `':)`},
-	{`:confused: :sweat_smile:`, `>:\ ':)`},
+	{`:+1:`, `+1`, `+1`},
+	{`:sweat_smile:`, `':)`, `😅`},
+	{`:confused: :sweat_smile:`, `>:\ ':)`, `😕 😅`},
 }
 
 func TestEmojiToAscii(t *testing.T) {
 	conv := NewConverter()
 	for _, tt := range emoji2AsciiTests {
-		got := conv.EmojiToAscii(tt.v)
-		if got != tt.want {
-			t.Errorf("converter.EmojiToAscii(\"%v\") Mismatch: want [%v] got [%v]", tt.v, tt.want, got)
+		gotAscii := conv.ConvertShortcodesString(tt.v, Ascii)
+		if gotAscii != tt.wantAscii {
+			t.Errorf("converter.ConvertString(\"%v\", Ascii) Mismatch: want [%v] got [%v]", tt.v, tt.wantAscii, gotAscii)
+		}
+		gotUnicode := conv.ConvertShortcodesString(tt.v, Unicode)
+		if gotUnicode != tt.wantUnicode {
+			t.Errorf("converter.ConvertString(\"%v\", Unicode) Mismatch: want [%v] got [%v]", tt.v, tt.wantUnicode, gotUnicode)
 		}
 	}
 }

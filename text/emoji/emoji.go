@@ -13,36 +13,36 @@ import (
 
 const gomojiRaw string = `
 :+1: +1
-:angry:	:@
-:broken_heart:	</3
-:confused:	>:\
-:cry:	:'(
-:disappointed:	:(
-:dizzy_face:	#)
-:expressionless:	-_-
-:fearful:	D:
-:flushed:	:$
-:frowning: :( 🙁
-:heart:	<3
-:innocent:	O:)
-:joy:	:')
+:angry:	:@	😠
+:broken_heart:	</3	💔
+:confused:	>:\ 😕
+:cry:	:'(	😢
+:disappointed:	:(	😞
+:dizzy_face:	#)	😵
+:expressionless:	-_-	😑
+:fearful:	D:	😨
+:flushed:	:$	😳
+:frowning:	:(	🙁
+:heart:	<3	🧡
+:innocent:	O:)	😇
+:joy:	:')	😂
 :kissing_heart:	:^*
-:laughing:	>:)
+:laughing:	>:)	😆
 :no_mouth:	:X
 :ok_woman:	*\0/*
-:open_mouth:	>:O
-:persevere:	>.<
-:slight_smile:	:)
-:smile: :) 😀
-:smiley:	:D
-:stuck_out_tongue:	:P
-:stuck_out_tongue_winking_eye:	>:P
-:sunglasses:	B)
-:sweat:	':(
-:sweat_smile:	':)
+:open_mouth:	>:O	😮
+:persevere:	>.<	😣
+:slight_smile:	:)	🙂
+:smile: :)	😀
+:smiley:	:D	😄
+:stuck_out_tongue:	:P	😛
+:stuck_out_tongue_winking_eye:	>:P	😜
+:sunglasses:	B)	😎
+:sweat:	':(	😰	
+:sweat_smile:	':)	😅
 :wink: ;) 😉`
 
-func GetEmojiToAsciiMap() map[string]Emoji {
+func GetEmojiDataShortcodeMap() map[string]Emoji {
 	data := map[string]Emoji{}
 	rx := regexp.MustCompile(`\s+`)
 	lines := strings.Split(gomojiRaw, "\n")
@@ -71,29 +71,36 @@ type Emoji struct {
 	ShortcodeRx *regexp.Regexp
 }
 
+type EmojiType int
+
+const (
+	Shortcode EmojiType = iota
+	Ascii
+	Unicode
+)
+
 type Converter struct {
-	data       map[string]Emoji
-	UseUnicode bool
+	data map[string]Emoji
 }
 
-func NewConverter() Converter {
-	return Converter{
-		data:       GetEmojiToAsciiMap(),
-		UseUnicode: true}
-}
+func NewConverter() Converter { return Converter{data: GetEmojiDataShortcodeMap()} }
 
-func (conv *Converter) EmojiToAscii(input string) string {
-	rx := regexp.MustCompile(`:\+?[0-9a-z_]+:`)
-	matches := rx.FindAllString(input, -1)
-	output := input
-	for _, emo := range matches {
-		if einfo, ok := conv.data[emo]; ok {
-			if conv.UseUnicode && len(einfo.Unicode) > 0 {
-				output = einfo.ShortcodeRx.ReplaceAllString(output, einfo.Unicode)
-			} else {
-				output = einfo.ShortcodeRx.ReplaceAllString(output, einfo.Ascii)
+func (conv *Converter) ConvertShortcodesString(input string, emoType EmojiType) string {
+	if emoType == Ascii || emoType == Unicode {
+		rx := regexp.MustCompile(`:\+?[0-9a-z_]+:`)
+		matches := rx.FindAllString(input, -1)
+		output := input
+		for _, emo := range matches {
+			if einfo, ok := conv.data[emo]; ok {
+				if emoType == Unicode && len(einfo.Unicode) > 0 {
+					output = einfo.ShortcodeRx.ReplaceAllString(output, einfo.Unicode)
+				} else {
+					output = einfo.ShortcodeRx.ReplaceAllString(output, einfo.Ascii)
+				}
+
 			}
 		}
+		return output
 	}
-	return output
+	return input
 }
