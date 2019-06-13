@@ -1,5 +1,7 @@
 package filepathutil
 
+// $ go get github.com/grokify/gotilla/git/apps/gitremoteaddupstream
+
 import (
 	"os"
 	"strconv"

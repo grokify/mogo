@@ -26,7 +26,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	gitCmd := fmt.Sprintf("remote add upstream https://github.com/%s/%s.git", opts.Parent, leafDir)
+	gitCmd := fmt.Sprintf("git remote add upstream https://github.com/%s/%s.git", opts.Parent, leafDir)
 	fmt.Printf("CMD: %s\n", gitCmd)
 	if len(opts.Exec) > 0 {
 		_, _, err := cmdutil.ExecSimple(gitCmd)
