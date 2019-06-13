@@ -9,6 +9,8 @@ import (
 	"github.com/jessevdk/go-flags"
 )
 
+// $ go get github.com/grokify/gotilla/git/apps/gitremoteaddupstream
+
 type cliOptions struct {
 	Parent string `short:"p" long:"parent" description:"GitHub parent user" required:"true"`
 	Exec   []bool `short:"e" long:"exec" description:"execute" required:"false"`
@@ -33,7 +35,8 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("Executed")
+		fmt.Println("Executed...")
+		fmt.Println("Common next steps:\n$ git fetch upstream\n$ git merge upstream/master\n$ git push origin master")
 	}
 
 	fmt.Println("DONE")
