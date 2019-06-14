@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/grokify/gotilla/cmd/cmdutil"
 	"github.com/grokify/gotilla/path/filepathutil"
@@ -28,7 +29,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	gitCmd := fmt.Sprintf("git remote add upstream https://github.com/%s/%s.git", opts.Parent, leafDir)
+	gitCmd := fmt.Sprintf("git remote add upstream https://github.com/%s/%s.git", strings.TrimSpace(opts.Parent), leafDir)
 	fmt.Printf("CMD: %s\n", gitCmd)
 	if len(opts.Exec) > 0 {
 		_, _, err := cmdutil.ExecSimple(gitCmd)
