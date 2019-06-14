@@ -125,6 +125,8 @@ const gomojiRaw string = `
 > UP_EMOJI = %w(:relaxed: :smiley: :relieved: :green_heart: :+1: :ok_hand: :sunny: :beers: :white_check_mark:)
 */
 
+var rxEmojiShortcode *regexp.Regexp = regexp.MustCompile(`:\+?[0-9a-z_]+:`)
+
 func GetEmojiDataShortcodeMap() map[string]Emoji {
 	data := map[string]Emoji{}
 	rx := regexp.MustCompile(`\s+`)
@@ -174,8 +176,7 @@ func (conv *Converter) ConvertShortcodesString(input string, emoType EmojiType) 
 	if emoType == Shortcode {
 		return input
 	}
-	rx := regexp.MustCompile(`:\+?[0-9a-z_]+:`)
-	matches := rx.FindAllString(input, -1)
+	matches := rxEmojiShortcode.FindAllString(input, -1)
 	output := input
 	for _, emoShortcode := range matches {
 		if einfo, ok := conv.data[emoShortcode]; ok {
