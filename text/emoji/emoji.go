@@ -32,12 +32,12 @@ const gomojiRaw string = `
 :ok_woman:	*\0/*
 :open_mouth:	😮	>:O
 :persevere:	😣	>.<
-:relaxed:	😌
+:relaxed:	🙂
 :relieved:	😌
 :scream:	😱
 :slight_smile:	🙂	:)
 :smile:	😀	:)
-:smiley:	😄	:D
+:smiley:	😃	:D
 :snowflake:	❄
 :snowman:	☃
 :stuck_out_tongue:	😛	:P
