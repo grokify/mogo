@@ -5,6 +5,12 @@ import (
 	"regexp"
 )
 
+var (
+	rxHttpUrlPrefix *regexp.Regexp = regexp.MustCompile(`^(i?)https?://`)
+	rxSkypeLink     *regexp.Regexp = regexp.MustCompile(`<([^><\|]*?)\|([^>]*?)>`)
+	rxBacktick3     *regexp.Regexp = regexp.MustCompile(`^\s*` + "```.+```" + `\s*$`)
+)
+
 // BoldText bodifies the identified text. It looks for start of words
 // using a word boundary and will arbirarily end to match words with
 // different suffixes.
@@ -30,15 +36,21 @@ func UrlToMarkdownLinkHostname(url string) string {
 }
 
 // SkypeToMarkdown converts Skype markup to Markdown. This is specifically
-// useful for converting Slack messages to Markdown.
-func SkypeToMarkdown(input string) string {
+// useful for converting Slack messages to Markdown. The `stripUrlAutoLink`
+// parameter will remove links when they are within 3 backticks and the
+// link innerHTML and URl match.
+func SkypeToMarkdown(input string, stripUrlAutoLink bool) string {
 	output := input
-	rx := regexp.MustCompile(`<([^><\|]*?)\|([^>]*?)>`)
-	m := rx.FindAllStringSubmatch(input, -1)
+	backtick3 := rxBacktick3.MatchString(output)
+	m := rxSkypeLink.FindAllStringSubmatch(input, -1)
 	for _, n := range m {
-		mkdn := fmt.Sprintf("[%s](%s)", n[2], n[1])
 		rxlink := regexp.MustCompile(regexp.QuoteMeta(n[0]))
-		output = rxlink.ReplaceAllString(output, mkdn)
+		if stripUrlAutoLink && backtick3 && n[1] == n[2] && rxHttpUrlPrefix.MatchString(n[1]) {
+			output = rxlink.ReplaceAllString(output, n[1])
+		} else {
+			mkdn := fmt.Sprintf("[%s](%s)", n[2], n[1])
+			output = rxlink.ReplaceAllString(output, mkdn)
+		}
 	}
 	return output
 }
