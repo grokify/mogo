@@ -9,6 +9,7 @@ var emoji2AsciiTests = []struct {
 	wantAscii   string
 	wantUnicode string
 }{
+	{`:-1:`, `-1`, `👎`},
 	{`:+1:`, `+1`, `👍`},
 	{`:sweat_smile:`, `':)`, `😅`},
 	{`:confused: :sweat_smile:`, `>:\ ':)`, `😕 😅`},

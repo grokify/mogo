@@ -95,7 +95,15 @@ const gomojiRaw string = `
 :crying_cat:	😿
 :grinning_cat:	😺
 :pouting_cat:	😾
-:weary_cat:	🙀`
+:weary_cat:	🙀
+
+:black_flag:	🏴
+:checkered_flag:	🏁
+:crossed_flags:	🎌
+:rainbow_flag:	🏳️‍🌈
+:triangular_flag:	🚩
+:white_flag:	🏳
+`
 
 /*
 :relaxed: Y
@@ -125,7 +133,7 @@ const gomojiRaw string = `
 > UP_EMOJI = %w(:relaxed: :smiley: :relieved: :green_heart: :+1: :ok_hand: :sunny: :beers: :white_check_mark:)
 */
 
-var rxEmojiShortcode *regexp.Regexp = regexp.MustCompile(`:\+?[0-9a-z_]+:`)
+var rxEmojiShortcode *regexp.Regexp = regexp.MustCompile(`:[\+\-]?[0-9a-z_]+:`)
 
 func GetEmojiDataShortcodeMap() map[string]Emoji {
 	data := map[string]Emoji{}
@@ -133,6 +141,9 @@ func GetEmojiDataShortcodeMap() map[string]Emoji {
 	lines := strings.Split(gomojiRaw, "\n")
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
+		if strings.Index(line, ":") != 0 {
+			continue
+		}
 		line = rx.ReplaceAllString(line, " ")
 		parts := strings.Split(line, " ")
 		if len(parts) == 2 || len(parts) == 3 {
