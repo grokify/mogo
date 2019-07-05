@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
@@ -229,6 +230,31 @@ func IsFileWithSizeGtZero(name string) (bool, error) {
 		// return fmt.Errorf("Filepath [%v] exists but is empty with size [%v].", name, fi.Size())
 	}
 	return true, nil
+}
+
+func SplitBetter(path string) (dir, file string) {
+	isDir, err := IsDir(path)
+	if err != nil && isDir {
+		return dir, ""
+	}
+	return filepath.Split(path)
+}
+
+func SplitBest(path string) (dir, file string, err error) {
+	isDir, err := IsDir(path)
+	if err != nil {
+		return "", "", err
+	} else if isDir {
+		return path, "", nil
+	}
+	isFile, err := IsFile(path)
+	if err != nil {
+		return "", "", err
+	} else if isFile {
+		dir, file := filepath.Split(path)
+		return dir, file, nil
+	}
+	return "", "", fmt.Errorf("Path is valid but not file or directory: [%v]", path)
 }
 
 func FilterFilenamesSizeGtZero(filepaths ...string) []string {
