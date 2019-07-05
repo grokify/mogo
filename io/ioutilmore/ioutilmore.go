@@ -257,6 +257,19 @@ func SplitBest(path string) (dir, file string, err error) {
 	return "", "", fmt.Errorf("Path is valid but not file or directory: [%v]", path)
 }
 
+func FileinfosToFilepaths(dir string, fileInfos []os.FileInfo) []string {
+	dir = strings.TrimSpace(dir)
+	paths := []string{}
+	for _, fi := range fileInfos {
+		if len(dir) > 0 {
+			paths = append(paths, filepath.Join(dir, fi.Name()))
+		} else {
+			paths = append(paths, fi.Name())
+		}
+	}
+	return paths
+}
+
 func FilterFilenamesSizeGtZero(filepaths ...string) []string {
 	filepathsExist := []string{}
 
