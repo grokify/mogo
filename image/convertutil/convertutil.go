@@ -23,7 +23,7 @@ brew install imagemagick
 const (
 	PdfWidth                      = 1950 // Ideal max image width
 	PdfHeight                     = 2350 // Ideal max image height
-	KindleWidth                   = 1400 // 600
+	KindleWidth                   = 600  // 1400
 	PressDpi                      = 300
 	WebDpi                        = 72
 	ResolutionPixelsPerInchString = "PixelsPerInch"
