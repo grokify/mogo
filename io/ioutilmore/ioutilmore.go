@@ -19,6 +19,14 @@ import (
 	"github.com/grokify/gotilla/type/maputil"
 )
 
+type FileType int
+
+const (
+	File FileType = iota
+	Directory
+	Any
+)
+
 func CopyFile(src, dst string) (err error) {
 	r, err := os.Open(src)
 	if err != nil {
@@ -101,6 +109,30 @@ func DirEntriesReSizeGt0(dir string, rx1 *regexp.Regexp) ([]os.FileInfo, error) 
 			if len(rs1) > 0 {
 				filesMatch = append(filesMatch, f)
 			}
+		}
+	}
+	return filesMatch, nil
+}
+
+func DirEntriesRxSizeGt0(dir string, fileFilter FileType, rx1 *regexp.Regexp) ([]os.FileInfo, error) {
+	filesMatch := []os.FileInfo{}
+	filesAll, e := ioutil.ReadDir(dir)
+	if e != nil {
+		return filesMatch, e
+	}
+	for _, fi := range filesAll {
+		if fi.Name() == "." || fi.Name() == ".." {
+			continue
+		} else if fileFilter == Directory && !fi.Mode().IsDir() {
+			continue
+		} else if fileFilter == File && !fi.Mode().IsRegular() {
+			continue
+		} else if fi.Size() <= int64(0) {
+			continue
+		}
+		rs1 := rx1.FindStringSubmatch(fi.Name())
+		if len(rs1) > 0 {
+			filesMatch = append(filesMatch, fi)
 		}
 	}
 	return filesMatch, nil
