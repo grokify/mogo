@@ -96,9 +96,9 @@ func FileInfosSplit(all []os.FileInfo, inclDotDirs bool) ([]os.FileInfo, []os.Fi
 
 func DirEntriesReSizeGt0(dir string, rx1 *regexp.Regexp) ([]os.FileInfo, error) {
 	filesMatch := []os.FileInfo{}
-	filesAll, e := ioutil.ReadDir(dir)
-	if e != nil {
-		return filesMatch, e
+	filesAll, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return filesMatch, err
 	}
 	for _, f := range filesAll {
 		if f.Name() == "." || f.Name() == ".." {
@@ -116,9 +116,9 @@ func DirEntriesReSizeGt0(dir string, rx1 *regexp.Regexp) ([]os.FileInfo, error) 
 
 func DirEntriesRxSizeGt0(dir string, fileFilter FileType, rx1 *regexp.Regexp) ([]os.FileInfo, error) {
 	filesMatch := []os.FileInfo{}
-	filesAll, e := ioutil.ReadDir(dir)
-	if e != nil {
-		return filesMatch, e
+	filesAll, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return filesMatch, err
 	}
 	for _, fi := range filesAll {
 		if fi.Name() == "." || fi.Name() == ".." {
