@@ -1,4 +1,4 @@
-package bigutil
+package bigint
 
 import (
 	"math/big"
@@ -20,7 +20,7 @@ func TestPowInt(t *testing.T) {
 	for _, tt := range powBigIntTests {
 		x := big.NewInt(tt.x)
 		y := big.NewInt(tt.y)
-		pow := PowInt(x, y)
+		pow := Pow(x, y)
 
 		if pow.String() != tt.want {
 			t.Errorf("bigutil.PowInt(%v,%v): want [%v], got [%v]", tt.x, tt.y, tt.want, pow.String())

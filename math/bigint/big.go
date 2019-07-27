@@ -1,4 +1,4 @@
-package bigutil
+package bigint
 
 import (
 	"fmt"
@@ -31,33 +31,39 @@ func IntToHex(n *big.Int) string {
 	return fmt.Sprintf("%x", n)
 }
 
+// DivInt devides a by b and returns a new `*big.Int`
+func Div(a, b *big.Int) *big.Int {
+	amodn := new(big.Int)
+	return amodn.Div(a, b)
+}
+
 // ModInt performs `a mod n`
-func ModInt(a, n *big.Int) *big.Int {
+func Mod(a, n *big.Int) *big.Int {
 	amodn := new(big.Int)
 	return amodn.Mod(a, n)
 }
 
 // IsEqualInt checks if a == b.
-func IsEqualInt(a, b *big.Int) bool {
+func IsEqual(a, b *big.Int) bool {
 	return a.String() == b.String()
 }
 
 // CopyInt returns a copy of a `*big.Int`
-func CopyInt(i *big.Int) *big.Int {
+func Copy(i *big.Int) *big.Int {
 	newInt := new(big.Int)
 	newInt.SetString(i.String(), 10)
 	return newInt
 }
 
 // PowInt is the power function for big ints.
-func PowInt(x *big.Int, y *big.Int) *big.Int {
+func Pow(x *big.Int, y *big.Int) *big.Int {
 	if y.Sign() < 1 {
 		return big.NewInt(1)
 	} else if x.Sign() == 0 {
 		return big.NewInt(0)
 	}
-	res := CopyInt(x)
-	cyc := CopyInt(y)
+	res := Copy(x)
+	cyc := Copy(y)
 	one := big.NewInt(1)
 	for {
 		if cyc.Cmp(one) < 1 {
