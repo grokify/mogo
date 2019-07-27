@@ -31,33 +31,35 @@ func IntToHex(n *big.Int) string {
 	return fmt.Sprintf("%x", n)
 }
 
-// DivInt devides a by b and returns a new `*big.Int`
+// Div devides a by b and returns a new `*big.Int`
 func Div(a, b *big.Int) *big.Int {
 	amodn := new(big.Int)
 	return amodn.Div(a, b)
 }
 
-// ModInt performs `a mod n`
+// Mod performs `a mod n`
 func Mod(a, n *big.Int) *big.Int {
 	amodn := new(big.Int)
 	return amodn.Mod(a, n)
 }
 
-// IsEqualInt checks if a == b.
+// IsEqual checks if a == b.
 func IsEqual(a, b *big.Int) bool {
 	return a.String() == b.String()
 }
 
-// CopyInt returns a copy of a `*big.Int`
+// Copy returns a copy of a `*big.Int`
 func Copy(i *big.Int) *big.Int {
 	newInt := new(big.Int)
 	newInt.SetString(i.String(), 10)
 	return newInt
 }
 
-// PowInt is the power function for big ints.
+// Pow is the power function for big ints.
 func Pow(x *big.Int, y *big.Int) *big.Int {
-	if y.Sign() < 1 {
+	if y.String() == "1" {
+		return Copy(x)
+	} else if y.Sign() < 1 {
 		return big.NewInt(1)
 	} else if x.Sign() == 0 {
 		return big.NewInt(0)
@@ -65,12 +67,9 @@ func Pow(x *big.Int, y *big.Int) *big.Int {
 	res := Copy(x)
 	cyc := Copy(y)
 	one := big.NewInt(1)
-	for {
-		if cyc.Cmp(one) < 1 {
-			break
-		}
+	for cyc.Cmp(one) > 0 {
 		res = res.Mul(res, x)
-		cyc = cyc.Sub(cyc, big.NewInt(1))
+		cyc = cyc.Sub(cyc, one)
 	}
 	return res
 }
