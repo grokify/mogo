@@ -5,11 +5,15 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/grokify/base36"
 	"github.com/grokify/gotilla/math/bigint"
 )
+
+// Md5Base36Length is the length for a MD5 Base36 string
+const Md5Base36Length int = 25
 
 // Encode36 returns an encoded string given a byte array.
 func Encode36(ba []byte) string {
@@ -40,7 +44,7 @@ func Decode36String(s36 string) ([]byte, error) {
 
 // Md5Base36 returns a Base36 encoded MD5 hash of a string.
 func Md5Base36(s string) string {
-	return fmt.Sprintf("%025s",
+	return fmt.Sprintf(`%0`+strconv.Itoa(Md5Base36Length)+`s`,
 		Encode36HexString(fmt.Sprintf("%x", md5.Sum([]byte(s)))))
 }
 
