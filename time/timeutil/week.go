@@ -36,14 +36,11 @@ func NextWeekday(dow time.Weekday) time.Time {
 	now := time.Now()
 	today := now.Weekday()
 	if dow == today {
-		//dur := tu.MustParseDuration("7d")
 		return now.Add(NewDurationDays(7))
 	} else if dow > today {
-		days := int(dow) - int(today)
-		//dur := tu.MustParseDuration(fmt.Sprintf("%dd", days))
-		return now.Add(NewDurationDays(uint16(days)))
+		return now.Add(NewDurationDays(
+			uint16(int(dow) - int(today))))
 	}
-	days := int(today) - int(dow) + 7
-	//dur := tu.MustParseDuration(fmt.Sprintf("%dd", days))
-	return now.Add(NewDurationDays(uint16(days)))
+	return now.Add(NewDurationDays(uint16(
+		int(today) - int(dow) + 7)))
 }
