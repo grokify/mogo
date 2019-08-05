@@ -25,10 +25,13 @@ const (
 	HeaderXContentTypeOptions          = "X-Content-Type-Options"
 	ContentTypeAppJsonUtf8             = "application/json; charset=utf-8"
 	ContentTypeAppFormUrlEncoded       = "application/x-www-form-urlencoded"
+	ContentTypeAppXml                  = "application/xml"
+	ContentTypeAppXmlUtf8              = "application/xml; charset=utf-8"
 	ContentTypeTextCalendarUtf8Request = `text/calendar; charset="utf-8"; method=REQUEST`
 	ContentTypeTextHtmlUtf8            = "text/html; charset=utf-8"
 	ContentTypeTextPlainUsAscii        = "text/plain; charset=us-ascii"
 	ContentTypeTextPlainUtf8           = "text/plain; charset=utf-8"
+	ContentTypeTextXmlUtf8             = "text/xml; charset=utf-8"
 	SchemeHTTPS                        = "https"
 )
 
