@@ -5,24 +5,15 @@ package filepathutil
 import (
 	"os"
 	"os/user"
-	"strconv"
 	"strings"
 )
-
-func PathSeparatorString() (string, error) {
-	return strconv.Unquote(strconv.QuoteRune(os.PathSeparator))
-}
 
 func CurLeafDir() (string, error) {
 	dir, err := os.Getwd()
 	if err != nil {
 		return "", err
 	}
-	sep, err := PathSeparatorString()
-	if err != nil {
-		return "", err
-	}
-	dirParts := strings.Split(dir, sep)
+	dirParts := strings.Split(dir, string(os.PathSeparator))
 	if len(dirParts) > 0 {
 		return dirParts[len(dirParts)-1], nil
 	}
