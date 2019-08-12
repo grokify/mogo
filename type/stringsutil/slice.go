@@ -20,6 +20,23 @@ func SliceTrimSpace(slice []string) []string {
 	return trimmed
 }
 
+func SliceIndexOrEmpty(s []string, index uint64) string {
+	if int(index) >= len(s) {
+		return ""
+	}
+	return s[index]
+}
+
+/*
+func FirstOrEmpty(s []string) string {
+	if len(s) > 0 {
+		return s[0]
+	}
+	return ""
+}
+
+}*/
+
 // JoinAny takes an array of interface{} and converts
 // each value to a string using fmt.Sprintf("%v")
 func JoinAny(a []interface{}, sep string) string {
