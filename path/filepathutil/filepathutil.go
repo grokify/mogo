@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// CurLeafDir returns the leaf dir of a nested directory.
 func CurLeafDir() (string, error) {
 	dir, err := os.Getwd()
 	if err != nil {
