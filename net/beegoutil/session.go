@@ -15,7 +15,7 @@ const (
 )
 
 // InitSession creates a starts session management https://beego.me/docs/module/session.md
-func InitSession(sessionProvider string, sessionConfig *session.ManagerConfig) {
+func InitSession(sessionProvider string, sessionConfig *session.ManagerConfig, log *BeegoLogsMore) {
 	sessionProvider = strings.TrimSpace(sessionProvider)
 	if len(sessionProvider) == 0 {
 		sessionProvider = strings.TrimSpace(
@@ -40,7 +40,6 @@ func InitSession(sessionProvider string, sessionConfig *session.ManagerConfig) {
 	} else {
 		sessionConfig.CookieName = BeegoSessionCookieNameDefault
 	}
-
 	globalSessions, _ := session.NewManager(sessionProvider, sessionConfig)
 	go globalSessions.GC()
 }
