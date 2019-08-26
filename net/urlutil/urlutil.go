@@ -106,8 +106,8 @@ var (
 	rxUriScheme    *regexp.Regexp = regexp.MustCompile(`^([A-Za-z][0-9A-Za-z]*:/)`)
 )
 
-// UriCondense trims spaces and condenses slashes.
-func UriCondense(uri string) string {
+// CondenseUri trims spaces and condenses slashes.
+func CondenseUri(uri string) string {
 	return rxUriScheme.ReplaceAllString(
 		rxFwdSlashMore.ReplaceAllString(strings.TrimSpace(uri), "/"),
 		"${1}/")
