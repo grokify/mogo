@@ -27,6 +27,7 @@ var condenseUriTests = []struct {
 	want string
 }{
 	{"https://abc//def//", "https://abc/def/"},
+	{"https:/abc//def//", "https://abc/def/"},
 	{"  https://abc//def//  ", "https://abc/def/"},
 	{"https://////abc///def/", "https://abc/def/"}}
 
