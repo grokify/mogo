@@ -21,3 +21,21 @@ func TestToSlugLowerString(t *testing.T) {
 		}
 	}
 }
+
+var uriCondenseTests = []struct {
+	v    string
+	want string
+}{
+	{"https://abc//def//", "https://abc/def/"},
+	{"  https://abc//def//  ", "https://abc/def/"},
+	{"https://////abc///def/", "https://abc/def/"}}
+
+func TestUriCondense(t *testing.T) {
+	for _, tt := range uriCondenseTests {
+		try := tt.v
+		got := UriCondense(try)
+		if got != tt.want {
+			t.Errorf("UriCondense(%v) failed want [%v] got [%v]", tt.v, tt.want, got)
+		}
+	}
+}

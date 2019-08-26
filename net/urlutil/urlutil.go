@@ -100,3 +100,15 @@ func GetURLPostBody(absoluteUrl string, bodyType string, reqBody io.Reader) ([]b
 func JoinAbsolute(elem ...string) string {
 	return regexp.MustCompile(`^([A-Za-z]+:/)`).ReplaceAllString(path.Join(elem...), "${1}/")
 }
+
+var (
+	rxFwdSlashMore *regexp.Regexp = regexp.MustCompile(`/+`)
+	rxUriScheme    *regexp.Regexp = regexp.MustCompile(`^([A-Za-z][0-9A-Za-z]*:/)`)
+)
+
+// UriCondense trims spaces and condenses slashes.
+func UriCondense(uri string) string {
+	return rxUriScheme.ReplaceAllString(
+		rxFwdSlashMore.ReplaceAllString(strings.TrimSpace(uri), "/"),
+		"${1}/")
+}
