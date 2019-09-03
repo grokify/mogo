@@ -126,3 +126,19 @@ func SliceToSingleIntOrNeg(vals []string) int {
 	}
 	return num
 }
+
+// Dedupe returns a string slice with duplicate values
+// removed. First observance is kept.
+func Dedupe(vals []string) []string {
+	deduped := []string{}
+	seen := map[string]int{}
+
+	for _, val := range vals {
+		if _, ok := seen[val]; ok {
+			continue
+		}
+		seen[val] = 1
+		deduped = append(deduped, val)
+	}
+	return deduped
+}
