@@ -64,6 +64,18 @@ func MapSSEqual(a, b map[string]string) bool {
 	return true
 }
 
+func MapSSToKeyValues(kvs map[string]string, sep string) string {
+	pairs := []string{}
+	for k, v := range kvs {
+		k = strings.Trim(k, sep)
+		v = strings.Trim(v, sep)
+		if len(k) > 0 {
+			pairs = append(pairs, k+"="+v)
+		}
+	}
+	return strings.Join(pairs, sep)
+}
+
 type MapInt64Int64 map[int64]int64
 
 func (m MapInt64Int64) KeysSorted() []int64 {
