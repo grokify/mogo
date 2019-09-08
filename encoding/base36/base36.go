@@ -58,7 +58,7 @@ func Md5String(s string) string {
 /*
 GMP Versions
 
-import "github.com/grokify/gmp"
+//import "github.com/grokify/gmp"
 
 // Encode36String returns an encoded string given a byte array.
 func Encode36(ba []byte) string {
