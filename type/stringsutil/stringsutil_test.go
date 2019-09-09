@@ -97,7 +97,7 @@ var toOppositeTests = []struct {
 	v    string
 	want string
 }{
-	{LowerUpper, UpperLower},
+	{lowerUpper, upperLower},
 	{"hello", "HELLO"},
 	{"Hello", "hELLO"},
 	{"HELLO", "hello"},

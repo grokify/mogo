@@ -14,10 +14,10 @@ const (
 	StringToLower     = "StringToLower"
 	SpaceToHyphen     = "SpaceToHyphen"
 	SpaceToUnderscore = "SpaceToUnderscore"
-	UpperAZ           = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	LowerAZ           = "abcdefghijklmnopqrstuvwxyz"
-	LowerUpper        = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	UpperLower        = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+	lowerAZ           = "abcdefghijklmnopqrstuvwxyz"
+	upperAZ           = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	lowerUpper        = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	upperLower        = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 )
 
 var (
@@ -266,5 +266,5 @@ func StringToConstant(s string) string {
 }
 
 func ToOpposite(s string) string {
-	return xstrings.Translate(s, LowerUpper, UpperLower)
+	return xstrings.Translate(s, lowerUpper, upperLower)
 }
