@@ -92,3 +92,25 @@ func TestJoinLiterary(t *testing.T) {
 		}
 	}
 }
+
+var toOppositeTests = []struct {
+	v    string
+	want string
+}{
+	{LowerUpper, UpperLower},
+	{"hello", "HELLO"},
+	{"Hello", "hELLO"},
+	{"HELLO", "hello"},
+	{"1Hello", "1hELLO"},
+}
+
+func TestToOpposite(t *testing.T) {
+	for _, tt := range toOppositeTests {
+		got := ToOpposite(tt.v)
+
+		if got != tt.want {
+			t.Errorf("strutil.ToOpposite(%v) Error: want [%v], got [%v]",
+				tt.v, tt.want, got)
+		}
+	}
+}
