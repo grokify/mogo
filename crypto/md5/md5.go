@@ -47,10 +47,5 @@ func Md5Base62(s string) string {
 // may be more standard, e.g. used in GMP and follows ASCII
 // table order.
 func Md5Base62UpperFirst(s string) string {
-	i := big.NewInt(0)
-	i2, ok := i.SetString(fmt.Sprintf("%x", cryptomd5.Sum([]byte(s))), 16)
-	if !ok {
-		panic("E_CANNOT_CONVERT_HEX")
-	}
-	return fmt.Sprintf(md5Base62Format, stringsutil.ToOpposite(i2.Text(62)))
+	return stringsutil.ToOpposite(Md5Base62(s))
 }
