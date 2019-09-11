@@ -7,9 +7,11 @@ import (
 	"net/url"
 	"path"
 	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/google/go-querystring/query"
+	"github.com/grokify/gotilla/type/stringsutil"
 )
 
 // AppendURLValues appends one url.Values to another url.Values.
@@ -71,7 +73,7 @@ func BuildURLQueryString(baseUrl string, qry interface{}) string {
 // GetURLBody returns an HTTP response byte array body from
 // a URL.
 func GetURLBody(absoluteUrl string) ([]byte, error) {
-	req, err := http.NewRequest("GET", absoluteUrl, nil)
+	req, err := http.NewRequest(http.MethodGet, absoluteUrl, nil)
 	if err != nil {
 		return []byte{}, err
 	}
@@ -99,4 +101,54 @@ func GetURLPostBody(absoluteUrl string, bodyType string, reqBody io.Reader) ([]b
 // JoinAbsolute performs a path.Join() while preserving two slashes after the scheme.
 func JoinAbsolute(elem ...string) string {
 	return regexp.MustCompile(`^([A-Za-z]+:/)`).ReplaceAllString(path.Join(elem...), "${1}/")
+}
+
+var (
+	rxFwdSlashMore *regexp.Regexp = regexp.MustCompile(`/+`)
+	rxUriScheme    *regexp.Regexp = regexp.MustCompile(`^([A-Za-z][0-9A-Za-z]*:/)`)
+)
+
+// CondenseUri trims spaces and condenses slashes.
+func CondenseUri(uri string) string {
+	return rxUriScheme.ReplaceAllString(
+		rxFwdSlashMore.ReplaceAllString(strings.TrimSpace(uri), "/"),
+		"${1}/")
+}
+
+// UrlValuesStringSorted returns and encoded string with sorting
+func UrlValuesEncodeSorted(v url.Values, priorities []string) string {
+	encoded := []string{}
+	priorityKeys := map[string]int{}
+
+	priorities = stringsutil.Dedupe(priorities)
+
+	for _, key := range priorities {
+		if vals, ok := v[key]; ok {
+			sort.Strings(vals)
+			for _, val := range vals {
+				qry := url.QueryEscape(key) + "=" + url.QueryEscape(val)
+				encoded = append(encoded, qry)
+			}
+		}
+
+		priorityKeys[key] = 1
+	}
+
+	sortedKeys := []string{}
+	for k, _ := range v {
+		if _, ok := priorityKeys[k]; !ok {
+			sortedKeys = append(sortedKeys, k)
+		}
+	}
+	sort.Strings(sortedKeys)
+	for _, key := range sortedKeys {
+		if vals, ok := v[key]; ok {
+			sort.Strings(vals)
+			for _, val := range vals {
+				qry := url.QueryEscape(key) + "=" + url.QueryEscape(val)
+				encoded = append(encoded, qry)
+			}
+		}
+	}
+	return strings.Join(encoded, "&")
 }

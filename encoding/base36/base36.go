@@ -50,10 +50,15 @@ func Md5Base36(s string) string {
 		Encode36HexString(fmt.Sprintf("%x", md5.Sum([]byte(s)))))
 }
 
+// Md5String is an alias for Md5Base36.
+func Md5String(s string) string {
+	return Md5Base36(s)
+}
+
 /*
 GMP Versions
 
-import "github.com/grokify/gmp"
+//import "github.com/grokify/gmp"
 
 // Encode36String returns an encoded string given a byte array.
 func Encode36(ba []byte) string {

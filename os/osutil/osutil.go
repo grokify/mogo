@@ -109,21 +109,25 @@ func EnvFiltered(rx *regexp.Regexp) map[string]string {
 
 func AbsFilepath(path string) (string, error) {
 	path = strings.TrimSpace(path)
-	if filepath.IsAbs(path) {
+	if len(path) == 0 {
 		return path, nil
-	} else if path == "~" || path == "~/" {
-		if usr, err := user.Current(); err != nil {
-			return path, err
-		} else {
-			return usr.HomeDir, nil
-		}
-	} else if strings.Index(path, "~/") == 0 {
-		if usr, err := user.Current(); err != nil {
-			return path, err
-		} else {
-			return regexp.MustCompile(`^~/`).ReplaceAllString(path, usr.HomeDir+"/"), nil
-		}
-	} else {
+	} else if filepath.IsAbs(path) {
+		return path, nil
+	}
+	parts := strings.Split(path, string(os.PathSeparator))
+	if parts[0] != "~" {
 		return filepath.Abs(path)
 	}
+
+	usr, err := user.Current()
+	if err != nil {
+		return path, err
+	}
+	if len(parts) == 1 {
+		return usr.HomeDir, nil
+	}
+
+	return strings.Join(
+		append([]string{usr.HomeDir}, parts[1:]...),
+		string(os.PathSeparator)), nil
 }

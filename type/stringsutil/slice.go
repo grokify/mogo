@@ -20,6 +20,23 @@ func SliceTrimSpace(slice []string) []string {
 	return trimmed
 }
 
+func SliceIndexOrEmpty(s []string, index uint64) string {
+	if int(index) >= len(s) {
+		return ""
+	}
+	return s[index]
+}
+
+/*
+func FirstOrEmpty(s []string) string {
+	if len(s) > 0 {
+		return s[0]
+	}
+	return ""
+}
+
+}*/
+
 // JoinAny takes an array of interface{} and converts
 // each value to a string using fmt.Sprintf("%v")
 func JoinAny(a []interface{}, sep string) string {
@@ -108,4 +125,20 @@ func SliceToSingleIntOrNeg(vals []string) int {
 		return -1
 	}
 	return num
+}
+
+// Dedupe returns a string slice with duplicate values
+// removed. First observance is kept.
+func Dedupe(vals []string) []string {
+	deduped := []string{}
+	seen := map[string]int{}
+
+	for _, val := range vals {
+		if _, ok := seen[val]; ok {
+			continue
+		}
+		seen[val] = 1
+		deduped = append(deduped, val)
+	}
+	return deduped
 }

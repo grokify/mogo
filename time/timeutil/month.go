@@ -1,5 +1,12 @@
 package timeutil
 
+import (
+	"fmt"
+	"time"
+
+	"github.com/grokify/base36"
+)
+
 func DayofmonthToEnglish(i uint16) string {
 	days := []string{
 		"zeorth",
@@ -21,4 +28,12 @@ func DayofmonthToEnglish(i uint16) string {
 		return tenZero[quotient-1]
 	}
 	return tenPlus[quotient-1] + " " + days[remainder]
+}
+
+func YearMonthBase36(yyyy, mm uint64) string {
+	return fmt.Sprintf("%04s", base36.Encode(yyyy*100+mm))
+}
+
+func YearMonthBase36Time(dt time.Time) string {
+	return YearMonthBase36(uint64(dt.Year()), uint64(dt.Month()))
 }

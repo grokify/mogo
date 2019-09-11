@@ -6,12 +6,18 @@ import (
 	"sort"
 	"strings"
 	"unicode"
+
+	"github.com/huandu/xstrings"
 )
 
 const (
 	StringToLower     = "StringToLower"
 	SpaceToHyphen     = "SpaceToHyphen"
 	SpaceToUnderscore = "SpaceToUnderscore"
+	lowerAZ           = "abcdefghijklmnopqrstuvwxyz"
+	upperAZ           = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	lowerUpper        = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	upperLower        = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 )
 
 var (
@@ -257,4 +263,8 @@ func StringToConstant(s string) string {
 		}
 	}
 	return strings.Join(newParts, "")
+}
+
+func ToOpposite(s string) string {
+	return xstrings.Translate(s, lowerUpper, upperLower)
 }
