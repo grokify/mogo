@@ -111,6 +111,17 @@ func SumDurations(durations ...time.Duration) time.Duration {
 	return dur
 }
 
+// SubDuration subtracts one duration from another and
+// returns the result as a `time.Duration`.
+func SubDuration(dur1, dur2 time.Duration) time.Duration {
+	ns := dur1.Nanoseconds() - dur2.Nanoseconds()
+	diff, err := time.ParseDuration(fmt.Sprintf("%dns", ns))
+	if err != nil {
+		panic("err")
+	}
+	return diff
+}
+
 func DurationDays(dur time.Duration) int64 { return int64(dur.Hours()/24.0) + 1 }
 
 func DurationIsZero(dur time.Duration) bool {
