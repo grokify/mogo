@@ -2,6 +2,7 @@ package htmlutil
 
 import (
 	"html"
+	"regexp"
 	"strings"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -47,7 +48,14 @@ const (
 	RingCentralGreyHex   = "#585858"
 )
 
-var bluemondayStrictPolicy = bluemonday.StrictPolicy()
+var (
+	bluemondayStrictPolicy                      = bluemonday.StrictPolicy()
+	rxHtmlToTextNewLines         *regexp.Regexp = regexp.MustCompile(`(?i:</?p>)`)
+	rxCarriageReturnLineFeed     *regexp.Regexp = regexp.MustCompile(`\r\n`)
+	rxLineFeedMore2              *regexp.Regexp = regexp.MustCompile(`\n\n+`)
+	rxCarriageReturnLineFeedMore *regexp.Regexp = regexp.MustCompile(`[\r\n]+`)
+	rxEndingSpacesLineFeed       *regexp.Regexp = regexp.MustCompile(`\s+\n`)
+)
 
 // HTMLToTextCondensed removes HTML tags, unescapes HTML entities,
 // and removes extra whitespace including non-breaking spaces.
@@ -60,5 +68,19 @@ func HTMLToTextCondensed(s string) string {
 				),
 			)),
 		" ",
+	)
+}
+
+// HTMLToText converts HTML to multi-line text.
+func HTMLToText(s string) string {
+	return rxLineFeedMore2.ReplaceAllString(
+		strings.TrimSpace(
+			html.UnescapeString(
+				bluemondayStrictPolicy.Sanitize(
+					rxHtmlToTextNewLines.ReplaceAllString(s, "$1\n\n"),
+				),
+			),
+		),
+		"\n\n",
 	)
 }
