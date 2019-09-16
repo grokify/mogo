@@ -51,11 +51,30 @@ const (
 var (
 	bluemondayStrictPolicy                      = bluemonday.StrictPolicy()
 	rxHtmlToTextNewLines         *regexp.Regexp = regexp.MustCompile(`(?i:</?p>)`)
+	rxCarriageReturn             *regexp.Regexp = regexp.MustCompile(`\r`)
+	rxLineFeed                   *regexp.Regexp = regexp.MustCompile(`\n`)
+	rxLineFeedMore               *regexp.Regexp = regexp.MustCompile(`\n+`)
 	rxCarriageReturnLineFeed     *regexp.Regexp = regexp.MustCompile(`\r\n`)
 	rxLineFeedMore2              *regexp.Regexp = regexp.MustCompile(`\n\n+`)
 	rxCarriageReturnLineFeedMore *regexp.Regexp = regexp.MustCompile(`[\r\n]+`)
 	rxEndingSpacesLineFeed       *regexp.Regexp = regexp.MustCompile(`\s+\n`)
 )
+
+func StreamlineCRLFs(s string) string {
+	newLines := []string{}
+	extLines := strings.Split(s, "\n")
+	for _, line := range extLines {
+		newLines = append(newLines, strings.TrimSpace(line))
+	}
+	s2 := strings.Join(newLines, "\n")
+	s2 = rxLineFeedMore2.ReplaceAllString(
+		rxCarriageReturn.ReplaceAllString(
+			rxCarriageReturnLineFeed.ReplaceAllString(s2, "\n"),
+			"\n"),
+		"\n",
+	)
+	return s2
+}
 
 // HTMLToTextCondensed removes HTML tags, unescapes HTML entities,
 // and removes extra whitespace including non-breaking spaces.
@@ -82,5 +101,16 @@ func HTMLToText(s string) string {
 			),
 		),
 		"\n\n",
+	)
+}
+
+func TextToHtml(s string) string {
+	return rxLineFeed.ReplaceAllString(StreamlineCRLFs(s), "<br/>")
+}
+
+func TextToHtmlBr2(s string) string {
+	return rxLineFeed.ReplaceAllString(
+		rxLineFeedMore.ReplaceAllString(StreamlineCRLFs(s), "\n"),
+		"<br/><br/>",
 	)
 }
