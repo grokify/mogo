@@ -22,6 +22,10 @@ func NewDurationDays(days uint16) time.Duration {
 	return dur
 }
 
+func NewDurationStrings(h, m, s string) (time.Duration, error) {
+	return time.ParseDuration(fmt.Sprintf("%vh%vm%vs", h, m, s))
+}
+
 // ParseDuration adds days (d), weeks (w), years (y).
 func ParseDuration(s string) (time.Duration, error) {
 	rx := regexp.MustCompile(`(?i)^\s*(-?\d+)(d|w|y)\s*$`)
