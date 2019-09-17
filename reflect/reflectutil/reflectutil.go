@@ -27,3 +27,14 @@ func GetField(item interface{}, fieldPath ...string) (interface{}, error) {
 	}
 	return GetField(nextItem, fieldPath[1:]...)
 }
+
+// TypeName returns the name of a struct.
+// stackoverflow-answerId:1908967
+func TypeName(myvar interface{}) (res string) {
+	t := reflect.TypeOf(myvar)
+	for t.Kind() == reflect.Ptr {
+		t = t.Elem()
+		res += "*"
+	}
+	return res + t.Name()
+}
