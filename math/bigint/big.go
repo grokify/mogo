@@ -73,3 +73,11 @@ func Pow(x *big.Int, y *big.Int) *big.Int {
 	}
 	return res
 }
+
+// Int64Mod returns an int64 mod
+func Int64Mod(x, y int64) int64 {
+	xBig := big.NewInt(x)
+	yBig := big.NewInt(y)
+	xBig.Mod(xBig, yBig)
+	return xBig.Int64()
+}

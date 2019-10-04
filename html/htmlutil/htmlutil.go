@@ -76,9 +76,9 @@ func StreamlineCRLFs(s string) string {
 	return s2
 }
 
-// HTMLToTextCondensed removes HTML tags, unescapes HTML entities,
+// HtmlToTextCondensed removes HTML tags, unescapes HTML entities,
 // and removes extra whitespace including non-breaking spaces.
-func HTMLToTextCondensed(s string) string {
+func HtmlToTextCondensed(s string) string {
 	return strings.Join(
 		strings.Fields(
 			html.UnescapeString(
@@ -89,8 +89,8 @@ func HTMLToTextCondensed(s string) string {
 	)
 }
 
-// HTMLToText converts HTML to multi-line text.
-func HTMLToText(s string) string {
+// HtmlToText converts HTML to multi-line text.
+func HtmlToText(s string) string {
 	return rxLineFeedMore2.ReplaceAllString(
 		strings.TrimSpace(
 			html.UnescapeString(
@@ -101,6 +101,19 @@ func HTMLToText(s string) string {
 		),
 		"\n\n",
 	)
+}
+
+func SimplifyHtmlText(s string) string {
+	text := HtmlToText(s)
+	lines := strings.Split(text, "\n")
+	newlines := []string{}
+	for _, line := range lines {
+		line := strings.TrimSpace(line)
+		if len(line) > 0 {
+			newlines = append(newlines, "<p>"+line+"</p>")
+		}
+	}
+	return strings.Join(newlines, "")
 }
 
 func TextToHtml(s string) string {
