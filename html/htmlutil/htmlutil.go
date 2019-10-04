@@ -81,11 +81,10 @@ func StreamlineCRLFs(s string) string {
 func HTMLToTextCondensed(s string) string {
 	return strings.Join(
 		strings.Fields(
-			strings.TrimSpace(
-				html.UnescapeString(
-					bluemondayStrictPolicy.Sanitize(s),
-				),
-			)),
+			html.UnescapeString(
+				bluemondayStrictPolicy.Sanitize(s),
+			),
+		),
 		" ",
 	)
 }
