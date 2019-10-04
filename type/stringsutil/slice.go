@@ -142,3 +142,14 @@ func Dedupe(vals []string) []string {
 	}
 	return deduped
 }
+
+// SliceIndexOf returns the index of an element in a
+// string slice. Returns -1 if not found.
+func SliceIndexOf(needle string, haystack []string) int {
+	for k, v := range haystack {
+		if v == needle {
+			return k
+		}
+	}
+	return -1 //not found.
+}
