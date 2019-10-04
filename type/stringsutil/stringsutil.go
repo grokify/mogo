@@ -134,6 +134,11 @@ func CondenseString(content string, join_lines bool) string {
 	return strings.TrimSpace(content)
 }
 
+// CondenseStringSimple removes extra spaces.
+func CondenseStringSimple(s string) string {
+	return strings.Join(strings.Fields(s), " ")
+}
+
 func StripControl(s string) string { return rxControl.ReplaceAllString(s, "") }
 
 // TrimSentenceLength trims a string by a max length at word boundaries.
