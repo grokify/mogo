@@ -15,6 +15,19 @@ import (
 	"github.com/golang/protobuf/ptypes/duration"
 )
 
+// NewDurationSeconds returns a new `time.Duration` given
+// a number of seconds.
+func NewDurationSeconds(secs float64) time.Duration {
+	nanos := int64(secs * float64(nanosPerSecond))
+	dur, err := time.ParseDuration(strconv.Itoa(int(nanos)) + "ns")
+	if err != nil {
+		panic(err)
+	}
+	return dur
+}
+
+// NewDurationDays returns `time.Duration` given
+// a number of days
 func NewDurationDays(days uint16) time.Duration {
 	durString := fmt.Sprintf("%dh", 24*days)
 	dur, err := time.ParseDuration(durString)

@@ -4,6 +4,7 @@
 package timeutil
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -29,6 +30,32 @@ type DurationInfo struct {
 	Milliseconds int64
 	Microseconds int64
 	Nanoseconds  int64
+}
+
+// NewDurationInfo returns a DurationInfo struct
+// for a duration in nanos.
+func NewDurationInfo(dur time.Duration) DurationInfo {
+	workingNanos := dur.Nanoseconds()
+	dinfo := DurationInfo{}
+	if workingNanos >= nanosPerHour {
+		hrs := float64(workingNanos) / float64(nanosPerHour)
+		hrsInt64 := int64(hrs)
+		dinfo.Hours = hrsInt64
+		workingNanos = workingNanos - (hrsInt64 * nanosPerHour)
+	}
+	if workingNanos >= nanosPerMinute {
+		min := float64(workingNanos) / float64(nanosPerMinute)
+		minInt64 := int64(min)
+		dinfo.Minutes = minInt64
+		workingNanos = workingNanos - (minInt64 * nanosPerMinute)
+	}
+	if workingNanos >= nanosPerSecond {
+		sec := float64(workingNanos) / float64(nanosPerSecond)
+		secInt64 := int64(sec)
+		dinfo.Seconds = secInt64
+		workingNanos = workingNanos - (secInt64 * nanosPerSecond)
+	}
+	return dinfo
 }
 
 // ParseDurationInfoStrings returns a DurationInfo object for
@@ -92,7 +119,7 @@ func (di *DurationInfo) TotalNanoseconds() int64 {
 		di.Nanoseconds
 }
 
-// ToDuration returns a `time.Duration` struct representing
+// Duration returns a `time.Duration` struct representing
 // the duration.
 func (di *DurationInfo) Duration() time.Duration {
 	dur, err := time.ParseDuration(strconv.Itoa(int(di.TotalNanoseconds())) + "ns")
@@ -100,4 +127,12 @@ func (di *DurationInfo) Duration() time.Duration {
 		panic(err)
 	}
 	return dur
+}
+
+// FormatDurationInfoMinSec returns the duration as a simple string
+// like 01:01.
+func FormatDurationInfoMinSec(di DurationInfo) string {
+	min := di.Hours*60 + di.Minutes
+	sec := di.Seconds
+	return fmt.Sprintf(`%02d:%02d`, min, sec)
 }
