@@ -13,7 +13,7 @@ var htmlToTextTests = []struct {
 
 func TestHTMLToText(t *testing.T) {
 	for _, tt := range htmlToTextTests {
-		got := HTMLToText(tt.v)
+		got := HtmlToText(tt.v)
 
 		if got != tt.want {
 			t.Errorf("htmlutil.TestHTMLToText(`%s`) Error: want [%v], got [%v]",
