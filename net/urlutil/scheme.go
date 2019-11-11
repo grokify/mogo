@@ -1,7 +1,6 @@
 package urlutil
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 )
@@ -28,7 +27,6 @@ func UriScheme(uri string) string {
 	uri = strings.TrimSpace(uri)
 	m := rxScheme.FindAllStringSubmatch(uri, -1)
 	if len(m) > 0 && len(m[0]) == 2 {
-		fmt.Println(m[0][1])
 		return strings.TrimSpace(m[0][1])
 	}
 	return ""
