@@ -27,16 +27,6 @@ func SliceIndexOrEmpty(s []string, index uint64) string {
 	return s[index]
 }
 
-/*
-func FirstOrEmpty(s []string) string {
-	if len(s) > 0 {
-		return s[0]
-	}
-	return ""
-}
-
-}*/
-
 // JoinAny takes an array of interface{} and converts
 // each value to a string using fmt.Sprintf("%v")
 func JoinAny(a []interface{}, sep string) string {
@@ -152,4 +142,26 @@ func SliceIndexOf(needle string, haystack []string) int {
 		}
 	}
 	return -1 //not found.
+}
+
+func SliceChooseOnePreferredLowerTrimSpace(options, preferenceOrder []string) string {
+	if len(options) == 0 {
+		return ""
+	} else if len(preferenceOrder) == 0 {
+		return strings.ToLower(strings.TrimSpace(options[0]))
+	}
+	optMap := map[string]int{}
+	for _, opt := range options {
+		opt = strings.ToLower(strings.TrimSpace(opt))
+		if len(opt) > 0 {
+			optMap[opt] = 1
+		}
+	}
+	for _, pref := range preferenceOrder {
+		pref = strings.ToLower(strings.TrimSpace(pref))
+		if _, ok := optMap[pref]; ok {
+			return pref
+		}
+	}
+	return strings.ToLower(strings.TrimSpace(options[0]))
 }
