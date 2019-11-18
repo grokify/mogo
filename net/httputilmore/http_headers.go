@@ -1,5 +1,6 @@
 package httputilmore
 
+// Constants ensuring that header names are correctly spelled and consistently cased.
 const (
 	HeaderAccept                       = "Accept"
 	HeaderAuthorization                = "Authorization"
