@@ -14,7 +14,7 @@ const (
 	HeaderContentType                  = "Content-Type"
 	HeaderDate                         = "Date"
 	HeaderIfMatch                      = "If-Match"
-	headerIfModifiedSince              = "If-Modified-Since"
+	HeaderIfModifiedSince              = "If-Modified-Since"
 	HeaderIfNoneMatch                  = "If-None-Match"
 	HeaderIfUnmodifiedSince            = "If-Unmodified-Since"
 	HeaderLocation                     = "Location"
