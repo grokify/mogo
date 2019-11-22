@@ -31,6 +31,31 @@ func MustInQuarter(dt time.Time, yyyyq int32) bool {
 		nxtQtrStart.After(dt)
 }
 
+// InQuarterRange checks to see if the date is within 2 quarters.
+func InQuarterRange(dt time.Time, yyyyq1, yyyyq2 int32) (bool, error) {
+	dtQ1, err := QuarterInt32StartTime(yyyyq1)
+	if err != nil {
+		return false, err
+	}
+	dtQ2, err := QuarterInt32StartTime(yyyyq2)
+	if err != nil {
+		return false, err
+	}
+	dtQ2Next := NextQuarter(dtQ2)
+	dtQ1, dtQ2 = MinMax(dtQ1, dtQ2)
+	return (dt.Equal(dtQ1) || dt.After(dtQ1)) && (dt.Before(dtQ2Next)), nil
+}
+
+// MustInQuarterRange returns whether a date is within 2 quarters.
+// It panics if the quarter integer is not valid.
+func MustInQuarterRange(dt time.Time, yyyyq1, yyyyq2 int32) bool {
+	inRange, err := InQuarterRange(dt, yyyyq1, yyyyq2)
+	if err != nil {
+		panic(err)
+	}
+	return inRange
+}
+
 /*
 func InQuarterOld(dt time.Time, yyyyq int32) (bool, error) {
 	qtrStart, err := QuarterInt32StartTime(yyyyq)
