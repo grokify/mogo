@@ -165,3 +165,31 @@ func SliceChooseOnePreferredLowerTrimSpace(options, preferenceOrder []string) st
 	}
 	return strings.ToLower(strings.TrimSpace(options[0]))
 }
+
+func SliceJoinQuotedMaxLength(slice []string, begQuote, endQuote, sep string, maxLength int) []string {
+	words := []string{}
+	curWords := []string{}
+	curLength := 0
+	for _, word := range slice {
+		if curLength+len(begQuote+word+endQuote+sep) > maxLength {
+			words = append(words, strings.Join(curWords, sep))
+			curWords = []string{}
+			curLength = 0
+		} else {
+			curWords = append(curWords, begQuote+word+endQuote)
+			curLength += len(begQuote + word + endQuote + sep)
+		}
+	}
+	if len(curWords) > 0 {
+		words = append(words, strings.Join(curWords, sep))
+	}
+	return words
+}
+
+func SliceJoinQuoted(slice []string, begQuote, endQuote, sep string) string {
+	words := []string{}
+	for _, word := range slice {
+		words = append(words, begQuote+word+endQuote)
+	}
+	return strings.Join(words, sep)
+}
