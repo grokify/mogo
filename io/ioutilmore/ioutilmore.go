@@ -94,6 +94,33 @@ func FileInfosSplit(all []os.FileInfo, inclDotDirs bool) ([]os.FileInfo, []os.Fi
 	return subdirs, regular
 }
 
+// DirEntriesNameRxVarFirsts returns a slice of the first
+// regexp match encountered.
+func DirEntriesNameRxVarFirsts(dir string, rx1 *regexp.Regexp) ([]string, error) {
+	vars := map[string]int{}
+	varsMatch := []string{}
+	filesAll, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return varsMatch, err
+	}
+	for _, f := range filesAll {
+		if f.Name() == "." || f.Name() == ".." {
+			continue
+		}
+		if f.Size() > int64(0) {
+			rs1 := rx1.FindStringSubmatch(f.Name())
+			if len(rs1) > 1 { // len = 2+
+				vars[rs1[1]] = 1
+				//filesMatch = append(filesMatch, f)
+			}
+		}
+	}
+	for varVal := range vars {
+		varsMatch = append(varsMatch, varVal)
+	}
+	return varsMatch, nil
+}
+
 func DirEntriesReSizeGt0(dir string, rx1 *regexp.Regexp) ([]os.FileInfo, error) {
 	filesMatch := []os.FileInfo{}
 	filesAll, err := ioutil.ReadDir(dir)
