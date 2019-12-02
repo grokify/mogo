@@ -1,6 +1,7 @@
 Gotilla
 =======
 
+[![Used By][used-by-svg]][used-by-link]
 [![Build Status][build-status-svg]][build-status-link]
 [![Go Report Card][goreport-svg]][goreport-link]
 [![Docs][docs-godoc-svg]][docs-godoc-link]
