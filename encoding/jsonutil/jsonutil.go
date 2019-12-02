@@ -24,6 +24,14 @@ func MarshalSimple(v interface{}, prefix, indent string) ([]byte, error) {
 	return json.MarshalIndent(v, prefix, indent)
 }
 
+func MustMarshalSimple(v interface{}, prefix, indent string) []byte {
+	bytes, err := MarshalSimple(v, prefix, indent)
+	if err != nil {
+		panic(err)
+	}
+	return bytes
+}
+
 func MustMarshal(i interface{}, embedError bool) []byte {
 	bytes, err := json.Marshal(i)
 	if err != nil {
