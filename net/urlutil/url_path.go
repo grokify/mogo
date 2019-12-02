@@ -1,8 +1,11 @@
 package urlutil
 
 import (
+	"net/url"
 	"regexp"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
 var leading *regexp.Regexp = regexp.MustCompile(`^/+`)
@@ -19,4 +22,18 @@ func SplitPath(urlPath string, stripLeading, stripTrailing bool) []string {
 		urlPath = trailing.ReplaceAllString(urlPath, "")
 	}
 	return strings.Split(urlPath, "/")
+}
+
+func GetPathLeaf(s string) (string, error) {
+	u, err := url.Parse(s)
+	if err != nil {
+		return "", err
+	}
+	sep := "/"
+	p := strings.Trim(u.Path, sep)
+	parts := strings.Split(p, sep)
+	if len(parts) == 0 {
+		return "", errors.New("GetPathLeaf - no path")
+	}
+	return parts[len(parts)-1], nil
 }
