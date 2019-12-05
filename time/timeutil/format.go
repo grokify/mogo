@@ -58,7 +58,7 @@ func FromTo2(fromLayout, toLayout, value string) (string, error) {
 	return t.Format(toLayout), nil
 }
 
-func FromToFirstValueOrZero(fromLayout, toLayout string, values []string) string {
+func FromToFirstValueOrEmpty(fromLayout, toLayout string, values []string) string {
 	dtString, err := FromToFirstValue(fromLayout, toLayout, values)
 	if err != nil {
 		return ""
