@@ -5,8 +5,11 @@ package timeutil
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 // More predefined layouts for use in Time.Format and time.Parse.
@@ -14,6 +17,7 @@ const (
 	DT14               = "20060102150405"
 	DT8                = "20060102"
 	DT6                = "200601"
+	MonthDay           = "1/2"
 	RFC3339FullDate    = "2006-01-02"
 	ISO8601            = "2006-01-02T15:04:05Z0700"
 	ISO8601TZHour      = "2006-01-02T15:04:05Z07"
@@ -36,12 +40,62 @@ const (
 )
 
 // Reformat a time string from one format to another
+// Deprecated...
 func FromTo(value, fromLayout, toLayout string) (string, error) {
 	t, err := time.Parse(fromLayout, strings.TrimSpace(value))
 	if err != nil {
 		return "", err
 	}
 	return t.Format(toLayout), nil
+}
+
+// Reformat a time string from one format to another
+func FromTo2(fromLayout, toLayout, value string) (string, error) {
+	t, err := time.Parse(fromLayout, strings.TrimSpace(value))
+	if err != nil {
+		return "", err
+	}
+	return t.Format(toLayout), nil
+}
+
+func FromToFirstValueOrZero(fromLayout, toLayout string, values []string) string {
+	dtString, err := FromToFirstValue(fromLayout, toLayout, values)
+	if err != nil {
+		return ""
+	}
+	return dtString
+}
+
+func FromToFirstValue(fromLayout, toLayout string, values []string) (string, error) {
+	for _, val := range values {
+		dt, err := time.Parse(fromLayout, val)
+		if err == nil {
+			return dt.Format(toLayout), nil
+		}
+	}
+	return "", errors.New("No Match")
+}
+
+func ParseFirstValueOrZero(layout string, values []string) time.Time {
+	dt, err := ParseFirstValue(layout, values)
+	if err != nil {
+		return TimeRFC3339Zero()
+	}
+	return dt
+}
+
+func ParseFirstValue(layout string, values []string) (time.Time, error) {
+	for _, val := range values {
+		try, err := time.Parse(layout, val)
+		if err == nil {
+			return try, nil
+		}
+	}
+	numVals := len(values)
+	if numVals == 0 {
+		return time.Now(), errors.New("No Time Values Supplied")
+	}
+	return time.Now(), fmt.Errorf("No Valid String of [%v] Supplied Values", strconv.Itoa(numVals))
 }
 
 // ParseOrZero returns a parsed time.Time or the RFC-3339 zero time.
