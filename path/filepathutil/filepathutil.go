@@ -44,3 +44,7 @@ func UserToAbsolute(file string) (string, error) {
 		append([]string{usr.HomeDir}, parts[1:]...),
 		string(os.PathSeparator)), nil
 }
+
+func Trim(file string) string      { return strings.Trim(file, string(os.PathSeparator)) }
+func TrimLeft(file string) string  { return strings.TrimLeft(file, string(os.PathSeparator)) }
+func TrimRight(file string) string { return strings.TrimRight(file, string(os.PathSeparator)) }
