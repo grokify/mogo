@@ -1,47 +1,16 @@
 package httputilmore
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
-	"os"
 	"regexp"
 	"strings"
 
 	"github.com/grokify/gotilla/strconv/strconvutil"
 )
-
-// GetWriteFile performs a HTTP GET request and saves the response body
-// to the file path specified
-func GetWriteFile(url string, filename string, perm os.FileMode) ([]byte, error) {
-	_, bytes, err := GetResponseAndBytes(url)
-	if err != nil {
-		return bytes, err
-	}
-	err = ioutil.WriteFile(filename, bytes, perm)
-	return bytes, err
-}
-
-// PostJsonSimple performs a HTTP POST request converting a body interface{} to
-// JSON and adding the appropriate JSON Content-Type header.
-func PostJsonSimple(requrl string, body interface{}) (*http.Response, error) {
-	bodyBytes, err := json.Marshal(body)
-	if err != nil {
-		return &http.Response{}, err
-	}
-
-	req, err := http.NewRequest(http.MethodPost, requrl, bytes.NewBuffer(bodyBytes))
-	if err != nil {
-		return &http.Response{}, err
-	}
-	req.Header.Set(HeaderContentType, ContentTypeAppJsonUtf8)
-
-	client := &http.Client{}
-	return client.Do(req)
-}
 
 // ResponseBody returns the body as a byte array
 func ResponseBody(res *http.Response) ([]byte, error) {
@@ -62,17 +31,6 @@ func ResponseBodyJSONMapIndent(res *http.Response, prefix string, indent string)
 	any := map[string]interface{}{}
 	json.Unmarshal(body, &any)
 	return json.MarshalIndent(any, prefix, indent)
-}
-
-// GetResponseAndBytes retreives a URL and returns the response body
-// as a byte array in addition to the *http.Response.
-func GetResponseAndBytes(url string) (*http.Response, []byte, error) {
-	resp, err := http.Get(url)
-	if err != nil {
-		return resp, []byte{}, err
-	}
-	bytes, err := ResponseBody(resp)
-	return resp, bytes, err
 }
 
 // UnmarshalResponseJSON unmarshal a `*http.Response` JSON body into
