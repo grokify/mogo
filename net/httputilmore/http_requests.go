@@ -9,8 +9,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-
-	"github.com/grokify/gotilla_bak/net/httputilmore"
 )
 
 // GetWriteFile performs a HTTP GET request and saves the response body
@@ -76,8 +74,8 @@ func SendWwwFormUrlEncodedSimple(method, urlStr string, data url.Values) (*http.
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Add(httputilmore.HeaderContentType, httputilmore.ContentTypeAppFormUrlEncoded)
-	req.Header.Add(httputilmore.HeaderContentLength, strconv.Itoa(len(data.Encode())))
+	req.Header.Add(HeaderContentType, ContentTypeAppFormUrlEncoded)
+	req.Header.Add(HeaderContentLength, strconv.Itoa(len(data.Encode())))
 	client := &http.Client{}
 	return client.Do(req)
 }
