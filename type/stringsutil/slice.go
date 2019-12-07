@@ -144,6 +144,19 @@ func SliceIndexOf(needle string, haystack []string) int {
 	return -1 //not found.
 }
 
+// SliceIndexOfLcTrimSpace returns the index of an element in a
+// string slice. Returns -1 if not found.
+func SliceIndexOfLcTrimSpace(needle string, haystack []string) int {
+	needle = strings.ToLower(strings.TrimSpace(needle))
+	for k, v := range haystack {
+		v = strings.ToLower(strings.TrimSpace(v))
+		if v == needle {
+			return k
+		}
+	}
+	return -1 //not found.
+}
+
 func SliceChooseOnePreferredLowerTrimSpace(options, preferenceOrder []string) string {
 	if len(options) == 0 {
 		return ""
