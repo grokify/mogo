@@ -7,13 +7,6 @@ import (
 	"os"
 )
 
-/*
-Adapted from
-
-https://stackoverflow.com/questions/35964656/golang-how-to-concatenate-append-images-to-one-another
-
-*/
-
 func NewImageSetFiles(filenames []string) (ImageMetaSet, error) {
 	//imageMetas := []ImageMeta{}
 	imSet := ImageMetaSet{ImageMetas: []ImageMeta{}}
