@@ -8,7 +8,6 @@ import (
 )
 
 func NewImageSetFiles(filenames []string) (ImageMetaSet, error) {
-	//imageMetas := []ImageMeta{}
 	imSet := ImageMetaSet{ImageMetas: []ImageMeta{}}
 	for _, filename := range filenames {
 		file, err := os.Open(filename)
