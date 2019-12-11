@@ -19,7 +19,7 @@ func WriteFileJPEG(filename string, img image.Image, quality int) error {
 		quality = DefaultQualityJPEG
 	}
 	if quality > 100 {
-		quality = DefaultQualityJPEG
+		quality = 100
 	}
 	opt.Quality = quality
 

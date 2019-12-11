@@ -13,6 +13,7 @@ import (
 type Options struct {
 	Images     []string `short:"i" description:"A slice of image files" required:"true"`
 	Outputfile string   `short:"o" description:"Output file" required:"true"`
+	Quality    int      `short:"q" description:"Quality"`
 	Verbose    []bool   `short:"v" description:"Verbose logging"`
 }
 
@@ -41,7 +42,7 @@ func main() {
 		filename = "merged.jpg"
 	}
 
-	err = imageutil.WriteFileJPEG(filename, merged, 100)
+	err = imageutil.WriteFileJPEG(filename, merged, opts.Quality)
 	if err != nil {
 		log.Fatal(err)
 	}
