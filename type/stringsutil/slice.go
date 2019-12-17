@@ -8,16 +8,28 @@ import (
 )
 
 // SliceTrimSpace removes leading and trailing spaces per
-// string and also removes empty strings.
-func SliceTrimSpace(slice []string) []string {
-	trimmed := []string{}
+// string and optionally removes empty strings.
+func SliceLinesTrimSpace(lines []string, condense bool) []string {
+	return SliceLinesTrim(lines, " ", condense)
+	/*trimmed := []string{}
 	for _, part := range slice {
 		part := strings.TrimSpace(part)
 		if len(part) > 0 {
 			trimmed = append(trimmed, part)
 		}
 	}
-	return trimmed
+	return trimmed*/
+}
+
+func SliceLinesTrim(lines []string, cutstr string, condense bool) []string {
+	for i, line := range lines {
+		line = strings.Trim(line, cutstr)
+		if condense && len(line) == 0 {
+			continue
+		}
+		lines[i] = line
+	}
+	return lines
 }
 
 func SliceIndexOrEmpty(s []string, index uint64) string {
@@ -46,7 +58,7 @@ func JoinInt(a []int, sep string) string {
 }
 
 func JoinCondenseTrimSpace(slice []string, sep string) string {
-	return strings.Join(SliceTrimSpace(slice), sep)
+	return strings.Join(SliceLinesTrimSpace(slice, true), sep)
 }
 
 func SliceCondenseRegexps(texts []string, regexps []*regexp.Regexp, replacement string) []string {
