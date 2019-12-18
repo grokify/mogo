@@ -2,16 +2,16 @@ package timeutil
 
 import "time"
 
-func InRange(this, start, end time.Time, incStart, incEnd bool) bool {
-	start, end = MinMax(start, end)
-	if incStart && this.Before(start) {
+func InRange(rangeStart, rangeEnd, needle time.Time, incStart, incEnd bool) bool {
+	rangeStart, rangeEnd = MinMax(rangeStart, rangeEnd)
+	if incStart && needle.Before(rangeStart) {
 		return false
-	} else if this.Before(start) || this.Equal(start) {
+	} else if needle.Before(rangeStart) || needle.Equal(rangeStart) {
 		return false
 	}
-	if incEnd && this.After(end) {
+	if incEnd && needle.After(rangeEnd) {
 		return false
-	} else if this.After(start) || this.Equal(start) {
+	} else if needle.After(rangeEnd) || needle.Equal(rangeEnd) {
 		return false
 	}
 	return true
