@@ -20,7 +20,7 @@
       h1 { font-size: 3.5em; }
       h2 { font-size: 2.3em; }
       h3 { font-size: 1.6em; }
-      body { font-size: 1.5em; }
+      body { font-size: 0.8em; }
       code { font-size:0.7em; }
       .slide .content {
         padding: 10px 90px !important;
@@ -95,6 +95,10 @@
       background-position: center center;
     }
     .github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
+
+    a{text-decoration:none;color:#666}
+    a:visited{text-decoration:none;color:#666}
+    
     </style>
   </head>
   <body>

@@ -42,7 +42,7 @@ func StreamRemarkHTML(qw422016 *qt422016.Writer, data PresentationData) {
       h1 { font-size: 3.5em; }
       h2 { font-size: 2.3em; }
       h3 { font-size: 1.6em; }
-      body { font-size: 1.5em; }
+      body { font-size: 0.8em; }
       code { font-size:0.7em; }
       .slide .content {
         padding: 10px 90px !important;
@@ -117,38 +117,42 @@ func StreamRemarkHTML(qw422016 *qt422016.Writer, data PresentationData) {
       background-position: center center;
     }
     .github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
+
+    a{text-decoration:none;color:#666}
+    a:visited{text-decoration:none;color:#666}
+    
     </style>
   </head>
   <body>
 	<textarea id="source">
 
 `)
-//line remark_template.qtpl:103
+//line remark_template.qtpl:107
 	for i, slideInfo := range data.Slides {
-//line remark_template.qtpl:103
+//line remark_template.qtpl:107
 		qw422016.N().S(`
 `)
-//line remark_template.qtpl:104
+//line remark_template.qtpl:108
 		qw422016.N().S(slideInfo.ToRemarkString())
-//line remark_template.qtpl:104
+//line remark_template.qtpl:108
 		qw422016.N().S(`
 `)
-//line remark_template.qtpl:105
+//line remark_template.qtpl:109
 		if i < len(data.Slides)-1 {
-//line remark_template.qtpl:105
+//line remark_template.qtpl:109
 			qw422016.N().S(`
         
 ---
 
 `)
-//line remark_template.qtpl:109
+//line remark_template.qtpl:113
 		}
-//line remark_template.qtpl:109
+//line remark_template.qtpl:113
 		qw422016.N().S(`
 `)
-//line remark_template.qtpl:110
+//line remark_template.qtpl:114
 	}
-//line remark_template.qtpl:110
+//line remark_template.qtpl:114
 	qw422016.N().S(`
 	
     </textarea>
@@ -156,31 +160,31 @@ func StreamRemarkHTML(qw422016 *qt422016.Writer, data PresentationData) {
   </body>
 </html>
 `)
-//line remark_template.qtpl:116
+//line remark_template.qtpl:120
 }
 
-//line remark_template.qtpl:116
+//line remark_template.qtpl:120
 func WriteRemarkHTML(qq422016 qtio422016.Writer, data PresentationData) {
-//line remark_template.qtpl:116
+//line remark_template.qtpl:120
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line remark_template.qtpl:116
+//line remark_template.qtpl:120
 	StreamRemarkHTML(qw422016, data)
-//line remark_template.qtpl:116
+//line remark_template.qtpl:120
 	qt422016.ReleaseWriter(qw422016)
-//line remark_template.qtpl:116
+//line remark_template.qtpl:120
 }
 
-//line remark_template.qtpl:116
+//line remark_template.qtpl:120
 func RemarkHTML(data PresentationData) string {
-//line remark_template.qtpl:116
+//line remark_template.qtpl:120
 	qb422016 := qt422016.AcquireByteBuffer()
-//line remark_template.qtpl:116
+//line remark_template.qtpl:120
 	WriteRemarkHTML(qb422016, data)
-//line remark_template.qtpl:116
+//line remark_template.qtpl:120
 	qs422016 := string(qb422016.B)
-//line remark_template.qtpl:116
+//line remark_template.qtpl:120
 	qt422016.ReleaseByteBuffer(qb422016)
-//line remark_template.qtpl:116
+//line remark_template.qtpl:120
 	return qs422016
-//line remark_template.qtpl:116
+//line remark_template.qtpl:120
 }
