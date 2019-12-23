@@ -9,6 +9,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/grokify/gotilla/math/mathutil"
+	"github.com/pkg/errors"
 )
 
 func InQuarter(dt time.Time, yyyyq int32) (bool, error) {
@@ -191,6 +194,23 @@ func NextQuarterInt32(yyyyq int32) (int32, error) {
 	return QuarterInt32ForTime(tNext), nil
 }
 
+func DeltaQuarterInt32(yyyyq int32, numQuarters int) (int32, error) {
+	if numQuarters < 0 {
+		return -1, fmt.Errorf("Use positive number of quarters [%v]", numQuarters)
+	} else if numQuarters == 0 {
+		return yyyyq, nil
+	}
+	future := yyyyq
+	var err error
+	for i := 0; i < numQuarters; i++ {
+		future, err = NextQuarterInt32(future)
+		if err != nil {
+			return -1, errors.Wrap(err, "Future Quarter")
+		}
+	}
+	return future, nil
+}
+
 // AnyStringToQuarterTime returns the current time if in the
 // current quarter or the end of any previous quarter.
 func AnyStringToQuarterTime(yyyyqSrcStr string) time.Time {
@@ -222,4 +242,38 @@ func AnyStringToQuarterTime(yyyyqSrcStr string) time.Time {
 		return time.Now().UTC()
 	}
 	return dtQtrEnd.UTC()
+}
+
+var rxYYYYQ = regexp.MustCompile(`^\d{4}[1-4]$`)
+
+func IsQuarterInt32(q int32) bool {
+	return rxYYYYQ.MatchString(strconv.Itoa(int(q)))
+}
+
+func NumQuartersInt32(start, end int32) (int, error) {
+	start, end = mathutil.MinMaxInt32(start, end)
+	if !IsQuarterInt32(start) {
+		return -1, fmt.Errorf("QuarterInt32 is not valid [%v] Must end in [1-4]", start)
+	}
+	if !IsQuarterInt32(end) {
+		return -1, fmt.Errorf("QuarterInt32 is not valid [%v] Must end in [1-4]", end)
+	}
+
+	cur := start
+	if start == end {
+		return 1, nil
+	}
+	numQuarters := 1
+	var err error
+	for {
+		numQuarters++
+		cur, err = NextQuarterInt32(cur)
+		if err != nil {
+			return -1, err
+		}
+		if cur == end {
+			return numQuarters, nil
+		}
+	}
+	return -1, errors.New("Default Error - should not encounter")
 }
