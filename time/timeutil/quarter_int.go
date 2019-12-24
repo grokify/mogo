@@ -244,7 +244,7 @@ func AnyStringToQuarterTime(yyyyqSrcStr string) time.Time {
 	return dtQtrEnd.UTC()
 }
 
-var rxYYYYQ = regexp.MustCompile(`^\d{4}[1-4]$`)
+var rxYYYYQ = regexp.MustCompile(`^[0-9]{4}[1-4]$`)
 
 func IsQuarterInt32(q int32) bool {
 	return rxYYYYQ.MatchString(strconv.Itoa(int(q)))
