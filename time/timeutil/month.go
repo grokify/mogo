@@ -16,7 +16,7 @@ func DayofmonthToEnglish(i uint16) string {
 		"sixteenth", "seventeenth", "eighteenth", "nineteenth", "twentieth",
 	}
 	tenZero := []string{"tenth", "twentieth", "thirtieth", "fourtieth", "fiftieth"}
-	tenPlus := []string{"ten", "twenty", "thirty", "fourty", "fifty"}
+	tenPlus := []string{"ten", "twenty", "thirty", "forty", "fifty"}
 	if i < 21 {
 		return days[i]
 	}

@@ -135,7 +135,7 @@ func UrlValuesEncodeSorted(v url.Values, priorities []string) string {
 	}
 
 	sortedKeys := []string{}
-	for k, _ := range v {
+	for k := range v {
 		if _, ok := priorityKeys[k]; !ok {
 			sortedKeys = append(sortedKeys, k)
 		}

@@ -45,7 +45,7 @@ func InQuarterRange(dt time.Time, yyyyq1, yyyyq2 int32) (bool, error) {
 		return false, err
 	}
 	dtQ2Next := NextQuarter(dtQ2)
-	dtQ1, dtQ2 = MinMax(dtQ1, dtQ2)
+	dtQ1, _ = MinMax(dtQ1, dtQ2)
 	return (dt.Equal(dtQ1) || dt.After(dtQ1)) && (dt.Before(dtQ2Next)), nil
 }
 

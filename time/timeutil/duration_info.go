@@ -53,7 +53,7 @@ func NewDurationInfo(dur time.Duration) DurationInfo {
 		sec := float64(workingNanos) / float64(nanosPerSecond)
 		secInt64 := int64(sec)
 		dinfo.Seconds = secInt64
-		workingNanos = workingNanos - (secInt64 * nanosPerSecond)
+		//workingNanos = workingNanos - (secInt64 * nanosPerSecond)
 	}
 	return dinfo
 }
