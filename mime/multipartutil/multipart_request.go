@@ -13,12 +13,12 @@ type FileInfo struct {
 	Filepath     string
 }
 
-// NewRequestFileUpload returns a `*http.Request` for making a
+// NewRequest returns a `*http.Request` for making a
 // request using multipart/form-data. It supports simple strings
 // and files. For more complex field requirements such as JSON
 // body parts that require Content-Type headers and Base64
 // encoding, use MultipartBuilder directly.
-func NewRequestFileUpload(method, url string, params url.Values, files []FileInfo) (*http.Request, error) {
+func NewRequest(method, url string, params url.Values, files []FileInfo) (*http.Request, error) {
 	mb := NewMultipartBuilder()
 	err := mb.WriteURLValues(params)
 	if err != nil {
