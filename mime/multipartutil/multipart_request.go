@@ -7,9 +7,10 @@ import (
 	"github.com/grokify/gotilla/net/httputilmore"
 )
 
+// FileInfo represents a file for uploading.
 type FileInfo struct {
-	ParamName string
-	Filepath  string
+	MIMEPartName string
+	Filepath     string
 }
 
 // NewRequestFileUpload returns a `*http.Request` for making a
@@ -24,7 +25,7 @@ func NewRequestFileUpload(method, url string, params url.Values, files []FileInf
 		return nil, err
 	}
 	for _, file := range files {
-		err := mb.WriteFilePathPlus(file.ParamName, file.Filepath, true)
+		err := mb.WriteFilePathPlus(file.MIMEPartName, file.Filepath, true)
 		if err != nil {
 			return nil, err
 		}
