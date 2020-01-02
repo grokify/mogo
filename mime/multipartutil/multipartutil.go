@@ -1,7 +1,6 @@
 // Package multipartutil provides helper functionality for using multipart.Writer.
 // Steps are to call NewMultipartBuilder(), write parts, call builder.Close(), and
 // retrieve Content-Type header from builder.Writer.FormDataContentType().
-
 package multipartutil
 
 import (
@@ -15,6 +14,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/textproto"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -54,6 +54,20 @@ func NewMultipartBuilder() MultipartBuilder {
 	builder.Buffer = &b
 	builder.Writer = multipart.NewWriter(&b)
 	return builder
+}
+
+// WriteURLValues writes simple header key value strings using `url.Values`
+// as an input parameter.
+func (builder *MultipartBuilder) WriteURLValues(params url.Values) error {
+	for key, vals := range params {
+		for _, val := range vals {
+			err := builder.WriteFieldString(key, val)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 // WriteFieldString adds a text part.
@@ -177,4 +191,9 @@ func (builder *MultipartBuilder) Close() error {
 // ContentType returns the content type for the `Content-Type` header.
 func (builder *MultipartBuilder) ContentType() string {
 	return builder.Writer.FormDataContentType()
+}
+
+// String returns the MIME parts as a string.
+func (builder *MultipartBuilder) String() string {
+	return builder.Buffer.String()
 }
