@@ -353,6 +353,28 @@ func WriteCSVFiltered(reader *csv.Reader, writer *csv.Writer, andFilter map[stri
 	return nil
 }
 
+func NewTableDataFileSimple(path string, sep string, hasHeader, trimSpace bool) (table.TableData, error) {
+	tbl := table.NewTableData()
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return tbl, err
+	}
+	lines := strings.Split(string(data), "\n")
+	for i, line := range lines {
+		if trimSpace {
+			line = strings.TrimSpace(line)
+		}
+		parts := strings.Split(line, sep)
+		parts = stringsutil.SliceLinesTrimSpace(parts, false)
+		if hasHeader && i == 0 {
+			tbl.Columns = parts
+		} else {
+			tbl.Records = append(tbl.Records, parts)
+		}
+	}
+	return tbl, nil
+}
+
 // NewTableDataFileCSV reads in a CSV file and returns a TableData struct.
 func NewTableDataFileCSV(path string, comma rune, stripBom bool) (table.TableData, error) {
 	tbl := table.NewTableData()
