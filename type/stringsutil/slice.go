@@ -11,14 +11,6 @@ import (
 // string and optionally removes empty strings.
 func SliceLinesTrimSpace(lines []string, condense bool) []string {
 	return SliceLinesTrim(lines, " ", condense)
-	/*trimmed := []string{}
-	for _, part := range slice {
-		part := strings.TrimSpace(part)
-		if len(part) > 0 {
-			trimmed = append(trimmed, part)
-		}
-	}
-	return trimmed*/
 }
 
 func SliceLinesTrim(lines []string, cutstr string, condense bool) []string {
