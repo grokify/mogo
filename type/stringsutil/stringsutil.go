@@ -273,3 +273,12 @@ func StringToConstant(s string) string {
 func ToOpposite(s string) string {
 	return xstrings.Translate(s, lowerUpper, upperLower)
 }
+
+var (
+	rxRN = regexp.MustCompile(`\r\n`)
+	rxR  = regexp.MustCompile(`\r`)
+)
+
+func NewlineToLinux(input string) string {
+	return rxR.ReplaceAllString(rxRN.ReplaceAllString(input, "\n"), "\n")
+}
