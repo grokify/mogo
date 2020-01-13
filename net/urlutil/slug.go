@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	rxSlugTextToUrl *regexp.Regexp = regexp.MustCompile(`[\s]+`)
+	rxSlugTextToUrl *regexp.Regexp = regexp.MustCompile(`[\s\t\r\n]+`)
 	rxSlugUrlToText *regexp.Regexp = regexp.MustCompile(`[_]+`)
 )
 
