@@ -45,6 +45,42 @@ func UserToAbsolute(file string) (string, error) {
 		string(os.PathSeparator)), nil
 }
 
-func Trim(file string) string      { return strings.Trim(file, string(os.PathSeparator)) }
-func TrimLeft(file string) string  { return strings.TrimLeft(file, string(os.PathSeparator)) }
+// Trim trims the provided filepath using `os.PathSeparator`
+func Trim(file string) string { return strings.Trim(file, string(os.PathSeparator)) }
+
+// TrimLeft left trims the provided filepath using `os.PathSeparator`
+func TrimLeft(file string) string { return strings.TrimLeft(file, string(os.PathSeparator)) }
+
+// TrimRight right trims the provided filepath using `os.PathSeparator`
 func TrimRight(file string) string { return strings.TrimRight(file, string(os.PathSeparator)) }
+
+// FilterFilepaths filters a slice of filepaths using various options.
+func FilterFilepaths(paths []string, inclExists, inclNotExists, inclFiles, inclDirs bool) []string {
+	filtered := []string{}
+	for _, path := range paths {
+		exists := true
+		fi, err := os.Stat(path)
+		if os.IsNotExist(err) {
+			exists = false
+		} else if err != nil {
+			continue
+		}
+		if !(inclExists && inclNotExists) {
+			if exists && !inclExists {
+				continue
+			}
+			if !exists && !inclNotExists {
+				continue
+			}
+		}
+		if !(inclFiles && inclDirs) {
+			if fi.Mode().IsRegular() && !inclFiles {
+				continue
+			} else if fi.Mode().IsDir() && !inclDirs {
+				continue
+			}
+		}
+		filtered = append(filtered, path)
+	}
+	return filtered
+}
