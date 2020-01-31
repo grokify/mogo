@@ -131,3 +131,13 @@ func AbsFilepath(path string) (string, error) {
 		append([]string{usr.HomeDir}, parts[1:]...),
 		string(os.PathSeparator)), nil
 }
+
+// FinfosToFilepaths returns a slice of string from a directory
+// and sli=ce of `os.FileInfo`.
+func FinfosToFilepaths(dir string, fis []os.FileInfo) []string {
+	filepaths := []string{}
+	for _, fi := range fis {
+		filepaths = append(filepaths, filepath.Join(dir, fi.Name()))
+	}
+	return filepaths
+}
