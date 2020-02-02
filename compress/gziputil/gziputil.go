@@ -10,9 +10,10 @@ import (
 )
 
 // CompressWriter compresses a byte slide and writes the results
-// to the supplied `io.Writer`.
+// to the supplied `io.Writer`. When writing to a file, a `*os.File`
+// from `os.Create()` can be used as the `io.Writer`.
 func CompressWriter(w io.Writer, data []byte) error {
-	gw, err := gzip.NewWriterLevel(w, gzip.BestSpeed)
+	gw, err := gzip.NewWriterLevel(w, gzip.BestCompression)
 	if err != nil {
 		return err
 	}
