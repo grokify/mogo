@@ -31,15 +31,15 @@ func Compress(data []byte, level int) []byte {
 
 // CompressBase64 performs gzip compression and then base64 encodes
 // the data.
-func CompressBase64(uncompressed []byte, level int) string {
-	compressed := Compress(uncompressed, level)
+func CompressBase64(data []byte, level int) string {
+	compressed := Compress(data, level)
 	return base64.StdEncoding.EncodeToString(compressed)
 }
 
 // CompressBase64JSON performs a JSON encoding, gzip compression and
 // then base64 encodes the data.
-func CompressBase64JSON(uncompressedData interface{}, level int) (string, error) {
-	uncompressedBytes, err := json.Marshal(uncompressedData)
+func CompressBase64JSON(data interface{}, level int) (string, error) {
+	uncompressedBytes, err := json.Marshal(data)
 	if err != nil {
 		return "", err
 	}
