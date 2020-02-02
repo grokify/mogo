@@ -50,8 +50,7 @@ func CompressBase64JSON(uncompressedData interface{}, level int) (string, error)
 func Uncompress(compressed []byte) ([]byte, error) {
 	gr, err := gzip.NewReader(bytes.NewBuffer(compressed))
 	if err != nil {
-		var byteSlice []byte
-		return byteSlice, err
+		return make([]byte, 0), err
 	}
 	defer gr.Close()
 	return ioutil.ReadAll(gr)
@@ -71,10 +70,9 @@ func UncompressWriter(w io.Writer, compressed []byte) error {
 // UncompressBase64 base 64 decodes an input string and then
 // gunzips the results.
 func UncompressBase64(compressedB64 string) ([]byte, error) {
-	var byteSlice []byte
 	compressed, err := base64.StdEncoding.DecodeString(compressedB64)
 	if err != nil {
-		return byteSlice, err
+		return make([]byte, 0), err
 	}
 	return Uncompress(compressed)
 }
