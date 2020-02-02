@@ -12,8 +12,8 @@ import (
 // CompressWriter compresses a byte slide and writes the results
 // to the supplied `io.Writer`. When writing to a file, a `*os.File`
 // from `os.Create()` can be used as the `io.Writer`.
-func CompressWriter(w io.Writer, data []byte) error {
-	gw, err := gzip.NewWriterLevel(w, gzip.BestCompression)
+func CompressWriter(w io.Writer, data []byte, level int) error {
+	gw, err := gzip.NewWriterLevel(w, level)
 	if err != nil {
 		return err
 	}
@@ -23,27 +23,27 @@ func CompressWriter(w io.Writer, data []byte) error {
 }
 
 // Compress performs gzip compression on a byte slice.
-func Compress(data []byte) []byte {
+func Compress(data []byte, level int) []byte {
 	buf := new(bytes.Buffer)
-	CompressWriter(buf, data)
+	CompressWriter(buf, data, level)
 	return buf.Bytes()
 }
 
 // CompressBase64 performs gzip compression and then base64 encodes
 // the data.
-func CompressBase64(uncompressed []byte) string {
-	compressed := Compress(uncompressed)
+func CompressBase64(uncompressed []byte, level int) string {
+	compressed := Compress(uncompressed, level)
 	return base64.StdEncoding.EncodeToString(compressed)
 }
 
 // CompressBase64JSON performs a JSON encoding, gzip compression and
 // then base64 encodes the data.
-func CompressBase64JSON(uncompressedData interface{}) (string, error) {
+func CompressBase64JSON(uncompressedData interface{}, level int) (string, error) {
 	uncompressedBytes, err := json.Marshal(uncompressedData)
 	if err != nil {
 		return "", err
 	}
-	return CompressBase64(uncompressedBytes), nil
+	return CompressBase64(uncompressedBytes, level), nil
 }
 
 // Uncompress gunzips a byte slice.

@@ -1,6 +1,7 @@
 package gziputil
 
 import (
+	"compress/gzip"
 	"testing"
 )
 
@@ -19,7 +20,7 @@ var compressTests = []struct {
 
 func TestGzipCompress(t *testing.T) {
 	for _, tt := range compressTests {
-		gotCompress := CompressBase64([]byte(tt.uncompressed))
+		gotCompress := CompressBase64([]byte(tt.uncompressed), gzip.BestCompression)
 
 		if 1 == 0 {
 			if gotCompress != tt.compressedBestSpeed {
