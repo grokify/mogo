@@ -403,25 +403,10 @@ func ReadFileJSON(file string, v interface{}) error {
 }
 
 func WriteFileJSON(filepath string, data interface{}, perm os.FileMode, prefix, indent string) error {
-	var bytes []byte
 	bytes, err := jsonutil.MarshalSimple(data, prefix, indent)
 	if err != nil {
 		return err
 	}
-	/*
-		if wantPretty {
-			bytesTry, err := json.MarshalIndent(data, "", "  ")
-			if err != nil {
-				return err
-			}
-			bytes = bytesTry
-		} else {
-			bytesTry, err := json.Marshal(data)
-			if err != nil {
-				return err
-			}
-			bytes = bytesTry
-		}*/
 	return ioutil.WriteFile(filepath, bytes, perm)
 }
 
