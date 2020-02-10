@@ -141,6 +141,18 @@ func DirEntriesReSizeGt0(dir string, rx1 *regexp.Regexp) ([]os.FileInfo, error) 
 	return filesMatch, nil
 }
 
+func DirEntriesRxSizeGt0Filepaths(dir string, fileFilter FileType, rx *regexp.Regexp) ([]string, error) {
+	fileinfos, err := DirEntriesRxSizeGt0(dir, fileFilter, rx)
+	if err != nil {
+		return []string{}, err
+	}
+	filepaths := []string{}
+	for _, fi := range fileinfos {
+		filepaths = append(filepaths, filepath.Join(dir, fi.Name()))
+	}
+	return filepaths, nil
+}
+
 func DirEntriesRxSizeGt0(dir string, fileFilter FileType, rx1 *regexp.Regexp) ([]os.FileInfo, error) {
 	filesMatch := []os.FileInfo{}
 	filesAll, err := ioutil.ReadDir(dir)
