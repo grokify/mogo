@@ -83,3 +83,10 @@ func (rng *RangeInt64) CellMinMax(idx int32) (int64, int64, error) {
 	}
 	return cellMin, cellMax, nil
 }
+
+// DivmodInt64 from https://stackoverflow.com/a/43945812
+func DivmodInt64(numerator, denominator int64) (quotient, remainder int64) {
+	quotient = numerator / denominator // integer division, decimals are truncated
+	remainder = numerator % denominator
+	return
+}
