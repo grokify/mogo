@@ -7,12 +7,20 @@ import (
 	"strings"
 )
 
-// SliceTrimSpace removes leading and trailing spaces per
+// Unshift adds an element at the first position
+// of the slice.
+func Unshift(a []string, x string) []string {
+	return append([]string{x}, a...)
+}
+
+// SliceLinesTrimSpace removes leading and trailing spaces per
 // string and optionally removes empty strings.
 func SliceLinesTrimSpace(lines []string, condense bool) []string {
 	return SliceLinesTrim(lines, " ", condense)
 }
 
+// SliceLinesTrim trims each line in a slice of lines using a
+// provided cut string.
 func SliceLinesTrim(lines []string, cutstr string, condense bool) []string {
 	for i, line := range lines {
 		line = strings.Trim(line, cutstr)
@@ -24,6 +32,8 @@ func SliceLinesTrim(lines []string, cutstr string, condense bool) []string {
 	return lines
 }
 
+// SliceIndexOrEmpty returns the element at the index
+// provided or an empty string.
 func SliceIndexOrEmpty(s []string, index uint64) string {
 	if int(index) >= len(s) {
 		return ""
