@@ -96,7 +96,7 @@ func QuarterInt32ForTime(dt time.Time) int32 {
 
 func QuarterInt32Now() int32 { return QuarterInt32ForTime(time.Now()) }
 
-func PraseQuarterInt32StartEndTimes(yyyyq int32) (time.Time, time.Time, error) {
+func ParseQuarterInt32StartEndTimes(yyyyq int32) (time.Time, time.Time, error) {
 	start, err := QuarterInt32StartTime(yyyyq)
 	if err != nil {
 		return start, start, err
