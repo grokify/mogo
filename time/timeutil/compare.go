@@ -82,6 +82,7 @@ func SliceMinMax(times []time.Time) (time.Time, time.Time) {
 		if i == 0 {
 			min = t
 			max = t
+			continue
 		}
 		if min.After(t) {
 			min = t
