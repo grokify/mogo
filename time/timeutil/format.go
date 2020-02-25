@@ -27,6 +27,7 @@ const (
 	ISO8601YM          = "2006-01"
 	InsightlyApiQuery  = "_1/_2/2006 _3:04:05 PM"
 	SQLTimestamp       = "2006-01-02 15:04:05" // MySQL, BigQuery, etc.
+	DateMDY            = "1/_2/2006"
 	DateMDYSlash       = "01/02/2006"
 	DateDMYHM2         = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
 )
@@ -224,4 +225,16 @@ func timeUnmarshalJSON(buf []byte, layout string) (time.Time, bool, error) {
 
 func timeMarshalJSON(t time.Time, layout string) ([]byte, error) {
 	return []byte(`"` + t.Format(layout) + `"`), nil
+}
+
+func ParseSlice(strings []string, layout string) ([]time.Time, error) {
+	times := []time.Time{}
+	for _, raw := range strings {
+		t, err := time.Parse(layout, raw)
+		if err != nil {
+			return times, err
+		}
+		times = append(times, t)
+	}
+	return times, nil
 }
