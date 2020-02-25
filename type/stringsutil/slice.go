@@ -13,6 +13,12 @@ func Unshift(a []string, x string) []string {
 	return append([]string{x}, a...)
 }
 
+// SliceCondenseSpace trims space from lines and removes
+// empty lines.
+func SliceCondenseSpace(lines []string) []string {
+	return SliceLinesTrimSpace(lines, true)
+}
+
 // SliceLinesTrimSpace removes leading and trailing spaces per
 // string and optionally removes empty strings.
 func SliceLinesTrimSpace(lines []string, condense bool) []string {
