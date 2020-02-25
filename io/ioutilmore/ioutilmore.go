@@ -121,7 +121,21 @@ func DirEntriesNameRxVarFirsts(dir string, rx1 *regexp.Regexp) ([]string, error)
 	return varsMatch, nil
 }
 
-func DirEntriesReSizeGt0(dir string, rx1 *regexp.Regexp) ([]os.FileInfo, error) {
+func DirEntriesPathsReNotEmpty(dir string, rx1 *regexp.Regexp) ([]string, error) {
+	paths := []string{}
+	files, err := DirEntriesReNotEmpty(dir, rx1)
+	if err != nil {
+		return paths, err
+	}
+	for _, fi := range files {
+		paths = append(paths, filepath.Join(dir, fi.Name()))
+	}
+	return paths, nil
+}
+
+// DirEntriesReNotEmpty returns a slide of files for non-empty files
+// matching regular expression. It was formerly `DirEntriesReSizeGt0`.
+func DirEntriesReNotEmpty(dir string, rx1 *regexp.Regexp) ([]os.FileInfo, error) {
 	filesMatch := []os.FileInfo{}
 	filesAll, err := ioutil.ReadDir(dir)
 	if err != nil {
