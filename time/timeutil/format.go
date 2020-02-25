@@ -227,7 +227,7 @@ func timeMarshalJSON(t time.Time, layout string) ([]byte, error) {
 	return []byte(`"` + t.Format(layout) + `"`), nil
 }
 
-func ParseSlice(strings []string, layout string) ([]time.Time, error) {
+func ParseSlice(layout string, strings []string) ([]time.Time, error) {
 	times := []time.Time{}
 	for _, raw := range strings {
 		t, err := time.Parse(layout, raw)
@@ -237,4 +237,19 @@ func ParseSlice(strings []string, layout string) ([]time.Time, error) {
 		times = append(times, t)
 	}
 	return times, nil
+}
+
+// FormatTimeMulti formats a `time.Time` object or
+// an epoch number. It is adapted from `github.com/wcharczuk/go-chart`.
+func FormatTimeMulti(dateFormat string, v interface{}) string {
+	if typed, isTyped := v.(time.Time); isTyped {
+		return typed.Format(dateFormat)
+	}
+	if typed, isTyped := v.(int64); isTyped {
+		return time.Unix(0, typed).Format(dateFormat)
+	}
+	if typed, isTyped := v.(float64); isTyped {
+		return time.Unix(0, int64(typed)).Format(dateFormat)
+	}
+	return ""
 }

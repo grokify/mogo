@@ -19,7 +19,7 @@ var sliceMinMaxTests = []struct {
 // TestDMYHM2ParseTime ensures timeutil.DateDMYHM2 is parsed to GMT timezone.
 func TestSliceMinMax(t *testing.T) {
 	for _, tt := range sliceMinMaxTests {
-		times, err := ParseSlice(strings.Split(tt.v, ","), time.RFC3339)
+		times, err := ParseSlice(time.RFC3339, strings.Split(tt.v, ","))
 		if err != nil {
 			t.Errorf("time.ParseSlice(%v) Error: [%v]", tt.v, err.Error())
 		}
