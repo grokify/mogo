@@ -30,7 +30,8 @@ func Compress(data []byte, level int) []byte {
 }
 
 // CompressBase64 performs gzip compression and then base64 encodes
-// the data.
+// the data. Level includes `compress/gzip.BestSpeed`, `compress/gzip.BestCompression`,
+// and `compress/gzip.DefaultCompression`.
 func CompressBase64(data []byte, level int) string {
 	compressed := Compress(data, level)
 	return base64.StdEncoding.EncodeToString(compressed)
