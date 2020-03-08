@@ -98,7 +98,7 @@ func DivmodInt64(numerator, denominator int64) (quotient, remainder int64) {
 // PrettyTicks returns a slice of integers that start
 // lower and end higher than the supplied range. This
 // is intended to be used for chart axis.
-func PrettyTicks(numTicks int, low, high int64) []int64 {
+func PrettyTicks(estimatedTickCount int, low, high int64) []int64 {
 	ticks := []int64{}
 	if low > high {
 		tmp := low
@@ -106,7 +106,7 @@ func PrettyTicks(numTicks int, low, high int64) []int64 {
 		high = tmp
 	}
 	diffRaw := high - low
-	tickSize := float64(diffRaw) / float64(numTicks)
+	tickSize := float64(diffRaw) / float64(estimatedTickCount)
 	tickSizedRounded := FloorMostSignificant(int64(tickSize))
 	lowFloor := FloorMostSignificant(int64(low))
 
@@ -134,7 +134,6 @@ func FloorMostSignificant(valOriginal int64) int64 {
 	}
 	valStr := fmt.Sprintf("%d", valPositive)
 	valLen := len(fmt.Sprintf("%d", valPositive))
-	vals := make([]string, valLen)
 	final := int64(0)
 
 	// Math power approach
@@ -149,6 +148,7 @@ func FloorMostSignificant(valOriginal int64) int64 {
 	}
 	// String approach
 	if 1 == 0 {
+		vals := make([]string, valLen)
 		for i := 0; i < valLen; i++ {
 			if i == 0 {
 				vals[i] = valStr[0:1]
