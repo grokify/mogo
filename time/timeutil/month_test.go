@@ -52,17 +52,18 @@ func TestYearMonthBase36(t *testing.T) {
 }
 
 var monthContinuousTests = []struct {
-	year   uint64
-	month  uint64
-	monthc uint64
+	year    uint64
+	month   uint64
+	monthc  uint64
+	rfc3339 string
 }{
-	{uint64(0), uint64(1), uint64(1)},
-	{uint64(0), uint64(12), uint64(12)},
-	{uint64(1), uint64(1), uint64(13)},
-	{uint64(1), uint64(12), uint64(24)},
-	{uint64(2), uint64(1), uint64(25)},
-	{uint64(3), uint64(12), uint64(48)},
-	{uint64(4), uint64(1), uint64(49)},
+	{uint64(0), uint64(1), uint64(1), "0000-01-01T00:00:00Z"},
+	{uint64(0), uint64(12), uint64(12), "0000-12-01T00:00:00Z"},
+	{uint64(1), uint64(1), uint64(13), "0001-01-01T00:00:00Z"},
+	{uint64(1), uint64(12), uint64(24), "0001-12-01T00:00:00Z"},
+	{uint64(2), uint64(1), uint64(25), "0002-01-01T00:00:00Z"},
+	{uint64(3), uint64(12), uint64(48), "0003-12-01T00:00:00Z"},
+	{uint64(4), uint64(1), uint64(49), "0004-01-01T00:00:00Z"},
 }
 
 func TestMonthContinuous(t *testing.T) {
@@ -78,6 +79,22 @@ func TestMonthContinuous(t *testing.T) {
 				tt.monthc,
 				tt.year, tt.month,
 				gotYear, gotMonth)
+		}
+		dt := MonthContinuousToTime(tt.monthc)
+		t3339 := dt.Format(time.RFC3339)
+		if t3339 != tt.rfc3339 {
+			t.Errorf("MonthContinuousToTime(%v, %v): want [%v], got [%v]",
+				tt.year, tt.month, tt.rfc3339, t3339)
+		}
+		wantDt, err := time.Parse(time.RFC3339, tt.rfc3339)
+		if err != nil {
+			t.Errorf("TimeToMonthContinuous time.Parse(time.RFC3339, \"%s\") error [%v]",
+				tt.rfc3339, err.Error())
+		}
+		gotMonthc := TimeToMonthContinuous(wantDt)
+		if gotMonthc != tt.monthc {
+			t.Errorf("TimeToMonthContinuous(\"%s\"): want [%v] got [%v]",
+				tt.rfc3339, tt.monthc, gotMonthc)
 		}
 	}
 }

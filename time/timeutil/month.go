@@ -78,10 +78,27 @@ func YearMonthToMonthContinuous(year, month uint64) uint64 {
 	return year*12 + month
 }
 
-// MonthContinuousToYearMonth converts a continuous month
+// MonthContinuousToYearMonth onverts a continuous month
 // value (e.g. numerof months from year 0).
 func MonthContinuousToYearMonth(monthc uint64) (uint64, uint64) {
 	quotient, remainder := mathutil.DivideInt64(
 		int64(monthc-1), int64(12))
 	return uint64(quotient), uint64(remainder + 1)
+}
+
+// TimeToMonthContinuous converts a `time.Time` value
+// to a continuous month.
+func TimeToMonthContinuous(t time.Time) uint64 {
+	t = t.UTC()
+	return YearMonthToMonthContinuous(
+		uint64(t.Year()), uint64(t.Month()))
+}
+
+// MonthContinuousToTime converts a continuous month
+// value to a `time.Time` value.
+func MonthContinuousToTime(monthc uint64) time.Time {
+	year, month := MonthContinuousToYearMonth(monthc)
+	return time.Date(
+		int(year), time.Month(int(month)), 1,
+		0, 0, 0, 0, time.UTC)
 }
