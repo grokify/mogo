@@ -2,6 +2,7 @@ package strconvutil
 
 import (
 	"fmt"
+	"math"
 	"regexp"
 	"sort"
 	"strconv"
@@ -122,3 +123,48 @@ func ChangeToXoXPct(v float64) float64 {
 // ChangeToFunnelPct converts a 1.0 == 100% based `float64` to a
 // Funnel percentage `float64`.
 func ChangeToFunnelPct(v float64) float64 { return v * 100.0 }
+
+// Int64Len returns the length of an Int64 number.
+func Int64Len(val int64) int {
+	return len(fmt.Sprintf("%d", val))
+}
+
+// Int64Abbreviation returns integer abbreviations.
+func Int64Abbreviation(val int64) string {
+	if val <= 999 {
+		return strconv.Itoa(int(val))
+	}
+	valStr := fmt.Sprintf("%d", val)
+	valLen := len(valStr)
+	switch valLen {
+	case 4:
+		float := float64(val) / math.Pow10(valLen-1)
+		return fmt.Sprintf("%.1fK", float)
+	case 5:
+		return fmt.Sprintf("%sK", valStr[0:2])
+	case 6:
+		return fmt.Sprintf("%sK", valStr[0:3])
+	case 7:
+		float := float64(val) / math.Pow10(valLen-1)
+		return fmt.Sprintf("%.1fM", float)
+	case 8:
+		return fmt.Sprintf("%sM", valStr[0:2])
+	case 9:
+		return fmt.Sprintf("%sM", valStr[0:3])
+	case 10:
+		float := float64(val) / math.Pow10(valLen-1)
+		return fmt.Sprintf("%.1fB", float)
+	case 11:
+		return fmt.Sprintf("%sB", valStr[0:2])
+	case 12:
+		return fmt.Sprintf("%sB", valStr[0:3])
+	case 13:
+		float := float64(val) / math.Pow10(valLen-1)
+		return fmt.Sprintf("%.1fT", float)
+	case 14:
+		return fmt.Sprintf("%sT", valStr[0:2])
+	case 15:
+		return fmt.Sprintf("%sT", valStr[0:3])
+	}
+	return fmt.Sprintf("%d", val)
+}

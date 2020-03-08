@@ -47,12 +47,43 @@ var changeToFunnelPctTests = []struct {
 
 func TestChangeToFunnelPctTests(t *testing.T) {
 	for _, tt := range changeToFunnelPctTests {
-		// without math.Round, we end up with:
-		// Error: with [0.9], want [-10], got [-9.999999999999998]
 		try := mathutil.RoundMore(ChangeToFunnelPct(tt.v), 0.5, 0.0)
-		// try := mathutil.Round(ChangeToXoXPct(tt.v))
 		if try != tt.want {
 			t.Errorf("strconvutil.ChangeToFunnelPct() Error: with [%v], want [%v], got [%v]",
+				tt.v, tt.want, try)
+		}
+	}
+}
+
+var intAbbrTests = []struct {
+	v    int64
+	want string
+}{
+	{0, "0"},
+	{1, "1"},
+	{100, "100"},
+	{999, "999"},
+	{1000, "1.0K"},
+	{1500, "1.5K"},
+	{15000, "15K"},
+	{150000, "150K"},
+	{1200000, "1.2M"},
+	{2000000, "2.0M"},
+	{20000000, "20M"},
+	{200000000, "200M"},
+	{2000000000, "2.0B"},
+	{20000000000, "20B"},
+	{200000000000, "200B"},
+	{2500000000000, "2.5T"},
+	{25000000000000, "25T"},
+	{250000000000000, "250T"},
+}
+
+func TestIntAbbrevations(t *testing.T) {
+	for _, tt := range intAbbrTests {
+		try := Int64Abbreviation(tt.v)
+		if try != tt.want {
+			t.Errorf("strconvutil.Int64Abbreviation(%v) Error: want [%v], got [%v]",
 				tt.v, tt.want, try)
 		}
 	}
