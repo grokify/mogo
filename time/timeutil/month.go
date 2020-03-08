@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/grokify/base36"
+	"github.com/grokify/gotilla/math/mathutil"
 )
 
 func DayofmonthToEnglish(i uint16) string {
@@ -41,7 +42,8 @@ func YearMonthBase36Time(dt time.Time) string {
 // MonthBegin allows you to add/subtract months resulting
 // in the first day of each month while avoiding Go's
 // `AddDate` normalization where "adding one month to
-// October 31 yields December 1, the normalized form for November 31."
+// October 31 yields December 1, the normalized form for
+// November 31."
 func MonthBegin(dt time.Time, deltaMonths int) time.Time {
 	dt = dt.UTC()
 	year := dt.Year()
@@ -66,4 +68,20 @@ func MonthBegin(dt time.Time, deltaMonths int) time.Time {
 		}
 	}
 	return time.Date(year, time.Month(month), 1, 0, 0, 0, 0, time.UTC)
+}
+
+// YearMonthToMonthContinuous converts a year and month to
+// a continuous month integer. This is useful when an even
+// even spacing between months is desired, such as with
+// charting x-axis values.
+func YearMonthToMonthContinuous(year, month uint64) uint64 {
+	return year*12 + month
+}
+
+// MonthContinuousToYearMonth converts a continuous month
+// value (e.g. numerof months from year 0).
+func MonthContinuousToYearMonth(monthc uint64) (uint64, uint64) {
+	quotient, remainder := mathutil.DivideInt64(
+		int64(monthc-1), int64(12))
+	return uint64(quotient), uint64(remainder + 1)
 }

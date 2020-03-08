@@ -51,6 +51,37 @@ func TestYearMonthBase36(t *testing.T) {
 	}
 }
 
+var monthContinuousTests = []struct {
+	year   uint64
+	month  uint64
+	monthc uint64
+}{
+	{uint64(0), uint64(1), uint64(1)},
+	{uint64(0), uint64(12), uint64(12)},
+	{uint64(1), uint64(1), uint64(13)},
+	{uint64(1), uint64(12), uint64(24)},
+	{uint64(2), uint64(1), uint64(25)},
+	{uint64(3), uint64(12), uint64(48)},
+	{uint64(4), uint64(1), uint64(49)},
+}
+
+func TestMonthContinuous(t *testing.T) {
+	for _, tt := range monthContinuousTests {
+		gotMonthC := YearMonthToMonthContinuous(tt.year, tt.month)
+		if gotMonthC != tt.monthc {
+			t.Errorf("YearMonthToMonthContinuous(%v, %v): want [%v], got [%v]",
+				tt.year, tt.month, tt.monthc, gotMonthC)
+		}
+		gotYear, gotMonth := MonthContinuousToYearMonth(tt.monthc)
+		if gotYear != tt.year || gotMonth != tt.month {
+			t.Errorf("MonthContinuousToYearMonth(%v): want [%v,%v], got [%v,%v]",
+				tt.monthc,
+				tt.year, tt.month,
+				gotYear, gotMonth)
+		}
+	}
+}
+
 var monthFirstTests = []struct {
 	year     int
 	month    int
