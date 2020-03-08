@@ -1,8 +1,10 @@
-package timeutil
+package month
 
 import (
 	"testing"
 	"time"
+
+	"github.com/grokify/gotilla/time/timeutil"
 )
 
 var dayofmonthToEnglishTests = []struct {
@@ -116,7 +118,7 @@ func TestMonthFirst(t *testing.T) {
 	for _, tt := range monthFirstTests {
 		dt1 := time.Date(tt.year, time.Month(tt.month), 1, 0, 0, 0, 0, time.UTC)
 		dt1Month := MonthBegin(dt1, 0)
-		dt1MonthStr := dt1Month.Format(RFC3339FullDate)
+		dt1MonthStr := dt1Month.Format(timeutil.RFC3339FullDate)
 		if tt.want != dt1MonthStr {
 			t.Errorf("MonthBegin(%v, %v): want [%v], got [%v]", dt1Month.Format(time.RFC3339),
 				"0", tt.want, dt1MonthStr)
@@ -124,7 +126,7 @@ func TestMonthFirst(t *testing.T) {
 		for i, want := range tt.wantNext {
 			n := i + 1
 			dtNext := MonthBegin(dt1, n)
-			dtNextStr := dtNext.Format(RFC3339FullDate)
+			dtNextStr := dtNext.Format(timeutil.RFC3339FullDate)
 			if want != dtNextStr {
 				t.Errorf("MonthBegin(%v, %v): want [%v], got [%v]", dt1Month.Format(time.RFC3339),
 					"0", want, dtNextStr)
@@ -133,7 +135,7 @@ func TestMonthFirst(t *testing.T) {
 		for i, want := range tt.wantPrev {
 			n := (i + 1) * -1
 			dtPrev := MonthBegin(dt1, n)
-			dtPrevStr := dtPrev.Format(RFC3339FullDate)
+			dtPrevStr := dtPrev.Format(timeutil.RFC3339FullDate)
 			if want != dtPrevStr {
 				t.Errorf("MonthBegin(%v, %v): want [%v], got [%v]", dt1Month.Format(time.RFC3339),
 					"0", want, dtPrevStr)

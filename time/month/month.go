@@ -1,4 +1,4 @@
-package timeutil
+package month
 
 import (
 	"fmt"
@@ -101,4 +101,22 @@ func MonthContinuousToTime(monthc uint64) time.Time {
 	return time.Date(
 		int(year), time.Month(int(month)), 1,
 		0, 0, 0, 0, time.UTC)
+}
+
+func MonthContinuousIsQuarterBegin(monthc uint64) bool {
+	t := MonthContinuousToTime(monthc)
+	month := t.Month()
+	if month == 1 || month == 4 || month == 7 || month == 10 {
+		return true
+	}
+	return false
+}
+
+func MonthContinuousIsYearBegin(monthc uint64) bool {
+	t := MonthContinuousToTime(monthc)
+	month := t.Month()
+	if month == 1 {
+		return true
+	}
+	return false
 }
