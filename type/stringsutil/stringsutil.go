@@ -101,6 +101,13 @@ func SubstringIsSuffix(s1, s2 string) bool {
 	return false
 }
 
+var rxSpace = regexp.MustCompile(`\s+`)
+
+// RemoveSpaces eliminates all spaces in a string.
+func RemoveSpaces(input string) string {
+	return rxSpace.ReplaceAllString(input, "")
+}
+
 // SplitCondenseSpace splits a string and trims spaces on
 // remaining elements, removing empty elements.
 func SplitCondenseSpace(s, sep string) []string {
