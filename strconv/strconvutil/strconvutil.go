@@ -129,7 +129,8 @@ func Int64Len(val int64) int {
 	return len(fmt.Sprintf("%d", val))
 }
 
-// Int64Abbreviation returns integer abbreviations.
+// Int64Abbreviation returns integer abbreviations. For example,
+// "1.5K", "15K", "150K", "1.5M", "15M", "150M".
 func Int64Abbreviation(val int64) string {
 	if val <= 999 {
 		return strconv.Itoa(int(val))
