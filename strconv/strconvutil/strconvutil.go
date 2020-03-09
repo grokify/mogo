@@ -19,6 +19,9 @@ func AtoiWithDefault(s string, def int) int {
 	return i
 }
 
+// Int64ToString is a function type to define functions.
+type Int64ToString func(int64) string
+
 // Commify takes an int64 and adds comma for every thousand
 // Stack Overflow: http://stackoverflow.com/users/1705598/icza
 // URL: http://stackoverflow.com/questions/13020308/how-to-fmt-printf-an-integer-with-thousands-comma
