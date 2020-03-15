@@ -3,6 +3,7 @@ package stringsutil
 import (
 	"fmt"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -14,9 +15,17 @@ func Unshift(a []string, x string) []string {
 }
 
 // SliceCondenseSpace trims space from lines and removes
-// empty lines.
-func SliceCondenseSpace(lines []string) []string {
-	return SliceLinesTrimSpace(lines, true)
+// empty lines. `unique` dedupes lines and `sort` preforms
+// a sort on the results.
+func SliceCondenseSpace(lines []string, dedupeResults, sortResults bool) []string {
+	results := SliceLinesTrimSpace(lines, true)
+	if dedupeResults {
+		results = Dedupe(results)
+	}
+	if sortResults {
+		sort.Strings(results)
+	}
+	return results
 }
 
 // SliceLinesTrimSpace removes leading and trailing spaces per
@@ -142,7 +151,6 @@ func SliceToSingleIntOrNeg(vals []string) int {
 func Dedupe(vals []string) []string {
 	deduped := []string{}
 	seen := map[string]int{}
-
 	for _, val := range vals {
 		if _, ok := seen[val]; ok {
 			continue
@@ -284,4 +292,18 @@ func SliceJoinQuoted(slice []string, begQuote, endQuote, sep string) string {
 		words = append(words, begQuote+word+endQuote)
 	}
 	return strings.Join(words, sep)
+}
+
+func Remove(real, filter []string) []string {
+	filtered := []string{}
+	filterMap := map[string]int{}
+	for _, f := range filter {
+		filterMap[f] = 1
+	}
+	for _, r := range real {
+		if _, ok := filterMap[r]; !ok {
+			filtered = append(filtered, r)
+		}
+	}
+	return filtered
 }
