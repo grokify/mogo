@@ -9,6 +9,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/grokify/gotilla_bak/time/timeutil"
 )
 
 // TimeSlice is used for sorting. e.g.
@@ -109,4 +111,26 @@ func MustFirstNonZeroTime(times ...time.Time) time.Time {
 		return TimeRFC3339Zero()
 	}
 	return t
+}
+
+func TimeSliceMinMax(times []time.Time) (time.Time, time.Time, error) {
+	min := timeutil.TimeRFC3339Zero()
+	max := timeutil.TimeRFC3339Zero()
+	if len(times) == 0 {
+		return min, max, errors.New("timeutil.TimeSliceMinMax provided with empty slice")
+	}
+	for i, t := range times {
+		if i == 0 {
+			min = t
+			max = t
+		} else {
+			if t.Before(min) {
+				min = t
+			}
+			if t.After(max) {
+				max = t
+			}
+		}
+	}
+	return min, max, nil
 }
