@@ -307,3 +307,14 @@ func Remove(real, filter []string) []string {
 	}
 	return filtered
 }
+
+func SliceToMap(strs []string) map[string]int {
+	strmap := map[string]int{}
+	for _, s := range strs {
+		if _, ok := strmap[s]; !ok {
+			strmap[s] = 0
+		}
+		strmap[s]++
+	}
+	return strmap
+}
