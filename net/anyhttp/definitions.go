@@ -47,7 +47,7 @@ func WriteSimpleJson(w Response, status int, message string) {
 	w.SetContentType(hum.ContentTypeAppJsonUtf8)
 	resInfo := hum.ResponseInfo{
 		StatusCode: status,
-		Message:    message}
+		Body:       message}
 	w.SetBodyBytes(resInfo.ToJson())
 }
 
