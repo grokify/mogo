@@ -4,15 +4,20 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/pkg/errors"
 )
 
 // ResponseInfo is a generic struct to handle response info.
 type ResponseInfo struct {
-	StatusCode int               `json:"statusCode"`
-	Headers    map[string]string `json:"headers"`
-	Message    string            `json:"body"`
+	Name       string            `json:"name,omitempty"` // to distinguish from other requests
+	Method     string            `json:"method,omitempty"`
+	URL        string            `json:"url,omitempty"`
+	StatusCode int               `json:"statusCode,omitempty"`
+	Time       time.Time         `json:"time,omitempty"`
+	Headers    map[string]string `json:"headers,omitempty"`
+	Body       string            `json:"body,omitempty"`
 }
 
 // ToJson returns ResponseInfo as a JSON byte array, embedding json.Marshal
@@ -20,7 +25,7 @@ type ResponseInfo struct {
 func (resIn *ResponseInfo) ToJson() []byte {
 	bytes, err := json.Marshal(resIn)
 	if err != nil {
-		resIn2 := ResponseInfo{StatusCode: 500, Message: err.Error()}
+		resIn2 := ResponseInfo{StatusCode: 500, Body: err.Error()}
 		bytes, _ := json.Marshal(resIn2)
 		return bytes
 	}
