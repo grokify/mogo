@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"io"
 	"io/ioutil"
+
+	"github.com/derekstavis/go-qs"
 )
 
 var (
@@ -82,4 +84,17 @@ func UnmarshalIoReader(r io.Reader, i interface{}) ([]byte, error) {
 		return b, err
 	}
 	return b, json.Unmarshal(b, i)
+}
+
+// UnmarshalRailsQS unmarshals a Rails query string to a Go struct.
+func UnmarshalRailsQS(railsQueryString string, i interface{}) error {
+	query, err := qs.Unmarshal(railsQueryString)
+	if err != nil {
+		return err
+	}
+	bytes, err := json.Marshal(query)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(bytes, i)
 }
