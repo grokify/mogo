@@ -30,6 +30,7 @@ type Args interface {
 	GetBytesSlice(key string) [][]byte
 	GetString(key string) string
 	GetStringSlice(key string) []string
+	GetURLValues() url.Values
 }
 
 type Response interface {
@@ -102,6 +103,10 @@ func (args ArgsUrlValues) GetStringSlice(key string) []string {
 		return slice
 	}
 	return []string{}
+}
+
+func (args ArgsUrlValues) GetURLValues() url.Values {
+	return args.Raw
 }
 
 type Addr struct {

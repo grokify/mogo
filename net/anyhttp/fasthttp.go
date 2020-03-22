@@ -4,6 +4,7 @@ import (
 	"io"
 	"mime/multipart"
 	"net"
+	"net/url"
 	"strings"
 
 	"github.com/valyala/fasthttp"
@@ -80,6 +81,13 @@ func (a ArgsFastHttp) GetStringSlice(key string) []string {
 	}
 	return newSlice
 }
+func (a ArgsFastHttp) GetURLValues() url.Values {
+	vals, err := url.ParseQuery(a.Raw.String())
+	if err != nil {
+		return url.Values{}
+	}
+	return vals
+}
 
 type ArgsFastHttpMulti struct {
 	Raw []*fasthttp.Args
@@ -134,6 +142,21 @@ func (args ArgsFastHttpMulti) GetStringSlice(key string) []string {
 		}
 	}
 	return newSlice
+}
+
+func (args ArgsFastHttpMulti) GetURLValues() url.Values {
+	allVals := url.Values{}
+	for _, raw := range args.Raw {
+		thisVals, err := url.ParseQuery(raw.String())
+		if err != nil {
+			for key, vals := range thisVals {
+				for _, v := range vals {
+					allVals.Add(key, v)
+				}
+			}
+		}
+	}
+	return allVals
 }
 
 func NewResReqFastHttp(ctx *fasthttp.RequestCtx) (ResponseFastHttp, *RequestFastHttp) {
