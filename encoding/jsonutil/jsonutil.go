@@ -4,12 +4,8 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
-
-	"github.com/derekstavis/go-qs"
-	"github.com/pkg/errors"
 )
 
 var (
@@ -86,24 +82,4 @@ func UnmarshalIoReader(r io.Reader, i interface{}) ([]byte, error) {
 		return b, err
 	}
 	return b, json.Unmarshal(b, i)
-}
-
-// UnmarshalRailsQS unmarshals a Rails query string to a Go struct.
-func UnmarshalRailsQS(railsQuery string, i interface{}) error {
-	query, err := qs.Unmarshal(railsQuery)
-	if err != nil {
-		return errors.Wrap(err,
-			fmt.Sprintf("jsonutil.UnmarshalRailsQS [%s]", railsQuery))
-	}
-	bytes, err := json.Marshal(query)
-	if err != nil {
-		return errors.Wrap(err,
-			fmt.Sprintf("jsonutil.UnmarshalRailsQS [%s]", railsQuery))
-	}
-	err = json.Unmarshal(bytes, i)
-	if err != nil {
-		return errors.Wrap(err,
-			fmt.Sprintf("jsonutil.UnmarshalRailsQS [%s]", railsQuery))
-	}
-	return nil
 }
