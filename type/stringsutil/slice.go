@@ -18,7 +18,7 @@ func Unshift(a []string, x string) []string {
 // empty lines. `unique` dedupes lines and `sort` preforms
 // a sort on the results.
 func SliceCondenseSpace(lines []string, dedupeResults, sortResults bool) []string {
-	results := SliceLinesTrimSpace(lines, true)
+	results := SliceTrimSpace(lines, true)
 	if dedupeResults {
 		results = Dedupe(results)
 	}
@@ -28,15 +28,15 @@ func SliceCondenseSpace(lines []string, dedupeResults, sortResults bool) []strin
 	return results
 }
 
-// SliceLinesTrimSpace removes leading and trailing spaces per
+// SliceTrimSpace removes leading and trailing spaces per
 // string and optionally removes empty strings.
-func SliceLinesTrimSpace(lines []string, condense bool) []string {
-	return SliceLinesTrim(lines, " ", condense)
+func SliceTrimSpace(lines []string, condense bool) []string {
+	return SliceTrim(lines, " ", condense)
 }
 
-// SliceLinesTrim trims each line in a slice of lines using a
+// SliceTrim trims each line in a slice of lines using a
 // provided cut string.
-func SliceLinesTrim(lines []string, cutstr string, condense bool) []string {
+func SliceTrim(lines []string, cutstr string, condense bool) []string {
 	for i, line := range lines {
 		line = strings.Trim(line, cutstr)
 		if condense && len(line) == 0 {
@@ -75,7 +75,7 @@ func JoinInt(a []int, sep string) string {
 }
 
 func JoinCondenseTrimSpace(slice []string, sep string) string {
-	return strings.Join(SliceLinesTrimSpace(slice, true), sep)
+	return strings.Join(SliceTrimSpace(slice, true), sep)
 }
 
 func SliceCondenseRegexps(texts []string, regexps []*regexp.Regexp, replacement string) []string {

@@ -365,7 +365,7 @@ func NewTableDataFileSimple(path string, sep string, hasHeader, trimSpace bool) 
 			line = strings.TrimSpace(line)
 		}
 		parts := strings.Split(line, sep)
-		parts = stringsutil.SliceLinesTrimSpace(parts, false)
+		parts = stringsutil.SliceTrimSpace(parts, false)
 		if hasHeader && i == 0 {
 			tbl.Columns = parts
 		} else {
