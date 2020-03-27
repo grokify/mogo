@@ -37,6 +37,10 @@ func LoadEnvDefaults() error {
 	return godotenv.Load()
 }
 
+func LoadDotEnv(paths ...string) ([]string, error) {
+	return LoadDotEnvSkipEmptyInfo(paths...)
+}
+
 func LoadDotEnvSkipEmptyInfo(paths ...string) ([]string, error) {
 	if len(paths) == 0 {
 		paths = DefaultPaths()
