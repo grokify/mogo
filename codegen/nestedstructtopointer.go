@@ -36,8 +36,10 @@ func ConvertFileNestedstructsToPointers(inFile, outFile string, perm os.FileMode
 	if err != nil {
 		return err
 	}
-	newLines := GoCodeNestedstructsToPointers(string(data))
-	return ioutil.WriteFile(outFile, []byte(newLines), perm)
+	return ioutil.WriteFile(
+		outFile,
+		[]byte(GoCodeNestedstructsToPointers(string(data))),
+		perm)
 }
 
 var (
