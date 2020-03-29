@@ -37,3 +37,16 @@ func GetPathLeaf(s string) (string, error) {
 	}
 	return parts[len(parts)-1], nil
 }
+
+func ModifyPath(rawurl, newpath string) (string, error) {
+	u, err := url.Parse(rawurl)
+	if err != nil {
+		return "", err
+	}
+	newpath = strings.TrimSpace(newpath)
+	if newpath == "/" {
+		newpath = ""
+	}
+	u.Path = newpath
+	return CondenseUri(u.String()), nil
+}
