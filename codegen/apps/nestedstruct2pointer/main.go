@@ -10,6 +10,12 @@ import (
 	"github.com/jessevdk/go-flags"
 )
 
+/*
+
+go get github.com/grokify/gotilla/codegen/apps/nestedstruct2pointer
+
+*/
+
 type Options struct {
 	Dir     string `short:"d" long:"dir" description:"Directory"`
 	Pattern string `short:"p" long:"pattern" description:"Pattern"`
