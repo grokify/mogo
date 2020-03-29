@@ -41,7 +41,7 @@ func ConvertFileNestedstructsToPointers(inFile, outFile string, perm os.FileMode
 }
 
 var (
-	rxParenOpen  = regexp.MustCompile(`{\s*$`)
+	rxParenOpen  = regexp.MustCompile(`^type\s+\S+\s+struct\s+{\s*$`)
 	rxParenClose = regexp.MustCompile(`^\s*}\s*$`)
 	rxCustomType = regexp.MustCompile(`^(\s*[0-9A-Za-z]+\s+(?:[0-9a-z\]\[]+\])?)([A-Z].*)$`)
 )

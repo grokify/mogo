@@ -8,9 +8,9 @@ var goCodeNestedstructsToPointersTests = []struct {
 	v    string
 	want string
 }{
-	{"{\nFoo Bar}\n", "{\nFoo *Bar}\n"},
-	{"{\nFoo []Bar}\n", "{\nFoo []*Bar}\n"},
-	{"{\nFoo map[string]Bar}\n", "{\nFoo map[string]*Bar}\n"},
+	{"type FooBar struct {\nFoo Bar}\n", "type FooBar struct {\nFoo *Bar}\n"},
+	{"type FooBar struct {\nFoo []Bar}\n", "type FooBar struct {\nFoo []*Bar}\n"},
+	{"type FooBar struct {\nFoo map[string]Bar}\n", "type FooBar struct {\nFoo map[string]*Bar}\n"},
 }
 
 func TestGoCodeNestedstructsToPointers(t *testing.T) {
