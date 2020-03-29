@@ -11,7 +11,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func ConvertFilesInPlaceNestedstructsToPointers(dir string, rx *regexp.Regexp, perm os.FileMode) ([]string, error) {
+func ConvertFilesInPlaceNestedstructsToPointers(dir string, rx *regexp.Regexp) ([]string, error) {
 	filepaths := []string{}
 	if rx == nil {
 		rx = regexp.MustCompile(`.*\.go$`)
@@ -22,7 +22,7 @@ func ConvertFilesInPlaceNestedstructsToPointers(dir string, rx *regexp.Regexp, p
 	}
 	for _, file := range files {
 		filepath := filepath.Join(dir, file.Name())
-		err := ConvertFileNestedstructsToPointers(filepath, filepath, perm)
+		err := ConvertFileNestedstructsToPointers(filepath, filepath, file.Mode().Perm())
 		if err != nil {
 			return filepaths, errors.Wrap(err, "codegen.ConvertFilesInPlace.ConvertFile")
 		}

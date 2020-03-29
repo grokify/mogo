@@ -27,13 +27,13 @@ func main() {
 	fmtutil.PrintJSON(opts)
 	if len(opts.Pattern) > 0 {
 		rx := regexp.MustCompile(opts.Pattern)
-		files, err := codegen.ConvertFilesInPlaceNestedstructsToPointers(opts.Dir, rx, 0644)
+		files, err := codegen.ConvertFilesInPlaceNestedstructsToPointers(opts.Dir, rx)
 		if err != nil {
 			log.Fatal(err)
 		}
 		fmtutil.PrintJSON(files)
 	} else {
-		files, err := codegen.ConvertFilesInPlaceNestedstructsToPointers(opts.Dir, nil, 0644)
+		files, err := codegen.ConvertFilesInPlaceNestedstructsToPointers(opts.Dir, nil)
 		if err != nil {
 			log.Fatal(err)
 		}
