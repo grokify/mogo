@@ -64,9 +64,9 @@ func GoCodeNestedstructsToPointers(code string) string {
 			newLines = append(newLines, line)
 			continue
 		} else if inParen {
-			mc := rxCustomType.FindStringSubmatch(line)
-			if len(mc) > 0 {
-				newLines = append(newLines, mc[1]+"*"+mc[2])
+			m := rxCustomType.FindStringSubmatch(line)
+			if len(m) > 0 {
+				newLines = append(newLines, m[1]+"*"+m[2])
 				continue
 			}
 		}
