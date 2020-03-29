@@ -41,10 +41,9 @@ func ConvertFileNestedstructsToPointers(inFile, outFile string, perm os.FileMode
 }
 
 var (
-	rxParenOpen         = regexp.MustCompile(`{\s*$`)
-	rxParenClose        = regexp.MustCompile(`^\s*}\s*$`)
-	rxCustomTypeComplex = regexp.MustCompile(`^(\s*[0-9A-Za-z]+\s+[0-9a-z\]\[]+\])([A-Z].*)$`)
-	rxCustomTypeSimple  = regexp.MustCompile(`^([\s\t]*[0-9A-Za-z]+[\s\t]+)([A-Z].*)$`)
+	rxParenOpen  = regexp.MustCompile(`{\s*$`)
+	rxParenClose = regexp.MustCompile(`^\s*}\s*$`)
+	rxCustomType = regexp.MustCompile(`^(\s*[0-9A-Za-z]+\s+(?:[0-9a-z\]\[]+\])?)([A-Z].*)$`)
 )
 
 // GoCodeNestedstructsToPointers is designed to convert
@@ -63,14 +62,9 @@ func GoCodeNestedstructsToPointers(code string) string {
 			newLines = append(newLines, line)
 			continue
 		} else if inParen {
-			mc := rxCustomTypeComplex.FindAllStringSubmatch(line, -1)
+			mc := rxCustomType.FindStringSubmatch(line)
 			if len(mc) > 0 {
-				newLines = append(newLines, mc[0][1]+"*"+mc[0][2])
-				continue
-			}
-			ms := rxCustomTypeSimple.FindAllStringSubmatch(line, -1)
-			if len(ms) > 0 {
-				newLines = append(newLines, ms[0][1]+"*"+ms[0][2])
+				newLines = append(newLines, mc[1]+"*"+mc[2])
 				continue
 			}
 		}
