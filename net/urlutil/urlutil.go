@@ -103,9 +103,15 @@ func JoinAbsolute(elem ...string) string {
 	return regexp.MustCompile(`^([A-Za-z]+:/)`).ReplaceAllString(path.Join(elem...), "${1}/")
 }
 
+// Join returns joining URL paths parts.
+func Join(elem ...string) string {
+	return rxFwdSlashMore.ReplaceAllString(
+		strings.Join(elem, "/s"), "/")
+}
+
 var (
-	rxFwdSlashMore *regexp.Regexp = regexp.MustCompile(`/+`)
 	rxUriScheme    *regexp.Regexp = regexp.MustCompile(`^([A-Za-z][0-9A-Za-z]*:/)`)
+	rxFwdSlashMore *regexp.Regexp = regexp.MustCompile(`/+`)
 )
 
 // CondenseUri trims spaces and condenses slashes.
