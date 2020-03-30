@@ -66,3 +66,22 @@ func TestUrlValuesEncodeSorted(t *testing.T) {
 		}
 	}
 }
+
+var joinTests = []struct {
+	v    []string
+	want string
+}{
+	{[]string{"foo", "bar"}, "foo/bar"},
+	{[]string{"foo/", "/bar"}, "foo/bar"},
+	{[]string{"foo/bar", "baz"}, "foo/bar/baz"},
+	{[]string{"foo", "", "bar"}, "foo/bar"}}
+
+func TestJoin(t *testing.T) {
+	for _, tt := range joinTests {
+		try := tt.v
+		got := Join(try...)
+		if got != tt.want {
+			t.Errorf("Join failed want [%v] got [%v]", tt.want, got)
+		}
+	}
+}

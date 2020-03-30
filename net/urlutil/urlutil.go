@@ -106,7 +106,7 @@ func JoinAbsolute(elem ...string) string {
 // Join returns joining URL paths parts.
 func Join(elem ...string) string {
 	return rxFwdSlashMore.ReplaceAllString(
-		strings.Join(elem, "/s"), "/")
+		strings.Join(elem, "/"), "/")
 }
 
 var (
