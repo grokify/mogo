@@ -318,3 +318,21 @@ func SliceToMap(strs []string) map[string]int {
 	}
 	return strmap
 }
+
+func SliceIntersection(list1, list2 []string) []string {
+	map1 := map[string]int{}
+	map2 := map[string]int{}
+	for _, item1 := range list1 {
+		map1[item1] = 1
+	}
+	for _, item2 := range list2 {
+		if _, ok := map1[item2]; ok {
+			map2[item2] = 1
+		}
+	}
+	intersection := []string{}
+	for key := range map2 {
+		intersection = append(intersection, key)
+	}
+	return intersection
+}
