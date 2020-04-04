@@ -58,7 +58,8 @@ func Scale(src image.Image, rect image.Rectangle, scale draw.Scaler) image.Image
 }
 
 // DefaultScaler returns a general best results interpolation
-// algorithm. See more here https://blog.codinghorror.com/better-image-resizing/ .
+// algorithm. See more here https://blog.codinghorror.com/better-image-resizing/ ,
+// https://support.esri.com/en/technical-article/000005606 .
 func DefaultScaler() draw.Scaler {
 	return draw.BiLinear
 }
