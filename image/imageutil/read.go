@@ -2,11 +2,19 @@ package imageutil
 
 import (
 	"image"
-	_ "image/jpeg"
-	_ "image/png"
 	"os"
 	"regexp"
 )
+
+func ReadImage(filename string) (image.Image, error) {
+	infile, err := os.Open(filename)
+	if err != nil {
+		return image.NewRGBA(image.Rectangle{image.Point{0, 0}, image.Point{0, 0}}), err
+	}
+	defer infile.Close()
+	img, _, err := image.Decode(infile)
+	return img, err
+}
 
 const (
 	rxImagesExtFormat = `\.(gif|jpg|jpeg|png)$`

@@ -3,6 +3,7 @@ package imageutil
 import (
 	"image"
 	"image/jpeg"
+	"image/png"
 	"os"
 )
 
@@ -24,4 +25,16 @@ func WriteFileJPEG(filename string, img image.Image, quality int) error {
 	opt.Quality = quality
 
 	return jpeg.Encode(out, img, &opt)
+}
+
+func WriteFilePNG(filename string, img image.Image) error {
+	out, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	err = png.Encode(out, img)
+	if err != nil {
+		return err
+	}
+	return out.Close()
 }
