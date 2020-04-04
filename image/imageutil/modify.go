@@ -49,7 +49,7 @@ func ImageWidthHeight(img image.Image) (int, int) {
 		img.Bounds().Max.Y - img.Bounds().Min.Y
 }
 
-// Scale will resize the image to thee provided rectangle using the
+// Scale will resize the image to the provided rectangle using the
 // provided interpolation function.
 func Scale(src image.Image, rect image.Rectangle, scale draw.Scaler) image.Image {
 	dst := image.NewRGBA(rect)
@@ -57,8 +57,10 @@ func Scale(src image.Image, rect image.Rectangle, scale draw.Scaler) image.Image
 	return dst
 }
 
+// DefaultScaler returns a general best results interpolation
+// algorithm. See more here https://blog.codinghorror.com/better-image-resizing/ .
 func DefaultScaler() draw.Scaler {
-	return draw.NearestNeighbor
+	return draw.BiLinear
 }
 
 func ParseScalar(rawInterpolation string) (draw.Scaler, error) {
