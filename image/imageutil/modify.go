@@ -25,11 +25,9 @@ func AddBackgroundWhite(imgSrc image.Image) image.Image {
 // https://github.com/nfnt/resize .
 func Resize(width, height uint, src image.Image, scale draw.Scaler) image.Image {
 	if width == 0 && height != 0 {
-		aspect := ImageAspect(src)
-		width = uint(aspect * float64(height))
+		width = uint(ImageAspect(src) * float64(height))
 	} else if height == 0 && width != 0 {
-		aspect := ImageAspect(src)
-		height = uint(float64(width) / aspect)
+		height = uint(float64(width) / ImageAspect(src))
 	}
 	rect := image.Rect(0, 0, int(width), int(height))
 	dst := image.NewRGBA(rect)
