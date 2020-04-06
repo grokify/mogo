@@ -14,7 +14,7 @@ const (
 	BeegoOauth2ConfigCfgVarPrefix string = "oauth2config"
 )
 
-func InitOAuth2Config(o2ConfigSet *ms.ConfigSet) error {
+func InitOAuth2Config(o2ConfigSet *ms.ConfigMoreSet) error {
 	oauth2providersraw := beego.AppConfig.String(BeegoOauth2ProvidersCfgVar)
 	oauth2providers := stringsutil.SplitTrimSpace(oauth2providersraw, ",")
 	for _, providerKey := range oauth2providers {
