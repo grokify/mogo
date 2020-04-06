@@ -134,7 +134,7 @@ func FloorMostSignificant(valOriginal int64) int64 {
 	}
 	valStr := fmt.Sprintf("%d", valPositive)
 	valLen := len(fmt.Sprintf("%d", valPositive))
-	final := int64(0)
+	var final int64
 
 	// Math power approach
 	mostSig, err := strconv.Atoi(valStr[0:1])

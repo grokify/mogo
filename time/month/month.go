@@ -43,7 +43,7 @@ func YearMonthBase36Time(dt time.Time) string {
 // in the first day of each month while avoiding Go's
 // `AddDate` normalization where "adding one month to
 // October 31 yields December 1, the normalized form for
-// November 31." Setting `deltaMonths` to 0 indicats the
+// November 31." Setting `deltaMonths` to 0 indicates the
 // current month.
 func MonthBegin(dt time.Time, deltaMonths int) time.Time {
 	dt = dt.UTC()
