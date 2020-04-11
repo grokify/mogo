@@ -67,7 +67,7 @@ var methods = [...]string{
 	http.MethodTrace,
 }
 
-// String returns the English name of the day ("Sunday", "Monday", ...).
+// String returns the English name of the HTTPMethod.
 func (method HTTPMethod) String() string {
 	if MethodConnect <= method && method <= MethodTrace {
 		return methods[method]
@@ -103,4 +103,13 @@ func ParseHTTPMethod(method string) (HTTPMethod, error) {
 		}
 	}
 	return MethodConnect, fmt.Errorf("E_NO_METHOD_FOR [%v]", method)
+}
+
+// NewHeadersMSS returns a `http.Header` struct give a `map[string]string`
+func NewHeadersMSS(headersMap map[string]string) http.Header {
+	header := http.Header{}
+	for k, v := range headersMap {
+		header.Add(k, v)
+	}
+	return header
 }
