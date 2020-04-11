@@ -12,6 +12,7 @@ import (
 	"github.com/grokify/gotilla/strconv/strconvutil"
 )
 
+/*
 // ResponseBody returns the body as a byte array
 func ResponseBody(res *http.Response) ([]byte, error) {
 	defer res.Body.Close()
@@ -22,26 +23,25 @@ func ResponseBody(res *http.Response) ([]byte, error) {
 	return contents, nil
 }
 
+// UnmarshalResponseJSON unmarshal a `*http.Response` JSON body into
+// a data pointer.
+func UnmarshalResponseJSON(resp *http.Response, data interface{}) ([]byte, error) {
+	bytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return bytes, err
+	}
+	return bytes, json.Unmarshal(bytes, data)
+}*/
+
 // ResponseBodyJSONMapIndent returns the body as a generic JSON dictionary
 func ResponseBodyJSONMapIndent(res *http.Response, prefix string, indent string) ([]byte, error) {
-	body, err := ResponseBody(res)
+	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return body, err
 	}
 	any := map[string]interface{}{}
 	json.Unmarshal(body, &any)
 	return json.MarshalIndent(any, prefix, indent)
-}
-
-// UnmarshalResponseJSON unmarshal a `*http.Response` JSON body into
-// a data pointer.
-func UnmarshalResponseJSON(resp *http.Response, data interface{}) error {
-	//bytes, err := ResponseBody(resp)
-	bytes, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return err
-	}
-	return json.Unmarshal(bytes, data)
 }
 
 // PrintRequestOut prints a http.Request using `httputil.DumpRequestOut`.

@@ -9,6 +9,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/grokify/gotilla/encoding/jsonutil"
 )
 
 // GetWriteFile performs a HTTP GET request and saves the response body
@@ -33,7 +35,7 @@ func GetJsonSimple(requrl string, header http.Header, data interface{}) (*http.R
 	if err != nil {
 		return nil, err
 	}
-	err = UnmarshalResponseJSON(resp, data)
+	_, err = jsonutil.UnmarshalIoReader(resp.Body, data)
 	return resp, err
 }
 
@@ -62,7 +64,7 @@ func GetResponseAndBytes(url string) (*http.Response, []byte, error) {
 	if err != nil {
 		return resp, []byte{}, err
 	}
-	bytes, err := ResponseBody(resp)
+	bytes, err := ioutil.ReadAll(resp.Body)
 	return resp, bytes, err
 }
 
