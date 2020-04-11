@@ -336,3 +336,9 @@ func SliceIntersection(list1, list2 []string) []string {
 	}
 	return intersection
 }
+
+func SliceIntersectionCondenseSpace(slice1, slice2 []string) []string {
+	return SliceIntersection(
+		SliceCondenseSpace(slice1, true, false),
+		SliceCondenseSpace(slice2, true, false))
+}
