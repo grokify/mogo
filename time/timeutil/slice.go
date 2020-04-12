@@ -106,14 +106,14 @@ func FirstNonZeroTime(times ...time.Time) (time.Time, error) {
 func MustFirstNonZeroTime(times ...time.Time) time.Time {
 	t, err := FirstNonZeroTime(times...)
 	if err != nil {
-		return TimeRFC3339Zero()
+		return TimeZeroRFC3339()
 	}
 	return t
 }
 
 func TimeSliceMinMax(times []time.Time) (time.Time, time.Time, error) {
-	min := TimeRFC3339Zero()
-	max := TimeRFC3339Zero()
+	min := TimeZeroRFC3339()
+	max := TimeZeroRFC3339()
 	if len(times) == 0 {
 		return min, max, errors.New("timeutil.TimeSliceMinMax provided with empty slice")
 	}

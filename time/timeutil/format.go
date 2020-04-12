@@ -82,7 +82,7 @@ func FromToFirstValue(fromLayout, toLayout string, values []string) (string, err
 func ParseFirstValueOrZero(layout string, values []string) time.Time {
 	dt, err := ParseFirstValue(layout, values)
 	if err != nil {
-		return TimeRFC3339Zero()
+		return TimeZeroRFC3339()
 	}
 	return dt
 }
@@ -105,7 +105,7 @@ func ParseFirstValue(layout string, values []string) (time.Time, error) {
 func ParseOrZero(layout, value string) time.Time {
 	t, err := time.Parse(layout, value)
 	if err != nil {
-		return TimeRFC3339Zero()
+		return TimeZeroRFC3339()
 	}
 	return t
 }
@@ -154,17 +154,17 @@ func FormatQuarterYYYYQ(t time.Time) string {
 	return fmt.Sprintf("%d Q%d", t.Year(), MonthToQuarter(uint8(t.Month())))
 }
 
-func TimeRFC3339Min() time.Time {
+func TimeMinRFC3339() time.Time {
 	t0, _ := time.Parse(time.RFC3339, RFC3339Min)
 	return t0
 }
 
-func TimeRFC3339Zero() time.Time {
+func TimeZeroRFC3339() time.Time {
 	t0, _ := time.Parse(time.RFC3339, RFC3339Zero)
 	return t0
 }
 
-func TimeRFC3339ZeroUnix() time.Time {
+func TimeZeroUnix() time.Time {
 	t0, _ := time.Parse(time.RFC3339, RFC3339ZeroUnix)
 	return t0
 }
@@ -174,9 +174,9 @@ func IsZero(u time.Time) bool { return TimeIsZeroAny(u) }
 func IsZeroAny(u time.Time) bool { return TimeIsZeroAny(u) }
 
 func TimeIsZeroAny(u time.Time) bool {
-	if u.Equal(TimeRFC3339Zero()) ||
-		u.Equal(TimeRFC3339Min()) ||
-		u.Equal(TimeRFC3339ZeroUnix()) {
+	if u.Equal(TimeZeroRFC3339()) ||
+		u.Equal(TimeMinRFC3339()) ||
+		u.Equal(TimeZeroUnix()) {
 		return true
 	}
 	return false
