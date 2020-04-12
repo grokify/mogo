@@ -13,7 +13,7 @@ import (
 )
 
 /*
-// ResponseBody returns the body as a byte array
+// ResponseBody is EOL. Use ioutil.ReadAll.
 func ResponseBody(res *http.Response) ([]byte, error) {
 	defer res.Body.Close()
 	contents, err := ioutil.ReadAll(res.Body)
@@ -23,8 +23,7 @@ func ResponseBody(res *http.Response) ([]byte, error) {
 	return contents, nil
 }
 
-// UnmarshalResponseJSON unmarshal a `*http.Response` JSON body into
-// a data pointer.
+// UnmarshalResponseJSON is EOL, use jsonutil.UnmarshalIoReader()
 func UnmarshalResponseJSON(resp *http.Response, data interface{}) ([]byte, error) {
 	bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
