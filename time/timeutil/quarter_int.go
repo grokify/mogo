@@ -277,3 +277,20 @@ func NumQuartersInt32(start, end int32) (int, error) {
 	}
 	return -1, errors.New("Default Error - should not encounter")
 }
+
+// QuartersInt32RelToAbs is useful relative date queries.
+func QuartersInt32RelToAbs(begin, end int32) (int32, int32) {
+	if begin < 100 {
+		begin = QuarterInt32ForTime(
+			DeltaQuarters(time.Now(), int(begin)))
+	}
+	if end < 100 {
+		beginDt, err := QuarterInt32StartTime(begin)
+		if err != nil {
+			panic(errors.Wrap(err, "timeutil.QuartersInt32RelToAbs"))
+		}
+		end = QuarterInt32ForTime(
+			DeltaQuarters(beginDt, int(end-1)))
+	}
+	return begin, end
+}
