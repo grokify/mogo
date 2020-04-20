@@ -37,14 +37,15 @@ func SliceTrimSpace(lines []string, condense bool) []string {
 // SliceTrim trims each line in a slice of lines using a
 // provided cut string.
 func SliceTrim(lines []string, cutstr string, condense bool) []string {
-	for i, line := range lines {
+	newLines := []string{}
+	for _, line := range lines {
 		line = strings.Trim(line, cutstr)
 		if condense && len(line) == 0 {
 			continue
 		}
-		lines[i] = line
+		newLines = append(newLines, line)
 	}
-	return lines
+	return newLines
 }
 
 // SliceIndexOrEmpty returns the element at the index
@@ -131,6 +132,14 @@ func SplitTrimSpace(s, sep string) []string {
 		strs = append(strs, strings.TrimSpace(str))
 	}
 	return strs
+}
+
+var rxSplitLines = regexp.MustCompile(`(\r\n|\r|\n)`)
+
+// SplitTextLines splits a string on the regxp
+// `(\r\n|\r|\n)`.
+func SplitTextLines(text string) []string {
+	return rxSplitLines.Split(text, -1)
 }
 
 // SliceToSingleIntOrNeg converts a single element slice
