@@ -34,7 +34,7 @@ func ReadFileCSVToSQLs(sqlFormat, filename, sep string, hasHeader, trimSpace boo
 	return sqls, nil
 }
 
-func ReadFileCSVToSQLsSimple(filename, sqlFormat string, haveHeader bool) ([]string, error) {
+func ReadFileCSVToSQLsSimple(filename, sqlFormat string, hasHeader bool) ([]string, error) {
 	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return []string{}, err
@@ -43,7 +43,7 @@ func ReadFileCSVToSQLsSimple(filename, sqlFormat string, haveHeader bool) ([]str
 	if len(lines) == 0 {
 		return []string{}, nil
 	}
-	if haveHeader {
+	if hasHeader {
 		lines = lines[1:]
 	}
 	if len(lines) == 0 {
