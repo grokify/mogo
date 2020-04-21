@@ -18,20 +18,15 @@ func SplitTextLines(text string) []string {
 	return rxSplitLines.Split(text, -1)
 }
 
-func ReadFileCSVToSQLs(sqlFormat, filename, sep string, hasHeader, trimSpace bool, col uint) ([]string, error) {
-	table, err := csvutil.NewTableDataFileSimple(filename, sep, hasHeader, trimSpace)
+func ReadFileCSVToSQLs(sqlFormat, filename, sep string, hasHeader, trimSpace bool, col uint) ([]string, []string, error) {
+	values, err := csvutil.ReadCSVFileSingleColumnValuesString(
+		filename, sep, hasHeader, trimSpace, col, true)
 	if err != nil {
-		return []string{}, err
+		return []string{}, []string{}, err
 	}
-	values := []string{}
-	for _, row := range table.Records {
-		if len(row) > int(col) {
-			values = append(values, row[col])
-		}
-	}
-	values = stringsutil.SliceCondenseSpace(values, true, true)
+
 	sqls := BuildSQLsInStrings(sqlFormat, values)
-	return sqls, nil
+	return sqls, values, nil
 }
 
 func ReadFileCSVToSQLsSimple(filename, sqlFormat string, hasHeader bool) ([]string, error) {

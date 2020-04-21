@@ -24,7 +24,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	sqls, err := sql.ReadFileCSVToSQLs(
+	sqls, values, err := sql.ReadFileCSVToSQLs(
 		os.Getenv("SQL_FORMAT"),
 		os.Getenv("SQL_CSV_FILE"),
 		",",
@@ -36,6 +36,9 @@ func main() {
 	}
 
 	fmtutil.PrintJSON(sqls)
+
+	fmt.Printf("SQL_ITEMS [%v]\n", len(values))
+	fmt.Printf("SQL_STATEMENTS [%v]\n", len(sqls))
 
 	fmt.Println("DONE")
 }
