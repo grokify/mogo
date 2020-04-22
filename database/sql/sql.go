@@ -10,7 +10,10 @@ import (
 	"github.com/grokify/gotilla/type/stringsutil"
 )
 
-var maxInsertLength = 18000
+const (
+	MaxSQLLengthSOQL = 99500
+	MaxSQLLengthApex = 18000
+)
 
 var rxSplitLines = regexp.MustCompile(`(\r\n|\r|\n)`)
 
@@ -25,7 +28,7 @@ func ReadFileCSVToSQLs(sqlFormat, filename, sep string, hasHeader, trimSpace boo
 		return []string{}, []string{}, err
 	}
 
-	sqls := BuildSQLsInStrings(sqlFormat, values)
+	sqls := BuildSQLsInStrings(sqlFormat, values, MaxSQLLengthSOQL)
 	return sqls, values, nil
 }
 
@@ -45,13 +48,13 @@ func ReadFileCSVToSQLsSimple(filename, sqlFormat string, hasHeader bool) ([]stri
 		return []string{}, nil
 	}
 	values := stringsutil.SliceCondenseSpace(lines, true, true)
-	sqls := BuildSQLsInStrings(sqlFormat, values)
+	sqls := BuildSQLsInStrings(sqlFormat, values, MaxSQLLengthSOQL)
 	return sqls, nil
 }
 
-func BuildSQLsInStrings(sqlFormat string, values []string) []string {
+func BuildSQLsInStrings(sqlFormat string, values []string, maxInsertLength int) []string {
 	sqls := []string{}
-	sqlIns := SliceToSQLs(values)
+	sqlIns := SliceToSQLs(values, maxInsertLength)
 	for _, sqlIn := range sqlIns {
 		sqls = append(sqls, fmt.Sprintf(sqlFormat, sqlIn))
 	}
@@ -60,20 +63,25 @@ func BuildSQLsInStrings(sqlFormat string, values []string) []string {
 
 func SliceToSQL(slice []string) string {
 	newSlice := []string{}
+	quote := "'"
 	for _, el := range slice {
-		newSlice = append(newSlice, "'"+el+"'")
+		newSlice = append(newSlice, quote+el+quote)
 	}
 	return strings.Join(newSlice, ",")
 }
 
-func SliceToSQLs(slice []string) []string {
-	max := maxInsertLength
+func SliceToSQLs(slice []string, maxInsertLength int) []string {
+	if maxInsertLength == 0 {
+		maxInsertLength = MaxSQLLengthSOQL
+	}
+	quote := "'"
 	strIdx := 0
 	newSlicesWip := [][]string{}
 	newSlicesWip = append(newSlicesWip, []string{})
 	for _, el := range slice {
-		newStr := "'" + el + "'"
-		if (LenStringForSlice(newSlicesWip[strIdx], ",") + len(newStr)) > max {
+		newStr := quote + el + quote
+		if maxInsertLength > 0 &&
+			(LenStringForSlice(newSlicesWip[strIdx], ",")+len(newStr)) > maxInsertLength {
 			newSlicesWip = append(newSlicesWip, []string{})
 			strIdx += 1
 		}
