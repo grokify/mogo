@@ -23,7 +23,7 @@ func TestSliceToSQLs(t *testing.T) {
 		if !reflect.DeepEqual(tt.valuesParsed, values) {
 			t.Errorf("TestSliceToSQLs() panic, bad test: with [%v]", tt.valuesRaw)
 		}
-		sqls := BuildSQLsInStrings(tt.sqlFormat, values)
+		sqls := BuildSQLsInStrings(tt.sqlFormat, values, MaxSQLLengthSOQL)
 		if len(sqls) == 0 {
 			t.Errorf("BuildSQLsInStrings() panic, bad test: with [%v] no results", tt.valuesRaw)
 		}
