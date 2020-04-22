@@ -34,6 +34,13 @@ func SliceTrimSpace(lines []string, condense bool) []string {
 	return SliceTrim(lines, " ", condense)
 }
 
+/*
+// SliceTrimSpace removes leading and trailing spaces per
+// string and optionally removes empty strings.
+func SliceTrimSpaceMore(lines []string, condense bool) []string {
+	return SliceTrim(lines, " ", condense)
+}*/
+
 // SliceTrim trims each line in a slice of lines using a
 // provided cut string.
 func SliceTrim(lines []string, cutstr string, condense bool) []string {
@@ -303,7 +310,7 @@ func SliceJoinQuoted(slice []string, begQuote, endQuote, sep string) string {
 	return strings.Join(words, sep)
 }
 
-func Remove(real, filter []string) []string {
+func SliceSubtract(real, filter []string) []string {
 	filtered := []string{}
 	filterMap := map[string]int{}
 	for _, f := range filter {
