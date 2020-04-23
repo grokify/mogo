@@ -1,7 +1,6 @@
 package httputilmore
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -13,16 +12,6 @@ import (
 )
 
 /*
-// ResponseBody is EOL. Use ioutil.ReadAll.
-func ResponseBody(res *http.Response) ([]byte, error) {
-	defer res.Body.Close()
-	contents, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return []byte{}, err
-	}
-	return contents, nil
-}
-
 // UnmarshalResponseJSON is EOL, use jsonutil.UnmarshalIoReader()
 func UnmarshalResponseJSON(resp *http.Response, data interface{}) ([]byte, error) {
 	bytes, err := ioutil.ReadAll(resp.Body)

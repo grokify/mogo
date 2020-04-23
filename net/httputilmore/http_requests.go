@@ -2,7 +2,6 @@ package httputilmore
 
 import (
 	"bytes"
-	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -39,22 +38,38 @@ func GetJsonSimple(requrl string, header http.Header, data interface{}) (*http.R
 	return resp, err
 }
 
+func PostJsonBytes(client *http.Client, requrl string, headers map[string]string, bodyBytes []byte) (*http.Response, error) {
+	req, err := http.NewRequest(http.MethodPost, requrl, bytes.NewBuffer(bodyBytes))
+	if err != nil {
+		return nil, err
+	}
+	for k, v := range headers {
+		k = strings.TrimSpace(k)
+		kMatch := strings.ToLower(k)
+		if kMatch == strings.ToLower(HeaderContentType) {
+			continue
+		}
+		req.Header.Set(k, v)
+	}
+	req.Header.Set(HeaderContentType, ContentTypeAppJsonUtf8)
+	if client == nil {
+		client = &http.Client{}
+	}
+	return client.Do(req)
+}
+
+func PostJsonMarshal(client *http.Client, requrl string, headers map[string]string, body interface{}) (*http.Response, error) {
+	bodyBytes, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	return PostJsonMarshal(client, requrl, headers, bodyBytes)
+}
+
 // PostJsonSimple performs a HTTP POST request converting a body interface{} to
 // JSON and adding the appropriate JSON Content-Type header.
 func PostJsonSimple(requrl string, body interface{}) (*http.Response, error) {
-	bodyBytes, err := json.Marshal(body)
-	if err != nil {
-		return &http.Response{}, err
-	}
-
-	req, err := http.NewRequest(http.MethodPost, requrl, bytes.NewBuffer(bodyBytes))
-	if err != nil {
-		return &http.Response{}, err
-	}
-	req.Header.Set(HeaderContentType, ContentTypeAppJsonUtf8)
-
-	client := &http.Client{}
-	return client.Do(req)
+	return PostJsonMarshal(nil, requrl, map[string]string{}, body)
 }
 
 // GetResponseAndBytes retreives a URL and returns the response body
