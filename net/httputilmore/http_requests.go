@@ -2,19 +2,47 @@ package httputilmore
 
 import (
 	"bytes"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
 	"github.com/grokify/gotilla/encoding/jsonutil"
+	"github.com/pkg/errors"
 )
 
+// GetWriteFile gets the conents of a URL and stores the body in
+// the desired filename location.
+func GetWriteFile(client *http.Client, url, filename string) error {
+	resp, err := client.Get(url)
+	if err != nil {
+		return errors.Wrap(err, "httputilmore.GetStoreURL.client.Get()")
+	}
+	defer resp.Body.Close()
+	dir, file := filepath.Split(filename)
+	if len(strings.TrimSpace(dir)) > 0 {
+		os.Chdir(dir)
+	}
+	f, err := os.Create(file)
+	if err != nil {
+		return errors.Wrap(err, "httputilmore.GetStoreURL.os.Create()")
+	}
+	defer f.Close()
+	_, err = io.Copy(f, resp.Body)
+	if err != nil {
+		err = errors.Wrap(err, "httputilmore.GetStoreURL.io.Copy()")
+	}
+	return err
+}
+
 // GetWriteFile performs a HTTP GET request and saves the response body
-// to the file path specified
-func GetWriteFile(url string, filename string, perm os.FileMode) ([]byte, error) {
+// to the file path specified. It reeads the entire file into memory
+// which is not ideal for large files.
+func GetWriteFileSimple(url string, filename string, perm os.FileMode) ([]byte, error) {
 	_, bytes, err := GetResponseAndBytes(url)
 	if err != nil {
 		return bytes, err
