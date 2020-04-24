@@ -8,7 +8,7 @@ import (
 
 	"github.com/grokify/gotilla/cmd/cmdutil"
 	"github.com/grokify/gotilla/image/imageutil"
-	"github.com/grokify/gotilla/math/mathutil"
+	"github.com/grokify/gotilla/math/ratio"
 	"github.com/grokify/gotilla/type/stringsutil"
 )
 
@@ -126,7 +126,7 @@ func ConvertToPDF(sourcePath, outputPath string) (bytes.Buffer, bytes.Buffer, er
 
 	outputWidth := 0
 	outputHeight := 0
-	_, calcY := mathutil.RatioInt(w, h, PdfWidth, 0)
+	_, calcY := ratio.RatioInt(w, h, PdfWidth, 0)
 	if calcY >= PdfHeight {
 		outputHeight = PdfHeight
 	} else {

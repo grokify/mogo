@@ -1,4 +1,4 @@
-package mathutil
+package ratio
 
 // RatioInt generates the missing value in a ratio calculation.
 // Missing number should be in second set of coordinates.
