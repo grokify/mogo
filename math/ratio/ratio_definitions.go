@@ -1,6 +1,6 @@
 package ratio
 
-var (
+const (
 	// Ratios are always width/height
 	RatioTelevisionEarly float64 = 5 / 4 // 1.25/1
 	RatioTelevision      float64 = 4 / 3 // 1.3/1
