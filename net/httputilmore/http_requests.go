@@ -91,7 +91,7 @@ func PostJsonMarshal(client *http.Client, requrl string, headers map[string]stri
 	if err != nil {
 		return nil, err
 	}
-	return PostJsonMarshal(client, requrl, headers, bodyBytes)
+	return PostJsonBytes(client, requrl, headers, bodyBytes)
 }
 
 // PostJsonSimple performs a HTTP POST request converting a body interface{} to
