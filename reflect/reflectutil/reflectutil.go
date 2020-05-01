@@ -38,3 +38,19 @@ func TypeName(myvar interface{}) (res string) {
 	}
 	return res + t.Name()
 }
+
+// SliceInterfaceToString converts an `interface{}` to a
+// `[]string`.
+func SliceInterfaceToString(raws interface{}) []string {
+	out := []string{}
+	switch reflect.TypeOf(raws).Kind() {
+	case reflect.Slice:
+		s := reflect.ValueOf(raws)
+
+		for i := 0; i < s.Len(); i++ {
+			val := s.Index(i)
+			out = append(out, val.Interface().(string))
+		}
+	}
+	return out
+}
