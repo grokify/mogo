@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/grokify/gotilla/type/stringsutil"
+	"github.com/grokify/gotilla/type/stringsutil/join"
 )
 
 const (
@@ -82,5 +82,5 @@ func (ut *URLTransformer) URLActualToPattern(s string) string {
 
 func (ut *URLTransformer) BuildReverseEndpointPattern(method, actualURL string) string {
 	pattern := ut.URLActualToPattern(actualURL)
-	return stringsutil.JoinCondenseTrimSpace([]string{pattern, method}, " ")
+	return join.JoinCondenseTrimSpace([]string{pattern, method}, " ")
 }

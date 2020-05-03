@@ -1,7 +1,6 @@
 package stringsutil
 
 import (
-	"fmt"
 	"regexp"
 	"sort"
 	"strconv"
@@ -64,6 +63,7 @@ func SliceIndexOrEmpty(s []string, index uint64) string {
 	return s[index]
 }
 
+/*
 // JoinAny takes an array of interface{} and converts
 // each value to a string using fmt.Sprintf("%v")
 func JoinAny(a []interface{}, sep string) string {
@@ -85,6 +85,7 @@ func JoinInt(a []int, sep string) string {
 func JoinCondenseTrimSpace(slice []string, sep string) string {
 	return strings.Join(SliceTrimSpace(slice, true), sep)
 }
+*/
 
 func SliceCondenseRegexps(texts []string, regexps []*regexp.Regexp, replacement string) []string {
 	parts := []string{}
@@ -223,12 +224,13 @@ func SliceChooseOnePreferredLowerTrimSpace(options, preferenceOrder []string) st
 	return strings.ToLower(strings.TrimSpace(options[0]))
 }
 
-func SliceJoinQuotedMaxLength(slice []string, begQuote, endQuote, sep string, maxLength int) []string {
+/*
+func SliceJoinQuoteMaxLength(slice []string, begQuote, endQuote, sep string, maxLength int) []string {
 	words := []string{}
 	curWords := []string{}
 	curLength := 0
 	for _, word := range slice {
-		if curLength+len(begQuote+word+endQuote+sep) > maxLength {
+		if maxLength > 0 && curLength+len(begQuote+word+endQuote+sep) > maxLength {
 			words = append(words, strings.Join(curWords, sep))
 			curWords = []string{}
 			curLength = 0
@@ -282,12 +284,12 @@ func JoinCustom(slice []string, cfg JoinCustomConfig) []string {
 	return lines
 }
 
-func SliceJoinQuotedMaxLengthTrimSpaceSkipEmpty(slice []string, begQuote, endQuote, sep string, maxLength int) []string {
+func SliceJoinQuoteMaxLengthTrimSpaceSkipEmpty(slice []string, begQuote, endQuote, sep string, maxLength int) []string {
 	words := []string{}
 	curWords := []string{}
 	curLength := 0
 	for _, word := range slice {
-		if curLength+len(begQuote+word+endQuote+sep) > maxLength {
+		if maxLength > 0 && curLength+len(begQuote+word+endQuote+sep) > maxLength {
 			words = append(words, strings.Join(curWords, sep))
 			curWords = []string{}
 			curLength = 0
@@ -309,6 +311,7 @@ func SliceJoinQuoted(slice []string, begQuote, endQuote, sep string) string {
 	}
 	return strings.Join(words, sep)
 }
+*/
 
 func SliceSubtract(real, filter []string) []string {
 	filtered := []string{}
