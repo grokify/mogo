@@ -261,3 +261,9 @@ func FormatTimeMulti(dateFormat string, v interface{}) string {
 	}
 	return ""
 }
+
+func FormatTimeToString(format string) func(time.Time) string {
+	return func(dt time.Time) string {
+		return dt.Format(format)
+	}
+}
