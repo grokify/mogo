@@ -19,6 +19,9 @@ func AtoiWithDefault(s string, def int) int {
 	return i
 }
 
+// Float64ToString is a function type to define functions.
+type Float64ToString func(float64) string
+
 // Int64ToString is a function type to define functions.
 type Int64ToString func(int64) string
 
