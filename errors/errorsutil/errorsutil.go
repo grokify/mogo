@@ -3,6 +3,7 @@ package errorsutil
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 // Append adds additional text to an existing error.
@@ -23,4 +24,21 @@ type ErrorInfo struct {
 	Display string
 	Input   string
 	Correct string
+}
+
+func Join(inclNils bool, errs ...error) error {
+	strs := []string{}
+	for _, err := range errs {
+		if err == nil {
+			if inclNils {
+				strs = append(strs, "nil")
+			}
+		} else {
+			strs = append(strs, err.Error())
+		}
+	}
+	if len(strs) > 0 {
+		return errors.New(strings.Join(strs, ";"))
+	}
+	return nil
 }
