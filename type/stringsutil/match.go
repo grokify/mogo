@@ -17,6 +17,8 @@ const (
 	TimeGTE
 	TimeLT
 	TimeLTE
+	MatchHasSuffix
+	MatchHasPrefix
 )
 
 type MatchInfo struct {

@@ -178,28 +178,37 @@ func Dedupe(vals []string) []string {
 	return deduped
 }
 
-// SliceIndexOf returns the index of an element in a
+// SliceIndex returns the index of an element in a
 // string slice. Returns -1 if not found.
-func SliceIndexOf(needle string, haystack []string) int {
-	for k, v := range haystack {
-		if v == needle {
-			return k
+func SliceIndex(haystack []string, needle string, trimSpace, toLower bool, matchType MatchType) int {
+	if trimSpace {
+		needle = strings.TrimSpace(needle)
+	}
+	if toLower {
+		needle = strings.ToLower(needle)
+	}
+	for idx, hay := range haystack {
+		if trimSpace {
+			hay = strings.TrimSpace(hay)
+		}
+		if toLower {
+			hay = strings.ToLower(hay)
+		}
+		if matchType == MatchHasSuffix {
+			if strings.HasSuffix(needle, hay) {
+				return idx
+			}
+		} else if matchType == MatchHasPrefix {
+			if strings.HasPrefix(needle, hay) {
+				return idx
+			}
+		} else {
+			if needle == hay {
+				return idx
+			}
 		}
 	}
-	return -1 //not found.
-}
-
-// SliceIndexOfLcTrimSpace returns the index of an element in a
-// string slice. Returns -1 if not found.
-func SliceIndexOfLcTrimSpace(needle string, haystack []string) int {
-	needle = strings.ToLower(strings.TrimSpace(needle))
-	for k, v := range haystack {
-		v = strings.ToLower(strings.TrimSpace(v))
-		if v == needle {
-			return k
-		}
-	}
-	return -1 //not found.
+	return -1
 }
 
 func SliceChooseOnePreferredLowerTrimSpace(options, preferenceOrder []string) string {
