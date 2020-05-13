@@ -66,8 +66,20 @@ func GetJsonSimple(requrl string, header http.Header, data interface{}) (*http.R
 	return resp, err
 }
 
-func PostJsonBytes(client *http.Client, requrl string, headers map[string]string, bodyBytes []byte) (*http.Response, error) {
-	req, err := http.NewRequest(http.MethodPost, requrl, bytes.NewBuffer(bodyBytes))
+func PatchJsonBytes(client *http.Client, requrl string, headers map[string]string, body []byte) (*http.Response, error) {
+	return RequestJsonBody(client, http.MethodPatch, requrl, headers, body)
+}
+
+func PostJsonBytes(client *http.Client, requrl string, headers map[string]string, body []byte) (*http.Response, error) {
+	return RequestJsonBody(client, http.MethodPost, requrl, headers, body)
+}
+
+func PutJsonBytes(client *http.Client, requrl string, headers map[string]string, body []byte) (*http.Response, error) {
+	return RequestJsonBody(client, http.MethodPut, requrl, headers, body)
+}
+
+func RequestJsonBody(client *http.Client, httpMethod, requrl string, headers map[string]string, body []byte) (*http.Response, error) {
+	req, err := http.NewRequest(httpMethod, requrl, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
 	}
@@ -122,5 +134,13 @@ func SendWwwFormUrlEncodedSimple(method, urlStr string, data url.Values) (*http.
 	req.Header.Add(HeaderContentType, ContentTypeAppFormUrlEncoded)
 	req.Header.Add(HeaderContentLength, strconv.Itoa(len(data.Encode())))
 	client := &http.Client{}
+	return client.Do(req)
+}
+
+func Delete(client *http.Client, url string) (*http.Response, error) {
+	req, err := http.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return nil, err
+	}
 	return client.Do(req)
 }
