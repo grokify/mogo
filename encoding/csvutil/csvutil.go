@@ -353,6 +353,39 @@ func WriteCSVFiltered(reader *csv.Reader, writer *csv.Writer, andFilter map[stri
 	return nil
 }
 
+func NewTableDataFilesSimple(filenames []string, sep string, hasHeader, trimSpace bool) (table.TableData, error) {
+	tbl := table.NewTableData()
+	for i, filename := range filenames {
+		filename = strings.TrimSpace(filename)
+		if len(filename) == 0 {
+			continue
+		}
+		tblx, err := NewTableDataFileSimple(filename, sep, hasHeader, trimSpace)
+		if err != nil {
+			return tbl, err
+		}
+		if len(tbl.Columns) == 0 {
+			tbl.Columns = tblx.Columns
+		} else {
+			curCols := strings.Join(tbl.Columns, ",")
+			nowCols := strings.Join(tblx.Columns, ",")
+			if curCols != nowCols {
+				if i == 0 {
+					// if len(tbl.Columns) > 0, i has to be > 0
+					panic("E_BAD_FILE_COUNTER_TABLE_COLUMNS")
+				}
+				return tbl, fmt.Errorf("CSV table definition mismatch [%s] AND [%s] for FILES [%s]",
+					curCols, nowCols,
+					filenames[i-1]+","+filename)
+			}
+		}
+		if len(tblx.Records) > 0 {
+			tbl.Records = append(tbl.Records, tblx.Records...)
+		}
+	}
+	return tbl, nil
+}
+
 func NewTableDataFileSimple(path string, sep string, hasHeader, trimSpace bool) (table.TableData, error) {
 	tbl := table.NewTableData()
 	data, err := ioutil.ReadFile(path)
