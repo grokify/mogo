@@ -10,10 +10,11 @@ import (
 type PgConn struct {
 	Host     string
 	Port     string
-	User     string
-	Password string
-	Database string
-	SSLMode  string
+	Addr     string `josn:"Addr,omitempty"`
+	User     string `json:"User,omitempty"`
+	Password string `json:"Password,omitempty"`
+	Database string `json:"Database,omitempty"`
+	SSLMode  string `json:"sslmode,omitempty"`
 }
 
 func NewPgConnJSON(data []byte) (PgConn, error) {
@@ -23,8 +24,10 @@ func NewPgConnJSON(data []byte) (PgConn, error) {
 }
 
 func (conn *PgConn) Address() string {
-	if len(conn.Host) > 0 && len(conn.Port) > 0 {
-		return "addr=" + conn.Host + ":" + conn.Port
+	if len(conn.Addr) > 0 {
+		return conn.Addr
+	} else if len(conn.Host) > 0 && len(conn.Port) > 0 {
+		return conn.Host + ":" + conn.Port
 	}
 	return ""
 }
@@ -39,7 +42,7 @@ func (conn *PgConn) Encode() string {
 		parts = append(parts, "password="+conn.Password)
 	}
 	if len(conn.Host) > 0 && len(conn.Port) > 0 {
-		parts = append(parts, conn.Address())
+		parts = append(parts, "addr="+conn.Address())
 	}
 	if len(conn.Database) > 0 {
 		parts = append(parts, "dbname="+conn.Database)
@@ -58,7 +61,12 @@ func (conn *PgConn) GoPgOptions() *pg.Options {
 		Database: conn.Database}
 }
 
+func (conn *PgConn) Client() *pg.DB {
+	return pg.Connect(conn.GoPgOptions())
+}
+
 func (conn *PgConn) Trim() {
+	conn.Addr = strings.TrimSpace(conn.Addr)
 	conn.Host = strings.TrimSpace(conn.Host)
 	conn.Port = strings.TrimSpace(conn.Port)
 	conn.User = strings.TrimSpace(conn.User)

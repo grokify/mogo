@@ -29,6 +29,7 @@ const (
 	ISO8601YM          = "2006-01"
 	Ruby               = "2006-01-02 15:04:05 -0700" // Ruby Time.now.to_s
 	SQLTimestamp       = "2006-01-02 15:04:05"       // MySQL, BigQuery, etc.
+	SQLTimestampPgTz   = "2006-01-02 15:04:05.999999-07"
 	InsightlyApiQuery  = "_1/_2/2006 _3:04:05 PM"
 	DateMDY            = "1/_2/2006"
 	DateMDYSlash       = "01/02/2006"
