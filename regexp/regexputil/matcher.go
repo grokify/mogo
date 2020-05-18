@@ -26,7 +26,7 @@ func (sm *StringMatcher) AddMatcher(rx *regexp.Regexp) {
 	sm.Matchers = append(sm.Matchers, rx)
 }
 
-// Match runs the provided string againts the prematch
+// Match runs the provided string against the prematch
 // function and regular expresssions, returning true if
 // any of the expressions match.
 func (sm *StringMatcher) Match(input string) bool {
