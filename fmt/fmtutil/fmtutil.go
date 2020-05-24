@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"expvar"
 	"fmt"
+
+	"github.com/grokify/gotilla/encoding/jsonutil"
 )
 
 var (
@@ -28,6 +30,16 @@ func PrintJSON(in interface{}) error {
 	} else {
 		j, err = json.Marshal(in)
 	}
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(j))
+	return nil
+}
+
+// PrintJSONMore pretty prints anything using supplied indentation.
+func PrintJSONMore(in interface{}, jsonPrefix, jsonIndent string) error {
+	j, err := jsonutil.MarshalSimple(in, jsonPrefix, jsonIndent)
 	if err != nil {
 		return err
 	}
