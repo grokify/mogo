@@ -10,15 +10,16 @@ require (
 	github.com/buger/jsonparser v1.0.0
 	github.com/caarlos0/env v3.5.0+incompatible
 	github.com/derekstavis/go-qs v0.0.0-20180720192143-9eef69e6c4e7
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/emersion/go-imap v1.0.4
 	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect
 	github.com/go-pg/pg v8.0.6+incompatible
 	github.com/golang/protobuf v1.4.2
 	github.com/google/go-querystring v1.0.0
-	github.com/grokify/base36 v1.0.0
+	github.com/grokify/base36 v1.0.1
 	github.com/grokify/bitcoinmath v0.0.0-20171208015713-6ef5b53bef73
 	github.com/grokify/gocharts v0.0.0-20200519050948-730f48e1a73f
-	github.com/grokify/oauth2more v0.3.0
+	github.com/grokify/oauth2more v0.3.1
 	github.com/huandu/xstrings v1.3.1
 	github.com/itchyny/base58-go v0.1.0
 	github.com/jessevdk/go-flags v1.4.0
@@ -43,6 +44,7 @@ require (
 	golang.org/x/image v0.0.0-20200430140353-33d19683fad8
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
 	golang.org/x/text v0.3.2
+	google.golang.org/api v0.25.0 // indirect
 	gopkg.in/oleiade/reflections.v1 v1.0.0
 	mellium.im/sasl v0.2.1 // indirect
 )
