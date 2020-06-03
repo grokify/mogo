@@ -17,10 +17,10 @@ import (
 
 // GetWriteFile gets the conents of a URL and stores the body in
 // the desired filename location.
-func GetWriteFile(client *http.Client, url, filename string) error {
+func GetWriteFile(client *http.Client, url, filename string) (*http.Response, error) {
 	resp, err := client.Get(url)
 	if err != nil {
-		return errors.Wrap(err, "httputilmore.GetStoreURL.client.Get()")
+		return resp, errors.Wrap(err, "httputilmore.GetStoreURL.client.Get()")
 	}
 	defer resp.Body.Close()
 	dir, file := filepath.Split(filename)
@@ -29,14 +29,14 @@ func GetWriteFile(client *http.Client, url, filename string) error {
 	}
 	f, err := os.Create(file)
 	if err != nil {
-		return errors.Wrap(err, "httputilmore.GetStoreURL.os.Create()")
+		return resp, errors.Wrap(err, "httputilmore.GetStoreURL.os.Create()")
 	}
 	defer f.Close()
 	_, err = io.Copy(f, resp.Body)
 	if err != nil {
 		err = errors.Wrap(err, "httputilmore.GetStoreURL.io.Copy()")
 	}
-	return err
+	return resp, err
 }
 
 // GetWriteFile performs a HTTP GET request and saves the response body
