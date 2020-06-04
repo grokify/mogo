@@ -93,6 +93,9 @@ func (tr *TimeRange) Duration() time.Duration {
 func (tr *TimeRange) Nanoseconds() uint64 {
 	tr.Normalize()
 	dur := tr.Max.Sub(tr.Min)
+	if dur.Nanoseconds() < 0 {
+		panic("E_TIMERANGE_DURATION_IS_NEGATIVE")
+	}
 	return uint64(dur.Nanoseconds())
 }
 
