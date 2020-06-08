@@ -27,8 +27,10 @@ require (
 	github.com/joho/godotenv v1.3.0
 	github.com/json-iterator/go v1.1.9
 	github.com/kellydunn/golang-geo v0.7.0
+	github.com/kurin/blazer v0.5.3
 	github.com/kylelemons/go-gypsy v0.0.0-20160905020020-08cad365cd28 // indirect
 	github.com/leekchan/accounting v0.0.0-20191218023648-17a4ce5f94d4
+	github.com/lytics/base62 v0.0.0-20180808010106-0ee4de5a5d6d
 	github.com/martinlindhe/base36 v1.0.0
 	github.com/microcosm-cc/bluemonday v1.0.2
 	github.com/pkg/errors v0.9.1
@@ -42,7 +44,6 @@ require (
 	github.com/ziutek/mymysql v1.5.4 // indirect
 	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37
 	golang.org/x/image v0.0.0-20200430140353-33d19683fad8
-	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
 	golang.org/x/text v0.3.2
 	google.golang.org/api v0.25.0 // indirect
 	gopkg.in/oleiade/reflections.v1 v1.0.0

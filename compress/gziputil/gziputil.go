@@ -9,6 +9,15 @@ import (
 	"io/ioutil"
 )
 
+func FixCompressLevel(level int) int {
+	if level > 9 {
+		level = 9
+	} else if level < -1 {
+		level = -1
+	}
+	return level
+}
+
 // CompressWriter compresses a byte slide and writes the results
 // to the supplied `io.Writer`. When writing to a file, a `*os.File`
 // from `os.Create()` can be used as the `io.Writer`.
@@ -25,7 +34,7 @@ func CompressWriter(w io.Writer, data []byte, level int) error {
 // Compress performs gzip compression on a byte slice.
 func Compress(data []byte, level int) []byte {
 	buf := new(bytes.Buffer)
-	CompressWriter(buf, data, level)
+	CompressWriter(buf, data, FixCompressLevel(level))
 	return buf.Bytes()
 }
 
