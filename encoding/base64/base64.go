@@ -17,7 +17,7 @@ var (
 	rxCheckNoPadding = regexp.MustCompile(`^[0-9A-Za-z/\+]*$`)
 )
 
-// Encode with optional gzip compression. 0 = no compession.
+// Encode with optional gzip compression. 0 = no compression.
 // 9 = best compression.
 func EncodeGzip(data []byte, compressLevel int) string {
 	if compressLevel != 0 {

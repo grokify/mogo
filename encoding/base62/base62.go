@@ -18,7 +18,7 @@ var (
 	rxCheckBase62NoPadding = regexp.MustCompile(`^[0-9A-Za-z]*$`)
 )
 
-// Encode with optional gzip compression. 0 = no compession.
+// Encode with optional gzip compression. 0 = no compression.
 // 9 = best compression. Currently, compression is disabled
 // as github.com/lytics/base62 does not appear to support it
 // properly.
