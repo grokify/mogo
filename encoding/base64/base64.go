@@ -22,9 +22,17 @@ func Decode(input []byte) ([]byte, error) {
 	return output[:n], err
 }
 
+const (
+	// RxCheckMore is from https://stackoverflow.com/a/8571649/1908967
+	RxCheckMore      = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$"
+	RxCheckSimple    = `^[0-9A-Za-z/\+]*=*$`
+	RxCheckNoPadding = `^[0-9A-Za-z/\+]*$`
+)
+
 var (
-	rxCheck          = regexp.MustCompile(`^[0-9A-Za-z/\+]*=*$`)
-	rxCheckNoPadding = regexp.MustCompile(`^[0-9A-Za-z/\+]*$`)
+	rxCheckMore      = regexp.MustCompile(RxCheckMore)
+	rxCheck          = regexp.MustCompile(RxCheckSimple)
+	rxCheckNoPadding = regexp.MustCompile(RxCheckNoPadding)
 )
 
 // Encode with optional gzip compression. 0 = no compression.
@@ -52,11 +60,11 @@ func DecodeGunzip(encoded string) ([]byte, error) {
 }
 
 func IsValid(input []byte) bool {
-	return rxCheck.Match(input)
+	return rxCheckMore.Match(input)
 }
 
 func IsValidString(input string) bool {
-	return rxCheck.MatchString(input)
+	return rxCheckMore.MatchString(input)
 }
 
 func StripPadding(str string) string {
