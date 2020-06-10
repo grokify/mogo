@@ -24,7 +24,7 @@ func Decode(input []byte) ([]byte, error) {
 
 const (
 	// RxCheckMore is from https://stackoverflow.com/a/8571649/1908967
-	RxCheckMore      = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$"
+	RxCheckMore      = `^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$`
 	RxCheckSimple    = `^[0-9A-Za-z/\+]*=*$`
 	RxCheckNoPadding = `^[0-9A-Za-z/\+]*$`
 )
