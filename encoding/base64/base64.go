@@ -4,6 +4,8 @@ package base64
 import (
 	"encoding/base64"
 	"encoding/json"
+	"io"
+	"io/ioutil"
 	"regexp"
 	"strings"
 
@@ -11,6 +13,14 @@ import (
 	"github.com/grokify/gotilla/encoding"
 	"github.com/pkg/errors"
 )
+
+// Decode decodes a byte array to provide an interface
+// like `base64/DecodeString`.
+func Decode(input []byte) ([]byte, error) {
+	var output []byte
+	n, err := base64.StdEncoding.Decode(output, input)
+	return output[:n], err
+}
 
 var (
 	rxCheck          = regexp.MustCompile(`^[0-9A-Za-z/\+]*=*$`)
@@ -39,6 +49,14 @@ func DecodeGunzip(encoded string) ([]byte, error) {
 		return bytes, nil
 	}
 	return bytesUnc, nil
+}
+
+func IsValid(input []byte) bool {
+	return rxCheck.Match(input)
+}
+
+func IsValidString(input string) bool {
+	return rxCheck.MatchString(input)
 }
 
 func StripPadding(str string) string {
@@ -71,4 +89,18 @@ func DecodeGunzipJSON(encoded string, output interface{}) error {
 		return errors.Wrap(err, "DecodeGunzipJSON.DecodeGunzip")
 	}
 	return json.Unmarshal(bytes, output)
+}
+
+// ReadAll provides an interface like `ioutil.ReadAll`
+// with optional base64 decoding. It is useful for
+// decoding `*http.Response.Body`.
+func ReadAll(r io.Reader) ([]byte, error) {
+	bytes, err := ioutil.ReadAll(r)
+	if err != nil {
+		return bytes, err
+	}
+	if IsValid(bytes) {
+		return Decode(bytes)
+	}
+	return bytes, err
 }
