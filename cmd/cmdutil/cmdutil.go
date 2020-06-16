@@ -9,6 +9,8 @@ import (
 )
 
 // ExecSimple provides a simple interface to execute a system command.
+// Redirects for STDOUT and STDERR must be passed in as file names,
+// not as `>` and `2>` UNIX file descriptors.
 func ExecSimple(command, stdoutFile, stderrFile string, perm os.FileMode) (bytes.Buffer, bytes.Buffer, error) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
