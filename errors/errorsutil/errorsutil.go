@@ -65,6 +65,16 @@ func (eis ErrorInfos) GoodInputs() []string {
 	return inputs
 }
 
+func (eis ErrorInfos) GoodCorrects() []string {
+	inputs := []string{}
+	for _, ei := range eis {
+		if ei.Error == nil {
+			inputs = append(inputs, ei.Correct)
+		}
+	}
+	return inputs
+}
+
 func (eis ErrorInfos) ErrorsString() []string {
 	estrings := []string{}
 	for _, ei := range eis {
