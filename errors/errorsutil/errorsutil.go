@@ -11,21 +11,6 @@ func Append(err error, str string) error {
 	return errors.New(fmt.Sprint(err) + str)
 }
 
-// PanicOnErr is a syntactic sugar function to panic on error.
-func PanicOnErr(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-
-type ErrorInfo struct {
-	Error   error
-	Code    string
-	Display string
-	Input   string
-	Correct string
-}
-
 func Join(inclNils bool, errs ...error) error {
 	strs := []string{}
 	for _, err := range errs {
@@ -41,4 +26,71 @@ func Join(inclNils bool, errs ...error) error {
 		return errors.New(strings.Join(strs, ";"))
 	}
 	return nil
+}
+
+// PanicOnErr is a syntactic sugar function to panic on error.
+func PanicOnErr(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
+type ErrorInfo struct {
+	Error       error
+	ErrorString string // must match Error
+	Code        string
+	Display     string
+	Input       string
+	Correct     string
+}
+
+type ErrorInfos []*ErrorInfo
+
+func (eis ErrorInfos) Inflate() {
+	for i, ei := range eis {
+		if ei != nil && ei.Error != nil {
+			ei.ErrorString = ei.Error.Error()
+		}
+		eis[i] = ei
+	}
+}
+
+func (eis ErrorInfos) GoodInputs() []string {
+	inputs := []string{}
+	for _, ei := range eis {
+		if ei.Error == nil {
+			inputs = append(inputs, ei.Input)
+		}
+	}
+	return inputs
+}
+
+func (eis ErrorInfos) ErrorsString() []string {
+	estrings := []string{}
+	for _, ei := range eis {
+		if ei.Error != nil {
+			estrings = append(estrings, ei.Error.Error())
+		}
+	}
+	return estrings
+}
+
+func (eis ErrorInfos) Filter(isError bool) ErrorInfos {
+	filtered := ErrorInfos{}
+	for _, ei := range eis {
+		if isError {
+			if ei.Error != nil {
+				filtered = append(filtered, ei)
+			} else {
+				filtered = append(filtered, nil)
+			}
+		} else if !isError {
+			if ei.Error == nil {
+				filtered = append(filtered, ei)
+			} else {
+				filtered = append(filtered, nil)
+			}
+		}
+	}
+	return filtered
 }
