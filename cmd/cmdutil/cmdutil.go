@@ -7,8 +7,7 @@ import (
 	"strings"
 )
 
-// ExecSimple provides a simple interface to execute a system
-// command.
+// ExecSimple provides a simple interface to execute a system command.
 func ExecSimple(command, stdoutFile, stderrFile string) (bytes.Buffer, bytes.Buffer, error) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
