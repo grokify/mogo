@@ -62,7 +62,7 @@ func main() {
 	for i, cmd := range cmds {
 		fmt.Printf("[%v/%v] %v\n", i+1, l, cmd)
 		if len(opts.Exec) > 0 {
-			stdout, stderr, err := cmdutil.ExecSimple(cmd, "", "", 0)
+			stdout, stderr, err := cmdutil.ExecSimple(cmd)
 			if err != nil {
 				log.Fatal(err)
 			}

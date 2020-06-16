@@ -9,9 +9,7 @@ import (
 )
 
 // ExecSimple provides a simple interface to execute a system command.
-// Redirects for STDOUT and STDERR must be passed in as file names,
-// not as `>` and `2>` UNIX file descriptors.
-func ExecSimple(command, stdoutFile, stderrFile string, perm os.FileMode) (bytes.Buffer, bytes.Buffer, error) {
+func ExecSimple(command string) (bytes.Buffer, bytes.Buffer, error) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 	parts := strings.Split(command, " ")
@@ -19,6 +17,14 @@ func ExecSimple(command, stdoutFile, stderrFile string, perm os.FileMode) (bytes
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 	err := cmd.Run()
+	return stdout, stderr, err
+}
+
+// ExecToFiles provides a simple interface to execute a system command.
+// Redirects for STDOUT and STDERR must be passed in as file names,
+// not as `>` and `2>` UNIX file descriptors.
+func ExecToFiles(command, stdoutFile, stderrFile string, perm os.FileMode) (bytes.Buffer, bytes.Buffer, error) {
+	stdout, stderr, err := ExecSimple(command)
 	if err != nil {
 		return stdout, stderr, err
 	}
