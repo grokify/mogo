@@ -35,6 +35,20 @@ func PanicOnErr(err error) {
 	}
 }
 
+func ErrorsToStrings(errs []error) (int, []string) {
+	strs := []string{}
+	count := 0
+	for _, err := range errs {
+		if err != nil {
+			strs = append(strs, err.Error())
+			count += 1
+		} else {
+			strs = append(strs, "")
+		}
+	}
+	return count, strs
+}
+
 type ErrorInfo struct {
 	Error       error
 	ErrorString string // must match Error
