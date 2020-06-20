@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -19,66 +18,12 @@ const (
 	MillisToNanoMultiplier = 1000000
 )
 
-var days = [...]string{
-	"Sunday",
-	"Monday",
-	"Tuesday",
-	"Wednesday",
-	"Thursday",
-	"Friday",
-	"Saturday",
-}
-
-type Interval int
-
-const (
-	Decade Interval = iota
-	Year
-	Quarter
-	Month
-	Week
-	Day
-	Hour
-	Minute
-	Second
-	Millisecond
-	Microsecond
-	Nanosecond
-)
-
-var intervals = [...]string{
-	"decade",
-	"year",
-	"quarter",
-	"month",
-	"week",
-	"day",
-	"hour",
-	"minute",
-	"second",
-	"millisecond",
-	"microsecond",
-	"nanosecond",
-}
-
 func MustParse(layout, value string) time.Time {
 	t, err := time.Parse(layout, value)
 	if err != nil {
 		panic(err)
 	}
 	return t
-}
-
-func (i Interval) String() string { return intervals[i] }
-
-func ParseInterval(src string) (Interval, error) {
-	canonical := strings.ToLower(strings.TrimSpace(src))
-	for i, try := range intervals {
-		if canonical == try {
-			return Interval(i), nil
-		}
-	}
-	return Year, fmt.Errorf("Interval [%v] not found.", src)
 }
 
 // TimeForEpochMillis returns the time.Time value for an epoch
@@ -316,30 +261,6 @@ func IsYearStart(t time.Time) bool {
 		return true
 	}
 	return false
-}
-
-func IntervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time, error) {
-	switch interval.String() {
-	case "year":
-		return YearStart(dt), nil
-	case "quarter":
-		return QuarterStart(dt), nil
-	case "month":
-		return MonthStart(dt), nil
-	case "week":
-		return WeekStart(dt, dow)
-	default:
-		return time.Time{}, fmt.Errorf("Interval [%v] not supported in timeutil.IntervalStart.", interval)
-	}
-}
-
-func ParseWeekday(s string) (time.Weekday, error) {
-	for i, day := range days {
-		if strings.ToLower(strings.TrimSpace(s)) == strings.ToLower(day) {
-			return time.Weekday(i), nil
-		}
-	}
-	return time.Weekday(0), fmt.Errorf("Cannot parse weekday: %s", s)
 }
 
 func ToMonthStart(t time.Time) time.Time {
