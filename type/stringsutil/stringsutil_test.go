@@ -59,7 +59,7 @@ var toUpperFirstTests = []struct {
 
 func TestToUpperFirst(t *testing.T) {
 	for _, tt := range toUpperFirstTests {
-		got := ToUpperFirst(tt.v)
+		got := ToUpperFirst(tt.v, false)
 
 		if got != tt.want {
 			t.Errorf("strutil.ToUpperFirst() Error: with [%v], want [%v], got [%v]",

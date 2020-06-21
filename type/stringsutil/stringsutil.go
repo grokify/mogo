@@ -50,8 +50,7 @@ func PadRight(str string, pad string, length int) string {
 // Capitalize returns a string with the first character
 // capitalized and the rest lower cased.
 func Capitalize(s1 string) string {
-	s2 := strings.ToLower(s1)
-	return ToUpperFirst(s2)
+	return ToUpperFirst(s1, true)
 }
 
 // ToLowerFirst lower cases the first letter in the string
@@ -69,7 +68,10 @@ func ToLowerFirst(s1 string) string {
 }
 
 // ToUpperFirst upper cases the first letter in the string
-func ToUpperFirst(s1 string) string {
+func ToUpperFirst(s1 string, lowerRest bool) string {
+	if lowerRest {
+		s1 = strings.ToLower(s1)
+	}
 	a1 := []rune(s1)
 	a1[0] = unicode.ToUpper(a1[0])
 	return string(a1)
@@ -271,7 +273,7 @@ func StringToConstant(s string) string {
 		if _, ok := ciMap[pUp]; ok {
 			newParts = append(newParts, pUp)
 		} else {
-			newParts = append(newParts, ToUpperFirst(strings.ToLower(p)))
+			newParts = append(newParts, ToUpperFirst(p, true))
 		}
 	}
 	return strings.Join(newParts, "")
