@@ -322,6 +322,8 @@ func SliceJoinQuoted(slice []string, begQuote, endQuote, sep string) string {
 }
 */
 
+// SliceSubtract uses Set math to remove elements of filter
+// from real.
 func SliceSubtract(real, filter []string) []string {
 	filtered := []string{}
 	filterMap := map[string]int{}
