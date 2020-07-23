@@ -52,6 +52,9 @@ func ReadFileCSVToSQLsSimple(filename, sqlFormat string, hasHeader bool) ([]stri
 	return sqls, nil
 }
 
+// BuildSQLsInStrings returns a SQL statement inserting SQL IN values.
+// The supplied SQL fromat should have a `%s` field surrounded by
+// parentheses `()`. For example `SELECT Id from Account WHERE Id IN (%s)`.
 func BuildSQLsInStrings(sqlFormat string, values []string, maxInsertLength int) []string {
 	sqls := []string{}
 	sqlIns := SliceToSQLs(values, maxInsertLength)
@@ -70,8 +73,10 @@ func SliceToSQL(slice []string) string {
 	return strings.Join(newSlice, ",")
 }
 
+// SliceToSQLs returns a slice of string elements separated by
+// commas without the surrounding ()'s.
 func SliceToSQLs(slice []string, maxInsertLength int) []string {
-	if maxInsertLength == 0 {
+	if maxInsertLength <= 0 {
 		maxInsertLength = MaxSQLLengthSOQL
 	}
 	quote := "'"
