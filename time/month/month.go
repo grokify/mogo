@@ -2,10 +2,13 @@ package month
 
 import (
 	"fmt"
+	"sort"
 	"time"
 
 	"github.com/grokify/base36"
 	"github.com/grokify/gotilla/math/mathutil"
+	"github.com/grokify/gotilla/sort/sortutil"
+	"github.com/grokify/gotilla/time/timeutil"
 )
 
 func DayofmonthToEnglish(i uint16) string {
@@ -120,4 +123,22 @@ func MonthContinuousIsYearBegin(monthc uint64) bool {
 		return true
 	}
 	return false
+}
+
+// TimeSeriesMonth returns time series of months given start and end
+// input times.
+func TimeSeriesMonth(sortAsc bool, times ...time.Time) sortutil.TimeSlice {
+	min, max := timeutil.SliceMinMax(times)
+	minMonth := timeutil.MonthStart(min)
+	maxMonth := timeutil.MonthStart(max)
+	timeSeries := sortutil.TimeSlice{}
+	curMonth := minMonth
+	for curMonth.Before(maxMonth) || curMonth.Equal(maxMonth) {
+		timeSeries = append(timeSeries, curMonth)
+		curMonth = timeutil.TimeDt6AddNMonths(curMonth, 1)
+	}
+	if len(timeSeries) > 0 && sortAsc {
+		sort.Sort(timeSeries)
+	}
+	return timeSeries
 }
