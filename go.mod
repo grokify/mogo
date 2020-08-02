@@ -33,6 +33,7 @@ require (
 	github.com/lytics/base62 v0.0.0-20180808010106-0ee4de5a5d6d
 	github.com/martinlindhe/base36 v1.0.0
 	github.com/microcosm-cc/bluemonday v1.0.2
+	github.com/nyaruka/phonenumbers v1.0.56
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/sftp v1.11.0
 	github.com/pquerna/ffjson v0.0.0-20190930134022-aa0246cd15f7 // indirect
