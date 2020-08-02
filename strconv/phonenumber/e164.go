@@ -17,3 +17,11 @@ func E164Format(numberToParse, defaultRegion string, numberFormat phonenumbers.P
 	}
 	return phonenumbers.Format(phone, numberFormat), nil
 }
+
+func MustE164Format(numberToParse, defaultRegion string, numberFormat phonenumbers.PhoneNumberFormat) string {
+	pn, err := E164Format(numberToParse, defaultRegion, numberFormat)
+	if err != nil {
+		panic(err)
+	}
+	return pn
+}
