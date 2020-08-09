@@ -35,6 +35,44 @@ func Resize(width, height uint, src image.Image, scale draw.Scaler) image.Image 
 	return dst
 }
 
+func ResizeMaxDimension(maxSide uint, src image.Image, scale draw.Scaler) image.Image {
+	width := src.Bounds().Dx()
+	height := src.Bounds().Dy()
+	if width > height {
+		if width == int(maxSide) {
+			return src
+		}
+		return Resize(maxSide, 0, src, scale)
+	}
+	if height == int(maxSide) {
+		return src
+	}
+	return Resize(0, maxSide, src, scale)
+}
+
+func Square(src image.Image) image.Image {
+	width := src.Bounds().Dx()
+	height := src.Bounds().Dy()
+	if width == height {
+		return src
+	}
+	if height > width {
+		// https://www.golangprograms.com/how-to-add-watermark-or-merge-two-image.html
+		newSq := image.NewRGBA(image.Rect(0, 0, height, height))
+		offset := image.Point{
+			X: int((float64(height) - float64(width)) / 2),
+			Y: 0}
+		draw.Draw(newSq, src.Bounds().Add(offset), src, image.Point{}, draw.Over)
+		return newSq
+	}
+	newSq := image.NewRGBA(image.Rect(0, 0, width, width))
+	offset := image.Point{
+		X: 0,
+		Y: int((float64(width) - float64(height)) / 2)}
+	draw.Draw(newSq, src.Bounds().Add(offset), src, image.Point{}, draw.Over)
+	return newSq
+}
+
 // Scale will resize the image to the provided rectangle using the
 // provided interpolation function.
 func Scale(src image.Image, rect image.Rectangle, scale draw.Scaler) image.Image {
