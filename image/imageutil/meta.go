@@ -12,13 +12,6 @@ func Aspect(width, height int) float64 {
 	return float64(width) / float64(height)
 }
 
-/*
-func ImageWidthHeight(img image.Image) (int, int) {
-	return RectangleWidthHeight(img.Bounds())
+func NegativeOffset(width, height, offset uint) image.Point {
+	return image.Pt(int(width-offset), int(height-offset))
 }
-
-func RectangleWidthHeight(rect image.Rectangle) (int, int) {
-	return rect.Max.X - rect.Min.X,
-		rect.Max.Y - rect.Min.Y
-}
-*/
