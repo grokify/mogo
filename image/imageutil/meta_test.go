@@ -13,8 +13,8 @@ var widthHeightTests = []struct {
 	{"transparent_640x480.png", 640, 480},
 }
 
-// TestImageWidthHeight tests reading image width and height.
-func TestImageWidthHeight(t *testing.T) {
+// TestRectangleWidthHeight tests reading image width and height.
+func TestRectangleWidthHeight(t *testing.T) {
 	for _, tt := range widthHeightTests {
 		img, err := ReadImage(filepath.Join("testdata", tt.file))
 		if err != nil {

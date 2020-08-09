@@ -35,19 +35,6 @@ func Resize(width, height uint, src image.Image, scale draw.Scaler) image.Image 
 	return dst
 }
 
-func ImageAspect(img image.Image) float64 {
-	return Aspect(ImageWidthHeight(img))
-}
-
-func Aspect(width, height int) float64 {
-	return float64(width) / float64(height)
-}
-
-func ImageWidthHeight(img image.Image) (int, int) {
-	return img.Bounds().Max.X - img.Bounds().Min.X,
-		img.Bounds().Max.Y - img.Bounds().Min.Y
-}
-
 // Scale will resize the image to the provided rectangle using the
 // provided interpolation function.
 func Scale(src image.Image, rect image.Rectangle, scale draw.Scaler) image.Image {
