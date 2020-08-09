@@ -65,3 +65,29 @@ func ParseScalar(rawInterpolation string) (draw.Scaler, error) {
 	}
 	return draw.NearestNeighbor, fmt.Errorf("Cannot parse Scalar [%s]", rawInterpolation)
 }
+
+func PaintColorRGBA(img *image.RGBA, clr color.RGBA) {
+	if img == nil {
+		return
+	}
+	PaintColorRGBARectangle(img, clr, img.Bounds())
+}
+
+func PaintColorRGBARectangle(img *image.RGBA, clr color.RGBA, rectNew image.Rectangle) {
+	if img == nil {
+		return
+	}
+	rectImg := img.Bounds()
+
+	for x := rectNew.Min.X; x < rectNew.Max.X; x++ {
+		if x < rectImg.Min.X || x > rectImg.Max.X {
+			continue
+		}
+		for y := rectNew.Min.Y; y < rectNew.Max.Y; y++ {
+			if y < rectImg.Min.Y || y > rectImg.Max.Y {
+				continue
+			}
+			img.Set(x, y, clr)
+		}
+	}
+}
