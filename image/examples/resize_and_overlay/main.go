@@ -25,7 +25,7 @@ func main() {
 	}
 
 	imgTop = imageutil.AddBackgroundWhite(imgTop)
-	imgTop = imageutil.Resize(120, 0, imgTop, imageutil.BestScaler())
+	imgTop = imageutil.Resize(120, 0, imgTop, imageutil.ScalerBest())
 	imgOut := imageutil.OverlayCenterYLeftAlign(imgBkg, imgTop)
 	err = imageutil.WriteFilePNG(fileOut, imgOut)
 	if err != nil {
