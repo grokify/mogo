@@ -81,15 +81,15 @@ func Scale(src image.Image, rect image.Rectangle, scale draw.Scaler) image.Image
 	return dst
 }
 
-// DefaultScaler returns a general best results interpolation
+// ScalerDefault returns a general best results interpolation
 // algorithm. See more here https://blog.codinghorror.com/better-image-resizing/ ,
 // https://support.esri.com/en/technical-article/000005606 ,
 // https://stackoverflow.com/questions/384991/what-is-the-best-image-downscaling-algorithm-quality-wise/6171860 .
-func DefaultScaler() draw.Scaler { return draw.BiLinear }
+func ScalerDefault() draw.Scaler { return draw.BiLinear }
 
-func BestScaler() draw.Scaler { return draw.CatmullRom }
+func ScalerBest() draw.Scaler { return draw.CatmullRom }
 
-func ParseScalar(rawInterpolation string) (draw.Scaler, error) {
+func ParseScaler(rawInterpolation string) (draw.Scaler, error) {
 	rawInterpolation = strings.ToLower(strings.TrimSpace(rawInterpolation))
 	switch rawInterpolation {
 	case "nearestneighbor":
