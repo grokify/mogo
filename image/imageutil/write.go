@@ -7,7 +7,10 @@ import (
 	"os"
 )
 
-const DefaultQualityJPEG int = 80
+const (
+	JPEGQualityDefault int = 80
+	JPEGQualityMax     int = 100
+)
 
 func WriteFileJPEG(filename string, img image.Image, quality int) error {
 	out, err := os.Create(filename)
@@ -17,10 +20,10 @@ func WriteFileJPEG(filename string, img image.Image, quality int) error {
 
 	var opt jpeg.Options
 	if quality <= 0 {
-		quality = DefaultQualityJPEG
+		quality = JPEGQualityDefault
 	}
-	if quality > 100 {
-		quality = 100
+	if quality > JPEGQualityMax {
+		quality = JPEGQualityMax
 	}
 	opt.Quality = quality
 
