@@ -15,11 +15,11 @@ func main() {
 	fileBkg := "_background.png"
 	fileOut := "_output.png"
 
-	imgTop, err := imageutil.ReadImage(fileTop)
+	imgTop, _, err := imageutil.ReadImage(fileTop)
 	if err != nil {
 		log.Fatal(errors.Wrap(err, fileTop))
 	}
-	imgBkg, err := imageutil.ReadImage(fileBkg)
+	imgBkg, _, err := imageutil.ReadImage(fileBkg)
 	if err != nil {
 		log.Fatal(errors.Wrap(err, fileBkg))
 	}
