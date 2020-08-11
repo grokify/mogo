@@ -1,19 +1,46 @@
 package imageutil
 
 import (
+	"fmt"
 	"image"
+	"net/http"
 	"os"
 	"regexp"
+	"strings"
 )
 
-func ReadImage(filename string) (image.Image, string, error) {
+func ReadImageAny(s string) (image.Image, string, error) {
+	if isHttpUri(s) {
+		return ReadImageHttp(s)
+	}
+	return ReadImageFile(s)
+}
+
+func isHttpUri(s string) bool {
+	try := strings.ToLower(strings.TrimSpace(s))
+	if strings.Index(try, "http://") == 0 || strings.Index(try, "https://") == 0 {
+		return true
+	}
+	return false
+}
+
+func ReadImageFile(filename string) (image.Image, string, error) {
 	infile, err := os.Open(filename)
 	if err != nil {
-		return image.NewRGBA(image.Rectangle{}),
-			"", err
+		return image.NewRGBA(image.Rectangle{}), "", err
 	}
 	defer infile.Close()
 	return image.Decode(infile)
+}
+
+func ReadImageHttp(imageUrl string) (image.Image, string, error) {
+	resp, err := http.Get(imageUrl)
+	if err != nil {
+		return image.NewRGBA(image.Rectangle{}), "", err
+	} else if resp.StatusCode >= 300 {
+		return image.NewRGBA(image.Rectangle{}), "", fmt.Errorf("HTTP_STATUS_CODE_GTE_300 [%v]", resp.StatusCode)
+	}
+	return image.Decode(resp.Body)
 }
 
 const (
