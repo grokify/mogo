@@ -11,17 +11,17 @@ import (
 
 // ProxyResponse copies the information from a `*http.Response` to a
 // `http.ResponseWriter`.
-func ProxyResponse(w http.ResponseWriter, resp *http.Response) error {
+func ProxyResponse(w http.ResponseWriter, resp *http.Response) ([]byte, error) {
 	if resp == nil {
-		return errors.New("E_NIL_HTTP_RESPONSE")
+		return nil, errors.New("E_NIL_HTTP_RESPONSE")
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	_, err = w.Write(body)
 	if err != nil {
-		return err
+		return body, err
 	}
 	headers := []string{
 		HeaderContentEncoding,
@@ -34,7 +34,7 @@ func ProxyResponse(w http.ResponseWriter, resp *http.Response) error {
 		}
 	}
 	w.WriteHeader(resp.StatusCode)
-	return nil
+	return body, nil
 }
 
 func ConsolidateErrorRespCodeGte300(resp *http.Response, err error, msg string) error {
