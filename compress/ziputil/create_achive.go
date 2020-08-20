@@ -39,7 +39,7 @@ func ZipFiles(zipfile string, removePaths bool, srcfiles []string) error {
 	}
 	err = zipw.Close()
 	if err != nil {
-		return err
+		return closeFileOnError(zfile, err)
 	}
 	return zfile.Close()
 }
