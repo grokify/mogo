@@ -121,19 +121,7 @@ func DirEntriesNameRxVarFirsts(dir string, rx1 *regexp.Regexp) ([]string, error)
 	return varsMatch, nil
 }
 
-func DirEntriesPathsReNotEmpty(dir string, rx1 *regexp.Regexp) ([]string, error) {
-	paths := []string{}
-	files, err := DirEntriesReNotEmpty(dir, rx1)
-	if err != nil {
-		return paths, err
-	}
-	for _, fi := range files {
-		paths = append(paths, filepath.Join(dir, fi.Name()))
-	}
-	return paths, nil
-}
-
-func ReadDirRegexp(dir string, rx1 *regexp.Regexp, skipEmpty bool) ([]os.FileInfo, []string, error) {
+func ReadDirRx(dir string, rx *regexp.Regexp, skipEmpty bool) ([]os.FileInfo, []string, error) {
 	filesMatch := []os.FileInfo{}
 	filenames := []string{}
 	filesAll, err := ioutil.ReadDir(dir)
@@ -145,38 +133,14 @@ func ReadDirRegexp(dir string, rx1 *regexp.Regexp, skipEmpty bool) ([]os.FileInf
 			continue
 		}
 		if (skipEmpty && f.Size() > int64(0)) || !skipEmpty {
-			rs1 := rx1.FindStringSubmatch(f.Name())
-			if len(rs1) > 0 {
+			rs := rx.FindStringSubmatch(f.Name())
+			if len(rs) > 0 {
 				filesMatch = append(filesMatch, f)
 				filenames = append(filenames, filepath.Join(dir, f.Name()))
 			}
 		}
 	}
 	return filesMatch, filenames, nil
-}
-
-// DirEntriesReNotEmpty returns a slide of files for non-empty files
-// matching regular expression. It was formerly `DirEntriesReSizeGt0`.
-func DirEntriesReNotEmpty(dir string, rx1 *regexp.Regexp) ([]os.FileInfo, error) {
-	files, _, err := ReadDirRegexp(dir, rx1, true)
-	return files, err
-	/* filesMatch := []os.FileInfo{}
-	filesAll, err := ioutil.ReadDir(dir)
-	if err != nil {
-		return filesMatch, err
-	}
-	for _, f := range filesAll {
-		if f.Name() == "." || f.Name() == ".." {
-			continue
-		}
-		if f.Size() > int64(0) {
-			rs1 := rx1.FindStringSubmatch(f.Name())
-			if len(rs1) > 0 {
-				filesMatch = append(filesMatch, f)
-			}
-		}
-	}
-	return filesMatch, nil */
 }
 
 func DirEntriesRxSizeGt0Filepaths(dir string, fileFilter FileType, rx *regexp.Regexp) ([]string, error) {
