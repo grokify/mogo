@@ -5,6 +5,7 @@ package timeutil
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -269,4 +270,58 @@ func FormatTimeToString(format string) func(time.Time) string {
 	return func(dt time.Time) string {
 		return dt.Format(format)
 	}
+}
+
+// OffsetFormat converts an integer offset value to a string
+// value to use in string time formats. Note: RFC-3339 times
+// use colons and the UTC "Z" offset.
+func OffsetFormat(offset int, useColon, useZ bool) string {
+	offsetStr := "+0000"
+	if offset == 0 {
+		if useZ {
+			offsetStr = "Z"
+		} else if useColon {
+			offsetStr = "+00:00"
+		}
+	} else if offset > 0 {
+		if useColon {
+			hr := int(offset / 100)
+			mn := offset - (hr * 100)
+			offsetStr = "+" + fmt.Sprintf("%02d:%02d", hr, mn)
+		} else {
+			offsetStr = "+" + fmt.Sprintf("%04d", offset)
+		}
+	} else if offset < 0 {
+		if useColon {
+			offsetPositive := -1 * offset
+			hr := int(offsetPositive / 100)
+			mn := offsetPositive - (hr * 100)
+			offsetStr = "-" + fmt.Sprintf("%02d:%02d", hr, mn)
+		} else {
+			offsetStr = "-" + fmt.Sprintf("%04d", -1*offset)
+		}
+	}
+	return offsetStr
+}
+
+var rxSQLTimestamp = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}$`)
+
+func ParseTimeUsingOffset(format, raw, sep string, offset int, useColon, useZ bool) (time.Time, error) {
+	return time.Parse(format, raw+sep+OffsetFormat(offset, useColon, useZ))
+}
+
+// ParseTimeSQLTimestampUsingOffset converts a SQL timestamp without timezone
+// adding in a manual integer timezone.
+func ParseTimeSQLTimestampUsingOffset(timeStr string, offset int) (time.Time, error) {
+	return ParseTimeUsingOffset(Ruby, timeStr, " ", offset, false, false)
+	/*
+		timeStr = strings.TrimSpace(timeStr)
+		if !rxSQLTimestamp.MatchString(timeStr) {
+			return time.Now(), fmt.Errorf("E_INVALID_SQL_TIMESTAMP [%v]", timeStr)
+		}
+		offsetStr := OffsetFormat(offset, useColon, useZ)
+		timeStr += " " + offsetStr
+		dt, err := time.Parse(Ruby, timeStr)
+		return dt, err
+	*/
 }

@@ -60,3 +60,31 @@ func TestRfc3339YMDTime(t *testing.T) {
 		}
 	}
 }
+
+var offsetFormatTests = []struct {
+	input    int
+	useColon bool
+	useZ     bool
+	want     string
+}{
+	{0, false, false, "+0000"},
+	{0, true, false, "+00:00"},
+	{0, true, true, "Z"},
+	{400, false, false, "+0400"},
+	{-400, false, false, "-0400"},
+	{530, false, false, "+0530"},
+	{-530, false, false, "-0530"},
+	{700, true, false, "+07:00"},
+	{-700, true, false, "-07:00"},
+	{845, true, false, "+08:45"},
+	{-845, true, false, "-08:45"},
+}
+
+func TestOffsetFormat(t *testing.T) {
+	for _, tt := range offsetFormatTests {
+		got := OffsetFormat(tt.input, tt.useColon, tt.useZ)
+		if got != tt.want {
+			t.Errorf("time.OffsetFormat(\"%v\",%v,%v) Mismatch: want [%v], got [%v]", tt.input, tt.useColon, tt.useZ, tt.want, got)
+		}
+	}
+}
