@@ -1,9 +1,6 @@
 package csvutil
 
-import (
-	"github.com/grokify/gotilla/type/stringsutil"
-)
-
+/*
 func ReadCSVFilesSingleColumnValuesString(files []string, sep string, hasHeader, trimSpace bool, col uint, condenseUniqueSort bool) ([]string, error) {
 	values := []string{}
 	for _, file := range files {
@@ -19,7 +16,8 @@ func ReadCSVFilesSingleColumnValuesString(files []string, sep string, hasHeader,
 	}
 	return values, nil
 }
-
+*/
+/*
 func ReadCSVFileSingleColumnValuesString(filename, sep string, hasHeader, trimSpace bool, col uint, condenseUniqueSort bool) ([]string, error) {
 	table, err := NewTableDataFileSimple(filename, sep, hasHeader, trimSpace)
 	if err != nil {
@@ -36,3 +34,4 @@ func ReadCSVFileSingleColumnValuesString(filename, sep string, hasHeader, trimSp
 	}
 	return values, nil
 }
+*/

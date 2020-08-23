@@ -3,14 +3,9 @@ package csvutil
 import (
 	"encoding/csv"
 	"encoding/json"
-	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
-	"strings"
 
-	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/gotilla/encoding/jsonutil"
 	"github.com/grokify/gotilla/type/stringsutil"
 )
 
@@ -197,7 +192,7 @@ type JsonRecordsInfo struct {
 type JsonRecordsInfoMeta struct {
 	Count int `json:"count"`
 }*/
-
+/*
 func ReadMergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStripBom bool, andFilter map[string]stringsutil.MatchInfo) (table.DocumentsSet, error) {
 	//data := JsonRecordsInfo{Records: []map[string]string{}}
 	data := table.NewDocumentsSet()
@@ -243,7 +238,8 @@ func ReadMergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inS
 	data.Inflate()
 	return data, nil
 }
-
+*/
+/*
 func MergeFilterCSVFilesToJSON(inPaths []string, outPath string, inComma rune, inStripBom bool, perm os.FileMode, andFilter map[string]stringsutil.MatchInfo) error {
 	data, err := ReadMergeFilterCSVFiles(inPaths, outPath, inComma, inStripBom, andFilter)
 	if err != nil {
@@ -255,7 +251,7 @@ func MergeFilterCSVFilesToJSON(inPaths []string, outPath string, inComma rune, i
 	}
 	return ioutil.WriteFile(outPath, bytes, perm)
 }
-
+*/
 func MergeFilterCSVFilesToJSONL(inPaths []string, outPath string, inComma rune, inStripBom bool, andFilter map[string]stringsutil.MatchInfo) error {
 	outFh, err := os.Create(outPath)
 	if err != nil {
@@ -353,6 +349,7 @@ func WriteCSVFiltered(reader *csv.Reader, writer *csv.Writer, andFilter map[stri
 	return nil
 }
 
+/*
 func NewTableDataFilesSimple(filenames []string, sep string, hasHeader, trimSpace bool) (table.TableData, error) {
 	tbl := table.NewTableData()
 	for i, filename := range filenames {
@@ -445,3 +442,4 @@ func NewTableDataFileCSV(path string, comma rune, stripBom bool) (table.TableDat
 	}
 	return tbl, nil
 }
+*/
