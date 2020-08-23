@@ -27,7 +27,8 @@ func main() {
 	sqls, values, err := sql.ReadFileCSVToSQLs(
 		os.Getenv("SQL_FORMAT"),
 		os.Getenv("SQL_CSV_FILE"),
-		",",
+		',',
+		true,
 		true,
 		true,
 		uint(col))
