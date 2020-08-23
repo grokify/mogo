@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -17,6 +16,7 @@ import (
 
 	"github.com/grokify/gotilla/encoding/jsonutil"
 	"github.com/grokify/gotilla/type/maputil"
+	"github.com/pkg/errors"
 )
 
 type FileType int
@@ -422,6 +422,14 @@ func WriteFileJSON(filepath string, data interface{}, perm os.FileMode, prefix, 
 		return err
 	}
 	return ioutil.WriteFile(filepath, bytes, perm)
+}
+
+func CloseFileWithError(file *os.File, err error) error {
+	errFile := file.Close()
+	if err != nil {
+		return errors.Wrap(err, errFile.Error())
+	}
+	return err
 }
 
 type FileWriter struct {
