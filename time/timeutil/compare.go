@@ -75,19 +75,16 @@ func MinMax(min, max time.Time) (time.Time, time.Time) {
 
 // SliceMinMax returns the min and max times of a time slice.
 func SliceMinMax(times []time.Time) (time.Time, time.Time) {
-	min := time.Now()
-	max := time.Now()
+	min := TimeMinRFC3339()
+	max := TimeMinRFC3339()
 
 	for i, t := range times {
 		if i == 0 {
 			min = t
 			max = t
-			continue
-		}
-		if min.After(t) {
+		} else if min.After(t) {
 			min = t
-		}
-		if max.Before(t) {
+		} else if max.Before(t) {
 			max = t
 		}
 	}
