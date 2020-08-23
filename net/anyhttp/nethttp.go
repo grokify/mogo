@@ -42,17 +42,19 @@ func (r *RequestNetHttp) ParseForm() error {
 
 func (r RequestNetHttp) Header(s string) []byte       { return []byte(r.Raw.Header.Get(s)) }
 func (r RequestNetHttp) HeaderString(s string) string { return r.Raw.Header.Get(s) }
-func (r RequestNetHttp) RemoteAddr() net.Addr         { return Addr{Protocol: "tcp", Address: r.Raw.RemoteAddr} }
-func (r RequestNetHttp) RemoteAddress() string        { return r.Raw.RemoteAddr }
-func (r RequestNetHttp) UserAgent() []byte            { return []byte(r.Raw.UserAgent()) }
-func (r RequestNetHttp) AllArgs() Args                { return r.allArgs }
-func (r RequestNetHttp) QueryArgs() Args              { return r.allArgs }
-func (r RequestNetHttp) PostArgs() Args               { return r.postArgs }
-func (r RequestNetHttp) Method() []byte               { return []byte(r.Raw.Method) }
-func (r RequestNetHttp) Headers() http.Header         { return r.Raw.Header }
-func (r RequestNetHttp) Form() url.Values             { return r.Raw.Form }
-func (r RequestNetHttp) RequestURI() []byte           { return []byte(r.Raw.RequestURI) }
-func (r RequestNetHttp) PostBody() ([]byte, error)    { return ioutil.ReadAll(r.Raw.Body) }
+func (r RequestNetHttp) RemoteAddr() net.Addr {
+	return Addr{Protocol: "tcp", Address: r.Raw.RemoteAddr}
+}
+func (r RequestNetHttp) RemoteAddress() string     { return r.Raw.RemoteAddr }
+func (r RequestNetHttp) UserAgent() []byte         { return []byte(r.Raw.UserAgent()) }
+func (r RequestNetHttp) AllArgs() Args             { return r.allArgs }
+func (r RequestNetHttp) QueryArgs() Args           { return r.allArgs }
+func (r RequestNetHttp) PostArgs() Args            { return r.postArgs }
+func (r RequestNetHttp) Method() []byte            { return []byte(r.Raw.Method) }
+func (r RequestNetHttp) Headers() http.Header      { return r.Raw.Header }
+func (r RequestNetHttp) Form() url.Values          { return r.Raw.Form }
+func (r RequestNetHttp) RequestURI() []byte        { return []byte(r.Raw.RequestURI) }
+func (r RequestNetHttp) PostBody() ([]byte, error) { return ioutil.ReadAll(r.Raw.Body) }
 
 func (r *RequestNetHttp) MultipartForm() (*multipart.Form, error) {
 	if !r.parsedMultipartForm {
