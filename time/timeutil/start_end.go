@@ -10,8 +10,7 @@ import (
 func DayStart(dt time.Time) time.Time {
 	return time.Date(
 		dt.Year(), dt.Month(), dt.Day(),
-		0, 0, 0, 0,
-		dt.Location())
+		0, 0, 0, 0, dt.Location())
 }
 
 // WeekStart takes a time.Time object and a week start day
@@ -23,18 +22,21 @@ func WeekStart(dt time.Time, dow time.Weekday) (time.Time, error) {
 func MonthStart(dt time.Time) time.Time {
 	return time.Date(
 		dt.Year(), dt.Month(), 1,
-		0, 0, 0, 0,
-		dt.Location())
+		0, 0, 0, 0, dt.Location())
 }
 
 // YearStart returns a a time.Time for the beginning of the year
 // in UTC time.
 func YearStart(dt time.Time) time.Time {
-	return time.Date(dt.UTC().Year(), time.January, 1, 0, 0, 0, 0, time.UTC)
+	return time.Date(
+		dt.Year(), time.January, 1,
+		0, 0, 0, 0, dt.Location())
 }
 
 func NextYearStart(dt time.Time) time.Time {
-	return time.Date(dt.UTC().Year()+1, time.January, 1, 0, 0, 0, 0, time.UTC)
+	return time.Date(
+		dt.Year()+1, time.January, 1,
+		0, 0, 0, 0, dt.Location())
 }
 
 func IsYearStart(t time.Time) bool {
