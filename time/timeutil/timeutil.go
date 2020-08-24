@@ -76,9 +76,9 @@ func NextDt6(dt6 int32) int32 {
 	year, month := ParseDt6(dt6)
 	if month == 12 {
 		month = 1
-		year += 1
+		year++
 	} else {
-		month += 1
+		month++
 	}
 	return int32(year)*100 + int32(month)
 }
@@ -214,6 +214,7 @@ func MonthNames() []string {
 	return data
 }
 
+/*
 // WeekStart takes a time.Time object and a week start day
 // in the time.Weekday format.
 func WeekStart(dt time.Time, dow time.Weekday) (time.Time, error) {
@@ -269,7 +270,7 @@ func ToMonthStart(t time.Time) time.Time {
 		0, 0, 0, 0,
 		t.Location())
 }
-
+*/
 // TimeMeta is a struct for holding various times related
 // to a current time, including year start, quarter start,
 // month start, and week start.
