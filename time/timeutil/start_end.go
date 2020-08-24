@@ -25,8 +25,6 @@ func MonthStart(dt time.Time) time.Time {
 		0, 0, 0, 0, dt.Location())
 }
 
-// YearStart returns a a time.Time for the beginning of the year
-// in UTC time.
 func YearStart(dt time.Time) time.Time {
 	return time.Date(
 		dt.Year(), time.January, 1,
@@ -39,14 +37,13 @@ func NextYearStart(dt time.Time) time.Time {
 		0, 0, 0, 0, dt.Location())
 }
 
-func IsYearStart(t time.Time) bool {
-	t = t.UTC()
-	if t.Nanosecond() == 0 &&
-		t.Second() == 0 &&
-		t.Minute() == 0 &&
-		t.Hour() == 0 &&
-		t.Day() == 1 &&
-		t.Month() == time.January {
+func IsYearStart(dt time.Time) bool {
+	if dt.Month() == time.January &&
+		dt.Day() == 1 &&
+		dt.Hour() == 0 &&
+		dt.Minute() == 0 &&
+		dt.Second() == 0 &&
+		dt.Nanosecond() == 0 {
 		return true
 	}
 	return false
