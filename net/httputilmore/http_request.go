@@ -105,7 +105,7 @@ func DoJSONSimple(client *http.Client, httpMethod, requrl string, headers map[st
 }
 
 func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string]string, reqBody interface{}, resBody interface{}) ([]byte, *http.Response, error) {
-	reqBodyBytes := []byte("")
+	var reqBodyBytes []byte
 	var err error
 	if reqBody != nil {
 		reqBodyBytes, err = json.Marshal(reqBody)
@@ -118,7 +118,7 @@ func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string]s
 	if err != nil || resBody == nil {
 		return nil, resp, err
 	}
-	resBodyBytes := []byte("")
+	var resBodyBytes []byte
 	if resBody != nil {
 		resBodyBytes, err = jsonutil.UnmarshalIoReader(resp.Body, resBody)
 	}
