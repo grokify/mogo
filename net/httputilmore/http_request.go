@@ -79,7 +79,25 @@ func PutJsonBytes(client *http.Client, requrl string, headers map[string]string,
 }
 
 func RequestJsonBody(client *http.Client, httpMethod, requrl string, headers map[string]string, body []byte) (*http.Response, error) {
-	req, err := http.NewRequest(httpMethod, requrl, bytes.NewBuffer(body))
+	requrl = strings.TrimSpace(requrl)
+	if len(requrl) == 0 {
+		return nil, errors.New("E_NO_REQUEST_URL")
+	}
+	if client == nil {
+		client = &http.Client{}
+	}
+	httpMethod = strings.TrimSpace(httpMethod)
+	if httpMethod == "" {
+		httpMethod = http.MethodPost
+	}
+	var req *http.Request
+	var err error
+
+	if len(body) == 0 {
+		req, err = http.NewRequest(httpMethod, requrl, nil)
+	} else {
+		req, err = http.NewRequest(httpMethod, requrl, bytes.NewBuffer(body))
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -91,11 +109,22 @@ func RequestJsonBody(client *http.Client, httpMethod, requrl string, headers map
 		}
 		req.Header.Set(k, v)
 	}
-	req.Header.Set(HeaderContentType, ContentTypeAppJsonUtf8)
-	if client == nil {
-		client = &http.Client{}
+	if len(body) > 0 {
+		req.Header.Set(HeaderContentType, ContentTypeAppJsonUtf8)
 	}
+
 	return client.Do(req)
+}
+
+func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string]string, reqBody interface{}, resBody interface{}) (*http.Response, error) {
+	resp, err := PostJsonMarshal(client, reqURL, headers, reqBody)
+	if err != nil || resBody == nil {
+		return resp, err
+	}
+	if resBody != nil {
+		_, err = jsonutil.UnmarshalIoReader(resp.Body, resBody)
+	}
+	return resp, err
 }
 
 func PostJsonMarshal(client *http.Client, requrl string, headers map[string]string, body interface{}) (*http.Response, error) {
