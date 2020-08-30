@@ -117,7 +117,16 @@ func RequestJsonBody(client *http.Client, httpMethod, requrl string, headers map
 }
 
 func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string]string, reqBody interface{}, resBody interface{}) (*http.Response, error) {
-	resp, err := PostJsonMarshal(client, reqURL, headers, reqBody)
+	bodyBytes := []byte("")
+	var err error
+	if reqBody != nil {
+		bodyBytes, err = json.Marshal(reqBody)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := RequestJsonBody(client, httpMethod, reqURL, headers, bodyBytes)
 	if err != nil || resBody == nil {
 		return resp, err
 	}
@@ -127,6 +136,7 @@ func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string]s
 	return resp, err
 }
 
+/*
 func PostJsonMarshal(client *http.Client, requrl string, headers map[string]string, body interface{}) (*http.Response, error) {
 	bodyBytes, err := json.Marshal(body)
 	if err != nil {
@@ -140,6 +150,7 @@ func PostJsonMarshal(client *http.Client, requrl string, headers map[string]stri
 func PostJsonSimple(requrl string, body interface{}) (*http.Response, error) {
 	return PostJsonMarshal(nil, requrl, map[string]string{}, body)
 }
+*/
 
 // GetResponseAndBytes retreives a URL and returns the response body
 // as a byte array in addition to the *http.Response.
