@@ -136,22 +136,6 @@ func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string]s
 	return resp, err
 }
 
-/*
-func PostJsonMarshal(client *http.Client, requrl string, headers map[string]string, body interface{}) (*http.Response, error) {
-	bodyBytes, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	return PostJsonBytes(client, requrl, headers, bodyBytes)
-}
-
-// PostJsonSimple performs a HTTP POST request converting a body interface{} to
-// JSON and adding the appropriate JSON Content-Type header.
-func PostJsonSimple(requrl string, body interface{}) (*http.Response, error) {
-	return PostJsonMarshal(nil, requrl, map[string]string{}, body)
-}
-*/
-
 // GetResponseAndBytes retreives a URL and returns the response body
 // as a byte array in addition to the *http.Response.
 func GetResponseAndBytes(url string) (*http.Response, []byte, error) {
