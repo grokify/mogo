@@ -75,9 +75,9 @@ type ResponseInfo struct {
 	Body       string            `json:"body,omitempty"`
 }
 
-// ToJson returns ResponseInfo as a JSON byte array, embedding json.Marshal
+// ToJSON returns ResponseInfo as a JSON byte array, embedding json.Marshal
 // errors if encountered.
-func (resIn *ResponseInfo) ToJson() []byte {
+func (resIn *ResponseInfo) ToJSON() []byte {
 	bytes, err := json.Marshal(resIn)
 	if err != nil {
 		resIn2 := ResponseInfo{StatusCode: 500, Body: err.Error()}
