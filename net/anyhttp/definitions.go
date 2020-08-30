@@ -49,7 +49,7 @@ func WriteSimpleJson(w Response, status int, message string) {
 	resInfo := hum.ResponseInfo{
 		StatusCode: status,
 		Body:       message}
-	w.SetBodyBytes(resInfo.ToJson())
+	w.SetBodyBytes(resInfo.ToJSON())
 }
 
 type MapStringString map[string]string
