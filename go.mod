@@ -3,7 +3,7 @@ module github.com/grokify/gotilla
 go 1.14
 
 require (
-	cloud.google.com/go v0.64.0 // indirect
+	cloud.google.com/go v0.65.0 // indirect
 	github.com/360EntSecGroup-Skylar/excelize v1.4.1 // indirect
 	github.com/OwnLocal/goes v1.0.0 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20200819183940-29e1ff8eb0bb
@@ -12,7 +12,6 @@ require (
 	github.com/buger/jsonparser v1.0.0
 	github.com/caarlos0/env v3.5.0+incompatible
 	github.com/derekstavis/go-qs v0.0.0-20180720192143-9eef69e6c4e7
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/emersion/go-imap v1.0.5
 	github.com/emersion/go-sasl v0.0.0-20200509203442-7bfe0ed36a21 // indirect
 	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect
@@ -41,10 +40,10 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.4
 	github.com/nyaruka/phonenumbers v1.0.57
 	github.com/pkg/errors v0.9.1
-	github.com/pkg/sftp v1.11.0
+	github.com/pkg/sftp v1.12.0
 	github.com/pquerna/ffjson v0.0.0-20190930134022-aa0246cd15f7 // indirect
 	github.com/prometheus/common v0.13.0 // indirect
-	github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644 // indirect
+	github.com/shiena/ansicolor v0.0.0-20200830101100-9405ca8e49f3 // indirect
 	github.com/shopspring/decimal v1.2.0 // indirect
 	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726 // indirect
 	github.com/siddontang/ledisdb v0.0.0-20181029004158-becf5f38d373 // indirect
@@ -56,9 +55,10 @@ require (
 	github.com/ziutek/mymysql v1.5.4 // indirect
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a
 	golang.org/x/image v0.0.0-20200801110659-972c09e46d76
-	golang.org/x/net v0.0.0-20200822124328-c89045814202 // indirect
-	golang.org/x/sys v0.0.0-20200821140526-fda516888d29 // indirect
+	golang.org/x/sys v0.0.0-20200828194041-157a740278f4 // indirect
 	golang.org/x/text v0.3.3
+	google.golang.org/genproto v0.0.0-20200829155447-2bf3329a0021 // indirect
+	google.golang.org/grpc v1.31.1 // indirect
 	gopkg.in/oleiade/reflections.v1 v1.0.0
 	mellium.im/sasl v0.2.1 // indirect
 )
