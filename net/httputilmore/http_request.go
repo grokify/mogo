@@ -66,18 +66,6 @@ func GetJsonSimple(requrl string, header http.Header, data interface{}) (*http.R
 	return resp, err
 }
 
-func PatchJsonBytes(client *http.Client, requrl string, headers map[string]string, body []byte) (*http.Response, error) {
-	return RequestJsonBody(client, http.MethodPatch, requrl, headers, body)
-}
-
-func PostJsonBytes(client *http.Client, requrl string, headers map[string]string, body []byte) (*http.Response, error) {
-	return RequestJsonBody(client, http.MethodPost, requrl, headers, body)
-}
-
-func PutJsonBytes(client *http.Client, requrl string, headers map[string]string, body []byte) (*http.Response, error) {
-	return RequestJsonBody(client, http.MethodPut, requrl, headers, body)
-}
-
 func RequestJsonBody(client *http.Client, httpMethod, requrl string, headers map[string]string, body []byte) (*http.Response, error) {
 	requrl = strings.TrimSpace(requrl)
 	if len(requrl) == 0 {
