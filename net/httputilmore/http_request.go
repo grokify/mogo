@@ -104,24 +104,25 @@ func DoJSONSimple(client *http.Client, httpMethod, requrl string, headers map[st
 	return client.Do(req)
 }
 
-func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string]string, reqBody interface{}, resBody interface{}) (*http.Response, error) {
-	bodyBytes := []byte("")
+func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string]string, reqBody interface{}, resBody interface{}) ([]byte, *http.Response, error) {
+	reqBodyBytes := []byte("")
 	var err error
 	if reqBody != nil {
-		bodyBytes, err = json.Marshal(reqBody)
+		reqBodyBytes, err = json.Marshal(reqBody)
 	}
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	resp, err := DoJSONSimple(client, httpMethod, reqURL, headers, bodyBytes)
+	resp, err := DoJSONSimple(client, httpMethod, reqURL, headers, reqBodyBytes)
 	if err != nil || resBody == nil {
-		return resp, err
+		return nil, resp, err
 	}
+	resBodyBytes := []byte("")
 	if resBody != nil {
-		_, err = jsonutil.UnmarshalIoReader(resp.Body, resBody)
+		resBodyBytes, err = jsonutil.UnmarshalIoReader(resp.Body, resBody)
 	}
-	return resp, err
+	return resBodyBytes, resp, err
 }
 
 // GetResponseAndBytes retreives a URL and returns the response body
