@@ -104,7 +104,7 @@ func DoJSONSimple(client *http.Client, httpMethod, requrl string, headers map[st
 	return client.Do(req)
 }
 
-func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string]string, reqBody interface{}, resBody interface{}) ([]byte, *http.Response, error) {
+func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string]string, reqBody, resBody interface{}) ([]byte, *http.Response, error) {
 	var reqBodyBytes []byte
 	var err error
 	if reqBody != nil {
