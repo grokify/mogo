@@ -9,15 +9,21 @@ import (
 	"golang.org/x/image/draw"
 )
 
-// AddBackgroundWhite adds a white background which is usable
-// when the image has a transparent background.
-func AddBackgroundWhite(imgSrc image.Image) image.Image {
+// AddBackgroundColor adds a background of `color.Color` to an image.
+// It is is useful when the image has a transparent background.
+func AddBackgroundColor(imgSrc image.Image, clr color.Color) image.Image {
 	imgNew := image.NewRGBA(imgSrc.Bounds())
 	draw.Draw(imgNew, imgNew.Bounds(),
-		&image.Uniform{color.White}, image.Point{}, draw.Src)
+		&image.Uniform{clr}, image.Point{}, draw.Src)
 	draw.Draw(imgNew, imgNew.Bounds(),
 		imgSrc, imgSrc.Bounds().Min, draw.Over)
 	return imgNew
+}
+
+// AddBackgroundWhite adds a white background which is usable
+// when the image has a transparent background.
+func AddBackgroundWhite(imgSrc image.Image) image.Image {
+	return AddBackgroundColor(imgSrc, color.White)
 }
 
 // Resize scales an image to the provided size units. Use a 0
