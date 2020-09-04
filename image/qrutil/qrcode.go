@@ -1,4 +1,4 @@
-// qrutil provides wrapper functions for https://github.com/skip2/go-qrcode s.
+// qrutil provides wrapper functions for https://github.com/skip2/go-qrcode
 package qrutil
 
 import (
