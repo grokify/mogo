@@ -43,6 +43,9 @@ require (
 	github.com/pkg/sftp v1.12.0
 	github.com/pquerna/ffjson v0.0.0-20190930134022-aa0246cd15f7 // indirect
 	github.com/prometheus/common v0.13.0 // indirect
+	github.com/rustyoz/Mtransform v0.0.0-20190224104252-60c8c35a3681 // indirect
+	github.com/rustyoz/genericlexer v0.0.0-20190224115003-eb82fd2987bd // indirect
+	github.com/rustyoz/svg v0.0.0-20200706102315-fe1aeca2ba20
 	github.com/shiena/ansicolor v0.0.0-20200830101100-9405ca8e49f3 // indirect
 	github.com/shopspring/decimal v1.2.0 // indirect
 	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726 // indirect
