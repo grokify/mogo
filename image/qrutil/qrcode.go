@@ -1,7 +1,11 @@
 // qrutil provides wrapper functions for https://github.com/skip2/go-qrcode s.
 package qrutil
 
-import "github.com/skip2/go-qrcode"
+import (
+	"image"
+
+	"github.com/skip2/go-qrcode"
+)
 
 type Opts struct {
 	QRCode    qrcode.QRCode
@@ -27,6 +31,14 @@ func New(opts qrcode.QRCode) (*qrcode.QRCode, error) {
 		q.DisableBorder = true
 	}
 	return q, nil
+}
+
+func NewImage(opts qrcode.QRCode, size int) (image.Image, error) {
+	qr, err := New(opts)
+	if err != nil {
+		return nil, err
+	}
+	return qr.Image(size), nil
 }
 
 func Create(opts Opts) (*qrcode.QRCode, error) {
