@@ -16,8 +16,8 @@ type Opts struct {
 
 // New creates a new `*qrcode.QRCode` using `qrcode.QRCode`
 // as the request parameter. `Content` is qrcode value.
-// Foreground and Background color are `color.Color`.
-// `Level` is in [`qrcode.Low`,`Medium`,`High,`Highest`].
+// `ForegroundColor` and `BackgroundColor` are `color.Color`.
+// `Level` is in [`qrcode.Low`,`Medium`,`High`,`Highest`].
 func New(opts qrcode.QRCode) (*qrcode.QRCode, error) {
 	q, err := qrcode.New(opts.Content, opts.Level)
 	if err != nil {
