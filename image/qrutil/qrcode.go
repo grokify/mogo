@@ -7,51 +7,40 @@ import (
 	"github.com/skip2/go-qrcode"
 )
 
-type Opts struct {
-	QRCode    qrcode.QRCode
-	Filename  string
-	Filesize  int
-	FileWrite bool
-}
-
 // New creates a new `*qrcode.QRCode` using `qrcode.QRCode`
 // as the request parameter. `Content` is qrcode value.
 // `ForegroundColor` and `BackgroundColor` are `color.Color`.
 // `Level` is in [`qrcode.Low`,`Medium`,`High`,`Highest`].
 func New(opts qrcode.QRCode) (*qrcode.QRCode, error) {
-	q, err := qrcode.New(opts.Content, opts.Level)
+	qrc, err := qrcode.New(opts.Content, opts.Level)
 	if err != nil {
 		return nil, err
 	}
 
 	if opts.BackgroundColor != opts.ForegroundColor {
-		q.BackgroundColor = opts.BackgroundColor
-		q.ForegroundColor = opts.ForegroundColor
+		qrc.BackgroundColor = opts.BackgroundColor
+		qrc.ForegroundColor = opts.ForegroundColor
 	}
 
 	if opts.DisableBorder {
-		q.DisableBorder = true
+		qrc.DisableBorder = true
 	}
-	return q, nil
+	return qrc, nil
 }
 
 func NewImage(opts qrcode.QRCode, size int) (image.Image, error) {
-	qr, err := New(opts)
+	qrc, err := New(opts)
 	if err != nil {
 		return nil, err
 	}
-	return qr.Image(size), nil
+	return qrc.Image(size), nil
 }
 
-func Create(opts Opts) (*qrcode.QRCode, error) {
-	q, err := New(opts.QRCode)
+func WritePNG(filename string, opts qrcode.QRCode, pixels int) error {
+	qrc, err := New(opts)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	if opts.FileWrite {
-		err = q.WriteFile(opts.Filesize, opts.Filename)
-	}
-
-	return q, err
+	return qrc.WriteFile(pixels, filename)
 }
