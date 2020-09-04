@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/grokify/gotilla/encoding/jsonutil"
 	"github.com/pkg/errors"
 )
 
@@ -74,9 +75,9 @@ type ResponseInfo struct {
 	Body       string            `json:"body,omitempty"`
 }
 
-// ToJson returns ResponseInfo as a JSON byte array, embedding json.Marshal
+// ToJSON returns ResponseInfo as a JSON byte array, embedding json.Marshal
 // errors if encountered.
-func (resIn *ResponseInfo) ToJson() []byte {
+func (resIn *ResponseInfo) ToJSON() []byte {
 	bytes, err := json.Marshal(resIn)
 	if err != nil {
 		resIn2 := ResponseInfo{StatusCode: 500, Body: err.Error()}
@@ -84,4 +85,33 @@ func (resIn *ResponseInfo) ToJson() []byte {
 		return bytes
 	}
 	return bytes
+}
+
+func ResponseWriterWriteJSON(w http.ResponseWriter, statusCode int, body interface{}, prefix, indent string) {
+	if w == nil {
+		return
+	}
+	wroteStatus := false
+	if body != nil {
+		bytes, err := jsonutil.MarshalSimple(body, "", "  ")
+		if err != nil {
+			gr := ResponseInfo{
+				Body: err.Error()}
+			bytes, err = jsonutil.MarshalSimple(gr, "", "  ")
+		}
+		if err != nil {
+			w.WriteHeader(500)
+			w.Write([]byte(err.Error()))
+			return
+		}
+		_, err = w.Write(bytes)
+		if err != nil {
+			w.WriteHeader(500)
+			w.Write([]byte(err.Error()))
+			wroteStatus = true
+		}
+	}
+	if !wroteStatus && statusCode != 0 {
+		w.WriteHeader(statusCode)
+	}
 }

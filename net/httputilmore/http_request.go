@@ -66,20 +66,26 @@ func GetJsonSimple(requrl string, header http.Header, data interface{}) (*http.R
 	return resp, err
 }
 
-func PatchJsonBytes(client *http.Client, requrl string, headers map[string]string, body []byte) (*http.Response, error) {
-	return RequestJsonBody(client, http.MethodPatch, requrl, headers, body)
-}
+func DoJSONSimple(client *http.Client, httpMethod, requrl string, headers map[string]string, body []byte) (*http.Response, error) {
+	requrl = strings.TrimSpace(requrl)
+	if len(requrl) == 0 {
+		return nil, errors.New("E_NO_REQUEST_URL")
+	}
+	if client == nil {
+		client = &http.Client{}
+	}
+	httpMethod = strings.TrimSpace(httpMethod)
+	if httpMethod == "" {
+		httpMethod = http.MethodPost
+	}
+	var req *http.Request
+	var err error
 
-func PostJsonBytes(client *http.Client, requrl string, headers map[string]string, body []byte) (*http.Response, error) {
-	return RequestJsonBody(client, http.MethodPost, requrl, headers, body)
-}
-
-func PutJsonBytes(client *http.Client, requrl string, headers map[string]string, body []byte) (*http.Response, error) {
-	return RequestJsonBody(client, http.MethodPut, requrl, headers, body)
-}
-
-func RequestJsonBody(client *http.Client, httpMethod, requrl string, headers map[string]string, body []byte) (*http.Response, error) {
-	req, err := http.NewRequest(httpMethod, requrl, bytes.NewBuffer(body))
+	if len(body) == 0 {
+		req, err = http.NewRequest(httpMethod, requrl, nil)
+	} else {
+		req, err = http.NewRequest(httpMethod, requrl, bytes.NewBuffer(body))
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -91,25 +97,32 @@ func RequestJsonBody(client *http.Client, httpMethod, requrl string, headers map
 		}
 		req.Header.Set(k, v)
 	}
-	req.Header.Set(HeaderContentType, ContentTypeAppJsonUtf8)
-	if client == nil {
-		client = &http.Client{}
+	if len(body) > 0 {
+		req.Header.Set(HeaderContentType, ContentTypeAppJsonUtf8)
 	}
+
 	return client.Do(req)
 }
 
-func PostJsonMarshal(client *http.Client, requrl string, headers map[string]string, body interface{}) (*http.Response, error) {
-	bodyBytes, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
+func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string]string, reqBody, resBody interface{}) ([]byte, *http.Response, error) {
+	var reqBodyBytes []byte
+	var err error
+	if reqBody != nil {
+		reqBodyBytes, err = json.Marshal(reqBody)
 	}
-	return PostJsonBytes(client, requrl, headers, bodyBytes)
-}
+	if err != nil {
+		return nil, nil, err
+	}
 
-// PostJsonSimple performs a HTTP POST request converting a body interface{} to
-// JSON and adding the appropriate JSON Content-Type header.
-func PostJsonSimple(requrl string, body interface{}) (*http.Response, error) {
-	return PostJsonMarshal(nil, requrl, map[string]string{}, body)
+	resp, err := DoJSONSimple(client, httpMethod, reqURL, headers, reqBodyBytes)
+	if err != nil || resBody == nil {
+		return nil, resp, err
+	}
+	var resBodyBytes []byte
+	if resBody != nil {
+		resBodyBytes, err = jsonutil.UnmarshalIoReader(resp.Body, resBody)
+	}
+	return resBodyBytes, resp, err
 }
 
 // GetResponseAndBytes retreives a URL and returns the response body
