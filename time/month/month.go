@@ -49,7 +49,6 @@ func YearMonthBase36Time(dt time.Time) string {
 // November 31." Setting `deltaMonths` to 0 indicates the
 // current month.
 func MonthBegin(dt time.Time, deltaMonths int) time.Time {
-	dt = dt.UTC()
 	year := dt.Year()
 	month := int(dt.Month())
 	if deltaMonths > 0 {
@@ -71,7 +70,7 @@ func MonthBegin(dt time.Time, deltaMonths int) time.Time {
 			}
 		}
 	}
-	return time.Date(year, time.Month(month), 1, 0, 0, 0, 0, time.UTC)
+	return time.Date(year, time.Month(month), 1, 0, 0, 0, 0, dt.Location())
 }
 
 // YearMonthToMonthContinuous converts a year and month to
