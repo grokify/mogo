@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
-	"regexp"
 	"strings"
 	"time"
 )
@@ -69,42 +68,6 @@ func GetFileInfo(path string) (os.FileInfo, error) {
 	}
 	defer f.Close()
 	return f.Stat()
-}
-
-type EnvVar struct {
-	Key   string
-	Value string
-}
-
-func Env() []EnvVar {
-	envs := []EnvVar{}
-	for _, e := range os.Environ() {
-		pair := strings.Split(e, "=")
-		if len(pair) > 0 {
-			key := strings.TrimSpace(pair[0])
-			if len(key) > 0 {
-				env := EnvVar{Key: key}
-				if len(pair) > 1 {
-					env.Value = strings.Join(pair[1:], "=")
-				}
-				envs = append(envs, env)
-			}
-		}
-	}
-	return envs
-}
-
-// EnvFiltered returns a map[string]string of environment
-// variables that match a regular expression.
-func EnvFiltered(rx *regexp.Regexp) map[string]string {
-	res := map[string]string{}
-	for _, e := range os.Environ() {
-		pair := strings.Split(e, "=")
-		if rx.MatchString(pair[0]) {
-			res[pair[0]] = pair[1]
-		}
-	}
-	return res
 }
 
 func AbsFilepath(path string) (string, error) {
