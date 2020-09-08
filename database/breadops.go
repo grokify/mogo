@@ -27,21 +27,21 @@ func NewBreadOps(name string) BreadOps {
 		Delete: []string{}}
 }
 
-func (bo *BreadOps) Condense() {
+func (bo *BreadOps) TrimSpace(dedupe, sort bool) {
 	bo.Name = strings.TrimSpace(bo.Name)
 	if bo.Browse != nil {
-		bo.Browse = stringsutil.SliceCondenseSpace(bo.Browse, true, true)
+		bo.Browse = stringsutil.SliceCondenseSpace(bo.Browse, dedupe, sort)
 	}
 	if bo.Read != nil {
-		bo.Read = stringsutil.SliceCondenseSpace(bo.Read, true, true)
+		bo.Read = stringsutil.SliceCondenseSpace(bo.Read, dedupe, sort)
 	}
 	if bo.Edit != nil {
-		bo.Edit = stringsutil.SliceCondenseSpace(bo.Edit, true, true)
+		bo.Edit = stringsutil.SliceCondenseSpace(bo.Edit, dedupe, sort)
 	}
 	if bo.Add != nil {
-		bo.Add = stringsutil.SliceCondenseSpace(bo.Add, true, true)
+		bo.Add = stringsutil.SliceCondenseSpace(bo.Add, dedupe, sort)
 	}
 	if bo.Delete != nil {
-		bo.Delete = stringsutil.SliceCondenseSpace(bo.Delete, true, true)
+		bo.Delete = stringsutil.SliceCondenseSpace(bo.Delete, dedupe, sort)
 	}
 }
