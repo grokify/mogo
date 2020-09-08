@@ -13,10 +13,8 @@ import (
 // It is is useful when the image has a transparent background.
 func AddBackgroundColor(imgSrc image.Image, clr color.Color) image.Image {
 	imgNew := image.NewRGBA(imgSrc.Bounds())
-	draw.Draw(imgNew, imgNew.Bounds(),
-		&image.Uniform{clr}, image.Point{}, draw.Src)
-	draw.Draw(imgNew, imgNew.Bounds(),
-		imgSrc, imgSrc.Bounds().Min, draw.Over)
+	draw.Draw(imgNew, imgNew.Bounds(), &image.Uniform{clr}, image.Point{}, draw.Src)
+	draw.Draw(imgNew, imgNew.Bounds(), imgSrc, imgSrc.Bounds().Min, draw.Over)
 	return imgNew
 }
 
