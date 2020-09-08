@@ -7,6 +7,17 @@ import (
 	"strings"
 )
 
+type StringSlice []string
+
+func (sx StringSlice) Exists(s string) bool {
+	for _, try := range sx {
+		if try == s {
+			return true
+		}
+	}
+	return false
+}
+
 // Unshift adds an element at the first position
 // of the slice.
 func Unshift(a []string, x string) []string {
