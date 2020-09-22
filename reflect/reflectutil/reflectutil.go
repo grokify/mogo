@@ -54,3 +54,15 @@ func SliceInterfaceToString(raws interface{}) []string {
 	}
 	return out
 }
+
+func IsNil(i interface{}) bool {
+	// From https://medium.com/@mangatmodi/go-check-nil-interface-the-right-way-d142776edef1
+	if i == nil {
+		return true
+	}
+	switch reflect.TypeOf(i).Kind() {
+	case reflect.Ptr, reflect.Map, reflect.Array, reflect.Chan, reflect.Slice:
+		return reflect.ValueOf(i).IsNil()
+	}
+	return false
+}
