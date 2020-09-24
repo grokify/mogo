@@ -86,21 +86,21 @@ func Scale(src image.Image, rect image.Rectangle, scale draw.Scaler) image.Image
 }
 
 func ResizeSameY(img1, img2 image.Image, larger bool) (image.Image, image.Image) {
-	h1 := img1.Bounds().Dy()
-	h2 := img2.Bounds().Dy()
-	if h1 == h2 {
+	y1 := img1.Bounds().Dy()
+	y2 := img2.Bounds().Dy()
+	if y1 == y2 {
 		return img1, img2
-	} else if h1 > h2 {
+	} else if y1 > y2 {
 		if larger {
-			img2 = Resize(0, uint(h1), img2, ScalerBest())
+			img2 = Resize(0, uint(y1), img2, ScalerBest())
 		} else {
-			img1 = Resize(0, uint(h2), img1, ScalerBest())
+			img1 = Resize(0, uint(y2), img1, ScalerBest())
 		}
 	} else {
 		if larger {
-			img1 = Resize(0, uint(h2), img1, ScalerBest())
+			img1 = Resize(0, uint(y2), img1, ScalerBest())
 		} else {
-			img2 = Resize(0, uint(h1), img2, ScalerBest())
+			img2 = Resize(0, uint(y1), img2, ScalerBest())
 		}
 	}
 	return img1, img2
