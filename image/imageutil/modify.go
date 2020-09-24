@@ -85,6 +85,48 @@ func Scale(src image.Image, rect image.Rectangle, scale draw.Scaler) image.Image
 	return dst
 }
 
+func ResizeSameY(img1, img2 image.Image, larger bool) (image.Image, image.Image) {
+	h1 := img1.Bounds().Dy()
+	h2 := img2.Bounds().Dy()
+	if h1 == h2 {
+		return img1, img2
+	} else if h1 > h2 {
+		if larger {
+			img2 = Resize(0, uint(h1), img2, ScalerBest())
+		} else {
+			img1 = Resize(0, uint(h2), img1, ScalerBest())
+		}
+	} else {
+		if larger {
+			img1 = Resize(0, uint(h2), img1, ScalerBest())
+		} else {
+			img2 = Resize(0, uint(h1), img2, ScalerBest())
+		}
+	}
+	return img1, img2
+}
+
+func ResizeSameX(img1, img2 image.Image, larger bool) (image.Image, image.Image) {
+	x1 := img1.Bounds().Dx()
+	x2 := img2.Bounds().Dx()
+	if x1 == x2 {
+		return img1, img2
+	} else if x1 > x2 {
+		if larger {
+			img2 = Resize(uint(x1), 0, img2, ScalerBest())
+		} else {
+			img1 = Resize(uint(x2), 0, img1, ScalerBest())
+		}
+	} else {
+		if larger {
+			img1 = Resize(uint(x2), 0, img1, ScalerBest())
+		} else {
+			img2 = Resize(uint(x1), 0, img2, ScalerBest())
+		}
+	}
+	return img1, img2
+}
+
 // ScalerDefault returns a general best results interpolation
 // algorithm. See more here https://blog.codinghorror.com/better-image-resizing/ ,
 // https://support.esri.com/en/technical-article/000005606 ,
