@@ -30,12 +30,12 @@ func MergeXSameY(img1, img2 image.Image, larger bool) image.Image {
 	return output
 }
 
-func MergeXSameYHttp(url1, url2 string, larger bool) (image.Image, error) {
-	img1, _, err := ReadImageHttp(url1)
+func MergeXSameYRead(location1, location2 string, larger bool) (image.Image, error) {
+	img1, _, err := ReadImageAny(location1)
 	if err != nil {
 		return img1, err
 	}
-	img2, _, err := ReadImageHttp(url2)
+	img2, _, err := ReadImageAny(location2)
 	if err != nil {
 		return img2, err
 	}
@@ -54,25 +54,25 @@ func MergeYSameX(img1, img2 image.Image, larger bool) image.Image {
 	return output
 }
 
-func MergeYSameXHttp(url1, url2 string, larger bool) (image.Image, error) {
-	img1, _, err := ReadImageHttp(url1)
+func MergeYSameXRead(location1, location2 string, larger bool) (image.Image, error) {
+	img1, _, err := ReadImageAny(location1)
 	if err != nil {
 		return img1, err
 	}
-	img2, _, err := ReadImageHttp(url2)
+	img2, _, err := ReadImageAny(location2)
 	if err != nil {
 		return img2, err
 	}
 	return MergeYSameX(img1, img2, true), nil
 }
 
-func Merge4Http(url1, url2, url3, url4 string, larger bool) (image.Image, error) {
-	img12, err := MergeXSameYHttp(url1, url2, larger)
+func Merge4Read(location1, location2, location3, location4 string, larger bool) (image.Image, error) {
+	img12, err := MergeXSameYRead(location1, location2, larger)
 	if err != nil {
 		return img12, err
 	}
 
-	img34, err := MergeXSameYHttp(url3, url4, larger)
+	img34, err := MergeXSameYRead(location3, location4, larger)
 	if err != nil {
 		return img34, err
 	}

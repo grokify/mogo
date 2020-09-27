@@ -14,7 +14,7 @@ func main() {
 		"https://example/img3.jpg",
 		"https://example/img4.jpg"}
 
-	img12, err := imageutil.MergeXSameYHttp(urls[0], urls[1], true)
+	img12, err := imageutil.MergeXSameYRead(urls[0], urls[1], true)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -26,7 +26,7 @@ func main() {
 	}
 	fmt.Printf("WROTE [%v]\n", outfile12)
 
-	img34, err := imageutil.MergeXSameYHttp(urls[2], urls[3], true)
+	img34, err := imageutil.MergeXSameYRead(urls[2], urls[3], true)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -47,7 +47,7 @@ func main() {
 	fmt.Printf("WROTE [%v]\n", outfile)
 
 	outfile4 := "_img4.jpg"
-	img4a, err := imageutil.Merge4Http(urls[0], urls[1], urls[2], urls[3], true)
+	img4a, err := imageutil.Merge4Read(urls[0], urls[1], urls[2], urls[3], true)
 	err = imageutil.WriteFileJPEG(outfile4, img4a, imageutil.JPEGQualityMax)
 	if err != nil {
 		log.Fatal(err)
