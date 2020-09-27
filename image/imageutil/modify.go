@@ -131,6 +131,7 @@ func ResizeSameX(img1, img2 image.Image, larger bool) (image.Image, image.Image)
 // algorithm. See more here https://blog.codinghorror.com/better-image-resizing/ ,
 // https://support.esri.com/en/technical-article/000005606 ,
 // https://stackoverflow.com/questions/384991/what-is-the-best-image-downscaling-algorithm-quality-wise/6171860 .
+
 func ScalerDefault() draw.Scaler { return draw.BiLinear }
 
 func ScalerBest() draw.Scaler { return draw.CatmullRom }
@@ -175,3 +176,10 @@ func PaintColorRGBARectangle(img *image.RGBA, clr color.RGBA, rectNew image.Rect
 		}
 	}
 }
+
+// Information on rotation:
+//
+// https://www.golangprograms.com/how-to-rotate-an-image-in-golang.html
+// https://code.google.com/archive/p/graphics-go/
+// https://github.com/BurntSushi/graphics-go
+// graphics.Rotate(dstImage, srcImage, &graphics.RotateOptions{math.Pi / 2.0}
