@@ -58,17 +58,6 @@ func MergeXSameYRead(locations []string, larger bool) (image.Image, error) {
 		return nil, err
 	}
 	return MergeXSameY(images, true), nil
-	/*
-		img1, _, err := ReadImageAny(location1)
-		if err != nil {
-			return img1, err
-		}
-		img2, _, err := ReadImageAny(location2)
-		if err != nil {
-			return img2, err
-		}
-		return MergeXSameY(img1, img2, true), nil
-	*/
 }
 
 func MergeYSameX(images []image.Image, larger bool) image.Image {
@@ -111,17 +100,6 @@ func MergeYSameXRead(locations []string, larger bool) (image.Image, error) {
 		return nil, err
 	}
 	return MergeYSameX(images, true), nil
-	/*
-		img1, _, err := ReadImageAny(location1)
-		if err != nil {
-			return img1, err
-		}
-		img2, _, err := ReadImageAny(location2)
-		if err != nil {
-			return img2, err
-		}
-		return MergeYSameX(img1, img2, true), nil
-	*/
 }
 
 func MatrixMergeRead(matrix [][]string, largerX, largerY bool) (image.Image, error) {
