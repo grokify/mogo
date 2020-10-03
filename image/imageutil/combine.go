@@ -141,9 +141,17 @@ func MatrixMergeRead(matrix [][]string, largerX, largerY bool) (image.Image, err
 }
 
 func MatrixMerge(matrix [][]image.Image, largerX, largerY bool) image.Image {
+	if len(matrix) == 0 {
+		return nil
+	}
 	rowImages := []image.Image{}
 	for _, rowParts := range matrix {
-		rowImages = append(rowImages, MergeXSameY(rowParts, largerY))
+		if len(rowParts) > 0 {
+			rowImages = append(rowImages, MergeXSameY(rowParts, largerY))
+		}
+	}
+	if len(rowImages) == 0 {
+		return nil
 	}
 	return MergeYSameX(rowImages, largerX)
 }
