@@ -150,6 +150,16 @@ func CondenseStringSimple(s string) string {
 
 func StripControl(s string) string { return rxControl.ReplaceAllString(s, "") }
 
+// TrimSpaceWithDefault trims spaces and replaces default value if
+// result is empty string.
+func TrimSpaceWithDefault(str string, defaultValue string) string {
+	str = strings.TrimSpace(str)
+	if len(str) == 0 {
+		str = defaultValue
+	}
+	return str
+}
+
 // TrimSentenceLength trims a string by a max length at word boundaries.
 func TrimSentenceLength(sentenceInput string, maxLength int) string {
 	if len(sentenceInput) <= maxLength {
