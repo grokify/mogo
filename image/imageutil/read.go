@@ -9,15 +9,27 @@ import (
 	"strings"
 )
 
-func ReadImageAny(s string) (image.Image, string, error) {
-	if isHttpUri(s) {
-		return ReadImageHttp(s)
+func ReadImageAny(location string) (image.Image, string, error) {
+	if isHttpUri(location) {
+		return ReadImageHttp(location)
 	}
-	return ReadImageFile(s)
+	return ReadImageFile(location)
 }
 
-func isHttpUri(s string) bool {
-	try := strings.ToLower(strings.TrimSpace(s))
+func ReadImages(locations []string) ([]image.Image, error) {
+	images := []image.Image{}
+	for _, location := range locations {
+		img, _, err := ReadImageAny(location)
+		if err != nil {
+			return images, err
+		}
+		images = append(images, img)
+	}
+	return images, nil
+}
+
+func isHttpUri(location string) bool {
+	try := strings.ToLower(strings.TrimSpace(location))
 	if strings.Index(try, "http://") == 0 || strings.Index(try, "https://") == 0 {
 		return true
 	}
