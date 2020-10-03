@@ -85,7 +85,61 @@ func Scale(src image.Image, rect image.Rectangle, scale draw.Scaler) image.Image
 	return dst
 }
 
-func ResizeSameY(img1, img2 image.Image, larger bool) (image.Image, image.Image) {
+func SliceXY(images []image.Image, maxIdx int) (minX, maxX, minY, maxY, sumX, sumY int) {
+	for i, img := range images {
+		if maxIdx >= 0 && i > maxIdx {
+			break
+		}
+		sumX += img.Bounds().Dx()
+		sumY += img.Bounds().Dy()
+		if i == 0 {
+			minX = img.Bounds().Dx()
+			maxX = img.Bounds().Dx()
+			minY = img.Bounds().Dy()
+			maxY = img.Bounds().Dy()
+			continue
+		}
+		if minX > img.Bounds().Dx() {
+			minX = img.Bounds().Dx()
+		}
+		if maxX < img.Bounds().Dx() {
+			maxX = img.Bounds().Dx()
+		}
+		if minY > img.Bounds().Dy() {
+			minY = img.Bounds().Dy()
+		}
+		if maxY < img.Bounds().Dy() {
+			maxY = img.Bounds().Dy()
+		}
+	}
+	return
+}
+
+func ResizeSameX(images []image.Image, larger bool) []image.Image {
+	minX, maxX, _, _, _, _ := SliceXY(images, -1)
+	for i, img := range images {
+		if larger && img.Bounds().Dx() != maxX {
+			images[i] = Resize(uint(maxX), 0, img, ScalerBest())
+		} else if !larger && img.Bounds().Dx() != minX {
+			images[i] = Resize(uint(minX), 0, img, ScalerBest())
+		}
+	}
+	return images
+}
+
+func ResizeSameY(images []image.Image, larger bool) []image.Image {
+	_, _, minY, maxY, _, _ := SliceXY(images, -1)
+	for i, img := range images {
+		if larger && img.Bounds().Dy() != maxY {
+			images[i] = Resize(uint(maxY), 0, img, ScalerBest())
+		} else if !larger && img.Bounds().Dy() != minY {
+			images[i] = Resize(uint(minY), 0, img, ScalerBest())
+		}
+	}
+	return images
+}
+
+func ResizeSameYTwo(img1, img2 image.Image, larger bool) (image.Image, image.Image) {
 	y1 := img1.Bounds().Dy()
 	y2 := img2.Bounds().Dy()
 	if y1 == y2 {
@@ -106,7 +160,7 @@ func ResizeSameY(img1, img2 image.Image, larger bool) (image.Image, image.Image)
 	return img1, img2
 }
 
-func ResizeSameX(img1, img2 image.Image, larger bool) (image.Image, image.Image) {
+func ResizeSameXTwo(img1, img2 image.Image, larger bool) (image.Image, image.Image) {
 	x1 := img1.Bounds().Dx()
 	x2 := img2.Bounds().Dx()
 	if x1 == x2 {
