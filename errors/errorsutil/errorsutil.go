@@ -53,7 +53,10 @@ type ErrorInfo struct {
 	Error       error
 	ErrorString string // must match Error
 	Code        string
-	Display     string
+	Summary     string
+	Description string
+	Explanation string
+	Source      string
 	Input       string
 	Correct     string
 }
