@@ -40,7 +40,7 @@ func MergeXSameY(images []image.Image, larger bool) image.Image {
 	return output
 }
 
-func MergeXSameYTwo(img1, img2 image.Image, larger bool) image.Image {
+func mergeXSameYTwo(img1, img2 image.Image, larger bool) image.Image {
 	img1, img2 = ResizeSameYTwo(img1, img2, larger)
 	output := image.NewRGBA(
 		image.Rect(0, 0,
@@ -93,7 +93,7 @@ func MergeYSameX(images []image.Image, larger bool) image.Image {
 	return output
 }
 
-func MergeYSameXTwo(img1, img2 image.Image, larger bool) image.Image {
+func mergeYSameXTwo(img1, img2 image.Image, larger bool) image.Image {
 	img1, img2 = ResizeSameXTwo(img1, img2, larger)
 	output := image.NewRGBA(
 		image.Rect(0, 0,
@@ -148,7 +148,7 @@ func MatrixMerge(matrix [][]image.Image, largerX, largerY bool) image.Image {
 	return MergeYSameX(rowImages, largerX)
 }
 
-func Merge4Read(location1, location2, location3, location4 string, larger bool) (image.Image, error) {
+func merge4Read(location1, location2, location3, location4 string, larger bool) (image.Image, error) {
 	img12, err := MergeXSameYRead([]string{location1, location2}, larger)
 	if err != nil {
 		return img12, err
