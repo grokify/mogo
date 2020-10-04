@@ -28,13 +28,9 @@ func MergeXSameY(images []image.Image, larger bool) image.Image {
 	_, _, minY, _, sumX, _ := SliceXY(images, -1)
 	output := image.NewRGBA(image.Rect(0, 0, sumX, minY))
 	sumXPrev := 0
-	for i, img := range images {
-		if i == 0 {
-			draw.Draw(output, img.Bounds(), img, image.Point{}, draw.Src)
-		} else {
-			imgOffset := image.Pt(sumXPrev, 0)
-			draw.Draw(output, img.Bounds().Add(imgOffset), img, image.Point{}, draw.Src)
-		}
+	for _, img := range images {
+		draw.Draw(output, img.Bounds().Add(image.Pt(sumXPrev, 0)),
+			img, image.Point{}, draw.Src)
 		sumXPrev += img.Bounds().Dx()
 	}
 	return output
@@ -47,8 +43,8 @@ func mergeXSameYTwo(img1, img2 image.Image, larger bool) image.Image {
 			img1.Bounds().Dx()+img2.Bounds().Dx(),
 			img1.Bounds().Dy()))
 	draw.Draw(output, img1.Bounds(), img1, image.Point{}, draw.Src)
-	img2Offset := image.Pt(img1.Bounds().Dx(), 0)
-	draw.Draw(output, img2.Bounds().Add(img2Offset), img2, image.Point{}, draw.Src)
+	draw.Draw(output, img2.Bounds().Add(image.Pt(img1.Bounds().Dx(), 0)),
+		img2, image.Point{}, draw.Src)
 	return output
 }
 
@@ -70,13 +66,9 @@ func MergeYSameX(images []image.Image, larger bool) image.Image {
 	minX, _, _, _, _, sumY := SliceXY(images, -1)
 	output := image.NewRGBA(image.Rect(0, 0, minX, sumY))
 	sumYPrev := 0
-	for i, img := range images {
-		if i == 0 {
-			draw.Draw(output, img.Bounds(), img, image.Point{}, draw.Src)
-		} else {
-			imgOffset := image.Pt(0, sumYPrev)
-			draw.Draw(output, img.Bounds().Add(imgOffset), img, image.Point{}, draw.Src)
-		}
+	for _, img := range images {
+		draw.Draw(output, img.Bounds().Add(image.Pt(0, sumYPrev)),
+			img, image.Point{}, draw.Src)
 		sumYPrev += img.Bounds().Dy()
 	}
 	return output
@@ -89,8 +81,8 @@ func mergeYSameXTwo(img1, img2 image.Image, larger bool) image.Image {
 			img1.Bounds().Dx(),
 			img1.Bounds().Dy()+img2.Bounds().Dy()))
 	draw.Draw(output, img1.Bounds(), img1, image.Point{}, draw.Src)
-	img2Offset := image.Pt(0, img1.Bounds().Dy())
-	draw.Draw(output, img2.Bounds().Add(img2Offset), img2, image.Point{}, draw.Src)
+	draw.Draw(output, img2.Bounds().Add(image.Pt(0, img1.Bounds().Dy())),
+		img2, image.Point{}, draw.Src)
 	return output
 }
 
