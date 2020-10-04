@@ -7,9 +7,7 @@ import (
 )
 
 func DistanceCIE94(color1, color2 color.RGBA) float64 {
-	clr1 := ColorfulColor(color1)
-	clr2 := ColorfulColor(color2)
-	return clr1.DistanceCIE94(clr2)
+	return ColorfulColor(color1).DistanceCIE94(ColorfulColor(color2))
 }
 
 func ColorfulColor(clr color.RGBA) colorful.Color {
