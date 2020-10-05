@@ -35,6 +35,7 @@ require (
 	github.com/kylelemons/go-gypsy v0.0.0-20160905020020-08cad365cd28 // indirect
 	github.com/leekchan/accounting v1.0.0
 	github.com/lib/pq v1.8.0 // indirect
+	github.com/lucasb-eyer/go-colorful v1.0.3
 	github.com/lytics/base62 v0.0.0-20180808010106-0ee4de5a5d6d
 	github.com/martinlindhe/base36 v1.1.0
 	github.com/microcosm-cc/bluemonday v1.0.4
