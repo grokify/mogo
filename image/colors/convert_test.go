@@ -2,6 +2,7 @@ package colors
 
 import (
 	"image/color"
+	"strings"
 	"testing"
 )
 
@@ -56,6 +57,15 @@ func TestConvertColors(t *testing.T) {
 		} else if gotHexNum.R != tt.R || gotHexNum.G != tt.G || gotHexNum.B != tt.B {
 			t.Errorf("Parse('%s'): want [%v] got [%v]", tt.hexNum, color.RGBA{
 				tt.R, tt.G, tt.B, 0xff}, gotHexNum)
+		}
+		clr := color.RGBA{
+			R: uint8(tt.R),
+			G: uint8(tt.G),
+			B: uint8(tt.B),
+			A: 0xff}
+		gotHexLc := ColorToHex(clr)
+		if gotHexLc != strings.ToLower(tt.hexRaw) {
+			t.Errorf("ColorToHex(%v): want [%v] got [%v]", clr, strings.ToLower(tt.hexRaw), gotHexLc)
 		}
 	}
 }

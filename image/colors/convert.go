@@ -55,6 +55,10 @@ func HexToColor(hexRGB string) (color.RGBA, error) {
 		A: 0xff}, nil
 }
 
+func ColorToHex(clr color.RGBA) string {
+	return fmt.Sprintf("%02x%02x%02x", clr.R, clr.G, clr.B)
+}
+
 func GoogleToColor(googString string) (color.RGBA, error) {
 	m := rxGoogleCol.FindStringSubmatch(googString)
 	if len(m) == 0 {
