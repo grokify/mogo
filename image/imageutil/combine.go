@@ -29,6 +29,9 @@ func MergeXSameY(images []image.Image, larger bool) image.Image {
 	output := image.NewRGBA(image.Rect(0, 0, sumX, minY))
 	sumXPrev := 0
 	for _, img := range images {
+		if IsNilOrEmpty(img) {
+			continue
+		}
 		draw.Draw(output, img.Bounds().Add(image.Pt(sumXPrev, 0)),
 			img, image.Point{}, draw.Src)
 		sumXPrev += img.Bounds().Dx()
@@ -67,6 +70,9 @@ func MergeYSameX(images []image.Image, larger bool) image.Image {
 	output := image.NewRGBA(image.Rect(0, 0, minX, sumY))
 	sumYPrev := 0
 	for _, img := range images {
+		if IsNilOrEmpty(img) {
+			continue
+		}
 		draw.Draw(output, img.Bounds().Add(image.Pt(0, sumYPrev)),
 			img, image.Point{}, draw.Src)
 		sumYPrev += img.Bounds().Dy()

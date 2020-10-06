@@ -15,3 +15,10 @@ func Aspect(width, height int) float64 {
 func NegativeOffset(width, height, offset uint) image.Point {
 	return image.Pt(int(width-offset), int(height-offset))
 }
+
+func IsNilOrEmpty(img image.Image) bool {
+	if img == nil || img.Bounds().Dx() == 0 || img.Bounds().Dy() == 0 {
+		return true
+	}
+	return false
+}
