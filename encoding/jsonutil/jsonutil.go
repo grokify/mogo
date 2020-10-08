@@ -88,3 +88,11 @@ func UnmarshalIoReader(r io.Reader, iface interface{}) ([]byte, error) {
 	}
 	return bytes, json.Unmarshal(bytes, iface)
 }
+
+func ReadFile(filename string, v interface{}) ([]byte, error) {
+	bytes, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return bytes, err
+	}
+	return bytes, json.Unmarshal(bytes, v)
+}
