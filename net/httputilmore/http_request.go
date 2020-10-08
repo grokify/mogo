@@ -18,6 +18,9 @@ import (
 // GetWriteFile gets the conents of a URL and stores the body in
 // the desired filename location.
 func GetWriteFile(client *http.Client, url, filename string) (*http.Response, error) {
+	if client == nil {
+		client = &http.Client{}
+	}
 	resp, err := client.Get(url)
 	if err != nil {
 		return resp, errors.Wrap(err, "httputilmore.GetStoreURL.client.Get()")
