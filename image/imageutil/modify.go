@@ -131,9 +131,9 @@ func ResizeSameY(images []image.Image, larger bool) []image.Image {
 	_, _, minY, maxY, _, _ := SliceXY(images, -1)
 	for i, img := range images {
 		if larger && img.Bounds().Dy() != maxY {
-			images[i] = Resize(uint(maxY), 0, img, ScalerBest())
+			images[i] = Resize(0, uint(maxY), img, ScalerBest())
 		} else if !larger && img.Bounds().Dy() != minY {
-			images[i] = Resize(uint(minY), 0, img, ScalerBest())
+			images[i] = Resize(0, uint(minY), img, ScalerBest())
 		}
 	}
 	return images

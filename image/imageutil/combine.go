@@ -1,7 +1,9 @@
 package imageutil
 
 import (
+	"fmt"
 	"image"
+	"strings"
 
 	"golang.org/x/image/draw"
 )
@@ -16,6 +18,16 @@ func OverlayCenterYLeftAlign(imgBg, imgOver image.Image) image.Image {
 
 	draw.Draw(output, imgOver.Bounds().Add(offset), imgOver, image.Point{}, draw.Src)
 	return output
+}
+
+func debugImagesDimensions(note string, images []image.Image) {
+	dimensions := []string{note}
+	for i, img := range images {
+		dimensions = append(dimensions,
+			fmt.Sprintf("X%d[%v]y%d[%v]",
+				i+1, img.Bounds().Dx(), i+1, img.Bounds().Dy()))
+	}
+	fmt.Printf(strings.Join(dimensions, " ") + "\n")
 }
 
 func MergeXSameY(images []image.Image, larger bool) image.Image {
