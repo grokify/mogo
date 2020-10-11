@@ -139,48 +139,6 @@ func ResizeSameY(images []image.Image, larger bool) []image.Image {
 	return images
 }
 
-func ResizeSameYTwo(img1, img2 image.Image, larger bool) (image.Image, image.Image) {
-	y1 := img1.Bounds().Dy()
-	y2 := img2.Bounds().Dy()
-	if y1 == y2 {
-		return img1, img2
-	} else if y1 > y2 {
-		if larger {
-			img2 = Resize(0, uint(y1), img2, ScalerBest())
-		} else {
-			img1 = Resize(0, uint(y2), img1, ScalerBest())
-		}
-	} else {
-		if larger {
-			img1 = Resize(0, uint(y2), img1, ScalerBest())
-		} else {
-			img2 = Resize(0, uint(y1), img2, ScalerBest())
-		}
-	}
-	return img1, img2
-}
-
-func ResizeSameXTwo(img1, img2 image.Image, larger bool) (image.Image, image.Image) {
-	x1 := img1.Bounds().Dx()
-	x2 := img2.Bounds().Dx()
-	if x1 == x2 {
-		return img1, img2
-	} else if x1 > x2 {
-		if larger {
-			img2 = Resize(uint(x1), 0, img2, ScalerBest())
-		} else {
-			img1 = Resize(uint(x2), 0, img1, ScalerBest())
-		}
-	} else {
-		if larger {
-			img1 = Resize(uint(x2), 0, img1, ScalerBest())
-		} else {
-			img2 = Resize(uint(x1), 0, img2, ScalerBest())
-		}
-	}
-	return img1, img2
-}
-
 // ScalerDefault returns a general best results interpolation
 // algorithm. See more here https://blog.codinghorror.com/better-image-resizing/ ,
 // https://support.esri.com/en/technical-article/000005606 ,

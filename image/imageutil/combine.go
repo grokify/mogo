@@ -51,18 +51,6 @@ func MergeXSameY(images []image.Image, larger bool) image.Image {
 	return output
 }
 
-func mergeXSameYTwo(img1, img2 image.Image, larger bool) image.Image {
-	img1, img2 = ResizeSameYTwo(img1, img2, larger)
-	output := image.NewRGBA(
-		image.Rect(0, 0,
-			img1.Bounds().Dx()+img2.Bounds().Dx(),
-			img1.Bounds().Dy()))
-	draw.Draw(output, img1.Bounds(), img1, image.Point{}, draw.Src)
-	draw.Draw(output, img2.Bounds().Add(image.Pt(img1.Bounds().Dx(), 0)),
-		img2, image.Point{}, draw.Src)
-	return output
-}
-
 func MergeXSameYRead(locations []string, larger bool) (image.Image, error) {
 	images, err := ReadImages(locations)
 	if err != nil {
@@ -89,18 +77,6 @@ func MergeYSameX(images []image.Image, larger bool) image.Image {
 			img, image.Point{}, draw.Src)
 		sumYPrev += img.Bounds().Dy()
 	}
-	return output
-}
-
-func mergeYSameXTwo(img1, img2 image.Image, larger bool) image.Image {
-	img1, img2 = ResizeSameXTwo(img1, img2, larger)
-	output := image.NewRGBA(
-		image.Rect(0, 0,
-			img1.Bounds().Dx(),
-			img1.Bounds().Dy()+img2.Bounds().Dy()))
-	draw.Draw(output, img1.Bounds(), img1, image.Point{}, draw.Src)
-	draw.Draw(output, img2.Bounds().Add(image.Pt(0, img1.Bounds().Dy())),
-		img2, image.Point{}, draw.Src)
 	return output
 }
 
@@ -142,18 +118,4 @@ func MatrixMerge(matrix [][]image.Image, largerX, largerY bool) image.Image {
 		return nil
 	}
 	return MergeYSameX(rowImages, largerX)
-}
-
-func merge4Read(location1, location2, location3, location4 string, larger bool) (image.Image, error) {
-	img12, err := MergeXSameYRead([]string{location1, location2}, larger)
-	if err != nil {
-		return img12, err
-	}
-
-	img34, err := MergeXSameYRead([]string{location3, location4}, larger)
-	if err != nil {
-		return img34, err
-	}
-
-	return MergeYSameX([]image.Image{img12, img34}, larger), nil
 }
