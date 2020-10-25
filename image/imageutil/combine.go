@@ -3,6 +3,7 @@ package imageutil
 import (
 	"fmt"
 	"image"
+	"image/color"
 	"strings"
 
 	"golang.org/x/image/draw"
@@ -88,23 +89,23 @@ func MergeYSameXRead(locations []string, larger bool) (image.Image, error) {
 	return MergeYSameX(images, true), nil
 }
 
-func MatrixMergeRead(matrix [][]string, largerX, largerY bool) (image.Image, error) {
-	matrixImages := [][]image.Image{}
-	for _, row := range matrix {
-		if len(row) == 0 {
-			continue
-		}
-		images, err := ReadImages(row)
-		if err != nil {
-			return nil, err
-		}
-		matrixImages = append(matrixImages, images)
-	}
+type Matrix [][]image.Image
 
-	return MatrixMerge(matrixImages, largerX, largerY), nil
+// AddBackgroundColor adds a background of `color.Color` to the images.
+// It is is useful when the image has a transparent background. Use
+// `colornames` for more colors, e.g. `colornames.Blue`.
+func (matrix Matrix) AddBackgroundColor(clr color.Color) {
+	for i, row := range matrix {
+		for j, img := range row {
+			matrix[i][j] = AddBackgroundColor(img, clr)
+		}
+	}
 }
 
-func MatrixMerge(matrix [][]image.Image, largerX, largerY bool) image.Image {
+// Merge combines a set of images resizing each row element's
+// height for consistent rows, an each row's width for consistent
+// widths.
+func (matrix Matrix) Merge(largerX, largerY bool) image.Image {
 	if len(matrix) == 0 {
 		return nil
 	}
@@ -118,4 +119,28 @@ func MatrixMerge(matrix [][]image.Image, largerX, largerY bool) image.Image {
 		return nil
 	}
 	return MergeYSameX(rowImages, largerX)
+}
+
+func MatrixRead(imglocations [][]string) (Matrix, error) {
+	matrixImages := Matrix{}
+	for _, row := range imglocations {
+		if len(row) == 0 {
+			continue
+		}
+		images, err := ReadImages(row)
+		if err != nil {
+			return nil, err
+		}
+		matrixImages = append(matrixImages, images)
+	}
+	return matrixImages, nil
+}
+
+func MatrixMergeRead(imglocations [][]string, largerX, largerY bool) (image.Image, error) {
+	matrixImages, err := MatrixRead(imglocations)
+	if err != nil {
+		return nil, err
+	}
+
+	return matrixImages.Merge(largerX, largerY), nil
 }

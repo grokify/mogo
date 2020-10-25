@@ -10,7 +10,8 @@ import (
 )
 
 // AddBackgroundColor adds a background of `color.Color` to an image.
-// It is is useful when the image has a transparent background.
+// It is is useful when the image has a transparent background. Use
+// `colornames` for more colors, e.g. `colornames.Blue`.
 func AddBackgroundColor(imgSrc image.Image, clr color.Color) image.Image {
 	imgNew := image.NewRGBA(imgSrc.Bounds())
 	draw.Draw(imgNew, imgNew.Bounds(), &image.Uniform{clr}, image.Point{}, draw.Src)
