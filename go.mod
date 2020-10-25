@@ -11,6 +11,7 @@ require (
 	github.com/aymerick/raymond v2.0.2+incompatible
 	github.com/buger/jsonparser v1.0.0
 	github.com/caarlos0/env v3.5.0+incompatible
+	github.com/chai2010/webp v1.1.0
 	github.com/derekstavis/go-qs v0.0.0-20180720192143-9eef69e6c4e7
 	github.com/emersion/go-imap v1.0.5
 	github.com/emersion/go-sasl v0.0.0-20200509203442-7bfe0ed36a21 // indirect

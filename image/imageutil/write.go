@@ -1,10 +1,14 @@
 package imageutil
 
 import (
+	"bytes"
 	"image"
 	"image/jpeg"
 	"image/png"
+	"io/ioutil"
 	"os"
+
+	"github.com/chai2010/webp"
 )
 
 const (
@@ -40,4 +44,13 @@ func WriteFilePNG(filename string, img image.Image) error {
 		return err
 	}
 	return out.Close()
+}
+
+func WriteFileWEBP(filename string, img image.Image, lossless bool, perm os.FileMode) error {
+	var buf bytes.Buffer
+	err := webp.Encode(&buf, img, &webp.Options{Lossless: lossless})
+	if err != nil {
+		return err
+	}
+	return ioutil.WriteFile(filename, buf.Bytes(), perm)
 }

@@ -3,10 +3,23 @@ package imageutil
 import (
 	"fmt"
 	"image"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
+
+	"github.com/chai2010/webp"
+)
+
+const (
+	FileExtensionWebp = ".webp"
+
+	FormatNameJPG  = "jpeg"
+	FormatNamePNG  = "png"
+	FormatNameWEBP = "webp"
 )
 
 func ReadImageAny(location string) (image.Image, string, error) {
@@ -42,7 +55,22 @@ func ReadImageFile(filename string) (image.Image, string, error) {
 		return image.NewRGBA(image.Rectangle{}), "", err
 	}
 	defer infile.Close()
+	if strings.ToLower(strings.TrimSpace(filepath.Ext(filename))) == FileExtensionWebp {
+		return DecodeWebpRGBA(infile)
+	}
 	return image.Decode(infile)
+}
+
+func DecodeWebpRGBA(r io.Reader) (image.Image, string, error) {
+	bytes, err := ioutil.ReadAll(r)
+	if err != nil {
+		return nil, "", err
+	}
+	img, err := webp.DecodeRGBA(bytes)
+	if err != nil {
+		return img, "", err
+	}
+	return img, FormatNameWEBP, nil
 }
 
 func ReadImageHttp(imageUrl string) (image.Image, string, error) {
