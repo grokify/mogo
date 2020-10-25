@@ -135,12 +135,3 @@ func MatrixRead(imglocations [][]string) (Matrix, error) {
 	}
 	return matrixImages, nil
 }
-
-func MatrixMergeRead(imglocations [][]string, largerX, largerY bool) (image.Image, error) {
-	matrixImages, err := MatrixRead(imglocations)
-	if err != nil {
-		return nil, err
-	}
-
-	return matrixImages.Merge(largerX, largerY), nil
-}
