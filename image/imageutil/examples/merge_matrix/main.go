@@ -21,9 +21,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	merged := matrix.Merge(true, true)
 
-	err = imageutil.WriteFileJPEG(outfile, merged, imageutil.JPEGQualityMax)
+	err = imageutil.WriteFileJPEG(
+		outfile, matrix.Merge(true, true), imageutil.JPEGQualityMax)
 	if err != nil {
 		log.Fatal(err)
 	}
