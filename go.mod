@@ -1,6 +1,6 @@
 module github.com/grokify/gotilla
 
-go 1.15
+go 1.13
 
 require (
 	cloud.google.com/go v0.65.0 // indirect
@@ -41,6 +41,7 @@ require (
 	github.com/martinlindhe/base36 v1.1.0
 	github.com/microcosm-cc/bluemonday v1.0.4
 	github.com/nyaruka/phonenumbers v1.0.57
+	github.com/oov/psd v0.0.0-20201002182931-74231384897f
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/sftp v1.12.0
 	github.com/pquerna/ffjson v0.0.0-20190930134022-aa0246cd15f7 // indirect
