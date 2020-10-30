@@ -6,6 +6,7 @@ import (
 	"image/color"
 	"strings"
 
+	"github.com/grokify/gotilla/image/colors"
 	"golang.org/x/image/draw"
 )
 
@@ -100,6 +101,15 @@ func (matrix Matrix) AddBackgroundColor(clr color.Color) {
 			matrix[i][j] = AddBackgroundColor(img, clr)
 		}
 	}
+}
+
+func (matrix Matrix) AddBackgroundColorHex(hexcolor string) error {
+	clr, err := colors.HexToColor(hexcolor)
+	if err != nil {
+		return err
+	}
+	matrix.AddBackgroundColor(clr)
+	return nil
 }
 
 // Merge combines a set of images resizing each row element's
