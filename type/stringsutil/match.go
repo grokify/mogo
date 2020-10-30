@@ -9,14 +9,14 @@ import (
 type MatchType int
 
 const (
-	Exact MatchType = iota
-	TrimSpace
-	TrimSpaceLower
-	Regexp
-	TimeGT
-	TimeGTE
-	TimeLT
-	TimeLTE
+	MatchExact MatchType = iota
+	MatchTrimSpace
+	MatchTrimSpaceLower
+	MatchRegexp
+	MatchTimeGT
+	MatchTimeGTE
+	MatchTimeLT
+	MatchTimeLTE
 	MatchHasSuffix
 	MatchHasPrefix
 )
@@ -34,29 +34,29 @@ type MatchInfo struct {
 // approaches
 func Match(s string, matchInfo MatchInfo) (bool, error) {
 	switch matchInfo.MatchType {
-	case Exact:
+	case MatchExact:
 		if s == matchInfo.String {
 			return true, nil
 		}
 		return false, nil
-	case TrimSpace:
+	case MatchTrimSpace:
 		m := strings.TrimSpace(s)
 		if m == strings.TrimSpace(matchInfo.String) {
 			return true, nil
 		}
 		return false, nil
-	case TrimSpaceLower:
+	case MatchTrimSpaceLower:
 		m := strings.ToLower(strings.TrimSpace(s))
 		if m == strings.ToLower(strings.TrimSpace(matchInfo.String)) {
 			return true, nil
 		}
 		return false, nil
-	case Regexp:
+	case MatchRegexp:
 		if matchInfo.Regexp == nil {
 			return false, nil
 		}
 		return matchInfo.Regexp.MatchString(s), nil
-	case TimeGT:
+	case MatchTimeGT:
 		t, err := time.Parse(matchInfo.TimeLayout, s)
 		if err != nil {
 			return false, err
@@ -66,7 +66,7 @@ func Match(s string, matchInfo MatchInfo) (bool, error) {
 		} else {
 			return false, nil
 		}
-	case TimeGTE:
+	case MatchTimeGTE:
 		t, err := time.Parse(matchInfo.TimeLayout, s)
 		if err != nil {
 			return false, err
@@ -76,7 +76,7 @@ func Match(s string, matchInfo MatchInfo) (bool, error) {
 		} else {
 			return false, nil
 		}
-	case TimeLT:
+	case MatchTimeLT:
 		t, err := time.Parse(matchInfo.TimeLayout, s)
 		if err != nil {
 			return false, err
@@ -86,7 +86,7 @@ func Match(s string, matchInfo MatchInfo) (bool, error) {
 		} else {
 			return false, nil
 		}
-	case TimeLTE:
+	case MatchTimeLTE:
 		t, err := time.Parse(matchInfo.TimeLayout, s)
 		if err != nil {
 			return false, err
