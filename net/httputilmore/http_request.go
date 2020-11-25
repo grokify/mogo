@@ -111,20 +111,25 @@ func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string]s
 	var reqBodyBytes []byte
 	var err error
 	if reqBody != nil {
-		reqBodyBytes, err = json.Marshal(reqBody)
+		if reqBodyBytesAssert, ok := reqBody.([]byte); ok {
+			reqBodyBytes = reqBodyBytesAssert
+		} else {
+			reqBodyBytes, err = json.Marshal(reqBody)
+		}
 	}
 	if err != nil {
 		return nil, nil, err
 	}
 
 	resp, err := DoJSONSimple(client, httpMethod, reqURL, headers, reqBodyBytes)
+	if err != nil {
+		return nil, resp, err
+	}
+
 	if err != nil || resBody == nil {
 		return nil, resp, err
 	}
-	var resBodyBytes []byte
-	if resBody != nil {
-		resBodyBytes, err = jsonutil.UnmarshalIoReader(resp.Body, resBody)
-	}
+	resBodyBytes, err := jsonutil.UnmarshalIoReader(resp.Body, resBody)
 	return resBodyBytes, resp, err
 }
 
