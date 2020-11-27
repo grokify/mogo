@@ -2,6 +2,7 @@
 package osutil
 
 import (
+	"bufio"
 	"io/ioutil"
 	"os"
 	"os/user"
@@ -70,6 +71,9 @@ func GetFileInfo(path string) (os.FileInfo, error) {
 	return f.Stat()
 }
 
+// AbsFilepath returns an absolute filepath, using
+// the user's current / home directory if indicated in
+// the filepath string.
 func AbsFilepath(path string) (string, error) {
 	path = strings.TrimSpace(path)
 	if len(path) == 0 {
@@ -103,4 +107,31 @@ func FinfosToFilepaths(dir string, fis []os.FileInfo) []string {
 		filepaths = append(filepaths, filepath.Join(dir, fi.Name()))
 	}
 	return filepaths
+}
+
+// CreateFileWithLines creates a file and writes lines to it. It will
+// optionally add a `lineSuffix` (e.g. `"\n"`) and use `bufio`.
+func CreateFileWithLines(filename string, lines []string, lineSuffix string, useBuffer bool) error {
+	f, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	if !useBuffer {
+		for _, line := range lines {
+			_, err := f.WriteString(line + lineSuffix)
+			if err != nil {
+				return err
+			}
+		}
+		return f.Sync()
+	}
+	w := bufio.NewWriter(f)
+	for _, line := range lines {
+		_, err := w.WriteString(line + lineSuffix)
+		if err != nil {
+			return err
+		}
+	}
+	return w.Flush()
 }
