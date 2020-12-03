@@ -81,3 +81,7 @@ func Int64Mod(x, y int64) int64 {
 	xBig.Mod(xBig, yBig)
 	return xBig.Int64()
 }
+
+func IntToBaseXString(baseX, val int) string {
+	return big.NewInt(int64(val)).Text(baseX)
+}

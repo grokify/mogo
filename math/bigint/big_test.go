@@ -27,3 +27,29 @@ func TestPowInt(t *testing.T) {
 		}
 	}
 }
+
+var intToBaseXStringTests = []struct {
+	base int
+	dec  int
+	val  string
+}{
+	{16, 15, "f"},
+	{32, 0, "0"},
+	{32, 1, "1"},
+	{32, 12, "c"}}
+
+func TestIntToBaseXString(t *testing.T) {
+	for _, tt := range intToBaseXStringTests {
+		try := IntToBaseXString(tt.base, tt.dec)
+
+		if try != tt.val {
+			t.Errorf("bigint.IntToBaseXString(%v,%v): want [%v], got [%v]",
+				tt.base, tt.dec, tt.val, try)
+		}
+		try2 := string([]rune(base36Dictionary)[tt.dec])
+		if try2 != tt.val {
+			t.Errorf("bigint.IntToBaseXString(%v,%v): want [%s], got [%s]",
+				tt.base, tt.dec, tt.val, try2)
+		}
+	}
+}
