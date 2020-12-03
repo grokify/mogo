@@ -65,18 +65,13 @@ func FilterFilepaths(paths []string, inclExists, inclNotExists, inclFiles, inclD
 		} else if err != nil {
 			continue
 		}
-		if !(inclExists && inclNotExists) {
-			if exists && !inclExists {
-				continue
-			}
-			if !exists && !inclNotExists {
-				continue
-			}
+		if !(inclExists && inclNotExists) &&
+			((!inclExists && exists) || (!inclNotExists && !exists)) {
+			continue
 		}
 		if !(inclFiles && inclDirs) {
-			if fi.Mode().IsRegular() && !inclFiles {
-				continue
-			} else if fi.Mode().IsDir() && !inclDirs {
+			if (!inclFiles && fi.Mode().IsRegular()) ||
+				(!inclDirs && fi.Mode().IsDir()) {
 				continue
 			}
 		}
