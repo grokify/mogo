@@ -39,12 +39,12 @@ func AspectRatio(img *svg.Svg) (float64, error) {
 		}
 		return vals[1] / vals[0], nil
 	} else if len(vals) == 4 {
-		w := vals[2] - vals[0]
-		h := vals[3] - vals[1]
-		if h == 0 {
+		width := vals[2] - vals[0]
+		height := vals[3] - vals[1]
+		if height == 0 {
 			return 0, errors.New("E_DENOM_HEIGHT==0")
 		}
-		return w / h, nil
+		return width / height, nil
 	}
 	return 0, fmt.Errorf("E_BAD_VIEWBOX_LEN [%v]", len(vals))
 }
