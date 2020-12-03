@@ -1,3 +1,4 @@
+name: "build-and-test"
 on:
   push:
     branches:
@@ -11,8 +12,9 @@ jobs:
   test:
     strategy:
       matrix:
-        go-version: [1.15.x]
-        platform: [ubuntu-latest, macos-latest, windows-latest]
+        go-version: [1.15.x, 1.14.x, 1.13.x]
+        platform: [ubuntu-latest]
+        # platform: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.platform }}
     steps:
     - name: Install Go
