@@ -22,7 +22,7 @@ func ReadFile(filename, name string, scale float64) (*svg.Svg, error) {
 		name = filename
 	}
 
-	return svg.ParseSvgFromReader(file, filename, scale)
+	return svg.ParseSvgFromReader(file, name, scale)
 }
 
 func AspectRatio(img *svg.Svg) (float64, error) {
