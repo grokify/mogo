@@ -2,7 +2,6 @@ Gotilla
 =======
 
 [![Used By][used-by-svg]][used-by-link]
-[![Build Status][build-status-svg]][build-status-link]
 [![Build Status](https://github.com/grokify/gotilla/workflows/build/badge.svg)](https://github.com/grokify/gotilla/actions)
 [![Go Report Card][goreport-svg]][goreport-link]
 [![Docs][docs-godoc-svg]][docs-godoc-link]
