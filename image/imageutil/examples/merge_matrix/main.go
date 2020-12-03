@@ -9,8 +9,8 @@ import (
 
 func main() {
 	urlsmatrix := [][]string{
-		[]string{"https://raw.githubusercontent.com/grokify/gotilla/master/image/imageutil/read_testdata/gopher_appengine_color.jpg"},
-		[]string{
+		{"https://raw.githubusercontent.com/grokify/gotilla/master/image/imageutil/read_testdata/gopher_appengine_color.jpg"},
+		{
 			"https://raw.githubusercontent.com/grokify/gotilla/master/image/imageutil/read_testdata/gopher_color.jpg",
 			"https://raw.githubusercontent.com/grokify/gotilla/master/image/imageutil/read_testdata/gopher_color.jpg"},
 	}
