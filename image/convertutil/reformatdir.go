@@ -64,31 +64,41 @@ func reformatImagesSubdir(baseSrcDir, baseOutDir, dirPart string, copyType CopyT
 		return err
 	}
 	for _, file := range files {
-		thisSrcFile := filepath.Join(thisSrcDir, file.Name())
-		thisOutFile := filepath.Join(thisOutDir, file.Name())
-		if !imageutil.IsImageExt(thisSrcFile) {
-			continue
+		err := reformatImagesSubdirFile(
+			filepath.Join(thisSrcDir, file.Name()),
+			filepath.Join(thisOutDir, file.Name()),
+			copyType, rewrite)
+		if err != nil {
+			return err
 		}
-		if !rewrite {
-			isFile, err := ioutilmore.IsFile(thisOutFile)
-			if err == nil && isFile {
+		/*
+			thisSrcFile := filepath.Join(thisSrcDir, file.Name())
+			thisOutFile := filepath.Join(thisOutDir, file.Name())
+
+			if !imageutil.IsImageExt(thisSrcFile) {
 				continue
 			}
-		}
+			if !rewrite {
+				isFile, err := ioutilmore.IsFile(thisOutFile)
+				if err == nil && isFile {
+					continue
+				}
+			}
 
-		switch copyType {
-		case PDFFormat:
-			_, _, err := ConvertToPDF(thisSrcFile, thisOutFile)
-			if err != nil {
-				return errors.Wrap(err, fmt.Sprintf("ConvertToPDF failed for [%s]", thisSrcFile))
+			switch copyType {
+			case PDFFormat:
+				_, _, err := ConvertToPDF(thisSrcFile, thisOutFile)
+				if err != nil {
+					return errors.Wrap(err, fmt.Sprintf("ConvertToPDF failed for [%s]", thisSrcFile))
+				}
+			case KindleFormat:
+				_, stderr, err := ConvertToKindle(thisSrcFile, thisOutFile)
+				err = CheckError(err, stderr)
+				if err != nil {
+					return err
+				}
 			}
-		case KindleFormat:
-			_, stderr, err := ConvertToKindle(thisSrcFile, thisOutFile)
-			err = CheckError(err, stderr)
-			if err != nil {
-				return err
-			}
-		}
+		*/
 	}
 	for _, sdir := range sdirs {
 		subDir := sdir.Name()
@@ -96,6 +106,33 @@ func reformatImagesSubdir(baseSrcDir, baseOutDir, dirPart string, copyType CopyT
 			subDir = filepath.Join(dirPart, subDir)
 		}
 		err := reformatImagesSubdir(baseSrcDir, baseOutDir, subDir, copyType, rewrite)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func reformatImagesSubdirFile(thisSrcFile, thisOutFile string, copyType CopyType, rewrite bool) error {
+	if !imageutil.IsImageExt(thisSrcFile) {
+		return nil
+	}
+	if !rewrite {
+		isFile, err := ioutilmore.IsFile(thisOutFile)
+		if err == nil && isFile {
+			return nil
+		}
+	}
+
+	switch copyType {
+	case PDFFormat:
+		_, _, err := ConvertToPDF(thisSrcFile, thisOutFile)
+		if err != nil {
+			return errors.Wrap(err, fmt.Sprintf("ConvertToPDF failed for [%s]", thisSrcFile))
+		}
+	case KindleFormat:
+		_, stderr, err := ConvertToKindle(thisSrcFile, thisOutFile)
+		err = CheckError(err, stderr)
 		if err != nil {
 			return err
 		}
