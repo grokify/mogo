@@ -38,6 +38,8 @@ var intToBaseXStringTests = []struct {
 	{32, 1, "1"},
 	{32, 12, "c"}}
 
+const base36Dictionary = "0123456789abcdefghijklmnopqrstuvwxyz"
+
 func TestIntToBaseXString(t *testing.T) {
 	for _, tt := range intToBaseXStringTests {
 		try := IntToBaseXString(tt.base, tt.dec)
