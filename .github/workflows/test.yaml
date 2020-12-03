@@ -7,7 +7,6 @@ on:
     branches:
       - master
 
-name: run tests
 jobs:
   test:
     strategy:
