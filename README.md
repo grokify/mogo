@@ -55,7 +55,7 @@ Gotilla is available under an MIT-style license. See [LICENSE](LICENSE) for deta
  [goreport-link]: https://goreportcard.com/report/github.com/grokify/gotilla
  [codeclimate-status-svg]: https://codeclimate.com/github/grokify/gotilla/badges/gpa.svg
  [codeclimate-status-link]: https://codeclimate.com/github/grokify/gotilla
- [docs-godoc-svg]: https://img.shields.io/badge/docs-godoc-blue.svg
- [docs-godoc-link]: https://godoc.org/github.com/grokify/gotilla
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/gotilla
+ [docs-godoc-link]: https://pkg.go.dev/github.com/grokify/gotilla
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
  [license-link]: https://github.com/grokify/gotilla/blob/master/LICENSE
