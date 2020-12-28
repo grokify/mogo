@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/gorilla/mux"
 	hum "github.com/grokify/gotilla/net/httputilmore"
 )
 
@@ -55,6 +56,17 @@ func (r RequestNetHttp) Headers() http.Header      { return r.Raw.Header }
 func (r RequestNetHttp) Form() url.Values          { return r.Raw.Form }
 func (r RequestNetHttp) RequestURI() []byte        { return []byte(r.Raw.RequestURI) }
 func (r RequestNetHttp) PostBody() ([]byte, error) { return ioutil.ReadAll(r.Raw.Body) }
+
+func (r RequestNetHttp) RequestURIVar(s string) string {
+	if r.Raw == nil {
+		return ""
+	}
+	vars := mux.Vars(r.Raw)
+	if val, ok := vars[s]; ok {
+		return val
+	}
+	return ""
+}
 
 func (r *RequestNetHttp) MultipartForm() (*multipart.Form, error) {
 	if !r.parsedMultipartForm {

@@ -22,6 +22,7 @@ type Request interface {
 	PostArgs() Args
 	MultipartForm() (*multipart.Form, error)
 	RequestURI() []byte
+	RequestURIVar(s string) string
 	PostBody() ([]byte, error)
 }
 

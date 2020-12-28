@@ -40,6 +40,13 @@ func (r RequestFastHttp) RequestURI() []byte                      { return r.Raw
 func (r RequestFastHttp) UserAgent() []byte                       { return r.Raw.UserAgent() }
 func (r RequestFastHttp) PostBody() ([]byte, error)               { return r.Raw.PostBody(), nil }
 
+func (r RequestFastHttp) RequestURIVar(s string) string {
+	if str, ok := r.Raw.UserValue(s).(string); ok {
+		return str
+	}
+	return ""
+}
+
 type ResponseFastHttp struct {
 	Raw *fasthttp.RequestCtx
 }
