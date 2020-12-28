@@ -1,4 +1,4 @@
-package simpleclient
+package httpsimple
 
 import (
 	"encoding/json"
@@ -12,7 +12,7 @@ import (
 
 var rxHttpUrl = regexp.MustCompile(`^(?i)https?://`)
 
-type Request struct {
+type SimpleRequest struct {
 	Method  string
 	URL     string
 	Headers map[string]string
@@ -20,7 +20,7 @@ type Request struct {
 	IsJSON  bool
 }
 
-func (req *Request) Inflate() {
+func (req *SimpleRequest) Inflate() {
 	req.Method = strings.ToUpper(strings.TrimSpace(req.Method))
 	if len(req.Method) == 0 {
 		req.Method = http.MethodGet
@@ -35,7 +35,7 @@ func (req *Request) Inflate() {
 	}
 }
 
-func (req *Request) BodyBytes() ([]byte, error) {
+func (req *SimpleRequest) BodyBytes() ([]byte, error) {
 	if req.Body == nil {
 		return []byte(""), nil
 	} else if reqBodyBytesAssert, ok := req.Body.([]byte); ok {
@@ -58,18 +58,23 @@ func NewSimpleClient(httpClient *http.Client, baseURL string) SimpleClient {
 }
 
 func (sc *SimpleClient) Get(reqURL string) (*http.Response, error) {
-	return sc.Do(Request{Method: http.MethodGet, URL: reqURL})
+	return sc.Do(SimpleRequest{Method: http.MethodGet, URL: reqURL})
 }
 
-func (sc *SimpleClient) Do(req Request) (*http.Response, error) {
+func (sc *SimpleClient) Do(req SimpleRequest) (*http.Response, error) {
 	req.Inflate()
 	bodyBytes, err := req.BodyBytes()
 	if err != nil {
 		return nil, err
 	}
 	reqURL := strings.TrimSpace(req.URL)
-	if !rxHttpUrl.MatchString(reqURL) && len(reqURL) > 0 {
+	if len(reqURL) == 0 && len(sc.BaseURL) > 0 {
+		reqURL = sc.BaseURL
+	} else if !rxHttpUrl.MatchString(reqURL) && len(sc.BaseURL) > 0 {
 		reqURL = urlutil.JoinAbsolute(sc.BaseURL, reqURL)
+	}
+	if sc.HTTPClient == nil {
+		sc.HTTPClient = &http.Client{}
 	}
 	return httputilmore.DoJSONSimple(
 		sc.HTTPClient, req.Method, reqURL, req.Headers, bodyBytes)
