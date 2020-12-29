@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/grokify/gotilla/type/stringsutil"
+	"github.com/grokify/simplego/type/stringsutil"
 )
 
 var DebugReadCSV = false // should not need to edit

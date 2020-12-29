@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/grokify/gotilla/type/stringsutil/join"
+	"github.com/grokify/simplego/type/stringsutil/join"
 )
 
 const (

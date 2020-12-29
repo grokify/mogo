@@ -6,9 +6,9 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/grokify/gotilla/config"
-	"github.com/grokify/gotilla/database/sql"
-	"github.com/grokify/gotilla/fmt/fmtutil"
+	"github.com/grokify/simplego/config"
+	"github.com/grokify/simplego/database/sql"
+	"github.com/grokify/simplego/fmt/fmtutil"
 )
 
 func main() {

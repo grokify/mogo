@@ -7,7 +7,7 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/grokify/gotilla/io/ioutilmore"
+	"github.com/grokify/simplego/io/ioutilmore"
 	"github.com/pkg/errors"
 )
 

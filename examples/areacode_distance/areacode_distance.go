@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/grokify/gotilla/strconv/phonenumber"
-	"github.com/kellydunn/golang-geo"
+	"github.com/grokify/simplego/strconv/phonenumber"
+	geo "github.com/kellydunn/golang-geo"
 )
 
 const (

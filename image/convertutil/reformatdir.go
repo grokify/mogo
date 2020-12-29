@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/grokify/gotilla/image/imageutil"
-	"github.com/grokify/gotilla/io/ioutilmore"
+	"github.com/grokify/simplego/image/imageutil"
+	"github.com/grokify/simplego/io/ioutilmore"
 	"github.com/pkg/errors"
 )
 

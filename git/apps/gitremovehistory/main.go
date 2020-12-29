@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/grokify/gotilla/cmd/cmdutil"
-	"github.com/grokify/gotilla/io/ioutilmore"
+	"github.com/grokify/simplego/cmd/cmdutil"
+	"github.com/grokify/simplego/io/ioutilmore"
 	"github.com/jessevdk/go-flags"
 )
 

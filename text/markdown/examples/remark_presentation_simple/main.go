@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/grokify/gotilla/text/markdown"
+	"github.com/grokify/simplego/text/markdown"
 )
 
 func main() {

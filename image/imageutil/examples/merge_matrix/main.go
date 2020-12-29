@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/grokify/gotilla/image/imageutil"
+	"github.com/grokify/simplego/image/imageutil"
 )
 
 func main() {
 	urlsmatrix := [][]string{
-		{"https://raw.githubusercontent.com/grokify/gotilla/master/image/imageutil/read_testdata/gopher_appengine_color.jpg"},
+		{"https://raw.githubusercontent.com/grokify/simplego/master/image/imageutil/read_testdata/gopher_appengine_color.jpg"},
 		{
-			"https://raw.githubusercontent.com/grokify/gotilla/master/image/imageutil/read_testdata/gopher_color.jpg",
-			"https://raw.githubusercontent.com/grokify/gotilla/master/image/imageutil/read_testdata/gopher_color.jpg"},
+			"https://raw.githubusercontent.com/grokify/simplego/master/image/imageutil/read_testdata/gopher_color.jpg",
+			"https://raw.githubusercontent.com/grokify/simplego/master/image/imageutil/read_testdata/gopher_color.jpg"},
 	}
 
 	outfile := "_merged.jpg"

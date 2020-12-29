@@ -6,8 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/grokify/gotilla/fmt/fmtutil"
-	"github.com/grokify/gotilla/net/http/har"
+	"github.com/grokify/simplego/fmt/fmtutil"
+	"github.com/grokify/simplego/net/http/har"
 )
 
 func main() {

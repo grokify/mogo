@@ -5,8 +5,8 @@ import (
 	"log"
 	"strings"
 
-	"github.com/grokify/gotilla/fmt/fmtutil"
-	"github.com/grokify/gotilla/image/imageutil"
+	"github.com/grokify/simplego/fmt/fmtutil"
+	"github.com/grokify/simplego/image/imageutil"
 	"github.com/jessevdk/go-flags"
 )
 

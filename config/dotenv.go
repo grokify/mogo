@@ -6,9 +6,9 @@ import (
 	"os/exec"
 	"strings"
 
-	iom "github.com/grokify/gotilla/io/ioutilmore"
-	"github.com/grokify/gotilla/os/osutil"
-	"github.com/grokify/gotilla/type/stringsutil"
+	iom "github.com/grokify/simplego/io/ioutilmore"
+	"github.com/grokify/simplego/os/osutil"
+	"github.com/grokify/simplego/type/stringsutil"
 	"github.com/joho/godotenv"
 )
 

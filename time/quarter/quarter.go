@@ -3,7 +3,7 @@ package quarter
 import (
 	"time"
 
-	"github.com/grokify/gotilla/math/mathutil"
+	"github.com/grokify/simplego/math/mathutil"
 )
 
 // YearQuarterToQuarterContinuous converts a year and quarteer to

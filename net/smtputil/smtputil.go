@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gotilla/time/timeutil"
+	"github.com/grokify/simplego/time/timeutil"
 )
 
 // GmailHost is the Google mail smtp hostname.

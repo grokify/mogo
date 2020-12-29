@@ -5,8 +5,8 @@ import (
 	"io"
 	"strings"
 
-	"github.com/grokify/gotilla/io/ioutilmore"
-	"github.com/grokify/gotilla/type/stringsutil"
+	"github.com/grokify/simplego/io/ioutilmore"
+	"github.com/grokify/simplego/type/stringsutil"
 )
 
 func ReadCSVFileSingleColumnValuesString(filename string, sep rune, stripBOM, hasHeader, trimSpace bool, colIdx uint, condenseUniqueSort bool) ([]string, error) {

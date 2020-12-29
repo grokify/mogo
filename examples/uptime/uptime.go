@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/grokify/gotilla/fmt/fmtutil"
-	"github.com/grokify/gotilla/time/timeutil"
+	"github.com/grokify/simplego/fmt/fmtutil"
+	"github.com/grokify/simplego/time/timeutil"
 )
 
 func getIncident(t0s, t1s, format string, durRange time.Duration, impactNum, totalNum int) {

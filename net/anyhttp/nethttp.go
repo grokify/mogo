@@ -9,7 +9,7 @@ import (
 	"net/url"
 
 	"github.com/gorilla/mux"
-	hum "github.com/grokify/gotilla/net/httputilmore"
+	hum "github.com/grokify/simplego/net/httputilmore"
 )
 
 type RequestNetHttp struct {

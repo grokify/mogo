@@ -3,7 +3,7 @@ package listutil
 import (
 	"strings"
 
-	"github.com/grokify/gotilla/type/maputil"
+	"github.com/grokify/simplego/type/maputil"
 )
 
 func ListStringsToLowerUniqueSorted(list []string) []string {

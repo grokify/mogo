@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/google/go-querystring/query"
-	"github.com/grokify/gotilla/type/stringsutil"
+	"github.com/grokify/simplego/type/stringsutil"
 )
 
 // AppendURLValues appends one url.Values to another url.Values.

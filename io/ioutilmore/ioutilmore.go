@@ -14,8 +14,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/grokify/gotilla/encoding/jsonutil"
-	"github.com/grokify/gotilla/type/maputil"
+	"github.com/grokify/simplego/encoding/jsonutil"
+	"github.com/grokify/simplego/type/maputil"
 	"github.com/pkg/errors"
 )
 

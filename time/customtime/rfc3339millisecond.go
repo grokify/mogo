@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gotilla/time/timeutil"
+	"github.com/grokify/simplego/time/timeutil"
 )
 
 // TimeRFC3339Milli represents a time that is represened

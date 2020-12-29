@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	iom "github.com/grokify/gotilla/io/ioutilmore"
+	iom "github.com/grokify/simplego/io/ioutilmore"
 )
 
 func main() {

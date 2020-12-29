@@ -19,7 +19,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	hum "github.com/grokify/gotilla/net/httputilmore"
+	hum "github.com/grokify/simplego/net/httputilmore"
 )
 
 func NewReaderBodyBytes(body []byte, boundary string) *multipart.Reader {

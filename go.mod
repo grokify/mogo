@@ -1,4 +1,4 @@
-module github.com/grokify/gotilla
+module github.com/grokify/simplego
 
 go 1.15
 
@@ -16,14 +16,11 @@ require (
 	github.com/emersion/go-imap v1.0.6
 	github.com/emersion/go-sasl v0.0.0-20200509203442-7bfe0ed36a21 // indirect
 	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect
-	github.com/fogleman/gg v1.3.0
 	github.com/go-pg/pg v8.0.7+incompatible
-	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.4.3
 	github.com/google/go-querystring v1.0.0
-	github.com/gopherjs/gopherjs v0.0.0-20200217142428-fce0ec30dd00 // indirect
 	github.com/gorilla/mux v1.8.0
-	github.com/grokify/base36 v1.0.1
+	github.com/grokify/base36 v1.0.2
 	github.com/grokify/bitcoinmath v0.0.0-20171208015713-6ef5b53bef73
 	github.com/huandu/xstrings v1.3.2
 	github.com/itchyny/base58-go v0.1.0
@@ -43,7 +40,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/nyaruka/phonenumbers v1.0.60
-	github.com/oov/psd v0.0.0-20201203182240-dad9002861d9
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/sftp v1.12.0
 	github.com/rustyoz/Mtransform v0.0.0-20190224104252-60c8c35a3681 // indirect

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/grokify/gotilla/net/httputilmore"
+	"github.com/grokify/simplego/net/httputilmore"
 )
 
 // FileInfo represents a file for uploading.

@@ -1,4 +1,4 @@
-package gotilla
+package simplego
 
 import (
 	"testing"

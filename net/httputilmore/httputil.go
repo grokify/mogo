@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/grokify/gotilla/strconv/strconvutil"
+	"github.com/grokify/simplego/strconv/strconvutil"
 )
 
 /*

@@ -6,8 +6,8 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/grokify/gotilla/fmt/fmtutil"
-	"github.com/grokify/gotilla/io/ioutilmore"
+	"github.com/grokify/simplego/fmt/fmtutil"
+	"github.com/grokify/simplego/io/ioutilmore"
 )
 
 func main() {

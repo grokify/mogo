@@ -4,7 +4,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/grokify/gotilla/type/stringsutil"
+	"github.com/grokify/simplego/type/stringsutil"
 )
 
 // MapStringMapStringInt represents a `map[string]map[string]int`

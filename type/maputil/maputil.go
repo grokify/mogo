@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/grokify/gotilla/sort/sortutil"
+	"github.com/grokify/simplego/sort/sortutil"
 )
 
 func StringKeys(mp interface{}) []string {

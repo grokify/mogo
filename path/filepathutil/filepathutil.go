@@ -1,6 +1,6 @@
 package filepathutil
 
-// $ go get github.com/grokify/gotilla/git/apps/gitremoteaddupstream
+// $ go get github.com/grokify/simplego/git/apps/gitremoteaddupstream
 
 import (
 	"os"

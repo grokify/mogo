@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/grokify/gotilla/encoding/jsonutil"
+	"github.com/grokify/simplego/encoding/jsonutil"
 	"github.com/pkg/errors"
 )
 

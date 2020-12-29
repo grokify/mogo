@@ -6,7 +6,7 @@ import (
 	"expvar"
 	"fmt"
 
-	"github.com/grokify/gotilla/encoding/jsonutil"
+	"github.com/grokify/simplego/encoding/jsonutil"
 )
 
 var (

@@ -6,8 +6,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/grokify/gotilla/encoding/csvutil"
-	"github.com/grokify/gotilla/type/stringsutil"
+	"github.com/grokify/simplego/encoding/csvutil"
+	"github.com/grokify/simplego/type/stringsutil"
 )
 
 const (

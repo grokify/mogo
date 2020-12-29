@@ -7,13 +7,13 @@ import (
 	"path"
 	"strconv"
 
-	"github.com/grokify/gotilla/encoding/csvutil"
-	"github.com/grokify/gotilla/sort/sortutil"
+	"github.com/grokify/simplego/encoding/csvutil"
+	"github.com/grokify/simplego/sort/sortutil"
 	"github.com/kellydunn/golang-geo"
 )
 
 const (
-	A2gCsvRelPath = "github.com/grokify/gotilla/strconv/phonenumber/us-area-code-geo.csv"
+	A2gCsvRelPath = "github.com/grokify/simplego/strconv/phonenumber/us-area-code-geo.csv"
 )
 
 type AreaCodeInfo struct {
