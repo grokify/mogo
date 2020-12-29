@@ -2,7 +2,7 @@ SimpleGo
 ========
 
 [![Used By][used-by-svg]][used-by-link]
-[![Build Status](https://github.com/grokify/simplego/workflows/build/badge.svg)](https://github.com/grokify/simplego/actions)
+[![Build Status][build-status-svg]][build-status-link]
 [![Go Report Card][goreport-svg]][goreport-link]
 [![Docs][docs-godoc-svg]][docs-godoc-link]
 [![License][license-svg]][license-link]
@@ -45,8 +45,8 @@ Please report issues and feature requests on [Github](https://github.com/grokify
 
  [used-by-svg]: https://sourcegraph.com/github.com/grokify/simplego/-/badge.svg
  [used-by-link]: https://sourcegraph.com/github.com/grokify/simplego?badge
- [build-status-svg]: https://api.travis-ci.org/grokify/simplego.svg?branch=master
- [build-status-link]: https://travis-ci.org/grokify/simplego
+ [build-status-svg]: https://github.com/grokify/simplego/workflows/build/badge.svg
+ [build-status-link]: https://github.com/grokify/simplego/actions
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/simplego
  [goreport-link]: https://goreportcard.com/report/github.com/grokify/simplego
  [codeclimate-status-svg]: https://codeclimate.com/github/grokify/simplego/badges/gpa.svg
