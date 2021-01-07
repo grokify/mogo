@@ -93,6 +93,9 @@ func (w ResponseNetHttp) SetBodyBytes(body []byte) (int, error) {
 	w.Raw.Write(body)
 	return -1, nil
 }
+
+// SetBodyStream takes an `io.Reader`. `bodySize` is accepted but
+// ignored to fulfill the `Response` interface requirement.
 func (w ResponseNetHttp) SetBodyStream(bodyStream io.Reader, bodySize int) error {
 	bytes, err := ioutil.ReadAll(bodyStream)
 	if err != nil {

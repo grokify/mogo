@@ -63,6 +63,11 @@ func (w ResponseFastHttp) SetBodyBytes(body []byte) (int, error) {
 	w.Raw.SetBody(body)
 	return -1, nil
 }
+
+// SetBodyStream takes an `io.Reader` and an optional `bodySize`.
+// If bodySize is >= 0, then bodySize bytes must be provided by
+// bodyStream before returning io.EOF. If bodySize < 0, then
+// bodyStream is read until io.EOF.
 func (w ResponseFastHttp) SetBodyStream(bodyStream io.Reader, bodySize int) error {
 	w.Raw.SetBodyStream(bodyStream, bodySize)
 	return nil
