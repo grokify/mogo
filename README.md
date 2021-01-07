@@ -45,7 +45,7 @@ Please report issues and feature requests on [Github](https://github.com/grokify
 
  [used-by-svg]: https://sourcegraph.com/github.com/grokify/simplego/-/badge.svg
  [used-by-link]: https://sourcegraph.com/github.com/grokify/simplego?badge
- [build-status-svg]: https://github.com/grokify/simplego/workflows/build/badge.svg
+ [build-status-svg]: https://github.com/grokify/simplego/workflows/CI%20Pipeline/badge.svg?branch=master
  [build-status-link]: https://github.com/grokify/simplego/actions
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/simplego
  [goreport-link]: https://goreportcard.com/report/github.com/grokify/simplego
