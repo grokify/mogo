@@ -118,18 +118,18 @@ type RateLimitInfo struct {
 func NewResponseRateLimitInfo(resp *http.Response, useXrlHyphen bool) RateLimitInfo {
 	rlstat := RateLimitInfo{
 		StatusCode: resp.StatusCode,
-		RetryAfter: strconvutil.AtoiWithDefault(resp.Header.Get("Retry-After"), 0)}
+		RetryAfter: strconvutil.AtoiOrDefault(resp.Header.Get("Retry-After"), 0)}
 
 	if useXrlHyphen {
-		rlstat.XRateLimitLimit = strconvutil.AtoiWithDefault(resp.Header.Get("X-Rate-Limit-Limit"), 0)
-		rlstat.XRateLimitRemaining = strconvutil.AtoiWithDefault(resp.Header.Get("X-Rate-Limit-Remaining"), 0)
-		rlstat.XRateLimitReset = strconvutil.AtoiWithDefault(resp.Header.Get("X-Rate-Limit-Reset"), 0)
-		rlstat.XRateLimitWindow = strconvutil.AtoiWithDefault(resp.Header.Get("X-Rate-Limit-Window"), 0)
+		rlstat.XRateLimitLimit = strconvutil.AtoiOrDefault(resp.Header.Get("X-Rate-Limit-Limit"), 0)
+		rlstat.XRateLimitRemaining = strconvutil.AtoiOrDefault(resp.Header.Get("X-Rate-Limit-Remaining"), 0)
+		rlstat.XRateLimitReset = strconvutil.AtoiOrDefault(resp.Header.Get("X-Rate-Limit-Reset"), 0)
+		rlstat.XRateLimitWindow = strconvutil.AtoiOrDefault(resp.Header.Get("X-Rate-Limit-Window"), 0)
 	} else {
-		rlstat.XRateLimitLimit = strconvutil.AtoiWithDefault(resp.Header.Get("X-RateLimit-Limit"), 0)
-		rlstat.XRateLimitRemaining = strconvutil.AtoiWithDefault(resp.Header.Get("X-RateLimit-Remaining"), 0)
-		rlstat.XRateLimitReset = strconvutil.AtoiWithDefault(resp.Header.Get("X-RateLimit-Reset"), 0)
-		rlstat.XRateLimitWindow = strconvutil.AtoiWithDefault(resp.Header.Get("X-RateLimit-Window"), 0)
+		rlstat.XRateLimitLimit = strconvutil.AtoiOrDefault(resp.Header.Get("X-RateLimit-Limit"), 0)
+		rlstat.XRateLimitRemaining = strconvutil.AtoiOrDefault(resp.Header.Get("X-RateLimit-Remaining"), 0)
+		rlstat.XRateLimitReset = strconvutil.AtoiOrDefault(resp.Header.Get("X-RateLimit-Reset"), 0)
+		rlstat.XRateLimitWindow = strconvutil.AtoiOrDefault(resp.Header.Get("X-RateLimit-Window"), 0)
 	}
 	return rlstat
 }

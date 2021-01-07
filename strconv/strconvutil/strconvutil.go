@@ -9,9 +9,9 @@ import (
 	"strings"
 )
 
-// AtoiWithDefault is like Atoi but takes a default value
+// AtoiOrDefault is like Atoi but takes a default value
 // which it returns in the event of a parse error.
-func AtoiWithDefault(s string, def int) int {
+func AtoiOrDefault(s string, def int) int {
 	i, err := strconv.Atoi(s)
 	if err != nil {
 		return def
