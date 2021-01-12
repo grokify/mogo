@@ -42,11 +42,11 @@ require (
 	github.com/nyaruka/phonenumbers v1.0.60
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/sftp v1.12.0
+	github.com/rs/zerolog v1.20.0
 	github.com/rustyoz/Mtransform v0.0.0-20190224104252-60c8c35a3681 // indirect
 	github.com/rustyoz/genericlexer v0.0.0-20190224115003-eb82fd2987bd // indirect
 	github.com/rustyoz/svg v0.0.0-20200706102315-fe1aeca2ba20
 	github.com/shopspring/decimal v1.2.0 // indirect
-	github.com/sirupsen/logrus v1.7.0
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/valyala/fasthttp v1.18.0
 	github.com/valyala/quicktemplate v1.6.3

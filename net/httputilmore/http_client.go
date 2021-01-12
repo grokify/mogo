@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 )
 
 var (
@@ -71,13 +71,13 @@ func DoRequestRateLimited(client *http.Client, req *http.Request, useXrlHyphen b
 }
 
 func LogRequestRateLimited(rlstat RateLimitInfo) {
-	log.WithFields(log.Fields{
-		"action":                 "http_rate_limited",
-		"status_code":            rlstat.StatusCode,
-		"retry-after":            rlstat.RetryAfter,
-		"x-rate-limit-remaining": rlstat.XRateLimitRemaining,
-		"x-rate-limit-window":    rlstat.XRateLimitWindow,
-	}).Info("Request has been rated limited.")
+	log.Info().
+		Str("action", "http_rate_limited").
+		Int("status_code", rlstat.StatusCode).
+		Int("retry-after", rlstat.RetryAfter).
+		Int("x-rate-limit-remaining", rlstat.XRateLimitRemaining).
+		Int("x-rate-limit-window", rlstat.XRateLimitWindow).
+		Msg("Request has been rated limited.")
 }
 
 type ClientMore struct {
