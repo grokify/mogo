@@ -1,14 +1,5 @@
 package mathutil
 
-// DivideInt64 performs integer division, returning
-// a quotient and remainder.
-func DivideInt64(dividend, divisor int64) (quotient, remainder int64) {
-	// from https://stackoverflow.com/questions/43945675/division-with-returning-quotient-and-remainder
-	quotient = dividend / divisor // integer division, decimals are truncated
-	remainder = dividend % divisor
-	return
-}
-
 // MinMaxInt32 returns min/max value given a slice of
 // input values.
 func MinMaxInt32(vals ...int32) (int32, int32) {
