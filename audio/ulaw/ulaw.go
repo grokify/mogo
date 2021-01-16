@@ -19,8 +19,12 @@ func WriteFileWavFromUlaw(filename string, ulawBytes []byte) error {
 	if err != nil {
 		return err
 	}
+	defer f.Close()
 	_, err = WriteWavFromUlaw(f, ulawBytes)
-	return err
+	if err != nil {
+		return err
+	}
+	return f.Sync()
 }
 
 func WriteWavFromUlaw(w io.Writer, ulawBytes []byte) (n int, err error) {
