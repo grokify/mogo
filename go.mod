@@ -32,7 +32,7 @@ require (
 	github.com/lytics/base62 v0.0.0-20180808010106-0ee4de5a5d6d
 	github.com/martinlindhe/base36 v1.1.0
 	github.com/microcosm-cc/bluemonday v1.0.4
-	github.com/nyaruka/phonenumbers v1.0.60
+	github.com/nyaruka/phonenumbers v1.0.61
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/sftp v1.12.0
 	github.com/rs/zerolog v1.20.0
