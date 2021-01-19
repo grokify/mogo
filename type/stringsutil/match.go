@@ -100,3 +100,38 @@ func Match(s string, matchInfo MatchInfo) (bool, error) {
 		return false, nil
 	}
 }
+
+func CheckSuffix(input, wantSuffix string) (fullstring, prefix, suffix string) {
+	fullstring = input
+	if len(suffix) > len(fullstring) {
+		return
+	}
+	lastIndex := strings.LastIndex(input, wantSuffix)
+	if lastIndex > 0 && lastIndex == len(input)-len(wantSuffix) {
+		prefix = fullstring[:len(input)-len(wantSuffix)]
+		suffix = wantSuffix
+		return
+	}
+	return
+}
+
+func SuffixMap(inputs, suffixes []string) (prefixes []string, matches map[string]string, nonmatches []string) {
+	matches = map[string]string{}
+	for _, input := range inputs {
+		gotMatch := false
+		for _, suffix := range suffixes {
+			gotFull, gotPrefix, gotSuffix := CheckSuffix(input, suffix)
+			if suffix == gotSuffix {
+				matches[gotSuffix] = gotFull
+				prefixes = append(prefixes, gotPrefix)
+				gotMatch = true
+			}
+		}
+		if !gotMatch {
+			nonmatches = append(nonmatches, input)
+		}
+	}
+	prefixes = SliceCondenseSpace(prefixes, true, true)
+	nonmatches = SliceCondenseSpace(nonmatches, true, true)
+	return prefixes, matches, nonmatches
+}
