@@ -41,7 +41,7 @@ func TestToLowerFirst(t *testing.T) {
 		got := ToLowerFirst(tt.v)
 
 		if got != tt.want {
-			t.Errorf("strutil.ToLowerFirst() Error: with [%v], want [%v], got [%v]",
+			t.Errorf("stringsutil.ToLowerFirst() Error: with [%v], want [%v], got [%v]",
 				tt.v, tt.want, got)
 		}
 	}
@@ -62,7 +62,7 @@ func TestToUpperFirst(t *testing.T) {
 		got := ToUpperFirst(tt.v, false)
 
 		if got != tt.want {
-			t.Errorf("strutil.ToUpperFirst() Error: with [%v], want [%v], got [%v]",
+			t.Errorf("stringsutil.ToUpperFirst() Error: with [%v], want [%v], got [%v]",
 				tt.v, tt.want, got)
 		}
 	}
@@ -109,7 +109,7 @@ func TestToOpposite(t *testing.T) {
 		got := ToOpposite(tt.v)
 
 		if got != tt.want {
-			t.Errorf("strutil.ToOpposite(%v) Error: want [%v], got [%v]",
+			t.Errorf("stringsutil.ToOpposite(%v) Error: want [%v], got [%v]",
 				tt.v, tt.want, got)
 		}
 	}
