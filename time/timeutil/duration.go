@@ -141,8 +141,6 @@ func SubDuration(dur1, dur2 time.Duration) time.Duration {
 	return diff
 }
 
-func DurationDays(dur time.Duration) int64 { return int64(dur.Hours()/24.0) + 1 }
-
 func DurationIsZero(dur time.Duration) bool {
 	if dur.Nanoseconds() == 0 {
 		return true
@@ -176,6 +174,8 @@ func DurationFromProtobuf(pdur *duration.Duration) time.Duration {
 	}
 	return dur
 }
+
+func DurationDaysInt64(dur time.Duration) int64 { return int64(dur.Hours()/24.0) + 1 }
 
 func DurationDays(d time.Duration) float64 { return d.Hours() / 24 }
 
