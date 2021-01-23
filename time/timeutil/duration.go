@@ -176,3 +176,7 @@ func DurationFromProtobuf(pdur *duration.Duration) time.Duration {
 	}
 	return dur
 }
+
+func DurationDays(d time.Duration) float64 { return d.Hours() / 24 }
+
+func DurationYears(d time.Duration) float64 { return DurationDays(d) / 365 }
