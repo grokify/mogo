@@ -2,6 +2,7 @@ package httpsimple
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"regexp"
 	"strings"
@@ -78,4 +79,17 @@ func (sc *SimpleClient) Do(req SimpleRequest) (*http.Response, error) {
 	}
 	return httputilmore.DoJSONSimple(
 		sc.HTTPClient, req.Method, reqURL, req.Headers, bodyBytes)
+}
+
+func (sc *SimpleClient) DoJSON(req SimpleRequest, resBody interface{}) ([]byte, *http.Response, error) {
+	resp, err := sc.Do(req)
+	if err != nil {
+		return []byte{}, nil, err
+	}
+	bytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return bytes, resp, err
+	}
+	err = json.Unmarshal(bytes, resBody)
+	return bytes, resp, err
 }
