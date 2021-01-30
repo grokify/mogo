@@ -38,9 +38,9 @@ func (req *SimpleRequest) Inflate() {
 
 func (req *SimpleRequest) BodyBytes() ([]byte, error) {
 	if req.Body == nil {
-		return []byte(""), nil
-	} else if reqBodyBytesAssert, ok := req.Body.([]byte); ok {
-		return reqBodyBytesAssert, nil
+		return []byte{}, nil
+	} else if reqBodyBytes, ok := req.Body.([]byte); ok {
+		return reqBodyBytes, nil
 	} else if reqBodyString, ok := req.Body.(string); ok {
 		return []byte(reqBodyString), nil
 	}
