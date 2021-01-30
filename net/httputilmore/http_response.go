@@ -38,10 +38,16 @@ func ProxyResponse(w http.ResponseWriter, resp *http.Response) ([]byte, error) {
 	return body, nil
 }
 
-func ConsolidateErrorRespCodeGte300(resp *http.Response, err error, msg string) error {
+func CondenseResponseNot2xxToError(resp *http.Response, err error, msg string) error {
 	if err != nil {
-		return errors.Wrap(err, msg)
-	} else if resp.StatusCode >= 300 {
+		if len(msg) > 0 {
+			return errors.Wrap(err, msg)
+		} else {
+			return err
+		}
+	} else if resp == nil {
+		return errors.New("*http.Response_is_nil")
+	} else if resp.StatusCode < 200 || resp.StatusCode > 299 {
 		if len(msg) > 0 {
 			msg += ": "
 		}
@@ -59,7 +65,7 @@ func ConsolidateErrorRespCodeGte300(resp *http.Response, err error, msg string) 
 		} else {
 			moreString = string(jsn)
 		}
-		return fmt.Errorf("%sStatusCode [%v] %s", msg, resp.StatusCode, moreString)
+		return fmt.Errorf("non_2xx_status_code [%d] [%s] [%s]", resp.StatusCode, msg, moreString)
 	}
 	return nil
 }
