@@ -33,7 +33,6 @@ func ParseOneColListToGrid(lines []string, colCount int, validateLength bool) ([
 	}
 	if len(curRow) > 0 {
 		rows = append(rows, curRow)
-		curRow = []string{}
 	}
 	if validateLength {
 		for _, row := range rows {
