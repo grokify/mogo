@@ -1,5 +1,7 @@
 package interfaceutil
 
+import "github.com/grokify/simplego/type/stringsutil"
+
 func SplitSliceInterface(items []interface{}, max int) [][]interface{} {
 	slices := [][]interface{}{}
 	current := []interface{}{}
@@ -16,4 +18,25 @@ func SplitSliceInterface(items []interface{}, max int) [][]interface{} {
 	}
 
 	return slices
+}
+
+func ToBool(value interface{}) bool {
+	if value == nil {
+		return false
+	} else if valBool, ok := value.(bool); ok {
+		return valBool
+	} else if valString, ok := value.(string); ok {
+		return stringsutil.ToBool(valString)
+	} else if valInt, ok := value.(int); ok {
+		if valInt == 0 {
+			return false
+		}
+		return true
+	} else if valFloat, ok := value.(float64); ok {
+		if valFloat == 0.0 {
+			return false
+		}
+		return true
+	}
+	return false
 }
