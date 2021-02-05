@@ -1,11 +1,11 @@
 SimpleGo
 ========
 
-[![Used By][used-by-svg]][used-by-link]
-[![Build Status][build-status-svg]][build-status-link]
-[![Go Report Card][goreport-svg]][goreport-link]
-[![Docs][docs-godoc-svg]][docs-godoc-link]
-[![License][license-svg]][license-link]
+[![Used By][used-by-svg]][used-by-url]
+[![Build Status][build-status-svg]][build-status-url]
+[![Go Report Card][goreport-svg]][goreport-url]
+[![Docs][docs-godoc-svg]][docs-godoc-url]
+[![License][license-svg]][license-url]
 
 ## Overview
 
@@ -44,14 +44,14 @@ To contribute:
 Please report issues and feature requests on [Github](https://github.com/grokify/simplego).
 
  [used-by-svg]: https://sourcegraph.com/github.com/grokify/simplego/-/badge.svg
- [used-by-link]: https://sourcegraph.com/github.com/grokify/simplego?badge
+ [used-by-url]: https://sourcegraph.com/github.com/grokify/simplego?badge
  [build-status-svg]: https://github.com/grokify/simplego/workflows/build/badge.svg?branch=master
- [build-status-link]: https://github.com/grokify/simplego/actions
+ [build-status-url]: https://github.com/grokify/simplego/actions
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/simplego
- [goreport-link]: https://goreportcard.com/report/github.com/grokify/simplego
+ [goreport-url]: https://goreportcard.com/report/github.com/grokify/simplego
  [codeclimate-status-svg]: https://codeclimate.com/github/grokify/simplego/badges/gpa.svg
- [codeclimate-status-link]: https://codeclimate.com/github/grokify/simplego
+ [codeclimate-status-url]: https://codeclimate.com/github/grokify/simplego
  [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/simplego
- [docs-godoc-link]: https://pkg.go.dev/github.com/grokify/simplego
+ [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/simplego
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
- [license-link]: https://github.com/grokify/simplego/blob/master/LICENSE
+ [license-url]: https://github.com/grokify/simplego/blob/master/LICENSE
