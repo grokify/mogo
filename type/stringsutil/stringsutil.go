@@ -85,12 +85,16 @@ func ToUpperFirst(s1 string, lowerRest bool) string {
 }
 
 // ToBool converts a string to a boolean value
-// looking for the string "true" in any case.
+// converting "f", "false", "0" and the empty string
+// to false with everything else being true.
 func ToBool(v string) bool {
-	if strings.ToLower(strings.TrimSpace(v)) == "true" {
-		return true
+	v = strings.ToLower(strings.TrimSpace(v))
+	if len(v) == 0 {
+		return false
+	} else if v == "0" || v == "f" || v == "false" {
+		return false
 	}
-	return false
+	return true
 }
 
 func SubstringIsSuffix(s1, s2 string) bool {
