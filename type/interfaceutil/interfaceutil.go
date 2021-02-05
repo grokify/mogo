@@ -40,3 +40,17 @@ func ToBool(value interface{}) bool {
 	}
 	return false
 }
+
+func ToBoolFlip(value interface{}) bool {
+	if ToBool(value) {
+		return false
+	}
+	return true
+}
+
+func ToBoolInt(value interface{}) int {
+	if ToBool(value) {
+		return 1
+	}
+	return 0
+}
