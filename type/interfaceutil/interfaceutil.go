@@ -54,3 +54,24 @@ func ToBoolInt(value interface{}) int {
 	}
 	return 0
 }
+
+func ToInt(value interface{}, defaultValue int) int {
+	if value == nil {
+		return defaultValue
+	} else if valBool, ok := value.(bool); ok {
+		if valBool {
+			return 1
+		}
+		return 0
+	} else if valString, ok := value.(string); ok {
+		if stringsutil.ToBool(valString) {
+			return 1
+		}
+		return 0
+	} else if valInt, ok := value.(int); ok {
+		return valInt
+	} else if valFloat, ok := value.(float64); ok {
+		return int(valFloat)
+	}
+	return defaultValue
+}
