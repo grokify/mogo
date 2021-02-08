@@ -58,13 +58,6 @@ func ToLowerFirst(s1 string) string {
 	a1 := []rune(s1)
 	a1[0] = unicode.ToLower(a1[0])
 	return string(a1)
-	/*
-		if s == "" {
-			return ""
-		}
-		r, n := utf8.DecodeRuneInString(s)
-		return string(unicode.ToLower(r)) + s[n:]
-	*/
 }
 
 // ToUpperFirst upper cases the first letter in the string
@@ -75,13 +68,6 @@ func ToUpperFirst(s1 string, lowerRest bool) string {
 	a1 := []rune(s1)
 	a1[0] = unicode.ToUpper(a1[0])
 	return string(a1)
-	/*
-			if s == "" {
-			return ""
-		}
-		r, n := utf8.DecodeRuneInString(s)
-		return string(unicode.ToUpper(r)) + s[n:]
-	*/
 }
 
 // ToBool converts a string to a boolean value
