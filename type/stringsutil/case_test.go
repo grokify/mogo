@@ -5,14 +5,15 @@ import (
 )
 
 var toCamelCaseTests = []struct {
-	anyString string
-	camelCase string
+	anyString  string
+	camelCase  string
+	pascalCase string
 }{
-	{"Lorem ipsum dolor sit amet", "loremIpsumDolorSitAmet"},
-	{"Lorem IPSUM", "loremIpsum"},
-	{"Lorem Ipsum", "loremIpsum"},
-	{"snake_case", "snakeCase"},
-	{"snake-case", "snakeCase"},
+	{"Lorem ipsum dolor sit amet", "loremIpsumDolorSitAmet", "LoremIpsumDolorSitAmet"},
+	{"Lorem IPSUM", "loremIpsum", "LoremIpsum"},
+	{"Lorem Ipsum", "loremIpsum", "LoremIpsum"},
+	{"snake_case", "snakeCase", "SnakeCase"},
+	{"kebab-case", "kebabCase", "KebabCase"},
 }
 
 func TestToCamelCase(t *testing.T) {
