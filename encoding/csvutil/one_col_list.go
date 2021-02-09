@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math"
-	"strings"
+
+	"github.com/grokify/simplego/type/stringsutil"
 )
 
 // ReadFileOneColListToGrid parses a file with one value per row.
@@ -13,7 +14,7 @@ func ReadFileOneColListToGrid(filename string, colCount int, validateLength bool
 	if err != nil {
 		return [][]string{}, err
 	}
-	return ParseOneColListToGrid(strings.Split(string(bytes), "\n"), colCount, validateLength)
+	return ParseOneColListToGrid(stringsutil.SplitLines(string(bytes)), colCount, validateLength)
 }
 
 // ParseOneColListToGrid parses a set of lines with one value per row.
