@@ -19,12 +19,14 @@ func Equal(str1, str2 string, trim, lower bool) bool {
 	return false
 }
 
-func EndsWith(s, substr string) bool {
-	idx := strings.Index(s, substr)
-	if len(s) >= len(substr) &&
-		idx > -1 &&
-		idx == len(s)-len(substr) {
-		return true
+func EndsWith(s string, substrs ...string) bool {
+	for _, substr := range substrs {
+		idx := strings.Index(s, substr)
+		if len(s) >= len(substr) &&
+			idx > -1 &&
+			idx == len(s)-len(substr) {
+			return true
+		}
 	}
 	return false
 }
