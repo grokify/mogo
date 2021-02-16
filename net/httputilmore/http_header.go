@@ -33,7 +33,9 @@ const (
 	ContentTypeAppXml                  = "application/xml"
 	ContentTypeAppXmlUtf8              = "application/xml; charset=utf-8"
 	ContentTypeTextCalendarUtf8Request = `text/calendar; charset="utf-8"; method=REQUEST`
+	ContentTypeTextHtml                = "text/html"
 	ContentTypeTextHtmlUtf8            = "text/html; charset=utf-8"
+	ContentTypeTextMarkdown            = "text/markdown"
 	ContentTypeTextPlain               = "text/plain"
 	ContentTypeTextPlainUsAscii        = "text/plain; charset=us-ascii"
 	ContentTypeTextPlainUtf8           = "text/plain; charset=utf-8"
