@@ -99,6 +99,14 @@ func SliceStringToIntSort(strings []string) ([]int, error) {
 	return intSlice, nil
 }
 
+func SliceItoa(ints []int) []string {
+	strs := []string{}
+	for _, intVal := range ints {
+		strs = append(strs, strconv.Itoa(intVal))
+	}
+	return strs
+}
+
 func FormatFloat64ToIntStringFunnel(v float64) string {
 	return FormatFloat64ToAnyStringFunnel(v, `%0.0f%%`)
 }
