@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math"
 	"regexp"
-	"sort"
 	"strconv"
 	"strings"
 )
@@ -73,38 +72,6 @@ func MustParseBool(s string) bool {
 		return false
 	}
 	return parsed
-}
-
-// SliceStringToInt converts a slice of string integers.
-func SliceStringToInt(strings []string) ([]int, error) {
-	ints := []int{}
-	for _, s := range strings {
-		thisInt, err := strconv.Atoi(s)
-		if err != nil {
-			return ints, err
-		}
-		ints = append(ints, thisInt)
-	}
-	return ints, nil
-}
-
-// SliceStringToIntSort converts and sorts a slice of string integers.
-func SliceStringToIntSort(strings []string) ([]int, error) {
-	ints, err := SliceStringToInt(strings)
-	if err != nil {
-		return ints, err
-	}
-	intSlice := sort.IntSlice(ints)
-	intSlice.Sort()
-	return intSlice, nil
-}
-
-func SliceItoa(ints []int) []string {
-	strs := []string{}
-	for _, intVal := range ints {
-		strs = append(strs, strconv.Itoa(intVal))
-	}
-	return strs
 }
 
 func FormatFloat64ToIntStringFunnel(v float64) string {
