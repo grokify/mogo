@@ -2,6 +2,7 @@ package maputil
 
 import (
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -73,7 +74,7 @@ const (
 
 // Sorted returns a set of key names and values sorted by
 // the sort type.
-func (msi MapStringInt) Sorted(sortBy string) []Record {
+func (msi MapStringInt) Sorted(sortBy string) RecordSet {
 	sortBy = strings.ToLower(strings.TrimSpace(sortBy))
 	records := []Record{}
 	for name, count := range msi {
@@ -103,4 +104,34 @@ func (msi MapStringInt) Sorted(sortBy string) []Record {
 type Record struct {
 	Name  string
 	Value int
+}
+
+type RecordSet []Record
+
+func (rs RecordSet) Total() int {
+	total := 0
+	for _, rec := range rs {
+		total += rec.Value
+	}
+	return total
+}
+
+func (rs RecordSet) Markdown(prefix, sep string, countFirst, addTotal bool) string {
+	lines := []string{}
+	for _, rec := range rs {
+		if countFirst {
+			lines = append(lines, prefix+strconv.Itoa(rec.Value)+sep+rec.Name)
+		} else {
+			lines = append(lines, prefix+rec.Name+sep+strconv.Itoa(rec.Value))
+		}
+	}
+	if addTotal {
+		total := rs.Total()
+		if countFirst {
+			lines = append(lines, prefix+strconv.Itoa(total)+sep+"Total")
+		} else {
+			lines = append(lines, prefix+"Total"+sep+strconv.Itoa(total))
+		}
+	}
+	return strings.Join(lines, "\n")
 }
