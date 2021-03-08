@@ -74,7 +74,7 @@ const (
 
 // Sorted returns a set of key names and values sorted by
 // the sort type.
-func (msi MapStringInt) Sorted(sortBy string) RecordSet {
+func (msi MapStringInt) Sorted(sortBy string) []Record {
 	sortBy = strings.ToLower(strings.TrimSpace(sortBy))
 	records := []Record{}
 	for name, count := range msi {
