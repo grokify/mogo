@@ -2,6 +2,7 @@ package maputil
 
 import (
 	"sort"
+	"strings"
 )
 
 // MapStringInt represents a `map[string]int`
@@ -61,4 +62,43 @@ func (msi MapStringInt) MinMaxValues() (int, int) {
 		i++
 	}
 	return min, max
+}
+
+const (
+	SortNameAsc   = "name asc"
+	SortNameDesc  = "name desc"
+	SortValueAsc  = "value asc"
+	SortValueDesc = "value desc"
+)
+
+func (msi MapStringInt) Sorted(sortBy string) []Record {
+	sortBy = strings.ToLower(strings.TrimSpace(sortBy))
+	records := []Record{}
+	for name, count := range msi {
+		records = append(records, Record{Name: name, Value: count})
+	}
+	switch sortBy {
+	case SortNameAsc:
+		sort.Slice(records, func(i, j int) bool {
+			return records[i].Name < records[j].Name
+		})
+	case SortNameDesc:
+		sort.Slice(records, func(i, j int) bool {
+			return records[i].Name > records[j].Name
+		})
+	case SortValueAsc:
+		sort.Slice(records, func(i, j int) bool {
+			return records[i].Value < records[j].Value
+		})
+	case SortValueDesc:
+		sort.Slice(records, func(i, j int) bool {
+			return records[i].Value > records[j].Value
+		})
+	}
+	return records
+}
+
+type Record struct {
+	Name  string
+	Value int
 }
