@@ -36,6 +36,9 @@ func Resize(width, height uint, src image.Image, scale draw.Scaler) image.Image 
 	}
 	rect := image.Rect(0, 0, int(width), int(height))
 	dst := image.NewRGBA(rect)
+	if scale == nil {
+		scale = ScalerBest()
+	}
 	scale.Scale(dst, rect, src, src.Bounds(), draw.Over, nil)
 	return dst
 }
@@ -53,6 +56,54 @@ func ResizeMaxDimension(maxSide uint, src image.Image, scale draw.Scaler) image.
 		return src
 	}
 	return Resize(0, maxSide, src, scale)
+}
+
+func ResizeMax(maxWidth, maxHeight uint, src image.Image, scale draw.Scaler) image.Image {
+	srcWidth := uint(src.Bounds().Dx())
+	srcHeight := uint(src.Bounds().Dy())
+	if srcWidth <= maxWidth && srcHeight <= maxHeight {
+		return src
+	}
+	outWidth := uint(0)
+	outHeight := uint(0)
+	if maxHeight == 0 {
+		outWidth = maxWidth
+	} else if maxWidth == 0 {
+		outHeight = maxHeight
+	} else {
+		wRatio := float64(maxWidth) / float64(srcWidth)
+		hRatio := float64(maxHeight) / float64(srcHeight)
+		if wRatio < hRatio {
+			outHeight = maxHeight
+		} else {
+			outWidth = maxWidth
+		}
+	}
+	return Resize(outWidth, outHeight, src, scale)
+}
+
+func ResizeMin(minWidth, minHeight uint, src image.Image, scale draw.Scaler) image.Image {
+	srcWidth := uint(src.Bounds().Dx())
+	srcHeight := uint(src.Bounds().Dy())
+	if srcWidth >= minWidth && srcHeight >= minHeight {
+		return src
+	}
+	outWidth := uint(0)
+	outHeight := uint(0)
+	if minHeight == 0 {
+		outWidth = minWidth
+	} else if minWidth == 0 {
+		outHeight = minHeight
+	} else {
+		wRatio := float64(minWidth) / float64(srcWidth)
+		hRatio := float64(minHeight) / float64(srcHeight)
+		if wRatio > hRatio {
+			outHeight = minHeight
+		} else {
+			outWidth = minWidth
+		}
+	}
+	return Resize(outWidth, outHeight, src, scale)
 }
 
 func Square(src image.Image) image.Image {
