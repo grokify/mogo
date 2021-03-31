@@ -16,6 +16,7 @@ var rxHttpUrl = regexp.MustCompile(`^(?i)https?://`)
 type SimpleRequest struct {
 	Method  string
 	URL     string
+	Query   map[string][]string
 	Headers map[string]string
 	Body    interface{}
 	IsJSON  bool
@@ -73,6 +74,13 @@ func (sc *SimpleClient) Do(req SimpleRequest) (*http.Response, error) {
 		reqURL = sc.BaseURL
 	} else if !rxHttpUrl.MatchString(reqURL) && len(sc.BaseURL) > 0 {
 		reqURL = urlutil.JoinAbsolute(sc.BaseURL, reqURL)
+	}
+	if len(req.Query) > 0 {
+		goURL, err := urlutil.URLAddQueryValues(reqURL, req.Query)
+		if err != nil {
+			return nil, err
+		}
+		reqURL = goURL.String()
 	}
 	if sc.HTTPClient == nil {
 		sc.HTTPClient = &http.Client{}

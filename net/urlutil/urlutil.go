@@ -10,7 +10,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/google/go-querystring/query"
 	"github.com/grokify/simplego/type/stringsutil"
 )
 
@@ -39,19 +38,29 @@ func ToSlugLowerString(s string) string {
 	return string(ToSlug([]byte(strings.ToLower(s))))
 }
 
-// BuildURLFromMap returns a URL as a string from a base URL and a
+// URLAddQueryMap returns a URL as a string from a base URL and a
 // set of query parameters as a map[string]string{}
-func BuildURLFromMap(baseUrl string, queryParams map[string]string) string {
+func URLAddQueryMapString(baseUrl string, queryParams map[string]string) (string, error) {
 	if len(queryParams) < 1 {
-		return baseUrl
+		return baseUrl, nil
 	}
-	queryValues := url.Values{}
+	queryValues := map[string][]string{}
 	for key, val := range queryParams {
-		queryValues.Set(key, val)
+		queryValues[key] = []string{val}
 	}
-	return BuildURL(baseUrl, queryValues)
+	/*
+		queryValues := url.Values{}
+		for key, val := range queryParams {
+			queryValues.Set(key, val)
+		}*/
+	curUrl, err := URLAddQueryValues(baseUrl, queryValues)
+	if err != nil {
+		return baseUrl, err
+	}
+	return curUrl.String(), nil
 }
 
+/*
 // BuildURL returns a URL string from a base URL and url.Values.
 func BuildURL(baseUrl string, queryValues url.Values) string {
 	qryString := queryValues.Encode()
@@ -61,6 +70,7 @@ func BuildURL(baseUrl string, queryValues url.Values) string {
 	return baseUrl
 }
 
+// BuildURLQueryString to be deprecated in favor of URLAddQueryString
 func BuildURLQueryString(baseUrl string, qry interface{}) string {
 	v, _ := query.Values(qry)
 	qryString := v.Encode()
@@ -68,6 +78,21 @@ func BuildURLQueryString(baseUrl string, qry interface{}) string {
 		return baseUrl + "?" + qryString
 	}
 	return baseUrl
+}
+*/
+func URLAddQueryValues(inputURL string, qry map[string][]string) (*url.URL, error) {
+	goURL, err := url.Parse(inputURL)
+	if err != nil {
+		return nil, err
+	}
+	allQS := goURL.Query()
+	for k, vals := range qry {
+		for _, val := range vals {
+			allQS.Set(k, val)
+		}
+	}
+	goURL.RawQuery = allQS.Encode()
+	return goURL, nil
 }
 
 // GetURLBody returns an HTTP response byte array body from

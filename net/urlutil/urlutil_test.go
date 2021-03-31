@@ -85,3 +85,26 @@ func TestJoin(t *testing.T) {
 		}
 	}
 }
+
+var qsAddTests = []struct {
+	baseURL string
+	qryKey  string
+	qryVal  string
+	wantURL string
+}{
+	{"http://example.com", "foo", "bar", "http://example.com?foo=bar"}}
+
+func TestURLAddQueryString(t *testing.T) {
+	for _, tt := range qsAddTests {
+		qs := map[string][]string{
+			tt.qryKey: []string{tt.qryVal}}
+		goURL, err := URLAddQueryValues(tt.baseURL, qs)
+		if err != nil {
+			t.Errorf("Got error [%s]", err.Error())
+		}
+		if goURL.String() != tt.wantURL {
+			t.Errorf("URLAddQueryString failed want [%v] got [%v]",
+				tt.wantURL, goURL.String())
+		}
+	}
+}
