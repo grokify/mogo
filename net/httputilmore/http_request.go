@@ -65,7 +65,7 @@ func GetJsonSimple(requrl string, header http.Header, data interface{}) (*http.R
 	if err != nil {
 		return nil, err
 	}
-	_, err = jsonutil.UnmarshalIoReader(resp.Body, data)
+	_, err = jsonutil.UnmarshalReader(resp.Body, data)
 	return resp, err
 }
 
@@ -129,7 +129,7 @@ func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string]s
 	if err != nil || resBody == nil {
 		return nil, resp, err
 	}
-	resBodyBytes, err := jsonutil.UnmarshalIoReader(resp.Body, resBody)
+	resBodyBytes, err := jsonutil.UnmarshalReader(resp.Body, resBody)
 	return resBodyBytes, resp, err
 }
 

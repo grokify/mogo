@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 )
@@ -81,12 +82,22 @@ func MarshalBase64(i interface{}) (string, error) {
 	return base64.StdEncoding.EncodeToString(data), nil
 }
 
-func UnmarshalIoReader(r io.Reader, iface interface{}) ([]byte, error) {
+func UnmarshalReader(r io.Reader, iface interface{}) ([]byte, error) {
 	bytes, err := ioutil.ReadAll(r)
 	if err != nil {
 		return bytes, err
 	}
 	return bytes, json.Unmarshal(bytes, iface)
+}
+
+func PrettyPrintReader(r io.Reader, prefix, indent string) ([]byte, error) {
+	bytes, err := ioutil.ReadAll(r)
+	if err != nil {
+		return bytes, err
+	}
+	outBytes := PrettyPrint(bytes, prefix, indent)
+	_, err = fmt.Println(string(outBytes))
+	return outBytes, err
 }
 
 func ReadFile(filename string, v interface{}) ([]byte, error) {

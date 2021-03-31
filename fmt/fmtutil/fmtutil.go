@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"expvar"
 	"fmt"
+	"io"
+	"io/ioutil"
 
 	"github.com/grokify/simplego/encoding/jsonutil"
 )
@@ -47,7 +49,7 @@ func PrintJSONMore(in interface{}, jsonPrefix, jsonIndent string) error {
 	return nil
 }
 
-// PrintJSON pretty prints anything using a default indentation
+// PrintJSONMin pretty prints anything using a default indentation
 func PrintJSONMin(in interface{}) error {
 	if j, err := json.Marshal(in); err != nil {
 		return err
@@ -55,4 +57,13 @@ func PrintJSONMin(in interface{}) error {
 		fmt.Println(string(j))
 		return nil
 	}
+}
+
+func PrintReader(r io.Reader) error {
+	bytes, err := ioutil.ReadAll(r)
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(bytes))
+	return nil
 }
