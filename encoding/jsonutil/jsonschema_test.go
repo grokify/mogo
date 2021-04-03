@@ -11,6 +11,7 @@ var jsonschemaEscapeTests = []struct {
 	{"a~b", "a~0b"},
 	{"a/b", "a~1b"},
 	{"a~/~/b", "a~0~1~0~1b"},
+	{"a~~~///b", "a~0~0~0~1~1~1b"},
 }
 
 func TestJSONSchemaEscape(t *testing.T) {
