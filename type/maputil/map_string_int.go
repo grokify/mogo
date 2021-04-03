@@ -9,6 +9,14 @@ import (
 // MapStringInt represents a `map[string]int`
 type MapStringInt map[string]int
 
+func NewMapStringIntSlice(slice []string) MapStringInt {
+	msi := MapStringInt{}
+	for i, s := range slice {
+		msi[s] = i
+	}
+	return msi
+}
+
 // Set sets the value of `val` to `key`.
 func (msi MapStringInt) Set(key string, val int) {
 	msi[key] = val
@@ -32,6 +40,14 @@ func (msi MapStringInt) Keys(sortKeys bool) []string {
 		sort.Strings(keys)
 	}
 	return keys
+}
+
+// Exists returns a boolean whether a string key exists.
+func (msi MapStringInt) Exists(key string) bool {
+	if _, ok := msi[key]; ok {
+		return true
+	}
+	return false
 }
 
 // MustGet returns a value or a default.
