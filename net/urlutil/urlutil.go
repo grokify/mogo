@@ -38,6 +38,7 @@ func ToSlugLowerString(s string) string {
 	return string(ToSlug([]byte(strings.ToLower(s))))
 }
 
+/*
 // URLAddQueryMap returns a URL as a string from a base URL and a
 // set of query parameters as a map[string]string{}
 func URLAddQueryMapString(baseUrl string, queryParams map[string]string) (string, error) {
@@ -48,11 +49,6 @@ func URLAddQueryMapString(baseUrl string, queryParams map[string]string) (string
 	for key, val := range queryParams {
 		queryValues[key] = []string{val}
 	}
-	/*
-		queryValues := url.Values{}
-		for key, val := range queryParams {
-			queryValues.Set(key, val)
-		}*/
 	curUrl, err := URLAddQueryValues(baseUrl, queryValues)
 	if err != nil {
 		return baseUrl, err
@@ -60,7 +56,6 @@ func URLAddQueryMapString(baseUrl string, queryParams map[string]string) (string
 	return curUrl.String(), nil
 }
 
-/*
 // BuildURL returns a URL string from a base URL and url.Values.
 func BuildURL(baseUrl string, queryValues url.Values) string {
 	qryString := queryValues.Encode()
@@ -85,6 +80,9 @@ func URLAddQueryValues(inputURL string, qry map[string][]string) (*url.URL, erro
 	if err != nil {
 		return nil, err
 	}
+	if len(qry) == 0 {
+		return goURL, nil
+	}
 	allQS := goURL.Query()
 	for k, vals := range qry {
 		for _, val := range vals {
@@ -95,8 +93,7 @@ func URLAddQueryValues(inputURL string, qry map[string][]string) (*url.URL, erro
 	return goURL, nil
 }
 
-// GetURLBody returns an HTTP response byte array body from
-// a URL.
+// GetURLBody returns an HTTP response byte array body from a URL.
 func GetURLBody(absoluteUrl string) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodGet, absoluteUrl, nil)
 	if err != nil {
