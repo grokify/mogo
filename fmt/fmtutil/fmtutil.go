@@ -3,7 +3,6 @@ package fmtutil
 
 import (
 	"encoding/json"
-	"expvar"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -18,10 +17,12 @@ var (
 )
 
 // init uses expvar to export package variables to simplify method signatures.
+/*
 func init() {
 	expvar.Publish("JSONPrefix", expvar.NewString(""))
 	expvar.Publish("JSONIndent", expvar.NewString("  "))
 }
+*/
 
 // PrintJSON pretty prints anything using a default indentation
 func PrintJSON(in interface{}) error {
