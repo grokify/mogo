@@ -33,7 +33,7 @@ func IsCase(caseType, s string) (bool, error) {
 			return IsPascalCase(s), nil
 		}
 	}
-	return false, fmt.Errorf("unkown string case type [%s]", caseType)
+	return false, fmt.Errorf("unknown string case type [%s]", caseType)
 }
 
 var (

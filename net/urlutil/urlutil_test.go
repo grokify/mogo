@@ -97,7 +97,7 @@ var qsAddTests = []struct {
 func TestURLAddQueryString(t *testing.T) {
 	for _, tt := range qsAddTests {
 		qs := map[string][]string{
-			tt.qryKey: []string{tt.qryVal}}
+			tt.qryKey: {tt.qryVal}}
 		goURL, err := URLAddQueryValues(tt.baseURL, qs)
 		if err != nil {
 			t.Errorf("Got error [%s]", err.Error())
