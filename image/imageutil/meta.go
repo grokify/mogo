@@ -2,6 +2,7 @@ package imageutil
 
 import (
 	"image"
+	"os"
 )
 
 func ImageAspect(img image.Image) float64 {
@@ -21,4 +22,48 @@ func IsNilOrEmpty(img image.Image) bool {
 		return true
 	}
 	return false
+}
+
+type ImageMeta struct {
+	File       *os.File
+	FormatName string
+	Image      image.Image
+}
+
+func (meta *ImageMeta) Stats() ImageStats {
+	if meta.Image == nil {
+		return ImageStatsNil()
+	}
+	return ImageStatsRect(meta.Image.Bounds())
+}
+
+func (meta *ImageMeta) Width() int {
+	if meta.Image == nil {
+		return -1
+	}
+	return meta.Image.Bounds().Max.X - meta.Image.Bounds().Min.X
+}
+
+func (meta *ImageMeta) Height() int {
+	if meta.Image == nil {
+		return -1
+	}
+	return meta.Image.Bounds().Max.Y - meta.Image.Bounds().Min.Y
+}
+
+type ImageStats struct {
+	Width  int
+	Height int
+}
+
+func ImageStatsNil() ImageStats {
+	return ImageStats{
+		Width:  -1,
+		Height: -1}
+}
+
+func ImageStatsRect(rect image.Rectangle) ImageStats {
+	return ImageStats{
+		Width:  rect.Max.X - rect.Min.X,
+		Height: rect.Max.Y - rect.Min.Y}
 }

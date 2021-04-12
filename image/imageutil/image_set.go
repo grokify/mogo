@@ -94,12 +94,6 @@ func (ims *ImageMetaSet) Stats() ImageStatsMulti {
 		SumY: ims.SumY(-1)}
 }
 
-type ImageMeta struct {
-	File       *os.File
-	FormatName string
-	Image      image.Image
-}
-
 type ImageStatsMulti struct {
 	MaxX int
 	SumX int
