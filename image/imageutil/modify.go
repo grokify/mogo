@@ -58,6 +58,9 @@ func ResizeMaxDimension(maxSide uint, src image.Image, scale draw.Scaler) image.
 	return Resize(0, maxSide, src, scale)
 }
 
+// ResizeMax resizes an image to maximum dimensions. To resize
+// to a maximum of 800 pixels width, the following can be used:
+// `ResizeMax(800, 0, img, nil)`.
 func ResizeMax(maxWidth, maxHeight uint, src image.Image, scale draw.Scaler) image.Image {
 	srcWidth := uint(src.Bounds().Dx())
 	srcHeight := uint(src.Bounds().Dy())
@@ -82,6 +85,9 @@ func ResizeMax(maxWidth, maxHeight uint, src image.Image, scale draw.Scaler) ima
 	return Resize(outWidth, outHeight, src, scale)
 }
 
+// ResizeMin resizes an image to minimum dimensions. To resize
+// to a minimum of 800 pixels width, the following can be used:
+// `ResizeMin(800, 0, img, nil)`.
 func ResizeMin(minWidth, minHeight uint, src image.Image, scale draw.Scaler) image.Image {
 	srcWidth := uint(src.Bounds().Dx())
 	srcHeight := uint(src.Bounds().Dy())
