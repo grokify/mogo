@@ -114,3 +114,21 @@ func TestToOpposite(t *testing.T) {
 		}
 	}
 }
+
+var condenseSpaceTests = []struct {
+	v    string
+	want string
+}{
+	{" a b\tc\rd\ne\r\nf\t g \n\n\n \n h ", "a b c d e f g h"},
+}
+
+func TestCondenseSpace(t *testing.T) {
+	for _, tt := range condenseSpaceTests {
+		got := CondenseSpace(tt.v)
+
+		if got != tt.want {
+			t.Errorf("stringsutil.CondenseSpace(%v) Error: want [%v], got [%v]",
+				tt.v, tt.want, got)
+		}
+	}
+}

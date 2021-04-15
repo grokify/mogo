@@ -133,8 +133,8 @@ func CondenseString(content string, join_lines bool) string {
 	return strings.TrimSpace(content)
 }
 
-// CondenseStringSimple removes extra spaces.
-func CondenseStringSimple(s string) string {
+// CondenseSpace removes extra spaces.
+func CondenseSpace(s string) string {
 	return strings.Join(strings.Fields(s), " ")
 }
 
