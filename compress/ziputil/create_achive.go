@@ -12,7 +12,7 @@ import (
 )
 
 func ZipFilesRx(zipfile, dir string, rx *regexp.Regexp, removePaths bool) error {
-	_, filepaths, err := ioutilmore.ReadDirRx(dir, rx, false)
+	_, filepaths, err := ioutilmore.ReadDirMore(dir, rx, true, false)
 	if err != nil {
 		return err
 	}
