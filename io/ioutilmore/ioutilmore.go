@@ -121,7 +121,7 @@ func DirEntriesNameRxVarFirsts(dir string, rx1 *regexp.Regexp) ([]string, error)
 	return varsMatch, nil
 }
 
-func ReadDirRx(dir string, rx *regexp.Regexp, skipEmpty bool) ([]os.FileInfo, []string, error) {
+func ReadDir(dir string, rx *regexp.Regexp, inclDotDirs, skipEmpty bool) ([]os.FileInfo, []string, error) {
 	filesMatch := []os.FileInfo{}
 	filenames := []string{}
 	filesAll, err := ioutil.ReadDir(dir)
@@ -130,11 +130,26 @@ func ReadDirRx(dir string, rx *regexp.Regexp, skipEmpty bool) ([]os.FileInfo, []
 	}
 	for _, f := range filesAll {
 		if f.Name() == "." || f.Name() == ".." {
-			continue
+			if inclDotDirs {
+				filesMatch = append(filesMatch, f)
+				if f.Name() == "." {
+					filenames = append(filenames, dir)
+				} else if f.Name() == ".." {
+					parentDir, _ := filepath.Split(dir)
+					filenames = append(filenames, parentDir)
+				}
+			} else {
+				continue
+			}
 		}
 		if (skipEmpty && f.Size() > int64(0)) || !skipEmpty {
-			rs := rx.FindStringSubmatch(f.Name())
-			if len(rs) > 0 {
+			if rx != nil {
+				rs := rx.FindStringSubmatch(f.Name())
+				if len(rs) > 0 {
+					filesMatch = append(filesMatch, f)
+					filenames = append(filenames, filepath.Join(dir, f.Name()))
+				}
+			} else {
 				filesMatch = append(filesMatch, f)
 				filenames = append(filenames, filepath.Join(dir, f.Name()))
 			}
