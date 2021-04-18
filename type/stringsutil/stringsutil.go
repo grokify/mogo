@@ -171,6 +171,18 @@ func TrimSentenceLength(sentenceInput string, maxLength int) string {
 	return sentenceLen
 }
 
+// FirstNotEmptyTrimSpace returns the first non-empty string
+// after applying `strings.TrimSpace()`.`
+func FirstNotEmptyTrimSpace(candidates ...string) string {
+	for _, s := range candidates {
+		s = strings.TrimSpace(s)
+		if len(s) > 0 {
+			return s
+		}
+	}
+	return ""
+}
+
 func JoinTrimSpace(strs []string) string {
 	return rxSpaces.ReplaceAllString(strings.Join(strs, " "), " ")
 }
