@@ -49,7 +49,7 @@ func (r RequestNetHttp) RemoteAddr() net.Addr {
 func (r RequestNetHttp) RemoteAddress() string     { return r.Raw.RemoteAddr }
 func (r RequestNetHttp) UserAgent() []byte         { return []byte(r.Raw.UserAgent()) }
 func (r RequestNetHttp) AllArgs() Args             { return r.allArgs }
-func (r RequestNetHttp) QueryArgs() Args           { return r.allArgs }
+func (r RequestNetHttp) QueryArgs() Args           { return &ArgsUrlValues{r.Raw.URL.Query()} }
 func (r RequestNetHttp) PostArgs() Args            { return r.postArgs }
 func (r RequestNetHttp) Method() []byte            { return []byte(r.Raw.Method) }
 func (r RequestNetHttp) Headers() http.Header      { return r.Raw.Header }
