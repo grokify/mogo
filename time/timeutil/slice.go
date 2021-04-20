@@ -133,17 +133,15 @@ func TimeSliceMinMax(times []time.Time) (time.Time, time.Time, error) {
 	return min, max, nil
 }
 
-// Distinct returns a time slice with disinct
-// times.
+// Distinct returns a time slice with distinct, or unique, times.
 func Distinct(times []time.Time) []time.Time {
 	filtered := []time.Time{}
 	seen := map[time.Time]int{}
 	for _, t := range times {
-		if _, ok := seen[t]; ok {
-			continue
+		if _, ok := seen[t]; !ok {
+			seen[t] = 1
+			filtered = append(filtered, t)
 		}
-		seen[t] = 1
-		filtered = append(filtered, t)
 	}
 	return filtered
 }
