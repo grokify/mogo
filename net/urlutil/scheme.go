@@ -31,3 +31,13 @@ func UriScheme(uri string) string {
 	}
 	return ""
 }
+
+func IsHttp(uri string, inclHttp, inclHttps bool) bool {
+	try := strings.ToLower(strings.TrimSpace(uri))
+	if strings.Index(try, "http://") == 0 && inclHttp {
+		return true
+	} else if strings.Index(try, "https://") == 0 && inclHttps {
+		return true
+	}
+	return false
+}
