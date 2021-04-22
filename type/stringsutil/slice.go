@@ -383,3 +383,22 @@ func SliceIntersectionCondenseSpace(slice1, slice2 []string) []string {
 		SliceCondenseSpace(slice1, true, false),
 		SliceCondenseSpace(slice2, true, false))
 }
+
+// SliceIsEmpty checks to see if a slice is empty. If `skipEmptyStrings`
+// it will also return empty if all elements are empty strings or
+// only contain spaces.
+func SliceIsEmpty(slice []string, skipEmptyStrings bool) bool {
+	if len(slice) == 0 {
+		return true
+	}
+	if !skipEmptyStrings {
+		return false
+	}
+	for _, s := range slice {
+		s = strings.TrimSpace(s)
+		if len(s) > 0 {
+			return false
+		}
+	}
+	return true
+}
