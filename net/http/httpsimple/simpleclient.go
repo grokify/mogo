@@ -76,7 +76,7 @@ func (sc *SimpleClient) Do(req SimpleRequest) (*http.Response, error) {
 		reqURL = urlutil.JoinAbsolute(sc.BaseURL, reqURL)
 	}
 	if len(req.Query) > 0 {
-		goURL, err := urlutil.URLAddQueryValues(reqURL, req.Query)
+		goURL, err := urlutil.URLAddQueryString(reqURL, req.Query)
 		if err != nil {
 			return nil, err
 		}
