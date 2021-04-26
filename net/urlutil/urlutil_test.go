@@ -96,15 +96,42 @@ var qsAddTests = []struct {
 
 func TestURLAddQueryString(t *testing.T) {
 	for _, tt := range qsAddTests {
-		qs := map[string][]string{
+		qsMap := map[string][]string{
 			tt.qryKey: {tt.qryVal}}
-		goURL, err := URLAddQueryValues(tt.baseURL, qs)
+		qsVal := url.Values{}
+		qsVal.Set(tt.qryKey, tt.qryVal)
+
+		goURL1, err := URLAddQueryValuesString(tt.baseURL, qsVal)
 		if err != nil {
 			t.Errorf("Got error [%s]", err.Error())
 		}
-		if goURL.String() != tt.wantURL {
+		if goURL1.String() != tt.wantURL {
+			t.Errorf("URLAddQueryValuesString failed want [%v] got [%v]",
+				tt.wantURL, goURL1.String())
+		}
+
+		goURL2, err := URLAddQueryString(tt.baseURL, qsMap)
+		if err != nil {
+			t.Errorf("Got error [%s]", err.Error())
+		}
+		if goURL2.String() != tt.wantURL {
 			t.Errorf("URLAddQueryString failed want [%v] got [%v]",
-				tt.wantURL, goURL.String())
+				tt.wantURL, goURL2.String())
+		}
+
+		goURLInput, err := url.Parse(tt.baseURL)
+		if err != nil {
+			t.Errorf("Got error url.Parse error [%s]", err.Error())
+		}
+		goURL3 := URLAddQuery(goURLInput, qsMap)
+		if goURL3.String() != tt.wantURL {
+			t.Errorf("URLAddQuery failed want [%v] got [%v]",
+				tt.wantURL, goURL3.String())
+		}
+		goURL4 := URLAddQueryValues(goURLInput, qsVal)
+		if goURL4.String() != tt.wantURL {
+			t.Errorf("URLAddQueryValues failed want [%v] got [%v]",
+				tt.wantURL, goURL4.String())
 		}
 	}
 }

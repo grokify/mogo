@@ -75,7 +75,54 @@ func BuildURLQueryString(baseUrl string, qry interface{}) string {
 	return baseUrl
 }
 */
-func URLAddQueryValues(inputURL string, qry map[string][]string) (*url.URL, error) {
+
+func URLAddQuery(inputURL *url.URL, qry map[string][]string) *url.URL {
+	if len(qry) == 0 {
+		return inputURL
+	}
+	allQS := inputURL.Query()
+	for k, vals := range qry {
+		for _, val := range vals {
+			allQS.Set(k, val)
+		}
+	}
+	inputURL.RawQuery = allQS.Encode()
+	return inputURL
+}
+
+func URLAddQueryValues(inputURL *url.URL, qry url.Values) *url.URL {
+	if len(qry) == 0 {
+		return inputURL
+	}
+	allQS := inputURL.Query()
+	for k, vals := range qry {
+		for _, val := range vals {
+			allQS.Set(k, val)
+		}
+	}
+	inputURL.RawQuery = allQS.Encode()
+	return inputURL
+}
+
+func URLAddQueryString(inputURL string, qry map[string][]string) (*url.URL, error) {
+	goURL, err := url.Parse(inputURL)
+	if err != nil {
+		return nil, err
+	}
+	if len(qry) == 0 {
+		return goURL, nil
+	}
+	allQS := goURL.Query()
+	for k, vals := range qry {
+		for _, val := range vals {
+			allQS.Set(k, val)
+		}
+	}
+	goURL.RawQuery = allQS.Encode()
+	return goURL, nil
+}
+
+func URLAddQueryValuesString(inputURL string, qry url.Values) (*url.URL, error) {
 	goURL, err := url.Parse(inputURL)
 	if err != nil {
 		return nil, err
