@@ -70,10 +70,12 @@ func (sc *SimpleClient) Do(req SimpleRequest) (*http.Response, error) {
 		return nil, err
 	}
 	reqURL := strings.TrimSpace(req.URL)
-	if len(reqURL) == 0 && len(sc.BaseURL) > 0 {
-		reqURL = sc.BaseURL
-	} else if !rxHttpUrl.MatchString(reqURL) && len(sc.BaseURL) > 0 {
-		reqURL = urlutil.JoinAbsolute(sc.BaseURL, reqURL)
+	if len(sc.BaseURL) > 0 {
+		if len(reqURL) == 0 {
+			reqURL = sc.BaseURL
+		} else if !rxHttpUrl.MatchString(reqURL) {
+			reqURL = urlutil.JoinAbsolute(sc.BaseURL, reqURL)
+		}
 	}
 	if len(req.Query) > 0 {
 		goURL, err := urlutil.URLAddQueryString(reqURL, req.Query)
@@ -100,4 +102,9 @@ func (sc *SimpleClient) DoJSON(req SimpleRequest, resBody interface{}) ([]byte, 
 	}
 	err = json.Unmarshal(bytes, resBody)
 	return bytes, resp, err
+}
+
+func Do(req SimpleRequest) (*http.Response, error) {
+	sc := SimpleClient{}
+	return sc.Do(req)
 }
