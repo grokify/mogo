@@ -1,6 +1,9 @@
 package jsonutil
 
-import "regexp"
+import (
+	"fmt"
+	"regexp"
+)
 
 const (
 	EscapedTilde = "~0"
@@ -30,4 +33,25 @@ func PropertyNameUnescape(s string) string {
 	return rxTildeEscaped.ReplaceAllString(
 		rxSlashEscaped.ReplaceAllString(s, "/"),
 		"~")
+}
+
+var rxSlashMore = regexp.MustCompile(`/+`)
+
+// PointerCondense removes duplicate slashes.
+func PointerCondense(s string) string {
+	return rxSlashMore.ReplaceAllString(s, "/")
+}
+
+// PointerSubEscapeAll will substitute vars using `fmt.Sprintf()`
+// All strings are escaped.
+func PointerSubEscapeAll(format string, vars ...interface{}) string {
+	if len(vars) == 0 {
+		return format
+	}
+	for i, v := range vars {
+		if vString, ok := v.(string); ok {
+			vars[i] = PropertyNameEscape(vString)
+		}
+	}
+	return PointerCondense(fmt.Sprintf(format, vars...))
 }
