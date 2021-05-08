@@ -10,6 +10,8 @@ var severityTests = []struct {
 	include      bool
 	errorIsNil   bool
 }{
+	{SeverityDisabled, SeverityCritical, false, true},
+	{SeverityError, SeverityDisabled, false, true},
 	{SeverityError, SeverityWarning, false, true},
 	{SeverityError, SeverityCritical, true, true},
 	{SeverityDebug, SeverityWarning, true, true},

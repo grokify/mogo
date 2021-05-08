@@ -64,6 +64,9 @@ func SeverityInclude(reportLevel, itemLevel Severity) (bool, error) {
 	if !ok {
 		return false, fmt.Errorf("itemLevel [%s] not supported", itemLevel)
 	}
+	if reportLevel == SeverityDisabled || itemLevel == SeverityDisabled {
+		return false, nil
+	}
 	if itemLevelInt <= reportLevelInt {
 		return true, nil
 	}
