@@ -5,8 +5,15 @@ package filepathutil
 import (
 	"os"
 	"os/user"
+	"path/filepath"
 	"strings"
 )
+
+// FilepathLeaf returns the last element of a path.
+func FilepathLeaf(s string) string {
+	_, file := filepath.Split(s)
+	return file
+}
 
 // CurLeafDir returns the leaf dir of a nested directory.
 func CurLeafDir() (string, error) {
