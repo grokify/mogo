@@ -14,21 +14,21 @@ https://google.github.io/styleguide/javaguide.html#s5.3-camel-case
 */
 
 const (
-	CaseCamel  = "camelCase"
-	CaseKebab  = "kebab-case"
-	CasePascal = "PascalCase"
-	CaseSnake  = "snake_case"
+	CamelCase  = "camelCase"
+	KebabCase  = "kebab-case"
+	PascalCase = "PascalCase"
+	SnakeCase  = "snake_case"
 )
 
 type CaseValidator struct{}
 
 func IsCase(caseType, s string) (bool, error) {
 	switch caseType {
-	case CaseCamel:
+	case CamelCase:
 		{
 			return IsCamelCase(s), nil
 		}
-	case CasePascal:
+	case PascalCase:
 		{
 			return IsPascalCase(s), nil
 		}
@@ -38,7 +38,9 @@ func IsCase(caseType, s string) (bool, error) {
 
 var (
 	rxCamelCase         = regexp.MustCompile(`^[a-z][0-9A-Za-z]*$`)
-	rxPascalCase        = regexp.MustCompile(`^[A-Z][0-9A-Za-z]*`)
+	rxKebabCase         = regexp.MustCompile(`^[a-z][0-9a-z-]*$`)
+	rxPascalCase        = regexp.MustCompile(`^[A-Z][0-9A-Za-z]*$`)
+	rxSnakeCase         = regexp.MustCompile(`^[a-z][0-9a-z_]*$`)
 	rxCamelCaseIdSuffix = regexp.MustCompile(`[0-9a-z](I[dD])$`)
 )
 
@@ -56,6 +58,10 @@ func IsCamelCase(input string) bool {
 	return true
 }
 
+func IsKebabCase(input string) bool {
+	return rxKebabCase.MatchString(input)
+}
+
 // IsPascalCase returns if a string is PascalCase or not.
 func IsPascalCase(input string) bool {
 	if !rxPascalCase.MatchString(input) {
@@ -70,13 +76,14 @@ func IsPascalCase(input string) bool {
 	return true
 }
 
+func IsSnakeCase(input string) bool {
+	return rxSnakeCase.MatchString(input)
+}
+
 var rxFirstAlphaUpper = regexp.MustCompile(`^[A-Z]`)
 
 // IsFirstAlphaUpper returns if the first character is
 // a capital [A-Z] character.
 func IsFirstAlphaUpper(s string) bool {
-	if rxFirstAlphaUpper.MatchString(s) {
-		return true
-	}
-	return false
+	return rxFirstAlphaUpper.MatchString(s)
 }
