@@ -5,8 +5,8 @@ import (
 )
 
 var severityTests = []struct {
-	execSeverity Severity
-	itemSeverity Severity
+	execSeverity string
+	itemSeverity string
 	include      bool
 	errorIsNil   bool
 }{
