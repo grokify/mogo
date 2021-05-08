@@ -20,6 +20,16 @@ const (
 	SnakeCase  = "snake_case"
 )
 
+func ValidCase(s string) bool {
+	if s == CamelCase ||
+		s == KebabCase ||
+		s == PascalCase ||
+		s == SnakeCase {
+		return true
+	}
+	return false
+}
+
 type CaseValidator struct{}
 
 func IsCase(caseType, s string) (bool, error) {
