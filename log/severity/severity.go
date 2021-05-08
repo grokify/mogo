@@ -1,4 +1,4 @@
-package logutil
+package severity
 
 import (
 	"fmt"
@@ -45,10 +45,10 @@ var severities = map[string]int{
 	SeverityDebug:         8,
 }
 
-// ParseSeverity takes a string and returns a constant
+// Parse takes a string and returns a constant
 // `Severity` value. Common aliases such as `warn` and
 // `info` are included.
-func ParseSeverity(sev string) (string, error) {
+func Parse(sev string) (string, error) {
 	sev = strings.ToLower(strings.TrimSpace(sev))
 	sev2, ok := mapStringSeverity[sev]
 	if ok {

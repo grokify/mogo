@@ -1,4 +1,4 @@
-package logutil
+package severity
 
 import (
 	"testing"
