@@ -6,15 +6,17 @@ import (
 
 var caseTests = []struct {
 	str      string
-	isCamel  bool
-	isPascal bool
+	isKebab  bool // lower case
+	isSnake  bool // lower case
+	isCamel  bool // upper case
+	isPascal bool // upper case
 }{
-	{"camelCase", true, false},
-	{"camelCaseId", true, false},
-	{"camelCaseID", false, false},
-	{"PascalCase", false, true},
-	{"PamelCaseId", false, true},
-	{"PamelCaseID", false, false},
+	{"camelCase", false, false, true, false},
+	{"camelCaseId", false, false, true, false},
+	{"camelCaseID", false, false, false, false},
+	{"PascalCase", false, false, false, true},
+	{"PascalCaseId", false, false, false, true},
+	{"PascalCaseID", false, false, false, false},
 }
 
 func TestCase(t *testing.T) {
@@ -29,6 +31,18 @@ func TestCase(t *testing.T) {
 				t.Errorf("stringcase.IsCamelCase(\"%s\") Mismatch: want [%v] got [%v]", tt.str, tt.isCamel, isCamel)
 			}
 		}
+
+		isKebab := IsKebabCase(tt.str)
+		if tt.isKebab {
+			if !isKebab {
+				t.Errorf("stringcase.IsKebabCase(\"%s\") Mismatch: want [%v] got [%v]", tt.str, tt.isKebab, isKebab)
+			}
+		} else {
+			if isKebab {
+				t.Errorf("stringcase.IsKebabCase(\"%s\") Mismatch: want [%v] got [%v]", tt.str, tt.isKebab, isKebab)
+			}
+		}
+
 		isPascal := IsPascalCase(tt.str)
 		if tt.isPascal {
 			if !isPascal {
@@ -39,5 +53,17 @@ func TestCase(t *testing.T) {
 				t.Errorf("stringcase.IsPascalCase(\"%s\") Mismatch: want [%v] got [%v]", tt.str, tt.isPascal, isPascal)
 			}
 		}
+
+		isSnake := IsSnakeCase(tt.str)
+		if tt.isSnake {
+			if !isSnake {
+				t.Errorf("stringcase.IsSnakeCase(\"%s\") Mismatch: want [%v] got [%v]", tt.str, tt.isSnake, isSnake)
+			}
+		} else {
+			if isSnake {
+				t.Errorf("stringcase.IsSnakeCase(\"%s\") Mismatch: want [%v] got [%v]", tt.str, tt.isSnake, isSnake)
+			}
+		}
+
 	}
 }
