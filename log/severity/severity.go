@@ -41,13 +41,13 @@ var mapStringSeverity = map[string]string{
 var severities = map[string]int{
 	SeverityDisabled:      -1,
 	SeverityEmergency:     0,
-	SeverityAlert:         2,
-	SeverityCritical:      3,
-	SeverityError:         4,
-	SeverityWarning:       5,
-	SeverityNotice:        6,
-	SeverityInformational: 7,
-	SeverityDebug:         8,
+	SeverityAlert:         1,
+	SeverityCritical:      2,
+	SeverityError:         3,
+	SeverityWarning:       4,
+	SeverityNotice:        5,
+	SeverityInformational: 6,
+	SeverityDebug:         7,
 }
 
 // Parse takes a string and returns a constant
