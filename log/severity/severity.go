@@ -24,7 +24,8 @@ var mapStringSeverity = map[string]string{
 	"off":           SeverityDisabled,
 	"emergency":     SeverityEmergency,
 	"emerg":         SeverityEmergency,
-	"panic":         SeverityEmergency,
+	"panic":         SeverityEmergency, // deprecated by syslog
+	"exception":     SeverityEmergency, // used by PostgreSQL
 	"alert":         SeverityAlert,
 	"critical":      SeverityCritical,
 	"crit":          SeverityCritical,
@@ -36,6 +37,7 @@ var mapStringSeverity = map[string]string{
 	"informational": SeverityInformational,
 	"info":          SeverityInformational,
 	"debug":         SeverityDebug,
+	"hint":          SeverityDebug, // used by Spectral
 }
 
 var severities = map[string]int{
