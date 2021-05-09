@@ -19,6 +19,8 @@ const (
 
 var mapStringSeverity = map[string]string{
 	"disabled":      SeverityDisabled,
+	"disable":       SeverityDisabled,
+	"off":           SeverityDisabled,
 	"emergency":     SeverityEmergency,
 	"alert":         SeverityAlert,
 	"critical":      SeverityCritical,
@@ -57,25 +59,43 @@ func Parse(sev string) (string, error) {
 	return SeverityDisabled, fmt.Errorf("severity not found [%s]", sev)
 }
 
+func Severities() []string {
+	return []string{
+		SeverityDisabled,
+		SeverityEmergency,
+		SeverityAlert,
+		SeverityCritical,
+		SeverityError,
+		SeverityWarning,
+		SeverityNotice,
+		SeverityInformational,
+		SeverityDebug}
+}
+
 // SeverityInclude checks to see if a severity level
 // is included against a certain severity filter.
 func SeverityInclude(filterLevel, itemLevel string) (bool, error) {
-	filterLevelInt, ok := severities[filterLevel]
+	filterLevelGood, err := Parse(filterLevel)
+	if err != nil || filterLevelGood == SeverityDisabled {
+		return false, err
+	}
+	filterLevelInt, ok := severities[filterLevelGood]
 	if !ok {
 		return false, fmt.Errorf("filterLevel [%s] not supported", filterLevel)
 	}
 	if filterLevelInt < 1 {
 		return false, nil
 	}
-	itemLevelInt, ok := severities[itemLevel]
+	itemLevelGood, err := Parse(itemLevel)
+	if err != nil || itemLevelGood == SeverityDisabled {
+		return false, err
+	}
+	itemLevelInt, ok := severities[itemLevelGood]
 	if !ok {
 		return false, fmt.Errorf("itemLevel [%s] not supported", itemLevel)
 	}
-	if filterLevel == SeverityDisabled || itemLevel == SeverityDisabled {
+	if itemLevelInt > filterLevelInt {
 		return false, nil
 	}
-	if itemLevelInt <= filterLevelInt {
-		return true, nil
-	}
-	return false, nil
+	return true, nil
 }
