@@ -17,17 +17,19 @@ var severityTests = []struct {
 	{SeverityDebug, SeverityWarning, true, true},
 	{SeverityDebug, SeverityCritical, true, true},
 	{SeverityCritical, SeverityError, false, true},
+	{SeverityDebug, SeverityDisabled, false, true},
 	{"foo", "bar", false, false},
 }
 
 func TestSeverity(t *testing.T) {
-	for _, tt := range severityTests {
+	n := len(severityTests)
+	for i, tt := range severityTests {
 		tryIncl, err := SeverityInclude(tt.execSeverity, tt.itemSeverity)
 		if err != nil && tt.errorIsNil {
-			t.Errorf("logutil.SeverityInclude(\"%s\",\"%s\") error [%v]", tt.execSeverity, tt.itemSeverity, err.Error())
+			t.Errorf("[%d/%d] severity.SeverityInclude(\"%s\",\"%s\") error [%v]", i+1, n, tt.execSeverity, tt.itemSeverity, err.Error())
 		}
 		if tryIncl != tt.include {
-			t.Errorf("logutil.SeverityInclude(\"%s\",\"%s\") want [%v] got [%v]", tt.execSeverity, tt.itemSeverity, tt.include, tryIncl)
+			t.Errorf("[%d/%d] severity.SeverityInclude(\"%s\",\"%s\") want [%v] got [%v]", i+1, n, tt.execSeverity, tt.itemSeverity, tt.include, tryIncl)
 		}
 	}
 }
