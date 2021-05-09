@@ -1,3 +1,4 @@
+// severity provides syslog-type severity level handling.
 package severity
 
 import (
@@ -7,13 +8,13 @@ import (
 
 const (
 	SeverityDisabled      = "disabled"
-	SeverityEmergency     = "emergency"
+	SeverityEmergency     = "emerg"
 	SeverityAlert         = "alert"
-	SeverityCritical      = "critical"
-	SeverityError         = "error"
+	SeverityCritical      = "crit"
+	SeverityError         = "err"
 	SeverityWarning       = "warning"
 	SeverityNotice        = "notice"
-	SeverityInformational = "informational"
+	SeverityInformational = "info"
 	SeverityDebug         = "debug"
 )
 
@@ -22,6 +23,8 @@ var mapStringSeverity = map[string]string{
 	"disable":       SeverityDisabled,
 	"off":           SeverityDisabled,
 	"emergency":     SeverityEmergency,
+	"emerg":         SeverityEmergency,
+	"panic":         SeverityEmergency,
 	"alert":         SeverityAlert,
 	"critical":      SeverityCritical,
 	"crit":          SeverityCritical,
@@ -59,6 +62,7 @@ func Parse(sev string) (string, error) {
 	return SeverityDisabled, fmt.Errorf("severity not found [%s]", sev)
 }
 
+// Severities returns a list of severities.
 func Severities() []string {
 	return []string{
 		SeverityDisabled,
