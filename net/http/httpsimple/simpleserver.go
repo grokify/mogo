@@ -83,3 +83,9 @@ func HandleTestAnyEngine(aRes anyhttp.Response, aReq anyhttp.Request) {
 	aRes.SetStatusCode(http.StatusOK)
 	aRes.SetBodyBytes(bytes)
 }
+
+type Handler interface {
+	HandleNetHTTP(res http.ResponseWriter, req *http.Request)
+	HandleFastHTTP(ctx *fasthttp.RequestCtx)
+	HandleAnyHTTP(aRes anyhttp.Response, aReq anyhttp.Request)
+}
