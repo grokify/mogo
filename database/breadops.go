@@ -6,6 +6,15 @@ import (
 	"github.com/grokify/simplego/type/stringsutil"
 )
 
+const (
+	FunctionBrowse = "browse"
+	FunctionRead   = "read"
+	FunctionEdit   = "edit"
+	FunctionAdd    = "add"
+	FunctionDelete = "delete"
+	FunctionOther  = "other"
+)
+
 // BreadOps uses the BREAD acronym to store identifiers for each
 // operation.
 type BreadOps struct {
