@@ -72,6 +72,8 @@ var (
 	rxPascalCase        = regexp.MustCompile(`^[A-Z][0-9A-Za-z]*$`)
 	rxSnakeCase         = regexp.MustCompile(`^[a-z][0-9a-z_]*$`)
 	rxCamelCaseIdSuffix = regexp.MustCompile(`[0-9a-z](I[dD])$`)
+	rxHypen             = regexp.MustCompile(`-`)
+	rxUnderscore        = regexp.MustCompile(`_`)
 )
 
 // IsCamelCase returns if a string is camelCase or not.
