@@ -9,7 +9,11 @@ import (
 // Constants ensuring that header names are correctly spelled and consistently cased.
 const (
 	HeaderAccept                       = "Accept"
+	HeaderAccessControlAllowHeaders    = "Access-Control-Allow-Headers"
+	HeaderAccessControlAllowMethods    = "Access-Control-Allow-Methods"
 	HeaderAccessControlAllowOrigin     = "Access-Control-Allow-Origin"
+	HeaderAccessControlRequestHeaders  = "Access-Control-Request-Headers"
+	HeaderAccessControlRequestMethod   = "Access-Control-Request-Method"
 	HeaderAuthorization                = "Authorization"
 	HeaderCacheControl                 = "Cache-Control"
 	HeaderContentDisposition           = "Content-Disposition"
