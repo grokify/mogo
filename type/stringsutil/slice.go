@@ -244,6 +244,35 @@ func SliceChooseOnePreferredLowerTrimSpace(options, preferenceOrder []string) st
 	return strings.ToLower(strings.TrimSpace(options[0]))
 }
 
+// SlicesCompare returns 3 slices given 2 slices which represent intersection
+// sets. The first set is present in slice A but not B, second for both and
+// third present in slice B but not A.
+func SlicesCompare(sliceA, sliceB []string) ([]string, []string, []string) {
+	anob := []string{}
+	both := []string{}
+	bnoa := []string{}
+	mapA := map[string]int{}
+	for _, s := range sliceA {
+		mapA[s] = 1
+	}
+	mapB := map[string]int{}
+	for _, b := range sliceB {
+		if _, ok := mapA[b]; ok {
+			both = append(both, b)
+		} else {
+			bnoa = append(both, b)
+		}
+	}
+	for _, a := range sliceA {
+		if _, ok := mapB[a]; !ok {
+			anob = append(anob, a)
+		}
+	}
+	return SliceCondenseSpace(anob, true, true),
+		SliceCondenseSpace(both, true, true),
+		SliceCondenseSpace(bnoa, true, true)
+}
+
 /*
 func SliceJoinQuoteMaxLength(slice []string, begQuote, endQuote, sep string, maxLength int) []string {
 	words := []string{}
