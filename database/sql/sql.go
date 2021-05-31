@@ -69,11 +69,20 @@ func BuildSQLsInStrings(sqlFormat string, values []string, maxInsertLength int) 
 	return sqls
 }
 
+const SingleQuote = "'"
+
+var rxSingleQuote = regexp.MustCompile(`'`)
+
+func QuoteWord(s string) string {
+	return SingleQuote +
+		rxSingleQuote.ReplaceAllString(s, "''") +
+		SingleQuote
+}
+
 func SliceToSQL(slice []string) string {
 	newSlice := []string{}
-	quote := "'"
 	for _, el := range slice {
-		newSlice = append(newSlice, quote+el+quote)
+		newSlice = append(newSlice, QuoteWord(el))
 	}
 	return strings.Join(newSlice, ",")
 }
@@ -84,12 +93,11 @@ func SliceToSQLs(slice []string, maxInsertLength int) []string {
 	if maxInsertLength <= 0 {
 		maxInsertLength = MaxSQLLengthSOQL
 	}
-	quote := "'"
 	strIdx := 0
 	newSlicesWip := [][]string{}
 	newSlicesWip = append(newSlicesWip, []string{})
 	for _, el := range slice {
-		newStr := quote + el + quote
+		newStr := QuoteWord(el)
 		if maxInsertLength > 0 &&
 			(LenStringForSlice(newSlicesWip[strIdx], ",")+len(newStr)) > maxInsertLength {
 			newSlicesWip = append(newSlicesWip, []string{})
