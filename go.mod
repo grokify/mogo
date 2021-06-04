@@ -19,6 +19,7 @@ require (
 	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect
 	github.com/go-pg/pg v8.0.7+incompatible
 	github.com/golang/protobuf v1.5.2
+	github.com/google/go-querystring v1.1.0
 	github.com/gorilla/mux v1.8.0
 	github.com/grokify/base36 v1.0.2
 	github.com/grokify/bitcoinmath v0.0.0-20171208015713-6ef5b53bef73

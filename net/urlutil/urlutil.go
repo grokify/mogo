@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/google/go-querystring/query"
 	"github.com/grokify/simplego/type/stringsutil"
 )
 
@@ -138,6 +139,14 @@ func URLAddQueryValuesString(inputURL string, qry url.Values) (*url.URL, error) 
 	}
 	goURL.RawQuery = allQS.Encode()
 	return goURL, nil
+}
+
+func URLAddQueryInterfaceString(inputURL string, qry interface{}) (*url.URL, error) {
+	urlvals, err := query.Values(qry)
+	if err != nil {
+		return nil, err
+	}
+	return URLAddQueryValuesString(inputURL, urlvals)
 }
 
 // GetURLBody returns an HTTP response byte array body from a URL.
