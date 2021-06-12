@@ -26,9 +26,9 @@ func SplitTextLines(text string) []string {
 func ReadCSVFileSingleColumnValuesString(filename string, sep rune, stripBOM, hasHeader, trimSpace bool, colIdx uint, condenseUniqueSort bool) ([]string, error) {
 */
 
-func ReadFileCSVToSQLs(sqlFormat, filename string, sep rune, stripBOM, hasHeader, trimSpace bool, colIdx uint) ([]string, []string, error) {
+func ReadFileCSVToSQLs(sqlFormat, filename string, sep rune, hasHeader, trimSpace bool, colIdx uint) ([]string, []string, error) {
 	values, err := csvutil.ReadCSVFileSingleColumnValuesString(
-		filename, sep, stripBOM, hasHeader, trimSpace, colIdx, true)
+		filename, sep, hasHeader, trimSpace, colIdx, true)
 	if err != nil {
 		return []string{}, []string{}, err
 	}

@@ -22,16 +22,20 @@ If you encounter this close the file and call again with stripBom = true
 // NewReader will create a csv.Reader and optionally strip off the
 // byte order mark (BOM) if requested. Close file reader with
 // `defer f.Close()`.
-func NewReader(path string, comma rune, stripBom bool) (*csv.Reader, *os.File, error) {
+func NewReader(path string, comma rune) (*csv.Reader, *os.File, error) {
 	var csvReader *csv.Reader
 	var file *os.File
 	file, err := os.Open(path)
 	if err != nil {
 		return csvReader, file, err
 	}
-	if stripBom {
-		b3 := make([]byte, 3)
-		_, err := file.Read(b3)
+	bom := make([]byte, 3)
+	_, err = file.Read(bom)
+	if err != nil {
+		return csvReader, file, err
+	}
+	if bom[0] != 0xef || bom[1] != 0xbb || bom[2] != 0xbf {
+		_, err = file.Seek(0, 0) // Not a BOM -- seek back to the beginning
 		if err != nil {
 			return csvReader, file, err
 		}
@@ -139,8 +143,8 @@ func (ch *CSVHeader) RecordToMSS(row []string) map[string]string {
 	return mss
 }
 
-func FilterCSVFile(inPath, outPath string, inComma rune, inStripBom bool, andFilter map[string]stringsutil.MatchInfo) error {
-	reader, inFile, err := NewReader(inPath, inComma, inStripBom)
+func FilterCSVFile(inPath, outPath string, inComma rune, andFilter map[string]stringsutil.MatchInfo) error {
+	reader, inFile, err := NewReader(inPath, inComma)
 	if err != nil {
 		return err
 	}
@@ -165,7 +169,7 @@ func MergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStrip
 	defer outFile.Close()
 
 	for i, inPath := range inPaths {
-		reader, inFile, err := NewReader(inPath, inComma, inStripBom)
+		reader, inFile, err := NewReader(inPath, inComma)
 		if err != nil {
 			return err
 		}
@@ -252,14 +256,14 @@ func MergeFilterCSVFilesToJSON(inPaths []string, outPath string, inComma rune, i
 	return ioutil.WriteFile(outPath, bytes, perm)
 }
 */
-func MergeFilterCSVFilesToJSONL(inPaths []string, outPath string, inComma rune, inStripBom bool, andFilter map[string]stringsutil.MatchInfo) error {
+func MergeFilterCSVFilesToJSONL(inPaths []string, outPath string, inComma rune, andFilter map[string]stringsutil.MatchInfo) error {
 	outFh, err := os.Create(outPath)
 	if err != nil {
 		return err
 	}
 
 	for _, inPath := range inPaths {
-		reader, inFile, err := NewReader(inPath, inComma, inStripBom)
+		reader, inFile, err := NewReader(inPath, inComma)
 		if err != nil {
 			return err
 		}

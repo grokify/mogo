@@ -9,9 +9,9 @@ import (
 	"github.com/grokify/simplego/type/stringsutil"
 )
 
-func ReadCSVFileSingleColumnValuesString(filename string, sep rune, stripBOM, hasHeader, trimSpace bool, colIdx uint, condenseUniqueSort bool) ([]string, error) {
+func ReadCSVFileSingleColumnValuesString(filename string, sep rune, hasHeader, trimSpace bool, colIdx uint, condenseUniqueSort bool) ([]string, error) {
 	values := []string{}
-	csvReader, file, err := NewReader(filename, sep, stripBOM)
+	csvReader, file, err := NewReader(filename, sep)
 	if err != nil {
 		return values, nil
 	}
@@ -55,11 +55,11 @@ func ReadCSVFileSingleColumnValuesString(filename string, sep rune, stripBOM, ha
 	return values, nil
 }
 
-func ReadCSVFilesSingleColumnValuesString(files []string, sep rune, stripBOM, hasHeader, trimSpace bool, colIdx uint, condenseUniqueSort bool) ([]string, error) {
+func ReadCSVFilesSingleColumnValuesString(files []string, sep rune, hasHeader, trimSpace bool, colIdx uint, condenseUniqueSort bool) ([]string, error) {
 	values := []string{}
 	for _, file := range files {
 		fileValues, err := ReadCSVFileSingleColumnValuesString(
-			file, sep, stripBOM, hasHeader, trimSpace, colIdx, false)
+			file, sep, hasHeader, trimSpace, colIdx, false)
 		if err != nil {
 			return values, err
 		}
