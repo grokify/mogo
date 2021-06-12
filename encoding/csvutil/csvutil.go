@@ -9,16 +9,6 @@ import (
 	"github.com/grokify/simplego/type/stringsutil"
 )
 
-var DebugReadCSV = false // should not need to edit
-
-/*
-
-For UTF-8 BOM, csv.Reader.Read() will return error = "line 1, column 1: bare \" in non-quoted-field"
-
-If you encounter this close the file and call again with stripBom = true
-
-*/
-
 // NewReader will create a csv.Reader and optionally strip off the
 // byte order mark (BOM) if requested. Close file reader with
 // `defer f.Close()`.
@@ -29,6 +19,7 @@ func NewReader(path string, comma rune) (*csv.Reader, *os.File, error) {
 	if err != nil {
 		return csvReader, file, err
 	}
+	// remove UTF-8 BOM, csv.Reader.Read() will return error = "line 1, column 1: bare \" in non-quoted-field"
 	bom := make([]byte, 3)
 	_, err = file.Read(bom)
 	if err != nil {
@@ -187,75 +178,6 @@ func MergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStrip
 	return nil
 }
 
-/*
-type JsonRecordsInfo struct {
-	Meta    JsonRecordsInfoMeta `json:"meta"`
-	Records []map[string]string `json:"records"`
-}
-
-type JsonRecordsInfoMeta struct {
-	Count int `json:"count"`
-}*/
-/*
-func ReadMergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStripBom bool, andFilter map[string]stringsutil.MatchInfo) (table.DocumentsSet, error) {
-	//data := JsonRecordsInfo{Records: []map[string]string{}}
-	data := table.NewDocumentsSet()
-
-	for _, inPath := range inPaths {
-		reader, inFile, err := NewReader(inPath, inComma, inStripBom)
-		if err != nil {
-			return data, err
-		}
-
-		csvHeader := CSVHeader{}
-		j := -1
-
-		for {
-			line, err := reader.Read()
-			if err == io.EOF {
-				break
-			} else if err != nil {
-				return data, err
-			}
-			j += 1
-
-			if j == 0 {
-				csvHeader.Columns = line
-				continue
-			}
-			match, err := csvHeader.RecordMatch(line, andFilter)
-			if err != nil {
-				return data, err
-			}
-			if !match {
-				continue
-			}
-
-			mss := csvHeader.RecordToMSS(line)
-			data.Documents = append(data.Documents, mss)
-		}
-		err = inFile.Close()
-		if err != nil {
-			return data, err
-		}
-	}
-	data.Inflate()
-	return data, nil
-}
-*/
-/*
-func MergeFilterCSVFilesToJSON(inPaths []string, outPath string, inComma rune, inStripBom bool, perm os.FileMode, andFilter map[string]stringsutil.MatchInfo) error {
-	data, err := ReadMergeFilterCSVFiles(inPaths, outPath, inComma, inStripBom, andFilter)
-	if err != nil {
-		return err
-	}
-	bytes, err := jsonutil.MarshalSimple(data, "", "  ")
-	if err != nil {
-		return err
-	}
-	return ioutil.WriteFile(outPath, bytes, perm)
-}
-*/
 func MergeFilterCSVFilesToJSONL(inPaths []string, outPath string, inComma rune, andFilter map[string]stringsutil.MatchInfo) error {
 	outFh, err := os.Create(outPath)
 	if err != nil {
@@ -352,98 +274,3 @@ func WriteCSVFiltered(reader *csv.Reader, writer *csv.Writer, andFilter map[stri
 	}
 	return nil
 }
-
-/*
-func NewTableDataFilesSimple(filenames []string, sep string, hasHeader, trimSpace bool) (table.TableData, error) {
-	tbl := table.NewTableData()
-	for i, filename := range filenames {
-		filename = strings.TrimSpace(filename)
-		if len(filename) == 0 {
-			continue
-		}
-		tblx, err := NewTableDataFileSimple(filename, sep, hasHeader, trimSpace)
-		if err != nil {
-			return tbl, err
-		}
-		if len(tbl.Columns) == 0 {
-			tbl.Columns = tblx.Columns
-		} else {
-			curCols := strings.Join(tbl.Columns, ",")
-			nowCols := strings.Join(tblx.Columns, ",")
-			if curCols != nowCols {
-				if i == 0 {
-					// if len(tbl.Columns) > 0, i has to be > 0
-					panic("E_BAD_FILE_COUNTER_TABLE_COLUMNS")
-				}
-				return tbl, fmt.Errorf("CSV table definition mismatch [%s] AND [%s] for FILES [%s]",
-					curCols, nowCols,
-					filenames[i-1]+","+filename)
-			}
-		}
-		if len(tblx.Records) > 0 {
-			tbl.Records = append(tbl.Records, tblx.Records...)
-		}
-	}
-	return tbl, nil
-}
-
-func NewTableDataFileSimple(path string, sep string, hasHeader, trimSpace bool) (table.TableData, error) {
-	tbl := table.NewTableData()
-	data, err := ioutil.ReadFile(path)
-	if err != nil {
-		return tbl, err
-	}
-	lines := strings.Split(string(data), "\n")
-	for i, line := range lines {
-		if trimSpace {
-			line = strings.TrimSpace(line)
-		}
-		parts := strings.Split(line, sep)
-		parts = stringsutil.SliceTrimSpace(parts, false)
-		if hasHeader && i == 0 {
-			tbl.Columns = parts
-		} else {
-			tbl.Records = append(tbl.Records, parts)
-		}
-	}
-	return tbl, nil
-}
-
-// NewTableDataFileCSV reads in a CSV file and returns a TableData struct.
-func NewTableDataFileCSV(path string, comma rune, stripBom bool) (table.TableData, error) {
-	tbl := table.NewTableData()
-	csvReader, f, err := NewReader(path, comma, stripBom)
-	if err != nil {
-		return tbl, err
-	}
-	defer f.Close()
-	if DebugReadCSV {
-		i := -1
-		for {
-			line, err := csvReader.Read()
-			if err == io.EOF {
-				break
-			} else if err != nil {
-				return tbl, err
-			}
-			i += 1
-			if i == 0 {
-				tbl.Columns = line
-				continue
-			}
-			tbl.Records = append(tbl.Records, line)
-			if i > 2500 {
-				fmt.Printf("[%v] %v\n", i, strings.Join(line, ","))
-			}
-		}
-
-	} else {
-		lines, err := csvReader.ReadAll()
-		if err != nil {
-			return tbl, err
-		}
-		tbl.LoadMergedRows(lines)
-	}
-	return tbl, nil
-}
-*/

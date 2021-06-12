@@ -70,22 +70,3 @@ func ReadCSVFilesSingleColumnValuesString(files []string, sep rune, hasHeader, t
 	}
 	return values, nil
 }
-
-/*
-func ReadCSVFileSingleColumnValuesString(filename, sep string, hasHeader, trimSpace bool, col uint, condenseUniqueSort bool) ([]string, error) {
-	table, err := NewTableDataFileSimple(filename, sep, hasHeader, trimSpace)
-	if err != nil {
-		return []string{}, err
-	}
-	values := []string{}
-	for _, row := range table.Records {
-		if len(row) > int(col) {
-			values = append(values, row[col])
-		}
-	}
-	if condenseUniqueSort {
-		values = stringsutil.SliceCondenseSpace(values, true, true)
-	}
-	return values, nil
-}
-*/
