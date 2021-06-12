@@ -6,19 +6,19 @@ import (
 	"time"
 
 	"github.com/grokify/simplego/fmt/fmtutil"
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/simplego/time/timezone"
 )
 
 func main() {
-	zones := timeutil.ZonesSystem(timeutil.DefaultZoneDirs())
+	zones := timezone.ZonesSystem(timezone.DefaultZoneDirs())
 	if 1 == 1 {
-		zones = timeutil.ZonesPortable()
+		zones = timezone.ZonesPortable()
 	}
 	fmtutil.PrintJSON(zones)
 	fmtutil.PrintJSONMin(zones)
 
 	tz := "America/New_York"
-	offset, err := timeutil.ZoneOffsetSeconds(time.Now(), tz)
+	offset, err := timezone.ZoneOffsetSeconds(time.Now(), tz)
 	if err != nil {
 		log.Fatal(err)
 	}

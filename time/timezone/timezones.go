@@ -1,4 +1,4 @@
-package timeutil
+package timezone
 
 import (
 	"encoding/json"
