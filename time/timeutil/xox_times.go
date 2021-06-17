@@ -1,6 +1,3 @@
-// timeutil provides a set of time utilities including comparisons,
-// conversion to "DT8" int32 and "DT14" int64 formats and other
-// capabilities.
 package timeutil
 
 import (
