@@ -1,6 +1,9 @@
 package number
 
-import "sort"
+import (
+	"sort"
+	"strconv"
+)
 
 func SliceInt64ToFloat64(src []int64) []float64 {
 	out := []float64{}
@@ -26,4 +29,11 @@ func IntSliceDedupe(elems []int, sortElems bool) []int {
 		sort.Ints(deduped)
 	}
 	return deduped
+}
+
+func IntLength(num int) uint {
+	if num < 0 {
+		num = num * -1
+	}
+	return uint(len(strconv.Itoa(num)))
 }
