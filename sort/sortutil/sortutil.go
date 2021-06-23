@@ -4,7 +4,6 @@ import (
 	"errors"
 	"sort"
 	"strings"
-	"time"
 )
 
 // For now, use only for slices < 100 in length for performance.
@@ -49,13 +48,6 @@ func (p Uint16Slice) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
 
 // Sort is a convenience method.
 func (p Uint16Slice) Sort() { sort.Sort(p) }
-
-type TimeSlice []time.Time
-
-func (p TimeSlice) Len() int           { return len(p) }
-func (p TimeSlice) Less(i, j int) bool { return p[i].Before(p[j]) }
-func (p TimeSlice) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
-func (p TimeSlice) Sort()              { sort.Sort(p) }
 
 // Convenience wrappers for common cases
 
