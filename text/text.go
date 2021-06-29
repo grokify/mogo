@@ -4,12 +4,13 @@ import (
 	"fmt"
 )
 
-type Text struct {
-	Display string
-	Slug    string
-}
-
 type Texts []Text
+
+type Text struct {
+	Display  string
+	Slug     string
+	Children Texts
+}
 
 func (texts Texts) DisplayForSlug(slug string) (string, error) {
 	for _, try := range texts {
@@ -27,17 +28,3 @@ func (texts Texts) DisplayTexts() []string {
 	}
 	return displays
 }
-
-/*
-type TextSet struct {
-	Texts []Text
-}
-
-func (ts *TextSet) DisplayTexts() []string {
-	displays := []string{}
-	for _, txt := range ts.Texts {
-		displays = append(displays, txt.Display)
-	}
-	return displays
-}
-*/
