@@ -27,6 +27,8 @@ Documentation is provided using godoc and available on [GoDoc.org](https://godoc
 - [io](https://pkg.go.dev/github.com/grokify/simplego/io)
 - [log](https://pkg.go.dev/github.com/grokify/simplego/log)
 - [net](https://pkg.go.dev/github.com/grokify/simplego/net)
+  - [net/httputilmore](https://pkg.go.dev/github.com/grokify/simplego/net/httputilmore)
+  - [net/urlutil](https://pkg.go.dev/github.com/grokify/simplego/net/urlutil)
 - [os](https://pkg.go.dev/github.com/grokify/simplego/os)
 - mime
   - [multipart](https://pkg.go.dev/github.com/grokify/simplego/mime/multipart)
