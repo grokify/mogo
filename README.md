@@ -23,6 +23,20 @@ In terms of scope, `simplego` is designed to cover all common areas.
 
 Documentation is provided using godoc and available on [GoDoc.org](https://godoc.org/github.com/grokify/simplego).
 
+- [crypto](https://pkg.go.dev/github.com/grokify/simplego/crypto)
+- [io](https://pkg.go.dev/github.com/grokify/simplego/io)
+- [log](https://pkg.go.dev/github.com/grokify/simplego/log)
+- [net](https://pkg.go.dev/github.com/grokify/simplego/net)
+- [os](https://pkg.go.dev/github.com/grokify/simplego/os)
+- mime
+  - [multipart](https://pkg.go.dev/github.com/grokify/simplego/mime/multipart)
+- [sort](https://pkg.go.dev/github.com/grokify/simplego/sort)
+- [strconv](https://pkg.go.dev/github.com/grokify/simplego/strconv)
+- [text](https://pkg.go.dev/github.com/grokify/simplego/text)
+- [time](https://pkg.go.dev/github.com/grokify/simplego/time)
+  - [timeutil](https://pkg.go.dev/github.com/grokify/simplego/time/timeutil)
+- [type](https://pkg.go.dev/github.com/grokify/simplego/type)
+
 ## Installation
 
 ```bash
