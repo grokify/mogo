@@ -110,7 +110,7 @@ func ReadDirRxSubmatch(dir string, rx *regexp.Regexp, subMatchIdx uint, inclDirs
 	return entryMap, nil
 }
 
-func ReadDirRxSubmatchGreatestEntries(dir string, rx *regexp.Regexp, subMatchIdx uint, inclDirs, inclFiles, inclEmptyFiles bool) ([]os.DirEntry, error) {
+func ReadDirRxSubmatchEntriesGreatest(dir string, rx *regexp.Regexp, subMatchIdx uint, inclDirs, inclFiles, inclEmptyFiles bool) ([]os.DirEntry, error) {
 	entryMap, err := ReadDirRxSubmatch(dir, rx, subMatchIdx, inclDirs, inclFiles, inclEmptyFiles)
 	if err != nil {
 		return []os.DirEntry{}, err
@@ -123,17 +123,25 @@ func ReadDirRxSubmatchGreatestEntries(dir string, rx *regexp.Regexp, subMatchIdx
 	return entryMap[greatest], nil
 }
 
-// ReadDirRxSubmatchGreatestCapture takes a directory, regular expression and returns the greatest of a single submatch in the
-// regular expression.
-func ReadDirRxSubmatchGreatestCapture(dir string, rx *regexp.Regexp, subMatchIdx uint, inclDirs, inclFiles, inclEmptyFiles bool) (string, error) {
-	entryMap, err := ReadDirRxSubmatch(dir, rx, subMatchIdx, inclDirs, inclFiles, inclEmptyFiles)
+// ReadDirRxSubmatchCaptureGreatest takes a directory, regular expression and returns the greatest of a single submatch in the regular expression.
+func ReadDirRxSubmatchCaptureGreatest(dir string, rx *regexp.Regexp, subMatchIdx uint, inclDirs, inclFiles, inclEmptyFiles bool) (string, error) {
+	keysSorted, err := ReadDirRxSubmatchCaptures(dir, rx, subMatchIdx, inclDirs, inclFiles, inclEmptyFiles)
 	if err != nil {
 		return "", err
 	}
-	if len(entryMap) == 0 {
-		return "", errors.New("no match for ReadDirRxSubmatchGreatestMatch")
-	}
-	keysSorted := maputil.StringKeysSorted(entryMap)
 	greatest := keysSorted[len(keysSorted)-1]
 	return greatest, nil
+}
+
+// ReadDirRxSubmatchCaptures takes a directory, regular expression and returns the greatest of captures from the regular expression.
+func ReadDirRxSubmatchCaptures(dir string, rx *regexp.Regexp, subMatchIdx uint, inclDirs, inclFiles, inclEmptyFiles bool) ([]string, error) {
+	entryMap, err := ReadDirRxSubmatch(dir, rx, subMatchIdx, inclDirs, inclFiles, inclEmptyFiles)
+	if err != nil {
+		return nil, err
+	}
+	if len(entryMap) == 0 {
+		return nil, errors.New("no match for ReadDirRxSubmatchGreatestMatch")
+	}
+	keysSorted := maputil.StringKeysSorted(entryMap)
+	return keysSorted, nil
 }
