@@ -14,6 +14,7 @@ import (
 	"strings"
 
 	"github.com/grokify/simplego/encoding/jsonutil"
+	"github.com/grokify/simplego/os/osutil"
 	"github.com/pkg/errors"
 )
 
@@ -278,6 +279,7 @@ func DirFromPath(path string) (string, error) {
 	return dir, nil
 }
 
+/*
 func IsDir(name string) (bool, error) {
 	if fi, err := os.Stat(name); err != nil {
 		return false, err
@@ -319,9 +321,10 @@ func IsFileWithSizeGtZero(name string) (bool, error) {
 	}
 	return true, nil
 }
+*/
 
 func SplitBetter(path string) (dir, file string) {
-	isDir, err := IsDir(path)
+	isDir, err := osutil.IsDir(path)
 	if err != nil && isDir {
 		return dir, ""
 	}
@@ -329,13 +332,13 @@ func SplitBetter(path string) (dir, file string) {
 }
 
 func SplitBest(path string) (dir, file string, err error) {
-	isDir, err := IsDir(path)
+	isDir, err := osutil.IsDir(path)
 	if err != nil {
 		return "", "", err
 	} else if isDir {
 		return path, "", nil
 	}
-	isFile, err := IsFile(path)
+	isFile, err := osutil.IsFile(path)
 	if err != nil {
 		return "", "", err
 	} else if isFile {
@@ -368,7 +371,7 @@ func FilterFilenamesSizeGtZero(filepaths ...string) []string {
 		for _, envPath := range envPathVals {
 			envPath = strings.TrimSpace(envPath)
 
-			if isFile, err := IsFileWithSizeGtZero(envPath); isFile && err == nil {
+			if isFile, err := osutil.IsFileWithSizeGtZero(envPath); isFile && err == nil {
 				filepathsExist = append(filepathsExist, envPath)
 			}
 		}
@@ -377,7 +380,7 @@ func FilterFilenamesSizeGtZero(filepaths ...string) []string {
 }
 
 func RemoveAllChildren(dir string) error {
-	isDir, err := IsDir(dir)
+	isDir, err := osutil.IsDir(dir)
 	if err != nil {
 		return err
 	}

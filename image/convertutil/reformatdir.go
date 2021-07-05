@@ -8,6 +8,7 @@ import (
 
 	"github.com/grokify/simplego/image/imageutil"
 	"github.com/grokify/simplego/io/ioutilmore"
+	"github.com/grokify/simplego/os/osutil"
 	"github.com/pkg/errors"
 )
 
@@ -46,7 +47,7 @@ func reformatImagesSubdir(baseSrcDir, baseOutDir, dirPart string, copyType CopyT
 		thisSrcDir = filepath.Join(thisSrcDir, dirPart)
 		thisOutDir = filepath.Join(thisOutDir, dirPart)
 
-		isDir, err := ioutilmore.IsDir(thisSrcDir)
+		isDir, err := osutil.IsDir(thisSrcDir)
 		if err != nil {
 			return err
 		}
@@ -118,7 +119,7 @@ func reformatImagesSubdirFile(thisSrcFile, thisOutFile string, copyType CopyType
 		return nil
 	}
 	if !rewrite {
-		isFile, err := ioutilmore.IsFile(thisOutFile)
+		isFile, err := osutil.IsFile(thisOutFile)
 		if err == nil && isFile {
 			return nil
 		}

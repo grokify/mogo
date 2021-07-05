@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/grokify/simplego/cmd/cmdutil"
-	"github.com/grokify/simplego/io/ioutilmore"
+	"github.com/grokify/simplego/os/osutil"
 	"github.com/jessevdk/go-flags"
 )
 
@@ -42,7 +42,7 @@ func main() {
 		}
 	}
 
-	isFile, err := ioutilmore.IsFile(opts.File)
+	isFile, err := osutil.IsFile(opts.File)
 	if err != nil {
 		log.Fatal(err)
 	} else if !isFile {
