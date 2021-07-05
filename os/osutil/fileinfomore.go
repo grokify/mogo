@@ -20,6 +20,6 @@ func NewFileInfoMoreFromPath(path string) (FileInfoMore, error) {
 		return FileInfoMore{}, err
 	}
 	fm := FileInfoMore{FileInfo: fi}
-	fm.ModAge = time.Now().Sub(fi.ModTime())
+	fm.ModAge = time.Since(fi.ModTime())
 	return fm, nil
 }
