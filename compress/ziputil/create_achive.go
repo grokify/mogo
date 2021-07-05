@@ -7,15 +7,16 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/grokify/simplego/io/ioutilmore"
+	"github.com/grokify/simplego/os/osutil"
 	"github.com/pkg/errors"
 )
 
 func ZipFilesRx(zipfile, dir string, rx *regexp.Regexp, removePaths bool) error {
-	_, filepaths, err := ioutilmore.ReadDirMore(dir, rx, true, false)
+	entries, err := osutil.ReadDirMore(dir, rx, false, true, false)
 	if err != nil {
 		return err
 	}
+	filepaths := osutil.DirEntrySlice(entries).Names(dir, true)
 	return ZipFiles(zipfile, removePaths, filepaths)
 }
 

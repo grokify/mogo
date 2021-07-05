@@ -11,11 +11,9 @@ import (
 	"path"
 	"path/filepath"
 	"regexp"
-	"sort"
 	"strings"
 
 	"github.com/grokify/simplego/encoding/jsonutil"
-	"github.com/grokify/simplego/type/maputil"
 	"github.com/pkg/errors"
 )
 
@@ -94,6 +92,7 @@ func FileInfosSplit(all []os.FileInfo, inclDotDirs bool) ([]os.FileInfo, []os.Fi
 	return subdirs, regular
 }
 
+/*
 // DirEntriesNameRxVarFirsts returns a slice of the first
 // regexp match encountered.
 func DirEntriesNameRxVarFirsts(dir string, rx1 *regexp.Regexp) ([]string, error) {
@@ -247,6 +246,7 @@ func DirFilesRegexpSubmatchGreatestSubmatch(dir string, rx1 *regexp.Regexp, nonZ
 	}
 	return strs[len(strs)-1], nil
 }
+*/
 
 func DirFromPath(path string) (string, error) {
 	path = strings.TrimRight(path, "/\\")

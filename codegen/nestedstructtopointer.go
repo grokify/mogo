@@ -1,34 +1,42 @@
 package codegen
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
 
-	"github.com/grokify/simplego/io/ioutilmore"
+	"github.com/grokify/simplego/os/osutil"
 	"github.com/pkg/errors"
 )
 
 func ConvertFilesInPlaceNestedstructsToPointers(dir string, rx *regexp.Regexp) ([]string, error) {
-	filepaths := []string{}
+	filenames := []string{}
 	if rx == nil {
 		rx = regexp.MustCompile(`.*\.go$`)
 	}
-	files, err := ioutilmore.DirEntriesRxSizeGt0(dir, ioutilmore.File, rx)
+	entries, err := osutil.ReadDirMore(dir, rx, false, true, false)
+	// files, err := ioutilmore.DirEntriesRxSizeGt0(dir, ioutilmore.File, rx)
 	if err != nil {
-		return filepaths, errors.Wrap(err, "codegen.ConvertFilesInPlace.DirEntriesReNotEmpty")
+		return filenames, errors.Wrap(err, "codegen.ConvertFilesInPlace.ReadDirMore")
 	}
-	for _, file := range files {
-		filepath := filepath.Join(dir, file.Name())
-		err := ConvertFileNestedstructsToPointers(filepath, filepath, file.Mode().Perm())
+	//filenames := osutil.DirEntrySlice(entries).Names(dir, true)
+	//for _, filename := range filenames {
+	for _, entry := range entries {
+		filename := filepath.Join(dir, entry.Name())
+		fileinfo, err := entry.Info()
 		if err != nil {
-			return filepaths, errors.Wrap(err, "codegen.ConvertFilesInPlace.ConvertFile")
+			return filenames, errors.Wrap(err, fmt.Sprintf("codegen.ConvertFilesInPlaceNestedstructsToPointers...entry.Info() [%s]", entry.Name()))
 		}
-		filepaths = append(filepaths, filepath)
+		err = ConvertFileNestedstructsToPointers(filename, filename, fileinfo.Mode().Perm())
+		if err != nil {
+			return filenames, errors.Wrap(err, "codegen.ConvertFilesInPlace.ConvertFile")
+		}
+		filenames = append(filenames, filename)
 	}
-	return filepaths, nil
+	return filenames, nil
 }
 
 func ConvertFileNestedstructsToPointers(inFile, outFile string, perm os.FileMode) error {
