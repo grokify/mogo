@@ -31,19 +31,6 @@ func EmptyAll(name string) error {
 	return nil
 }
 
-// Exists checks whether the named filepath exists or not for
-// a file or directory.
-func Exists(name string) (bool, error) {
-	_, err := os.Stat(name)
-	if err == nil {
-		return true, nil
-	}
-	if os.IsNotExist(err) {
-		return false, nil
-	}
-	return true, err
-}
-
 // FileModAge returns a time.Duration representing the age
 // of the named file from FileInfo.ModTime().
 func FileModAge(name string) (time.Duration, error) {
@@ -52,13 +39,13 @@ func FileModAge(name string) (time.Duration, error) {
 		dur0, _ := time.ParseDuration("0s")
 		return dur0, err
 	}
-	return time.Now().Sub(stat.ModTime()), nil
+	return time.Since(stat.ModTime()), nil
 }
 
 // FileModAgeFromInfo returns the file last modification
 // age as a time.Duration.
 func FileModAgeFromInfo(fi os.FileInfo) time.Duration {
-	return time.Now().Sub(fi.ModTime())
+	return time.Since(fi.ModTime())
 }
 
 // GetFileInfo returns an os.FileInfo from a filepath.
