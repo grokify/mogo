@@ -65,9 +65,9 @@ func ReadSubdirMax(dir string, rx *regexp.Regexp) (os.DirEntry, error) {
 	return sdirs[len(sdirs)-1], nil
 }
 
-// ReadDirRxSubmatch takes a directory, regular expression and boolean to indicate
-// whether to include zero size files and returns the greatest of a single match in the
-// regular expression.
+// ReadDirRxSubmatch takes a directory, regular expression and boolean to
+// indicate whether to include zero size files and returns the greatest of
+// a single match in the regular expression.
 func ReadDirRxSubmatch(dir string, rx *regexp.Regexp, subMatchIdx uint, inclDirs, inclFiles, inclEmptyFiles bool) (map[string][]os.DirEntry, error) {
 	entryMap := map[string][]os.DirEntry{}
 
@@ -123,7 +123,8 @@ func ReadDirRxSubmatchEntriesGreatest(dir string, rx *regexp.Regexp, subMatchIdx
 	return entryMap[greatest], nil
 }
 
-// ReadDirRxSubmatchCaptureGreatest takes a directory, regular expression and returns the greatest of a single submatch in the regular expression.
+// ReadDirRxSubmatchCaptureGreatest takes a directory, regular expression
+// and returns the greatest of a single submatch in the regular expression.
 func ReadDirRxSubmatchCaptureGreatest(dir string, rx *regexp.Regexp, subMatchIdx uint, inclDirs, inclFiles, inclEmptyFiles bool) (string, error) {
 	keysSorted, err := ReadDirRxSubmatchCaptures(dir, rx, subMatchIdx, inclDirs, inclFiles, inclEmptyFiles)
 	if err != nil {
@@ -133,7 +134,8 @@ func ReadDirRxSubmatchCaptureGreatest(dir string, rx *regexp.Regexp, subMatchIdx
 	return greatest, nil
 }
 
-// ReadDirRxSubmatchCaptures takes a directory, regular expression and returns the greatest of captures from the regular expression.
+// ReadDirRxSubmatchCaptures takes a directory, regular expression and
+// returns the greatest of captures from the regular expression.
 func ReadDirRxSubmatchCaptures(dir string, rx *regexp.Regexp, subMatchIdx uint, inclDirs, inclFiles, inclEmptyFiles bool) ([]string, error) {
 	entryMap, err := ReadDirRxSubmatch(dir, rx, subMatchIdx, inclDirs, inclFiles, inclEmptyFiles)
 	if err != nil {
