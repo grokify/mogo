@@ -101,3 +101,17 @@ func WriteCSVFiltered(reader *csv.Reader, writer *csv.Writer, andFilter map[stri
 	}
 	return nil
 }
+
+// WriteFile writes a `[][]string` to a file.
+func WriteFile(filename string, rows [][]string) error {
+	c, f, err := NewWriterFile(filename)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	err = c.WriteAll(rows)
+	if err != nil {
+		return err
+	}
+	return f.Sync()
+}
