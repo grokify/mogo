@@ -9,6 +9,8 @@ import (
 	"golang.org/x/net/html/atom"
 )
 
+// TokensBetweenAtom returns the tokens that represent the `innerHtml`
+// between a start and end tag token.
 func TokensBetweenAtom(z *html.Tokenizer, skipErrors, inclusive bool, htmlAtom atom.Atom) ([]html.Token, error) {
 	return TokensBetween(z, skipErrors, inclusive,
 		TokenFilters{{
