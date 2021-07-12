@@ -83,9 +83,7 @@ func NextStartToken(z *html.Tokenizer, skipErrors bool, htmlAtoms ...atom.Atom) 
 			}
 		case html.StartTagToken:
 			tok := z.Token()
-			if len(htmlAtoms) == 0 {
-				return tok, nil
-			} else if atoms.Exists(tok.DataAtom) {
+			if atoms.Exists(tok.DataAtom) {
 				return tok, nil
 			}
 		}
@@ -94,16 +92,16 @@ func NextStartToken(z *html.Tokenizer, skipErrors bool, htmlAtoms ...atom.Atom) 
 		fmt.Errorf("token not found for [%s]", strings.Join(atoms.Names(), ","))
 }
 
-func NextTextToken(z *html.Tokenizer, skipErrors bool, atomFilter ...atom.Atom) (html.Token, error) {
-	atoms := NewAtomSet(atomFilter...)
+func NextTextToken(z *html.Tokenizer, skipErrors bool, htmlAtoms ...atom.Atom) (html.Token, error) {
+	atoms := NewAtomSet(htmlAtoms...)
 	for {
 		tokType := z.Next()
 		tok := z.Token()
 		if !skipErrors && tokType == html.ErrorToken {
 			return tok, z.Err()
-		} else if len(atomFilter) == 0 && tokType == html.TextToken {
+		} else if atoms.Len() == 0 && tokType == html.TextToken {
 			return tok, nil
-		} else if len(atomFilter) > 0 &&
+		} else if atoms.Len() > 0 &&
 			tokType == html.StartTagToken &&
 			atoms.Exists(tok.DataAtom) {
 			return NextTextToken(z, skipErrors)
