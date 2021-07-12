@@ -9,7 +9,17 @@ import (
 	"golang.org/x/net/html/atom"
 )
 
-func TokensBewteen(z *html.Tokenizer, skipErrors bool, begin, end TokenFilters, inclusive bool) ([]html.Token, error) {
+func TokensBetweenAtom(z *html.Tokenizer, skipErrors, inclusive bool, htmlAtom atom.Atom) ([]html.Token, error) {
+	return TokensBetween(z, skipErrors, inclusive,
+		TokenFilters{{
+			TokenType: html.StartTagToken,
+			AtomSet:   NewAtomSet(htmlAtom)}},
+		TokenFilters{{
+			TokenType: html.EndTagToken,
+			AtomSet:   NewAtomSet(htmlAtom)}})
+}
+
+func TokensBetween(z *html.Tokenizer, skipErrors, inclusive bool, begin, end TokenFilters) ([]html.Token, error) {
 	tokens := []html.Token{}
 	tmsBegin, err := NextTokenMatch(z, skipErrors, false, false, begin...)
 	if err != nil {
@@ -49,7 +59,8 @@ func NextTokenMatch(z *html.Tokenizer, skipErrors, includeChain, includeMatch bo
 					return matches, nil
 				}
 			}
-		} else if includeChain {
+		}
+		if includeChain {
 			matches = append(matches, token)
 		}
 	}
