@@ -7,9 +7,9 @@ import (
 )
 
 const (
+	TypeAPI               = "api"
 	TypeMethod            = "method"
 	TypeEvent             = "event"
-	TypeMethodAliasAPI    = "api"
 	TypeEventAliasWebhook = "webhook"
 )
 
@@ -38,8 +38,8 @@ func ParseOperationType(input, def string) string {
 	switch inputLc {
 	case TypeMethod:
 		return TypeMethod
-	case TypeMethodAliasAPI:
-		return TypeMethod
+	case TypeAPI:
+		return TypeAPI
 	case TypeEvent:
 		return TypeEvent
 	case TypeEventAliasWebhook:
