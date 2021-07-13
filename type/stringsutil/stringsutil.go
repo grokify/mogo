@@ -140,11 +140,22 @@ func CondenseSpace(s string) string {
 
 func StripControl(s string) string { return rxControl.ReplaceAllString(s, "") }
 
+/*
 func OrDefault(s, defaultValue string) string {
 	if len(s) == 0 {
 		return defaultValue
 	}
 	return s
+}
+*/
+
+func FirstNonEmpty(vals ...string) string {
+	for _, val := range vals {
+		if len(val) > 0 {
+			return val
+		}
+	}
+	return ""
 }
 
 // TrimSpaceOrDefault trims spaces and replaces default value if
