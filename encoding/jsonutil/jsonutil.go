@@ -6,7 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
+	"io/fs"
+	"os"
 )
 
 var (
@@ -83,7 +84,7 @@ func MarshalBase64(i interface{}) (string, error) {
 }
 
 func UnmarshalReader(r io.Reader, iface interface{}) ([]byte, error) {
-	bytes, err := ioutil.ReadAll(r)
+	bytes, err := io.ReadAll(r)
 	if err != nil {
 		return bytes, err
 	}
@@ -91,7 +92,7 @@ func UnmarshalReader(r io.Reader, iface interface{}) ([]byte, error) {
 }
 
 func PrettyPrintReader(r io.Reader, prefix, indent string) ([]byte, error) {
-	bytes, err := ioutil.ReadAll(r)
+	bytes, err := io.ReadAll(r)
 	if err != nil {
 		return bytes, err
 	}
@@ -101,9 +102,17 @@ func PrettyPrintReader(r io.Reader, prefix, indent string) ([]byte, error) {
 }
 
 func ReadFile(filename string, v interface{}) ([]byte, error) {
-	bytes, err := ioutil.ReadFile(filename)
+	bytes, err := os.ReadFile(filename)
 	if err != nil {
 		return bytes, err
 	}
 	return bytes, json.Unmarshal(bytes, v)
+}
+
+func WriteFile(filename string, v interface{}, prefix, indent string, perm fs.FileMode) error {
+	bytes, err := MarshalSimple(v, prefix, indent)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(filename, bytes, perm)
 }
