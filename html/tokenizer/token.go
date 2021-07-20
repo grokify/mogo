@@ -22,7 +22,7 @@ func ParseLink(tokens ...html.Token) (string, string, error) {
 	if len(tokens) < 3 {
 		return "", "", fmt.Errorf("less than 3 tokens [%d]", len(tokens))
 	}
-	href, err := TokenAttribute(tokens[0], "href", true)
+	href, err := TokenAttribute(tokens[0], AttrHref, true)
 	if err != nil {
 		return href, "", errors.New("href not found")
 	}
