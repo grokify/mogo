@@ -1,10 +1,10 @@
 package tokenizer
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
+	"github.com/pkg/errors"
 	"golang.org/x/net/html"
 )
 
@@ -18,13 +18,16 @@ func (tokens Tokens) String() string {
 	return strings.Join(toks, "")
 }
 
-func ParseLink(tokens ...html.Token) (string, string, error) {
+func ParseLink(tokens ...html.Token) (href string, desc string, err error) {
 	if len(tokens) < 3 {
-		return "", "", fmt.Errorf("less than 3 tokens [%d]", len(tokens))
+		return "", "", fmt.Errorf("less than 3 tokens, token count [%d]", len(tokens))
 	}
-	href, err := TokenAttribute(tokens[0], AttrHref, true)
+	href, err = TokenAttribute(tokens[0], AttrHref)
 	if err != nil {
-		return href, "", errors.New("href not found")
+		return href, "", errors.Wrap(err,
+			fmt.Sprintf("href not found in token [%s]",
+				tokens[0].DataAtom))
 	}
-	return href, Tokens(tokens[1 : len(tokens)-1]).String(), nil
+	desc = Tokens(tokens[1 : len(tokens)-1]).String()
+	return
 }
