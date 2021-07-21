@@ -28,17 +28,12 @@ func (attrs Attributes) GetOne(attributeKey string) (html.Attribute, error) {
 	return matches[0], nil
 }
 
-func TokenAttribute(token html.Token, attrName string, attrLower bool) (string, error) {
-	attrNameMatch := attrName
-	if attrLower {
-		attrNameMatch = strings.ToLower(attrNameMatch)
-	}
+func TokenAttribute(token html.Token, attrName string) (string, error) {
+	attrNameWant := strings.TrimSpace(strings.ToLower(attrName))
 	for _, attr := range token.Attr {
-		if attrLower && strings.ToLower(attr.Key) == attrNameMatch {
-			return attr.Val, nil
-		} else if !attrLower && attr.Key == attrNameMatch {
+		if strings.TrimSpace(strings.ToLower(attr.Key)) == attrNameWant {
 			return attr.Val, nil
 		}
 	}
-	return "", fmt.Errorf("attribute not found [%s] matchLower [%v]", attrName, attrLower)
+	return "", fmt.Errorf("attribute not found [%s]", attrName)
 }
