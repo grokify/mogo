@@ -60,9 +60,12 @@ var (
 	EmptyTimeSliceError   = errors.New("empty time slice")
 	OutOfBoundsError      = errors.New("out of bounds")
 	OutOfBoundsLowerError = errors.New("out of bounds lower")
+	OutOfBoundsUpperError = errors.New("out of bounds upper")
 )
 
-func (ts TimeSlice) RangeLower(t time.Time) (time.Time, error) {
+// RangeLower returns the TimeSlice time value for the range
+// lower than or equal to the supplied time.
+func (ts TimeSlice) RangeLower(t time.Time, inclusive bool) (time.Time, error) {
 	if len(ts) == 0 {
 		return t, EmptyTimeSliceError
 	}
@@ -74,9 +77,31 @@ func (ts TimeSlice) RangeLower(t time.Time) (time.Time, error) {
 	for i := 1; i < len(ts); i++ {
 		if t.Before(ts[i]) {
 			return ts[i-1], nil
+		} else if inclusive && t.Equal(ts[i]) {
+			return ts[i-1], nil
 		}
 	}
 	return ts[len(ts)-1], nil
+}
+
+// RangeUpper returns the TimeSlice time value for the range
+// lower than or equal to the supplied time. The time `t` must
+// be less than or equal to the upper range.
+func (ts TimeSlice) RangeUpper(t time.Time, inclusive bool) (time.Time, error) {
+	if len(ts) == 0 {
+		return t, EmptyTimeSliceError
+	} else if ts[len(ts)-1].Before(t) {
+		return t, OutOfBoundsUpperError
+	}
+	for i := range ts {
+		tMax := ts[len(ts)-1-i]
+		if t.Before(tMax) {
+			return tMax, nil
+		} else if inclusive && t.Equal(tMax) {
+			return tMax, nil
+		}
+	}
+	return ts[0], nil
 }
 
 func ParseTimeSlice(format string, times []string) (TimeSlice, error) {
