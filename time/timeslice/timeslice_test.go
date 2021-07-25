@@ -1,4 +1,4 @@
-package sortutil
+package timeslice
 
 import (
 	"sort"

@@ -7,7 +7,7 @@ import (
 
 	"github.com/grokify/base36"
 	"github.com/grokify/simplego/math/mathutil"
-	"github.com/grokify/simplego/sort/sortutil"
+	"github.com/grokify/simplego/time/timeslice"
 	"github.com/grokify/simplego/time/timeutil"
 )
 
@@ -126,11 +126,11 @@ func MonthContinuousIsYearBegin(monthc uint64) bool {
 
 // TimeSeriesMonth returns time series of months given start and end
 // input times.
-func TimeSeriesMonth(sortAsc bool, times ...time.Time) sortutil.TimeSlice {
+func TimeSeriesMonth(sortAsc bool, times ...time.Time) timeslice.TimeSlice {
 	min, max := timeutil.SliceMinMax(times)
 	minMonth := timeutil.MonthStart(min)
 	maxMonth := timeutil.MonthStart(max)
-	timeSeries := sortutil.TimeSlice{}
+	timeSeries := timeslice.TimeSlice{}
 	curMonth := minMonth
 	for curMonth.Before(maxMonth) || curMonth.Equal(maxMonth) {
 		timeSeries = append(timeSeries, curMonth)

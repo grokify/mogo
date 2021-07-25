@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+/*
 // TimeSlice is used for sorting. e.g.
 // sort.Sort(sort.Reverse(timeSlice))
 // sort.Sort(timeSlice)
@@ -17,6 +18,7 @@ type TimeSlice []time.Time
 func (s TimeSlice) Less(i, j int) bool { return s[i].Before(s[j]) }
 func (s TimeSlice) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 func (s TimeSlice) Len() int           { return len(s) }
+*/
 
 func Sort(times []time.Time) []time.Time {
 	sort.Slice(
