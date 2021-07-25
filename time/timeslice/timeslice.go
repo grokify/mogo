@@ -62,7 +62,7 @@ var (
 	OutOfBoundsLowerError = errors.New("out of bounds lower")
 )
 
-func (ts TimeSlice) BucketLower(t time.Time) (time.Time, error) {
+func (ts TimeSlice) RangeLower(t time.Time) (time.Time, error) {
 	if len(ts) == 0 {
 		return t, EmptyTimeSliceError
 	}
