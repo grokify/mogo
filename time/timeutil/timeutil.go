@@ -18,6 +18,34 @@ const (
 	MillisToNanoMultiplier = 1000000
 )
 
+// TimeOpts represnts a struct for `time.Date`.
+type TimeOpts struct {
+	Year       int
+	Month      int
+	Day        int
+	Hour       int
+	Minute     int
+	Second     int
+	Nanosecond int
+	Location   *time.Location
+}
+
+// Time returns a `time.Time` struct.
+func (opts TimeOpts) Time() time.Time {
+	if opts.Location == nil {
+		opts.Location = time.UTC
+	}
+	return time.Date(
+		opts.Year,
+		time.Month(opts.Month),
+		opts.Day,
+		opts.Hour,
+		opts.Minute,
+		opts.Second,
+		opts.Nanosecond,
+		opts.Location)
+}
+
 func MustParse(layout, value string) time.Time {
 	t, err := time.Parse(layout, value)
 	if err != nil {
