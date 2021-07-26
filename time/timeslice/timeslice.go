@@ -2,7 +2,6 @@ package timeslice
 
 import (
 	"errors"
-	"fmt"
 	"sort"
 	"time"
 )
@@ -106,7 +105,6 @@ func (ts TimeSlice) RangeUpper(t time.Time, inclusive bool) (time.Time, error) {
 	for i := range sortedTs {
 		// check times in reverse order
 		nextRangeUpper := sortedTs[len(sortedTs)-1-i]
-		fmt.Printf("nextRangeUpper [%s]\n", nextRangeUpper.Format(time.RFC3339))
 		if t.After(nextRangeUpper) {
 			return curRangeUpper, nil
 		} else if inclusive && t.Equal(nextRangeUpper) {
