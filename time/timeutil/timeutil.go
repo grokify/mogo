@@ -30,7 +30,8 @@ type TimeOpts struct {
 	Location   *time.Location
 }
 
-// Time returns a `time.Time` struct.
+// Time returns a `time.Time` struct. If no `Location`
+// is set, `time.UTC` is used.
 func (opts TimeOpts) Time() time.Time {
 	if opts.Location == nil {
 		opts.Location = time.UTC
