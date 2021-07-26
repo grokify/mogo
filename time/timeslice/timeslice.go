@@ -2,6 +2,7 @@ package timeslice
 
 import (
 	"errors"
+	"fmt"
 	"sort"
 	"time"
 )
@@ -69,19 +70,23 @@ func (ts TimeSlice) RangeLower(t time.Time, inclusive bool) (time.Time, error) {
 	if len(ts) == 0 {
 		return t, EmptyTimeSliceError
 	}
-	if ts[0].After(t) { // lower bound too high
+	sortedTs := ts.Dedupe()
+	sort.Sort(sortedTs)
+
+	if sortedTs[0].After(t) {
 		return t, OutOfBoundsLowerError
-	} else if len(ts) == 1 {
-		return ts[0], nil
 	}
-	for i := 1; i < len(ts); i++ {
-		if t.Before(ts[i]) {
-			return ts[i-1], nil
-		} else if inclusive && t.Equal(ts[i]) {
-			return ts[i-1], nil
+
+	curRangeLower := sortedTs[0]
+	for _, nextRangeLower := range sortedTs {
+		if t.Before(nextRangeLower) {
+			return curRangeLower, nil
+		} else if inclusive && t.Equal(nextRangeLower) {
+			return nextRangeLower, nil
 		}
+		curRangeLower = nextRangeLower
 	}
-	return ts[len(ts)-1], nil
+	return sortedTs[len(sortedTs)-1], nil
 }
 
 // RangeUpper returns the TimeSlice time value for the range
@@ -90,18 +95,26 @@ func (ts TimeSlice) RangeLower(t time.Time, inclusive bool) (time.Time, error) {
 func (ts TimeSlice) RangeUpper(t time.Time, inclusive bool) (time.Time, error) {
 	if len(ts) == 0 {
 		return t, EmptyTimeSliceError
-	} else if ts[len(ts)-1].Before(t) {
+	}
+	sortedTs := ts.Dedupe()
+	sort.Sort(sortedTs)
+
+	if sortedTs[len(sortedTs)-1].Before(t) {
 		return t, OutOfBoundsUpperError
 	}
-	for i := range ts {
-		tMax := ts[len(ts)-1-i]
-		if t.Before(tMax) {
-			return tMax, nil
-		} else if inclusive && t.Equal(tMax) {
-			return tMax, nil
+	curRangeUpper := sortedTs[len(sortedTs)-1]
+	for i := range sortedTs {
+		// check times in reverse order
+		nextRangeUpper := sortedTs[len(sortedTs)-1-i]
+		fmt.Printf("nextRangeUpper [%s]\n", nextRangeUpper.Format(time.RFC3339))
+		if t.After(nextRangeUpper) {
+			return curRangeUpper, nil
+		} else if inclusive && t.Equal(nextRangeUpper) {
+			return nextRangeUpper, nil
 		}
+		curRangeUpper = nextRangeUpper
 	}
-	return ts[0], nil
+	return sortedTs[0], nil
 }
 
 func ParseTimeSlice(format string, times []string) (TimeSlice, error) {
