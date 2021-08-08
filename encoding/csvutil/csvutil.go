@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/grokify/simplego/type/stringsutil"
 )
@@ -34,6 +35,14 @@ func NewReader(path string, comma rune) (*csv.Reader, *os.File, error) {
 	csvReader = csv.NewReader(file)
 	csvReader.Comma = comma
 	return csvReader, file, nil
+}
+
+func trimUTF8ByteOrderMarkString(s string) string {
+	byteOrderMarkAsString := string('\uFEFF')
+	if strings.HasPrefix(s, byteOrderMarkAsString) {
+		return strings.TrimPrefix(s, byteOrderMarkAsString)
+	}
+	return s
 }
 
 type CSVHeader struct {
