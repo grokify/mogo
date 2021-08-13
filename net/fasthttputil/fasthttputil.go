@@ -14,7 +14,5 @@ func GetReqQueryParam(ctx *fasthttp.RequestCtx, headerName string) string {
 func GetSplitReqQueryParam(ctx *fasthttp.RequestCtx, headerName, sep string) []string {
 	return stringsutil.SliceTrimSpace(
 		strings.Split(
-			string(ctx.QueryArgs().Peek(headerName)), sep),
-		true,
-	)
+			string(ctx.QueryArgs().Peek(headerName)), sep))
 }
