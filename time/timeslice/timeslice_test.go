@@ -1,7 +1,6 @@
 package timeslice
 
 import (
-	"fmt"
 	"sort"
 	"strings"
 	"testing"
@@ -112,7 +111,6 @@ var timeRangeTests = []struct {
 
 func TestTimeRange(t *testing.T) {
 	for i, tt := range timeRangeTests {
-		fmt.Printf("TEST [%d]\n", i)
 		timeSlice, err := ParseTimeSlice(time.RFC3339, tt.timeRange)
 		if err != nil {
 			t.Errorf("time slice did not parse as RFC-3339 [%s] error [%s]",
