@@ -28,7 +28,7 @@ func Unshift(a []string, x string) []string {
 // empty lines. `unique` dedupes lines and `sort` preforms
 // a sort on the results.
 func SliceCondenseSpace(lines []string, dedupeResults, sortResults bool) []string {
-	results := SliceTrimSpace(lines, true)
+	results := SliceTrim(lines, " ", true)
 	if dedupeResults {
 		results = Dedupe(results)
 	}
@@ -39,9 +39,12 @@ func SliceCondenseSpace(lines []string, dedupeResults, sortResults bool) []strin
 }
 
 // SliceTrimSpace removes leading and trailing spaces per
-// string and optionally removes empty strings.
-func SliceTrimSpace(lines []string, condense bool) []string {
-	return SliceTrim(lines, " ", condense)
+// string.
+func SliceTrimSpace(s []string) []string {
+	for i, v := range s {
+		s[i] = strings.TrimSpace(v)
+	}
+	return s
 }
 
 /*
