@@ -47,13 +47,6 @@ func SliceTrimSpace(s []string) []string {
 	return s
 }
 
-/*
-// SliceTrimSpace removes leading and trailing spaces per
-// string and optionally removes empty strings.
-func SliceTrimSpaceMore(lines []string, condense bool) []string {
-	return SliceTrim(lines, " ", condense)
-}*/
-
 // SliceTrim trims each line in a slice of lines using a
 // provided cut string.
 func SliceTrim(lines []string, cutstr string, condense bool) []string {
