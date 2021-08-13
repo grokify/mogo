@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-
-	"github.com/grokify/simplego/type/stringsutil"
 )
 
 // JoinAny takes an array of interface{} and converts
@@ -26,9 +24,11 @@ func JoinInt(a []int, sep string) string {
 	return strings.Join(strs, sep)
 }
 
+/*
 func JoinCondenseTrimSpace(slice []string, sep string) string {
 	return strings.Join(stringsutil.SliceTrimSpace(slice, true), sep)
 }
+*/
 
 func JoinQuoteMaxLength(slice []string, begQuote, endQuote, sep string, maxLength int) []string {
 	words := []string{}
