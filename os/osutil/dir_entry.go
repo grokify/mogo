@@ -7,22 +7,21 @@ import (
 	"strings"
 )
 
-type DirEntrySlice []os.DirEntry
+type DirEntries []os.DirEntry
 
-func (slice DirEntrySlice) Len() int           { return len(slice) }
-func (slice DirEntrySlice) Less(i, j int) bool { return slice[i].Name() < slice[j].Name() }
-func (slice DirEntrySlice) Swap(i, j int)      { slice[i], slice[j] = slice[j], slice[i] }
-func (slice DirEntrySlice) Sort()              { sort.Sort(slice) }
+func (entries DirEntries) Len() int           { return len(entries) }
+func (entries DirEntries) Less(i, j int) bool { return entries[i].Name() < entries[j].Name() }
+func (entries DirEntries) Swap(i, j int)      { entries[i], entries[j] = entries[j], entries[i] }
+func (entries DirEntries) Sort()              { sort.Sort(entries) }
 
 // Names returns a slice of entry names. It can optionally
 // add the directory path and sort the values.
-
-func (slice DirEntrySlice) Names(dir string, sortNames bool) []string {
+func (entries DirEntries) Names(dir string, sortNames bool) []string {
 	if len(strings.TrimSpace(dir)) == 0 {
 		dir = ""
 	}
 	names := []string{}
-	for _, item := range slice {
+	for _, item := range entries {
 		if len(dir) == 0 {
 			names = append(names, item.Name())
 		} else {
@@ -36,9 +35,9 @@ func (slice DirEntrySlice) Names(dir string, sortNames bool) []string {
 }
 
 // Infos returns a `[]os.FileInfo` slice.
-func (slice DirEntrySlice) Infos() ([]os.FileInfo, error) {
+func (entries DirEntries) Infos() ([]os.FileInfo, error) {
 	var infos []os.FileInfo
-	for _, entry := range slice {
+	for _, entry := range entries {
 		info, err := entry.Info()
 		if err != nil {
 			return infos, err
