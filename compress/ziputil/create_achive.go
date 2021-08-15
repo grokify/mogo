@@ -16,7 +16,7 @@ func ZipFilesRx(zipfile, dir string, rx *regexp.Regexp, removePaths bool) error 
 	if err != nil {
 		return err
 	}
-	filepaths := osutil.DirEntrySlice(entries).Names(dir, true)
+	filepaths := osutil.DirEntries(entries).Names(dir, true)
 	return ZipFiles(zipfile, removePaths, filepaths)
 }
 

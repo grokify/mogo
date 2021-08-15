@@ -22,7 +22,7 @@ func ConvertFilesInPlaceNestedstructsToPointers(dir string, rx *regexp.Regexp) (
 	if err != nil {
 		return filenames, errors.Wrap(err, "codegen.ConvertFilesInPlace.ReadDirMore")
 	}
-	//filenames := osutil.DirEntrySlice(entries).Names(dir, true)
+	//filenames := osutil.DirEntries(entries).Names(dir, true)
 	//for _, filename := range filenames {
 	for _, entry := range entries {
 		filename := filepath.Join(dir, entry.Name())
