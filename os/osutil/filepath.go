@@ -13,9 +13,9 @@ func IsDir(name string) (bool, error) {
 	return true, nil
 }
 
-// IsFile verifies a path exists, is a file and is not empty,
-// returning an error otherwise. An os file not exists check can be done
-// with os.IsNotExist(err) which acts on error from os.Stat()
+// IsFile verifies a path exists and is a file. It will optionally
+// check if a file is not empty. An os file not exists check can be
+// done with os.IsNotExist(err) which acts on error from os.Stat().
 func IsFile(name string, sizeGtZero bool) (bool, error) {
 	if fi, err := os.Stat(name); err != nil {
 		return false, err
