@@ -24,12 +24,14 @@ In terms of scope, `simplego` is designed to cover all common areas.
 Documentation is provided using godoc and available on [GoDoc.org](https://godoc.org/github.com/grokify/simplego).
 
 - [crypto](https://pkg.go.dev/github.com/grokify/simplego/crypto)
+- html
+  - [tokenizer](https://pkg.go.dev/github.com/grokify/simplego/html/tokenizer)
 - [io](https://pkg.go.dev/github.com/grokify/simplego/io)
 - [log](https://pkg.go.dev/github.com/grokify/simplego/log)
 - [net](https://pkg.go.dev/github.com/grokify/simplego/net)
   - [net/httputilmore](https://pkg.go.dev/github.com/grokify/simplego/net/httputilmore)
   - [net/urlutil](https://pkg.go.dev/github.com/grokify/simplego/net/urlutil)
-- [os](https://pkg.go.dev/github.com/grokify/simplego/os)
+- [os/osutil](https://pkg.go.dev/github.com/grokify/simplego/os/osutil)
 - mime
   - [multipart](https://pkg.go.dev/github.com/grokify/simplego/mime/multipart)
 - [sort](https://pkg.go.dev/github.com/grokify/simplego/sort)
