@@ -34,7 +34,7 @@ import (
 // GetRsaPrivateKeyForPkcs1PrivateKeyPath returns a *rsa.PrivateKey
 // for a given PKCS#1 private key file path without a password
 func GetRsaPrivateKeyForPkcs1PrivateKeyPath(prvKeyPKCS1Path string) (*rsa.PrivateKey, error) {
-	isFile, err := osutil.IsFileWithSizeGtZero(prvKeyPKCS1Path)
+	isFile, err := osutil.IsFile(prvKeyPKCS1Path, true)
 	if err != nil {
 		return nil, err
 	} else if !isFile {
@@ -60,7 +60,7 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyBytes(prvKeyPkcs1Bytes []byte) (*rsa.Priv
 // GetRsaPrivateKeyForPkcs1PrivateKeyPathWithPassword returns a *rsa.PrivateKey
 // for a given PKCS#1 private key file path and password
 func GetRsaPrivateKeyForPkcs1PrivateKeyPathWithPassword(prvKeyPKCS1Path string, password []byte) (*rsa.PrivateKey, error) {
-	isFile, err := osutil.IsFileWithSizeGtZero(prvKeyPKCS1Path)
+	isFile, err := osutil.IsFile(prvKeyPKCS1Path, true)
 	if err != nil {
 		return nil, err
 	} else if !isFile {
@@ -92,7 +92,7 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyBytesWithPassword(prvKeyPkcs1BytesEnc []b
 func GetRsaPublicKeyForPkcs8PublicKeyPath(pubKeyPkcs8Path string) (*rsa.PublicKey, error) {
 	var pubKey *rsa.PublicKey
 
-	isFile, err := osutil.IsFileWithSizeGtZero(pubKeyPkcs8Path)
+	isFile, err := osutil.IsFile(pubKeyPkcs8Path, true)
 	if err != nil {
 		return pubKey, err
 	} else if !isFile {

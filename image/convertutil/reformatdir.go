@@ -119,7 +119,7 @@ func reformatImagesSubdirFile(thisSrcFile, thisOutFile string, copyType CopyType
 		return nil
 	}
 	if !rewrite {
-		isFile, err := osutil.IsFile(thisOutFile)
+		isFile, err := osutil.IsFile(thisOutFile, false)
 		if err == nil && isFile {
 			return nil
 		}

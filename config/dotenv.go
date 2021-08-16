@@ -100,7 +100,7 @@ func LoadEnvPathsPrioritized(fixedPath, envPath string) error {
 func checkEnvPathsPrioritized(fixedPath, envPath string) (string, error) {
 	fixedPath = strings.TrimSpace(fixedPath)
 	if len(fixedPath) > 0 {
-		isFile, err := osutil.IsFileWithSizeGtZero(fixedPath)
+		isFile, err := osutil.IsFile(fixedPath, true)
 		if err != nil {
 			return fixedPath, err
 		} else if !isFile {
@@ -111,7 +111,7 @@ func checkEnvPathsPrioritized(fixedPath, envPath string) (string, error) {
 
 	envPath = strings.TrimSpace(envPath)
 	if len(envPath) > 0 {
-		isFile, err := osutil.IsFileWithSizeGtZero(fixedPath)
+		isFile, err := osutil.IsFile(fixedPath, true)
 		if err != nil {
 			return envPath, err
 		} else if !isFile {
@@ -121,7 +121,7 @@ func checkEnvPathsPrioritized(fixedPath, envPath string) (string, error) {
 	}
 
 	thisDirPath := "./.env"
-	isFile, err := osutil.IsFileWithSizeGtZero(thisDirPath)
+	isFile, err := osutil.IsFile(thisDirPath, true)
 	if err != nil {
 		return thisDirPath, err
 	} else if !isFile {

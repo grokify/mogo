@@ -42,7 +42,7 @@ func main() {
 		}
 	}
 
-	isFile, err := osutil.IsFile(opts.File)
+	isFile, err := osutil.IsFile(opts.File, false)
 	if err != nil {
 		log.Fatal(err)
 	} else if !isFile {

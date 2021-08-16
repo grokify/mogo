@@ -338,7 +338,7 @@ func SplitBest(path string) (dir, file string, err error) {
 	} else if isDir {
 		return path, "", nil
 	}
-	isFile, err := osutil.IsFile(path)
+	isFile, err := osutil.IsFile(path, false)
 	if err != nil {
 		return "", "", err
 	} else if isFile {
@@ -371,7 +371,7 @@ func FilterFilenamesSizeGtZero(filepaths ...string) []string {
 		for _, envPath := range envPathVals {
 			envPath = strings.TrimSpace(envPath)
 
-			if isFile, err := osutil.IsFileWithSizeGtZero(envPath); isFile && err == nil {
+			if isFile, err := osutil.IsFile(envPath, true); isFile && err == nil {
 				filepathsExist = append(filepathsExist, envPath)
 			}
 		}
