@@ -33,7 +33,6 @@ func NewReader(rs io.ReadSeeker, comma rune) (*csv.Reader, error) {
 // byte order mark (BOM) if requested. Close file reader with
 // `defer f.Close()`.
 func NewReaderFile(path string, comma rune) (*csv.Reader, *os.File, error) {
-	var file *os.File
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, file, err
