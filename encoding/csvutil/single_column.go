@@ -11,7 +11,7 @@ import (
 
 func ReadCSVFileSingleColumnValuesString(filename string, sep rune, hasHeader, trimSpace bool, colIdx uint, condenseUniqueSort bool) ([]string, error) {
 	values := []string{}
-	csvReader, file, err := NewReader(filename, sep)
+	csvReader, file, err := NewReaderFile(filename, sep)
 	if err != nil {
 		return values, nil
 	}

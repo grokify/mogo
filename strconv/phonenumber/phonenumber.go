@@ -68,7 +68,7 @@ func (a2g *AreaCodeToGeo) ReadData() error {
 }
 
 func (a2g *AreaCodeToGeo) ReadCsvPath(csvpath string) error {
-	csv, file, err := csvutil.NewReader(A2gCsvFullPath(), ',')
+	csv, file, err := csvutil.NewReaderFile(A2gCsvFullPath(), ',')
 	if err != nil {
 		return err
 	}

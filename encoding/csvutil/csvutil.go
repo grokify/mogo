@@ -10,31 +10,36 @@ import (
 	"github.com/grokify/simplego/type/stringsutil"
 )
 
-// NewReader will create a csv.Reader and optionally strip off the
+func NewReader(rs io.ReadSeeker, comma rune) (*csv.Reader, error) {
+	var csvReader *csv.Reader
+	// remove UTF-8 BOM, csv.Reader.Read() will return error = "line 1, column 1: bare \" in non-quoted-field"
+	bom := make([]byte, 3)
+	_, err := rs.Read(bom)
+	if err != nil {
+		return csvReader, err
+	}
+	if bom[0] != 0xef || bom[1] != 0xbb || bom[2] != 0xbf {
+		_, err = rs.Seek(0, 0) // Not a BOM -- seek back to the beginning
+		if err != nil {
+			return csvReader, err
+		}
+	}
+	csvReader = csv.NewReader(rs)
+	csvReader.Comma = comma
+	return csvReader, nil
+}
+
+// NewReaderFile will create a csv.Reader and optionally strip off the
 // byte order mark (BOM) if requested. Close file reader with
 // `defer f.Close()`.
-func NewReader(path string, comma rune) (*csv.Reader, *os.File, error) {
-	var csvReader *csv.Reader
+func NewReaderFile(path string, comma rune) (*csv.Reader, *os.File, error) {
 	var file *os.File
 	file, err := os.Open(path)
 	if err != nil {
-		return csvReader, file, err
+		return nil, file, err
 	}
-	// remove UTF-8 BOM, csv.Reader.Read() will return error = "line 1, column 1: bare \" in non-quoted-field"
-	bom := make([]byte, 3)
-	_, err = file.Read(bom)
-	if err != nil {
-		return csvReader, file, err
-	}
-	if bom[0] != 0xef || bom[1] != 0xbb || bom[2] != 0xbf {
-		_, err = file.Seek(0, 0) // Not a BOM -- seek back to the beginning
-		if err != nil {
-			return csvReader, file, err
-		}
-	}
-	csvReader = csv.NewReader(file)
-	csvReader.Comma = comma
-	return csvReader, file, nil
+	c, err := NewReader(file, comma)
+	return c, file, err
 }
 
 func trimUTF8ByteOrderMarkString(s string) string {
@@ -87,7 +92,7 @@ func (ch *CSVHeader) RecordToMSS(row []string) map[string]string {
 }
 
 func FilterCSVFile(inPath, outPath string, inComma rune, andFilter map[string]stringsutil.MatchInfo) error {
-	reader, inFile, err := NewReader(inPath, inComma)
+	reader, inFile, err := NewReaderFile(inPath, inComma)
 	if err != nil {
 		return err
 	}
@@ -112,7 +117,7 @@ func MergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStrip
 	defer outFile.Close()
 
 	for i, inPath := range inPaths {
-		reader, inFile, err := NewReader(inPath, inComma)
+		reader, inFile, err := NewReaderFile(inPath, inComma)
 		if err != nil {
 			return err
 		}
@@ -137,7 +142,7 @@ func MergeFilterCSVFilesToJSONL(inPaths []string, outPath string, inComma rune, 
 	}
 
 	for _, inPath := range inPaths {
-		reader, inFile, err := NewReader(inPath, inComma)
+		reader, inFile, err := NewReaderFile(inPath, inComma)
 		if err != nil {
 			return err
 		}

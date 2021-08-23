@@ -17,7 +17,7 @@ var newReaderTests = []struct {
 
 func TestNewReader(t *testing.T) {
 	for _, tt := range newReaderTests {
-		csvReader, f, err := NewReader(tt.filename, tt.separator)
+		csvReader, f, err := NewReaderFile(tt.filename, tt.separator)
 		if err != nil {
 			t.Errorf("csvutil.NewReader(\"%s\",...): error [%s]",
 				tt.filename, err.Error())
