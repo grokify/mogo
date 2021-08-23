@@ -9,6 +9,8 @@ import (
 	"golang.org/x/net/html/atom"
 )
 
+var TokenNotFound = errors.New("token not found")
+
 // TokensBetweenAtom returns the tokens that represent the `innerHtml`
 // between a start and end tag token.
 func TokensBetweenAtom(z *html.Tokenizer, skipErrors, inclusive bool, htmlAtom atom.Atom) ([]html.Token, error) {
@@ -66,7 +68,7 @@ func NextTokenMatch(z *html.Tokenizer, skipErrors, includeChain, includeMatch bo
 			matches = append(matches, token)
 		}
 	}
-	return matches, errors.New("token not found")
+	return matches, TokenNotFound
 }
 
 func NextStartToken(z *html.Tokenizer, skipErrors bool, htmlAtoms ...atom.Atom) (html.Token, error) {
@@ -107,5 +109,5 @@ func NextTextToken(z *html.Tokenizer, skipErrors bool, htmlAtoms ...atom.Atom) (
 			return NextTextToken(z, skipErrors)
 		}
 	}
-	return html.Token{}, errors.New("text token not found")
+	return html.Token{}, TokenNotFound
 }
