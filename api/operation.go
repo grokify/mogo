@@ -9,21 +9,26 @@ import (
 const (
 	TypeAPI               = "api"
 	TypeMethod            = "method"
+	TypeCallbackMethod    = "callback"
 	TypeEvent             = "event"
 	TypeEventAliasWebhook = "webhook"
+
+	MethodClass    = "class"
+	MethodInstance = "instance"
 )
 
 type Operations []Operation
 
 func (ops Operations) Table() ([]string, [][]string) {
 	cols := []string{
-		"Tags", "Class", "Type", "Path", "Summary", "Description", "Link"}
+		"Tags", "Class", "Op Type", "Method Type", "Path", "Summary", "Description", "Link"}
 	rows := [][]string{}
 	for _, op := range ops {
 		row := []string{
 			strings.Join(op.Tags, ", "),
 			op.Class,
-			op.Type,
+			op.OperationType,
+			op.MethodType,
 			op.Path,
 			op.Summary,
 			op.Description,
@@ -49,19 +54,21 @@ func ParseOperationType(input, def string) string {
 }
 
 type Operation struct {
-	Tags        []string
-	Class       string // Object class for SDKs
-	Type        string // Method or Event
-	Path        string
-	Summary     string
-	Description string
-	Link        string
+	Tags          []string
+	Class         string // Object class for SDKs
+	OperationType string // Method or Event
+	MethodType    string
+	Path          string
+	Summary       string
+	Description   string
+	Link          string
 }
 
 func (op *Operation) TrimSpace() {
 	op.Tags = stringsutil.SliceCondenseSpace(op.Tags, true, false)
 	op.Class = strings.TrimSpace(op.Class)
-	op.Type = strings.TrimSpace(op.Type)
+	op.OperationType = strings.TrimSpace(op.OperationType)
+	op.MethodType = strings.TrimSpace(op.MethodType)
 	op.Path = strings.TrimSpace(op.Path)
 	op.Summary = strings.TrimSpace(op.Summary)
 	op.Description = strings.TrimSpace(op.Description)
