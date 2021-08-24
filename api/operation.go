@@ -12,6 +12,10 @@ const (
 	TypeCallbackMethod    = "callback"
 	TypeEvent             = "event"
 	TypeEventAliasWebhook = "webhook"
+	TypeCategory          = "category" // mobile
+	TypeClass             = "class"    // mobile
+	TypeConstant          = "constant" // mobile
+	TypeProtocol          = "protocol" // mobile
 
 	MethodClass    = "class"
 	MethodInstance = "instance"
