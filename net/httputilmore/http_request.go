@@ -69,7 +69,7 @@ func GetJsonSimple(requrl string, header http.Header, data interface{}) (*http.R
 	return resp, err
 }
 
-func DoJSONSimple(client *http.Client, httpMethod, requrl string, headers map[string]string, body []byte) (*http.Response, error) {
+func DoJSONSimple(client *http.Client, httpMethod, requrl string, headers map[string][]string, body []byte) (*http.Response, error) {
 	requrl = strings.TrimSpace(requrl)
 	if len(requrl) == 0 {
 		return nil, errors.New("E_NO_REQUEST_URL")
@@ -92,13 +92,15 @@ func DoJSONSimple(client *http.Client, httpMethod, requrl string, headers map[st
 	if err != nil {
 		return nil, err
 	}
-	for k, v := range headers {
+	for k, vals := range headers {
 		k = strings.TrimSpace(k)
 		kMatch := strings.ToLower(k)
 		if kMatch == strings.ToLower(HeaderContentType) {
 			continue
 		}
-		req.Header.Set(k, v)
+		for _, v := range vals {
+			req.Header.Set(k, v)
+		}
 	}
 	if len(body) > 0 {
 		req.Header.Set(HeaderContentType, ContentTypeAppJsonUtf8)
@@ -107,7 +109,7 @@ func DoJSONSimple(client *http.Client, httpMethod, requrl string, headers map[st
 	return client.Do(req)
 }
 
-func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string]string, reqBody, resBody interface{}) ([]byte, *http.Response, error) {
+func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string][]string, reqBody, resBody interface{}) ([]byte, *http.Response, error) {
 	var reqBodyBytes []byte
 	var err error
 	if reqBody != nil {

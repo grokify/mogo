@@ -17,7 +17,7 @@ type SimpleRequest struct {
 	Method  string
 	URL     string
 	Query   map[string][]string
-	Headers map[string]string
+	Headers map[string][]string
 	Body    interface{}
 	IsJSON  bool
 }
@@ -28,11 +28,26 @@ func (req *SimpleRequest) Inflate() {
 		req.Method = http.MethodGet
 	}
 	if req.Headers == nil {
-		req.Headers = map[string]string{}
+		req.Headers = map[string][]string{}
 	}
 	if req.IsJSON {
-		if _, ok := req.Headers[httputilmore.HeaderContentType]; !ok {
-			req.Headers[httputilmore.HeaderContentType] = httputilmore.ContentTypeAppJsonUtf8
+		if vals, ok := req.Headers[httputilmore.HeaderContentType]; !ok {
+			req.Headers[httputilmore.HeaderContentType] =
+				[]string{httputilmore.ContentTypeAppJsonUtf8}
+		} else {
+			haveCT := false
+			for _, hval := range vals {
+				hval = strings.ToLower(strings.ToLower(hval))
+				if strings.Index(hval, httputilmore.ContentTypeAppJson) == 0 {
+					haveCT = true
+					break
+				}
+			}
+			if !haveCT {
+				req.Headers[httputilmore.HeaderContentType] = append(
+					req.Headers[httputilmore.HeaderContentType],
+					httputilmore.ContentTypeAppJson)
+			}
 		}
 	}
 }
