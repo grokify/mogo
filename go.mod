@@ -33,24 +33,24 @@ require (
 	github.com/lytics/base62 v0.0.0-20180808010106-0ee4de5a5d6d
 	github.com/martinlindhe/base36 v1.1.0
 	github.com/microcosm-cc/bluemonday v1.0.15
-	github.com/nyaruka/phonenumbers v1.0.70
+	github.com/nyaruka/phonenumbers v1.0.71
 	github.com/oleiade/reflections v1.0.1 // indirect
-	github.com/onsi/gomega v1.15.0 // indirect
+	github.com/onsi/gomega v1.16.0 // indirect
 	github.com/pkg/errors v0.9.1
-	github.com/pkg/sftp v1.13.2
-	github.com/rs/zerolog v1.23.0
+	github.com/pkg/sftp v1.13.3
+	github.com/rs/zerolog v1.24.0
 	github.com/rustyoz/Mtransform v0.0.0-20190224104252-60c8c35a3681 // indirect
 	github.com/rustyoz/genericlexer v0.0.0-20190224115003-eb82fd2987bd // indirect
 	github.com/rustyoz/svg v0.0.0-20200706102315-fe1aeca2ba20
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
-	github.com/valyala/fasthttp v1.28.0
+	github.com/valyala/fasthttp v1.29.0
 	github.com/valyala/fastjson v1.6.3
 	github.com/valyala/quicktemplate v1.6.3
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	github.com/ziutek/mymysql v1.5.4 // indirect
-	golang.org/x/crypto v0.0.0-20210813211128-0a44fdfbc16e
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d
-	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d
+	golang.org/x/net v0.0.0-20210903162142-ad29c8ab022f
 	golang.org/x/text v0.3.7
 	gopkg.in/oleiade/reflections.v1 v1.0.0
 	mellium.im/sasl v0.2.1 // indirect
