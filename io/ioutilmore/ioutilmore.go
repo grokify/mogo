@@ -111,7 +111,7 @@ func DirFromPath(path string) (string, error) {
 	case mode.IsRegular():
 		isFile = true
 	}
-	if isFile == false {
+	if !isFile {
 		return "", nil
 	}
 	rx1 := regexp.MustCompile(`^(.+)[/\\][^/\\]+`)
@@ -145,7 +145,7 @@ func SplitBest(path string) (dir, file string, err error) {
 		dir, file := filepath.Split(path)
 		return dir, file, nil
 	}
-	return "", "", fmt.Errorf("Path is valid but not file or directory: [%v]", path)
+	return "", "", fmt.Errorf("path is valid but not file or directory: [%v]", path)
 }
 
 func FilterFilenamesSizeGtZero(filepaths ...string) []string {
@@ -169,7 +169,7 @@ func RemoveAllChildren(dir string) error {
 	if err != nil {
 		return err
 	}
-	if isDir == false {
+	if !isDir {
 		err = errors.New("400: Path Is Not Directory")
 		return err
 	}
@@ -258,4 +258,16 @@ func NewFileWriter(path string) (FileWriter, error) {
 func (f *FileWriter) Close() {
 	f.Writer.Flush()
 	f.File.Close()
+}
+
+// ReadAllOrError will successfully return the data
+// or return the error in the value return value.
+// This is useful to simply test scripts where the
+// data is printed for debugging or testing.
+func ReadAllOrError(r io.Reader) []byte {
+	data, err := io.ReadAll(r)
+	if err != nil {
+		return []byte(err.Error())
+	}
+	return data
 }
