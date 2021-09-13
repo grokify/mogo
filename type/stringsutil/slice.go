@@ -185,9 +185,23 @@ func Dedupe(vals []string) []string {
 	return deduped
 }
 
-// SliceIndex returns the index of an element in a
+// SliceIndex returns the first index of an element in a
 // string slice. Returns -1 if not found.
-func SliceIndex(haystack []string, needle string, trimSpace, toLower bool, matchType MatchType) int {
+func SliceIndex(haystack []string, needle string) int {
+	if len(haystack) == 0 {
+		return -1
+	}
+	for i, el := range haystack {
+		if needle == el {
+			return i
+		}
+	}
+	return -1
+}
+
+// SliceIndexMore returns the index of an element in a
+// string slice. Returns -1 if not found.
+func SliceIndexMore(haystack []string, needle string, trimSpace, toLower bool, matchType MatchType) int {
 	if trimSpace {
 		needle = strings.TrimSpace(needle)
 	}
