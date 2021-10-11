@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/grokify/simplego/cmd/cmdutil"
+	"github.com/grokify/simplego/os/executil"
 	"github.com/grokify/simplego/os/osutil"
 	"github.com/jessevdk/go-flags"
 )
@@ -62,7 +62,7 @@ func main() {
 	for i, cmd := range cmds {
 		fmt.Printf("[%v/%v] %v\n", i+1, l, cmd)
 		if len(opts.Exec) > 0 {
-			stdout, stderr, err := cmdutil.ExecSimple(cmd)
+			stdout, stderr, err := executil.ExecSimple(cmd)
 			if err != nil {
 				log.Fatal(err)
 			}

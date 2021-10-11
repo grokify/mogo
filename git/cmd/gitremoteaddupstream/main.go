@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/grokify/simplego/cmd/cmdutil"
+	"github.com/grokify/simplego/os/executil"
 	"github.com/grokify/simplego/path/filepathutil"
 	"github.com/jessevdk/go-flags"
 )
@@ -32,7 +32,7 @@ func main() {
 	gitCmd := fmt.Sprintf("git remote add upstream https://github.com/%s/%s.git", strings.TrimSpace(opts.Parent), leafDir)
 	fmt.Printf("CMD: %s\n", gitCmd)
 	if len(opts.Exec) > 0 {
-		_, _, err := cmdutil.ExecSimple(gitCmd)
+		_, _, err := executil.ExecSimple(gitCmd)
 		if err != nil {
 			log.Fatal(err)
 		}

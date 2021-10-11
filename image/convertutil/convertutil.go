@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/grokify/simplego/cmd/cmdutil"
 	"github.com/grokify/simplego/image/imageutil"
 	"github.com/grokify/simplego/math/ratio"
+	"github.com/grokify/simplego/os/executil"
 	"github.com/grokify/simplego/type/stringsutil"
 )
 
@@ -103,7 +103,7 @@ func ConvertToKindle(sourcePath, outputPath string) (bytes.Buffer, bytes.Buffer,
 		OutputHeight:      0,
 		ResolutionDensity: PressDpi,
 		ResolutionUnits:   ResolutionPixelsPerInch})
-	return cmdutil.ExecSimple(command)
+	return executil.ExecSimple(command)
 }
 
 func ConvertToPDFSimple(sourcePath, outputPath string) (bytes.Buffer, bytes.Buffer, error) {
@@ -114,7 +114,7 @@ func ConvertToPDFSimple(sourcePath, outputPath string) (bytes.Buffer, bytes.Buff
 		OutputHeight:      0,
 		ResolutionDensity: PressDpi,
 		ResolutionUnits:   ResolutionPixelsPerInch})
-	return cmdutil.ExecSimple(command)
+	return executil.ExecSimple(command)
 }
 
 func ConvertToPDF(sourcePath, outputPath string) (bytes.Buffer, bytes.Buffer, error) {
@@ -140,12 +140,12 @@ func ConvertToPDF(sourcePath, outputPath string) (bytes.Buffer, bytes.Buffer, er
 		OutputHeight:      outputHeight,
 		ResolutionDensity: PressDpi,
 		ResolutionUnits:   ResolutionPixelsPerInch})
-	stdout, stderr, err := cmdutil.ExecSimple(command)
+	stdout, stderr, err := executil.ExecSimple(command)
 	fmt.Printf("STDERR: %s\n", stderr.String())
 	fmt.Printf("GOLERR: %s\n", err.Error())
 	fmt.Printf("INDEX: %v\n", strings.Index(stderr.String(), convertError))
 	return stdout, stderr, err
-	//return cmdutil.ExecSimple(command)
+	//return executil.ExecSimple(command)
 }
 
 const (
