@@ -61,15 +61,6 @@ func SliceTrim(lines []string, cutstr string, condense bool) []string {
 	return newLines
 }
 
-// SliceIndexOrEmpty returns the element at the index
-// provided or an empty string.
-func SliceIndexOrEmpty(s []string, index uint64) string {
-	if int(index) >= len(s) {
-		return ""
-	}
-	return s[index]
-}
-
 /*
 // JoinAny takes an array of interface{} and converts
 // each value to a string using fmt.Sprintf("%v")
@@ -183,53 +174,6 @@ func Dedupe(vals []string) []string {
 		deduped = append(deduped, val)
 	}
 	return deduped
-}
-
-// SliceIndex returns the first index of an element in a
-// string slice. Returns -1 if not found.
-func SliceIndex(haystack []string, needle string) int {
-	if len(haystack) == 0 {
-		return -1
-	}
-	for i, el := range haystack {
-		if needle == el {
-			return i
-		}
-	}
-	return -1
-}
-
-// SliceIndexMore returns the index of an element in a
-// string slice. Returns -1 if not found.
-func SliceIndexMore(haystack []string, needle string, trimSpace, toLower bool, matchType MatchType) int {
-	if trimSpace {
-		needle = strings.TrimSpace(needle)
-	}
-	if toLower {
-		needle = strings.ToLower(needle)
-	}
-	for idx, hay := range haystack {
-		if trimSpace {
-			hay = strings.TrimSpace(hay)
-		}
-		if toLower {
-			hay = strings.ToLower(hay)
-		}
-		if matchType == MatchHasSuffix {
-			if strings.HasSuffix(needle, hay) {
-				return idx
-			}
-		} else if matchType == MatchHasPrefix {
-			if strings.HasPrefix(needle, hay) {
-				return idx
-			}
-		} else {
-			if needle == hay {
-				return idx
-			}
-		}
-	}
-	return -1
 }
 
 func SliceChooseOnePreferredLowerTrimSpace(options, preferenceOrder []string) string {
