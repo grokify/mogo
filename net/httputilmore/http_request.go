@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/grokify/simplego/encoding/jsonutil"
+	"github.com/grokify/simplego/net/urlutil"
 	"github.com/pkg/errors"
 )
 
@@ -160,10 +161,28 @@ func SendWwwFormUrlEncodedSimple(method, urlStr string, data url.Values) (*http.
 	return client.Do(req)
 }
 
+// GetUrlOrReadFile takes a string and will either call HTTP GET if the
+// string begins with `http` or `https` URI scheme or read a file if it
+// does not.
+func GetUrlOrReadFile(input string) ([]byte, error) {
+	if urlutil.IsHttp(input, true, true) {
+		resp, err := http.Get(input)
+		if err != nil {
+			return []byte{}, err
+		}
+		return io.ReadAll(resp.Body)
+	}
+	return os.ReadFile(input)
+}
+
+// Delete calls the HTTP `DELETE` method on a given URL.
 func Delete(client *http.Client, url string) (*http.Response, error) {
 	req, err := http.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
+	}
+	if client == nil {
+		client = &http.Client{}
 	}
 	return client.Do(req)
 }
