@@ -1,6 +1,7 @@
 package httputilmore
 
 import (
+	"bytes"
 	"net/http"
 )
 
@@ -70,4 +71,27 @@ func NewHeadersMSS(headersMap map[string]string) http.Header {
 		header.Add(k, v)
 	}
 	return header
+}
+
+// HeaderMerge combines data from multiple `http.Header` structs.
+func HeaderMerge(headers ...http.Header) http.Header {
+	merged := http.Header{}
+	for _, h := range headers {
+		for k, vals := range h {
+			for _, v := range vals {
+				merged.Add(k, v)
+			}
+		}
+	}
+	return merged
+}
+
+// HeaderString converts a `http.Header` to a string.
+func HeaderString(h http.Header) (string, error) {
+	b := bytes.NewBuffer([]byte{})
+	err := h.Write(b)
+	if err != nil {
+		return "", err
+	}
+	return b.String(), nil
 }
