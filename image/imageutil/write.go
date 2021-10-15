@@ -16,6 +16,15 @@ const (
 	JPEGQualityMax     int = 100
 )
 
+func ResizeFileJPEG(inputFile, outputFile string, outputWidth, outputHeight uint, quality int) error {
+	img, _, err := ReadImageFile(inputFile)
+	if err != nil {
+		return err
+	}
+	img2 := Resize(outputWidth, outputHeight, img, ScalerBest())
+	return WriteFileJPEG(outputFile, img2, quality)
+}
+
 func WriteFileJPEG(filename string, img image.Image, quality int) error {
 	out, err := os.Create(filename)
 	if err != nil {

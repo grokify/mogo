@@ -133,18 +133,24 @@ func ConvertToPDF(sourcePath, outputPath string) (bytes.Buffer, bytes.Buffer, er
 		outputWidth = PdfWidth
 	}
 
-	command := ConvertCommand(ConvertParams{
-		SourcePath:        sourcePath,
-		OutputPath:        outputPath,
-		OutputWidth:       outputWidth,
-		OutputHeight:      outputHeight,
-		ResolutionDensity: PressDpi,
-		ResolutionUnits:   ResolutionPixelsPerInch})
-	stdout, stderr, err := executil.ExecSimple(command)
-	fmt.Printf("STDERR: %s\n", stderr.String())
-	fmt.Printf("GOLERR: %s\n", err.Error())
-	fmt.Printf("INDEX: %v\n", strings.Index(stderr.String(), convertError))
-	return stdout, stderr, err
+	if 1 == 0 {
+		command := ConvertCommand(ConvertParams{
+			SourcePath:        sourcePath,
+			OutputPath:        outputPath,
+			OutputWidth:       outputWidth,
+			OutputHeight:      outputHeight,
+			ResolutionDensity: PressDpi,
+			ResolutionUnits:   ResolutionPixelsPerInch})
+		stdout, stderr, err := executil.ExecSimple(command)
+		fmt.Printf("STDERR: %s\n", stderr.String())
+		fmt.Printf("GOLERR: %s\n", err.Error())
+		fmt.Printf("INDEX: %v\n", strings.Index(stderr.String(), convertError))
+		return stdout, stderr, err
+	}
+
+	b := bytes.NewBuffer([]byte(""))
+	err = imageutil.ResizeFileJPEG(sourcePath, outputPath, uint(outputWidth), uint(outputHeight), -1)
+	return *b, *b, err
 	//return executil.ExecSimple(command)
 }
 
