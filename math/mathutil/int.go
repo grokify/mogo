@@ -7,8 +7,7 @@ func IntLen(i int) int {
 	return len(fmt.Sprintf("%d", i))
 }
 
-// MinMaxInt32 returns min/max value given a slice of
-// input values.
+// MinMaxInt32 returns min/max value given a slice of input values.
 func MinMaxInt32(vals ...int32) (int32, int32) {
 	min := int32(0)
 	max := int32(0)
@@ -28,8 +27,7 @@ func MinMaxInt32(vals ...int32) (int32, int32) {
 	return min, max
 }
 
-// MinMaxUint returns min/max value given a slice of
-// input values.
+// MinMaxUint returns min/max value given a slice of input values.
 func MinMaxUint(vals ...uint) (uint, uint) {
 	min := uint(0)
 	max := uint(0)
