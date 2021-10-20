@@ -1,5 +1,7 @@
 package mathutil
 
+import "fmt"
+
 // MinMaxInt32 returns min/max value given a slice of
 // input values.
 func MinMaxInt32(vals ...int32) (int32, int32) {
@@ -40,4 +42,8 @@ func MinMaxUint(vals ...uint) (uint, uint) {
 		}
 	}
 	return min, max
+}
+
+func IntLen(i int) int {
+	return len(fmt.Sprintf("%d", i))
 }

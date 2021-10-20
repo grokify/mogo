@@ -44,3 +44,24 @@ func TestMinMax(t *testing.T) {
 		}
 	}
 }
+
+var intLenTests = []struct {
+	val int
+	len uint
+}{
+	{-1000, 5},
+	{-1, 2},
+	{0, 1},
+	{1, 1},
+	{1000, 4},
+}
+
+func TestIntLen(t *testing.T) {
+	for _, tt := range intLenTests {
+		intLen := IntLen(tt.val)
+		if uint(intLen) != tt.len {
+			t.Errorf("mathutil.IntLen(%d) Mismatch: want [%d], got [%d]",
+				tt.val, tt.len, intLen)
+		}
+	}
+}
