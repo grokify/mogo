@@ -19,7 +19,7 @@ require (
 	github.com/google/go-querystring v1.1.0
 	github.com/gorilla/mux v1.8.0
 	github.com/grokify/base36 v1.0.2
-	github.com/grokify/bitcoinmath v0.0.0-20171208015713-6ef5b53bef73
+	github.com/grokify/bitcoinmath v0.1.0
 	github.com/huandu/xstrings v1.3.2
 	github.com/itchyny/base58-go v0.2.0
 	github.com/jessevdk/go-flags v1.5.0
@@ -39,7 +39,7 @@ require (
 	github.com/onsi/gomega v1.16.0 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/sftp v1.13.4
-	github.com/rs/zerolog v1.25.0
+	github.com/rs/zerolog v1.26.0
 	github.com/rustyoz/Mtransform v0.0.0-20190224104252-60c8c35a3681 // indirect
 	github.com/rustyoz/genericlexer v0.0.0-20190224115003-eb82fd2987bd // indirect
 	github.com/rustyoz/svg v0.0.0-20200706102315-fe1aeca2ba20
@@ -51,9 +51,8 @@ require (
 	github.com/ziutek/mymysql v1.5.4 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
 	golang.org/x/image v0.0.0-20211028202545-6944b10bf410
-	golang.org/x/net v0.0.0-20211029224645-99673261e6eb
+	golang.org/x/net v0.0.0-20211101193420-4a448f8816b3
 	golang.org/x/text v0.3.7
 	gopkg.in/oleiade/reflections.v1 v1.0.0
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	mellium.im/sasl v0.2.1 // indirect
 )
