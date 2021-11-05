@@ -19,7 +19,6 @@ func SkypeToMarkdown(input string, stripUrlAutoLink bool) string {
 	output := input
 	backtick3 := rxBacktick3.MatchString(output)
 	m := rxSkypeLink.FindAllStringSubmatch(input, -1)
-	//fmtutil.PrintJSON(m)
 	for _, n := range m {
 		rxlink := regexp.MustCompile(regexp.QuoteMeta(n[0]))
 		if stripUrlAutoLink && backtick3 && n[1] == n[2] && rxHttpUrlPrefix.MatchString(n[1]) {
