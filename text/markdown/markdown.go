@@ -3,6 +3,7 @@ package markdown
 import (
 	"fmt"
 	"regexp"
+	"strings"
 )
 
 // BoldText bodifies the identified text. It looks for start of words
@@ -27,4 +28,19 @@ func UrlToMarkdownLinkHostname(url string) string {
 		return fmt.Sprintf("[%v%v](%v)", m[1], suffix, url)
 	}
 	return url
+}
+
+// Linkify constructs a link from url and text inputs.
+// This function does not handle escaping so it should
+// be done before hand, e.g. using `\[` instead of `[`
+// by itself in the `text`.
+func Linkify(url, text string) string {
+	url = strings.TrimSpace(url)
+	if len(url) == 0 {
+		return text
+	}
+	if len(text) == 0 {
+		return "[" + url + "](" + url + ")"
+	}
+	return "[" + text + "](" + url + ")"
 }
