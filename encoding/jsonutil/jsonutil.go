@@ -83,12 +83,20 @@ func MarshalBase64(i interface{}) (string, error) {
 	return base64.StdEncoding.EncodeToString(data), nil
 }
 
-func UnmarshalReader(r io.Reader, iface interface{}) ([]byte, error) {
+func UnmarshalMSI(data map[string]interface{}, v interface{}) error {
+	bytes, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(bytes, v)
+}
+
+func UnmarshalReader(r io.Reader, v interface{}) ([]byte, error) {
 	bytes, err := io.ReadAll(r)
 	if err != nil {
 		return bytes, err
 	}
-	return bytes, json.Unmarshal(bytes, iface)
+	return bytes, json.Unmarshal(bytes, v)
 }
 
 func PrettyPrintReader(r io.Reader, prefix, indent string) ([]byte, error) {
