@@ -34,6 +34,15 @@ func Parse(colorName string) (color.RGBA, error) {
 	return color.RGBA{}, fmt.Errorf("E_COLOR_NOT_FOUND [%s]", colorName)
 }
 
+// Parse returns a `color.RGBA` given a hex color code and panics if an error occurs.
+func MustHexToColor(hexRGB string) color.RGBA {
+	c, err := HexToColor(hexRGB)
+	if err != nil {
+		panic(err)
+	}
+	return c
+}
+
 // Parse returns a `color.RGBA` given a hex color code.
 func HexToColor(hexRGB string) (color.RGBA, error) {
 	hexRGB = strings.ToLower(strings.TrimSpace(hexRGB))
