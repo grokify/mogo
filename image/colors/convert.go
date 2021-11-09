@@ -45,8 +45,7 @@ func MustParse(input string) color.RGBA {
 
 // ParseHex returns a `color.RGBA` given a hex color code.
 func ParseHex(hexRGB string) (color.RGBA, error) {
-	hexRGB = strings.ToLower(strings.TrimSpace(hexRGB))
-	m := rxColorHex.FindStringSubmatch(hexRGB)
+	m := rxColorHex.FindStringSubmatch(strings.ToLower(strings.TrimSpace(hexRGB)))
 	if len(m) == 0 {
 		return color.RGBA{}, fmt.Errorf("E_COLOR_NOT_HEX_STRING [%s]", hexRGB)
 	}
