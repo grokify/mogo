@@ -104,7 +104,7 @@ func (matrix Matrix) AddBackgroundColor(clr color.Color) {
 }
 
 func (matrix Matrix) AddBackgroundColorHex(hexcolor string) error {
-	clr, err := colors.HexToColor(hexcolor)
+	clr, err := colors.ParseHex(hexcolor)
 	if err != nil {
 		return err
 	}
