@@ -16,35 +16,35 @@ var (
 	rxGoogleCol = regexp.MustCompile(`^google([0-9]+)$`)
 )
 
-// Parse returns a `color.RGBA` given a color name
-// or hex color code.
+// Parse returns a `color.RGBA` given a color name or hex color code.
 func Parse(colorName string) (color.RGBA, error) {
 	colorName = strings.ToLower(strings.TrimSpace(colorName))
 	if col, ok := colornames.Map[colorName]; ok {
 		return col, nil
 	}
-	colorHtml, err := HexToColor(colorName)
+	colorHtml, err := ParseHex(colorName)
 	if err == nil {
 		return colorHtml, nil
 	}
-	colorGoog, err := GoogleToColor(colorName)
+	colorGoog, err := ParseGoogle(colorName)
 	if err == nil {
 		return colorGoog, nil
 	}
 	return color.RGBA{}, fmt.Errorf("E_COLOR_NOT_FOUND [%s]", colorName)
 }
 
-// Parse returns a `color.RGBA` given a hex color code and panics if an error occurs.
-func MustHexToColor(hexRGB string) color.RGBA {
-	c, err := HexToColor(hexRGB)
+// MustParse returns a `color.RGBA` given a hex color code or Google color string.
+// It panics if the input string cannot be parsed.
+func MustParse(input string) color.RGBA {
+	c, err := Parse(input)
 	if err != nil {
 		panic(err)
 	}
 	return c
 }
 
-// Parse returns a `color.RGBA` given a hex color code.
-func HexToColor(hexRGB string) (color.RGBA, error) {
+// ParseHex returns a `color.RGBA` given a hex color code.
+func ParseHex(hexRGB string) (color.RGBA, error) {
 	hexRGB = strings.ToLower(strings.TrimSpace(hexRGB))
 	m := rxColorHex.FindStringSubmatch(hexRGB)
 	if len(m) == 0 {
@@ -64,11 +64,7 @@ func HexToColor(hexRGB string) (color.RGBA, error) {
 		A: 0xff}, nil
 }
 
-func ColorToHex(clr color.RGBA) string {
-	return fmt.Sprintf("%02x%02x%02x", clr.R, clr.G, clr.B)
-}
-
-func GoogleToColor(googString string) (color.RGBA, error) {
+func ParseGoogle(googString string) (color.RGBA, error) {
 	m := rxGoogleCol.FindStringSubmatch(googString)
 	if len(m) == 0 {
 		return color.RGBA{},
@@ -80,4 +76,8 @@ func GoogleToColor(googString string) (color.RGBA, error) {
 	}
 	col := GoogleChartColorX(uint64(idxInt))
 	return col, nil
+}
+
+func ColorToHex(clr color.RGBA) string {
+	return fmt.Sprintf("%02x%02x%02x", clr.R, clr.G, clr.B)
 }

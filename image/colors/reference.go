@@ -34,7 +34,7 @@ var GoogleChartColorsHex = [...]string{
 func GetGoogleChartColors() []color.RGBA {
 	rgbas := []color.RGBA{}
 	for _, hex := range GoogleChartColorsHex {
-		rgb, err := HexToColor(hex)
+		rgb, err := ParseHex(hex)
 		if err != nil {
 			panic(err)
 		}
