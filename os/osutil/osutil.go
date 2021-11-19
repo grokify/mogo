@@ -122,11 +122,3 @@ func CreateFileWithLines(filename string, lines []string, lineSuffix string, use
 	}
 	return w.Flush()
 }
-
-func UserGoSrcDir() (string, error) {
-	userhome, err := os.UserHomeDir()
-	if err != nil {
-		return userhome, err
-	}
-	return filepath.Join(userhome, "go/src"), nil
-}

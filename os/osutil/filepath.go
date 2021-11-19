@@ -2,6 +2,7 @@ package osutil
 
 import (
 	"os"
+	"path/filepath"
 )
 
 func IsDir(name string) (bool, error) {
@@ -37,4 +38,24 @@ func Exists(name string) (bool, error) {
 		return false, err
 	}
 	return true, nil
+}
+
+func MustUserHomeDir(subdirs ...string) string {
+	userhomedir, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
+	if len(subdirs) > 0 {
+		subdirs = append([]string{userhomedir}, subdirs...)
+		return filepath.Join(subdirs...)
+	}
+	return userhomedir
+}
+
+func UserGoSrcDir() (string, error) {
+	userhome, err := os.UserHomeDir()
+	if err != nil {
+		return userhome, err
+	}
+	return filepath.Join(userhome, "go/src"), nil
 }
