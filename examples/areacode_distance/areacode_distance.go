@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/grokify/simplego/strconv/phonenumber"
+	"github.com/grokify/mogo/strconv/phonenumber"
 	geo "github.com/kellydunn/golang-geo"
 )
 

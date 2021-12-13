@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/grokify/base36"
-	"github.com/grokify/simplego/math/bigint"
+	"github.com/grokify/mogo/math/bigint"
 )
 
 // Md5Base36Length is the length for a MD5 Base36 string

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/grokify/simplego/image/imageutil"
+	"github.com/grokify/mogo/image/imageutil"
 	"github.com/pkg/errors"
 )
 

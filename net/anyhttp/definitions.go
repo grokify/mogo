@@ -6,7 +6,7 @@ import (
 	"net"
 	"net/url"
 
-	hum "github.com/grokify/simplego/net/httputilmore"
+	hum "github.com/grokify/mogo/net/httputilmore"
 )
 
 type Request interface {

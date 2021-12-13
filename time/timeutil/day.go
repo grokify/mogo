@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/simplego/type/stringsutil"
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 var days = [...]string{

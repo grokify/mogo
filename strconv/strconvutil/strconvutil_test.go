@@ -3,7 +3,7 @@ package strconvutil
 import (
 	"testing"
 
-	"github.com/grokify/simplego/math/mathutil"
+	"github.com/grokify/mogo/math/mathutil"
 )
 
 var changeToXoXPctTests = []struct {

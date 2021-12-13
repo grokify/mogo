@@ -12,8 +12,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/grokify/simplego/encoding/jsonutil"
-	"github.com/grokify/simplego/net/urlutil"
+	"github.com/grokify/mogo/encoding/jsonutil"
+	"github.com/grokify/mogo/net/urlutil"
 	"github.com/pkg/errors"
 )
 

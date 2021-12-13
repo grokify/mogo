@@ -9,8 +9,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/grokify/simplego/compress/gziputil"
-	"github.com/grokify/simplego/encoding"
+	"github.com/grokify/mogo/compress/gziputil"
+	"github.com/grokify/mogo/encoding"
 	"github.com/pkg/errors"
 )
 

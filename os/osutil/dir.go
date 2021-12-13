@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"sort"
 
-	"github.com/grokify/simplego/type/maputil"
+	"github.com/grokify/mogo/type/maputil"
 )
 
 func ReadDirMore(dir string, rx *regexp.Regexp, inclDirs, inclFiles, inclEmptyFiles bool) ([]os.DirEntry, error) {

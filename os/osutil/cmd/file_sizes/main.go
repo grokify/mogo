@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/grokify/simplego/fmt/fmtutil"
-	"github.com/grokify/simplego/os/osutil"
+	"github.com/grokify/mogo/fmt/fmtutil"
+	"github.com/grokify/mogo/os/osutil"
 	"github.com/jessevdk/go-flags"
 )
 

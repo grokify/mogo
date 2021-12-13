@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/grokify/simplego/type/stringsutil"
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 func NewReader(rs io.ReadSeeker, comma rune) (*csv.Reader, error) {

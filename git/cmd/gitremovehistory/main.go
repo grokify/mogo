@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/grokify/simplego/os/executil"
-	"github.com/grokify/simplego/os/osutil"
+	"github.com/grokify/mogo/os/executil"
+	"github.com/grokify/mogo/os/osutil"
 	"github.com/jessevdk/go-flags"
 )
 

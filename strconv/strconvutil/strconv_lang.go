@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/grokify/simplego/text/languageutil"
+	"github.com/grokify/mogo/text/languageutil"
 )
 
 var rxComma = regexp.MustCompile(`,`)

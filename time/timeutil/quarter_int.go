@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/simplego/math/mathutil"
+	"github.com/grokify/mogo/math/mathutil"
 	"github.com/pkg/errors"
 )
 

@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/grokify/simplego/image/convertutil"
+	"github.com/grokify/mogo/image/convertutil"
 	"github.com/jessevdk/go-flags"
 )
 

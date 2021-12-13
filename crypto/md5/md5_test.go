@@ -3,7 +3,7 @@ package md5
 import (
 	"testing"
 
-	"github.com/grokify/simplego/encoding/base36"
+	"github.com/grokify/mogo/encoding/base36"
 )
 
 var encodeBase36HexStringTests = []struct {

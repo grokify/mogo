@@ -5,14 +5,14 @@ import (
 	"log"
 	"regexp"
 
-	"github.com/grokify/simplego/codegen"
-	"github.com/grokify/simplego/fmt/fmtutil"
+	"github.com/grokify/mogo/codegen"
+	"github.com/grokify/mogo/fmt/fmtutil"
 	"github.com/jessevdk/go-flags"
 )
 
 /*
 
-go get github.com/grokify/simplego/codegen/apps/nestedstruct2pointer
+go get github.com/grokify/mogo/codegen/apps/nestedstruct2pointer
 
 */
 

@@ -1,7 +1,7 @@
 // encoding provides generic encoding support.
 package encoding
 
-import "github.com/grokify/simplego/math/mathutil"
+import "github.com/grokify/mogo/math/mathutil"
 
 func Pad4(encoded, char string) string {
 	inputLength := len(encoded)

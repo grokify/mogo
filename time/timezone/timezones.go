@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/simplego/type/listutil"
+	"github.com/grokify/mogo/type/listutil"
 )
 
 const (

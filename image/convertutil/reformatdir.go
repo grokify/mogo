@@ -6,9 +6,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/grokify/simplego/image/imageutil"
-	"github.com/grokify/simplego/io/ioutilmore"
-	"github.com/grokify/simplego/os/osutil"
+	"github.com/grokify/mogo/image/imageutil"
+	"github.com/grokify/mogo/io/ioutilmore"
+	"github.com/grokify/mogo/os/osutil"
 	"github.com/pkg/errors"
 )
 

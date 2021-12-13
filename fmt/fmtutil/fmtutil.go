@@ -7,7 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/grokify/simplego/encoding/jsonutil"
+	"github.com/grokify/mogo/encoding/jsonutil"
 )
 
 var (

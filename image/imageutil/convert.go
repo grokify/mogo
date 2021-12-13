@@ -5,7 +5,7 @@ import (
 	"image"
 	"image/color"
 
-	"github.com/grokify/simplego/reflect/reflectutil"
+	"github.com/grokify/mogo/reflect/reflectutil"
 	"golang.org/x/image/draw"
 )
 

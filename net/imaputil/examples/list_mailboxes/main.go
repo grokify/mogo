@@ -5,8 +5,8 @@ import (
 	"log"
 
 	"github.com/emersion/go-imap"
-	"github.com/grokify/simplego/config"
-	"github.com/grokify/simplego/net/imaputil"
+	"github.com/grokify/mogo/config"
+	"github.com/grokify/mogo/net/imaputil"
 )
 
 func main() {

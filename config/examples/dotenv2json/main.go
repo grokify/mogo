@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/grokify/simplego/config"
+	"github.com/grokify/mogo/config"
 	"github.com/jessevdk/go-flags"
 )
 

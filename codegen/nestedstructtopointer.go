@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/grokify/simplego/os/osutil"
+	"github.com/grokify/mogo/os/osutil"
 	"github.com/pkg/errors"
 )
 

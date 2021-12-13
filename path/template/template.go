@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/simplego/reflect/reflectutil"
-	"github.com/grokify/simplego/time/timeutil"
-	"github.com/grokify/simplego/type/stringsutil"
+	"github.com/grokify/mogo/reflect/reflectutil"
+	"github.com/grokify/mogo/time/timeutil"
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 // Execute takes a template string and an interface{}

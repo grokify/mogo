@@ -5,8 +5,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/grokify/simplego/fmt/fmtutil"
-	"github.com/grokify/simplego/time/timezone"
+	"github.com/grokify/mogo/fmt/fmtutil"
+	"github.com/grokify/mogo/time/timezone"
 )
 
 func main() {

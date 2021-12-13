@@ -1,4 +1,4 @@
-package simplego
+package mogo
 
-// Stub file to enable `go get github.com/grokify/simplego`
-const VERSION = "0.0.0"
+// Stub file to enable `go get github.com/grokify/mogo`
+const VERSION = "0.32.0"

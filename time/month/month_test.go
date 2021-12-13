@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 var dayofmonthToEnglishTests = []struct {

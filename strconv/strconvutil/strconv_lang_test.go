@@ -3,7 +3,7 @@ package strconvutil
 import (
 	"testing"
 
-	"github.com/grokify/simplego/text/languageutil"
+	"github.com/grokify/mogo/text/languageutil"
 )
 
 var strconvLangTests = []struct {

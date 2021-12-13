@@ -3,8 +3,8 @@ package bytesutil
 import (
 	"bytes"
 
-	"github.com/grokify/simplego/fmt/fmtutil"
-	"github.com/grokify/simplego/math/mathutil"
+	"github.com/grokify/mogo/fmt/fmtutil"
+	"github.com/grokify/mogo/math/mathutil"
 )
 
 const UTF8BOM = "\xef\xbb\xbf"

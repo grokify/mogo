@@ -3,7 +3,7 @@ package colors
 import (
 	"image/color"
 
-	"github.com/grokify/simplego/math/mathutil"
+	"github.com/grokify/mogo/math/mathutil"
 )
 
 // ChartColor1 is the color palette for Google Charts as collected by

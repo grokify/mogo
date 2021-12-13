@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	p12 "github.com/grokify/simplego/crypto/pkcs12util"
+	p12 "github.com/grokify/mogo/crypto/pkcs12util"
 	"github.com/joho/godotenv"
 )
 

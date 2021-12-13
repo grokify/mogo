@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/aymerick/raymond"
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 // RegisterAll registers helpers for the Raymond Handlebars template

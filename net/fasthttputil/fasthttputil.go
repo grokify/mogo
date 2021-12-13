@@ -3,7 +3,7 @@ package fasthttputil
 import (
 	"strings"
 
-	"github.com/grokify/simplego/type/stringsutil"
+	"github.com/grokify/mogo/type/stringsutil"
 	"github.com/valyala/fasthttp"
 )
 

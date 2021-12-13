@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/grokify/simplego/os/osutil"
+	"github.com/grokify/mogo/os/osutil"
 )
 
 /*

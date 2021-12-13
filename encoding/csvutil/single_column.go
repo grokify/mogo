@@ -5,8 +5,8 @@ import (
 	"io"
 	"strings"
 
-	"github.com/grokify/simplego/io/ioutilmore"
-	"github.com/grokify/simplego/type/stringsutil"
+	"github.com/grokify/mogo/io/ioutilmore"
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 func ReadCSVFileSingleColumnValuesString(filename string, sep rune, hasHeader, trimSpace bool, colIdx uint, condenseUniqueSort bool) ([]string, error) {

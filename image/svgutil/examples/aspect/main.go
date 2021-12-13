@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/grokify/simplego/image/svgutil"
+	"github.com/grokify/mogo/image/svgutil"
 )
 
 func main() {

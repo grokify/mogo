@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/grokify/simplego/type/stringsutil"
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 // Writer is a struct for a CSV/TSV writer.

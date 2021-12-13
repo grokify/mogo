@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/emersion/go-imap/client"
-	"github.com/grokify/simplego/type/stringsutil"
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 const (

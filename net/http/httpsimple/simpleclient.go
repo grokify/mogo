@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/grokify/simplego/net/httputilmore"
-	"github.com/grokify/simplego/net/urlutil"
+	"github.com/grokify/mogo/net/httputilmore"
+	"github.com/grokify/mogo/net/urlutil"
 )
 
 var rxHttpUrl = regexp.MustCompile(`^(?i)https?://`)

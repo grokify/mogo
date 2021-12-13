@@ -1,6 +1,6 @@
 package interfaceutil
 
-import "github.com/grokify/simplego/type/stringsutil"
+import "github.com/grokify/mogo/type/stringsutil"
 
 func SplitSliceInterface(items []interface{}, max int) [][]interface{} {
 	slices := [][]interface{}{}

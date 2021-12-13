@@ -1,4 +1,4 @@
-package simplego
+package mogo
 
 import (
 	"testing"

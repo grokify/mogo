@@ -4,7 +4,7 @@ package fmtutil
 import (
 	"strconv"
 
-	"github.com/grokify/simplego/type/number"
+	"github.com/grokify/mogo/type/number"
 )
 
 func SprintfFormatLeadingCharLength(char string, length uint) string {

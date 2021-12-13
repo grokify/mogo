@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/grokify/simplego/errors/errorsutil"
+	"github.com/grokify/mogo/errors/errorsutil"
 	"golang.org/x/image/colornames"
 )
 

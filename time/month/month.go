@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/grokify/base36"
-	"github.com/grokify/simplego/math/mathutil"
-	"github.com/grokify/simplego/time/timeslice"
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/math/mathutil"
+	"github.com/grokify/mogo/time/timeslice"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 func DayofmonthToEnglish(i uint16) string {

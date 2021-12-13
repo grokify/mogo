@@ -6,7 +6,7 @@ import (
 	"image/color"
 	"strings"
 
-	"github.com/grokify/simplego/image/colors"
+	"github.com/grokify/mogo/image/colors"
 	"golang.org/x/image/draw"
 )
 

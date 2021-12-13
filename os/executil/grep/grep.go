@@ -3,7 +3,7 @@ package grep
 import (
 	"strings"
 
-	"github.com/grokify/simplego/type/stringsutil"
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 type GrepResults []GrepResult

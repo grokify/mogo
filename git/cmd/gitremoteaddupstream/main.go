@@ -5,12 +5,12 @@ import (
 	"log"
 	"strings"
 
-	"github.com/grokify/simplego/os/executil"
-	"github.com/grokify/simplego/path/filepathutil"
+	"github.com/grokify/mogo/os/executil"
+	"github.com/grokify/mogo/path/filepathutil"
 	"github.com/jessevdk/go-flags"
 )
 
-// $ go get github.com/grokify/simplego/git/apps/gitremoteaddupstream
+// $ go get github.com/grokify/mogo/git/apps/gitremoteaddupstream
 
 type cliOptions struct {
 	Parent string `short:"p" long:"parent" description:"GitHub parent user" required:"true"`
