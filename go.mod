@@ -16,9 +16,8 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/google/go-querystring v1.1.0
 	github.com/gorilla/mux v1.8.0
-	github.com/grokify/base36 v1.0.2
+	github.com/grokify/base36 v1.0.4
 	github.com/grokify/bitcoinmath v0.1.0
-	github.com/grokify/simplego v0.32.0 // indirect
 	github.com/huandu/xstrings v1.3.2
 	github.com/itchyny/base58-go v0.2.0
 	github.com/jessevdk/go-flags v1.5.0
