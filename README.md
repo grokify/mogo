@@ -44,7 +44,7 @@ Documentation is provided using godoc and available on [GoDoc.org](https://godoc
 ## Installation
 
 ```bash
-$ go get github.com/grokify/simplego/...
+$ go get github.com/grokify/mogo/...
 ```
 
 ## Contributing
@@ -53,7 +53,7 @@ Features, Issues, and Pull Requests are always welcome.
 
 To contribute:
 
-1. Fork it ( http://github.com/grokify/simplego/fork )
+1. Fork it ( http://github.com/grokify/mogo/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -70,6 +70,6 @@ Please report issues and feature requests on [Github](https://github.com/grokify
  [codeclimate-status-svg]: https://codeclimate.com/github/grokify/mogo/badges/gpa.svg
  [codeclimate-status-url]: https://codeclimate.com/github/grokify/mogo
  [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/mogo
- [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/simplego
+ [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/mogo
  [license-svg]: https://img.shields.io/badge/license-MIT-mogo.svg
  [license-url]: https://github.com/grokify/mogo/blob/master/LICENSE
