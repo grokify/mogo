@@ -2,6 +2,7 @@ package httputilmore
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -26,6 +27,9 @@ func GetWriteFile(client *http.Client, url, filename string) (*http.Response, er
 	if err != nil {
 		return resp, errors.Wrap(err, "httputilmore.GetStoreURL.client.Get()")
 	}
+	if resp.StatusCode > 299 {
+		return resp, fmt.Errorf("non-200 status code [%d]", resp.StatusCode)
+	}
 	defer resp.Body.Close()
 	dir, file := filepath.Split(filename)
 	if len(strings.TrimSpace(dir)) > 0 {
@@ -40,7 +44,7 @@ func GetWriteFile(client *http.Client, url, filename string) (*http.Response, er
 	if err != nil {
 		err = errors.Wrap(err, "httputilmore.GetStoreURL.io.Copy()")
 	}
-	return resp, err
+	return resp, nil
 }
 
 // GetWriteFile performs a HTTP GET request and saves the response body
