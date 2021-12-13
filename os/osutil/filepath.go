@@ -28,8 +28,7 @@ func IsFile(name string, sizeGtZero bool) (bool, error) {
 	return true, nil
 }
 
-// Exists checks whether the named filepath exists or not for
-// a file or directory.
+// Exists checks whether the named filepath exists or not for a file or directory.
 func Exists(name string) (bool, error) {
 	_, err := os.Stat(name)
 	if os.IsNotExist(err) {
