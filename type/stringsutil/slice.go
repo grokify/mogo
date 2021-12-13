@@ -385,3 +385,28 @@ func SliceIsEmpty(slice []string, skipEmptyStrings bool) bool {
 	}
 	return true
 }
+
+// SliceSplitLengthStats returns a `map[int]int` indicating how many
+// strings of which length are present.
+func SliceSplitLengthStats(slice []string, sep string) map[int]int {
+	stats := map[int]int{}
+	for _, s := range slice {
+		p := strings.Split(s, sep)
+		stats[len(p)]++
+	}
+	return stats
+}
+
+// SliceBySplitLength returns lines by split length. This is useful for analyzing
+// what types of data exist with different lengths.
+func SliceBySplitLength(slice []string, sep string) map[int][]string {
+	bylen := map[int][]string{}
+	for _, s := range slice {
+		p := strings.Split(s, sep)
+		if _, ok := bylen[len(p)]; !ok {
+			bylen[len(p)] = []string{}
+		}
+		bylen[len(p)] = append(bylen[len(p)], s)
+	}
+	return bylen
+}
