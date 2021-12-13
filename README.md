@@ -19,6 +19,8 @@ to make programming Go a bit faster.
 
 In terms of scope, `mogo` is designed to cover all common areas.
 
+:warning: `mogo` is in a deconstruction phase. It currently has many dependencies and the goal is to move external dependences to separate packages such as `mogonet`, `mogotime`, etc.
+
 ## Documentation
 
 Documentation is provided using godoc and available on [GoDoc.org](https://godoc.org/github.com/grokify/mogo).
