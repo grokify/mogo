@@ -62,8 +62,8 @@ func ImageStatsNil() ImageStats {
 		Height: -1}
 }
 
-func ImageStatsRect(rect image.Rectangle) ImageStats {
+func ImageStatsRect(r image.Rectangle) ImageStats {
 	return ImageStats{
-		Width:  rect.Max.X - rect.Min.X,
-		Height: rect.Max.Y - rect.Min.Y}
+		Width:  r.Max.X - r.Min.X,
+		Height: r.Max.Y - r.Min.Y}
 }
