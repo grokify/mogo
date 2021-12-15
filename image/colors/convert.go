@@ -102,6 +102,9 @@ func ColorAverageImage(i image.Image) color.Color {
 			n++
 		}
 	}
+	if n == 0.0 {
+		return color.Black
+	}
 	return color.RGBA{
 		R: uint8(math.Sqrt(r / n)),
 		G: uint8(math.Sqrt(g / n)),
