@@ -2,6 +2,7 @@ package colors
 
 import (
 	"fmt"
+	"image"
 	"image/color"
 	"regexp"
 	"strconv"
@@ -77,6 +78,42 @@ func ParseGoogle(googString string) (color.RGBA, error) {
 	return col, nil
 }
 
-func ColorToHex(clr color.RGBA) string {
-	return fmt.Sprintf("%02x%02x%02x", clr.R, clr.G, clr.B)
+func ColorRGBAToHex(c color.RGBA) string {
+	return fmt.Sprintf("%02x%02x%02x", c.R, c.G, c.B)
+}
+
+func ColorToHex(c color.Color) string {
+	r, g, b, _ := c.RGBA()
+	return fmt.Sprintf("%02x%02x%02x", uint8(r), uint8(g), uint8(b))
+}
+
+func ColorAverageImage(i image.Image) color.Color {
+	min := i.Bounds().Min
+	max := i.Bounds().Max
+	colors := []color.Color{}
+	for x := min.X; x < max.X; x++ {
+		for y := min.Y; y < max.Y; y++ {
+			colors = append(colors, i.At(x, y))
+		}
+	}
+	return ColorAverage(colors...)
+}
+
+func ColorAverage(c ...color.Color) color.Color {
+	if len(c) == 0 {
+		return color.Black
+	}
+	r, b, g := 0.0, 0.0, 0.0
+	for _, ci := range c {
+		ri, gi, bi, _ := ci.RGBA()
+		r += float64(uint8(ri) * uint8(ri))
+		g += float64(uint8(gi) * uint8(gi))
+		b += float64(uint8(bi) * uint8(bi))
+	}
+	n := float64(len(c))
+	return color.RGBA{
+		R: uint8(r / n),
+		G: uint8(g / n),
+		B: uint8(b / n),
+		A: 255}
 }

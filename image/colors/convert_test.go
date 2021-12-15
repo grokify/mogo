@@ -63,6 +63,10 @@ func TestConvertColors(t *testing.T) {
 			G: uint8(tt.G),
 			B: uint8(tt.B),
 			A: 0xff}
+		gotRGBAHexLc := ColorRGBAToHex(clr)
+		if gotRGBAHexLc != strings.ToLower(tt.hexRaw) {
+			t.Errorf("ColorRGBAToHex(%v): want [%v] got [%v]", clr, strings.ToLower(tt.hexRaw), gotRGBAHexLc)
+		}
 		gotHexLc := ColorToHex(clr)
 		if gotHexLc != strings.ToLower(tt.hexRaw) {
 			t.Errorf("ColorToHex(%v): want [%v] got [%v]", clr, strings.ToLower(tt.hexRaw), gotHexLc)
