@@ -94,8 +94,7 @@ func ColorAverageImage(i image.Image) color.Color {
 	r, b, g, n := 0.0, 0.0, 0.0, 0.0
 	for x := min.X; x < max.X; x++ {
 		for y := min.Y; y < max.Y; y++ {
-			c := i.At(x, y)
-			ri, gi, bi, _ := c.RGBA()
+			ri, gi, bi, _ := i.At(x, y).RGBA()
 			r += float64(uint8(ri) * uint8(ri))
 			g += float64(uint8(gi) * uint8(gi))
 			b += float64(uint8(bi) * uint8(bi))
