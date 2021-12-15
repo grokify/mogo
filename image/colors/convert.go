@@ -90,13 +90,22 @@ func ColorToHex(c color.Color) string {
 func ColorAverageImage(i image.Image) color.Color {
 	min := i.Bounds().Min
 	max := i.Bounds().Max
-	colors := []color.Color{}
+	r, b, g, n := 0.0, 0.0, 0.0, 0.0
 	for x := min.X; x < max.X; x++ {
 		for y := min.Y; y < max.Y; y++ {
-			colors = append(colors, i.At(x, y))
+			c := i.At(x, y)
+			ri, gi, bi, _ := c.RGBA()
+			r += float64(uint8(ri) * uint8(ri))
+			g += float64(uint8(gi) * uint8(gi))
+			b += float64(uint8(bi) * uint8(bi))
+			n++
 		}
 	}
-	return ColorAverage(colors...)
+	return color.RGBA{
+		R: uint8(r / n),
+		G: uint8(g / n),
+		B: uint8(b / n),
+		A: 255}
 }
 
 func ColorAverage(c ...color.Color) color.Color {
