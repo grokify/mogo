@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
@@ -102,9 +103,9 @@ func ColorAverageImage(i image.Image) color.Color {
 		}
 	}
 	return color.RGBA{
-		R: uint8(r / n),
-		G: uint8(g / n),
-		B: uint8(b / n),
+		R: uint8(math.Sqrt(r / n)),
+		G: uint8(math.Sqrt(g / n)),
+		B: uint8(math.Sqrt(b / n)),
 		A: 255}
 }
 
@@ -121,8 +122,8 @@ func ColorAverage(c ...color.Color) color.Color {
 	}
 	n := float64(len(c))
 	return color.RGBA{
-		R: uint8(r / n),
-		G: uint8(g / n),
-		B: uint8(b / n),
+		R: uint8(math.Sqrt(r / n)),
+		G: uint8(math.Sqrt(g / n)),
+		B: uint8(math.Sqrt(b / n)),
 		A: 255}
 }
