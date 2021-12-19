@@ -9,8 +9,6 @@ require (
 	github.com/buaazp/fasthttprouter v0.1.1
 	github.com/buger/jsonparser v1.1.1
 	github.com/caarlos0/env v3.5.0+incompatible
-	github.com/chai2010/webp v1.1.0
-	github.com/cheekybits/is v0.0.0-20150225183255-68e9c0620927 // indirect
 	github.com/derekstavis/go-qs v0.0.0-20180720192143-9eef69e6c4e7
 	github.com/emersion/go-imap v1.2.0
 	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect
@@ -29,7 +27,6 @@ require (
 	github.com/kellydunn/golang-geo v0.7.0
 	github.com/kylelemons/go-gypsy v1.0.0 // indirect
 	github.com/leekchan/accounting v1.0.0
-	github.com/lucasb-eyer/go-colorful v1.2.0
 	github.com/lytics/base62 v0.0.0-20180808010106-0ee4de5a5d6d
 	github.com/martinlindhe/base36 v1.1.0
 	github.com/microcosm-cc/bluemonday v1.0.16
@@ -39,19 +36,14 @@ require (
 	github.com/onsi/gomega v1.17.0 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/sftp v1.13.4
-	github.com/rs/zerolog v1.26.0
-	github.com/rustyoz/Mtransform v0.0.0-20190224104252-60c8c35a3681 // indirect
-	github.com/rustyoz/genericlexer v0.0.0-20190224115003-eb82fd2987bd // indirect
-	github.com/rustyoz/svg v0.0.0-20200706102315-fe1aeca2ba20
-	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
+	github.com/rs/zerolog v1.26.1
 	github.com/valyala/fasthttp v1.31.0
 	github.com/valyala/fastjson v1.6.3
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	github.com/ziutek/mymysql v1.5.4 // indirect
-	golang.org/x/crypto v0.0.0-20211209193657-4570a0811e8b
-	golang.org/x/image v0.0.0-20211028202545-6944b10bf410
-	golang.org/x/net v0.0.0-20211209124913-491a49abca63
+	golang.org/x/crypto v0.0.0-20211215165025-cf75a172585e
+	golang.org/x/net v0.0.0-20211216030914-fe4d6282115f
 	golang.org/x/text v0.3.7
 	gopkg.in/oleiade/reflections.v1 v1.0.0
 	mellium.im/sasl v0.2.1 // indirect
