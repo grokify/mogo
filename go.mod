@@ -43,6 +43,7 @@ require (
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	github.com/ziutek/mymysql v1.5.4 // indirect
 	golang.org/x/crypto v0.0.0-20211215165025-cf75a172585e
+	golang.org/x/image v0.0.0-20211028202545-6944b10bf410
 	golang.org/x/net v0.0.0-20211216030914-fe4d6282115f
 	golang.org/x/text v0.3.7
 	gopkg.in/oleiade/reflections.v1 v1.0.0
