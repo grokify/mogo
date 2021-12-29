@@ -1,12 +1,15 @@
 package osutil
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 )
 
+// DirEntries provides utility functions for `[]os.DirEntry`. Use as
+// `entries := osutil.DirEntries(slice)``
 type DirEntries []os.DirEntry
 
 func (entries DirEntries) Len() int           { return len(entries) }
@@ -32,6 +35,18 @@ func (entries DirEntries) Names(dir string, sortNames bool) []string {
 		sort.Strings(names)
 	}
 	return names
+}
+
+// WriteFileNames writes a text file with filenames, one per line.
+func (entries DirEntries) WriteFileNames(filename, dir string, sortNames bool, perm os.FileMode) error {
+	if len(filename) == 0 {
+		return errors.New("filename required")
+	}
+	names := entries.Names(dir, sortNames)
+	return os.WriteFile(
+		filename,
+		[]byte(strings.Join(names, "\n")+"\n"),
+		perm)
 }
 
 // Infos returns a `[]os.FileInfo` slice.
