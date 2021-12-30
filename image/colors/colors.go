@@ -7,9 +7,10 @@ import (
 type Colors []color.Color
 
 func (clrs Colors) In(c color.Color) bool {
-	wantHex := ColorToHex(c)
+	r, g, b, a := c.RGBA()
 	for _, cx := range clrs {
-		if ColorToHex(cx) == wantHex {
+		rx, gx, bx, ax := cx.RGBA()
+		if r == rx && g == gx && b == bx && a == ax {
 			return true
 		}
 	}
