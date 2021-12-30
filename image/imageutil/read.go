@@ -18,7 +18,7 @@ const (
 	FormatNameWEBP = "webp"
 )
 
-func ReadImageAny(location string) (image.Image, string, error) {
+func ReadImage(location string) (image.Image, string, error) {
 	if isHttpUri(location) {
 		return ReadImageHttp(location)
 	}
@@ -28,7 +28,7 @@ func ReadImageAny(location string) (image.Image, string, error) {
 func ReadImages(locations []string) ([]image.Image, error) {
 	images := []image.Image{}
 	for _, location := range locations {
-		img, _, err := ReadImageAny(location)
+		img, _, err := ReadImage(location)
 		if err != nil {
 			return images, err
 		}
