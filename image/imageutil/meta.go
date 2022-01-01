@@ -83,3 +83,20 @@ func ImagePixelCount(img image.Image) int {
 	}
 	return w * h
 }
+
+func ImageColors(img image.Image) [][]color.Color {
+	rows := [][]color.Color{}
+	minPt := img.Bounds().Min
+	maxPt := img.Bounds().Max
+	if minPt.X == maxPt.X || minPt.Y == maxPt.Y {
+		return rows
+	}
+	for y := minPt.Y; y <= maxPt.Y; y++ {
+		row := []color.Color{}
+		for x := minPt.X; x <= maxPt.X; x++ {
+			row = append(row, img.At(x, y))
+		}
+		rows = append(rows, row)
+	}
+	return rows
+}
