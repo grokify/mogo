@@ -84,6 +84,8 @@ func ImagePixelCount(img image.Image) int {
 	return w * h
 }
 
+// ImageColors returns colors for an image covering the pixels
+// described in `image.Rectangle`: https://pkg.go.dev/image#Rectangle
 func ImageColors(img image.Image) [][]color.Color {
 	rows := [][]color.Color{}
 	minPt := img.Bounds().Min
@@ -91,9 +93,9 @@ func ImageColors(img image.Image) [][]color.Color {
 	if minPt.X == maxPt.X || minPt.Y == maxPt.Y {
 		return rows
 	}
-	for y := minPt.Y; y <= maxPt.Y; y++ {
+	for y := minPt.Y; y < maxPt.Y; y++ {
 		row := []color.Color{}
-		for x := minPt.X; x <= maxPt.X; x++ {
+		for x := minPt.X; x < maxPt.X; x++ {
 			row = append(row, img.At(x, y))
 		}
 		rows = append(rows, row)
