@@ -89,6 +89,19 @@ func ColorToHex(c color.Color) string {
 	return fmt.Sprintf("%02x%02x%02x", uint8(r), uint8(g), uint8(b))
 }
 
+// ColorString returns a full 16-bit color representation.
+func ColorString(c color.Color) string {
+	r, g, b, a := c.RGBA()
+	five0fmt := "%05d"
+	return strings.Join(
+		[]string{
+			fmt.Sprintf(five0fmt, int(r)),
+			fmt.Sprintf(five0fmt, int(g)),
+			fmt.Sprintf(five0fmt, int(b)),
+			fmt.Sprintf(five0fmt, int(a)),
+		}, ".")
+}
+
 func ColorAverageImage(i image.Image) color.Color {
 	var r, g, b uint64
 
