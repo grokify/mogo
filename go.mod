@@ -33,7 +33,6 @@ require (
 	github.com/onsi/gomega v1.17.0 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/sftp v1.13.4
-	github.com/rs/zerolog v1.26.1
 	github.com/valyala/fastjson v1.6.3
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
