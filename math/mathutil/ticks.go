@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pkg/errors"
+	"github.com/grokify/mogo/errors/errorsutil"
 )
 
 func PrettyTicksPercent(estimatedTickCount int, low, high float64, sigDigits uint8) []float64 {
@@ -67,7 +67,7 @@ func FloorMostSignificant(valOriginal int64) int64 {
 	// Math power approach
 	mostSig, err := strconv.Atoi(valStr[0:1])
 	if err != nil {
-		panic(errors.Wrap(err, "mathutil.FloorMostSignificant"))
+		panic(errorsutil.Wrap(err, "mathutil.FloorMostSignificant"))
 	}
 	if isNegative {
 		final = -1 * int64(mostSig+1) * int64(math.Pow10(valLen-1))
@@ -87,7 +87,7 @@ func FloorMostSignificant(valOriginal int64) int64 {
 		intStr := strings.Join(vals, "")
 		num, err := strconv.Atoi(intStr)
 		if err != nil {
-			panic(errors.Wrap(err, "mathutil.FloorMostSignificant"))
+			panic(errorsutil.Wrap(err, "mathutil.FloorMostSignificant"))
 		}
 		final = int64(num)
 	}

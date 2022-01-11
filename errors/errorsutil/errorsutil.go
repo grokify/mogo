@@ -2,13 +2,18 @@ package errorsutil
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 )
 
+/*
 // Append adds additional text to an existing error.
 func Append(err error, str string) error {
 	return errors.New(fmt.Sprint(err) + str)
+}
+*/
+
+func Wrap(err error, prefix string) error {
+	return errors.New(prefix + ": " + err.Error())
 }
 
 func Join(inclNils bool, errs ...error) error {

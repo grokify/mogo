@@ -1,11 +1,10 @@
 package urlutil
 
 import (
+	"errors"
 	"net/url"
 	"regexp"
 	"strings"
-
-	"github.com/pkg/errors"
 )
 
 var leading *regexp.Regexp = regexp.MustCompile(`^/+`)

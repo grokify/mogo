@@ -1,14 +1,15 @@
 package timeutil
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/math/mathutil"
-	"github.com/pkg/errors"
 )
 
 func InQuarter(dt time.Time, yyyyq int32) (bool, error) {
@@ -202,7 +203,7 @@ func DeltaQuarterInt32(yyyyq int32, numQuarters int) (int32, error) {
 	for i := 0; i < numQuarters; i++ {
 		future, err = NextQuarterInt32(future)
 		if err != nil {
-			return -1, errors.Wrap(err, "Future Quarter")
+			return -1, errorsutil.Wrap(err, "Future Quarter")
 		}
 	}
 	return future, nil
@@ -284,7 +285,7 @@ func QuartersInt32RelToAbs(begin, end int32) (int32, int32) {
 	if end < 100 {
 		beginDt, err := QuarterInt32StartTime(begin)
 		if err != nil {
-			panic(errors.Wrap(err, "timeutil.QuartersInt32RelToAbs"))
+			panic(errorsutil.Wrap(err, "timeutil.QuartersInt32RelToAbs"))
 		}
 		end = QuarterInt32ForTime(
 			DeltaQuarters(beginDt, int(end-1)))

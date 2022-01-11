@@ -1,13 +1,14 @@
 package httputilmore
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
 
 	"github.com/grokify/mogo/encoding/jsonutil"
-	"github.com/pkg/errors"
+	"github.com/grokify/mogo/errors/errorsutil"
 )
 
 // ProxyResponse copies the information from a `*http.Response` to a
@@ -41,7 +42,7 @@ func ProxyResponse(w http.ResponseWriter, resp *http.Response) ([]byte, error) {
 func CondenseResponseNot2xxToError(resp *http.Response, err error, msg string) error {
 	if err != nil {
 		if len(msg) > 0 {
-			return errors.Wrap(err, msg)
+			return errorsutil.Wrap(err, msg)
 		} else {
 			return err
 		}

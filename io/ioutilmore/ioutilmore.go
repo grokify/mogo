@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -14,8 +15,8 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/encoding/jsonutil"
+	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/os/osutil"
-	"github.com/pkg/errors"
 )
 
 type FileType int
@@ -232,7 +233,7 @@ func WriteFileJSON(filepath string, data interface{}, perm os.FileMode, prefix, 
 func CloseFileWithError(file *os.File, err error) error {
 	errFile := file.Close()
 	if err != nil {
-		return errors.Wrap(err, errFile.Error())
+		return errorsutil.Wrap(err, errFile.Error())
 	}
 	return err
 }

@@ -8,8 +8,8 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/os/osutil"
-	"github.com/pkg/errors"
 )
 
 func ConvertFilesInPlaceNestedstructsToPointers(dir string, rx *regexp.Regexp) ([]string, error) {
@@ -20,7 +20,7 @@ func ConvertFilesInPlaceNestedstructsToPointers(dir string, rx *regexp.Regexp) (
 	entries, err := osutil.ReadDirMore(dir, rx, false, true, false)
 	// files, err := ioutilmore.DirEntriesRxSizeGt0(dir, ioutilmore.File, rx)
 	if err != nil {
-		return filenames, errors.Wrap(err, "codegen.ConvertFilesInPlace.ReadDirMore")
+		return filenames, errorsutil.Wrap(err, "codegen.ConvertFilesInPlace.ReadDirMore")
 	}
 	//filenames := osutil.DirEntries(entries).Names(dir, true)
 	//for _, filename := range filenames {
@@ -28,11 +28,11 @@ func ConvertFilesInPlaceNestedstructsToPointers(dir string, rx *regexp.Regexp) (
 		filename := filepath.Join(dir, entry.Name())
 		fileinfo, err := entry.Info()
 		if err != nil {
-			return filenames, errors.Wrap(err, fmt.Sprintf("codegen.ConvertFilesInPlaceNestedstructsToPointers...entry.Info() [%s]", entry.Name()))
+			return filenames, errorsutil.Wrap(err, fmt.Sprintf("codegen.ConvertFilesInPlaceNestedstructsToPointers...entry.Info() [%s]", entry.Name()))
 		}
 		err = ConvertFileNestedstructsToPointers(filename, filename, fileinfo.Mode().Perm())
 		if err != nil {
-			return filenames, errors.Wrap(err, "codegen.ConvertFilesInPlace.ConvertFile")
+			return filenames, errorsutil.Wrap(err, "codegen.ConvertFilesInPlace.ConvertFile")
 		}
 		filenames = append(filenames, filename)
 	}

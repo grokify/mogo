@@ -1,13 +1,12 @@
 package timeutil
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // More predefined layouts for use in Time.Format and time.Parse.

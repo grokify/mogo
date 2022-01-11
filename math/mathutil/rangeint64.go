@@ -3,7 +3,7 @@ package mathutil
 import (
 	"fmt"
 
-	pkgerr "github.com/pkg/errors"
+	"github.com/grokify/mogo/errors/errorsutil"
 )
 
 // RangeFloat64 creates a range with a fixed set of cells and
@@ -37,7 +37,7 @@ func (rng *RangeInt64) binarySearch(v int64, l, r int32) (int32, error) {
 	m := int32(float32(l) + (float32(r)-float32(l))/2.0)
 	min, max, err := rng.CellMinMax(m)
 	if err != nil {
-		return int32(0), pkgerr.Wrap(err, "CellMinMax() failed")
+		return int32(0), errorsutil.Wrap(err, "CellMinMax() failed")
 	}
 	//fmt.Printf("{\"iter\":%v,\"val\":%v,\"l\":%v,\"r\":%v,\"m\":%v,\"minv\":%v,\"maxv\":%v}\n", rng.iter, v, l, r, m, min, max)
 

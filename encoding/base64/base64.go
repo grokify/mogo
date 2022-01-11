@@ -11,7 +11,7 @@ import (
 
 	"github.com/grokify/mogo/compress/gziputil"
 	"github.com/grokify/mogo/encoding"
-	"github.com/pkg/errors"
+	"github.com/grokify/mogo/errors/errorsutil"
 )
 
 // Decode decodes a byte array to provide an interface
@@ -94,7 +94,7 @@ func DecodeGunzipJSON(encoded string, output interface{}) error {
 	}
 	bytes, err := DecodeGunzip(encoded)
 	if err != nil {
-		return errors.Wrap(err, "DecodeGunzipJSON.DecodeGunzip")
+		return errorsutil.Wrap(err, "DecodeGunzipJSON.DecodeGunzip")
 	}
 	return json.Unmarshal(bytes, output)
 }

@@ -31,13 +31,12 @@ require (
 	github.com/oleiade/reflections v1.0.1 // indirect
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.17.0 // indirect
-	github.com/pkg/errors v0.9.1
 	github.com/pkg/sftp v1.13.4
 	github.com/valyala/fastjson v1.6.3
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	github.com/ziutek/mymysql v1.5.4 // indirect
-	golang.org/x/crypto v0.0.0-20211215165025-cf75a172585e
+	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
 	golang.org/x/image v0.0.0-20211028202545-6944b10bf410
 	golang.org/x/net v0.0.0-20220111093109-d55c255bac03
 	golang.org/x/text v0.3.7

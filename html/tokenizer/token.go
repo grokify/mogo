@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/pkg/errors"
+	"github.com/grokify/mogo/errors/errorsutil"
 	"golang.org/x/net/html"
 )
 
@@ -24,7 +24,7 @@ func ParseLink(tokens ...html.Token) (href string, desc string, err error) {
 	}
 	href, err = TokenAttribute(tokens[0], AttrHref)
 	if err != nil {
-		return href, "", errors.Wrap(err,
+		return href, "", errorsutil.Wrap(err,
 			fmt.Sprintf("href not found in token [%s]",
 				tokens[0].DataAtom))
 	}

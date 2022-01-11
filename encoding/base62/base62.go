@@ -8,8 +8,8 @@ import (
 
 	"github.com/grokify/mogo/compress/gziputil"
 	"github.com/grokify/mogo/encoding"
+	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/lytics/base62"
-	"github.com/pkg/errors"
 )
 
 var (
@@ -64,7 +64,7 @@ func DecodeGunzipJSON(encoded string, output interface{}) error {
 	}
 	bytes, err := DecodeGunzip(encoded)
 	if err != nil {
-		return errors.Wrap(err, "DecodeGunzipJSON.DecodeGunzip")
+		return errorsutil.Wrap(err, "DecodeGunzipJSON.DecodeGunzip")
 	}
 	return json.Unmarshal(bytes, output)
 }

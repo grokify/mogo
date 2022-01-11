@@ -2,6 +2,7 @@ package httputilmore
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -13,8 +14,8 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/encoding/jsonutil"
+	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/net/urlutil"
-	"github.com/pkg/errors"
 )
 
 // GetWriteFile gets the conents of a URL and stores the body in
@@ -25,7 +26,7 @@ func GetWriteFile(client *http.Client, url, filename string) (*http.Response, er
 	}
 	resp, err := client.Get(url)
 	if err != nil {
-		return resp, errors.Wrap(err, "httputilmore.GetStoreURL.client.Get()")
+		return resp, errorsutil.Wrap(err, "httputilmore.GetStoreURL.client.Get()")
 	}
 	if resp.StatusCode > 299 {
 		return resp, fmt.Errorf("non-200 status code [%d]", resp.StatusCode)
@@ -37,12 +38,12 @@ func GetWriteFile(client *http.Client, url, filename string) (*http.Response, er
 	}
 	f, err := os.Create(file)
 	if err != nil {
-		return resp, errors.Wrap(err, "httputilmore.GetStoreURL.os.Create()")
+		return resp, errorsutil.Wrap(err, "httputilmore.GetStoreURL.os.Create()")
 	}
 	defer f.Close()
 	_, err = io.Copy(f, resp.Body)
 	if err != nil {
-		err = errors.Wrap(err, "httputilmore.GetStoreURL.io.Copy()")
+		err = errorsutil.Wrap(err, "httputilmore.GetStoreURL.io.Copy()")
 	}
 	return resp, nil
 }

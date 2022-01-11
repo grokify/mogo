@@ -7,8 +7,8 @@ import (
 	"os"
 	"regexp"
 
+	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/os/osutil"
-	"github.com/pkg/errors"
 )
 
 func ZipFilesRx(zipfile, dir string, rx *regexp.Regexp, removePaths bool) error {
@@ -35,7 +35,7 @@ func ZipFiles(zipfile string, removePaths bool, srcfiles []string) error {
 			return closeFileAndZipOnError(
 				zfile,
 				zipw,
-				errors.Wrap(err, fmt.Sprintf("Failed to add file %s to zip", filename)))
+				errorsutil.Wrap(err, fmt.Sprintf("Failed to add file %s to zip", filename)))
 		}
 	}
 	err = zipw.Close()
@@ -49,13 +49,13 @@ func closeFileAndZipOnError(f *os.File, zipw *zip.Writer, err error) error {
 	if zipw != nil {
 		zipwErr := zipw.Close()
 		if zipwErr != nil {
-			err = errors.Wrap(err, zipwErr.Error())
+			err = errorsutil.Wrap(err, zipwErr.Error())
 		}
 	}
 	if f != nil {
 		fErr := f.Close()
 		if fErr != nil {
-			err = errors.Wrap(err, fErr.Error())
+			err = errorsutil.Wrap(err, fErr.Error())
 		}
 	}
 	return err
@@ -65,7 +65,7 @@ func closeFileOnError(f *os.File, err error) error {
 	if f != nil {
 		fErr := f.Close()
 		if fErr != nil {
-			err = errors.Wrap(err, fErr.Error())
+			err = errorsutil.Wrap(err, fErr.Error())
 		}
 	}
 	return err
