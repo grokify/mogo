@@ -3,10 +3,8 @@ module github.com/grokify/mogo
 go 1.16
 
 require (
-	github.com/apex/gateway v1.1.2
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
 	github.com/aymerick/raymond v2.0.2+incompatible
-	github.com/buaazp/fasthttprouter v0.1.1
 	github.com/buger/jsonparser v1.1.1
 	github.com/caarlos0/env v3.5.0+incompatible
 	github.com/derekstavis/go-qs v0.0.0-20180720192143-9eef69e6c4e7
@@ -15,7 +13,6 @@ require (
 	github.com/go-pg/pg v8.0.7+incompatible
 	github.com/golang/protobuf v1.5.2
 	github.com/google/go-querystring v1.1.0
-	github.com/gorilla/mux v1.8.0
 	github.com/grokify/base36 v1.0.5
 	github.com/grokify/bitcoinmath v0.1.0
 	github.com/huandu/xstrings v1.3.2
@@ -30,21 +27,20 @@ require (
 	github.com/lytics/base62 v0.0.0-20180808010106-0ee4de5a5d6d
 	github.com/martinlindhe/base36 v1.1.0
 	github.com/microcosm-cc/bluemonday v1.0.17
-	github.com/nyaruka/phonenumbers v1.0.73
+	github.com/nyaruka/phonenumbers v1.0.74
 	github.com/oleiade/reflections v1.0.1 // indirect
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.17.0 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/sftp v1.13.4
 	github.com/rs/zerolog v1.26.1
-	github.com/valyala/fasthttp v1.31.0
 	github.com/valyala/fastjson v1.6.3
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	github.com/ziutek/mymysql v1.5.4 // indirect
 	golang.org/x/crypto v0.0.0-20211215165025-cf75a172585e
 	golang.org/x/image v0.0.0-20211028202545-6944b10bf410
-	golang.org/x/net v0.0.0-20211216030914-fe4d6282115f
+	golang.org/x/net v0.0.0-20220111093109-d55c255bac03
 	golang.org/x/text v0.3.7
 	gopkg.in/oleiade/reflections.v1 v1.0.0
 	mellium.im/sasl v0.2.1 // indirect
