@@ -64,17 +64,18 @@ func (ops Operations) TagCounts(concatenate bool, sep string) map[string]int {
 	return msi
 }
 
-func (ops Operations) PathsUnique() bool {
+func (ops Operations) DuplicatePaths() map[string]int {
 	mapPaths := map[string]int{}
 	for _, op := range ops {
 		mapPaths[op.Path] += 1
 	}
-	for _, v := range mapPaths {
-		if v > 1 {
-			return false
+	dupPaths := map[string]int{}
+	for opPath, pathCount := range mapPaths {
+		if pathCount > 1 {
+			dupPaths[opPath] = pathCount
 		}
 	}
-	return true
+	return dupPaths
 }
 
 func (ops Operations) Table() ([]string, [][]string) {
