@@ -83,7 +83,7 @@ func (ops Operations) Table() ([]string, [][]string) {
 		"Tags", "Class", "Op Type", "Method Type", "Path", "Summary", "Description", "Link"}
 	rows := [][]string{}
 	for _, op := range ops {
-		row := []string{
+		rows = append(rows, []string{
 			strings.Join(op.Tags, ", "),
 			op.Class,
 			op.OperationType,
@@ -91,8 +91,7 @@ func (ops Operations) Table() ([]string, [][]string) {
 			op.Path,
 			op.Summary,
 			op.Description,
-			op.Link}
-		rows = append(rows, row)
+			op.Link})
 	}
 	return cols, rows
 }
