@@ -23,6 +23,60 @@ const (
 
 type Operations []Operation
 
+func (ops Operations) TrimSpace() {
+	for i, op := range ops {
+		op.TrimSpace()
+		ops[i] = op
+	}
+}
+
+func (ops Operations) RemovePaths(paths []string) Operations {
+	paths = stringsutil.SliceUnique(paths)
+	if len(paths) == 0 {
+		return ops
+	}
+	newOps := Operations{}
+OP:
+	for _, op := range ops {
+		for _, rem := range paths {
+			if op.Path == rem {
+				continue OP
+			}
+		}
+		newOps = append(newOps, op)
+	}
+	return newOps
+}
+
+func (ops Operations) TagCounts(concatenate bool, sep string) map[string]int {
+	msi := map[string]int{}
+	for _, op := range ops {
+		tags := stringsutil.SliceCondenseSpace(op.Tags, true, true)
+		if concatenate {
+			tagc := strings.Join(tags, sep)
+			msi[tagc] += 1
+			continue
+		}
+		for _, tag := range tags {
+			msi[tag] += 1
+		}
+	}
+	return msi
+}
+
+func (ops Operations) PathsUnique() bool {
+	mapPaths := map[string]int{}
+	for _, op := range ops {
+		mapPaths[op.Path] += 1
+	}
+	for _, v := range mapPaths {
+		if v > 1 {
+			return false
+		}
+	}
+	return true
+}
+
 func (ops Operations) Table() ([]string, [][]string) {
 	cols := []string{
 		"Tags", "Class", "Op Type", "Method Type", "Path", "Summary", "Description", "Link"}
