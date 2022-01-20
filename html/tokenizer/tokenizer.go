@@ -1,8 +1,10 @@
 package tokenizer
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 
 	"golang.org/x/net/html"
@@ -10,6 +12,14 @@ import (
 )
 
 var TokenNotFound = errors.New("token not found")
+
+func NewTokenizerFile(filename string) (*html.Tokenizer, error) {
+	htmlBytes, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	return html.NewTokenizer(bytes.NewReader(htmlBytes)), nil
+}
 
 // TokensBetweenAtom returns the tokens that represent the `innerHtml`
 // between a start and end tag token.
@@ -33,6 +43,9 @@ func TokensBetween(z *html.Tokenizer, skipErrors, inclusive bool, begin, end Tok
 		tokens = append(tokens, tmsBegin...)
 	}
 	tokensChain, err := NextTokenMatch(z, skipErrors, true, inclusive, end...)
+	if err != nil {
+		return tokens, err
+	}
 	tokens = append(tokens, tokensChain...)
 	return tokens, nil
 }
@@ -48,6 +61,9 @@ func NextTokenMatch(z *html.Tokenizer, skipErrors, includeChain, includeMatch bo
 	for {
 		tt := z.Next()
 		token := z.Token()
+		if token.Type == html.ErrorToken {
+			break
+		}
 		filtersForType := filtersMore.ByTokenType(tt)
 		if len(filtersForType) > 0 {
 			for _, filter := range filtersForType {
@@ -68,7 +84,7 @@ func NextTokenMatch(z *html.Tokenizer, skipErrors, includeChain, includeMatch bo
 			matches = append(matches, token)
 		}
 	}
-	return matches, TokenNotFound
+	return matches, nil
 }
 
 func NextStartToken(z *html.Tokenizer, skipErrors bool, htmlAtoms ...atom.Atom) (html.Token, error) {
