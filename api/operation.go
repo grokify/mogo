@@ -49,6 +49,7 @@ OP:
 }
 
 func (ops Operations) TagCounts(concatenate bool, sep string) map[string]int {
+	ops.TrimSpace()
 	msi := map[string]int{}
 	for _, op := range ops {
 		tags := stringsutil.SliceCondenseSpace(op.Tags, true, true)
@@ -76,6 +77,19 @@ func (ops Operations) DuplicatePaths() map[string]int {
 		}
 	}
 	return dupPaths
+}
+
+func (ops Operations) TypeCounts() (operationCounts map[string]int, methodCounts map[string]int) {
+	ops.TrimSpace()
+	operationCounts = map[string]int{}
+	methodCounts = map[string]int{}
+	for _, op := range ops {
+		operationCounts[op.OperationType] += 1
+		if op.OperationType == TypeMethod {
+			methodCounts[op.MethodType] += 1
+		}
+	}
+	return
 }
 
 func (ops Operations) Table() ([]string, [][]string) {
