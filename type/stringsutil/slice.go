@@ -38,8 +38,7 @@ func SliceCondenseSpace(lines []string, dedupeResults, sortResults bool) []strin
 	return results
 }
 
-// SliceTrimSpace removes leading and trailing spaces per
-// string.
+// SliceTrimSpace removes leading and trailing spaces per string.
 func SliceTrimSpace(s []string) []string {
 	for i, v := range s {
 		s[i] = strings.TrimSpace(v)
@@ -59,6 +58,19 @@ func SliceTrim(lines []string, cutstr string, condense bool) []string {
 		newLines = append(newLines, line)
 	}
 	return newLines
+}
+
+func SliceUnique(s []string) []string {
+	unique := []string{}
+	seen := map[string]int{}
+	for _, x := range s {
+		if _, ok := seen[x]; ok {
+			continue
+		}
+		unique = append(unique, x)
+		seen[x] = 1
+	}
+	return unique
 }
 
 /*
