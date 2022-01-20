@@ -1,7 +1,9 @@
 package tokenizer
 
 import (
+	"fmt"
 	"sort"
+	"strings"
 
 	"golang.org/x/net/html/atom"
 )
@@ -17,6 +19,39 @@ func NewAtomSet(htmlAtoms ...atom.Atom) AtomSet {
 		atomSet.Add(htmlAtoms...)
 	}
 	return atomSet
+}
+
+func NewAtomSetStringMust(tagNames ...string) AtomSet {
+	atoms, err := NewAtomSetString(tagNames...)
+	if err != nil {
+		panic(err)
+	}
+	return atoms
+}
+
+func NewAtomSetString(tagNames ...string) (AtomSet, error) {
+	if len(tagNames) == 0 {
+		return NewAtomSet(), nil
+	}
+	atoms := []atom.Atom{}
+	unmatchedNames := []string{}
+	for _, tagName := range tagNames {
+		tagAtom := AtomLookupString(tagName)
+		if strings.TrimSpace(tagAtom.String()) == "" {
+			unmatchedNames = append(unmatchedNames, tagName)
+		} else {
+			atoms = append(atoms, tagAtom)
+		}
+	}
+	atomsSet := NewAtomSet(atoms...)
+	if len(unmatchedNames) > 0 {
+		return atomsSet, fmt.Errorf("unmatchedTagNames [%s]", strings.Join(unmatchedNames, ","))
+	}
+	return atomsSet, nil
+}
+
+func AtomLookupString(tagName string) atom.Atom {
+	return atom.Lookup([]byte(strings.ToLower(strings.TrimSpace(tagName))))
 }
 
 func (set AtomSet) Len() int {
