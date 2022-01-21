@@ -30,3 +30,28 @@ func EndsWith(s string, substrs ...string) bool {
 	}
 	return false
 }
+
+func ContainsMore(s string, substrs []string, all, lc, trimSpaceSubstr bool) bool {
+	if lc {
+		s = strings.ToLower(s)
+	}
+	matchAll := true
+	for _, sub := range substrs {
+		if lc {
+			sub = strings.ToLower(sub)
+		}
+		if trimSpaceSubstr {
+			sub = strings.TrimSpace(sub)
+		}
+		ok := strings.Contains(s, sub)
+		if ok && !all {
+			return true
+		} else if !ok {
+			if all {
+				return false
+			}
+			matchAll = false
+		}
+	}
+	return matchAll
+}
