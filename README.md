@@ -23,6 +23,7 @@ In terms of scope, `mogo` is designed to cover all common areas.
 See the following modules for extended functionality (with more dependencies):
 
 * GoAuth - [github.com/grokify/goauth](https://github.com/grokify/goauth)
+* GoCharts - [github.com/grokify/gocharts](https://github.com/grokify/gocharts)
 * GoHTTP - [github.com/grokify/gohttp](https://github.com/grokify/gohttp)
 
 ## Documentation
