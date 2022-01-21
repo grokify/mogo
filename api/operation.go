@@ -48,7 +48,7 @@ OP:
 	return newOps
 }
 
-func (ops Operations) TagCounts(concatenate bool, sep string) map[string]int {
+func (ops Operations) CountsByTag(concatenate bool, sep string) map[string]int {
 	ops.TrimSpace()
 	msi := map[string]int{}
 	for _, op := range ops {
@@ -79,7 +79,15 @@ func (ops Operations) DuplicatePaths() map[string]int {
 	return dupPaths
 }
 
-func (ops Operations) TypeCounts() (operationCounts map[string]int, methodCounts map[string]int) {
+func (ops Operations) CountsByTagCount() map[int]int {
+	mii := map[int]int{}
+	for _, op := range ops {
+		mii[len(op.Tags)] += 1
+	}
+	return mii
+}
+
+func (ops Operations) CountsByType() (operationCounts map[string]int, methodCounts map[string]int) {
 	ops.TrimSpace()
 	operationCounts = map[string]int{}
 	methodCounts = map[string]int{}
