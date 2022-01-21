@@ -16,7 +16,7 @@ languages where there are more productivity methods. The `mogo` package's
 goal is to provide wrappers for common tasks in the same spirit of `io/ioutil`
 to make programming Go a bit faster.
 
-In terms of scope, `mogo` is designed to cover all common areas.
+In terms of scope, `mogo` is designed to cover all common areas, with a move to fewer dependencies.
 
 :warning: `mogo` is in a deconstruction phase. It currently has many dependencies and the goal is to move external dependences to separate packages such as `gohttp`.
 
