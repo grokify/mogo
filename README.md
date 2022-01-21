@@ -18,7 +18,7 @@ to make programming Go a bit faster.
 
 In terms of scope, `mogo` is designed to cover all common areas.
 
-:warning: `mogo` is in a deconstruction phase. It currently has many dependencies and the goal is to move external dependences to separate packages such as `mogonet`, `mogotime`, etc.
+:warning: `mogo` is in a deconstruction phase. It currently has many dependencies and the goal is to move external dependences to separate packages such as `gohttp`.
 
 See the following modules for extended functionality (with more dependencies):
 
