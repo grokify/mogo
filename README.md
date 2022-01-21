@@ -20,6 +20,11 @@ In terms of scope, `mogo` is designed to cover all common areas.
 
 :warning: `mogo` is in a deconstruction phase. It currently has many dependencies and the goal is to move external dependences to separate packages such as `mogonet`, `mogotime`, etc.
 
+See the following modules for extended functionality (with more dependencies):
+
+* GoAuth - [github.com/grokify/goauth](https://github.com/grokify/goauth)
+* GoHTTP - [github.com/grokify/gohttp](https://github.com/grokify/gohttp)
+
 ## Documentation
 
 Documentation is provided using godoc and available on [GoDoc.org](https://godoc.org/github.com/grokify/mogo).
