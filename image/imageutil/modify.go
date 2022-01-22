@@ -12,17 +12,17 @@ import (
 // AddBackgroundColor adds a background of `color.Color` to an image.
 // It is is useful when the image has a transparent background. Use
 // `colornames` for more colors, e.g. `colornames.Blue`.
-func AddBackgroundColor(imgSrc image.Image, clr color.Color) image.Image {
-	imgNew := image.NewRGBA(imgSrc.Bounds())
+func AddBackgroundColor(img image.Image, clr color.Color) image.Image {
+	imgNew := image.NewRGBA(img.Bounds())
 	draw.Draw(imgNew, imgNew.Bounds(), &image.Uniform{clr}, image.Point{}, draw.Src)
-	draw.Draw(imgNew, imgNew.Bounds(), imgSrc, imgSrc.Bounds().Min, draw.Over)
+	draw.Draw(imgNew, imgNew.Bounds(), img, img.Bounds().Min, draw.Over)
 	return imgNew
 }
 
 // AddBackgroundWhite adds a white background which is usable
 // when the image has a transparent background.
-func AddBackgroundWhite(imgSrc image.Image) image.Image {
-	return AddBackgroundColor(imgSrc, color.White)
+func AddBackgroundWhite(img image.Image) image.Image {
+	return AddBackgroundColor(img, color.White)
 }
 
 // Resize scales an image to the provided size units. Use a 0
