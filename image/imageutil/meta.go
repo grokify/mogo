@@ -33,6 +33,10 @@ type ImageMeta struct {
 	Image      image.Image
 }
 
+func NewImageMeta(img image.Image) ImageMeta {
+	return ImageMeta{Image: img}
+}
+
 func (meta *ImageMeta) Stats() ImageStats {
 	if meta.Image == nil {
 		return ImageStatsNil()
