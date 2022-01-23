@@ -259,8 +259,7 @@ func AddBorderRGBA(img *image.RGBA, clr color.Color, width int) *image.RGBA {
 	if width == 0 {
 		return img
 	}
-	imgMeta := ImageMeta{Image: img}
-	w, h := imgMeta.Width(), imgMeta.Height()
+	w, h := img.Bounds().Dx(), img.Bounds().Dy()
 	w2 := w + border*2
 	h2 := h + border*2
 	i2 := image.NewRGBA(image.Rect(0, 0, w2-1, h2-1))
