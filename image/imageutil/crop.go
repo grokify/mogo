@@ -39,13 +39,13 @@ func CropX(img image.Image, w uint, align string) (image.Image, error) {
 	switch strings.ToLower(strings.TrimSpace(align)) {
 	case AlignLeft:
 		xMin = img.Bounds().Min.X
-		xMax = img.Bounds().Min.X + int(w)
-	case AlignRight:
-		xMin = img.Bounds().Max.X - int(w)
-		xMax = img.Bounds().Max.X
+		xMax = xMin + int(w)
 	case AlignCenter:
 		xMin = (img.Bounds().Max.Y - int(w)) / 2
 		xMax = xMin + int(w)
+	case AlignRight:
+		xMax = img.Bounds().Max.X
+		xMin = xMax - int(w)
 	default:
 		return nil, fmt.Errorf("alignment not supported [%s]", align)
 	}
@@ -65,13 +65,13 @@ func CropY(img image.Image, h uint, align string) (image.Image, error) {
 	switch strings.ToLower(strings.TrimSpace(align)) {
 	case AlignTop:
 		yMin = img.Bounds().Min.Y
-		yMax = img.Bounds().Min.Y + int(h)
-	case AlignBottom:
-		yMin = img.Bounds().Max.Y - int(h)
-		yMax = img.Bounds().Max.Y
+		yMax = yMin + int(h)
 	case AlignCenter:
 		yMin = (img.Bounds().Max.Y - int(h)) / 2
 		yMax = yMin + int(h)
+	case AlignBottom:
+		yMax = img.Bounds().Max.Y
+		yMin = yMax - int(h)
 	default:
 		return nil, fmt.Errorf("alignment not supported [%s]", align)
 	}
