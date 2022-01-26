@@ -20,7 +20,6 @@ func Crop(img image.Image, retain image.Rectangle) (image.Image, error) {
 	type subImager interface {
 		SubImage(r image.Rectangle) image.Image
 	}
-
 	// img is an Image interface. This checks if the underlying value has a
 	// method called SubImage. If it does, then we can use SubImage to crop the
 	// image.
@@ -28,12 +27,14 @@ func Crop(img image.Image, retain image.Rectangle) (image.Image, error) {
 	if !ok {
 		return nil, fmt.Errorf("image does not support cropping")
 	}
-
 	return simg.SubImage(retain), nil
 }
 
-// CropHorizontal takes an image and crops it horizontally.
-func CropHorizontal(img image.Image, w uint, align string) (image.Image, error) {
+// CropX takes an image and crops it horizontally.
+func CropX(img image.Image, w uint, align string) (image.Image, error) {
+	if int(w) > img.Bounds().Dx() {
+		return img, nil
+	}
 	var xMin, xMax int
 	switch strings.ToLower(strings.TrimSpace(align)) {
 	case AlignLeft:
@@ -55,8 +56,11 @@ func CropHorizontal(img image.Image, w uint, align string) (image.Image, error) 
 		img.Bounds().Max.Y))
 }
 
-// CropVertical takes an image and crops it verticaly.
-func CropVertical(img image.Image, h uint, align string) (image.Image, error) {
+// CropY takes an image and crops it verticaly.
+func CropY(img image.Image, h uint, align string) (image.Image, error) {
+	if int(h) > img.Bounds().Dy() {
+		return img, nil
+	}
 	var yMin, yMax int
 	switch strings.ToLower(strings.TrimSpace(align)) {
 	case AlignTop:
