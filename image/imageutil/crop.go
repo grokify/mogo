@@ -14,24 +14,6 @@ const (
 	AlignRight  = "right"
 )
 
-// CropVertical takes an image and crops it verticaly.
-func CropVertical(img image.Image, h uint, align string) (image.Image, error) {
-	align = strings.ToLower(strings.TrimSpace(align))
-	if align != AlignTop && align != AlignBottom {
-		align = AlignCenter
-	}
-	hMin := 0
-	hMax := int(h)
-	if align == AlignCenter {
-		hMin = (img.Bounds().Max.Y - int(h)) / 2
-		hMax = hMin + int(h)
-	} else if align == AlignBottom {
-		hMin = img.Bounds().Max.Y - int(h)
-		hMax = img.Bounds().Max.Y
-	}
-	return Crop(img, image.Rect(img.Bounds().Min.X, hMin, img.Bounds().Max.X, hMax))
-}
-
 // Crop takes an image and crops it to the specified rectangle. `CropImage`
 // is from: https://stackoverflow.com/a/63256403.
 func Crop(img image.Image, retain image.Rectangle) (image.Image, error) {
@@ -48,4 +30,50 @@ func Crop(img image.Image, retain image.Rectangle) (image.Image, error) {
 	}
 
 	return simg.SubImage(retain), nil
+}
+
+// CropHorizontal takes an image and crops it horizontally.
+func CropHorizontal(img image.Image, w uint, align string) (image.Image, error) {
+	var xMin, xMax int
+	switch strings.ToLower(strings.TrimSpace(align)) {
+	case AlignLeft:
+		xMin = img.Bounds().Min.X
+		xMax = img.Bounds().Min.X + int(w)
+	case AlignRight:
+		xMin = img.Bounds().Max.X - int(w)
+		xMax = img.Bounds().Max.X
+	case AlignCenter:
+		xMin = (img.Bounds().Max.Y - int(w)) / 2
+		xMax = xMin + int(w)
+	default:
+		return nil, fmt.Errorf("alignment not supported [%s]", align)
+	}
+	return Crop(img, image.Rect(
+		xMin,
+		img.Bounds().Min.Y,
+		xMax,
+		img.Bounds().Max.Y))
+}
+
+// CropVertical takes an image and crops it verticaly.
+func CropVertical(img image.Image, h uint, align string) (image.Image, error) {
+	var yMin, yMax int
+	switch strings.ToLower(strings.TrimSpace(align)) {
+	case AlignTop:
+		yMin = img.Bounds().Min.Y
+		yMax = img.Bounds().Min.Y + int(h)
+	case AlignBottom:
+		yMin = img.Bounds().Max.Y - int(h)
+		yMax = img.Bounds().Max.Y
+	case AlignCenter:
+		yMin = (img.Bounds().Max.Y - int(h)) / 2
+		yMax = yMin + int(h)
+	default:
+		return nil, fmt.Errorf("alignment not supported [%s]", align)
+	}
+	return Crop(img, image.Rect(
+		img.Bounds().Min.X,
+		yMin,
+		img.Bounds().Max.X,
+		yMax))
 }
