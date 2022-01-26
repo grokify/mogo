@@ -30,7 +30,7 @@ func Crop(img image.Image, retain image.Rectangle) (image.Image, error) {
 	return simg.SubImage(retain), nil
 }
 
-// CropX takes an image and crops it horizontally.
+// CropX crops an image by its width horizontally.
 func CropX(img image.Image, w uint, align string) (image.Image, error) {
 	if int(w) > img.Bounds().Dx() {
 		return img, nil
@@ -56,7 +56,7 @@ func CropX(img image.Image, w uint, align string) (image.Image, error) {
 		img.Bounds().Max.Y))
 }
 
-// CropY takes an image and crops it verticaly.
+// CropY crops an image by its height verticaly.
 func CropY(img image.Image, h uint, align string) (image.Image, error) {
 	if int(h) > img.Bounds().Dy() {
 		return img, nil
