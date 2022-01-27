@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"image"
 	"strings"
+
+	"golang.org/x/image/draw"
 )
 
 const (
@@ -30,22 +32,23 @@ func Crop(img image.Image, retain image.Rectangle) (image.Image, error) {
 	return simg.SubImage(retain), nil
 }
 
+/*
 // CropX crops an image by its width horizontally.
-func CropX(img image.Image, w uint, align string) (image.Image, error) {
-	if int(w) >= img.Bounds().Dx() {
+func CropX(img image.Image, width uint, align string) (image.Image, error) {
+	if int(width) >= img.Bounds().Dx() {
 		return img, nil
 	}
 	var xMin, xMax int
 	switch strings.ToLower(strings.TrimSpace(align)) {
 	case AlignLeft:
 		xMin = img.Bounds().Min.X
-		xMax = xMin + int(w)
+		xMax = xMin + int(width)
 	case AlignCenter:
-		xMin = (img.Bounds().Max.Y - int(w)) / 2
-		xMax = xMin + int(w)
+		xMin = (img.Bounds().Max.Y - int(width)) / 2
+		xMax = xMin + int(width)
 	case AlignRight:
 		xMax = img.Bounds().Max.X
-		xMin = xMax - int(w)
+		xMin = xMax - int(width)
 	default:
 		return nil, fmt.Errorf("alignment not supported [%s]", align)
 	}
@@ -57,21 +60,21 @@ func CropX(img image.Image, w uint, align string) (image.Image, error) {
 }
 
 // CropY crops an image by its height verticaly.
-func CropY(img image.Image, h uint, align string) (image.Image, error) {
-	if int(h) >= img.Bounds().Dy() {
+func CropY(img image.Image, height uint, align string) (image.Image, error) {
+	if int(height) >= img.Bounds().Dy() {
 		return img, nil
 	}
 	var yMin, yMax int
 	switch strings.ToLower(strings.TrimSpace(align)) {
 	case AlignTop:
 		yMin = img.Bounds().Min.Y
-		yMax = yMin + int(h)
+		yMax = yMin + int(height)
 	case AlignCenter:
-		yMin = (img.Bounds().Max.Y - int(h)) / 2
-		yMax = yMin + int(h)
+		yMin = (img.Bounds().Max.Y - int(height)) / 2
+		yMax = yMin + int(height)
 	case AlignBottom:
 		yMax = img.Bounds().Max.Y
-		yMin = yMax - int(h)
+		yMin = yMax - int(height)
 	default:
 		return nil, fmt.Errorf("alignment not supported [%s]", align)
 	}
@@ -80,4 +83,62 @@ func CropY(img image.Image, h uint, align string) (image.Image, error) {
 		yMin,
 		img.Bounds().Max.X,
 		yMax))
+}
+*/
+
+func Square(src image.Image) image.Image {
+	width := src.Bounds().Dx()
+	height := src.Bounds().Dy()
+	if width == height {
+		return src
+	} else if height > width {
+		return CropY(src, uint(width), AlignCenter)
+	}
+	return CropX(src, uint(height), AlignCenter)
+}
+
+// CropX crops an image by its width horizontally.
+func CropX(src image.Image, width uint, align string) image.Image {
+	if int(width) > src.Bounds().Dx() {
+		return src
+	}
+	var xMin int
+	switch strings.ToLower(strings.TrimSpace(align)) {
+	case AlignLeft:
+		xMin = 0
+	case AlignRight:
+		xMin = -1 * int(width)
+	default:
+		xMin = -1 * (src.Bounds().Max.X - int(width)) / 2
+	}
+	offset := image.Point{
+		X: xMin,
+		Y: src.Bounds().Min.Y,
+	}
+	new := image.NewRGBA(image.Rect(0, 0, int(width), src.Bounds().Dy()))
+	draw.Draw(new, src.Bounds().Add(offset), src, image.Point{}, draw.Over)
+	return new
+}
+
+// CropY crops an image by its height verticaly.
+func CropY(src image.Image, height uint, align string) image.Image {
+	if int(height) > src.Bounds().Dy() {
+		return src
+	}
+	var yMin int
+	switch strings.ToLower(strings.TrimSpace(align)) {
+	case AlignTop:
+		yMin = 0
+	case AlignBottom:
+		yMin = -1 * int(height)
+	default:
+		yMin = -1 * (src.Bounds().Max.Y - int(height)) / 2
+	}
+	offset := image.Point{
+		X: src.Bounds().Min.X,
+		Y: yMin,
+	}
+	new := image.NewRGBA(image.Rect(0, 0, src.Bounds().Dx(), int(height)))
+	draw.Draw(new, src.Bounds().Add(offset), src, image.Point{}, draw.Over)
+	return new
 }
