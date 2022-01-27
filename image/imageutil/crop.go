@@ -1,7 +1,6 @@
 package imageutil
 
 import (
-	"fmt"
 	"image"
 	"strings"
 
@@ -16,75 +15,54 @@ const (
 	AlignRight  = "right"
 )
 
-// Crop takes an image and crops it to the specified rectangle. `CropImage`
-// is from: https://stackoverflow.com/a/63256403.
-func Crop(img image.Image, retain image.Rectangle) (image.Image, error) {
-	type subImager interface {
-		SubImage(r image.Rectangle) image.Image
-	}
-	// img is an Image interface. This checks if the underlying value has a
-	// method called SubImage. If it does, then we can use SubImage to crop the
-	// image.
-	simg, ok := img.(subImager)
-	if !ok {
-		return nil, fmt.Errorf("image does not support cropping")
-	}
-	return simg.SubImage(retain), nil
+// Crop takes an image and crops it to the specified rectangle.
+func Crop(src image.Image, retain image.Rectangle) image.Image {
+	new := image.NewRGBA(retain)
+	draw.Draw(new, new.Bounds(), src, retain.Min, draw.Over)
+	return new
 }
 
-/*
 // CropX crops an image by its width horizontally.
-func CropX(img image.Image, width uint, align string) (image.Image, error) {
-	if int(width) >= img.Bounds().Dx() {
-		return img, nil
+func CropX(src image.Image, width uint, align string) image.Image {
+	if int(width) >= src.Bounds().Dx() {
+		return src
 	}
-	var xMin, xMax int
+	var xMin int
 	switch strings.ToLower(strings.TrimSpace(align)) {
 	case AlignLeft:
-		xMin = img.Bounds().Min.X
-		xMax = xMin + int(width)
-	case AlignCenter:
-		xMin = (img.Bounds().Max.Y - int(width)) / 2
-		xMax = xMin + int(width)
+		xMin = src.Bounds().Min.X
 	case AlignRight:
-		xMax = img.Bounds().Max.X
-		xMin = xMax - int(width)
+		xMin = src.Bounds().Max.X - int(width)
 	default:
-		return nil, fmt.Errorf("alignment not supported [%s]", align)
+		xMin = (src.Bounds().Max.X - int(width)) / 2
 	}
-	return Crop(img, image.Rect(
+	return Crop(src, image.Rect(
 		xMin,
-		img.Bounds().Min.Y,
-		xMax,
-		img.Bounds().Max.Y))
+		src.Bounds().Min.Y,
+		xMin+int(width),
+		src.Bounds().Max.Y))
 }
 
 // CropY crops an image by its height verticaly.
-func CropY(img image.Image, height uint, align string) (image.Image, error) {
-	if int(height) >= img.Bounds().Dy() {
-		return img, nil
+func CropY(src image.Image, height uint, align string) image.Image {
+	if int(height) >= src.Bounds().Dy() {
+		return src
 	}
-	var yMin, yMax int
+	var yMin int
 	switch strings.ToLower(strings.TrimSpace(align)) {
 	case AlignTop:
-		yMin = img.Bounds().Min.Y
-		yMax = yMin + int(height)
-	case AlignCenter:
-		yMin = (img.Bounds().Max.Y - int(height)) / 2
-		yMax = yMin + int(height)
+		yMin = src.Bounds().Min.Y
 	case AlignBottom:
-		yMax = img.Bounds().Max.Y
-		yMin = yMax - int(height)
+		yMin = src.Bounds().Max.Y - int(height)
 	default:
-		return nil, fmt.Errorf("alignment not supported [%s]", align)
+		yMin = (src.Bounds().Max.Y - int(height)) / 2
 	}
-	return Crop(img, image.Rect(
-		img.Bounds().Min.X,
+	return Crop(src, image.Rect(
+		src.Bounds().Min.X,
 		yMin,
-		img.Bounds().Max.X,
-		yMax))
+		src.Bounds().Max.X,
+		yMin+int(height)))
 }
-*/
 
 func Square(src image.Image) image.Image {
 	width := src.Bounds().Dx()
@@ -95,50 +73,4 @@ func Square(src image.Image) image.Image {
 		return CropY(src, uint(width), AlignCenter)
 	}
 	return CropX(src, uint(height), AlignCenter)
-}
-
-// CropX crops an image by its width horizontally.
-func CropX(src image.Image, width uint, align string) image.Image {
-	if int(width) > src.Bounds().Dx() {
-		return src
-	}
-	var xMin int
-	switch strings.ToLower(strings.TrimSpace(align)) {
-	case AlignLeft:
-		xMin = 0
-	case AlignRight:
-		xMin = -1 * int(width)
-	default:
-		xMin = -1 * (src.Bounds().Max.X - int(width)) / 2
-	}
-	offset := image.Point{
-		X: xMin,
-		Y: src.Bounds().Min.Y,
-	}
-	new := image.NewRGBA(image.Rect(0, 0, int(width), src.Bounds().Dy()))
-	draw.Draw(new, src.Bounds().Add(offset), src, image.Point{}, draw.Over)
-	return new
-}
-
-// CropY crops an image by its height verticaly.
-func CropY(src image.Image, height uint, align string) image.Image {
-	if int(height) > src.Bounds().Dy() {
-		return src
-	}
-	var yMin int
-	switch strings.ToLower(strings.TrimSpace(align)) {
-	case AlignTop:
-		yMin = 0
-	case AlignBottom:
-		yMin = -1 * int(height)
-	default:
-		yMin = -1 * (src.Bounds().Max.Y - int(height)) / 2
-	}
-	offset := image.Point{
-		X: src.Bounds().Min.X,
-		Y: yMin,
-	}
-	new := image.NewRGBA(image.Rect(0, 0, src.Bounds().Dx(), int(height)))
-	draw.Draw(new, src.Bounds().Add(offset), src, image.Point{}, draw.Over)
-	return new
 }
