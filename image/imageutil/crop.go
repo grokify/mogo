@@ -67,10 +67,12 @@ func CropY(src image.Image, height uint, align string) image.Image {
 func Square(src image.Image) image.Image {
 	width := src.Bounds().Dx()
 	height := src.Bounds().Dy()
-	if width == height {
+	switch {
+	case width == height:
 		return src
-	} else if height > width {
+	case width > height:
+		return CropX(src, uint(height), AlignCenter)
+	default:
 		return CropY(src, uint(width), AlignCenter)
 	}
-	return CropX(src, uint(height), AlignCenter)
 }
