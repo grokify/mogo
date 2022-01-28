@@ -5,6 +5,8 @@ import (
 	"net/http"
 )
 
+// rw.Header().Set("WWW-Authenticate", "Basic realm=Restricted")
+
 // Constants ensuring that header names are correctly spelled and consistently cased.
 const (
 	HeaderAccept                       = "Accept"
@@ -30,6 +32,7 @@ const (
 	HeaderLocation                     = "Location"
 	HeaderRange                        = "Range"
 	HeaderUserAgent                    = "User-Agent"
+	HeaderWWWAuthenticate              = "WWW-Authenticate"
 	HeaderXContentTypeOptions          = "X-Content-Type-Options"
 	ContentTypeAppJson                 = "application/json"
 	ContentTypeAppJsonUtf8             = "application/json; charset=utf-8"
@@ -45,6 +48,7 @@ const (
 	ContentTypeTextPlainUtf8           = "text/plain; charset=utf-8"
 	ContentTypeTextXmlUtf8             = "text/xml; charset=utf-8"
 	SchemeHTTPS                        = "https"
+	WWWAuthenticateBasicRestricted     = "Basic realm=Restricted"
 )
 
 // fmtInt formats v into the tail of buf.
