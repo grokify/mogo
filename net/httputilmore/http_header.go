@@ -36,6 +36,7 @@ const (
 	HeaderXContentTypeOptions          = "X-Content-Type-Options"
 	ContentTypeAppJson                 = "application/json"
 	ContentTypeAppJsonUtf8             = "application/json; charset=utf-8"
+	ContentTypeAppOctetStream          = "application/octet-stream"
 	ContentTypeAppFormUrlEncoded       = "application/x-www-form-urlencoded"
 	ContentTypeAppXml                  = "application/xml"
 	ContentTypeAppXmlUtf8              = "application/xml; charset=utf-8"
