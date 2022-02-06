@@ -2,8 +2,7 @@ package imageutil
 
 import (
 	"image"
-
-	"golang.org/x/image/draw"
+	"image/draw"
 )
 
 func Overlay(src, overlay image.Image, offset image.Point) image.Image {

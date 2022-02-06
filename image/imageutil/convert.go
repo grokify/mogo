@@ -3,8 +3,7 @@ package imageutil
 import (
 	"image"
 	"image/color"
-
-	"golang.org/x/image/draw"
+	"image/draw"
 )
 
 func ImageToRGBA(img image.Image) *image.RGBA {

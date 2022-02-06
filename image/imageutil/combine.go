@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	"image/draw"
 	"strings"
 
 	"github.com/grokify/mogo/image/colors"
-	"golang.org/x/image/draw"
 )
 
 func debugImagesDimensions(note string, images []image.Image) {

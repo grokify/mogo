@@ -2,9 +2,8 @@ package imageutil
 
 import (
 	"image"
+	"image/draw"
 	"strings"
-
-	"golang.org/x/image/draw"
 )
 
 const (
