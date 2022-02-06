@@ -67,23 +67,22 @@ func CropY(src image.Image, height uint, align string) image.Image {
 func SquareLarger(src image.Image, bgcolor color.Color) image.Image {
 	width := src.Bounds().Dx()
 	height := src.Bounds().Dy()
-	if width == height {
+	switch {
+	case width > height:
+		new := AddBackgroundColor(image.NewRGBA(image.Rect(0, 0, width, width)), bgcolor)
+		draw.Draw(new, new.Bounds(), src, image.Point{
+			Y: src.Bounds().Min.Y + ((height - width) / 2),
+			X: src.Bounds().Min.X}, draw.Over)
+		return new
+	case width < height:
+		new := AddBackgroundColor(image.NewRGBA(image.Rect(0, 0, height, height)), bgcolor)
+		draw.Draw(new, new.Bounds(), src, image.Point{
+			X: src.Bounds().Min.X + ((width - height) / 2),
+			Y: src.Bounds().Min.Y}, draw.Over)
+		return new
+	default:
 		return src
 	}
-	if width > height {
-		new := AddBackgroundColor(
-			image.NewRGBA(image.Rect(0, 0, width, width)), bgcolor)
-		draw.Draw(new, new.Bounds(), src, image.Point{
-			X: src.Bounds().Min.X,
-			Y: (height - width) / 2}, draw.Over)
-		return new
-	}
-	new := AddBackgroundColor(
-		image.NewRGBA(image.Rect(0, 0, height, height)), bgcolor)
-	draw.Draw(new, new.Bounds(), src, image.Point{
-		X: (width - height) / 2,
-		Y: src.Bounds().Min.Y}, draw.Over)
-	return new
 }
 
 func Square(src image.Image) image.Image {
