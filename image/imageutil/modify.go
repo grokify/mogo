@@ -11,8 +11,9 @@ import (
 
 // AddBackgroundColor adds a background of `color.Color` to an image.
 // It is is useful when the image has a transparent background. Use
-// `colornames` for more colors, e.g. `colornames.Blue`.
-func AddBackgroundColor(img image.Image, clr color.Color) image.Image {
+// `colornames` for more colors, e.g. `colornames.Blue`. This returns
+// a `draw.Image` so it can be used as an input to `draw.Draw()`.
+func AddBackgroundColor(img image.Image, clr color.Color) draw.Image {
 	imgNew := image.NewRGBA(img.Bounds())
 	draw.Draw(imgNew, imgNew.Bounds(), &image.Uniform{clr}, image.Point{}, draw.Src)
 	draw.Draw(imgNew, imgNew.Bounds(), img, img.Bounds().Min, draw.Over)
