@@ -64,6 +64,8 @@ func CropY(src image.Image, height uint, align string) image.Image {
 		yMin+int(height)))
 }
 
+// SquareLarger returns an image that is cropped to where the height and weight are equal
+// to the larger of the source image.
 func SquareLarger(src image.Image, bgcolor color.Color) image.Image {
 	width := src.Bounds().Dx()
 	height := src.Bounds().Dy()
@@ -85,15 +87,17 @@ func SquareLarger(src image.Image, bgcolor color.Color) image.Image {
 	}
 }
 
+// Square returns an image that is cropped to where the height and weight are equal
+// to the smaller of the source image.
 func Square(src image.Image) image.Image {
 	width := src.Bounds().Dx()
 	height := src.Bounds().Dy()
 	switch {
-	case width == height:
-		return src
 	case width > height:
 		return CropX(src, uint(height), AlignCenter)
-	default:
+	case width < height:
 		return CropY(src, uint(width), AlignCenter)
+	default:
+		return src
 	}
 }
