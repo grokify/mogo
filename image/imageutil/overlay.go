@@ -3,6 +3,7 @@ package imageutil
 import (
 	"image"
 	"image/draw"
+	"strings"
 )
 
 func Overlay(src, overlay image.Image, offset image.Point) image.Image {
@@ -11,6 +12,45 @@ func Overlay(src, overlay image.Image, offset image.Point) image.Image {
 	draw.Draw(output, overlay.Bounds().Add(offset), overlay, image.Point{}, draw.Src)
 	return output
 }
+
+const (
+	LocUpper      = "upper"
+	LocMiddle     = "middle"
+	LocLower      = "lower"
+	LocLeft       = "left"
+	LocCenter     = "center"
+	LocRight      = "right"
+	LocUpperLeft  = "upperleft"
+	LocUpperRight = "upperright"
+	LocLowerLeft  = "lowerleft"
+	LocLowerRight = "lowerright"
+)
+
+func OverlayMore(src, overlay image.Image, overlayLocation string, padX, padY uint) image.Image {
+	return Overlay(src, overlay,
+		OverlayPointMin(src.Bounds(), overlay.Bounds(), overlayLocation, padX, padY))
+}
+
+func OverlayPointMin(src, overlay image.Rectangle, overlayLocation string, padX, padY uint) image.Point {
+	pt := image.Point{}
+	if strings.Contains(overlayLocation, LocUpper) {
+		pt.Y = src.Min.Y + int(padY)
+	} else if strings.Contains(overlayLocation, LocLower) {
+		pt.Y = src.Max.Y - overlay.Dy() - int(padY)
+	} else {
+		pt.Y = src.Max.Y - ((src.Dy() - overlay.Dy()) / 2)
+	}
+	if strings.Contains(overlayLocation, LocLeft) {
+		pt.X = src.Min.X + int(padX)
+	} else if strings.Contains(overlayLocation, LocRight) {
+		pt.X = src.Max.X - overlay.Dx() - int(padX)
+	} else {
+		pt.X = src.Max.X - ((src.Dx() - overlay.Dx()) / 2)
+	}
+	return pt
+}
+
+/*
 
 func OverlayCenterYLeftAlign(src, overlay image.Image) image.Image {
 	h1 := src.Bounds().Dy()
@@ -26,3 +66,5 @@ func OverlayLowerLeft(src, overlay image.Image) image.Image {
 			src.Bounds().Min.X,
 			src.Bounds().Max.Y-overlay.Bounds().Dy()))
 }
+
+*/
