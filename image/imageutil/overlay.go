@@ -27,24 +27,24 @@ const (
 )
 
 func OverlayMore(src, overlay image.Image, overlayLocation string, padX, padY uint) image.Image {
-	return Overlay(src, overlay, OverlayPointMin(src.Bounds(), overlay.Bounds(), overlayLocation, padX, padY))
+	return Overlay(src, overlay, OverlayOffset(src.Bounds(), overlay.Bounds(), overlayLocation, padX, padY))
 }
 
-func OverlayPointMin(src, overlay image.Rectangle, overlayLocation string, padX, padY uint) image.Point {
+func OverlayOffset(src, overlay image.Rectangle, overlayLocation string, padX, padY uint) image.Point {
 	pt := image.Point{}
 	if strings.Contains(overlayLocation, LocUpper) {
 		pt.Y = src.Min.Y + int(padY)
 	} else if strings.Contains(overlayLocation, LocLower) {
 		pt.Y = src.Max.Y - overlay.Dy() - int(padY)
 	} else {
-		pt.Y = src.Max.Y - ((src.Dy() - overlay.Dy()) / 2) - int(padY)
+		pt.Y = src.Max.Y - ((src.Dy() - overlay.Dy()) / 2) + int(padY)
 	}
 	if strings.Contains(overlayLocation, LocLeft) {
 		pt.X = src.Min.X + int(padX)
 	} else if strings.Contains(overlayLocation, LocRight) {
 		pt.X = src.Max.X - overlay.Dx() - int(padX)
 	} else {
-		pt.X = src.Max.X - ((src.Dx() - overlay.Dx()) / 2) - int(padX)
+		pt.X = src.Max.X - ((src.Dx() - overlay.Dx()) / 2) + int(padX)
 	}
 	return pt
 }
