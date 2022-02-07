@@ -37,14 +37,14 @@ func OverlayPointMin(src, overlay image.Rectangle, overlayLocation string, padX,
 	} else if strings.Contains(overlayLocation, LocLower) {
 		pt.Y = src.Max.Y - overlay.Dy() - int(padY)
 	} else {
-		pt.Y = src.Max.Y - ((src.Dy() - overlay.Dy()) / 2)
+		pt.Y = src.Max.Y - ((src.Dy() - overlay.Dy()) / 2) - int(padY)
 	}
 	if strings.Contains(overlayLocation, LocLeft) {
 		pt.X = src.Min.X + int(padX)
 	} else if strings.Contains(overlayLocation, LocRight) {
 		pt.X = src.Max.X - overlay.Dx() - int(padX)
 	} else {
-		pt.X = src.Max.X - ((src.Dx() - overlay.Dx()) / 2)
+		pt.X = src.Max.X - ((src.Dx() - overlay.Dx()) / 2) - int(padX)
 	}
 	return pt
 }
