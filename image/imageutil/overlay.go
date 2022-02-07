@@ -27,8 +27,7 @@ const (
 )
 
 func OverlayMore(src, overlay image.Image, overlayLocation string, padX, padY uint) image.Image {
-	return Overlay(src, overlay,
-		OverlayPointMin(src.Bounds(), overlay.Bounds(), overlayLocation, padX, padY))
+	return Overlay(src, overlay, OverlayPointMin(src.Bounds(), overlay.Bounds(), overlayLocation, padX, padY))
 }
 
 func OverlayPointMin(src, overlay image.Rectangle, overlayLocation string, padX, padY uint) image.Point {
