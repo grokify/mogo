@@ -26,11 +26,11 @@ const (
 	LocLowerRight = "lowerright"
 )
 
-func OverlayMore(src, overlay image.Image, overlayLocation string, padX, padY uint) image.Image {
+func OverlayMore(src, overlay image.Image, overlayLocation string, padX, padY int) image.Image {
 	return Overlay(src, overlay, OverlayOffset(src.Bounds(), overlay.Bounds(), overlayLocation, padX, padY))
 }
 
-func OverlayOffset(src, overlay image.Rectangle, overlayLocation string, padX, padY uint) image.Point {
+func OverlayOffset(src, overlay image.Rectangle, overlayLocation string, padX, padY int) image.Point {
 	pt := image.Point{}
 	if strings.Contains(overlayLocation, LocUpper) {
 		pt.Y = src.Min.Y + int(padY)
