@@ -1,7 +1,6 @@
 package imageutil
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 
@@ -36,7 +35,6 @@ func ColsFilteredColor(img image.Image, c ...color.Color) []int {
 
 	minPt := img.Bounds().Min
 	maxPt := img.Bounds().Max
-	fmt.Printf("X MIN [%d] MAX [%d]\n", minPt.X, maxPt.X)
 COL:
 	for x := minPt.X; x <= maxPt.X; x++ {
 		for y := minPt.Y; y <= maxPt.Y; y++ {
