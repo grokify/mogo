@@ -24,28 +24,28 @@ func HashFile(file string) (string, error) {
 	return fmt.Sprintf("%x", h.Sum(nil)), nil
 }
 
-func Sum512d224Base32Bytes(b []byte, padChar rune) string {
+func Sum512d224Base32Bytes(b []byte, padding rune) string {
 	b28 := sha512.Sum512_224(b)
-	return base32.StdEncoding.WithPadding(padChar).EncodeToString(b28[:])
+	return base32.StdEncoding.WithPadding(padding).EncodeToString(b28[:])
 }
 
-func Sum512d224Base32String(s string, padChar rune) string {
-	return Sum512d224Base32Bytes([]byte(s), padChar)
+func Sum512d224Base32String(s string, padding rune) string {
+	return Sum512d224Base32Bytes([]byte(s), padding)
 }
 
-func Sum512d224Base32(r io.Reader, padChar rune) (string, error) {
+func Sum512d224Base32(r io.Reader, padding rune) (string, error) {
 	h := sha512.New512_224()
 	if _, err := io.Copy(h, r); err != nil {
 		return "", err
 	}
-	return base32.StdEncoding.WithPadding(padChar).EncodeToString(h.Sum([]byte{})), nil
+	return base32.StdEncoding.WithPadding(padding).EncodeToString(h.Sum([]byte{})), nil
 }
 
-func Sum512d224Base32File(name string, padChar rune) (string, error) {
+func Sum512d224Base32File(name string, padding rune) (string, error) {
 	f, err := os.Open(name)
 	if err != nil {
 		return "", err
 	}
 	defer f.Close()
-	return Sum512d224Base32(f, padChar)
+	return Sum512d224Base32(f, padding)
 }
