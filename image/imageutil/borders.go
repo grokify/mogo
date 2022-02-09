@@ -3,14 +3,15 @@ package imageutil
 import (
 	"image"
 	"image/color"
+	"image/draw"
 )
 
-func PaintBorderRGBA(img *image.RGBA, clr color.RGBA, width uint) {
+func PaintBorder(img draw.Image, clr color.Color, width uint) {
 	if img == nil {
 		return
 	}
 	if width <= 0 {
-		PaintColorRGBA(img, clr)
+		PaintColor(img, clr, img.Bounds())
 		return
 	}
 	borders := []image.Rectangle{}
@@ -20,7 +21,7 @@ func PaintBorderRGBA(img *image.RGBA, clr color.RGBA, width uint) {
 	borders = append(borders, RectangleBorderYMax(img.Bounds(), width))
 
 	for _, borderRect := range borders {
-		PaintColorRGBARectangle(img, clr, borderRect)
+		PaintColor(img, clr, borderRect)
 	}
 }
 

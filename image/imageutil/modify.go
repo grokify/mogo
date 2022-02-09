@@ -199,24 +199,25 @@ func ParseScaler(rawInterpolation string) (draw.Scaler, error) {
 	return draw.NearestNeighbor, fmt.Errorf("Cannot parse Scalar [%s]", rawInterpolation)
 }
 
-func PaintColorRGBA(img *image.RGBA, clr color.RGBA) {
+/*
+func PaintColor(img draw.Image, clr color.RGBA) {
 	if img == nil {
 		return
 	}
 	PaintColorRGBARectangle(img, clr, img.Bounds())
-}
+}*/
 
-func PaintColorRGBARectangle(img *image.RGBA, clr color.RGBA, rectNew image.Rectangle) {
+func PaintColor(img draw.Image, clr color.Color, area image.Rectangle) {
 	if img == nil {
 		return
 	}
 	rectImg := img.Bounds()
 
-	for x := rectNew.Min.X; x < rectNew.Max.X; x++ {
+	for x := area.Min.X; x < area.Max.X; x++ {
 		if x < rectImg.Min.X || x > rectImg.Max.X {
 			continue
 		}
-		for y := rectNew.Min.Y; y < rectNew.Max.Y; y++ {
+		for y := area.Min.Y; y < area.Max.Y; y++ {
 			if y < rectImg.Min.Y || y > rectImg.Max.Y {
 				continue
 			}
@@ -225,11 +226,15 @@ func PaintColorRGBARectangle(img *image.RGBA, clr color.RGBA, rectNew image.Rect
 	}
 }
 
-func AddBorderRGBAImage(img image.Image, clr color.Color, width int) *image.RGBA {
-	return AddBorderRGBA(ImageToRGBA(img), clr, width)
+/*
+func AddBorderImage(img image.Image, clr color.Color, width int) draw.Image {
+	return AddBorder(ImageToRGBA(img), clr, width)
 }
+*/
 
-func AddBorderRGBA(img *image.RGBA, clr color.Color, width int) *image.RGBA {
+// AddBorder adds a border to a `draw.Image`. If you have an `image.Image`,
+// first convert it with `ImageToRGBA(img)`.
+func AddBorder(img draw.Image, clr color.Color, width int) draw.Image {
 	if img == nil {
 		return img
 	}
