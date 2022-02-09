@@ -234,7 +234,7 @@ func AddBorderImage(img image.Image, clr color.Color, width int) draw.Image {
 
 // AddBorder adds a border to a `draw.Image`. If you have an `image.Image`,
 // first convert it with `ImageToRGBA(img)`.
-func AddBorder(img draw.Image, clr color.Color, width int) draw.Image {
+func AddBorder(img draw.Image, clr color.Color, width uint) draw.Image {
 	if img == nil {
 		return img
 	}
