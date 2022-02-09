@@ -9,11 +9,7 @@ import (
 // PaintBorder colorizes a border of size `width` in the existing
 // canvas, overwriting any colors in that space.
 func PaintBorder(img draw.Image, clr color.Color, width uint) {
-	if img == nil {
-		return
-	}
-	if width == 0 {
-		PaintColor(img, clr, img.Bounds())
+	if img == nil || width == 0 {
 		return
 	}
 	PaintColor(img, clr, RectangleBorderXMin(img.Bounds(), width))
