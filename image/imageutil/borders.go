@@ -6,23 +6,20 @@ import (
 	"image/draw"
 )
 
+// PaintBorder colorizes a border of size `width` in the existing
+// canvas, overwriting any colors in that space.
 func PaintBorder(img draw.Image, clr color.Color, width uint) {
 	if img == nil {
 		return
 	}
-	if width <= 0 {
+	if width == 0 {
 		PaintColor(img, clr, img.Bounds())
 		return
 	}
-	borders := []image.Rectangle{}
-	borders = append(borders, RectangleBorderXMin(img.Bounds(), width))
-	borders = append(borders, RectangleBorderXMax(img.Bounds(), width))
-	borders = append(borders, RectangleBorderYMin(img.Bounds(), width))
-	borders = append(borders, RectangleBorderYMax(img.Bounds(), width))
-
-	for _, borderRect := range borders {
-		PaintColor(img, clr, borderRect)
-	}
+	PaintColor(img, clr, RectangleBorderXMin(img.Bounds(), width))
+	PaintColor(img, clr, RectangleBorderXMax(img.Bounds(), width))
+	PaintColor(img, clr, RectangleBorderYMin(img.Bounds(), width))
+	PaintColor(img, clr, RectangleBorderYMax(img.Bounds(), width))
 }
 
 func RectangleBorderXMin(rect image.Rectangle, pixels uint) image.Rectangle {
