@@ -184,16 +184,23 @@ func ScalerDefault() draw.Scaler { return draw.BiLinear }
 
 func ScalerBest() draw.Scaler { return draw.CatmullRom }
 
+const (
+	AlgNearestNeighbor = "nearestneighbor"
+	AlgApproxBiLinear  = "approxbilinear"
+	AlgBiLinear        = "bilinear"
+	AlgCatmullRom      = "catmullrom"
+)
+
 func ParseScaler(rawInterpolation string) (draw.Scaler, error) {
 	rawInterpolation = strings.ToLower(strings.TrimSpace(rawInterpolation))
 	switch rawInterpolation {
-	case "nearestneighbor":
+	case AlgNearestNeighbor:
 		return draw.NearestNeighbor, nil
-	case "approxbilinear":
+	case AlgApproxBiLinear:
 		return draw.ApproxBiLinear, nil
-	case "bilinear":
+	case AlgBiLinear:
 		return draw.BiLinear, nil
-	case "catmullrom":
+	case AlgCatmullRom:
 		return draw.CatmullRom, nil
 	}
 	return draw.NearestNeighbor, fmt.Errorf("Cannot parse Scalar [%s]", rawInterpolation)
