@@ -1,5 +1,6 @@
 package phonenumber
 
+/*
 import (
 	"strings"
 
@@ -25,3 +26,4 @@ func MustE164Format(numberToParse, defaultRegion string, numberFormat phonenumbe
 	}
 	return pn
 }
+*/

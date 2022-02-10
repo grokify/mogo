@@ -1,5 +1,12 @@
 package main
 
+import "fmt"
+
+func main() {
+	fmt.Println("DONE")
+}
+
+/*
 import (
 	"fmt"
 
@@ -38,3 +45,4 @@ func main() {
 	fmt.Printf("Great circle distance %v to %v: %v\n", USNYC_AREACODE, USSFO_AREACODE, dist)
 	fmt.Println("DONE")
 }
+*/

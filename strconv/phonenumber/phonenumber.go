@@ -1,5 +1,6 @@
 package phonenumber
 
+/*
 import (
 	"fmt"
 	"io"
@@ -167,3 +168,4 @@ func (a2g *AreaCodeToGeo) GcdAreaCodes(ac1Int uint16, ac2Int uint16) (float64, e
 func A2gCsvFullPath() string {
 	return path.Join(os.Getenv("GOPATH"), "src", A2gCsvRelPath)
 }
+*/
