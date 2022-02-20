@@ -18,13 +18,14 @@ to make programming Go a bit faster.
 
 In terms of scope, `mogo` is designed to cover all common areas, with a move to fewer dependencies.
 
-:warning: `mogo` is in a deconstruction phase. It currently has many dependencies and the goal is to move external dependences to separate packages such as `gohttp`.
+:warning: `mogo` is in a deconstruction phase. It currently has many dependencies and the goal is to move external dependences to separate packages in the Mogo family.
 
 See the following modules for extended functionality (with more dependencies):
 
 * GoAuth - [github.com/grokify/goauth](https://github.com/grokify/goauth)
 * GoCharts - [github.com/grokify/gocharts](https://github.com/grokify/gocharts)
 * GoHTTP - [github.com/grokify/gohttp](https://github.com/grokify/gohttp)
+* GoNet - [github.com/grokify/gonet](https://github.com/grokify/gonet)
 * GoPhoneNumbers - [github.com/grokify/gophonenumbers](https://github.com/grokify/gophonenumbers)
 
 ## Documentation
