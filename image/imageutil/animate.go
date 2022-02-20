@@ -47,5 +47,5 @@ func imageToPalettedFuncWrap(src image.Image, f func(s image.Image) *image.Palet
 	if v, ok := src.(*image.Paletted); ok {
 		return v, nil
 	}
-	return nil, fmt.Errorf("image index cannot be converted to `*image.Paletted`, no function, is not `*image.Paletted`")
+	return nil, fmt.Errorf("image cannot be converted to `*image.Paletted`, no function and is not `*image.Paletted`")
 }
