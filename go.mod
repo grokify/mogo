@@ -27,7 +27,7 @@ require (
 	github.com/valyala/fastjson v1.6.3
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
-	golang.org/x/crypto v0.0.0-20220209195652-db638375bc3a
+	golang.org/x/crypto v0.0.0-20220214200702-86341886e292
 	golang.org/x/image v0.0.0-20211028202545-6944b10bf410
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd
 	golang.org/x/text v0.3.7
