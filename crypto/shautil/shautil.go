@@ -1,4 +1,4 @@
-package sha1util
+package shautil
 
 import (
 	"crypto/sha1"
@@ -9,8 +9,8 @@ import (
 	"os"
 )
 
-func HashFile(file string) (string, error) {
-	f, err := os.Open(file)
+func Sum1HexFile(name string) (string, error) {
+	f, err := os.Open(name)
 	if err != nil {
 		return "", err
 	}
@@ -25,8 +25,8 @@ func HashFile(file string) (string, error) {
 }
 
 func Sum512d224Base32Bytes(b []byte, padding rune) string {
-	b28 := sha512.Sum512_224(b)
-	return base32.StdEncoding.WithPadding(padding).EncodeToString(b28[:])
+	b28len := sha512.Sum512_224(b)
+	return base32.StdEncoding.WithPadding(padding).EncodeToString(b28len[:])
 }
 
 func Sum512d224Base32String(s string, padding rune) string {
