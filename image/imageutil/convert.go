@@ -7,6 +7,19 @@ import (
 	"image/draw"
 )
 
+func ImageToPaletted(src image.Image, p color.Palette) *image.Paletted {
+	if dst, ok := src.(*image.Paletted); ok {
+		return dst
+	}
+	dst := image.NewPaletted(src.Bounds(), p)
+	draw.Draw(dst, dst.Rect, src, src.Bounds().Min, draw.Over)
+	return dst
+}
+
+func ImageToPalettedPlan9(src image.Image) *image.Paletted {
+	return ImageToPaletted(src, palette.Plan9)
+}
+
 func ImageToRGBA(src image.Image) *image.RGBA {
 	/*
 		// https://stackoverflow.com/questions/31463756/convert-image-image-to-image-nrgba
@@ -28,19 +41,7 @@ func ImageToRGBA(src image.Image) *image.RGBA {
 	return dst
 }
 
-func ImageToPalettedPlan9(src image.Image) *image.Paletted {
-	return ImageToPaletted(src, palette.Plan9)
-}
-
-func ImageToPaletted(src image.Image, p color.Palette) *image.Paletted {
-	if dst, ok := src.(*image.Paletted); ok {
-		return dst
-	}
-	dst := image.NewPaletted(src.Bounds(), p)
-	draw.Draw(dst, dst.Rect, src, src.Bounds().Min, draw.Over)
-	return dst
-}
-
+/*
 func NRGBAtoRGBA(imgNRGBA *image.NRGBA) *image.RGBA {
 	rect := imgNRGBA.Bounds()
 	imgRGBA := image.NewRGBA(rect)
@@ -63,14 +64,6 @@ func ImageWithSetToRGBA(src draw.Image) *image.RGBA {
 	return imgRGBA
 }
 
-func ImageAnyToRGBA(src image.Image) *image.RGBA {
-	// https://stackoverflow.com/questions/31463756/convert-image-image-to-image-nrgba
-	b := src.Bounds()
-	img := image.NewRGBA(image.Rect(0, 0, b.Dx(), b.Dy()))
-	draw.Draw(img, img.Bounds(), src, b.Min, draw.Src)
-	return img
-}
-
 func YCbCrToRGBA(src *image.YCbCr) *image.RGBA {
 	// https://stackoverflow.com/questions/31463756/convert-image-image-to-image-nrgba
 	b := src.Bounds()
@@ -78,3 +71,4 @@ func YCbCrToRGBA(src *image.YCbCr) *image.RGBA {
 	draw.Draw(img, img.Bounds(), src, b.Min, draw.Src)
 	return img
 }
+*/
