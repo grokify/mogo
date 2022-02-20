@@ -42,23 +42,23 @@ func ImageToRGBA(src image.Image) *image.RGBA {
 }
 
 /*
-func NRGBAtoRGBA(imgNRGBA *image.NRGBA) *image.RGBA {
-	rect := imgNRGBA.Bounds()
-	imgRGBA := image.NewRGBA(rect)
-	for x := rect.Min.X; x <= rect.Max.X; x++ {
-		for y := rect.Min.Y; y <= rect.Max.Y; y++ {
-			imgRGBA.Set(x, y, imgNRGBA.At(x, y))
-		}
-	}
-	return imgRGBA
-}
-
 func ImageWithSetToRGBA(src draw.Image) *image.RGBA {
 	rect := src.Bounds()
 	imgRGBA := image.NewRGBA(rect)
 	for x := rect.Min.X; x <= rect.Max.X; x++ {
 		for y := rect.Min.Y; y <= rect.Max.Y; y++ {
 			imgRGBA.Set(x, y, src.At(x, y))
+		}
+	}
+	return imgRGBA
+}
+
+func NRGBAtoRGBA(imgNRGBA *image.NRGBA) *image.RGBA {
+	rect := imgNRGBA.Bounds()
+	imgRGBA := image.NewRGBA(rect)
+	for x := rect.Min.X; x <= rect.Max.X; x++ {
+		for y := rect.Min.Y; y <= rect.Max.Y; y++ {
+			imgRGBA.Set(x, y, imgNRGBA.At(x, y))
 		}
 	}
 	return imgRGBA
