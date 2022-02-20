@@ -2,26 +2,42 @@ package imageutil
 
 import (
 	"image"
+	"image/color"
+	"image/color/palette"
 	"image/draw"
 )
 
-func ImageToRGBA(img image.Image) *image.RGBA {
-	if dst, ok := img.(*image.RGBA); ok {
+func ImageToRGBA(src image.Image) *image.RGBA {
+	/*
+		// https://stackoverflow.com/questions/31463756/convert-image-image-to-image-nrgba
+		switch img := img.(type) {
+		case *image.NRGBA:
+			return NRGBAtoRGBA(img)
+		case *image.Paletted:
+			return ImageWithSetToRGBA(img)
+		case *image.YCbCr:
+			return YCbCrToRGBA(img)
+		}
+	*/
+	if dst, ok := src.(*image.RGBA); ok {
 		return dst
 	}
-	// https://stackoverflow.com/questions/31463756/convert-image-image-to-image-nrgba
-	switch img := img.(type) {
-	case *image.NRGBA:
-		return NRGBAtoRGBA(img)
-	case *image.Paletted:
-		return ImageWithSetToRGBA(img)
-	case *image.YCbCr:
-		return YCbCrToRGBA(img)
-	}
-	// Use the image/draw package to convert to *image.RGBA.
-	b := img.Bounds()
+	b := src.Bounds()
 	dst := image.NewRGBA(image.Rect(0, 0, b.Dx(), b.Dy()))
-	draw.Draw(dst, dst.Bounds(), img, b.Min, draw.Src)
+	draw.Draw(dst, dst.Rect, src, src.Bounds().Min, draw.Src)
+	return dst
+}
+
+func ImageToPalettedPlan9(src image.Image) *image.Paletted {
+	return ImageToPaletted(src, palette.Plan9)
+}
+
+func ImageToPaletted(src image.Image, p color.Palette) *image.Paletted {
+	if dst, ok := src.(*image.Paletted); ok {
+		return dst
+	}
+	dst := image.NewPaletted(src.Bounds(), p)
+	draw.Draw(dst, dst.Rect, src, src.Bounds().Min, draw.Over)
 	return dst
 }
 
