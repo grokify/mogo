@@ -3,12 +3,9 @@ module github.com/grokify/mogo
 go 1.16
 
 require (
-	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
 	github.com/aymerick/raymond v2.0.2+incompatible
 	github.com/buger/jsonparser v1.1.1
 	github.com/caarlos0/env/v6 v6.9.1
-	github.com/derekstavis/go-qs v0.0.0-20180720192143-9eef69e6c4e7
-	github.com/emersion/go-imap v1.2.0
 	github.com/golang/protobuf v1.5.2
 	github.com/google/go-querystring v1.1.0
 	github.com/grokify/base36 v1.0.5
@@ -23,7 +20,6 @@ require (
 	github.com/martinlindhe/base36 v1.1.0
 	github.com/microcosm-cc/bluemonday v1.0.18
 	github.com/oleiade/reflections v1.0.1 // indirect
-	github.com/pkg/sftp v1.13.4
 	github.com/valyala/fastjson v1.6.3
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
