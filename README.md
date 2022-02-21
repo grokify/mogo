@@ -3,6 +3,7 @@ MoGo
 
 [![Build Status][build-status-svg]][build-status-url]
 [![Go Report Card][goreport-svg]][goreport-url]
+[![SLOC][loc-svg]][repo-url]
 [![Docs][docs-godoc-svg]][docs-godoc-url]
 [![License][license-svg]][license-url]
 
@@ -82,3 +83,5 @@ Please report issues and feature requests on [Github](https://github.com/grokify
  [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/mogo
  [license-svg]: https://img.shields.io/badge/license-MIT-mogo.svg
  [license-url]: https://github.com/grokify/mogo/blob/master/LICENSE
+ [loc-svg]: https://tokei.rs/b1/github/grokify/mogo
+ [repo-url]: https://github.com/grokify/mogo
