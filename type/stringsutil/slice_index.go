@@ -2,14 +2,25 @@ package stringsutil
 
 import "strings"
 
-// SliceIndex returns the first index of an element in a
-// string slice. Returns -1 if not found.
+// SliceIndex returns the index of the first match
+// using `=`. Returns -1 if not found.
 func SliceIndex(haystack []string, needle string) int {
 	if len(haystack) == 0 {
 		return -1
 	}
 	for i, el := range haystack {
 		if needle == el {
+			return i
+		}
+	}
+	return -1
+}
+
+// SliceIndexContains returns the index of the first match
+// using `strings.Contains()`. Returns -1 if not found.
+func SliceIndexContains(s []string, substr string) int {
+	for i, si := range s {
+		if strings.Contains(si, substr) {
 			return i
 		}
 	}
