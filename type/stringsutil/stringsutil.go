@@ -140,6 +140,16 @@ func CondenseSpace(s string) string {
 
 func StripControl(s string) string { return rxControl.ReplaceAllString(s, "") }
 
+func StripSubstring(s, substr string, insensitive bool) string {
+	var rx *regexp.Regexp
+	if insensitive {
+		rx = regexp.MustCompile(`(?i)` + regexp.QuoteMeta(substr))
+	} else {
+		rx = regexp.MustCompile(regexp.QuoteMeta(substr))
+	}
+	return rx.ReplaceAllString(s, "")
+}
+
 /*
 func OrDefault(s, defaultValue string) string {
 	if len(s) == 0 {
