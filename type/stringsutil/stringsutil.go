@@ -331,3 +331,14 @@ var (
 func NewlineToLinux(input string) string {
 	return rxR.ReplaceAllString(rxRN.ReplaceAllString(input, "\n"), "\n")
 }
+
+// EmptyError takes a string and error, returning
+// the string value or an empty string if an error
+// is encountered. It is used for simplifying code
+// that returns a value or an error if not present.
+func EmptyError(s string, err error) string {
+	if err != nil {
+		return ""
+	}
+	return s
+}
