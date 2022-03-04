@@ -38,9 +38,10 @@ const (
 	ContentTypeAppJsonUtf8             = "application/json; charset=utf-8"
 	ContentTypeAppOctetStream          = "application/octet-stream"
 	ContentTypeAppFormUrlEncoded       = "application/x-www-form-urlencoded"
+	ContentTypeAppFormUrlEncodedUtf8   = "application/x-www-form-urlencoded; charset=utf-8"
 	ContentTypeAppXml                  = "application/xml"
 	ContentTypeAppXmlUtf8              = "application/xml; charset=utf-8"
-	ContentTypeTextCalendarUtf8Request = `text/calendar; charset="utf-8"; method=REQUEST`
+	ContentTypeTextCalendarUtf8Request = "text/calendar; charset=utf-8; method=REQUEST"
 	ContentTypeTextHtml                = "text/html"
 	ContentTypeTextHtmlUtf8            = "text/html; charset=utf-8"
 	ContentTypeTextMarkdown            = "text/markdown"
