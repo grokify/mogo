@@ -31,7 +31,7 @@ func (ops Operations) TrimSpace() {
 }
 
 func (ops Operations) RemovePaths(paths []string) Operations {
-	paths = stringsutil.SliceUnique(paths)
+	paths = stringsutil.SliceDedupe(paths)
 	if len(paths) == 0 {
 		return ops
 	}
