@@ -38,9 +38,15 @@ func (imgs Images) DxMin() int {
 	return dxMin
 }
 
-func (imgs Images) DxSum() int {
+// DxSum returns the sum of widths up to and including
+// `maxIndexInclusive`. Use a negative value for `maxIndexInclusive`
+// to include all elements.
+func (imgs Images) DxSum(maxIndexInclusive int) int {
 	dxSum := 0
-	for _, img := range imgs {
+	for i, img := range imgs {
+		if maxIndexInclusive >= 0 && i > maxIndexInclusive {
+			break
+		}
 		dxSum += img.Bounds().Dx()
 	}
 	return dxSum
@@ -76,9 +82,15 @@ func (imgs Images) DyMin() int {
 	return dyMin
 }
 
-func (imgs Images) DySum() int {
+// DySum returns the sum of heights up to and including
+// `maxIndexInclusive`. Use a negative value for `maxIndexInclusive`
+// to include all elements.
+func (imgs Images) DySum(maxIndexInclusive int) int {
 	dySum := 0
-	for _, img := range imgs {
+	for i, img := range imgs {
+		if maxIndexInclusive >= 0 && i > maxIndexInclusive {
+			break
+		}
 		dySum += img.Bounds().Dy()
 	}
 	return dySum
@@ -116,9 +128,9 @@ func (imgs Images) Stats() ImagesStats {
 		Dxs:   imgs.Dxs(),
 		DxMax: imgs.DxMax(),
 		DxMin: imgs.DxMin(),
-		DxSum: imgs.DxSum(),
+		DxSum: imgs.DxSum(-1),
 		Dys:   imgs.Dys(),
 		DyMax: imgs.DyMax(),
 		DyMin: imgs.DyMin(),
-		DySum: imgs.DySum()}
+		DySum: imgs.DySum(-1)}
 }
