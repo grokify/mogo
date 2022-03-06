@@ -16,7 +16,7 @@ func ImageToPaletted(src image.Image, p color.Palette) *image.Paletted {
 	return dst
 }
 
-type ToPaletted func(src image.Image) *image.Paletted
+type ToPalettedFunc func(src image.Image) *image.Paletted
 
 // ImageToPalettedPlan9 converts an image to `*image.Paletted`. See the
 // go implementation here: https://github.com/golang/go/blob/master/src/image/gif/writer.go
