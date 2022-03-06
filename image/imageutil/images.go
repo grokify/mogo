@@ -2,8 +2,6 @@ package imageutil
 
 import (
 	"image"
-	_ "image/jpeg"
-	_ "image/png"
 
 	"golang.org/x/image/draw"
 )
