@@ -16,8 +16,16 @@ func ImageToPaletted(src image.Image, p color.Palette) *image.Paletted {
 	return dst
 }
 
+// ImageToPalettedPlan9 converts an image to `*image.Paletted`. See the
+// go implementation here: https://github.com/golang/go/blob/master/src/image/gif/writer.go
 func ImageToPalettedPlan9(src image.Image) *image.Paletted {
 	return ImageToPaletted(src, palette.Plan9)
+}
+
+// ImageToPalettedWebSafe uses the 216 color palete created by Netscape.
+// See more here: https://en.wikipedia.org/wiki/Web_colors#Web-safe_colors
+func ImageToPalettedWebSafe(src image.Image) *image.Paletted {
+	return ImageToPaletted(src, palette.WebSafe)
 }
 
 func ImageToRGBA(src image.Image) *image.RGBA {
