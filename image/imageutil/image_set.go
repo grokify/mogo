@@ -86,17 +86,19 @@ func (ims *ImageMetaSet) SumY(maxIndexInclusive int) int {
 	return sumY
 }
 
-func (ims *ImageMetaSet) Stats() ImageStatsMulti {
-	return ImageStatsMulti{
-		MaxX: ims.MaxX(),
-		MaxY: ims.MaxY(),
-		SumX: ims.SumX(-1),
-		SumY: ims.SumY(-1)}
+func (ims *ImageMetaSet) Stats() ImagesStats {
+	return ImagesStats{
+		DxMax: ims.MaxX(),
+		DyMax: ims.MaxY(),
+		DxSum: ims.SumX(-1),
+		DySum: ims.SumY(-1)}
 }
 
-type ImageStatsMulti struct {
-	MaxX int
-	SumX int
-	MaxY int
-	SumY int
+type ImagesStats struct {
+	DxMax int
+	DxMin int
+	DxSum int
+	DyMax int
+	DyMin int
+	DySum int
 }
