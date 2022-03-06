@@ -1,16 +1,15 @@
 package imageutil
 
 import (
-	"image"
-	"image/draw"
 	_ "image/jpeg"
 	_ "image/png"
 )
 
+/*
 // MergeHorizontalRGBA returns an image that is composed
 // of non-overlapping imagers in ImageMetaSet. The code here
 // is adapted from https://stackoverflow.com/a/35965499/1908967
-func MergeHorizontalRGBA(ims ImageMetaSet) image.Image {
+func MergeHorizontalRGBAOld(ims ImageMetaSet) image.Image {
 	mergedRGBA := image.NewRGBA(image.Rectangle{
 		image.Point{0, 0},
 		image.Point{ims.SumX(-1), ims.MaxY()}})
@@ -28,3 +27,4 @@ func MergeHorizontalRGBA(ims ImageMetaSet) image.Image {
 	}
 	return mergedRGBA
 }
+*/

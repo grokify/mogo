@@ -133,3 +133,26 @@ func MatrixRead(imglocations [][]string) (Matrix, error) {
 	}
 	return matrixImages, nil
 }
+
+// MergeXRGBA returns an image that is composed
+// of non-overlapping imagers in ImageMetaSet. The code here
+// is adapted from https://stackoverflow.com/a/35965499/1908967
+func MergeXRGBA(imgs []image.Image) image.Image {
+	imgs2 := Images(imgs)
+	mergedRGBA := image.NewRGBA(image.Rectangle{
+		image.Point{0, 0},
+		image.Point{imgs2.DxSum(-1), imgs2.DyMax()}})
+
+	for i, img := range imgs2 {
+		if i == 0 {
+			draw.Draw(mergedRGBA, img.Bounds(), img, image.Point{0, 0}, draw.Src)
+		} else {
+			startingPostionI := image.Point{imgs2.DxSum(i - 1), 0}
+			rectangleI := image.Rectangle{
+				startingPostionI,
+				startingPostionI.Add(img.Bounds().Size())}
+			draw.Draw(mergedRGBA, rectangleI, img, image.Point{0, 0}, draw.Src)
+		}
+	}
+	return mergedRGBA
+}
