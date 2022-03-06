@@ -6,7 +6,7 @@ import (
 	"image/gif"
 )
 
-func BuildGifAnimationSimpleReadAny(src *gif.GIF, delay int, names []string, f func(s image.Image) *image.Paletted) (*gif.GIF, error) {
+func BuildGifAnimationSimpleReadAny(src *gif.GIF, delay int, names []string, f ToPaletted) (*gif.GIF, error) {
 	if src == nil {
 		src = &gif.GIF{}
 	}
@@ -25,7 +25,7 @@ func BuildGifAnimationSimpleReadAny(src *gif.GIF, delay int, names []string, f f
 	return src, nil
 }
 
-func BuildGifAnimationSimple(src *gif.GIF, delay int, imgs []image.Image, f func(s image.Image) *image.Paletted) (*gif.GIF, error) {
+func BuildGifAnimationSimple(src *gif.GIF, delay int, imgs []image.Image, f ToPaletted) (*gif.GIF, error) {
 	if src == nil {
 		src = &gif.GIF{}
 	}
