@@ -95,9 +95,11 @@ func (ims *ImageMetaSet) Stats() ImagesStats {
 }
 
 type ImagesStats struct {
+	Dxs   []int
 	DxMax int
 	DxMin int
 	DxSum int
+	Dys   []int
 	DyMax int
 	DyMin int
 	DySum int

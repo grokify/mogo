@@ -113,9 +113,11 @@ func (imgs Images) ConsistentSize(scale draw.Scaler, yAlign string) {
 
 func (imgs Images) Stats() ImagesStats {
 	return ImagesStats{
+		Dxs:   imgs.Dxs(),
 		DxMax: imgs.DxMax(),
 		DxMin: imgs.DxMin(),
 		DxSum: imgs.DxSum(),
+		Dys:   imgs.Dys(),
 		DyMax: imgs.DyMax(),
 		DyMin: imgs.DyMin(),
 		DySum: imgs.DySum()}
