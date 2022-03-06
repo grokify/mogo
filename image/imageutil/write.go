@@ -2,16 +2,29 @@ package imageutil
 
 import (
 	"image"
+	"image/gif"
 	"image/jpeg"
 	"image/png"
 	"os"
-	// "github.com/chai2010/webp"
 )
 
 const (
 	JPEGQualityDefault int = 80
 	JPEGQualityMax     int = 100
 )
+
+func WriteFileGIF(filename string, img *gif.GIF) error {
+	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	err = gif.EncodeAll(f, img)
+	if err != nil {
+		return err
+	}
+	return f.Close()
+}
 
 func ResizeFileJPEG(inputFile, outputFile string, outputWidth, outputHeight uint, quality int) error {
 	img, _, err := ReadImageFile(inputFile)
@@ -23,7 +36,7 @@ func ResizeFileJPEG(inputFile, outputFile string, outputWidth, outputHeight uint
 }
 
 func WriteFileJPEG(filename string, img image.Image, quality int) error {
-	out, err := os.Create(filename)
+	out, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		return err
 	}
@@ -41,7 +54,7 @@ func WriteFileJPEG(filename string, img image.Image, quality int) error {
 }
 
 func WriteFilePNG(filename string, img image.Image) error {
-	out, err := os.Create(filename)
+	out, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		return err
 	}
@@ -51,14 +64,3 @@ func WriteFilePNG(filename string, img image.Image) error {
 	}
 	return out.Close()
 }
-
-/*
-func WriteFileWEBP(filename string, img image.Image, lossless bool, perm os.FileMode) error {
-	var buf bytes.Buffer
-	err := webp.Encode(&buf, img, &webp.Options{Lossless: lossless})
-	if err != nil {
-		return err
-	}
-	return ioutil.WriteFile(filename, buf.Bytes(), perm)
-}
-*/
