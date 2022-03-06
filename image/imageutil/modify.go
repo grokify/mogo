@@ -179,7 +179,6 @@ func ResizeSameY(images []image.Image, larger bool) []image.Image {
 // algorithm. See more here https://blog.codinghorror.com/better-image-resizing/ ,
 // https://support.esri.com/en/technical-article/000005606 ,
 // https://stackoverflow.com/questions/384991/what-is-the-best-image-downscaling-algorithm-quality-wise/6171860 .
-
 func ScalerDefault() draw.Scaler { return draw.BiLinear }
 
 func ScalerBest() draw.Scaler { return draw.CatmullRom }
@@ -203,16 +202,8 @@ func ParseScaler(rawInterpolation string) (draw.Scaler, error) {
 	case AlgCatmullRom:
 		return draw.CatmullRom, nil
 	}
-	return draw.NearestNeighbor, fmt.Errorf("Cannot parse Scalar [%s]", rawInterpolation)
+	return draw.NearestNeighbor, fmt.Errorf("cannot parse Scalar [%s]", rawInterpolation)
 }
-
-/*
-func PaintColor(img draw.Image, clr color.RGBA) {
-	if img == nil {
-		return
-	}
-	PaintColorRGBARectangle(img, clr, img.Bounds())
-}*/
 
 func PaintColor(img draw.Image, clr color.Color, area image.Rectangle) {
 	if img == nil {
@@ -232,12 +223,6 @@ func PaintColor(img draw.Image, clr color.Color, area image.Rectangle) {
 		}
 	}
 }
-
-/*
-func AddBorderImage(img image.Image, clr color.Color, width int) draw.Image {
-	return AddBorder(ImageToRGBA(img), clr, width)
-}
-*/
 
 // AddBorder adds a border to a `draw.Image`. If you have an `image.Image`,
 // first convert it with `ImageToRGBA(img)`.
