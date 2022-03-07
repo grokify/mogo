@@ -20,7 +20,10 @@ func DefaultZoneDirs() []string {
 
 func ZonesPortable() []string {
 	zones := []string{}
-	json.Unmarshal([]byte(PortableZones), &zones)
+	err := json.Unmarshal([]byte(PortableZones), &zones)
+	if err != nil {
+		panic(err)
+	}
 	return zones
 }
 

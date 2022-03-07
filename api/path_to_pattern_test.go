@@ -16,16 +16,19 @@ var urlToPatternTests = []struct {
 
 func TestURLToPattern(t *testing.T) {
 	ut := NewURLTransformer()
-	ut.LoadPaths([]string{
+	err := ut.LoadPaths([]string{
 		"/pets",
 		"/pets/{petId}",
 		"/pets/{petId}/vacinations",
 		"/pets/{petId}/vacinations/{vacinationId}"})
+	if err != nil {
+		t.Errorf(`err URLTransformer.LoadPaths(...) failed: err [%s]`, err.Error())
+	}
 
 	for _, tt := range urlToPatternTests {
 		got := ut.URLActualToPattern(tt.v)
 		if got != tt.want {
-			t.Errorf(`URLActualToPattern("%v") Failed: want [%v], got [%v]`, tt.v, tt.want, got)
+			t.Errorf(`err URLActualToPattern("%v") failed: want [%v], got [%v]`, tt.v, tt.want, got)
 		}
 	}
 }
