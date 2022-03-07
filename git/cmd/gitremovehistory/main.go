@@ -71,7 +71,7 @@ func main() {
 			if len(stderrString) > 0 {
 				log.Fatal(stderrString)
 			} else if len(stdoutString) > 0 {
-				fmt.Printf(stdoutString)
+				fmt.Println(stdoutString)
 			}
 		}
 	}
