@@ -27,7 +27,7 @@ func ParseWeekday(s string) (time.Weekday, error) {
 			return time.Weekday(i), nil
 		}
 	}
-	return time.Weekday(0), fmt.Errorf("Cannot parse weekday: %s", s)
+	return time.Weekday(0), fmt.Errorf("cannot parse weekday: %s", s)
 }
 
 // var rxYyyy = regexp.MustCompile(`^[0-9]+$`)

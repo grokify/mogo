@@ -56,7 +56,7 @@ func TimeDeltaDowInt(base time.Time, wantDow int, deltaUnits int, wantInclusive 
 		}
 		deltaDays = deltaDaysTry
 	} else {
-		return base, errors.New("Delta units cannot be 0")
+		return base, errors.New("delta units cannot be 0")
 	}
 	if deltaUnitsAbs > 1 {
 		additional := deltaUnitsAbs - 1
@@ -88,9 +88,9 @@ func DaysAgoDowStrings(baseDowS string, wantDowS string, wantInclusive bool) (in
 
 func DaysAgoDow(baseDow int, wantDow int, wantInclusive bool) (int, error) {
 	if baseDow < 0 || baseDow > 6 {
-		return int(0), fmt.Errorf("Base Day of Week is not in [0-6]: %v", baseDow)
+		return int(0), fmt.Errorf("base day of week is not in [0-6]: %v", baseDow)
 	} else if wantDow < 0 || wantDow > 6 {
-		return int(0), fmt.Errorf("Want Day of Week is not in [0-6]: %v", wantDow)
+		return int(0), fmt.Errorf("want day of week is not in [0-6]: %v", wantDow)
 	}
 
 	deltaDays1 := baseDow - wantDow
@@ -98,7 +98,7 @@ func DaysAgoDow(baseDow int, wantDow int, wantInclusive bool) (int, error) {
 	if deltaDays2 < 0 {
 		deltaDays2 += 7
 	}
-	if wantInclusive == false && deltaDays2 == 0 {
+	if !wantInclusive && deltaDays2 == 0 {
 		deltaDays2 = 7
 	}
 	return deltaDays2, nil
@@ -119,16 +119,16 @@ func DaysToDowStrings(baseDowS string, wantDowS string, wantInclusive bool) (int
 
 func DaysToDow(baseDow int, wantDow int, wantInclusive bool) (int, error) {
 	if baseDow < 0 || baseDow > 6 {
-		return int(0), fmt.Errorf("Base Day of Week is not in [0-6]: %v", baseDow)
+		return int(0), fmt.Errorf("base day of week is not in [0-6]: %v", baseDow)
 	} else if wantDow < 0 || wantDow > 6 {
-		return int(0), fmt.Errorf("Want Day of Week is not in [0-6]: %v", wantDow)
+		return int(0), fmt.Errorf("want day of week is not in [0-6]: %v", wantDow)
 	}
 	deltaDays1 := wantDow - baseDow
 	deltaDays2 := deltaDays1
 	if deltaDays2 < 0 {
 		deltaDays2 += 7
 	}
-	if wantInclusive == false && deltaDays2 == 0 {
+	if !wantInclusive && deltaDays2 == 0 {
 		deltaDays2 = 7
 	}
 	return deltaDays2, nil
@@ -139,10 +139,10 @@ func ParseDayOfWeek(value string) (int, error) {
 	days := []string{"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"}
 	mapping := map[string]int{}
 	for i, dow := range days {
-		mapping[dow] = int(i)
+		mapping[dow] = i
 	}
 	if dow, ok := mapping[valueLc]; ok {
 		return dow, nil
 	}
-	return -1, fmt.Errorf("English name of day not found: %v", value)
+	return -1, fmt.Errorf("name of day not found in English: %v", value)
 }

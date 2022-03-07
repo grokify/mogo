@@ -16,14 +16,14 @@ type DurationPct struct {
 
 func (dp *DurationPct) Inflate() error {
 	if dp.DurationRange.Seconds() == 0 {
-		return errors.New("No Duration Range")
+		return errors.New("no duration range")
 	}
 	err := dp.InflateDurationActive()
 	if err != nil {
 		return err
 	}
-	dp.DurationPct = float64(dp.DurationActive.Seconds()) /
-		float64(dp.DurationRange.Seconds())
+	dp.DurationPct = dp.DurationActive.Seconds() /
+		dp.DurationRange.Seconds()
 	return nil
 }
 
@@ -44,7 +44,7 @@ type ImpactPct struct {
 
 func (ip *ImpactPct) Inflate() error {
 	if ip.TotalNum == 0 {
-		return errors.New("Total num is zero")
+		return errors.New("total num is zero")
 	}
 	ip.ImpactPct = float64(ip.ImpactNum) / float64(ip.TotalNum)
 	return nil

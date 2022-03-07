@@ -36,9 +36,6 @@ func (trs TimeRanges) IntersectionAny() time.Duration {
 		t1 := rangesNonZero[0]
 		t2 := rangesNonZero[1]
 		return t1.IntersectionDuration(*t2)
-	} else {
-		return time.Duration(0)
-		panic("E_MORE_THAN_2_RANGES")
 	}
 	return time.Duration(0)
 }
@@ -122,8 +119,5 @@ func (tr *TimeRange) IntersectionDuration(tr2 TimeRange) time.Duration {
 
 func (tr *TimeRange) HasIntersection(tr2 TimeRange) bool {
 	dur := tr.IntersectionDuration(tr2)
-	if dur.Nanoseconds() > 0 {
-		return true
-	}
-	return false
+	return dur.Nanoseconds() > 0
 }

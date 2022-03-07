@@ -47,7 +47,7 @@ func ParseInterval(src string) (Interval, error) {
 			return Interval(i), nil
 		}
 	}
-	return Year, fmt.Errorf("Interval [%v] not found.", src)
+	return Year, fmt.Errorf("interval [%v] not found", src)
 }
 
 func IntervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time, error) {
@@ -61,6 +61,6 @@ func IntervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time
 	case "week":
 		return WeekStart(dt, dow)
 	default:
-		return time.Time{}, fmt.Errorf("Interval [%v] not supported in timeutil.IntervalStart.", interval)
+		return time.Time{}, fmt.Errorf("interval [%v] not supported in timeutil.IntervalStart", interval)
 	}
 }

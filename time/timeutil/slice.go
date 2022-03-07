@@ -29,7 +29,7 @@ func Sort(times []time.Time) []time.Time {
 
 func Earliest(times []time.Time, skipZeroes bool) (time.Time, error) {
 	if len(times) == 0 {
-		return time.Now(), errors.New("No times")
+		return time.Now(), errors.New("no times")
 	}
 	sort.Slice(
 		times,
@@ -37,14 +37,14 @@ func Earliest(times []time.Time, skipZeroes bool) (time.Time, error) {
 
 	first := times[0]
 	if skipZeroes && TimeIsZeroAny(first) {
-		return first, fmt.Errorf("Latest Time is Zero [%s]", first.Format(time.RFC3339))
+		return first, fmt.Errorf("latest time is zero [%s]", first.Format(time.RFC3339))
 	}
 	return first, nil
 }
 
 func Latest(times []time.Time, skipZeroes bool) (time.Time, error) {
 	if len(times) == 0 {
-		return time.Now(), errors.New("No times")
+		return time.Now(), errors.New("no times")
 	}
 	sort.Slice(
 		times,
@@ -52,7 +52,7 @@ func Latest(times []time.Time, skipZeroes bool) (time.Time, error) {
 
 	last := times[len(times)-1]
 	if skipZeroes && TimeIsZeroAny(last) {
-		return last, fmt.Errorf("Latest Time is Zero [%s]", last.Format(time.RFC3339))
+		return last, fmt.Errorf("latest time is zero [%s]", last.Format(time.RFC3339))
 	}
 	return last, nil
 }
@@ -72,7 +72,7 @@ func QuarterSlice(min, max time.Time) []time.Time {
 
 func FirstNonZeroTimeParsed(format string, times []string) (time.Time, error) {
 	if len(times) == 0 {
-		return time.Now(), errors.New("No times provided")
+		return time.Now(), errors.New("no times provided")
 	}
 	for _, timeString := range times {
 		timeString = strings.TrimSpace(timeString)
@@ -87,19 +87,19 @@ func FirstNonZeroTimeParsed(format string, times []string) (time.Time, error) {
 			return t, nil
 		}
 	}
-	return time.Now(), errors.New("No times provided")
+	return time.Now(), errors.New("no times provided")
 }
 
 func FirstNonZeroTime(times ...time.Time) (time.Time, error) {
 	if len(times) == 0 {
-		return time.Now(), errors.New("No times provided")
+		return time.Now(), errors.New("no times provided")
 	}
 	for _, t := range times {
 		if !IsZeroAny(t) {
 			return t, nil
 		}
 	}
-	return time.Now(), errors.New("No times provided")
+	return time.Now(), errors.New("no times provided")
 }
 
 func MustFirstNonZeroTime(times ...time.Time) time.Time {

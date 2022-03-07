@@ -1,7 +1,6 @@
 package timeutil
 
 import (
-	"errors"
 	"fmt"
 	"regexp"
 	"strconv"
@@ -110,7 +109,7 @@ func ParseQuarterInt32(yyyyq int32) (int32, uint8, error) {
 		q = -1 * q
 	}
 	if q < 1 || q > 4 {
-		return int32(0), uint8(0), fmt.Errorf("Quarter '%v' is not valid", q)
+		return int32(0), uint8(0), fmt.Errorf("quarter '%v' is not valid", q)
 	}
 	return yyyy, uint8(q), nil
 }
@@ -271,10 +270,10 @@ func NumQuartersInt32(start, end int32) (int, error) {
 			return -1, err
 		}
 		if cur == end {
-			return numQuarters, nil
+			break
 		}
 	}
-	return -1, errors.New("Default Error - should not encounter")
+	return numQuarters, nil
 }
 
 // QuartersInt32RelToAbs is useful relative date queries.
