@@ -16,7 +16,6 @@ var convTests = []struct {
 
 func TestConv(t *testing.T) {
 	for _, tt := range convTests {
-
 		tryCamel := CaseKebabToCamel(tt.kebab)
 		if tryCamel != tt.camel {
 			t.Errorf("stringcase.CaseKebabToCamel(\"%s\") Mismatch: want [%v] got [%v]",

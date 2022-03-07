@@ -15,7 +15,7 @@ var emoji2ASCIITests = []struct {
 	{`:confused: :sweat_smile:`, `>:\ ':)`, `😕 😅`},
 }
 
-func TestEmojiToAscii(t *testing.T) {
+func TestEmojiToASCII(t *testing.T) {
 	conv := NewConverter()
 	for _, tt := range emoji2ASCIITests {
 		gotASCII := conv.ConvertShortcodesString(tt.v, Ascii)

@@ -15,7 +15,6 @@ func MinInt32(ints []int32) int32 {
 		} else if this < min {
 			min = this
 		}
-
 	}
 	return min
 }
