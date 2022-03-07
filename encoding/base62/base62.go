@@ -13,9 +13,9 @@ import (
 )
 
 var (
-	rxStripPadding         = regexp.MustCompile(`\++\s*$`)
-	rxCheckBase62          = regexp.MustCompile(`^[0-9A-Za-z]*\+*\s*$`)
-	rxCheckBase62NoPadding = regexp.MustCompile(`^[0-9A-Za-z]*$`)
+	rxCheckBase62 = regexp.MustCompile(`^[0-9A-Za-z]*\+*\s*$`)
+	// rxCheckBase62NoPadding = regexp.MustCompile(`^[0-9A-Za-z]*$`)
+	// rxStripPadding         = regexp.MustCompile(`\++\s*$`)
 )
 
 // Encode with optional gzip compression. 0 = no compression.
@@ -23,6 +23,7 @@ var (
 // as github.com/lytics/base62 does not appear to support it
 // properly.
 func EncodeGzip(data []byte, compressLevel int) (string, error) {
+	/* disalbe due to lytics/base62
 	compressLevel = 0
 	var err error
 	if compressLevel != 0 {
@@ -30,7 +31,7 @@ func EncodeGzip(data []byte, compressLevel int) (string, error) {
 		if err != nil {
 			return "", err
 		}
-	}
+	}*/
 	return base62.StdEncoding.EncodeToString(data), nil
 }
 
