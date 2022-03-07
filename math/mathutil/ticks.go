@@ -36,7 +36,7 @@ func PrettyTicks(estimatedTickCount int, low, high int64) []int64 {
 	diffRaw := high - low
 	tickSize := float64(diffRaw) / float64(estimatedTickCount)
 	tickSizedRounded := FloorMostSignificant(int64(tickSize))
-	lowFloor := FloorMostSignificant(int64(low))
+	lowFloor := FloorMostSignificant(low)
 
 	ticks = append(ticks, lowFloor)
 	for ticks[len(ticks)-1] < high {

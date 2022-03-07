@@ -61,7 +61,7 @@ func (g *GpgEncrypt) EncryptStringToFile(plaintext string, sPath string, sEmail 
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(sPath, buf.Bytes(), 0666)
+	return ioutil.WriteFile(sPath, buf.Bytes(), 0600)
 }
 
 func (g *GpgEncrypt) EncryptFile(pathPlain string, pathCrypt string, sEmail string) error {
