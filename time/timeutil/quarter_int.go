@@ -10,6 +10,7 @@ import (
 
 	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/math/mathutil"
+	"github.com/grokify/mogo/type/number"
 )
 
 func InQuarter(dt time.Time, yyyyq int32) (bool, error) {
@@ -119,7 +120,11 @@ func QuarterStringStartTime(yyyyqStr string) (time.Time, error) {
 	if err != nil {
 		return time.Now(), err
 	}
-	return QuarterInt32StartTime(int32(yyyyq))
+	yyyyq32, err := number.Int32(yyyyq)
+	if err != nil {
+		return time.Now(), err
+	}
+	return QuarterInt32StartTime(yyyyq32)
 }
 
 func QuarterStringEndTime(yyyyqStr string) (time.Time, error) {

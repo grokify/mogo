@@ -1,12 +1,15 @@
 package imageutil
 
 import (
+	"errors"
 	"fmt"
 	"image"
 	"net/http"
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/grokify/mogo/net/urlutil"
 	// "github.com/chai2010/webp"
 )
 
@@ -19,8 +22,8 @@ const (
 )
 
 func ReadImage(location string) (image.Image, string, error) {
-	if isHttpUri(location) {
-		return ReadImageHttp(location)
+	if urlutil.IsHTTP(location, true, true) {
+		return ReadImageHTTP(location)
 	}
 	return ReadImageFile(location)
 }
@@ -37,6 +40,7 @@ func ReadImages(locations []string) ([]image.Image, error) {
 	return images, nil
 }
 
+/*
 func isHttpUri(location string) bool {
 	try := strings.ToLower(strings.TrimSpace(location))
 	if strings.Index(try, "http://") == 0 || strings.Index(try, "https://") == 0 {
@@ -44,6 +48,7 @@ func isHttpUri(location string) bool {
 	}
 	return false
 }
+*/
 
 func ReadImageFile(filename string) (image.Image, string, error) {
 	infile, err := os.Open(filename)
@@ -71,8 +76,12 @@ func DecodeWebpRGBA(r io.Reader) (image.Image, string, error) {
 }
 */
 
-func ReadImageHttp(imageUrl string) (image.Image, string, error) {
-	resp, err := http.Get(imageUrl)
+func ReadImageHTTP(imageURL string) (image.Image, string, error) {
+	imageURL = strings.TrimSpace(imageURL)
+	if !urlutil.IsHTTP(imageURL, true, true) {
+		return nil, "", errors.New("url is not valid")
+	}
+	resp, err := http.Get(imageURL)
 	if err != nil {
 		return image.NewRGBA(image.Rectangle{}), "", err
 	} else if resp.StatusCode >= 300 {
