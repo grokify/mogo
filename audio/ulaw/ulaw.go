@@ -28,7 +28,7 @@ func WriteFileWAVFromULAW(filename string, ulawBytes []byte) error {
 		return err
 	}
 	defer f.Close()
-	_, err = WriteWavFromUlaw(f, ulawBytes)
+	_, err = WriteWAVFromULAW(f, ulawBytes)
 	if err != nil {
 		return err
 	}

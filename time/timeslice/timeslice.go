@@ -49,35 +49,33 @@ func (ts TimeSlice) Format(format string) []string {
 }
 
 func (ts TimeSlice) Duplicate() TimeSlice {
-	newTs := TimeSlice{}
-	for _, t := range ts {
-		newTs = append(newTs, t)
-	}
-	return newTs
+	newTS := TimeSlice{}
+	newTS = append(newTS, ts...)
+	return newTS
 }
 
 var (
-	EmptyTimeSliceError   = errors.New("empty time slice")
-	OutOfBoundsError      = errors.New("out of bounds")
-	OutOfBoundsLowerError = errors.New("out of bounds lower")
-	OutOfBoundsUpperError = errors.New("out of bounds upper")
+	ErrEmptyTimeSlice   = errors.New("empty time slice")
+	ErrOutOfBounds      = errors.New("out of bounds")
+	ErrOutOfBoundsLower = errors.New("out of bounds lower")
+	ErrOutOfBoundsUpper = errors.New("out of bounds upper")
 )
 
 // RangeLower returns the TimeSlice time value for the range
 // lower than or equal to the supplied time.
 func (ts TimeSlice) RangeLower(t time.Time, inclusive bool) (time.Time, error) {
 	if len(ts) == 0 {
-		return t, EmptyTimeSliceError
+		return t, ErrEmptyTimeSlice
 	}
-	sortedTs := ts.Dedupe()
-	sort.Sort(sortedTs)
+	sortedTS := ts.Dedupe()
+	sort.Sort(sortedTS)
 
-	if sortedTs[0].After(t) {
-		return t, OutOfBoundsLowerError
+	if sortedTS[0].After(t) {
+		return t, ErrOutOfBoundsLower
 	}
 
-	curRangeLower := sortedTs[0]
-	for _, nextRangeLower := range sortedTs {
+	curRangeLower := sortedTS[0]
+	for _, nextRangeLower := range sortedTS {
 		if t.Before(nextRangeLower) {
 			return curRangeLower, nil
 		} else if inclusive && t.Equal(nextRangeLower) {
@@ -85,7 +83,7 @@ func (ts TimeSlice) RangeLower(t time.Time, inclusive bool) (time.Time, error) {
 		}
 		curRangeLower = nextRangeLower
 	}
-	return sortedTs[len(sortedTs)-1], nil
+	return sortedTS[len(sortedTS)-1], nil
 }
 
 // RangeUpper returns the TimeSlice time value for the range
@@ -93,18 +91,18 @@ func (ts TimeSlice) RangeLower(t time.Time, inclusive bool) (time.Time, error) {
 // be less than or equal to the upper range.
 func (ts TimeSlice) RangeUpper(t time.Time, inclusive bool) (time.Time, error) {
 	if len(ts) == 0 {
-		return t, EmptyTimeSliceError
+		return t, ErrEmptyTimeSlice
 	}
-	sortedTs := ts.Dedupe()
-	sort.Sort(sortedTs)
+	sortedTS := ts.Dedupe()
+	sort.Sort(sortedTS)
 
-	if sortedTs[len(sortedTs)-1].Before(t) {
-		return t, OutOfBoundsUpperError
+	if sortedTS[len(sortedTS)-1].Before(t) {
+		return t, ErrOutOfBoundsUpper
 	}
-	curRangeUpper := sortedTs[len(sortedTs)-1]
-	for i := range sortedTs {
+	curRangeUpper := sortedTS[len(sortedTS)-1]
+	for i := range sortedTS {
 		// check times in reverse order
-		nextRangeUpper := sortedTs[len(sortedTs)-1-i]
+		nextRangeUpper := sortedTS[len(sortedTS)-1-i]
 		if t.After(nextRangeUpper) {
 			return curRangeUpper, nil
 		} else if inclusive && t.Equal(nextRangeUpper) {
@@ -112,7 +110,7 @@ func (ts TimeSlice) RangeUpper(t time.Time, inclusive bool) (time.Time, error) {
 		}
 		curRangeUpper = nextRangeUpper
 	}
-	return sortedTs[0], nil
+	return sortedTS[0], nil
 }
 
 func ParseTimeSlice(format string, times []string) (TimeSlice, error) {
