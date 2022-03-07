@@ -14,10 +14,10 @@ const (
 	StringToLower     = "StringToLower"
 	SpaceToHyphen     = "SpaceToHyphen"
 	SpaceToUnderscore = "SpaceToUnderscore"
-	lowerAZ           = "abcdefghijklmnopqrstuvwxyz"
-	upperAZ           = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	lowerUpper        = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	upperLower        = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+	// lowerAZ           = "abcdefghijklmnopqrstuvwxyz"
+	// upperAZ           = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	lowerUpper = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	upperLower = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 )
 
 var (
