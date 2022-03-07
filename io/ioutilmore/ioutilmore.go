@@ -207,10 +207,13 @@ func FileinfosNames(fis []os.FileInfo) []string {
 }
 
 // ReaderToBytes reads from an io.Reader, e.g. io.ReadCloser
-func ReaderToBytes(ior io.Reader) []byte {
+func ReaderToBytes(ior io.Reader) ([]byte, error) {
 	buf := new(bytes.Buffer)
-	buf.ReadFrom(ior)
-	return buf.Bytes()
+	_, err := buf.ReadFrom(ior)
+	if err != nil {
+		return []byte{}, err
+	}
+	return buf.Bytes(), nil
 }
 
 // ReadFileJSON reads and unmarshals a file.

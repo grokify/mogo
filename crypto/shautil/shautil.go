@@ -1,14 +1,13 @@
 package shautil
 
 import (
-	"crypto/sha1"
 	"crypto/sha512"
 	"encoding/base32"
-	"fmt"
 	"io"
 	"os"
 )
 
+/*
 func Sum1HexFile(name string) (string, error) {
 	f, err := os.Open(name)
 	if err != nil {
@@ -23,6 +22,7 @@ func Sum1HexFile(name string) (string, error) {
 
 	return fmt.Sprintf("%x", h.Sum(nil)), nil
 }
+*/
 
 func Sum512d224Base32Bytes(b []byte, padding rune) string {
 	b28len := sha512.Sum512_224(b)

@@ -3,7 +3,6 @@ package bytesutil
 import (
 	"bytes"
 
-	"github.com/grokify/mogo/fmt/fmtutil"
 	"github.com/grokify/mogo/math/mathutil"
 )
 
@@ -48,6 +47,5 @@ func BytesToIntsMore(bytes []byte, intLength int) []int {
 	if len(curNum) > 0 {
 		ints = append(ints, BytesToInt(curNum))
 	}
-	fmtutil.PrintJSON(ints)
 	return ints
 }

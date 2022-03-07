@@ -17,13 +17,15 @@ var readImageFileTests = []struct {
 
 func TestShaSumFile(t *testing.T) {
 	for _, tt := range readImageFileTests {
-		trySha1, err := Sum1HexFile(tt.filename)
-		if err != nil {
-			t.Errorf("shautil.Sum1HexFile(\"%s\") Error: [%v]", tt.filename, err.Error())
-		}
-		if trySha1 != tt.sha1Hex {
-			t.Errorf("shautil.Sum1HexFile(\"%s\") Format Want [%s], Got [%v]", tt.filename, tt.sha1Hex, trySha1)
-		}
+		/*
+			trySha1, err := Sum1HexFile(tt.filename)
+			if err != nil {
+				t.Errorf("shautil.Sum1HexFile(\"%s\") Error: [%v]", tt.filename, err.Error())
+			}
+			if trySha1 != tt.sha1Hex {
+				t.Errorf("shautil.Sum1HexFile(\"%s\") Format Want [%s], Got [%v]", tt.filename, tt.sha1Hex, trySha1)
+			}
+		*/
 		trySha512d224Base32, err := Sum512d224Base32File(tt.filename, '=')
 		if err != nil {
 			t.Errorf("shautil.Sum512d224Base32File(\"%s\") Error: [%v]", tt.filename, err.Error())
