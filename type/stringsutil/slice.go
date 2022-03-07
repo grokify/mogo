@@ -60,7 +60,7 @@ func SliceTrim(lines []string, cutstr string, condense bool) []string {
 	return newLines
 }
 
-// SliceDedupe removes duplicate occurences of a string
+// SliceDedupe removes duplicate occurrences of a string
 // from a slice, keeping the first one encountered. It
 // maintains the order of elements in the slice.
 func SliceDedupe(s []string) []string {

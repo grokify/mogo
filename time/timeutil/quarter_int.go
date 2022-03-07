@@ -225,7 +225,7 @@ func AnyStringToQuarterTime(yyyyqSrcStr string) time.Time {
 		return time.Now().UTC()
 	}
 	// If cannot parse to integer, return now time.
-	yyyyqSrc, err := strconv.Atoi(yyyyqSrcStr)
+	yyyyqSrc32, err := strconvutil.Atoi32(yyyyqSrcStr)
 	if err != nil {
 		return time.Now().UTC()
 	}
@@ -236,7 +236,7 @@ func AnyStringToQuarterTime(yyyyqSrcStr string) time.Time {
 		return time.Now().UTC()
 	}
 	// return quarter end time
-	dtQtrEnd, err := QuarterInt32EndTime(int32(yyyyqSrc))
+	dtQtrEnd, err := QuarterInt32EndTime(yyyyqSrc32)
 	if err != nil {
 		return time.Now().UTC()
 	}
