@@ -30,21 +30,30 @@ func main() {
 	if opts.Dir == "" {
 		opts.Dir = "."
 	}
-	fmtutil.PrintJSON(opts)
+	err = fmtutil.PrintJSON(opts)
+	if err != nil {
+		log.Fatal(err)
+	}
 	if len(opts.Pattern) > 0 {
 		files, err := codegen.ConvertFilesInPlaceNestedstructsToPointers(
 			opts.Dir, regexp.MustCompile(opts.Pattern))
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmtutil.PrintJSON(files)
+		err = fmtutil.PrintJSON(files)
+		if err != nil {
+			log.Fatal(err)
+		}
 	} else {
 		files, err := codegen.ConvertFilesInPlaceNestedstructsToPointers(
 			opts.Dir, nil)
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmtutil.PrintJSON(files)
+		err = fmtutil.PrintJSON(files)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	fmt.Println("DONE")
 }

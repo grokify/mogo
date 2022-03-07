@@ -30,7 +30,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmtutil.PrintJSON(rows)
+	err = fmtutil.PrintJSON(rows)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	fmt.Println("DONE")
 }
