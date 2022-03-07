@@ -23,7 +23,7 @@ const (
 	Korean     = "ko"
 	Norwegian  = "no"
 	Polish     = "pl"
-	Portugese  = "pt"
+	Portuguese = "pt"
 	Romanian   = "ro"
 	Russian    = "ru"
 	Slovak     = "sk"

@@ -32,11 +32,11 @@ func URIScheme(uri string) string {
 	return ""
 }
 
-func IsHTTP(uri string, inclHttp, inclHttps bool) bool {
+func IsHTTP(uri string, inclHTTP, inclHTTPS bool) bool {
 	try := strings.ToLower(strings.TrimSpace(uri))
-	if strings.Index(try, "http://") == 0 && inclHttp {
+	if strings.Index(try, "http://") == 0 && inclHTTP {
 		return true
-	} else if strings.Index(try, "https://") == 0 && inclHttps {
+	} else if strings.Index(try, "https://") == 0 && inclHTTPS {
 		return true
 	}
 	return false

@@ -28,7 +28,7 @@ const (
 	Ruby               = "2006-01-02 15:04:05 -0700" // Ruby Time.now.to_s
 	SQLTimestamp       = "2006-01-02 15:04:05"       // MySQL, BigQuery, etc.
 	SQLTimestampPgTz   = "2006-01-02 15:04:05.999999-07"
-	InsightlyApiQuery  = "_1/_2/2006 _3:04:05 PM"
+	InsightlyAPIQuery  = "_1/_2/2006 _3:04:05 PM"
 	DateMDY            = "1/_2/2006"
 	DateMDYSlash       = "01/02/2006"
 	DateDMYHM2         = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
@@ -76,7 +76,7 @@ func FromToFirstValue(fromLayout, toLayout string, values []string) (string, err
 			return dt.Format(toLayout), nil
 		}
 	}
-	return "", errors.New("No Match")
+	return "", errors.New("no match")
 }
 
 func ParseFirstValueOrZero(layout string, values []string) time.Time {
@@ -96,9 +96,9 @@ func ParseFirstValue(layout string, values []string) (time.Time, error) {
 	}
 	numVals := len(values)
 	if numVals == 0 {
-		return time.Now(), errors.New("No Time Values Supplied")
+		return time.Now(), errors.New("no time values supplied")
 	}
-	return time.Now(), fmt.Errorf("No Valid String of [%v] Supplied Values", strconv.Itoa(numVals))
+	return time.Now(), fmt.Errorf("no valid string of [%v] supplied values", strconv.Itoa(numVals))
 }
 
 // ParseOrZero returns a parsed time.Time or the RFC-3339 zero time.
@@ -115,7 +115,7 @@ func ParseFirst(layouts []string, value string) (time.Time, error) {
 	value = strings.TrimSpace(value)
 	if len(value) == 0 || len(layouts) == 0 {
 		return time.Now(), fmt.Errorf(
-			"Requires value [%v] and at least one layout [%v]", value, strings.Join(layouts, ","))
+			"requires value [%v] and at least one layout [%v]", value, strings.Join(layouts, ","))
 	}
 	for _, layout := range layouts {
 		layout = strings.TrimSpace(layout)
@@ -126,7 +126,7 @@ func ParseFirst(layouts []string, value string) (time.Time, error) {
 			return dt, nil
 		}
 	}
-	return time.Now(), fmt.Errorf("Cannot parse time [%v] with layouts [%v]",
+	return time.Now(), fmt.Errorf("cannot parse time [%v] with layouts [%v]",
 		value, strings.Join(layouts, ","))
 }
 
@@ -139,7 +139,7 @@ var FormatMap = map[string]string{
 func GetFormat(formatName string) (string, error) {
 	format, ok := FormatMap[strings.TrimSpace(formatName)]
 	if !ok {
-		return "", fmt.Errorf("Format Not Found: %v", format)
+		return "", fmt.Errorf("format Not Found: %v", format)
 	}
 	return format, nil
 }

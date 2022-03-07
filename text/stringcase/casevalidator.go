@@ -71,7 +71,7 @@ var (
 	rxKebabCase         = regexp.MustCompile(`^[a-z][0-9a-z-]*$`)
 	rxPascalCase        = regexp.MustCompile(`^[A-Z][0-9A-Za-z]*$`)
 	rxSnakeCase         = regexp.MustCompile(`^[a-z][0-9a-z_]*$`)
-	rxCamelCaseIdSuffix = regexp.MustCompile(`[0-9a-z](I[dD])$`)
+	rxCamelCaseIDSuffix = regexp.MustCompile(`[0-9a-z](I[dD])$`)
 	rxHypen             = regexp.MustCompile(`-`)
 	rxUnderscore        = regexp.MustCompile(`_`)
 )
@@ -81,7 +81,7 @@ func IsCamelCase(input string) bool {
 	if !rxCamelCase.MatchString(input) {
 		return false
 	}
-	m := rxCamelCaseIdSuffix.FindStringSubmatch(input)
+	m := rxCamelCaseIDSuffix.FindStringSubmatch(input)
 	if len(m) == 2 {
 		if m[1] != "Id" {
 			return false
@@ -99,7 +99,7 @@ func IsPascalCase(input string) bool {
 	if !rxPascalCase.MatchString(input) {
 		return false
 	}
-	m := rxCamelCaseIdSuffix.FindStringSubmatch(input)
+	m := rxCamelCaseIDSuffix.FindStringSubmatch(input)
 	if len(m) == 2 {
 		if m[1] != "Id" {
 			return false

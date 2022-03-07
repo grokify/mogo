@@ -21,10 +21,10 @@ func TestURIScheme(t *testing.T) {
 	}
 }
 
-var isHttpTests = []struct {
+var isHTTPTests = []struct {
 	v         string
-	inclHttp  bool
-	inclHttps bool
+	inclHTTP  bool
+	inclHTTPS bool
 	want      bool
 }{
 	{"http://example.com", false, false, false},
@@ -40,11 +40,11 @@ var isHttpTests = []struct {
 }
 
 func TestIsHTTP(t *testing.T) {
-	for _, tt := range isHttpTests {
+	for _, tt := range isHTTPTests {
 		try := tt.v
-		got := IsHTTP(try, tt.inclHttp, tt.inclHttps)
+		got := IsHTTP(try, tt.inclHTTP, tt.inclHTTPS)
 		if got != tt.want {
-			t.Errorf("IsHttp(%v) failed want [%v] got [%v]", tt.v, tt.want, got)
+			t.Errorf("func IsHttp(%v) failed want [%v] got [%v]", tt.v, tt.want, got)
 		}
 	}
 }
