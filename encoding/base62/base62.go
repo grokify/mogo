@@ -22,12 +22,16 @@ var (
 // 9 = best compression. Currently, compression is disabled
 // as github.com/lytics/base62 does not appear to support it
 // properly.
-func EncodeGzip(data []byte, compressLevel int) string {
+func EncodeGzip(data []byte, compressLevel int) (string, error) {
 	compressLevel = 0
+	var err error
 	if compressLevel != 0 {
-		data = gziputil.Compress(data, compressLevel)
+		data, err = gziputil.Compress(data, compressLevel)
+		if err != nil {
+			return "", err
+		}
 	}
-	return base62.StdEncoding.EncodeToString(data)
+	return base62.StdEncoding.EncodeToString(data), nil
 }
 
 // DecodeGunzip base62 decodes a string with optional
@@ -51,7 +55,7 @@ func EncodeGzipJSON(data interface{}, compressLevel int) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return EncodeGzip(bytes, compressLevel), err
+	return EncodeGzip(bytes, compressLevel)
 }
 
 // DecodeGunzipJSON base62 decodes a string with optoinal

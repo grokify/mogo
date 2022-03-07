@@ -36,7 +36,10 @@ func TestEncodeBase64String(t *testing.T) {
 	levels := []int{0, 1, 5, 9}
 	for i, tt := range encodeBase64StringTests {
 		for _, compressLevel := range levels {
-			enc := EncodeGzip([]byte(tt.plaintext), compressLevel)
+			enc, err := EncodeGzip([]byte(tt.plaintext), compressLevel)
+			if err != nil {
+				t.Errorf("base64.EncodeGzip(\"%s\") err [%v]", tt.plaintext, err.Error())
+			}
 
 			if 1 == 0 && compressLevel == 0 && enc != tt.encoded64 {
 				t.Errorf("base64.EncodeGzip(%v): want [%v], got [%v]", tt.plaintext, tt.encoded64, enc)

@@ -37,11 +37,15 @@ var (
 
 // Encode with optional gzip compression. 0 = no compression.
 // 9 = best compression.
-func EncodeGzip(data []byte, compressLevel int) string {
+func EncodeGzip(data []byte, compressLevel int) (string, error) {
+	var err error
 	if compressLevel != 0 {
-		data = gziputil.Compress(data, compressLevel)
+		data, err = gziputil.Compress(data, compressLevel)
+		if err != nil {
+			return "", err
+		}
 	}
-	return base64.StdEncoding.EncodeToString(data)
+	return base64.StdEncoding.EncodeToString(data), nil
 }
 
 // DecodeGunzip base64 decodes a string with optional
@@ -81,7 +85,7 @@ func EncodeGzipJSON(data interface{}, compressLevel int) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return EncodeGzip(bytes, compressLevel), err
+	return EncodeGzip(bytes, compressLevel)
 }
 
 // DecodeGunzipJSON base64 decodes a string with optoinal

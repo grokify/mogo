@@ -16,7 +16,10 @@ func TestEncodeBase62String(t *testing.T) {
 	levels := []int{9}
 	for _, tt := range encodeBase36StringTests {
 		for _, level := range levels {
-			enc := EncodeGzip([]byte(tt.plaintext), level)
+			enc, err := EncodeGzip([]byte(tt.plaintext), level)
+			if err != nil {
+				t.Errorf("base62.EncodeGzip(%v): err [%v]", tt.plaintext, err.Error())
+			}
 
 			if level == 0 && enc != tt.encoded62 {
 				t.Errorf("base62.EncodeGzip(%v): want [%v], got [%v]", tt.plaintext, tt.encoded62, enc)
