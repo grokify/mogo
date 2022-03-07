@@ -70,6 +70,5 @@ func TestDd6(t *testing.T) {
 			t.Errorf("timeutil.Dd6ToTime(dd6rev, true) Error: want [%v], got [%v]",
 				dt, dtRev)
 		}
-
 	}
 }

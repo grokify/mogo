@@ -28,10 +28,7 @@ func ToBool(value interface{}) bool {
 	} else if valString, ok := value.(string); ok {
 		return stringsutil.ToBool(valString)
 	} else if valInt, ok := value.(int); ok {
-		if valInt == 0 {
-			return false
-		}
-		return true
+		return valInt != 0
 	} else if valFloat, ok := value.(float64); ok {
 		if valFloat == 0.0 {
 			return false
