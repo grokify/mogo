@@ -11,3 +11,7 @@ linters:
     - unconvert
     - unparam
     - whitespace
+linters-settings:
+  gosec:
+    excludes:
+      - G107
