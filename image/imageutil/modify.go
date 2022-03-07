@@ -152,7 +152,10 @@ func SliceXY(images []image.Image, maxIdx int) (minX, maxX, minY, maxY, sumX, su
 }
 
 func ResizeSameX(images []image.Image, larger bool) []image.Image {
-	minX, maxX, _, _, _, _ := SliceXY(images, -1)
+	// minX, maxX, _, _, _, _ := SliceXY(images, -1)
+	imgs := Images(images)
+	minX := imgs.DxMin()
+	maxX := imgs.DxMax()
 	for i, img := range images {
 		if larger && img.Bounds().Dx() != maxX {
 			images[i] = Resize(uint(maxX), 0, img, ScalerBest())
@@ -164,7 +167,10 @@ func ResizeSameX(images []image.Image, larger bool) []image.Image {
 }
 
 func ResizeSameY(images []image.Image, larger bool) []image.Image {
-	_, _, minY, maxY, _, _ := SliceXY(images, -1)
+	// _, _, minY, maxY, _, _ := SliceXY(images, -1)
+	imgs := Images(images)
+	minY := imgs.DyMin()
+	maxY := imgs.DyMax()
 	for i, img := range images {
 		if larger && img.Bounds().Dy() != maxY {
 			images[i] = Resize(0, uint(maxY), img, ScalerBest())
