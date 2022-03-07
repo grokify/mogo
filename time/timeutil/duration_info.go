@@ -7,12 +7,12 @@ import (
 	"time"
 )
 
-var (
+const (
 	nanosPerSecond      = int64(1000000000)
-	nanosPerMicrosecond = int64(nanosPerSecond / 1000000)
-	nanosPerMillisecond = int64(nanosPerSecond / 1000)
-	nanosPerMinute      = int64(nanosPerSecond * 60)
-	nanosPerHour        = int64(nanosPerMinute * 24)
+	nanosPerMicrosecond = nanosPerSecond / 1000000
+	nanosPerMillisecond = nanosPerSecond / 1000
+	nanosPerMinute      = nanosPerSecond * 60
+	nanosPerHour        = nanosPerMinute * 24
 )
 
 // 00:00:00,309 - 00:00:07,074	 And in conclusion, we have found MySQL to be an excellent database for our website. Any questions?	S1
