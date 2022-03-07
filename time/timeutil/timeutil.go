@@ -218,7 +218,7 @@ func Dt14ForInts(yyyy, mm, dd, hr, mn, dy int) int64 {
 	if err != nil {
 		panic(err)
 	}
-	return int64(iDt14)
+	return iDt14
 }
 
 // Dt14ForTime returns a Dt14 value given a time.Time struct.
@@ -229,7 +229,7 @@ func Dt14ForTime(t time.Time) int64 {
 	if err != nil {
 		panic(err)
 	}
-	return int64(iDt14)
+	return iDt14
 }
 
 // TimeForDt14 returns a time.Time value given a Dt14 value.
