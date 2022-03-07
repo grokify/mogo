@@ -1,24 +1,12 @@
 package imageutil
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 	"image/draw"
-	"strings"
 
 	"github.com/grokify/mogo/image/colors"
 )
-
-func debugImagesDimensions(note string, images []image.Image) {
-	dimensions := []string{note}
-	for i, img := range images {
-		dimensions = append(dimensions,
-			fmt.Sprintf("X%d[%v]y%d[%v]",
-				i+1, img.Bounds().Dx(), i+1, img.Bounds().Dy()))
-	}
-	fmt.Printf(strings.Join(dimensions, " ") + "\n")
-}
 
 func MergeXSameY(images []image.Image, larger bool) image.Image {
 	if len(images) == 0 {
