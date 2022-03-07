@@ -150,8 +150,8 @@ func URLAddQueryInterfaceString(inputURL string, qry interface{}) (*url.URL, err
 }
 
 // GetURLBody returns an HTTP response byte array body from a URL.
-func GetURLBody(absoluteUrl string) ([]byte, error) {
-	req, err := http.NewRequest(http.MethodGet, absoluteUrl, nil)
+func GetURLBody(absoluteURL string) ([]byte, error) {
+	req, err := http.NewRequest(http.MethodGet, absoluteURL, nil)
 	if err != nil {
 		return []byte{}, err
 	}
@@ -166,9 +166,9 @@ func GetURLBody(absoluteUrl string) ([]byte, error) {
 
 // GetURLPostBody returns a HTTP post body as a byte array from a
 // URL, body type and an io.Reader.
-func GetURLPostBody(absoluteUrl string, bodyType string, reqBody io.Reader) ([]byte, error) {
+func GetURLPostBody(absoluteURL string, bodyType string, reqBody io.Reader) ([]byte, error) {
 	client := &http.Client{}
-	res, err := client.Post(absoluteUrl, bodyType, reqBody)
+	res, err := client.Post(absoluteURL, bodyType, reqBody)
 	if err != nil {
 		return []byte{}, err
 	}
@@ -188,19 +188,19 @@ func Join(elem ...string) string {
 }
 
 var (
-	rxUriScheme    *regexp.Regexp = regexp.MustCompile(`^([A-Za-z][0-9A-Za-z]*:/)`)
+	rxURIScheme    *regexp.Regexp = regexp.MustCompile(`^([A-Za-z][0-9A-Za-z]*:/)`)
 	rxFwdSlashMore *regexp.Regexp = regexp.MustCompile(`/+`)
 )
 
-// CondenseUri trims spaces and condenses slashes.
-func CondenseUri(uri string) string {
-	return rxUriScheme.ReplaceAllString(
+// CondenseURI  trims spaces and condenses slashes.
+func CondenseURI(uri string) string {
+	return rxURIScheme.ReplaceAllString(
 		rxFwdSlashMore.ReplaceAllString(strings.TrimSpace(uri), "/"),
 		"${1}/")
 }
 
-// UrlValuesStringSorted returns and encoded string with sorting
-func UrlValuesEncodeSorted(v url.Values, priorities []string) string {
+// URLValuesEncodeSorted returns and encoded string with sorting
+func URLValuesEncodeSorted(v url.Values, priorities []string) string {
 	encoded := []string{}
 	priorityKeys := map[string]int{}
 

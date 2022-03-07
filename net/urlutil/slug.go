@@ -5,14 +5,14 @@ import (
 )
 
 var (
-	rxSlugTextToUrl *regexp.Regexp = regexp.MustCompile(`[\s\t\r\n]+`)
-	rxSlugUrlToText *regexp.Regexp = regexp.MustCompile(`[_]+`)
+	rxSlugTextToURL *regexp.Regexp = regexp.MustCompile(`[\s\t\r\n]+`)
+	rxSlugURLToText *regexp.Regexp = regexp.MustCompile(`[_]+`)
 )
 
-func SlugTextToUrl(s string) string {
-	return rxSlugTextToUrl.ReplaceAllString(s, "_")
+func SlugTextToURL(s string) string {
+	return rxSlugTextToURL.ReplaceAllString(s, "_")
 }
 
-func SlugUrlToText(s string) string {
-	return rxSlugUrlToText.ReplaceAllString(s, " ")
+func SlugURLToText(s string) string {
+	return rxSlugURLToText.ReplaceAllString(s, " ")
 }

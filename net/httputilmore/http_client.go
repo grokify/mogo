@@ -16,10 +16,10 @@ var (
 	HTTP_TIMEOUT int   = 10
 )
 
+// NewHTTPClient is a HTTP client provides default and updatable timeouts.
 // The default Go HTTP client never times out.
-// This HTTP client provides default and updatable timeouts
 // More at: https://medium.com/@nate510/don-t-use-go-s-default-http-client-4804cb19f779#.ymd655pgz
-func NewHttpClient() *http.Client {
+func NewHTTPClient() *http.Client {
 	dial_timeout, _ := time.ParseDuration(fmt.Sprintf("%vs", DIAL_TIMEOUT))
 
 	netTransport := &http.Transport{

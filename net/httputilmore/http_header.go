@@ -40,7 +40,7 @@ const (
 	ContentTypeAppFormURLEncoded       = "application/x-www-form-urlencoded"
 	ContentTypeAppFormURLEncodedUtf8   = "application/x-www-form-urlencoded; charset=utf-8"
 	ContentTypeAppXML                  = "application/xml"
-	ContentTypeAppXmlUtf8              = "application/xml; charset=utf-8"
+	ContentTypeAppXMLUtf8              = "application/xml; charset=utf-8"
 	ContentTypeTextCalendarUtf8Request = "text/calendar; charset=utf-8; method=REQUEST"
 	ContentTypeTextHTML                = "text/html"
 	ContentTypeTextHTMLUtf8            = "text/html; charset=utf-8"

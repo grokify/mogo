@@ -32,10 +32,10 @@ var condenseUriTests = []struct {
 	{"  https://abc//def//  ", "https://abc/def/"},
 	{"https://////abc///def/", "https://abc/def/"}}
 
-func TestCondenseUri(t *testing.T) {
+func TestCondenseURI(t *testing.T) {
 	for _, tt := range condenseUriTests {
 		try := tt.v
-		got := CondenseUri(try)
+		got := CondenseURI(try)
 		if got != tt.want {
 			t.Errorf("UriCondense(%v) failed want [%v] got [%v]", tt.v, tt.want, got)
 		}
@@ -60,7 +60,7 @@ func TestUrlValuesEncodeSorted(t *testing.T) {
 		if err != nil {
 			t.Errorf("UrlValuesEncodeSorted(...) failed ParseQuery(%v)", tt.raw)
 		}
-		got := UrlValuesEncodeSorted(try, tt.priority)
+		got := URLValuesEncodeSorted(try, tt.priority)
 		if got != tt.want {
 			t.Errorf("UrlValuesEncodeSorted [%v][%v] failed want [%v] got [%v]", tt.raw, tt.priority, tt.want, got)
 		}

@@ -47,5 +47,5 @@ func ModifyPath(rawurl, newpath string) (string, error) {
 		newpath = ""
 	}
 	u.Path = newpath
-	return CondenseUri(u.String()), nil
+	return CondenseURI(u.String()), nil
 }

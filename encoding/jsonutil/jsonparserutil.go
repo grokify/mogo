@@ -8,31 +8,31 @@ import (
 	"github.com/buger/jsonparser"
 )
 
-func JsonParserGetArrayIntOneOnly(data []byte, key string) (int, error) {
-	values, err := JsonParserGetArrayString(data, key)
+func JSONParserGetArrayIntOneOnly(data []byte, key string) (int, error) {
+	values, err := JSONParserGetArrayString(data, key)
 	if err != nil {
 		return -1, err
 	}
 	if len(values) != 1 {
-		return -1, fmt.Errorf("Expecting 1 Value, Got [%v]", len(values))
+		return -1, fmt.Errorf("expecting 1 value, got [%v] values", len(values))
 	}
 	valueString := values[0]
 	valueInt, err := strconv.Atoi(valueString)
 	return valueInt, err
 }
 
-func JsonParserGetArrayStringOneOnly(data []byte, key string) (string, error) {
-	values, err := JsonParserGetArrayString(data, key)
+func JSONParserGetArrayStringOneOnly(data []byte, key string) (string, error) {
+	values, err := JSONParserGetArrayString(data, key)
 	if err != nil {
 		return "", err
 	}
 	if len(values) != 1 {
-		return "", fmt.Errorf("Expecting 1 Value, Got [%v]", len(values))
+		return "", fmt.Errorf("expecting 1 value, got [%v] values", len(values))
 	}
 	return values[0], nil
 }
 
-func JsonParserGetArrayString(data []byte, key string) ([]string, error) {
+func JSONParserGetArrayString(data []byte, key string) ([]string, error) {
 	strs := []string{}
 	value, _, _, err := jsonparser.Get(data, key)
 	if err != nil {

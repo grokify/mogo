@@ -11,10 +11,10 @@ var uriSchemeTests = []struct {
 	{"https://example.com", "https"},
 	{"rc6://example", "rc6"}}
 
-func TestUriScheme(t *testing.T) {
+func TestURIScheme(t *testing.T) {
 	for _, tt := range uriSchemeTests {
 		try := tt.v
-		got := UriScheme(try)
+		got := URIScheme(try)
 		if got != tt.want {
 			t.Errorf("GetScheme(%v) failed want [%v] got [%v]", tt.v, tt.want, got)
 		}
@@ -39,10 +39,10 @@ var isHttpTests = []struct {
 	{"tel://example.com", true, true, false},
 }
 
-func TestIsHttp(t *testing.T) {
+func TestIsHTTP(t *testing.T) {
 	for _, tt := range isHttpTests {
 		try := tt.v
-		got := IsHttp(try, tt.inclHttp, tt.inclHttps)
+		got := IsHTTP(try, tt.inclHttp, tt.inclHttps)
 		if got != tt.want {
 			t.Errorf("IsHttp(%v) failed want [%v] got [%v]", tt.v, tt.want, got)
 		}

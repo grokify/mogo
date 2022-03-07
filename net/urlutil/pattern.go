@@ -14,10 +14,7 @@ func VarsToGeneric(input string) string {
 func MatchGeneric(path1, path2 string) bool {
 	gen1 := VarsToGeneric(path1)
 	gen2 := VarsToGeneric(path2)
-	if gen1 != gen2 {
-		return false
-	}
-	return true
+	return gen1 == gen2
 }
 
 func EndpointString(path, method string, generic bool) string {

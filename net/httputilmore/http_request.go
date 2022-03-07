@@ -60,7 +60,7 @@ func GetWriteFileSimple(url string, filename string, perm os.FileMode) ([]byte, 
 	return bytes, err
 }
 
-func GetJsonSimple(requrl string, header http.Header, data interface{}) (*http.Response, error) {
+func GetJSONSimple(requrl string, header http.Header, data interface{}) (*http.Response, error) {
 	req, err := http.NewRequest(http.MethodGet, requrl, nil)
 	if err != nil {
 		return nil, err
@@ -152,7 +152,7 @@ func GetResponseAndBytes(url string) (*http.Response, []byte, error) {
 	return resp, bytes, err
 }
 
-func SendWwwFormUrlEncodedSimple(method, urlStr string, data url.Values) (*http.Response, error) {
+func SendWWWFormUrlEncodedSimple(method, urlStr string, data url.Values) (*http.Response, error) {
 	req, err := http.NewRequest(
 		method,
 		urlStr,
@@ -166,11 +166,11 @@ func SendWwwFormUrlEncodedSimple(method, urlStr string, data url.Values) (*http.
 	return client.Do(req)
 }
 
-// GetUrlOrReadFile takes a string and will either call HTTP GET if the
+// GetURLOrReadFile takes a string and will either call HTTP GET if the
 // string begins with `http` or `https` URI scheme or read a file if it
 // does not.
-func GetUrlOrReadFile(input string) ([]byte, error) {
-	if urlutil.IsHttp(input, true, true) {
+func GetURLOrReadFile(input string) ([]byte, error) {
+	if urlutil.IsHTTP(input, true, true) {
 		resp, err := http.Get(input)
 		if err != nil {
 			return []byte{}, err
