@@ -32,18 +32,21 @@ func CompressWriter(w io.Writer, data []byte, level int) error {
 }
 
 // Compress performs gzip compression on a byte slice.
-func Compress(data []byte, level int) []byte {
+func Compress(data []byte, level int) ([]byte, error) {
 	buf := new(bytes.Buffer)
-	CompressWriter(buf, data, FixCompressLevel(level))
-	return buf.Bytes()
+	err := CompressWriter(buf, data, FixCompressLevel(level))
+	return buf.Bytes(), err
 }
 
 // CompressBase64 performs gzip compression and then base64 encodes
 // the data. Level includes `compress/gzip.BestSpeed`, `compress/gzip.BestCompression`,
 // and `compress/gzip.DefaultCompression`.
-func CompressBase64(data []byte, level int) string {
-	compressed := Compress(data, level)
-	return base64.StdEncoding.EncodeToString(compressed)
+func CompressBase64(data []byte, level int) (string, error) {
+	compressed, err := Compress(data, level)
+	if err != nil {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(compressed), nil
 }
 
 // CompressBase64JSON performs a JSON encoding, gzip compression and
@@ -53,7 +56,7 @@ func CompressBase64JSON(data interface{}, level int) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return CompressBase64(uncompressedBytes, level), nil
+	return CompressBase64(uncompressedBytes, level)
 }
 
 // Uncompress gunzips a byte slice.

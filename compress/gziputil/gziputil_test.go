@@ -26,7 +26,11 @@ type compressTestObject struct {
 
 func TestGzipCompress(t *testing.T) {
 	for _, tt := range compressTests {
-		gotCompress := CompressBase64([]byte(tt.uncompressed), gzip.BestCompression)
+		gotCompress, err := CompressBase64([]byte(tt.uncompressed), gzip.BestCompression)
+		if err != nil {
+			t.Errorf("gziputil.CompressBase64(<data>, \"%s\") Error [%v]",
+				tt.compressedBestCompression, err.Error())
+		}
 
 		if 1 == 0 {
 			if gotCompress != tt.compressedBestSpeed {

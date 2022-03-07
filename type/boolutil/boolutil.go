@@ -1,10 +1,7 @@
 package boolutil
 
 func Flip(b bool) bool {
-	if b {
-		return false
-	}
-	return true
+	return !b
 }
 
 func ToInt(b bool) int {

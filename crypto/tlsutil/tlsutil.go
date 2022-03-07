@@ -15,6 +15,7 @@ func NewTLSConfig() TLSConfig {
 	return TLSConfig{
 		Config: &tls.Config{
 			Certificates: []tls.Certificate{},
+			MinVersion:   tls.VersionTLS12,
 		},
 	}
 }
@@ -39,7 +40,7 @@ func (tc *TLSConfig) LoadCACert(ca_cert_filepath string) error {
 
 	ok := tc.Config.RootCAs.AppendCertsFromPEM(cert)
 	if !ok {
-		return fmt.Errorf("Cannot add Root CA cert %v", ca_cert_filepath)
+		return fmt.Errorf("cannot add Root CA cert %v", ca_cert_filepath)
 	}
 	return nil
 }

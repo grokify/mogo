@@ -14,11 +14,11 @@ func DetectContentTypeFile(name string) (string, error) {
 	}
 	defer file.Close()
 
-	return DetectContentTypeReadSeeker(file)
+	return DetectContentTypeReadSeeker(file, false)
 }
 
 // DetectContentTypeReadSeeker detects the media type by reading MIME type information of an `io.ReadSeeker`.
-func DetectContentTypeReadSeeker(rs io.ReadSeeker) (string, error) {
+func DetectContentTypeReadSeeker(rs io.ReadSeeker, resetPointer bool) (string, error) {
 	// Only the first 512 bytes are used to sniff the content type.
 	data := make([]byte, 512)
 	_, err := rs.Read(data)
@@ -26,8 +26,13 @@ func DetectContentTypeReadSeeker(rs io.ReadSeeker) (string, error) {
 		return "", err
 	}
 
-	// Reset the read pointer if necessary.
-	rs.Seek(0, 0)
+	if resetPointer {
+		// Reset the read pointer if necessary.
+		_, err = rs.Seek(0, 0)
+		if err != nil {
+			return "", err
+		}
+	}
 
 	// Returns `application/octet-stream` if media type is unknown.
 	return http.DetectContentType(data), nil
