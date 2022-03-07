@@ -239,7 +239,10 @@ func TimeForDt14(dt14 int64) (time.Time, error) {
 
 func MonthNames() []string {
 	data := []string{}
-	json.Unmarshal([]byte(MonthsEN), &data)
+	err := json.Unmarshal([]byte(MonthsEN), &data)
+	if err != nil {
+		panic(err)
+	}
 	return data
 }
 

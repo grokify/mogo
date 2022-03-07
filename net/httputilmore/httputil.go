@@ -2,7 +2,7 @@ package httputilmore
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httputil"
 	"regexp"
@@ -23,12 +23,15 @@ func UnmarshalResponseJSON(resp *http.Response, data interface{}) ([]byte, error
 
 // ResponseBodyJSONMapIndent returns the body as a generic JSON dictionary
 func ResponseBodyJSONMapIndent(res *http.Response, prefix string, indent string) ([]byte, error) {
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return body, err
 	}
 	any := map[string]interface{}{}
-	json.Unmarshal(body, &any)
+	err = json.Unmarshal(body, &any)
+	if err != nil {
+		return body, err
+	}
 	return json.MarshalIndent(any, prefix, indent)
 }
 
