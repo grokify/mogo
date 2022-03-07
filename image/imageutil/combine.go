@@ -15,7 +15,10 @@ func MergeXSameY(images []image.Image, larger bool) image.Image {
 		return images[0]
 	}
 	images = ResizeSameY(images, larger)
-	_, _, minY, _, sumX, _ := SliceXY(images, -1)
+	// _, _, minY, _, sumX, _ := SliceXY(images, -1)
+	imgs := Images(images)
+	minY := imgs.DyMin()
+	sumX := imgs.DxSum(-1)
 	output := image.NewRGBA(image.Rect(0, 0, sumX, minY))
 	sumXPrev := 0
 	for _, img := range images {
@@ -44,7 +47,10 @@ func MergeYSameX(images []image.Image, larger bool) image.Image {
 		return images[0]
 	}
 	images = ResizeSameX(images, larger)
-	minX, _, _, _, _, sumY := SliceXY(images, -1)
+	// minX, _, _, _, _, sumY := SliceXY(images, -1)
+	imgs := Images(images)
+	minX := imgs.DxMin()
+	sumY := imgs.DySum(-1)
 	output := image.NewRGBA(image.Rect(0, 0, minX, sumY))
 	sumYPrev := 0
 	for _, img := range images {
