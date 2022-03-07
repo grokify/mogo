@@ -40,10 +40,7 @@ func (tf *TokenFilter) Match(t html.Token) bool {
 func TokensSubset(startFilter, endFilter *TokenFilter, inclusive, greedy bool, toks []html.Token) []html.Token {
 	subset := []html.Token{}
 	if startFilter == nil && endFilter == nil {
-		for _, tok := range toks {
-			subset = append(subset, tok)
-		}
-		return subset
+		return toks
 	}
 	matching := false
 	if startFilter == nil {

@@ -24,8 +24,8 @@ func TestHash(t *testing.T) {
 
 		got := HashSimpleBase36([]byte(tt.input), saltBytes)
 
-		if string(got) != tt.want {
-			t.Errorf("Argon2 Error: want [%v], got [%v]", tt.want, string(got))
+		if got != tt.want {
+			t.Errorf("Argon2 Error: want [%v], got [%v]", tt.want, got)
 		}
 	}
 }

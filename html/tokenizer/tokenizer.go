@@ -11,7 +11,7 @@ import (
 	"golang.org/x/net/html/atom"
 )
 
-var TokenNotFound = errors.New("token not found")
+var ErrTokenNotFound = errors.New("token not found")
 
 func NewTokenizerFile(filename string) (*html.Tokenizer, error) {
 	htmlBytes, err := os.ReadFile(filename)
@@ -125,5 +125,5 @@ func NextTextToken(z *html.Tokenizer, skipErrors bool, htmlAtoms ...atom.Atom) (
 			return NextTextToken(z, skipErrors)
 		}
 	}
-	return html.Token{}, TokenNotFound
+	return html.Token{}, ErrTokenNotFound
 }
