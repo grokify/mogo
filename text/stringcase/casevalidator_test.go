@@ -64,6 +64,5 @@ func TestCase(t *testing.T) {
 				t.Errorf("stringcase.IsSnakeCase(\"%s\") Mismatch: want [%v] got [%v]", tt.str, tt.isSnake, isSnake)
 			}
 		}
-
 	}
 }

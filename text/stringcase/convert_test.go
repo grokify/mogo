@@ -52,7 +52,6 @@ func TestConv(t *testing.T) {
 			t.Errorf("stringcase.CaseSnakeToPascal(\"%s\") Mismatch: want [%v] got [%v]",
 				tt.snake, tt.pascal, tryPascal)
 		}
-
 	}
 }
 
