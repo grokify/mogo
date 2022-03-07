@@ -183,7 +183,7 @@ func TrimSentenceLength(sentenceInput string, maxLength int) string {
 	if len(sentenceInput) <= maxLength {
 		return sentenceInput
 	}
-	sentenceLen := string(sentenceInput[0:maxLength]) // first350 := string(s[0:350])
+	sentenceLen := sentenceInput[0:maxLength] // first350 := string(s[0:350])
 	rxEnd := regexp.MustCompile(`[[:punct:]][^[[:punct:]]]*$`)
 	sentencePunct := rxEnd.ReplaceAllString(sentenceLen, "")
 	if len(sentencePunct) >= 2 {

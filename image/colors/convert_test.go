@@ -61,9 +61,9 @@ func TestConvertColors(t *testing.T) {
 				tt.R, tt.G, tt.B, 0xff}, gotHexNum)
 		}
 		clr := color.RGBA{
-			R: uint8(tt.R),
-			G: uint8(tt.G),
-			B: uint8(tt.B),
+			R: tt.R,
+			G: tt.G,
+			B: tt.B,
 			A: 0xff}
 		gotRGBAHexLc := ColorRGBAToHex(clr)
 		if gotRGBAHexLc != strings.ToLower(tt.hexRaw) {
