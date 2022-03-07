@@ -280,7 +280,7 @@ func OffsetFormat(offset int, useColon, useZ bool) string {
 		}
 	} else if offset > 0 {
 		if useColon {
-			hr := int(offset / 100)
+			hr := offset / 100
 			mn := offset - (hr * 100)
 			offsetStr = "+" + fmt.Sprintf("%02d:%02d", hr, mn)
 		} else {
@@ -289,7 +289,7 @@ func OffsetFormat(offset int, useColon, useZ bool) string {
 	} else if offset < 0 {
 		if useColon {
 			offsetPositive := -1 * offset
-			hr := int(offsetPositive / 100)
+			hr := offsetPositive / 100
 			mn := offsetPositive - (hr * 100)
 			offsetStr = "-" + fmt.Sprintf("%02d:%02d", hr, mn)
 		} else {
