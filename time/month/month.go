@@ -118,10 +118,7 @@ func MonthContinuousIsQuarterBegin(monthc uint64) bool {
 func MonthContinuousIsYearBegin(monthc uint64) bool {
 	t := MonthContinuousToTime(monthc)
 	month := t.Month()
-	if month == 1 {
-		return true
-	}
-	return false
+	return month == 1
 }
 
 // TimeSeriesMonth returns time series of months given start and end

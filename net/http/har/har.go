@@ -152,7 +152,7 @@ type Request struct {
 	// Absolute URL of the request (fragments are not included).
 	Url string `json:"url"`
 	// Request HTTP Version.
-	HttpVersion string
+	HTTPVersion string
 	// List of cookie objects.
 	Cookies []Cookie
 	// List of header objects.

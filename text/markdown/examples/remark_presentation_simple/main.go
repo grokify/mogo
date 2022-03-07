@@ -24,7 +24,7 @@ func main() {
 	html := markdown.RemarkHTML(slides)
 	fmt.Println(html)
 
-	err := ioutil.WriteFile("test_slides.html", []byte(html), 0644)
+	err := ioutil.WriteFile("test_slides.html", []byte(html), 0600)
 	if err != nil {
 		log.Fatal(err)
 	}

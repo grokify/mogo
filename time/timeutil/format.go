@@ -3,7 +3,6 @@ package timeutil
 import (
 	"errors"
 	"fmt"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -300,7 +299,7 @@ func OffsetFormat(offset int, useColon, useZ bool) string {
 	return offsetStr
 }
 
-var rxSQLTimestamp = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}$`)
+// var rxSQLTimestamp = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}$`)
 
 func ParseTimeUsingOffset(format, raw, sep string, offset int, useColon, useZ bool) (time.Time, error) {
 	return time.Parse(format, raw+sep+OffsetFormat(offset, useColon, useZ))

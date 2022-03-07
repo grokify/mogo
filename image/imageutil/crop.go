@@ -43,7 +43,7 @@ func CropX(src image.Image, width uint, align string) image.Image {
 		src.Bounds().Max.Y))
 }
 
-// CropY crops an image by its height verticaly.
+// CropY crops an image by its height vertically.
 func CropY(src image.Image, height uint, align string) image.Image {
 	if int(height) >= src.Bounds().Dy() {
 		return src

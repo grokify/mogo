@@ -139,10 +139,7 @@ func SubDuration(dur1, dur2 time.Duration) time.Duration {
 }
 
 func DurationIsZero(dur time.Duration) bool {
-	if dur.Nanoseconds() == 0 {
-		return true
-	}
-	return false
+	return dur.Nanoseconds() == 0
 }
 
 func DurationZero() time.Duration {

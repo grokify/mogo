@@ -17,7 +17,7 @@ func BoldText(haystack, needle string) string {
 	return regexp.MustCompile(`(?i)\b(`+regexp.QuoteMeta(needle)+`)`).ReplaceAllString(output, "**$1**")
 }
 
-func UrlToMarkdownLinkHostname(url string) string {
+func URLToMarkdownLinkHostname(url string) string {
 	rx := regexp.MustCompile(`(?i)^https?://([^/]+)(/[^/])`)
 	m := rx.FindStringSubmatch(url)
 	if len(m) > 1 {

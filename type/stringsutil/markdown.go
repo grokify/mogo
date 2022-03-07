@@ -5,7 +5,7 @@ import (
 	"regexp"
 )
 
-func UrlToMarkdownLinkHostname(url string) string {
+func URLToMarkdownLinkHostname(url string) string {
 	rx := regexp.MustCompile(`(?i)^https?://([^/]+)(/[^/])`)
 	m := rx.FindStringSubmatch(url)
 	if len(m) > 1 {
