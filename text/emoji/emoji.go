@@ -152,7 +152,7 @@ func GetEmojiDataShortcodeMap() map[string]Emoji {
 				Unicode:     strings.TrimSpace(parts[1]),
 				ShortcodeRx: regexp.MustCompile(regexp.QuoteMeta(parts[0]))}
 			if len(parts) == 3 {
-				emo.Ascii = strings.TrimSpace(parts[2])
+				emo.ASCII = strings.TrimSpace(parts[2])
 			}
 			data[parts[0]] = emo
 		} else if len(parts) > 3 {
@@ -163,7 +163,7 @@ func GetEmojiDataShortcodeMap() map[string]Emoji {
 }
 
 type Emoji struct {
-	Ascii       string
+	ASCII       string
 	Shortcode   string
 	Unicode     string
 	ShortcodeRx *regexp.Regexp
@@ -195,11 +195,11 @@ func (conv *Converter) ConvertShortcodesString(input string, emoType EmojiType) 
 				if len(einfo.Unicode) > 0 {
 					output = einfo.ShortcodeRx.ReplaceAllString(output, einfo.Unicode)
 				} else {
-					output = einfo.ShortcodeRx.ReplaceAllString(output, einfo.Ascii)
+					output = einfo.ShortcodeRx.ReplaceAllString(output, einfo.ASCII)
 				}
 			} else {
-				if len(einfo.Ascii) > 0 {
-					output = einfo.ShortcodeRx.ReplaceAllString(output, einfo.Ascii)
+				if len(einfo.ASCII) > 0 {
+					output = einfo.ShortcodeRx.ReplaceAllString(output, einfo.ASCII)
 				} else {
 					output = einfo.ShortcodeRx.ReplaceAllString(output, einfo.Unicode)
 				}

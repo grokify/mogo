@@ -26,7 +26,6 @@ func TestLetterToNumber(t *testing.T) {
 				t.Errorf("phonenumber.LetterToNumberMap() Error: with [%v], want [%v], got [%v]",
 					tt.v, tt.want, num)
 			}
-
 		} else {
 			t.Errorf("phonenumber.LetterToNumberMap() Not Found Error: with [%v], want [%v]",
 				tt.v, tt.want)

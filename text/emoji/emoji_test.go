@@ -4,9 +4,9 @@ import (
 	"testing"
 )
 
-var emoji2AsciiTests = []struct {
+var emoji2ASCIITests = []struct {
 	v           string
-	wantAscii   string
+	wantASCII   string
 	wantUnicode string
 }{
 	{`:-1:`, `-1`, `👎`},
@@ -17,10 +17,10 @@ var emoji2AsciiTests = []struct {
 
 func TestEmojiToAscii(t *testing.T) {
 	conv := NewConverter()
-	for _, tt := range emoji2AsciiTests {
-		gotAscii := conv.ConvertShortcodesString(tt.v, Ascii)
-		if gotAscii != tt.wantAscii {
-			t.Errorf("converter.ConvertString(\"%v\", Ascii) Mismatch: want [%v] got [%v]", tt.v, tt.wantAscii, gotAscii)
+	for _, tt := range emoji2ASCIITests {
+		gotASCII := conv.ConvertShortcodesString(tt.v, Ascii)
+		if gotASCII != tt.wantASCII {
+			t.Errorf("converter.ConvertString(\"%v\", ASCII) Mismatch: want [%v] got [%v]", tt.v, tt.wantASCII, gotASCII)
 		}
 		gotUnicode := conv.ConvertShortcodesString(tt.v, Unicode)
 		if gotUnicode != tt.wantUnicode {
