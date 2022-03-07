@@ -22,13 +22,13 @@ var (
 
 // ValidGUIDHex checks to see if a string is a valid GUID.
 func ValidGUIDHex(guid string) bool {
-	return rxGuid.MatchString(guid)
+	return rxGUID.MatchString(guid)
 }
 
 // GUIDToBigInt converts a GUID string, with or with out hypens, to a *big.Int.
 func GUIDToBigInt(guid string) (*big.Int, error) {
 	if !ValidGUIDHex(guid) {
-		return nil, fmt.Errorf("not a valid Guid: %v\n", guid)
+		return nil, fmt.Errorf("not a valid GUID [%s]", guid)
 	}
 	bi := big.NewInt(0)
 	bi.SetString(rxHyphen.ReplaceAllString(guid, ""), 16)

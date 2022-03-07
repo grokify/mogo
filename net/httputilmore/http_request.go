@@ -46,7 +46,7 @@ func GetWriteFile(client *http.Client, url, filename string) (*http.Response, er
 	defer f.Close()
 	_, err = io.Copy(f, resp.Body)
 	if err != nil {
-		err = errorsutil.Wrap(err, "httputilmore.GetStoreURL.io.Copy()")
+		return resp, errorsutil.Wrap(err, "httputilmore.GetStoreURL.io.Copy()")
 	}
 	return resp, nil
 }
