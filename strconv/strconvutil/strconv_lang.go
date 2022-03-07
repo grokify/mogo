@@ -2,14 +2,13 @@ package strconvutil
 
 import (
 	"fmt"
-	"regexp"
 	"strconv"
 	"strings"
 
 	"github.com/grokify/mogo/text/languageutil"
 )
 
-var rxComma = regexp.MustCompile(`,`)
+// var rxComma = regexp.MustCompile(`,`)
 
 // AtoiLang provides language parsing to handle
 // thousands separators.

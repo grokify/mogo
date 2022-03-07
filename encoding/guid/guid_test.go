@@ -60,8 +60,8 @@ var base58ToGuidNoHypenTests = []struct {
 }
 
 func TestBase58ToGUIDNoHyphen(t *testing.T) {
-	for _, tt := range base58ToGUIDHypenTests {
-		b58, err := Base58ToGUID(tt.v, true)
+	for _, tt := range base58ToGuidNoHypenTests {
+		b58, err := Base58ToGUID(tt.v, false)
 
 		if err != nil {
 			t.Errorf("guid.Base58ToGuid(%v): want %v, err %v", tt.v, tt.want, err.Error())
