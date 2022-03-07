@@ -50,7 +50,7 @@ const (
 
 var (
 	bluemondayStrictPolicy                      = bluemonday.StrictPolicy()
-	rxHtmlToTextNewLines         *regexp.Regexp = regexp.MustCompile(`(?i:</?p>)`)
+	rxHTMLToTextNewLines         *regexp.Regexp = regexp.MustCompile(`(?i:</?p>)`)
 	rxCarriageReturn             *regexp.Regexp = regexp.MustCompile(`\r`)
 	rxLineFeed                   *regexp.Regexp = regexp.MustCompile(`\n`)
 	rxLineFeedMore               *regexp.Regexp = regexp.MustCompile(`\n+`)
@@ -76,9 +76,9 @@ func StreamlineCRLFs(s string) string {
 	return s2
 }
 
-// HtmlToTextCondensed removes HTML tags, unescapes HTML entities,
+// HTMLToTextCondensed removes HTML tags, unescapes HTML entities,
 // and removes extra whitespace including non-breaking spaces.
-func HtmlToTextCondensed(s string) string {
+func HTMLToTextCondensed(s string) string {
 	return strings.Join(
 		strings.Fields(
 			html.UnescapeString(
@@ -89,13 +89,13 @@ func HtmlToTextCondensed(s string) string {
 	)
 }
 
-// HtmlToText converts HTML to multi-line text.
-func HtmlToText(s string) string {
+// HTMLToText converts HTML to multi-line text.
+func HTMLToText(s string) string {
 	return rxLineFeedMore2.ReplaceAllString(
 		strings.TrimSpace(
 			html.UnescapeString(
 				bluemondayStrictPolicy.Sanitize(
-					rxHtmlToTextNewLines.ReplaceAllString(s, "$1\n\n"),
+					rxHTMLToTextNewLines.ReplaceAllString(s, "$1\n\n"),
 				),
 			),
 		),
@@ -103,8 +103,8 @@ func HtmlToText(s string) string {
 	)
 }
 
-func SimplifyHtmlText(s string) string {
-	text := HtmlToText(s)
+func SimplifyHTMLText(s string) string {
+	text := HTMLToText(s)
 	lines := strings.Split(text, "\n")
 	newlines := []string{}
 	for _, line := range lines {
@@ -116,11 +116,11 @@ func SimplifyHtmlText(s string) string {
 	return strings.Join(newlines, "")
 }
 
-func TextToHtml(s string) string {
+func TextToHTML(s string) string {
 	return rxLineFeed.ReplaceAllString(StreamlineCRLFs(s), "<br/>")
 }
 
-func TextToHtmlBr2(s string) string {
+func TextToHTMLBr2(s string) string {
 	return rxLineFeed.ReplaceAllString(
 		rxLineFeedMore.ReplaceAllString(StreamlineCRLFs(s), "\n"),
 		"<br/><br/>",

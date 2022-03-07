@@ -7,7 +7,6 @@ import (
 	"net"
 	"net/http"
 	"time"
-
 	//"github.com/rs/zerolog/log"
 )
 
@@ -72,23 +71,23 @@ func DoRequestRateLimited(client *http.Client, req *http.Request, useXrlHyphen b
 }
 
 func LogRequestRateLimited(rlstat RateLimitInfo) {
-	logInfo:= map[string]interface{}{
-		"action": "http_rate_limited",
-		"status_code": rlstat.StatusCode,
-		"retry-after": rlstat.RetryAfter,
+	logInfo := map[string]interface{}{
+		"action":                 "http_rate_limited",
+		"status_code":            rlstat.StatusCode,
+		"retry-after":            rlstat.RetryAfter,
 		"x-rate-limit-remaining": rlstat.XRateLimitRemaining,
-		"x-rate-limit-window": rlstat.XRateLimitWindow,
-		"message":"Request has been rated limited."}
-	log.Printf("%v\n" ,  logInfo) 
-/*
-	log.Info().
-		Str("action", "http_rate_limited").
-		Int("status_code", rlstat.StatusCode).
-		Int("retry-after", rlstat.RetryAfter).
-		Int("x-rate-limit-remaining", rlstat.XRateLimitRemaining).
-		Int("x-rate-limit-window", rlstat.XRateLimitWindow).
-		Msg("Request has been rated limited.")
-		*/
+		"x-rate-limit-window":    rlstat.XRateLimitWindow,
+		"message":                "Request has been rated limited."}
+	log.Printf("%v\n", logInfo)
+	/*
+		log.Info().
+			Str("action", "http_rate_limited").
+			Int("status_code", rlstat.StatusCode).
+			Int("retry-after", rlstat.RetryAfter).
+			Int("x-rate-limit-remaining", rlstat.XRateLimitRemaining).
+			Int("x-rate-limit-window", rlstat.XRateLimitWindow).
+			Msg("Request has been rated limited.")
+	*/
 }
 
 type ClientMore struct {
@@ -104,6 +103,6 @@ func (cm *ClientMore) PostToJSON(postURL string, body interface{}) (*http.Respon
 	if err != nil {
 		return &http.Response{}, err
 	}
-	req.Header.Set(HeaderContentType, ContentTypeAppJsonUtf8)
+	req.Header.Set(HeaderContentType, ContentTypeAppJSONUtf8)
 	return cm.Client.Do(req)
 }

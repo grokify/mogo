@@ -109,7 +109,7 @@ func DoJSONSimple(client *http.Client, httpMethod, requrl string, headers map[st
 		}
 	}
 	if len(body) > 0 {
-		req.Header.Set(HeaderContentType, ContentTypeAppJsonUtf8)
+		req.Header.Set(HeaderContentType, ContentTypeAppJSONUtf8)
 	}
 
 	return client.Do(req)
