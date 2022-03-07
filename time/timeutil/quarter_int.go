@@ -232,7 +232,7 @@ func AnyStringToQuarterTime(yyyyqSrcStr string) time.Time {
 	// Have good yyyyq
 	// If yyyySrc == yyyyNow, return now time.
 	yyyyqNow := QuarterInt32ForTime(time.Now().UTC())
-	if int32(yyyyqSrc) == yyyyqNow {
+	if yyyyqSrc32 == yyyyqNow {
 		return time.Now().UTC()
 	}
 	// return quarter end time

@@ -59,10 +59,6 @@ func CopyFile(src, dst string) (err error) {
 		return
 	}
 	err = os.Chmod(dst, si.Mode())
-	if err != nil {
-		return
-	}
-
 	return
 }
 
