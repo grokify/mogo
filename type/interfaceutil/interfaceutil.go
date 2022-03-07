@@ -30,19 +30,13 @@ func ToBool(value interface{}) bool {
 	} else if valInt, ok := value.(int); ok {
 		return valInt != 0
 	} else if valFloat, ok := value.(float64); ok {
-		if valFloat == 0.0 {
-			return false
-		}
-		return true
+		return valFloat != 0.0
 	}
 	return false
 }
 
 func ToBoolFlip(value interface{}) bool {
-	if ToBool(value) {
-		return false
-	}
-	return true
+	return !ToBool(value)
 }
 
 func ToBoolInt(value interface{}) int {
