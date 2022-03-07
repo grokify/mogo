@@ -41,7 +41,7 @@ func NewReaderFile(path string, comma rune) (*csv.Reader, *os.File, error) {
 	return c, file, err
 }
 
-func trimUTF8ByteOrderMarkString(s string) string {
+func TrimUTF8ByteOrderMarkString(s string) string {
 	byteOrderMarkAsString := string('\uFEFF')
 	if strings.HasPrefix(s, byteOrderMarkAsString) {
 		return strings.TrimPrefix(s, byteOrderMarkAsString)
