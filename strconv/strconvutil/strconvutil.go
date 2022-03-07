@@ -8,16 +8,6 @@ import (
 	"strings"
 )
 
-// AtoiOrDefault is like Atoi but takes a default value
-// which it returns in the event of a parse error.
-func AtoiOrDefault(s string, def int) int {
-	i, err := strconv.Atoi(s)
-	if err != nil {
-		return def
-	}
-	return i
-}
-
 // Float64ToString is a function type to define functions.
 type Float64ToString func(float64) string
 

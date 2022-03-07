@@ -10,7 +10,7 @@ import (
 
 	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/math/mathutil"
-	"github.com/grokify/mogo/type/number"
+	"github.com/grokify/mogo/strconv/strconvutil"
 )
 
 func InQuarter(dt time.Time, yyyyq int32) (bool, error) {
@@ -116,11 +116,7 @@ func ParseQuarterInt32(yyyyq int32) (int32, uint8, error) {
 }
 
 func QuarterStringStartTime(yyyyqStr string) (time.Time, error) {
-	yyyyq, err := strconv.Atoi(yyyyqStr)
-	if err != nil {
-		return time.Now(), err
-	}
-	yyyyq32, err := number.Int32(yyyyq)
+	yyyyq32, err := strconvutil.Atoi32(yyyyqStr)
 	if err != nil {
 		return time.Now(), err
 	}
@@ -128,11 +124,11 @@ func QuarterStringStartTime(yyyyqStr string) (time.Time, error) {
 }
 
 func QuarterStringEndTime(yyyyqStr string) (time.Time, error) {
-	yyyyq, err := strconv.Atoi(yyyyqStr)
+	yyyyq32, err := strconvutil.Atoi32(yyyyqStr)
 	if err != nil {
 		return time.Now(), err
 	}
-	return QuarterInt32EndTime(int32(yyyyq))
+	return QuarterInt32EndTime(yyyyq32)
 }
 
 func QuarterInt32StartTime(yyyyq int32) (time.Time, error) {
@@ -153,11 +149,11 @@ func QuarterInt32EndTime(yyyyq int32) (time.Time, error) {
 }
 
 func ParseQuarterStringStartTime(yyyyqStr string) (time.Time, error) {
-	yyyyq, err := strconv.Atoi(yyyyqStr)
+	yyyyq32, err := strconvutil.Atoi32(yyyyqStr)
 	if err != nil {
 		return time.Now(), err
 	}
-	return QuarterInt32StartTime(int32(yyyyq))
+	return QuarterInt32StartTime(yyyyq32)
 }
 
 func QuarterInt32End(yyyyq int32) (time.Time, error) {
@@ -181,7 +177,7 @@ func ParseHalf(yyyyh int32) (int32, uint8, error) {
 		h = -1 * h
 	}
 	if h < 1 || h > 2 {
-		return int32(0), uint8(0), fmt.Errorf("Half '%v' is not valid", h)
+		return int32(0), uint8(0), fmt.Errorf("half '%v' is not valid", h)
 	}
 	return yyyy, uint8(h), nil
 }
@@ -199,7 +195,7 @@ func NextQuarterInt32(yyyyq int32) (int32, error) {
 
 func DeltaQuarterInt32(yyyyq int32, numQuarters int) (int32, error) {
 	if numQuarters < 0 {
-		return -1, fmt.Errorf("Use positive number of quarters [%v]", numQuarters)
+		return -1, fmt.Errorf("use positive number of quarters [%v]", numQuarters)
 	} else if numQuarters == 0 {
 		return yyyyq, nil
 	}
@@ -208,7 +204,7 @@ func DeltaQuarterInt32(yyyyq int32, numQuarters int) (int32, error) {
 	for i := 0; i < numQuarters; i++ {
 		future, err = NextQuarterInt32(future)
 		if err != nil {
-			return -1, errorsutil.Wrap(err, "Future Quarter")
+			return -1, errorsutil.Wrap(err, "future quarter")
 		}
 	}
 	return future, nil
@@ -256,10 +252,10 @@ func IsQuarterInt32(q int32) bool {
 func NumQuartersInt32(start, end int32) (int, error) {
 	start, end = mathutil.MinMaxInt32(start, end)
 	if !IsQuarterInt32(start) {
-		return -1, fmt.Errorf("QuarterInt32 is not valid [%v] Must end in [1-4]", start)
+		return -1, fmt.Errorf("quarterInt32 is not valid [%v] Must end in [1-4]", start)
 	}
 	if !IsQuarterInt32(end) {
-		return -1, fmt.Errorf("QuarterInt32 is not valid [%v] Must end in [1-4]", end)
+		return -1, fmt.Errorf("quarterInt32 is not valid [%v] Must end in [1-4]", end)
 	}
 
 	cur := start
