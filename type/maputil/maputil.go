@@ -1,6 +1,7 @@
 package maputil
 
 import (
+	"fmt"
 	"reflect"
 	"sort"
 	"strings"
@@ -91,7 +92,11 @@ func (m MapInt64Int64) ValuesSortedByKeys() []int64 {
 	vals := []int64{}
 	keys := m.KeysSorted()
 	for _, k := range keys {
-		vals = append(vals, k)
+		if v, ok := m[k]; ok {
+			vals = append(vals, v)
+		} else {
+			panic(fmt.Sprintf("key not found [%d]", k))
+		}
 	}
 	return vals
 }

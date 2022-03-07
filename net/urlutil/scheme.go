@@ -15,10 +15,7 @@ var rxScheme *regexp.Regexp = regexp.MustCompile(uriSchemePattern)
 // has a URI scheme.
 func URIHasScheme(uri string) bool {
 	scheme := URIScheme(uri)
-	if len(scheme) > 0 {
-		return true
-	}
-	return false
+	return len(scheme) > 0
 }
 
 // URIScheme extracts the URI scheme from a string. It returns
