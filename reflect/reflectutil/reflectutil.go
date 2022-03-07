@@ -18,7 +18,7 @@ func Set(i interface{}, key string, value interface{}) {
 }
 
 func GetField(item interface{}, fieldPath ...string) (interface{}, error) {
-	if fieldPath == nil || len(fieldPath) == 0 {
+	if len(fieldPath) == 0 {
 		return item, nil
 	}
 	nextItem, err := reflections.GetField(item, strings.TrimSpace(fieldPath[0]))

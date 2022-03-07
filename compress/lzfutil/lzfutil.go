@@ -3,7 +3,7 @@ package lzfutil
 import (
 	"io/ioutil"
 
-	"github.com/zhuyie/golzf"
+	lzf "github.com/zhuyie/golzf"
 )
 
 // ReadFile reads a LZF compressed file, e.g. one compressed
@@ -11,7 +11,7 @@ import (
 func ReadFile(file string) ([]byte, error) {
 	bytes, err := ioutil.ReadFile(file)
 	if err != nil {
-		return []byte(""), err
+		return []byte{}, err
 	}
 	// *100 is an safe guess to ensure the file can be decoded.
 	decompressed := make([]byte, len(bytes)*100)
