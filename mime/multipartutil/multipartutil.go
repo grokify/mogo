@@ -26,7 +26,7 @@ func NewReaderBodyBytes(body []byte, boundary string) *multipart.Reader {
 	return multipart.NewReader(bytes.NewReader(body), boundary)
 }
 
-func NewMultipartReaderForHttpResponse(resp *http.Response) (*multipart.Reader, error) {
+func NewMultipartReaderForHTTPResponse(resp *http.Response) (*multipart.Reader, error) {
 	contentType := resp.Header.Get(hum.HeaderContentType)
 	mediaType, params, err := mime.ParseMediaType(contentType)
 	if err != nil {

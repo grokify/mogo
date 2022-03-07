@@ -160,7 +160,7 @@ func SendWwwFormUrlEncodedSimple(method, urlStr string, data url.Values) (*http.
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Add(HeaderContentType, ContentTypeAppFormUrlEncoded)
+	req.Header.Add(HeaderContentType, ContentTypeAppFormURLEncoded)
 	req.Header.Add(HeaderContentLength, strconv.Itoa(len(data.Encode())))
 	client := &http.Client{}
 	return client.Do(req)

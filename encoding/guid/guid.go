@@ -11,23 +11,23 @@ import (
 
 const (
 	// GuidPattern is a regexp pattern for GUIDs.
-	GuidPattern = `^([0-9a-fA-F]{8})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{12})$`
+	GUIDPattern = `^([0-9a-fA-F]{8})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{12})$`
 	guidReplace = "${1}-${2}-${3}-${4}-${5}"
 )
 
 var (
-	rxGuid   = regexp.MustCompile(GuidPattern)
+	rxGuid   = regexp.MustCompile(GUIDPattern)
 	rxHyphen = regexp.MustCompile(`-`)
 )
 
-// ValidGuidHex checks to see if a string is a valid GUID.
-func ValidGuidHex(guid string) bool {
+// ValidGUIDHex checks to see if a string is a valid GUID.
+func ValidGUIDHex(guid string) bool {
 	return rxGuid.MatchString(guid)
 }
 
-// GuidToBigInt converts a GUID string, with or with out hypens, to a *big.Int.
-func GuidToBigInt(guid string) (*big.Int, error) {
-	if !ValidGuidHex(guid) {
+// GUIDToBigInt converts a GUID string, with or with out hypens, to a *big.Int.
+func GUIDToBigInt(guid string) (*big.Int, error) {
+	if !ValidGUIDHex(guid) {
 		return nil, fmt.Errorf("Not a valid Guid: %v\n", guid)
 	}
 	bi := big.NewInt(0)
@@ -35,17 +35,17 @@ func GuidToBigInt(guid string) (*big.Int, error) {
 	return bi, nil
 }
 
-// GuidToBase58 converts a GUID string to a Base58 string using the Bitcoin alphabet.
-func GuidToBase58(guid string) (string, error) {
-	bi, err := GuidToBigInt(guid)
+// GUIDToBase58 converts a GUID string to a Base58 string using the Bitcoin alphabet.
+func GUIDToBase58(guid string) (string, error) {
+	bi, err := GUIDToBigInt(guid)
 	if err != nil {
 		return "", err
 	}
 	return string(bitcoinmath.Big2Base58(bi)), nil
 }
 
-// Base58ToGuid converts a Base58 string to a GUID string, with or without hyphens, using the Bitcoin alphabet.
-func Base58ToGuid(b58str string, inclHyphen bool) (string, error) {
+// Base58ToGUID converts a Base58 string to a GUID string, with or without hyphens, using the Bitcoin alphabet.
+func Base58ToGUID(b58str string, inclHyphen bool) (string, error) {
 	b58 := bitcoinmath.Base58(b58str)
 	bi := b58.Base582Big()
 

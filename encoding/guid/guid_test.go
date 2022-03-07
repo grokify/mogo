@@ -17,7 +17,7 @@ var guidToBase58Tests = []struct {
 
 func TestGuidToBase58(t *testing.T) {
 	for _, tt := range guidToBase58Tests {
-		b58, err := GuidToBase58(tt.v)
+		b58, err := GUIDToBase58(tt.v)
 
 		if err != nil {
 			t.Errorf("base10.Encode(%v): want %v, err %v", tt.v, tt.want, err.Error())
@@ -29,7 +29,7 @@ func TestGuidToBase58(t *testing.T) {
 	}
 }
 
-var base58ToGuidHypenTests = []struct {
+var base58ToGUIDHypenTests = []struct {
 	v    string
 	want string
 }{
@@ -37,9 +37,9 @@ var base58ToGuidHypenTests = []struct {
 	{"RuERb5XkGtKhpCYLxK2axr", "c9a646d3-9c61-4cb7-bfcd-ee2522c8f633"},
 }
 
-func TestBase58ToGuidHyphen(t *testing.T) {
-	for _, tt := range base58ToGuidHypenTests {
-		b58, err := Base58ToGuid(tt.v, true)
+func TestBase58ToGUIDHyphen(t *testing.T) {
+	for _, tt := range base58ToGUIDHypenTests {
+		b58, err := Base58ToGUID(tt.v, true)
 
 		if err != nil {
 			t.Errorf("guid.Base58ToGuid(%v): want %v, err %v", tt.v, tt.want, err.Error())
@@ -59,9 +59,9 @@ var base58ToGuidNoHypenTests = []struct {
 	{"RuERb5XkGtKhpCYLxK2axr", "c9a646d39c614cb7bfcdee2522c8f633"},
 }
 
-func TestBase58ToGuidNoHyphen(t *testing.T) {
-	for _, tt := range base58ToGuidHypenTests {
-		b58, err := Base58ToGuid(tt.v, true)
+func TestBase58ToGUIDNoHyphen(t *testing.T) {
+	for _, tt := range base58ToGUIDHypenTests {
+		b58, err := Base58ToGUID(tt.v, true)
 
 		if err != nil {
 			t.Errorf("guid.Base58ToGuid(%v): want %v, err %v", tt.v, tt.want, err.Error())

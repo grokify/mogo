@@ -24,9 +24,9 @@ func Parse(colorName string) (color.RGBA, error) {
 	if col, ok := colornames.Map[colorName]; ok {
 		return col, nil
 	}
-	colorHtml, err := ParseHex(colorName)
+	colorHTML, err := ParseHex(colorName)
 	if err == nil {
-		return colorHtml, nil
+		return colorHTML, nil
 	}
 	colorGoog, err := ParseGoogle(colorName)
 	if err == nil {
