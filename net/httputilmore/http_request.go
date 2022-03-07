@@ -34,7 +34,10 @@ func GetWriteFile(client *http.Client, url, filename string) (*http.Response, er
 	defer resp.Body.Close()
 	dir, file := filepath.Split(filename)
 	if len(strings.TrimSpace(dir)) > 0 {
-		os.Chdir(dir)
+		err := os.Chdir(dir)
+		if err != nil {
+			return nil, err
+		}
 	}
 	f, err := os.Create(file)
 	if err != nil {

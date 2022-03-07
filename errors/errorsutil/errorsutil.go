@@ -17,6 +17,9 @@ func Wrap(err error, prefix string) error {
 }
 
 func Join(inclNils bool, errs ...error) error {
+	if len(errs) == 0 {
+		return nil
+	}
 	strs := []string{}
 	for _, err := range errs {
 		if err == nil {

@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
@@ -184,11 +185,17 @@ func MergeFilterCSVFilesToJSONL(inPaths []string, outPath string, inComma rune, 
 			if err != nil {
 				return err
 			}
-			outFh.Sync()
+			err = outFh.Sync()
+			if err != nil {
+				errOut := outFh.Close()
+				errIn := inFile.Close()
+				return errorsutil.Join(false, err, errOut, errIn)
+			}
 		}
 		err = inFile.Close()
 		if err != nil {
-			return err
+			errOut := outFh.Close()
+			return errorsutil.Join(false, err, errOut)
 		}
 	}
 	return outFh.Close()

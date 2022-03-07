@@ -94,31 +94,44 @@ func (resIn *ResponseInfo) ToJSON() []byte {
 	return bytes
 }
 
-func ResponseWriterWriteJSON(w http.ResponseWriter, statusCode int, body interface{}, prefix, indent string) {
+func ResponseWriterWriteJSON(w http.ResponseWriter, statusCode int, body interface{}, prefix, indent string) error {
 	if w == nil {
-		return
+		return errors.New("nil response writer")
 	}
 	wroteStatus := false
+	var errs []error
 	if body != nil {
 		bytes, err := jsonutil.MarshalSimple(body, "", "  ")
 		if err != nil {
+			errs = append(errs, err)
 			gr := ResponseInfo{
 				Body: err.Error()}
 			bytes, err = jsonutil.MarshalSimple(gr, "", "  ")
-		}
-		if err != nil {
+			if err != nil {
+				errs = append(errs, err)
+			}
 			w.WriteHeader(500)
-			w.Write([]byte(err.Error()))
-			return
+			_, err2 := w.Write(bytes)
+			errs = append(errs, err2)
+			return errorsutil.Join(false, errs...)
 		}
 		_, err = w.Write(bytes)
 		if err != nil {
+			errs = append(errs, err)
+			gr := ResponseInfo{
+				Body: err.Error()}
+			bytes, err = jsonutil.MarshalSimple(gr, "", "  ")
+			if err != nil {
+				errs = append(errs, err)
+			}
 			w.WriteHeader(500)
-			w.Write([]byte(err.Error()))
-			wroteStatus = true
+			_, err2 := w.Write(bytes)
+			errs = append(errs, err2)
+			return errorsutil.Join(false, errs...)
 		}
 	}
 	if !wroteStatus && statusCode != 0 {
 		w.WriteHeader(statusCode)
 	}
+	return nil
 }
