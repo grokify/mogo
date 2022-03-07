@@ -16,7 +16,7 @@ const (
 )
 
 var (
-	rxGuid   = regexp.MustCompile(GUIDPattern)
+	rxGUID   = regexp.MustCompile(GUIDPattern)
 	rxHyphen = regexp.MustCompile(`-`)
 )
 
@@ -28,7 +28,7 @@ func ValidGUIDHex(guid string) bool {
 // GUIDToBigInt converts a GUID string, with or with out hypens, to a *big.Int.
 func GUIDToBigInt(guid string) (*big.Int, error) {
 	if !ValidGUIDHex(guid) {
-		return nil, fmt.Errorf("Not a valid Guid: %v\n", guid)
+		return nil, fmt.Errorf("not a valid Guid: %v\n", guid)
 	}
 	bi := big.NewInt(0)
 	bi.SetString(rxHyphen.ReplaceAllString(guid, ""), 16)
@@ -52,11 +52,11 @@ func Base58ToGUID(b58str string, inclHyphen bool) (string, error) {
 	guid := fmt.Sprintf("%032s", bi.Text(16))
 
 	if len(guid) != 32 {
-		return "", fmt.Errorf("Error converting base58 string to hex: %v", b58str)
+		return "", fmt.Errorf("error converting base58 string to hex: %v", b58str)
 	}
 
 	if inclHyphen {
-		guid = rxGuid.ReplaceAllString(guid, guidReplace)
+		guid = rxGUID.ReplaceAllString(guid, guidReplace)
 	}
 
 	return guid, nil

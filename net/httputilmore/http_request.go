@@ -155,7 +155,7 @@ func GetResponseAndBytes(url string) (*http.Response, []byte, error) {
 	return resp, bytes, err
 }
 
-func SendWWWFormUrlEncodedSimple(method, urlStr string, data url.Values) (*http.Response, error) {
+func SendWWWFormURLEncodedSimple(method, urlStr string, data url.Values) (*http.Response, error) {
 	req, err := http.NewRequest(
 		method,
 		urlStr,

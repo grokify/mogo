@@ -36,7 +36,7 @@ var ChartColor1 = [...]string{
 // Link is a struct to hold information for an HTML link.
 type Link struct {
 	Href      string
-	InnerHtml string
+	InnerHTML string
 }
 
 const (
@@ -50,7 +50,7 @@ const (
 
 var (
 	bluemondayStrictPolicy                  = bluemonday.StrictPolicy()
-	rxHtmlToTextNewLines     *regexp.Regexp = regexp.MustCompile(`(?i:</?p>)`)
+	rxHTMLToTextNewLines     *regexp.Regexp = regexp.MustCompile(`(?i:</?p>)`)
 	rxCarriageReturn         *regexp.Regexp = regexp.MustCompile(`\r`)
 	rxLineFeed               *regexp.Regexp = regexp.MustCompile(`\n`)
 	rxLineFeedMore           *regexp.Regexp = regexp.MustCompile(`\n+`)
@@ -95,7 +95,7 @@ func HTMLToText(s string) string {
 		strings.TrimSpace(
 			html.UnescapeString(
 				bluemondayStrictPolicy.Sanitize(
-					rxHtmlToTextNewLines.ReplaceAllString(s, "$1\n\n"),
+					rxHTMLToTextNewLines.ReplaceAllString(s, "$1\n\n"),
 				),
 			),
 		),

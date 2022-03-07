@@ -70,8 +70,5 @@ func QuarterContinuousIsQuarterBegin(quarterc uint64) bool {
 func QuarterContinuousIsYearBegin(quarterc uint64) bool {
 	t := QuarterContinuousToTime(quarterc)
 	month := t.Month()
-	if month == 1 {
-		return true
-	}
-	return false
+	return month == 1
 }

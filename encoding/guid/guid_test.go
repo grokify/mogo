@@ -15,7 +15,7 @@ var guidToBase58Tests = []struct {
 	{"c9a646d39c614cb7bfcdee2522c8f633", "RuERb5XkGtKhpCYLxK2axr"},
 }
 
-func TestGuidToBase58(t *testing.T) {
+func TestGUIDToBase58(t *testing.T) {
 	for _, tt := range guidToBase58Tests {
 		b58, err := GUIDToBase58(tt.v)
 
@@ -51,7 +51,7 @@ func TestBase58ToGUIDHyphen(t *testing.T) {
 	}
 }
 
-var base58ToGuidNoHypenTests = []struct {
+var base58ToGUIDNoHypenTests = []struct {
 	v    string
 	want string
 }{
@@ -60,7 +60,7 @@ var base58ToGuidNoHypenTests = []struct {
 }
 
 func TestBase58ToGUIDNoHyphen(t *testing.T) {
-	for _, tt := range base58ToGuidNoHypenTests {
+	for _, tt := range base58ToGUIDNoHypenTests {
 		b58, err := Base58ToGUID(tt.v, false)
 
 		if err != nil {

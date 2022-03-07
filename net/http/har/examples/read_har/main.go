@@ -28,7 +28,7 @@ func main() {
 
 	for _, entry := range h.Log.Entries {
 		method := entry.Request.Method
-		url := entry.Request.Url
+		url := entry.Request.URL
 		endpoint := method + " " + url
 		fmt.Printf("ENDPOINT [%v]\n", endpoint)
 	}

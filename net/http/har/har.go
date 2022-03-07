@@ -82,7 +82,7 @@ type Page struct {
 	// (ISO 8601 YYYY-MM-DDThh:mm:ss.sTZD, e.g. 2009-07-24T19:20:30.45+01:00).
 	StartedDateTime string
 	// Unique identifier of a page within the . Entries use it to refer the parent page.
-	Id string
+	ID string `json:"id"`
 	// Page title.
 	Title string
 	// Detailed timing info about page load.
@@ -114,7 +114,7 @@ type PageTiming struct {
 type Entry struct {
 	// Unique, optional Reference to the parent page. Leave out this field if
 	// the application does not support grouping by pages.
-	Pageref string `json:"omitempty"`
+	Pageref string `json:"pageref,omitempty"`
 	// Date and time stamp of the request start
 	// (ISO 8601 YYYY-MM-DDThh:mm:ss.sTZD).
 	StartedDateTime time.Time `json:"startedDateTime"`
@@ -138,9 +138,9 @@ type Entry struct {
 	// port isn't available for the application, any other unique connection ID
 	// can be used instead (e.g. connection index). Leave out this field if the
 	// application doesn't support this info.
-	Connection string `json:"omitempty"`
+	Connection string `json:"connection,omitempty"`
 	// (new in 1.2) A comment provided by the user or the application.
-	Comment string `json:"omitempty"`
+	Comment string `json:"comment,omitempty"`
 }
 
 type Request struct {
@@ -150,9 +150,9 @@ type Request struct {
 	// Request method (GET, POST, ...).
 	Method string `json:"method"`
 	// Absolute URL of the request (fragments are not included).
-	Url string `json:"url"`
+	URL string `json:"url"`
 	// Request HTTP Version.
-	HTTPVersion string
+	HTTPVersion string `json:"httpVersion"`
 	// List of cookie objects.
 	Cookies []Cookie
 	// List of header objects.
@@ -181,7 +181,7 @@ type Response struct {
 	// Response status description.
 	StatusText string
 	// Response HTTP Version.
-	HttpVersion string
+	HTTPVersion string `json:"httpVersion"`
 	// List of cookie objects.
 	Cookies []Cookie
 	// List of header objects.
@@ -203,7 +203,7 @@ type Response struct {
 	// available.
 	BodySize int
 	// optional (new in 1.2) A comment provided by the user or the application.
-	Comment string `json:"omitempty"`
+	Comment string `json:"comment,omitempty"`
 }
 
 type Cookie struct {
@@ -216,26 +216,26 @@ type Cookie struct {
 	// The cookie value.
 	Value string
 	// optional The path pertaining to the cookie.
-	Path string `json:"omitempty"`
+	Path string `json:"path,omitempty"`
 	// optional The host of the cookie.
-	Domain string `json:"omitempty"`
+	Domain string `json:"domain,omitempty"`
 	// optional Cookie expiration time.
 	// (ISO 8601 YYYY-MM-DDThh:mm:ss.sTZD, e.g. 2009-07-24T19:20:30.123+02:00).
-	Expires string `json:"omitempty"`
+	Expires string `json:"expires,omitempty"`
 	// optional Set to true if the cookie is HTTP only, false otherwise.
-	HttpOnly string `json:"omitempty"`
+	HttpOnly string `json:"httpOnly,omitempty"`
 	// optional (new in 1.2) True if the cookie was transmitted over ssl, false
 	// otherwise.
-	Secure bool `json:"omitempty"`
+	Secure bool `json:"secure,omitempty"`
 	// optional (new in 1.2) A comment provided by the user or the application.
-	Comment bool `json:"omitempty"`
+	Comment bool `json:"comment,omitempty"`
 }
 
 type NVP struct {
 	// NVP is simply a name/value pair with a comment
 	Name    string
 	Value   string
-	Comment string `json:"omitempty"`
+	Comment string `json:"comment,omitempty"`
 }
 
 type PostData struct {
@@ -243,14 +243,14 @@ type PostData struct {
 	 */
 
 	//  Mime type of posted data.
-	MimeType string
+	MIMEType string `json:"mimeType"`
 	//  List of posted parameters (in case of URL encoded parameters).
 	Params []PostParam
 	//  Plain text posted data
 	Text string
 	// optional (new in 1.2) A comment provided by the user or the
 	// application.
-	Comment string `json:"omitempty"`
+	Comment string `json:"comment,omitempty"`
 }
 
 type PostParam struct {
@@ -260,13 +260,13 @@ type PostParam struct {
 	// name of a posted parameter.
 	Name string
 	// optional value of a posted parameter or content of a posted file.
-	Value string `json:"omitempty"`
+	Value string `json:"value,omitempty"`
 	// optional name of a posted file.
-	FileName string `json:"omitempty"`
+	FileName string `json:"fileName,omitempty"`
 	// optional content type of a posted file.
-	ContentType string `json:"omitempty"`
+	ContentType string `json:"contentType,omitempty"`
 	// optional (new in 1.2) A comment provided by the user or the application.
-	Comment string `json:"omitempty"`
+	Comment string `json:"comment,omitempty"`
 }
 
 type Content struct {
@@ -280,7 +280,7 @@ type Content struct {
 	Size int
 	// optional Number of bytes saved. Leave out this field if the information
 	// is not available.
-	Compression int `json:"omitempty"`
+	Compression int `json:"compression,omitempty"`
 	// MIME type of the response text (value of the Content-Type response
 	// header). The charset attribute of the MIME type is included (if
 	// available).
@@ -290,14 +290,14 @@ type Content struct {
 	// is either HTTP decoded text or a encoded (e.g. "base64") representation of
 	// the response body. Leave out this field if the information is not
 	// available.
-	Text string `json:"omitempty"`
+	Text string `json:"text,omitempty"`
 	// optional (new in 1.2) Encoding used for response text field e.g
 	// "base64". Leave out this field if the text field is HTTP decoded
 	// (decompressed & unchunked), than trans-coded from its original character
 	// set into UTF-8.
-	Encoding string `json:"omitempty"`
+	Encoding string `json:"encoding,omitempty"`
 	// optional (new in 1.2) A comment provided by the user or the application.
-	Comment string `json:"omitempty"`
+	Comment string `json:"commentomitempty"`
 }
 
 type Cache struct {
@@ -306,12 +306,12 @@ type Cache struct {
 
 	// optional State of a cache entry before the request. Leave out this field
 	// if the information is not available.
-	BeforeRequest CacheObject `json:"omitempty"`
+	BeforeRequest CacheObject `json:"beforeRequest,omitempty"`
 	// optional State of a cache entry after the request. Leave out this field if
 	// the information is not available.
-	AfterRequest CacheObject `json:"omitempty"`
+	AfterRequest CacheObject `json:"afterRequest,omitempty"`
 	// optional (new in 1.2) A comment provided by the user or the application.
-	Comment string `json:"omitempty"`
+	Comment string `json:"comment,omitempty"`
 }
 
 type CacheObject struct {
@@ -319,7 +319,7 @@ type CacheObject struct {
 	 */
 
 	// optional - Expiration time of the cache entry.
-	Expires string `json:"omitempty"`
+	Expires string `json:"expires,omitempty"`
 	// The last time the cache entry was opened.
 	LastAccess string
 	// Etag
@@ -327,7 +327,7 @@ type CacheObject struct {
 	// The number of times the cache entry has been opened.
 	HitCount int
 	// optional (new in 1.2) A comment provided by the user or the application.
-	Comment string `json:"omitempty"`
+	Comment string `json:"comment,omitempty"`
 }
 
 type PageTimings struct {
@@ -335,13 +335,13 @@ type PageTimings struct {
 	All times are specified in milliseconds.
 	*/
 
-	Blocked int `json:"omitempty"`
+	Blocked int `json:"blocked,omitempty"`
 	// optional - Time spent in a queue waiting for a network connection. Use -1
 	// if the timing does not apply to the current request.
-	Dns int `json:"omitempty"`
+	DNS int `json:"dns,omitempty"`
 	// optional - DNS resolution time. The time required to resolve a host name.
 	// Use -1 if the timing does not apply to the current request.
-	Connect int `json:"omitempty"`
+	Connect int `json:"connect,omitempty"`
 	// optional - Time required to create TCP connection. Use -1 if the timing
 	// does not apply to the current request.
 	Send int
@@ -350,11 +350,11 @@ type PageTimings struct {
 	// Waiting for a response from the server.
 	Receive int
 	// Time required to read entire response from the server (or cache).
-	Ssl int `json:"omitempty"`
+	SSL int `json:"ssl,omitempty"`
 	// optional (new in 1.2) - Time required for SSL/TLS negotiation. If this
 	// field is defined then the time is also included in the connect field (to
 	// ensure backward compatibility with HAR 1.1). Use -1 if the timing does not
 	// apply to the current request.
-	Comment string `json:"omitempty"`
+	Comment string `json:"comment,omitempty"`
 	// optional (new in 1.2) - A comment provided by the user or the application.
 }

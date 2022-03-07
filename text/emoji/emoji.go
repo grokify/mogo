@@ -173,7 +173,7 @@ type EmojiType int
 
 const (
 	Shortcode EmojiType = iota
-	Ascii
+	ASCII
 	Unicode
 )
 

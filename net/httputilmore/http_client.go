@@ -10,21 +10,21 @@ import (
 	//"github.com/rs/zerolog/log"
 )
 
-var (
-	DIAL_TIMEOUT int64 = 5
-	TLS_TIMEOUT  int   = 5
-	HTTP_TIMEOUT int   = 10
+const (
+	DialTimeout int = 5
+	TLSTimeout  int = 5
+	HTTPTimeout int = 10
 )
 
 // NewHTTPClient is a HTTP client provides default and updatable timeouts.
 // The default Go HTTP client never times out.
 // More at: https://medium.com/@nate510/don-t-use-go-s-default-http-client-4804cb19f779#.ymd655pgz
 func NewHTTPClient() *http.Client {
-	dial_timeout, _ := time.ParseDuration(fmt.Sprintf("%vs", DIAL_TIMEOUT))
+	dialTimeout, _ := time.ParseDuration(fmt.Sprintf("%vs", DialTimeout))
 
 	netTransport := &http.Transport{
 		Dial: (&net.Dialer{
-			Timeout: dial_timeout}).Dial,
+			Timeout: dialTimeout}).Dial,
 		TLSHandshakeTimeout: 5 * time.Second}
 
 	netClient := &http.Client{

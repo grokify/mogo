@@ -70,10 +70,7 @@ func (msmsi MapStringMapStringInt) CountsWithVal(wantVal int, sep string) (int, 
 // that matches an exact vaule.
 func MapStringMapStringIntFuncExactMatch(valWant int) func(string, string, int) bool {
 	return func(str1, str2 string, val int) bool {
-		if valWant == val {
-			return true
-		}
-		return false
+		return valWant == val
 	}
 }
 

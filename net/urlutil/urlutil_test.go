@@ -18,12 +18,12 @@ func TestToSlugLowerString(t *testing.T) {
 		try := tt.v
 		got := ToSlugLowerString(try)
 		if got != tt.want {
-			t.Errorf("ToSlugLowerString failed want [%v] got [%v]", tt.want, got)
+			t.Errorf("func ToSlugLowerString failed want [%v] got [%v]", tt.want, got)
 		}
 	}
 }
 
-var condenseUriTests = []struct {
+var condenseURITests = []struct {
 	v    string
 	want string
 }{
@@ -33,11 +33,11 @@ var condenseUriTests = []struct {
 	{"https://////abc///def/", "https://abc/def/"}}
 
 func TestCondenseURI(t *testing.T) {
-	for _, tt := range condenseUriTests {
+	for _, tt := range condenseURITests {
 		try := tt.v
 		got := CondenseURI(try)
 		if got != tt.want {
-			t.Errorf("UriCondense(%v) failed want [%v] got [%v]", tt.v, tt.want, got)
+			t.Errorf("func CondenseURI(%v) failed want [%v] got [%v]", tt.v, tt.want, got)
 		}
 	}
 }
@@ -58,11 +58,11 @@ func TestUrlValuesEncodeSorted(t *testing.T) {
 	for _, tt := range urlValuesEncodeSortedTests {
 		try, err := url.ParseQuery(tt.raw)
 		if err != nil {
-			t.Errorf("UrlValuesEncodeSorted(...) failed ParseQuery(%v)", tt.raw)
+			t.Errorf("test UrlValuesEncodeSorted(...) failed ParseQuery(%v)", tt.raw)
 		}
 		got := URLValuesEncodeSorted(try, tt.priority)
 		if got != tt.want {
-			t.Errorf("UrlValuesEncodeSorted [%v][%v] failed want [%v] got [%v]", tt.raw, tt.priority, tt.want, got)
+			t.Errorf("test UrlValuesEncodeSorted [%v][%v] failed want [%v] got [%v]", tt.raw, tt.priority, tt.want, got)
 		}
 	}
 }
@@ -106,7 +106,7 @@ func TestURLAddQueryString(t *testing.T) {
 			t.Errorf("Got error [%s]", err.Error())
 		}
 		if goURL1.String() != tt.wantURL {
-			t.Errorf("URLAddQueryValuesString failed want [%v] got [%v]",
+			t.Errorf("func URLAddQueryValuesString failed want [%v] got [%v]",
 				tt.wantURL, goURL1.String())
 		}
 
@@ -115,7 +115,7 @@ func TestURLAddQueryString(t *testing.T) {
 			t.Errorf("Got error [%s]", err.Error())
 		}
 		if goURL2.String() != tt.wantURL {
-			t.Errorf("URLAddQueryString failed want [%v] got [%v]",
+			t.Errorf("func URLAddQueryString failed want [%v] got [%v]",
 				tt.wantURL, goURL2.String())
 		}
 
@@ -125,12 +125,12 @@ func TestURLAddQueryString(t *testing.T) {
 		}
 		goURL3 := URLAddQuery(goURLInput, qsMap)
 		if goURL3.String() != tt.wantURL {
-			t.Errorf("URLAddQuery failed want [%v] got [%v]",
+			t.Errorf("func URLAddQuery failed want [%v] got [%v]",
 				tt.wantURL, goURL3.String())
 		}
 		goURL4 := URLAddQueryValues(goURLInput, qsVal)
 		if goURL4.String() != tt.wantURL {
-			t.Errorf("URLAddQueryValues failed want [%v] got [%v]",
+			t.Errorf("func URLAddQueryValues failed want [%v] got [%v]",
 				tt.wantURL, goURL4.String())
 		}
 	}
