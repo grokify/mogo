@@ -16,9 +16,8 @@ func GetReqQueryParam(req *http.Request, headerName string) string {
 func GetSplitReqQueryParam(req *http.Request, headerName, sep string) []string {
 	return stringsutil.SliceTrimSpace(
 		strings.Split(
-			string(
-				GetReqQueryParam(req, headerName),
-			), sep),
+			GetReqQueryParam(req, headerName),
+			sep),
 	)
 }
 

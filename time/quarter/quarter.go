@@ -54,7 +54,7 @@ func QuarterContinuousToTime(monthc uint64) time.Time {
 		month = 10
 	}
 	return time.Date(
-		int(year), time.Month(int(month)), 1,
+		int(year), time.Month(month), 1,
 		0, 0, 0, 0, time.UTC)
 }
 
