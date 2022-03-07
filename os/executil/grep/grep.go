@@ -29,7 +29,7 @@ func ParseGrep(data []byte) GrepResults {
 	res := GrepResults{}
 	lines := strings.Split(string(data), "\n")
 	for _, line := range lines {
-		lineParts := strings.SplitN(string(line), ":", 2)
+		lineParts := strings.SplitN(line, ":", 2)
 		if len(lineParts) == 2 {
 			res = append(res, GrepResult{
 				File: lineParts[0],
