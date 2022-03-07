@@ -51,7 +51,7 @@ func OpenBox(ciphertext []byte, secretKeyBytes []byte) ([]byte, error) {
 	copy(nonce[:], ciphertext[:24])
 	plaintext, ok := secretbox.Open(nil, ciphertext[24:], &nonce, &secretKey)
 	if !ok {
-		return []byte(""), fmt.Errorf("Cannot decrypt")
+		return []byte(""), fmt.Errorf("cannot decrypt")
 	}
 	return plaintext, nil
 }

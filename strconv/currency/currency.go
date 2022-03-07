@@ -48,7 +48,7 @@ func Symbol(iso4217 string) (string, error) {
 	if sym, ok := SymbolMap[iso4217]; ok {
 		return sym, nil
 	}
-	return iso4217, errors.New("Cannot Find Symbol")
+	return iso4217, errors.New("cannot find symbol")
 }
 
 func SymbolPrefix(iso4217 string) string {
