@@ -37,10 +37,10 @@ func OverlayOffset(src, overlay image.Rectangle, overlayLocation string, padX, p
 	} else if strings.Contains(overlayLocation, LocLower) {
 		pt.Y = src.Max.Y - overlay.Dy() - padY
 	} else {
-		pt.Y = src.Max.Y - ((src.Dy() - overlay.Dy()) / 2) + int(padY)
+		pt.Y = src.Max.Y - ((src.Dy() - overlay.Dy()) / 2) + padY
 	}
 	if strings.Contains(overlayLocation, LocLeft) {
-		pt.X = src.Min.X + int(padX)
+		pt.X = src.Min.X + padX
 	} else if strings.Contains(overlayLocation, LocRight) {
 		pt.X = src.Max.X - overlay.Dx() - padX
 	} else {
