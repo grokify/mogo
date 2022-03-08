@@ -6,7 +6,7 @@ import (
 	"github.com/grokify/mogo/math/mathutil"
 )
 
-// ChartColor1 is the color palette for Google Charts as collected by
+// GoogleChartColorsHex is the color palette for Google Charts as collected by
 // Craig Davis here: https://gist.github.com/there4/2579834
 var GoogleChartColorsHex = [...]string{
 	"#3366CC",
