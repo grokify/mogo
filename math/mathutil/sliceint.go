@@ -1,7 +1,6 @@
 package mathutil
 
 import (
-	"errors"
 	"sort"
 )
 
@@ -35,7 +34,7 @@ func (sint *SliceInt) Sort() {
 // Min returns the minimum element value in the integer slice.
 func (sint *SliceInt) Min() (int, error) {
 	if len(sint.Elements) == 0 {
-		return 0, errors.New("List is empty")
+		return 0, ErrEmptyList
 	}
 	if !sort.IntsAreSorted(sint.Elements) {
 		sort.Ints(sint.Elements)
@@ -46,7 +45,7 @@ func (sint *SliceInt) Min() (int, error) {
 // Max returns the maximum element value in the integer slice.
 func (sint *SliceInt) Max() (int, error) {
 	if len(sint.Elements) == 0 {
-		return 0, errors.New("List is empty")
+		return 0, ErrEmptyList
 	}
 	if !sort.IntsAreSorted(sint.Elements) {
 		sort.Ints(sint.Elements)
@@ -57,7 +56,7 @@ func (sint *SliceInt) Max() (int, error) {
 // Sum returns sum of all the elements in the integer slice.
 func (sint *SliceInt) Sum() (int, error) {
 	if len(sint.Elements) == 0 {
-		return 0, errors.New("List is empty")
+		return 0, ErrEmptyList
 	}
 	sum := int(0)
 	for _, num := range sint.Elements {
@@ -74,7 +73,7 @@ func (sint *SliceInt) Average() (float64, error) {
 // Mean returns the arithmetic mean of the integer slice.
 func (sint *SliceInt) Mean() (float64, error) {
 	if len(sint.Elements) == 0 {
-		return 0, errors.New("List is empty")
+		return 0, ErrEmptyList
 	}
 	sum, err := sint.Sum()
 	if err != nil {
@@ -86,7 +85,7 @@ func (sint *SliceInt) Mean() (float64, error) {
 // Median returns the median or middle value of the sorted integer slice.
 func (sint *SliceInt) Median() (int, error) {
 	if len(sint.Elements) == 0 {
-		return 0, errors.New("List is empty")
+		return 0, ErrEmptyList
 	}
 	if !sort.IntsAreSorted(sint.Elements) {
 		sort.Ints(sint.Elements)
