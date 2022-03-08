@@ -147,7 +147,7 @@ func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string][
 // GetResponseAndBytes retreives a URL and returns the response body
 // as a byte array in addition to the *http.Response.
 func GetResponseAndBytes(url string) (*http.Response, []byte, error) {
-	resp, err := http.Get(url)
+	resp, err := http.Get(url) // #nosec G107
 	if err != nil {
 		return resp, []byte{}, err
 	}
@@ -174,7 +174,7 @@ func SendWWWFormURLEncodedSimple(method, urlStr string, data url.Values) (*http.
 // does not.
 func GetURLOrReadFile(input string) ([]byte, error) {
 	if urlutil.IsHTTP(input, true, true) {
-		resp, err := http.Get(input)
+		resp, err := http.Get(input) // #nosec G107
 		if err != nil {
 			return []byte{}, err
 		}

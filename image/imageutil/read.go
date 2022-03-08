@@ -81,7 +81,7 @@ func ReadImageHTTP(imageURL string) (image.Image, string, error) {
 	if !urlutil.IsHTTP(imageURL, true, true) {
 		return nil, "", errors.New("url is not valid")
 	}
-	resp, err := http.Get(imageURL)
+	resp, err := http.Get(imageURL) // #nosec G107
 	if err != nil {
 		return image.NewRGBA(image.Rectangle{}), "", err
 	} else if resp.StatusCode >= 300 {

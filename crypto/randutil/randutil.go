@@ -22,7 +22,7 @@ func NewCryptoRand(r io.Reader, s mrand.Source) CryptoRand {
 	}
 	return CryptoRand{
 		reader: r,
-		mrand:  mrand.New(s)}
+		mrand:  mrand.New(s)} // #nosec G404
 }
 
 func (cr *CryptoRand) Intn(n int) (int, error) {
