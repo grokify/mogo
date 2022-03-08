@@ -26,19 +26,12 @@ func NewCryptoRand(r io.Reader, s mrand.Source) CryptoRand {
 }
 
 func (cr *CryptoRand) Intn(n int) (int, error) {
-	bign, err := rand.Int(cr.reader, big.NewInt(int64(n)))
-	if err != nil {
-		return -1, err
-	}
-	return int(bign.Int64()), nil
+	i64, err := cr.Int64n(int64(n))
+	return int(i64), err
 }
 
 func (cr *CryptoRand) MustIntn(n int) int {
-	i, err := cr.Intn(n)
-	if err != nil {
-		return cr.mrand.Intn(n)
-	}
-	return i
+	return int(cr.MustInt64n(int64(n)))
 }
 
 func (cr *CryptoRand) Int64n(n int64) (int64, error) {
