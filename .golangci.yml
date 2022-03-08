@@ -27,4 +27,4 @@ linters-settings:
     go: "1.16"
     checks:
       - all
-    #  - '-ST1018' # Avoid zero-width and control characters in string literals: Unicode format character `U+` vs. `\u`
+      - '-ST1018' # Avoid zero-width and control characters in string literals: Unicode format character `U+` vs. `\u`

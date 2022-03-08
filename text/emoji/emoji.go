@@ -12,7 +12,8 @@ import (
 	"strings"
 )
 
-const gomojiRaw string = `:angry:	😠	:@
+const gomojiRaw string = `
+:angry:	😠	:@
 :anguished:	😧
 :astonished:	😲
 :confused:	😕	>:\
