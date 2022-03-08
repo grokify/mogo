@@ -38,7 +38,7 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyPath(prvKeyPKCS1Path string) (*rsa.Privat
 	if err != nil {
 		return nil, err
 	} else if !isFile {
-		return nil, fmt.Errorf("Filepath is not a file or is empty [%v]", prvKeyPKCS1Path)
+		return nil, fmt.Errorf("filepath is not a file or is empty [%v]", prvKeyPKCS1Path)
 	}
 
 	prvKeyPkcs1Bytes, err := ioutil.ReadFile(prvKeyPKCS1Path)
@@ -52,7 +52,7 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyPath(prvKeyPKCS1Path string) (*rsa.Privat
 func GetRsaPrivateKeyForPkcs1PrivateKeyBytes(prvKeyPkcs1Bytes []byte) (*rsa.PrivateKey, error) {
 	block, rest := pem.Decode(prvKeyPkcs1Bytes)
 	if len(rest) > 0 {
-		return nil, fmt.Errorf("Extra data included in key len: %v", len(rest))
+		return nil, fmt.Errorf("extra data included in key len: %v", len(rest))
 	}
 	return x509.ParsePKCS1PrivateKey(block.Bytes)
 }
@@ -64,7 +64,7 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyPathWithPassword(prvKeyPKCS1Path string, 
 	if err != nil {
 		return nil, err
 	} else if !isFile {
-		return nil, fmt.Errorf("Filepath is not a file or is empty [%v]", prvKeyPKCS1Path)
+		return nil, fmt.Errorf("filepath is not a file or is empty [%v]", prvKeyPKCS1Path)
 	}
 
 	prvKeyPkcs1BytesEnc, err := ioutil.ReadFile(prvKeyPKCS1Path)
@@ -78,7 +78,7 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyPathWithPassword(prvKeyPKCS1Path string, 
 func GetRsaPrivateKeyForPkcs1PrivateKeyBytesWithPassword(prvKeyPkcs1BytesEnc []byte, password []byte) (*rsa.PrivateKey, error) {
 	block, rest := pem.Decode(prvKeyPkcs1BytesEnc)
 	if len(rest) > 0 {
-		return nil, fmt.Errorf("Extra data included in key len: %v", len(rest))
+		return nil, fmt.Errorf("extra data included in key len: %v", len(rest))
 	}
 	prvKeyBytes, err := x509.DecryptPEMBlock(block, password)
 	if err != nil {
@@ -96,7 +96,7 @@ func GetRsaPublicKeyForPkcs8PublicKeyPath(pubKeyPkcs8Path string) (*rsa.PublicKe
 	if err != nil {
 		return pubKey, err
 	} else if !isFile {
-		return nil, fmt.Errorf("Filepath is not a file or is empty [%v]", pubKeyPkcs8Path)
+		return nil, fmt.Errorf("filepath is not a file or is empty [%v]", pubKeyPkcs8Path)
 	}
 
 	pubKeyPkcs8Bytes, err := ioutil.ReadFile(pubKeyPkcs8Path)
