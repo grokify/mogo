@@ -13,7 +13,7 @@ func ExecSimple(command string) (bytes.Buffer, bytes.Buffer, error) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 	parts := strings.Split(command, " ")
-	cmd := exec.Command(parts[0], parts[1:]...)
+	cmd := exec.Command(parts[0], parts[1:]...) // #nosec G204
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 	err := cmd.Run()
