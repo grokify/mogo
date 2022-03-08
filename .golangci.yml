@@ -19,5 +19,6 @@ linters-settings:
       - G501
   staticcheck:
     go: "1.16"
-    excludes:
-      - SA1019
+    checks:
+      - all
+      - '-SA1019' # Disable: x509.DecryptPEMBlock has been deprecated
