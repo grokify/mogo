@@ -9,7 +9,7 @@ import (
 // Encode adapted from https://stackoverflow.com/questions/28128285/
 func Encode(bytes []byte) *big.Int {
 	bi := big.NewInt(0)
-	h := md5.New()
+	h := md5.New() // #nosec G401
 	h.Write(bytes)
 	bi.SetBytes(h.Sum(nil))
 	return bi

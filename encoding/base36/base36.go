@@ -47,7 +47,7 @@ func Decode36String(s36 string) ([]byte, error) {
 // Md5Base36 returns a Base36 encoded MD5 hash of a string.
 func Md5Base36(s string) string {
 	return fmt.Sprintf(md5base36format,
-		Encode36HexString(fmt.Sprintf("%x", md5.Sum([]byte(s)))))
+		Encode36HexString(fmt.Sprintf("%x", md5.Sum([]byte(s))))) // #nosec G401
 }
 
 // Md5String is an alias for Md5Base36.

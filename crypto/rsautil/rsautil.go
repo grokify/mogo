@@ -17,7 +17,7 @@ type CryptorOAEP struct {
 }
 
 func NewCryptorOAEP() CryptorOAEP {
-	return CryptorOAEP{Hash: md5.New()}
+	return CryptorOAEP{Hash: md5.New()} // #nosec G401
 }
 
 func (enc *CryptorOAEP) DecryptOAEP(ciphertextBytes []byte, label []byte) ([]byte, error) {
