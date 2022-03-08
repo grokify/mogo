@@ -38,7 +38,7 @@ func ParseOneColListToGrid(lines []string, colCount int, validateLength bool) ([
 	if validateLength {
 		for _, row := range rows {
 			if len(row) != colCount {
-				return rows, fmt.Errorf("Error Row Length Want [%d] Have [%d]", colCount, len(row))
+				return rows, fmt.Errorf("error row length: want [%d] have [%d]", colCount, len(row))
 			}
 		}
 	}

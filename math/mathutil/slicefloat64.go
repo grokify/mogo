@@ -5,6 +5,8 @@ import (
 	"sort"
 )
 
+var ErrEmptyList = errors.New("list is empty")
+
 // SliceFloat64 represets a slice of integers and provides functions on that slice.
 type SliceFloat64 struct {
 	Elements []float64
@@ -35,7 +37,7 @@ func (sf64 *SliceFloat64) Sort() {
 // Min returns the minimum element value in the float64 slice.
 func (sf64 *SliceFloat64) Min() (float64, error) {
 	if len(sf64.Elements) == 0 {
-		return 0, errors.New("List is empty")
+		return 0, ErrEmptyList
 	}
 	if !sort.Float64sAreSorted(sf64.Elements) {
 		sort.Float64s(sf64.Elements)
@@ -46,7 +48,7 @@ func (sf64 *SliceFloat64) Min() (float64, error) {
 // Max returns the maximum element value in the float64 slice.
 func (sf64 *SliceFloat64) Max() (float64, error) {
 	if len(sf64.Elements) == 0 {
-		return 0, errors.New("List is empty")
+		return 0, ErrEmptyList
 	}
 	if !sort.Float64sAreSorted(sf64.Elements) {
 		sort.Float64s(sf64.Elements)
@@ -57,7 +59,7 @@ func (sf64 *SliceFloat64) Max() (float64, error) {
 // Sum returns sum of all the elements in the float64 slice.
 func (sf64 *SliceFloat64) Sum() (float64, error) {
 	if len(sf64.Elements) == 0 {
-		return 0, errors.New("List is empty")
+		return 0, ErrEmptyList
 	}
 	sum := float64(0)
 	for _, num := range sf64.Elements {
@@ -74,7 +76,7 @@ func (sf64 *SliceFloat64) Average() (float64, error) {
 // Mean returns the arithmetic mean of the float64 slice.
 func (sf64 *SliceFloat64) Mean() (float64, error) {
 	if len(sf64.Elements) == 0 {
-		return 0, errors.New("List is empty")
+		return 0, ErrEmptyList
 	}
 	sum, err := sf64.Sum()
 	if err != nil {
@@ -86,7 +88,7 @@ func (sf64 *SliceFloat64) Mean() (float64, error) {
 // Median returns the median or middle value of the sorted float64 slice.
 func (sf64 *SliceFloat64) Median() (float64, error) {
 	if len(sf64.Elements) == 0 {
-		return 0, errors.New("List is empty")
+		return 0, ErrEmptyList
 	}
 	if !sort.Float64sAreSorted(sf64.Elements) {
 		sort.Float64s(sf64.Elements)
