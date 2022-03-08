@@ -79,7 +79,7 @@ func GetDotEnvVal(envPath, varName string) (string, error) {
 
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
-		return "", fmt.Errorf("Failed to execute command: %s", cmd)
+		return "", fmt.Errorf("failed to execute command: %s", cmd)
 	}
 	return string(out), nil
 }
@@ -104,7 +104,7 @@ func checkEnvPathsPrioritized(fixedPath, envPath string) (string, error) {
 		if err != nil {
 			return fixedPath, err
 		} else if !isFile {
-			return fixedPath, fmt.Errorf("Path is not a file or is 0 size [%v]", fixedPath)
+			return fixedPath, fmt.Errorf("path is not a file or is 0 size [%v]", fixedPath)
 		}
 		return fixedPath, nil
 	}
@@ -115,7 +115,7 @@ func checkEnvPathsPrioritized(fixedPath, envPath string) (string, error) {
 		if err != nil {
 			return envPath, err
 		} else if !isFile {
-			return envPath, fmt.Errorf("Path is not a file or is 0 size [%v]", envPath)
+			return envPath, fmt.Errorf("path is not a file or is 0 size [%v]", envPath)
 		}
 		return envPath, nil
 	}
@@ -125,7 +125,7 @@ func checkEnvPathsPrioritized(fixedPath, envPath string) (string, error) {
 	if err != nil {
 		return thisDirPath, err
 	} else if !isFile {
-		return thisDirPath, fmt.Errorf("Path is not a file or is 0 size [%v]", thisDirPath)
+		return thisDirPath, fmt.Errorf("path is not a file or is 0 size [%v]", thisDirPath)
 	}
 	return thisDirPath, nil
 }

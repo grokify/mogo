@@ -17,7 +17,7 @@ const GmailHost = "gmail.com"
 func GmailAddressPlusTime(smtpUser string) (string, error) {
 	smtpUser = strings.TrimSpace(smtpUser)
 	if len(smtpUser) == 0 {
-		return "", errors.New("No SMTP User address provided.")
+		return "", errors.New("no SMTP User address provided")
 	}
 	t := time.Now()
 	return fmt.Sprintf(`%s+%s@%s`, smtpUser, t.Format(timeutil.DT14), GmailHost), nil
