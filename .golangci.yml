@@ -15,4 +15,9 @@ linters-settings:
   gosec:
     excludes:
       - G107
+      - G401
       - G501
+  staticcheck:
+    go: "1.16"
+    excludes:
+      - SA1019
