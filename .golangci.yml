@@ -22,3 +22,4 @@ linters-settings:
     checks:
       - all
       - '-SA1019' # Disable: x509.DecryptPEMBlock has been deprecated
+      - '-ST1018' # Disable: Unicode format character `U+` vs. `\u`
