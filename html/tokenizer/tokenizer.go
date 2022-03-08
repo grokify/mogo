@@ -3,15 +3,14 @@ package tokenizer
 import (
 	"bytes"
 	"errors"
-	"fmt"
+	"io"
 	"os"
-	"strings"
 
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
 
-var ErrTokenNotFound = errors.New("token not found")
+var ErrTokenNotFound = errors.New("token(s) not found")
 
 func NewTokenizerFile(filename string) (*html.Tokenizer, error) {
 	htmlBytes, err := os.ReadFile(filename)
@@ -96,8 +95,11 @@ func NextStartToken(z *html.Tokenizer, skipErrors bool, htmlAtoms ...atom.Atom) 
 		ttThis := z.Next()
 		switch ttThis {
 		case html.ErrorToken:
-			if !skipErrors {
-				return html.Token{}, z.Err()
+			err := z.Err()
+			if z.Err() == io.EOF {
+				return html.Token{}, ErrTokenNotFound
+			} else if !skipErrors {
+				return html.Token{}, err
 			}
 		case html.StartTagToken:
 			tok := z.Token()
@@ -106,8 +108,6 @@ func NextStartToken(z *html.Tokenizer, skipErrors bool, htmlAtoms ...atom.Atom) 
 			}
 		}
 	}
-	return html.Token{},
-		fmt.Errorf("token not found for [%s]", strings.Join(atoms.Names(), ","))
 }
 
 func NextTextToken(z *html.Tokenizer, skipErrors bool, htmlAtoms ...atom.Atom) (html.Token, error) {
@@ -115,8 +115,13 @@ func NextTextToken(z *html.Tokenizer, skipErrors bool, htmlAtoms ...atom.Atom) (
 	for {
 		tokType := z.Next()
 		tok := z.Token()
-		if !skipErrors && tokType == html.ErrorToken {
-			return tok, z.Err()
+		if tokType == html.ErrorToken {
+			err := z.Err()
+			if err == io.EOF {
+				return tok, ErrTokenNotFound
+			} else if !skipErrors {
+				return tok, err
+			}
 		} else if atoms.Len() == 0 && tokType == html.TextToken {
 			return tok, nil
 		} else if atoms.Len() > 0 &&
@@ -125,5 +130,4 @@ func NextTextToken(z *html.Tokenizer, skipErrors bool, htmlAtoms ...atom.Atom) (
 			return NextTextToken(z, skipErrors)
 		}
 	}
-	return html.Token{}, ErrTokenNotFound
 }
