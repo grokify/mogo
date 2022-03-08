@@ -6,7 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"golang.org/x/crypto/openpgp"
+	// "golang.org/x/crypto/openpgp"
+	"github.com/ProtonMail/go-crypto/openpgp"
 )
 
 type GpgEncrypt struct {
