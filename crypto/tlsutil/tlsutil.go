@@ -45,6 +45,8 @@ func (tc *TLSConfig) LoadCACert(caCertFilepath string) error {
 	return nil
 }
 
+/*
 func (tc *TLSConfig) Inflate() {
-	tc.Config.BuildNameToCertificate()
+	// tc.Config.BuildNameToCertificate()
 }
+*/
