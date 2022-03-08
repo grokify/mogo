@@ -16,14 +16,15 @@ linters-settings:
     excludes:
       - G107
       - G401
+      - G404 # Use of weak random number generator (math/rand instead of crypto/rand)
       - G501
   staticcheck:
     go: "1.16"
     checks:
       - all
-      - '-SA1019' # Disable: x509.DecryptPEMBlock has been deprecated
+      - '-SA1019' # x509.DecryptPEMBlock has been deprecated
   stylecheck:
     go: "1.16"
     checks:
       - all
-      - '-ST1018' # Disable: Unicode format character `U+` vs. `\u`
+      - '-ST1018' # Unicode format character `U+` vs. `\u`

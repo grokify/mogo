@@ -36,7 +36,7 @@ func (cr *CryptoRand) Intn(n int) (int, error) {
 func (cr *CryptoRand) MustIntn(n int) int {
 	i, err := cr.Intn(n)
 	if err != nil {
-		return cr.mrand.Intn(int(n))
+		return cr.mrand.Intn(n)
 	}
 	return i
 }
