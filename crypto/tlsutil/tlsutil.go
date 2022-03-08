@@ -20,8 +20,8 @@ func NewTLSConfig() TLSConfig {
 	}
 }
 
-func (tc *TLSConfig) LoadX509KeyPair(cert_filepath, key_filepath string) error {
-	cert, err := tls.LoadX509KeyPair(cert_filepath, key_filepath)
+func (tc *TLSConfig) LoadX509KeyPair(certFilepath, keyFilepath string) error {
+	cert, err := tls.LoadX509KeyPair(certFilepath, keyFilepath)
 	if err != nil {
 		return err
 	}
@@ -29,8 +29,8 @@ func (tc *TLSConfig) LoadX509KeyPair(cert_filepath, key_filepath string) error {
 	return nil
 }
 
-func (tc *TLSConfig) LoadCACert(ca_cert_filepath string) error {
-	cert, err := ioutil.ReadFile(ca_cert_filepath)
+func (tc *TLSConfig) LoadCACert(caCertFilepath string) error {
+	cert, err := ioutil.ReadFile(caCertFilepath)
 	if err != nil {
 		return err
 	}
@@ -40,7 +40,7 @@ func (tc *TLSConfig) LoadCACert(ca_cert_filepath string) error {
 
 	ok := tc.Config.RootCAs.AppendCertsFromPEM(cert)
 	if !ok {
-		return fmt.Errorf("cannot add Root CA cert %v", ca_cert_filepath)
+		return fmt.Errorf("cannot add Root CA cert %v", caCertFilepath)
 	}
 	return nil
 }

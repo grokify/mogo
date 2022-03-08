@@ -116,8 +116,8 @@ func SplitCondenseSpace(s, sep string) []string {
 
 // CondenseString trims whitespace at the ends of the string
 // as well as in between.
-func CondenseString(content string, join_lines bool) string {
-	if join_lines {
+func CondenseString(content string, joinLines bool) string {
+	if joinLines {
 		content = regexp.MustCompile(`\n`).ReplaceAllString(content, " ")
 	}
 	// Beginning
