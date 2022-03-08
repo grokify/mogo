@@ -21,7 +21,7 @@ func (uv *URLValidator) SchemesToLower() {
 
 func (uv *URLValidator) ValidateURLString(s string) (*url.URL, error) {
 	if len(strings.TrimSpace(s)) < 1 {
-		return nil, fmt.Errorf("URL is empty.")
+		return nil, fmt.Errorf("string URL is empty")
 	}
 	u, err := url.ParseRequestURI(s)
 	if err != nil {
@@ -34,7 +34,7 @@ func (uv *URLValidator) ValidateURL(u *url.URL) (*url.URL, error) {
 	if len(uv.RequiredSchemes) > 0 {
 		if _, ok := uv.RequiredSchemes[u.Scheme]; !ok {
 			return u,
-				fmt.Errorf("Scheme `%v` is not in list of required schemes: %v",
+				fmt.Errorf("scheme `%v` is not in list of required schemes: %v",
 					u.Scheme, uv.RequiredSchemesSortedString())
 		}
 	}

@@ -13,29 +13,29 @@ type Bool bool
 
 var rxString = regexp.MustCompile(`^"(.*)"$`)
 
-func (this *Bool) Value() bool {
-	return bool(*this)
+func (b *Bool) Value() bool {
+	return bool(*b)
 }
 
-func (this *Bool) UnmarshalJSON(b []byte) error {
-	s := strings.TrimSpace(string(b))
+func (b *Bool) UnmarshalJSON(data []byte) error {
+	s := strings.TrimSpace(string(data))
 	m := rxString.FindStringSubmatch(s)
 	if len(m) == 2 {
 		s = m[1]
 	}
-	*this = Bool(stringsutil.ToBool(s))
+	*b = Bool(stringsutil.ToBool(s))
 	return nil
 }
 
 // Int64 implements a tolerant reader for `int64` type.
 type Int64 int64
 
-func (this *Int64) Value() int64 {
-	return int64(*this)
+func (i64 *Int64) Value() int64 {
+	return int64(*i64)
 }
 
-func (this *Int64) UnmarshalJSON(b []byte) error {
-	*this = Int64(stringToInt64(string(b)))
+func (i64 *Int64) UnmarshalJSON(data []byte) error {
+	*i64 = Int64(stringToInt64(string(data)))
 	return nil
 }
 
