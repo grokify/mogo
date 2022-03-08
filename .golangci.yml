@@ -14,10 +14,10 @@ linters:
 linters-settings:
   gosec:
     excludes:
-      - G107
-      - G401
+      - G107 # Url provided to HTTP request as taint input
+      - G401 # Detect the usage of DES, RC4, MD5 or SHA1
       - G404 # Use of weak random number generator (math/rand instead of crypto/rand)
-      - G501
+      - G501 # Import blocklist: crypto/md5
   staticcheck:
     go: "1.16"
     checks:
