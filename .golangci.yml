@@ -12,7 +12,7 @@ linters:
     - unparam
     - whitespace
 linters-settings:
-  #gosec:
+  # gosec:
   #  excludes:
   #    - G107 # Url provided to HTTP request as taint input
   #    - G401 # Detect the usage of DES, RC4, MD5 or SHA1
