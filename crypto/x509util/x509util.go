@@ -80,7 +80,7 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyBytesWithPassword(prvKeyPkcs1BytesEnc []b
 	if len(rest) > 0 {
 		return nil, fmt.Errorf("extra data included in key len: %v", len(rest))
 	}
-	prvKeyBytes, err := x509.DecryptPEMBlock(block, password)
+	prvKeyBytes, err := x509.DecryptPEMBlock(block, password) // nolint:staticcheck
 	if err != nil {
 		return nil, err
 	}
