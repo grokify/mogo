@@ -1,7 +1,7 @@
 package rsautil
 
 import (
-	"crypto/md5"
+	"crypto/md5" // #nosec G501
 	"crypto/rand"
 	"crypto/rsa"
 	"encoding/base64"

@@ -2,7 +2,7 @@
 package base36
 
 import (
-	"crypto/md5"
+	"crypto/md5" // #nosec G501
 	"encoding/hex"
 	"fmt"
 	"strings"

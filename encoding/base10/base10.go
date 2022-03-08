@@ -2,7 +2,7 @@
 package base10
 
 import (
-	"crypto/md5"
+	"crypto/md5" // #nosec G501
 	"math/big"
 )
 
