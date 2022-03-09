@@ -40,6 +40,12 @@ func PrintJSON(in interface{}) error {
 	return nil
 }
 
+func MustPrintJSON(in interface{}) {
+	if err := PrintJSON(in); err != nil {
+		panic(err)
+	}
+}
+
 // PrintJSONMore pretty prints anything using supplied indentation.
 func PrintJSONMore(in interface{}, jsonPrefix, jsonIndent string) error {
 	j, err := jsonutil.MarshalSimple(in, jsonPrefix, jsonIndent)
