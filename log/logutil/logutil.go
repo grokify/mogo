@@ -1,21 +1,22 @@
-// logutil provides logging utility functions.
+// logutil provides logging utility functions which are useful for
+// decreasing lines of code for simple error logging.
 package logutil
 
 import "log"
 
-func FatalOnError(err error) {
+func FatalErr(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func PrintOnError(err error) {
+func PrintErr(err error) {
 	if err != nil {
 		log.Print(err.Error())
 	}
 }
 
-func PrintlnOnError(err error) {
+func PrintlnErr(err error) {
 	if err != nil {
 		log.Println(err.Error())
 	}
