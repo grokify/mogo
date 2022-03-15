@@ -1,24 +1,73 @@
 package mimeutil
 
 import (
+	"errors"
 	"io"
+	"mime"
 	"net/http"
 	"os"
+	"regexp"
+	"strings"
 )
 
-// DetectContentTypeFile detects the media type by reading MIME type information of the file content.
-func DetectContentTypeFile(name string) (string, error) {
+// MustTypeByFilename follows the convention of
+// `mime.TypeByExtension` by returning an empty
+// string if type not found.
+func MustTypeByFilename(nameOrExt string) string {
+	mt, err := TypeByFilename(nameOrExt)
+	if err != nil {
+		return ""
+	}
+	return mt
+}
+
+// TypeByFilename detects a mimetype using `mime.TypeByExtension`.
+func TypeByFilename(nameOrExt string) (string, error) {
+	ext := strings.TrimSpace(nameOrExt)
+	if strings.Contains(ext, ".") {
+		m := regexp.MustCompile(`(.[^.]+)$`).FindStringSubmatch(ext)
+		if len(m) < 2 {
+			return "", errors.New("extension not found")
+		}
+		ext = m[1]
+	} else {
+		ext = "." + ext
+	}
+	mt := mime.TypeByExtension(ext)
+	if len(mt) == 0 {
+		return "", errors.New("type not detected")
+	}
+	return mt, nil
+}
+
+// MustTypeByFile follows the convention of
+// `mime.TypeByExtension` by returning an empty
+// string if type not found.
+func MustTypeByFile(name string) string {
+	mt, err := TypeByFile(name)
+	if err != nil {
+		return ""
+	}
+	return mt
+}
+
+// TypeByFile detects the media type by reading MIME type
+// information of the file content. It relies on
+// `http.DetectContentType``
+func TypeByFile(name string) (string, error) {
 	file, err := os.Open(name)
 	if err != nil {
 		return "", err
 	}
 	defer file.Close()
 
-	return DetectContentTypeReadSeeker(file, false)
+	return TypeByReadSeeker(file, false)
 }
 
-// DetectContentTypeReadSeeker detects the media type by reading MIME type information of an `io.ReadSeeker`.
-func DetectContentTypeReadSeeker(rs io.ReadSeeker, resetPointer bool) (string, error) {
+// TypeByReadSeeker detects the media type by reading MIME type
+// information of an `io.ReadSeeker`. It relies on
+// `http.DetectContentType`
+func TypeByReadSeeker(rs io.ReadSeeker, resetPointer bool) (string, error) {
 	// Only the first 512 bytes are used to sniff the content type.
 	data := make([]byte, 512)
 	_, err := rs.Read(data)
