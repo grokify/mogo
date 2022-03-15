@@ -8,15 +8,23 @@ import (
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/grokify/mogo/net/httputilmore"
 )
 
 // MustTypeByFilename follows the convention of
 // `mime.TypeByExtension` by returning an empty
-// string if type not found.
-func MustTypeByFilename(nameOrExt string) string {
+// string if type not found. If `useDefault` is
+// set, a non-detected value is set to `application/octet-stream`
+// which is the default for `http.DetectContentType`.
+func MustTypeByFilename(nameOrExt string, useDefault bool) string {
 	mt, err := TypeByFilename(nameOrExt)
-	if err != nil {
-		return ""
+	if err != nil || len(strings.TrimSpace(mt)) == 0 {
+		if useDefault {
+			return httputilmore.ContentTypeAppOctetStream
+		} else {
+			return ""
+		}
 	}
 	return mt
 }
@@ -42,11 +50,17 @@ func TypeByFilename(nameOrExt string) (string, error) {
 
 // MustTypeByFile follows the convention of
 // `mime.TypeByExtension` by returning an empty
-// string if type not found.
-func MustTypeByFile(name string) string {
+// string if type not found. If `useDefault` is
+// set, a non-detected value is set to `application/octet-stream`
+// which is the default for `http.DetectContentType`.
+func MustTypeByFile(name string, useDefault bool) string {
 	mt, err := TypeByFile(name)
-	if err != nil {
-		return ""
+	if err != nil || len(strings.TrimSpace(mt)) == 0 {
+		if useDefault {
+			return httputilmore.ContentTypeAppOctetStream
+		} else {
+			return ""
+		}
 	}
 	return mt
 }
