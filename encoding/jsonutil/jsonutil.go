@@ -83,6 +83,13 @@ func MarshalBase64(i interface{}) (string, error) {
 	return base64.StdEncoding.EncodeToString(data), nil
 }
 
+func MustUnmarshal(data []byte, v interface{}) {
+	err := json.Unmarshal(data, v)
+	if err != nil {
+		panic(err.Error())
+	}
+}
+
 func UnmarshalMSI(data map[string]interface{}, v interface{}) error {
 	bytes, err := json.Marshal(data)
 	if err != nil {
