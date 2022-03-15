@@ -12,6 +12,8 @@ import (
 	"github.com/grokify/mogo/net/httputilmore"
 )
 
+const DefaultMIMEType = httputilmore.ContentTypeAppOctetStream
+
 // MustTypeByFilename follows the convention of
 // `mime.TypeByExtension` by returning an empty
 // string if type not found. If `useDefault` is
@@ -21,7 +23,7 @@ func MustTypeByFilename(nameOrExt string, useDefault bool) string {
 	mt, err := TypeByFilename(nameOrExt)
 	if err != nil || len(strings.TrimSpace(mt)) == 0 {
 		if useDefault {
-			return httputilmore.ContentTypeAppOctetStream
+			return DefaultMIMEType
 		} else {
 			return ""
 		}
@@ -57,7 +59,7 @@ func MustTypeByFile(name string, useDefault bool) string {
 	mt, err := TypeByFile(name)
 	if err != nil || len(strings.TrimSpace(mt)) == 0 {
 		if useDefault {
-			return httputilmore.ContentTypeAppOctetStream
+			return DefaultMIMEType
 		} else {
 			return ""
 		}
