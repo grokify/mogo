@@ -88,3 +88,15 @@ func Slice2FilterLinesHaveIndex(groups [][]string, needle string, wantIndex int)
 	}
 	return newGroups
 }
+
+// IndexMulti returns the earliest match.
+func IndexMulti(s string, substr ...string) int {
+	idxm := -1
+	for _, sub := range substr {
+		idx := strings.Index(s, sub)
+		if idx > -1 && (idxm < 0 || idx < idxm) {
+			idxm = idx
+		}
+	}
+	return idxm
+}
