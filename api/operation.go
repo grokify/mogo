@@ -23,9 +23,9 @@ const (
 
 type Operations []Operation
 
-func (ops Operations) TrimSpace() {
+func (ops Operations) TrimSpace(sortTags bool) {
 	for i, op := range ops {
-		op.TrimSpace()
+		op.TrimSpace(sortTags)
 		ops[i] = op
 	}
 }
@@ -49,7 +49,6 @@ OP:
 }
 
 func (ops Operations) CountsByTag(concatenate bool, sep string) map[string]int {
-	ops.TrimSpace()
 	msi := map[string]int{}
 	for _, op := range ops {
 		tags := stringsutil.SliceCondenseSpace(op.Tags, true, true)
@@ -87,8 +86,15 @@ func (ops Operations) CountsByTagCount() map[int]int {
 	return mii
 }
 
+func (ops Operations) CountsByClass() map[string]int {
+	msi := map[string]int{}
+	for _, op := range ops {
+		msi[op.Class] += 1
+	}
+	return msi
+}
+
 func (ops Operations) CountsByType() (operationCounts map[string]int, methodCounts map[string]int) {
-	ops.TrimSpace()
 	operationCounts = map[string]int{}
 	methodCounts = map[string]int{}
 	for _, op := range ops {
@@ -144,8 +150,8 @@ type Operation struct {
 	Link          string
 }
 
-func (op *Operation) TrimSpace() {
-	op.Tags = stringsutil.SliceCondenseSpace(op.Tags, true, false)
+func (op *Operation) TrimSpace(sortTags bool) {
+	op.Tags = stringsutil.SliceCondenseSpace(op.Tags, true, sortTags)
 	op.Class = strings.TrimSpace(op.Class)
 	op.OperationType = strings.TrimSpace(op.OperationType)
 	op.MethodType = strings.TrimSpace(op.MethodType)
