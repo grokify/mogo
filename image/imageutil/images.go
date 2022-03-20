@@ -8,6 +8,16 @@ import (
 
 type Images []image.Image
 
+func (imgs Images) Dimensions() []image.Point {
+	points := []image.Point{}
+	for _, img := range imgs {
+		points = append(points, image.Point{
+			X: img.Bounds().Canon().Max.X,
+			Y: img.Bounds().Canon().Max.Y})
+	}
+	return points
+}
+
 func (imgs Images) Dxs() []int {
 	dxs := []int{}
 	for _, img := range imgs {
@@ -74,7 +84,7 @@ func (imgs Images) DyMin() int {
 	dyMin := 0
 	for i, img := range imgs {
 		if i == 0 {
-			dyMin = img.Bounds().Dx()
+			dyMin = img.Bounds().Dy()
 		} else if dy := img.Bounds().Dy(); dy < dyMin {
 			dyMin = dy
 		}
