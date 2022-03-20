@@ -44,6 +44,14 @@ func (ims *ImageMetaSet) CloseFilesAll() error {
 	return nil
 }
 
+func (ims *ImageMetaSet) Images() []image.Image {
+	imgs := []image.Image{}
+	for _, img := range ims.ImageMetas {
+		imgs = append(imgs, img.Image)
+	}
+	return imgs
+}
+
 func (ims *ImageMetaSet) MaxX() int {
 	maxX := 0
 	for _, im := range ims.ImageMetas {
