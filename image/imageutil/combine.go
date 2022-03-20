@@ -113,6 +113,42 @@ func (matrix Matrix) Merge(largerX, largerY bool) image.Image {
 	return MergeYSameX(rowImages, largerX)
 }
 
+func (matrix Matrix) DxSumMax() int {
+	dxMax := 0
+	for _, row := range matrix {
+		rowDxSum := Images(row).DxSum(-1)
+		if rowDxSum > dxMax {
+			dxMax = rowDxSum
+		}
+	}
+	return dxMax
+}
+
+func (matrix Matrix) DxSumMin() int {
+	dxMin := 0
+	for i, row := range matrix {
+		if i == 0 {
+			dxMin = Images(row).DxSum(-1)
+		}
+		rowDxSum := Images(row).DxSum(-1)
+		if rowDxSum < dxMin {
+			dxMin = rowDxSum
+		}
+	}
+	return dxMin
+}
+
+func (matrix Matrix) Dimensions() [][]image.Point {
+	points := [][]image.Point{}
+	for r, row := range matrix {
+		points = append(points, []image.Point{})
+		for _, img := range row {
+			points[r] = append(points[r], img.Bounds().Canon().Max)
+		}
+	}
+	return points
+}
+
 func MatrixRead(imglocations [][]string) (Matrix, error) {
 	matrixImages := Matrix{}
 	for _, row := range imglocations {
