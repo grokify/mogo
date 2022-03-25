@@ -4,6 +4,7 @@ import (
 	"go/build"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func IsDir(name string) (bool, error) {
@@ -60,6 +61,10 @@ func GoPath() string {
 	return build.Default.GOPATH
 }
 
-func GoPathSrc() string {
+func GoPathSrc(packagePath string) string {
+	packagePathTrim := strings.TrimSpace(packagePath)
+	if len(packagePathTrim) > 0 && packagePathTrim != "." {
+		return filepath.Join(GoPath(), "src", packagePath)
+	}
 	return filepath.Join(GoPath(), "src")
 }
