@@ -46,8 +46,7 @@ func MustUserHomeDir(subdirs ...string) string {
 		panic(err)
 	}
 	if len(subdirs) > 0 {
-		subdirs = append([]string{userhomedir}, subdirs...)
-		return filepath.Join(subdirs...)
+		return filepath.Join(userhomedir, filepath.Join(subdirs...))
 	}
 	return userhomedir
 }
