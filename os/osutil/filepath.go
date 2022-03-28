@@ -1,6 +1,7 @@
 package osutil
 
 import (
+	"go/build"
 	"os"
 	"path/filepath"
 )
@@ -45,16 +46,25 @@ func MustUserHomeDir(subdirs ...string) string {
 		panic(err)
 	}
 	if len(subdirs) > 0 {
-		subdirs = append([]string{userhomedir}, subdirs...)
-		return filepath.Join(subdirs...)
+		return filepath.Join(userhomedir, filepath.Join(subdirs...))
 	}
 	return userhomedir
 }
 
-func UserGoSrcDir() (string, error) {
-	userhome, err := os.UserHomeDir()
-	if err != nil {
-		return userhome, err
+func GoPath() string {
+	gopath := os.Getenv("GOPATH")
+	if gopath != "" {
+		return gopath
 	}
-	return filepath.Join(userhome, "go/src"), nil
+	return build.Default.GOPATH
+}
+
+func GoPathSrc(pkgparts ...string) string {
+	if len(pkgparts) > 0 {
+		packagePath := filepath.Join(pkgparts...)
+		if len(packagePath) > 0 && packagePath != "." {
+			return filepath.Join(GoPath(), "src", packagePath)
+		}
+	}
+	return filepath.Join(GoPath(), "src")
 }
