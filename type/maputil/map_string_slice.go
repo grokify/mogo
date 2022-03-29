@@ -9,7 +9,11 @@ import (
 type MapStringSlice map[string][]string
 
 func (mss MapStringSlice) Add(key, value string) {
-	mss[key] = append(mss[key], value)
+	if _, ok := mss[key]; !ok {
+		mss[key] = []string{value}
+	} else {
+		mss[key] = append(mss[key], value)
+	}
 }
 
 func (mss MapStringSlice) Sort(dedupe bool) {
