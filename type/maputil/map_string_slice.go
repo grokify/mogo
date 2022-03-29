@@ -8,6 +8,10 @@ import (
 
 type MapStringSlice map[string][]string
 
+func NewMapStringSlice() MapStringSlice {
+	return MapStringSlice{}
+}
+
 func (mss MapStringSlice) Add(key, value string) {
 	if _, ok := mss[key]; !ok {
 		mss[key] = []string{value}
