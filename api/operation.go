@@ -126,7 +126,7 @@ func (ops Operations) Table() ([]string, [][]string) {
 }
 
 func (ops Operations) PathsByClass() maputil.MapStringSlice {
-	var mss maputil.MapStringSlice
+	mss := maputil.MapStringSlice{}
 	for _, op := range ops {
 		mss.Add(op.Class, op.Path)
 	}
