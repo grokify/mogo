@@ -3,6 +3,7 @@ package api
 import (
 	"strings"
 
+	"github.com/grokify/mogo/type/maputil"
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
@@ -122,6 +123,15 @@ func (ops Operations) Table() ([]string, [][]string) {
 			op.Link})
 	}
 	return cols, rows
+}
+
+func (ops Operations) PathsByClass() maputil.MapStringSlice {
+	var mss maputil.MapStringSlice
+	for _, op := range ops {
+		mss.Add(op.Class, op.Path)
+	}
+	mss.Sort(true)
+	return mss
 }
 
 func ParseOperationType(input, def string) string {
