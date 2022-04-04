@@ -15,6 +15,7 @@ func (ts TimeSlice) Len() int           { return len(ts) }
 func (ts TimeSlice) Less(i, j int) bool { return ts[i].Before(ts[j]) }
 func (ts TimeSlice) Swap(i, j int)      { ts[i], ts[j] = ts[j], ts[i] }
 func (ts TimeSlice) Sort()              { sort.Sort(ts) }
+func (ts TimeSlice) SortReverse()       { sort.Sort(sort.Reverse(ts)) }
 
 func (ts TimeSlice) Dedupe() TimeSlice {
 	newTimeSlice := TimeSlice{}
