@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"regexp"
 	"sort"
 
@@ -146,4 +147,21 @@ func ReadDirRxSubmatchCaptures(dir string, rx *regexp.Regexp, subMatchIdx uint, 
 	}
 	keysSorted := maputil.StringKeysSorted(entryMap)
 	return keysSorted, nil
+}
+
+// VisitPath visit a directory and all subdirectories, executing the
+// supplied `visitFunc` on each.
+func VisitPath(dir string, inclDirs, inclFiles, inclEmptyFiles bool, visitFunc func(dir string) error) error {
+	err := visitFunc(dir)
+	if err != nil {
+		return err
+	}
+	entries, err := ReadDirMore(dir, nil, inclDirs, inclFiles, inclEmptyFiles)
+	if err != nil {
+		return err
+	}
+	for _, entry := range entries {
+		VisitPath(filepath.Join(dir, entry.Name()), inclDirs, inclFiles, inclEmptyFiles, visitFunc)
+	}
+	return nil
 }
