@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	err := osutil.VisitPath(osutil.GoPathSrc(), true, false, false, func(dir string) error {
+	err := osutil.VisitPath(osutil.GoPathSrc(), nil, true, false, false, func(dir string) error {
 		fmt.Println(dir)
 		return nil
 	})
