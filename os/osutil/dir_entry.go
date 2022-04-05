@@ -15,7 +15,9 @@ type DirEntries []os.DirEntry
 func (entries DirEntries) Len() int           { return len(entries) }
 func (entries DirEntries) Less(i, j int) bool { return entries[i].Name() < entries[j].Name() }
 func (entries DirEntries) Swap(i, j int)      { entries[i], entries[j] = entries[j], entries[i] }
-func (entries DirEntries) Sort()              { sort.Sort(entries) }
+
+// Sort sorts dir entries by name.
+func (entries DirEntries) Sort() { sort.Sort(entries) }
 
 // Names returns a slice of entry names. It can optionally
 // add the directory path and sort the values.
