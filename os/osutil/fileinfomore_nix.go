@@ -1,6 +1,7 @@
+// +build linux darwin
+
 package osutil
 
-//go:build cgo && (linux || darwin)
 import (
 	"syscall"
 )
