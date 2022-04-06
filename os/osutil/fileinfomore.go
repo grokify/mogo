@@ -2,7 +2,6 @@ package osutil
 
 import (
 	"os"
-	"syscall"
 	"time"
 )
 
@@ -23,17 +22,4 @@ func NewFileInfoMoreFromPath(path string) (FileInfoMore, error) {
 	fm := FileInfoMore{FileInfo: fi}
 	fm.ModAge = time.Since(fi.ModTime())
 	return fm, nil
-}
-
-func FileStatT(filename string) (syscall.Stat_t, error) {
-	var stat syscall.Stat_t
-	return stat, syscall.Stat(filename, &stat)
-}
-
-func MustFileStatT(filename string) syscall.Stat_t {
-	stat, err := FileStatT(filename)
-	if err != nil {
-		panic(err)
-	}
-	return stat
 }
