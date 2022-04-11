@@ -6,7 +6,21 @@ package osutil
 import (
 	"path/filepath"
 	"sort"
+	"syscall"
 )
+
+func FileStatT(filename string) (syscall.Stat_t, error) {
+	var stat syscall.Stat_t
+	return stat, syscall.Stat(filename, &stat)
+}
+
+func MustFileStatT(filename string) syscall.Stat_t {
+	stat, err := FileStatT(filename)
+	if err != nil {
+		panic(err)
+	}
+	return stat
+}
 
 // SortDirEntriesBirthtimeSec sorts `DirEntries` by `Stat_t.Birthtimespec` which
 // is available on OS-X but not all systems. It will panic if a entry is not found.
