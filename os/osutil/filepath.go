@@ -51,14 +51,32 @@ func MustUserHomeDir(subdirs ...string) string {
 	return userhomedir
 }
 
-func GoPath() string {
+func GoPath(parts ...string) string {
+	partsPath := ""
+	if len(partsPath) > 0 {
+		if parts[0] == "." {
+			parts = parts[1:]
+		}
+		partsPath = filepath.Join(parts...)
+		if partsPath == "." {
+			partsPath = ""
+		}
+	}
 	gopath := os.Getenv("GOPATH")
 	if gopath != "" {
+		if len(partsPath) > 0 {
+			return filepath.Join(gopath, partsPath)
+		}
 		return gopath
 	}
-	return build.Default.GOPATH
+	gopath = build.Default.GOPATH
+	if len(partsPath) > 0 {
+		return filepath.Join(gopath, partsPath)
+	}
+	return gopath
 }
 
+/*
 func GoPathSrc(pkgparts ...string) string {
 	if len(pkgparts) > 0 {
 		packagePath := filepath.Join(pkgparts...)
@@ -68,3 +86,4 @@ func GoPathSrc(pkgparts ...string) string {
 	}
 	return filepath.Join(GoPath(), "src")
 }
+*/
