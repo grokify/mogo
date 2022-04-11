@@ -5,12 +5,16 @@ import (
 )
 
 var (
-	rxSlugTextToURL *regexp.Regexp = regexp.MustCompile(`[\s\t\r\n]+`)
-	rxSlugURLToText *regexp.Regexp = regexp.MustCompile(`[_]+`)
+	rxSlugTextToURL *regexp.Regexp = regexp.MustCompile(`[\s\t\r\n_-]+`)
+	rxSlugURLToText *regexp.Regexp = regexp.MustCompile(`[_-]+`)
 )
 
-func SlugTextToURL(s string) string {
-	return rxSlugTextToURL.ReplaceAllString(s, "_")
+func SlugTextToURL(s string, underscore bool) string {
+	sep := "-"
+	if underscore {
+		sep = "_'"
+	}
+	return rxSlugTextToURL.ReplaceAllString(s, sep)
 }
 
 func SlugURLToText(s string) string {
