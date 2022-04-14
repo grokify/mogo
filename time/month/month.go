@@ -82,7 +82,7 @@ func YearMonthToMonthContinuous(year, month uint64) uint64 {
 }
 
 // MonthContinuousToYearMonth converts a continuous month
-// value (e.g. numerof months from year 0).
+// value (e.g. number of months from year 0).
 func MonthContinuousToYearMonth(monthc uint64) (uint64, uint64) {
 	quotient, remainder := mathutil.DivideInt64(
 		int64(monthc-1), int64(12))
