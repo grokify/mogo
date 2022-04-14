@@ -64,6 +64,10 @@ func MustParseBool(s string) bool {
 	return parsed
 }
 
+func FormatFloat64Simple(v float64) string {
+	return strconv.FormatFloat(v, 'f', -1, 64)
+}
+
 func FormatFloat64ToIntStringFunnel(v float64) string {
 	return FormatFloat64ToAnyStringFunnel(v, `%0.0f%%`)
 }
