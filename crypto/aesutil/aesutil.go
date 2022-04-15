@@ -14,7 +14,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/itchyny/base58-go"
+	base58 "github.com/itchyny/base58-go"
 )
 
 func EncryptAesBase58Json(plainitem interface{}, key []byte, encoding *base58.Encoding) ([]byte, error) {

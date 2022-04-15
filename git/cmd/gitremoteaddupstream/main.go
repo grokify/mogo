@@ -7,7 +7,7 @@ import (
 
 	"github.com/grokify/mogo/os/executil"
 	"github.com/grokify/mogo/path/filepathutil"
-	"github.com/jessevdk/go-flags"
+	flags "github.com/jessevdk/go-flags"
 )
 
 // $ go get github.com/grokify/mogo/git/apps/gitremoteaddupstream

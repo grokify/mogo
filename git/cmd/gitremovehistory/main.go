@@ -8,7 +8,7 @@ import (
 
 	"github.com/grokify/mogo/os/executil"
 	"github.com/grokify/mogo/os/osutil"
-	"github.com/jessevdk/go-flags"
+	flags "github.com/jessevdk/go-flags"
 )
 
 // CLI App for:
