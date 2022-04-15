@@ -160,7 +160,10 @@ func VisitPath(dir string, rx *regexp.Regexp, inclDirs, inclFiles, inclEmptyFile
 		return err
 	}
 	for _, entry := range entries {
-		VisitPath(filepath.Join(dir, entry.Name()), rx, inclDirs, inclFiles, inclEmptyFiles, visitFunc)
+		err := VisitPath(filepath.Join(dir, entry.Name()), rx, inclDirs, inclFiles, inclEmptyFiles, visitFunc)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
