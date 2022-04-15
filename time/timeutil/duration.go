@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/duration"
+	"google.golang.org/protobuf/types/known/durationpb"
 )
 
 // NewDurationSeconds returns a new `time.Duration` given
@@ -160,7 +160,7 @@ func MaxDuration(durs []time.Duration) time.Duration {
 // DurationFromProtobuf converts a protobuf duration to a
 // `time.Duration`.
 // More on protobuf: https://godoc.org/github.com/golang/protobuf/ptypes/duration#Duration
-func DurationFromProtobuf(pdur *duration.Duration) time.Duration {
+func DurationFromProtobuf(pdur *durationpb.Duration) time.Duration {
 	dur, err := time.ParseDuration(
 		strconv.Itoa(int((pdur.Seconds*nanosPerSecond)+int64(pdur.Nanos))) + "ns")
 	if err != nil {
