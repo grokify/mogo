@@ -49,3 +49,14 @@ func (cr *CryptoRand) MustInt64n(n int64) int64 {
 	}
 	return i64
 }
+
+func CryptoRandInt64(random io.Reader, max int64) (int64, error) {
+	if random == nil {
+		random = rand.Reader
+	}
+	num, err := rand.Int(random, big.NewInt(max))
+	if err != nil {
+		return 0, err
+	}
+	return num.Int64(), nil
+}
