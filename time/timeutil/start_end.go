@@ -34,16 +34,21 @@ func NextYearStart(dt time.Time) time.Time {
 		0, 0, 0, 0, dt.Location())
 }
 
+func IsMonthStart(dt time.Time) bool {
+	return dt.Day() == 1 &&
+		dt.Hour() == 0 &&
+		dt.Minute() == 0 &&
+		dt.Second() == 0 &&
+		dt.Nanosecond() == 0
+}
+
 func IsYearStart(dt time.Time) bool {
-	if dt.Month() == time.January &&
+	return dt.Month() == time.January &&
 		dt.Day() == 1 &&
 		dt.Hour() == 0 &&
 		dt.Minute() == 0 &&
 		dt.Second() == 0 &&
-		dt.Nanosecond() == 0 {
-		return true
-	}
-	return false
+		dt.Nanosecond() == 0
 }
 
 // QuarterEnd returns a time.Time for the end of the
