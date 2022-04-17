@@ -19,6 +19,18 @@ func TimeSeriesMinMax(interval Interval, min, max time.Time) []time.Time {
 	min, max = MinMax(min, max)
 	series := []time.Time{}
 	switch interval {
+	case Year:
+		min = YearStart(min)
+		max = YearStart(max)
+		series = append(series, min)
+		cur := min
+		for {
+			cur = cur.AddDate(1, 0, 0)
+			if cur.After(max) {
+				break
+			}
+			series = append(series, cur)
+		}
 	case Month:
 		min = MonthStart(min)
 		max = MonthStart(max)
@@ -32,7 +44,7 @@ func TimeSeriesMinMax(interval Interval, min, max time.Time) []time.Time {
 			series = append(series, cur)
 		}
 	default:
-		panic(fmt.Sprintf("E_INTERVAL_NOT_SUPPORTED [%v]", interval))
+		panic(fmt.Sprintf("interval not supportedin timeutil.TimeSeriesMinMax [%v]", interval))
 	}
 	return series
 }
