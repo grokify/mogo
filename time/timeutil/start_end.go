@@ -43,12 +43,7 @@ func IsMonthStart(dt time.Time) bool {
 }
 
 func IsYearStart(dt time.Time) bool {
-	return dt.Month() == time.January &&
-		dt.Day() == 1 &&
-		dt.Hour() == 0 &&
-		dt.Minute() == 0 &&
-		dt.Second() == 0 &&
-		dt.Nanosecond() == 0
+	return dt.Month() == time.January && IsMonthStart(dt)
 }
 
 // QuarterEnd returns a time.Time for the end of the
