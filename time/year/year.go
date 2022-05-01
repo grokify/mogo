@@ -19,7 +19,7 @@ func TimeSeriesYear(sortAsc bool, times ...time.Time) timeslice.TimeSlice {
 		timeSeries = append(timeSeries, curYear)
 		curYear = curYear.AddDate(1, 0, 0)
 	}
-	if len(timeSeries) > 0 && sortAsc {
+	if len(timeSeries) > 1 && sortAsc {
 		sort.Sort(timeSeries)
 	}
 	return timeSeries
