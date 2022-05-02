@@ -2,6 +2,7 @@ package strconvutil
 
 import (
 	"strconv"
+	"strings"
 )
 
 // AtoiOrDefault is like Atoi but takes a default value
@@ -36,4 +37,22 @@ func Atoi8(s string) (int8, error) {
 		return 0, err
 	}
 	return int8(i8), nil
+}
+
+func CanonicalIntStringOrIgnore(s, comma, decimal string) string {
+	try, err := AtoiMore(s, comma, decimal)
+	if err != nil {
+		return s
+	}
+	return strconv.Itoa(try)
+}
+
+func AtoiMore(s, comma, decimal string) (int, error) {
+	if len(comma) > 0 {
+		s = strings.Replace(s, comma, "", -1)
+	}
+	if len(decimal) > 0 && decimal != "." {
+		s = strings.Replace(s, decimal, ".", -1)
+	}
+	return strconv.Atoi(s)
 }
