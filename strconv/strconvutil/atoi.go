@@ -52,7 +52,7 @@ func AtoiMore(s, comma, decimal string) (int, error) {
 	if len(comma) > 0 {
 		s = strings.Replace(s, comma, "", -1)
 	}
-	if len(decimal) > 0 && strings.Index(s, decimal) > -1 {
+	if len(decimal) > 0 && strings.Contains(s, decimal) {
 		s = regexp.MustCompile(regexp.QuoteMeta(decimal)+`.*$`).ReplaceAllString(s, "")
 	}
 	return strconv.Atoi(s)
