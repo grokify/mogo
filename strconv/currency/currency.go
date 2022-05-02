@@ -1,4 +1,4 @@
-package currencyutil
+package currency
 
 import (
 	"errors"
