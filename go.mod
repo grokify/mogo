@@ -6,7 +6,7 @@ require (
 	github.com/ProtonMail/go-crypto v0.0.0-20220407094043-a94812496cf5
 	github.com/aymerick/raymond v2.0.2+incompatible
 	github.com/buger/jsonparser v1.1.1
-	github.com/caarlos0/env/v6 v6.9.1
+	github.com/caarlos0/env/v6 v6.9.2
 	github.com/google/go-querystring v1.1.0
 	github.com/grokify/base36 v1.0.5
 	github.com/grokify/bitcoinmath v0.1.0
