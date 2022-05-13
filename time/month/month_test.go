@@ -162,7 +162,22 @@ var timeSeriesMonthTests = []struct {
 			"2001-03-01T00:00:00Z",
 			"2001-04-01T00:00:00Z",
 		},
-	}}
+	},
+	{
+		[]string{
+			"2000-11-15T00:00:00Z",
+			"2001-04-20T00:00:00Z",
+		},
+		[]string{
+			"2000-11-01T00:00:00Z",
+			"2000-12-01T00:00:00Z",
+			"2001-01-01T00:00:00Z",
+			"2001-02-01T00:00:00Z",
+			"2001-03-01T00:00:00Z",
+			"2001-04-01T00:00:00Z",
+		},
+	},
+}
 
 func TestTimeSeriesMonth(t *testing.T) {
 	for _, tt := range timeSeriesMonthTests {
