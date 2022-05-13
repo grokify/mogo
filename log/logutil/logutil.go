@@ -2,10 +2,17 @@
 // decreasing lines of code for simple error logging.
 package logutil
 
-import "log"
+import (
+	"log"
 
-func FatalErr(err error) {
+	"github.com/grokify/mogo/errors/errorsutil"
+)
+
+func FatalErr(err error, wrap ...string) {
 	if err != nil {
+		for _, w := range wrap {
+			err = errorsutil.Wrap(err, w)
+		}
 		log.Fatal(err.Error())
 	}
 }
