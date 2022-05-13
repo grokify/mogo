@@ -10,8 +10,8 @@ import (
 
 func FatalErr(err error, wrap ...string) {
 	if err != nil {
-		for _, w := range wrap {
-			err = errorsutil.Wrap(err, w)
+		for i := len(wrap) - 1; i >= 0; i-- {
+			err = errorsutil.Wrap(err, wrap[i])
 		}
 		log.Fatal(err.Error())
 	}
