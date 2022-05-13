@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/grokify/mogo/time/timeslice"
 	"github.com/grokify/mogo/time/timeutil"
 )
 
@@ -140,6 +141,42 @@ func TestMonthFirst(t *testing.T) {
 				t.Errorf("MonthBegin(%v, %v): want [%v], got [%v]", dt1Month.Format(time.RFC3339),
 					"0", want, dtPrevStr)
 			}
+		}
+	}
+}
+
+var timeSeriesMonthTests = []struct {
+	input  []string
+	series []string
+}{
+	{
+		[]string{
+			"2000-11-01T00:00:00Z",
+			"2001-04-01T00:00:00Z",
+		},
+		[]string{
+			"2000-11-01T00:00:00Z",
+			"2000-12-01T00:00:00Z",
+			"2001-01-01T00:00:00Z",
+			"2001-02-01T00:00:00Z",
+			"2001-03-01T00:00:00Z",
+			"2001-04-01T00:00:00Z",
+		},
+	}}
+
+func TestTimeSeriesMonth(t *testing.T) {
+	for _, tt := range timeSeriesMonthTests {
+		input, err := timeslice.ParseTimeSlice(time.RFC3339, tt.input)
+		if err != nil {
+			t.Errorf("year.TestTimeSeriesMonth cannot parse [%v] Error: [%s]", tt.input, err.Error())
+		}
+		seriesWant, err := timeslice.ParseTimeSlice(time.RFC3339, tt.series)
+		if err != nil {
+			t.Errorf("year.TestTimeSeriesMonth cannot parse [%v] Error: [%s]", tt.series, err.Error())
+		}
+		seriesTry := TimeSeriesMonth(true, input...)
+		if !seriesTry.Equal(seriesWant) {
+			t.Errorf("year.TimeSeriesMonth series not equal: want [%v] try [%v]", seriesWant, seriesTry)
 		}
 	}
 }
