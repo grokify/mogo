@@ -20,6 +20,10 @@ const (
 	upperLower = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 )
 
+type Stringable interface {
+	String() string
+}
+
 var (
 	rxControl = regexp.MustCompile(`[[:cntrl:]]`)
 	rxSpaces  = regexp.MustCompile(`\s+`)
