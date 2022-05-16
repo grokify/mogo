@@ -38,9 +38,7 @@ func (el Element) Add(key string, values ...string) {
 		}
 		return
 	}
-	for _, val := range values {
-		el.Attrs[key] = append(el.Attrs[key], val)
-	}
+	el.Attrs[key] = append(el.Attrs[key], values...)
 }
 
 func (el Element) String() string {
