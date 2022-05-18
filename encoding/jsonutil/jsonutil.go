@@ -106,6 +106,12 @@ func UnmarshalReader(r io.Reader, v interface{}) ([]byte, error) {
 	return bytes, json.Unmarshal(bytes, v)
 }
 
+func UnmarshalStrict(data []byte, v interface{}) error {
+	dec := json.NewDecoder(bytes.NewReader(data))
+	dec.DisallowUnknownFields()
+	return dec.Decode(v)
+}
+
 func PrettyPrintReader(r io.Reader, prefix, indent string) ([]byte, error) {
 	bytes, err := io.ReadAll(r)
 	if err != nil {
