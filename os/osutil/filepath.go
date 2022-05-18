@@ -4,6 +4,7 @@ import (
 	"go/build"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func IsDir(name string) (bool, error) {
@@ -54,11 +55,11 @@ func MustUserHomeDir(subdirs ...string) string {
 func GoPath(parts ...string) string {
 	partsPath := ""
 	if len(parts) > 0 {
-		if parts[0] == "." {
+		if strings.TrimSpace(parts[0]) == "." {
 			parts = parts[1:]
 		}
 		partsPath = filepath.Join(parts...)
-		if partsPath == "." {
+		if strings.TrimSpace(partsPath) == "." {
 			partsPath = ""
 		}
 	}
