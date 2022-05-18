@@ -53,7 +53,7 @@ func MustUserHomeDir(subdirs ...string) string {
 
 func GoPath(parts ...string) string {
 	partsPath := ""
-	if len(partsPath) > 0 {
+	if len(parts) > 0 {
 		if parts[0] == "." {
 			parts = parts[1:]
 		}
