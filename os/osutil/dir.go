@@ -3,6 +3,7 @@ package osutil
 import (
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -161,6 +162,33 @@ func VisitPath(dir string, rx *regexp.Regexp, inclDirs, inclFiles, inclEmptyFile
 	}
 	for _, entry := range entries {
 		err := VisitPath(filepath.Join(dir, entry.Name()), rx, inclDirs, inclFiles, inclEmptyFiles, visitFunc)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func VisitFiles(name string, visitFunc func(dir string, info fs.FileInfo) error) error {
+	fileInfo, err := os.Stat(name)
+	if err != nil {
+		return err
+	}
+	dir, _ := filepath.Split(name)
+	err = visitFunc(dir, fileInfo)
+	if err != nil {
+		return err
+	}
+	fileMode := fileInfo.Mode()
+	if !fileMode.IsDir() {
+		return nil
+	}
+	entries, err := os.ReadDir(name)
+	if err != nil {
+		return err
+	}
+	for _, entry := range entries {
+		err := VisitFiles(filepath.Join(name, entry.Name()), visitFunc)
 		if err != nil {
 			return err
 		}
