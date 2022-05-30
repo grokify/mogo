@@ -1,5 +1,6 @@
 package raymondhelpers
 
+/*
 import (
 	"regexp"
 	"strings"
@@ -9,8 +10,7 @@ import (
 	"github.com/grokify/mogo/time/timeutil"
 )
 
-// RegisterAll registers helpers for the Raymond Handlebars template
-// engine.
+// RegisterAll registers helpers for the Raymond Handlebars template engine.
 func RegisterAll() {
 	RegisterStringSafe()
 	RegisterTimeSafe()
@@ -42,3 +42,4 @@ func RegisterStringSafe() {
 		return raymond.SafeString(s)
 	})
 }
+*/
