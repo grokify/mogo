@@ -42,16 +42,11 @@ func CreateArchiveGzipWriter(buf io.Writer, files map[string]string) error {
 	sort.Strings(filenames)
 	// Iterate over files and add them to the tar archive
 	for _, filename := range filenames {
-		var err error
 		archivename, ok := files[filename]
 		if !ok {
 			panic("map key not found")
 		}
-		if len(archivename) > 0 {
-			err = AddFileToArchive(tw, filename, archivename)
-		} else {
-			err = AddFileToArchive(tw, filename, "")
-		}
+		err := AddFileToArchive(tw, filename, archivename)
 		if err != nil {
 			return err
 		}
