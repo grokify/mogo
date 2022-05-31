@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/ProtonMail/go-crypto v0.0.0-20220517143526-88bb52951d5b
 	github.com/buger/jsonparser v1.1.1
-	github.com/caarlos0/env/v6 v6.9.2
+	github.com/caarlos0/env/v6 v6.9.3
 	github.com/google/go-querystring v1.1.0
 	github.com/grokify/base36 v1.0.5
 	github.com/grokify/bitcoinmath v0.1.0
