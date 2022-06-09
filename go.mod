@@ -23,8 +23,8 @@ require (
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e
-	golang.org/x/image v0.0.0-20220413100746-70e8d0d3baa9
-	golang.org/x/net v0.0.0-20220526153639-5463443f8c37
+	golang.org/x/image v0.0.0-20220601225756-64ec528b34cd
+	golang.org/x/net v0.0.0-20220607020251-c690dde0001d
 	golang.org/x/text v0.3.7
 	google.golang.org/protobuf v1.28.0
 	gopkg.in/oleiade/reflections.v1 v1.0.0
