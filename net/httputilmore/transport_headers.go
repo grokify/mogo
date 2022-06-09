@@ -2,6 +2,7 @@ package httputilmore
 
 import (
 	"net/http"
+	"net/url"
 )
 
 // TransportRequestModifier implements http.RoundTripper.
@@ -13,7 +14,7 @@ import (
 type TransportRequestModifier struct {
 	Transport http.RoundTripper
 	Header    http.Header
-	Query     map[string][]string // use raw struct to avoid param capitalization with `http.Header`
+	Query     url.Values
 	Override  bool
 }
 
