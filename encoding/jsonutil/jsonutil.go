@@ -10,6 +10,8 @@ import (
 	"os"
 )
 
+const FileExt = ".json"
+
 var (
 	MarshalPrefix = ""
 	MarshalIndent = "    "
