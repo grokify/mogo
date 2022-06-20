@@ -16,7 +16,7 @@ require (
 	github.com/json-iterator/go v1.1.12
 	github.com/leekchan/accounting v1.0.0
 	github.com/lytics/base62 v0.0.0-20180808010106-0ee4de5a5d6d
-	github.com/martinlindhe/base36 v1.1.0
+	github.com/martinlindhe/base36 v1.1.1
 	github.com/microcosm-cc/bluemonday v1.0.18
 	github.com/oleiade/reflections v1.0.1 // indirect
 	github.com/valyala/fastjson v1.6.3
