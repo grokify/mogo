@@ -2,37 +2,27 @@ package mailutil
 
 import (
 	"net/mail"
-	"regexp"
 	"sort"
 	"strings"
 )
 
-var rxAddressRFC5322Capture = regexp.MustCompile(`<([^><]+?)>`)
-
 type Addresses []*mail.Address
 
-func (addrs Addresses) Strings(smtpOnly, includeAngleBrackets, smtpToLower, sortAsc bool) []string {
+func (addrs Addresses) Strings(smtpOnly, smtpToLower, sortAsc bool) []string {
 	strs := []string{}
 	for _, addr := range addrs {
 		if addr == nil {
 			continue
 		}
-		str := strings.TrimSpace(addr.String())
-		if len(str) == 0 {
-			continue
-		}
+		var str string
 		if smtpOnly {
-			m := rxAddressRFC5322Capture.FindStringSubmatch(str)
-			if len(m) > 0 {
-				if includeAngleBrackets {
-					str = strings.TrimSpace(m[1])
-				} else {
-					str = strings.TrimSpace(m[0])
-				}
-				if smtpToLower {
-					str = strings.ToLower(str)
-				}
+			if smtpToLower {
+				str = strings.ToLower(addr.Address)
+			} else {
+				str = addr.Address
 			}
+		} else {
+			str = addr.String()
 		}
 		strs = append(strs, str)
 	}
@@ -43,8 +33,11 @@ func (addrs Addresses) Strings(smtpOnly, includeAngleBrackets, smtpToLower, sort
 }
 
 /*
+var rxAddressRFC5322Capture = regexp.MustCompile(`<([^><]+?)>`)
+
 // ParseMulti will parse multiple email addresses from a string using
-// RFC 5322 angle brackets.
+// RFC 5322 angle brackets. `mail.ParseAddressList()` will only handle
+// comma delimiters.
 func ParseMulti(input string) (Addresses, error) {
 	addrs := Addresses{}
 	m := rxAddressRFC5322Capture.FindAllStringSubmatch(input, -1)
