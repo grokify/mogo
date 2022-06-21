@@ -5,8 +5,6 @@ import (
 	"regexp"
 	"sort"
 	"strings"
-
-	"github.com/grokify/mogo/fmt/fmtutil"
 )
 
 type Addresses []*mail.Address
@@ -46,7 +44,6 @@ func ParseMulti(input string) (Addresses, error) {
 		return addrs, nil
 	}
 	for _, mx := range m {
-		fmtutil.PrintJSON(mx)
 		try := strings.TrimSpace(mx[1])
 		if len(try) == 0 {
 			continue
