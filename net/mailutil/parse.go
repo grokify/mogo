@@ -7,9 +7,11 @@ import (
 	"strings"
 )
 
+var rxAddressRFC5322Capture = regexp.MustCompile(`<([^><]+?)>`)
+
 type Addresses []*mail.Address
 
-func (addrs Addresses) Strings(includeAngleBrackets, toLower, sortAsc bool) []string {
+func (addrs Addresses) Strings(smtpOnly, includeAngleBrackets, smtpToLower, sortAsc bool) []string {
 	strs := []string{}
 	for _, addr := range addrs {
 		if addr == nil {
@@ -19,11 +21,18 @@ func (addrs Addresses) Strings(includeAngleBrackets, toLower, sortAsc bool) []st
 		if len(str) == 0 {
 			continue
 		}
-		if toLower {
-			str = strings.ToLower(str)
-		}
-		if !includeAngleBrackets {
-			str = strings.Trim(str, "<>")
+		if smtpOnly {
+			m := rxAddressRFC5322Capture.FindStringSubmatch(str)
+			if len(m) > 0 {
+				if includeAngleBrackets {
+					str = strings.TrimSpace(m[1])
+				} else {
+					str = strings.TrimSpace(m[0])
+				}
+				if smtpToLower {
+					str = strings.ToLower(str)
+				}
+			}
 		}
 		strs = append(strs, str)
 	}
@@ -33,8 +42,7 @@ func (addrs Addresses) Strings(includeAngleBrackets, toLower, sortAsc bool) []st
 	return strs
 }
 
-var rxAddressRFC5322Capture = regexp.MustCompile(`<([^><]+?)>`)
-
+/*
 // ParseMulti will parse multiple email addresses from a string using
 // RFC 5322 angle brackets.
 func ParseMulti(input string) (Addresses, error) {
@@ -58,3 +66,4 @@ func ParseMulti(input string) (Addresses, error) {
 	}
 	return addrs, nil
 }
+*/
