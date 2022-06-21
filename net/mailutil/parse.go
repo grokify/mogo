@@ -8,6 +8,17 @@ import (
 
 type Addresses []*mail.Address
 
+func (addrs Addresses) TrimSpace(trimName, trimAddress bool) {
+	for i := range addrs {
+		if trimName {
+			addrs[i].Name = strings.TrimSpace(addrs[i].Name)
+		}
+		if trimAddress {
+			addrs[i].Address = strings.TrimSpace(addrs[i].Address)
+		}
+	}
+}
+
 func (addrs Addresses) Strings(smtpOnly, smtpToLower, sortAsc bool) []string {
 	strs := []string{}
 	for _, addr := range addrs {
