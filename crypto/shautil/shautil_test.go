@@ -21,7 +21,6 @@ func TestSumString(t *testing.T) {
 	}
 }
 
-
 var readImageFileTests = []struct {
 	filename                string
 	sha1Hex                 string

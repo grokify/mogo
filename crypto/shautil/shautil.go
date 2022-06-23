@@ -26,7 +26,7 @@ func Sum1HexFile(name string) (string, error) {
 }
 */
 
-// Sum256String takes an input string and returns the hexidecimal hash value.
+// Sum256String takes an input string and returns the hexadecimal hash value.
 // It is equivalent to `echo -n "input" | shasum -a 256` on macOS.
 func Sum256String(s string) string {
 	hash := sha256.Sum256([]byte(s))
