@@ -28,8 +28,7 @@ func GetField(item interface{}, fieldPath ...string) (interface{}, error) {
 	return GetField(nextItem, fieldPath[1:]...)
 }
 
-// TypeName returns the name of a struct.
-// stackoverflow-answerId:1908967
+// TypeName returns the name of a struct. stackoverflow-answerId:1908967
 func TypeName(myvar interface{}) (res string) {
 	t := reflect.TypeOf(myvar)
 	for t.Kind() == reflect.Ptr {
@@ -39,8 +38,7 @@ func TypeName(myvar interface{}) (res string) {
 	return res + t.Name()
 }
 
-// SliceInterfaceToString converts an `interface{}` to a
-// `[]string`.
+// SliceInterfaceToString converts an `interface{}` to a `[]string`.
 func SliceInterfaceToString(raws interface{}) []string {
 	out := []string{}
 	switch reflect.TypeOf(raws).Kind() {
