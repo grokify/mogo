@@ -4,6 +4,24 @@ import (
 	"testing"
 )
 
+var sumStringTests = []struct {
+	sum256 string
+	input  string
+}{
+	{"09ca7e4eaa6e8ae9c7d261167129184883644d07dfba7cbfbc4c8a2e08360d5b", "hello, world"},
+	{"03675ac53ff9cd1535ccc7dfcdfa2c458c5218371f418dc136f2d19ac1fbe8a5", "Hello, World"},
+}
+
+func TestSumString(t *testing.T) {
+	for _, tt := range sumStringTests {
+		try256 := Sum256String(tt.input)
+		if try256 != tt.sum256 {
+			t.Errorf("shautil.Sum256String(\"%s\") Want [%s], Got [%v]", tt.input, tt.sum256, try256)
+		}
+	}
+}
+
+
 var readImageFileTests = []struct {
 	filename                string
 	sha1Hex                 string
