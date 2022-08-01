@@ -26,6 +26,6 @@ require (
 	golang.org/x/image v0.0.0-20220617043117-41969df76e82
 	golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e
 	golang.org/x/text v0.3.7
-	google.golang.org/protobuf v1.28.0
+	google.golang.org/protobuf v1.28.1
 	gopkg.in/oleiade/reflections.v1 v1.0.0
 )
