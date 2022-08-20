@@ -39,12 +39,12 @@ func QuarterAdd(dt time.Time, count int) time.Time {
 	if count == 0 {
 		return QuarterStart(dt)
 	} else if count < 0 {
-		return QuarterPrev(dt, uint(-1*count))
+		return quarterPrev(dt, uint(-1*count))
 	}
-	return QuarterNext(dt, uint(count))
+	return quarterNext(dt, uint(count))
 }
 
-func QuarterNext(dt time.Time, count uint) time.Time {
+func quarterNext(dt time.Time, count uint) time.Time {
 	dt = QuarterStart(dt)
 	for i := 0; i < int(count); i++ {
 		dt = quarterNextSingle(dt)
@@ -56,7 +56,7 @@ func quarterPrevSingle(dt time.Time) time.Time {
 	return TimeDt6SubNMonths(QuarterStart(dt), 3)
 }
 
-func QuarterPrev(dt time.Time, num uint) time.Time {
+func quarterPrev(dt time.Time, num uint) time.Time {
 	for i := 0; i < int(num); i++ {
 		dt = quarterPrevSingle(dt)
 	}

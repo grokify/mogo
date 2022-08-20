@@ -17,7 +17,7 @@ func InQuarter(dt time.Time, yyyyq int32) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	nxtQtrStart := QuarterNext(thsQtrStart, 1)
+	nxtQtrStart := QuarterAdd(thsQtrStart, 1)
 	return (thsQtrStart.Before(dt) || thsQtrStart.Equal(dt)) &&
 		nxtQtrStart.After(dt), nil
 }
@@ -27,7 +27,7 @@ func MustInQuarter(dt time.Time, yyyyq int32) bool {
 	if err != nil {
 		panic(err)
 	}
-	nxtQtrStart := QuarterNext(thsQtrStart, 1)
+	nxtQtrStart := QuarterAdd(thsQtrStart, 1)
 	return (thsQtrStart.Before(dt) || thsQtrStart.Equal(dt)) &&
 		nxtQtrStart.After(dt)
 }
@@ -42,7 +42,7 @@ func InQuarterRange(dt time.Time, yyyyq1, yyyyq2 int32) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	dtQ2Next := QuarterNext(dtQ2, 1)
+	dtQ2Next := QuarterAdd(dtQ2, 1)
 	dtQ1, _ = MinMax(dtQ1, dtQ2)
 	return (dt.Equal(dtQ1) || dt.After(dtQ1)) && (dt.Before(dtQ2Next)), nil
 }
@@ -188,7 +188,7 @@ func quarterInt32NextSingle(yyyyq int32) (int32, error) {
 	if err != nil {
 		return int32(0), err
 	}
-	tNext := QuarterNext(t, 1)
+	tNext := QuarterAdd(t, 1)
 	return QuarterInt32ForTime(tNext), nil
 }
 

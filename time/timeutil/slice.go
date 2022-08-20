@@ -65,7 +65,7 @@ func QuarterSlice(min, max time.Time) []time.Time {
 	cur := minQ
 	for cur.Before(maxQ) || cur.Equal(maxQ) {
 		times = append(times, cur)
-		cur = QuarterNext(cur, 1)
+		cur = QuarterAdd(cur, 1)
 	}
 	return times
 }

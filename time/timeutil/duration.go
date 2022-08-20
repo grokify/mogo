@@ -114,7 +114,7 @@ func DurationStringMinutesSeconds(durationSeconds int64) (string, error) {
 // calendar quarter for the time provided.
 func QuarterDuration(dt time.Time) time.Duration {
 	start := QuarterStart(dt)
-	end := QuarterNext(start, 1)
+	end := QuarterAdd(start, 1)
 	return end.Sub(start)
 }
 

@@ -14,7 +14,7 @@ type XOXTimes struct {
 func QOQTimes(thisTime time.Time) XOXTimes {
 	xox := XOXTimes{CurrentTime: thisTime.UTC()}
 	xox.CurrentStart = QuarterStart(xox.CurrentTime)
-	xox.PreviousStart = QuarterPrev(xox.CurrentStart, 1)
+	xox.PreviousStart = QuarterAdd(xox.CurrentStart, -1)
 
 	dur := xox.CurrentTime.Sub(xox.CurrentStart)
 	xox.PreviousTime = xox.PreviousStart.Add(dur)
