@@ -84,14 +84,14 @@ func TimeForDt6(dt6 int32) (time.Time, error) {
 	return time.Parse(DT6, strconv.FormatInt(int64(dt6), 10))
 }
 
-func ParseDt6(dt6 int32) (int16, int8) {
+func Dt6Parse(dt6 int32) (int16, int8) {
 	year := dt6 / 100
 	month := int(dt6) - (int(year) * 100)
 	return int16(year), int8(month)
 }
 
-func PrevDt6(dt6 int32) int32 {
-	year, month := ParseDt6(dt6)
+func Dt6Prev(dt6 int32) int32 {
+	year, month := Dt6Parse(dt6)
 	if month == 1 {
 		month = 12
 		year = year - 1
@@ -101,8 +101,8 @@ func PrevDt6(dt6 int32) int32 {
 	return int32(year)*100 + int32(month)
 }
 
-func NextDt6(dt6 int32) int32 {
-	year, month := ParseDt6(dt6)
+func Dt6Next(dt6 int32) int32 {
+	year, month := Dt6Parse(dt6)
 	if month == 12 {
 		month = 1
 		year++
@@ -115,7 +115,7 @@ func NextDt6(dt6 int32) int32 {
 func TimeDt6AddNMonths(dt time.Time, numMonths int) time.Time {
 	dt6 := Dt6ForTime(dt)
 	for i := 0; i < numMonths; i++ {
-		dt6 = NextDt6(dt6)
+		dt6 = Dt6Next(dt6)
 	}
 	dt6NextMonth, err := TimeForDt6(dt6)
 	if err != nil {
@@ -127,7 +127,7 @@ func TimeDt6AddNMonths(dt time.Time, numMonths int) time.Time {
 func TimeDt6SubNMonths(dt time.Time, numMonths int) time.Time {
 	dt6 := Dt6ForTime(dt)
 	for i := 0; i < numMonths; i++ {
-		dt6 = PrevDt6(dt6)
+		dt6 = Dt6Prev(dt6)
 	}
 	dt6NextMonth, err := TimeForDt6(dt6)
 	if err != nil {
@@ -150,7 +150,7 @@ func Dt6MinMaxSlice(minDt6 int32, maxDt6 int32) []int32 {
 	curDt6 := minDt6
 	for curDt6 < maxDt6+1 {
 		dt6Range = append(dt6Range, curDt6)
-		curDt6 = NextDt6(curDt6)
+		curDt6 = Dt6Next(curDt6)
 	}
 	return dt6Range
 }

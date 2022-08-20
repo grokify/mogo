@@ -63,7 +63,7 @@ func QuarterInt32Timeline(ints []int32) ([]int32, error) {
 		this := min
 		var err error
 		for this < max {
-			this, err = NextQuarterInt32(this)
+			this, err = QuarterInt32Add(this, 1)
 			if err != nil {
 				return qtrs, err
 			}

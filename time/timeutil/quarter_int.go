@@ -183,7 +183,7 @@ func ParseHalf(yyyyh int32) (int32, uint8, error) {
 
 func QuarterInt32ToYear(yyyyq int32) int32 { return int32(float32(yyyyq) / 10) }
 
-func NextQuarterInt32(yyyyq int32) (int32, error) {
+func quarterInt32NextSingle(yyyyq int32) (int32, error) {
 	t, err := QuarterInt32StartTime(yyyyq)
 	if err != nil {
 		return int32(0), err
@@ -192,7 +192,7 @@ func NextQuarterInt32(yyyyq int32) (int32, error) {
 	return QuarterInt32ForTime(tNext), nil
 }
 
-func DeltaQuarterInt32(yyyyq int32, numQuarters int) (int32, error) {
+func QuarterInt32Add(yyyyq int32, numQuarters int) (int32, error) {
 	if numQuarters < 0 {
 		return -1, fmt.Errorf("use positive number of quarters [%v]", numQuarters)
 	} else if numQuarters == 0 {
@@ -201,7 +201,7 @@ func DeltaQuarterInt32(yyyyq int32, numQuarters int) (int32, error) {
 	future := yyyyq
 	var err error
 	for i := 0; i < numQuarters; i++ {
-		future, err = NextQuarterInt32(future)
+		future, err = quarterInt32NextSingle(future)
 		if err != nil {
 			return -1, errorsutil.Wrap(err, "future quarter")
 		}
@@ -265,7 +265,7 @@ func NumQuartersInt32(start, end int32) (int, error) {
 	var err error
 	for {
 		numQuarters++
-		cur, err = NextQuarterInt32(cur)
+		cur, err = QuarterInt32Add(cur, 1)
 		if err != nil {
 			return -1, err
 		}

@@ -32,7 +32,7 @@ func FirstDayOfISOWeek(year int, week int, timezone *time.Location) time.Time {
 	return date
 }
 
-func NextWeekday(dow time.Weekday) time.Time {
+func WeekdayNext(dow time.Weekday) time.Time {
 	now := time.Now()
 	today := now.Weekday()
 	if dow == today {

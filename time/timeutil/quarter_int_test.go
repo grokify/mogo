@@ -55,7 +55,7 @@ func TestNumQuartersInt32(t *testing.T) {
 
 func TestDeltaQuarterInt32(t *testing.T) {
 	for _, tt := range numQuartersInt32Tests {
-		got, err := DeltaQuarterInt32(tt.start, tt.num-1)
+		got, err := QuarterInt32Add(tt.start, tt.num-1)
 		if err != nil {
 			t.Errorf("DeltaQuarterInt32 Error [%v]", err.Error())
 		}
