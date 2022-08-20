@@ -19,35 +19,46 @@ func QuarterStartString(dt time.Time) string {
 	return fmt.Sprintf("%v Q%v", dtStart.Year(), MonthToQuarter(uint8(dtStart.Month())))
 }
 
-func NextQuarter(dt time.Time) time.Time {
-	return TimeDt6AddNMonths(QuarterStart(dt), 3)
-}
-
+/*
 func DeltaQuarters(dt time.Time, num int) time.Time {
 	dt = QuarterStart(dt)
 	if num > 0 {
-		dt = NextQuarters(dt, uint(num))
+		dt = QuarterNext(dt, uint(num))
 	} else if num < 0 {
-		dt = PrevQuarters(dt, uint(-1*num))
+		dt = QuarterPrev(dt, uint(-1*num))
 	}
 	return dt
 }
+*/
 
-func NextQuarters(dt time.Time, num uint) time.Time {
+func quarterNextSingle(dt time.Time) time.Time {
+	return TimeDt6AddNMonths(QuarterStart(dt), 3)
+}
+
+func QuarterAdd(dt time.Time, count int) time.Time {
+	if count == 0 {
+		return QuarterStart(dt)
+	} else if count < 0 {
+		return QuarterPrev(dt, uint(-1*count))
+	}
+	return QuarterNext(dt, uint(count))
+}
+
+func QuarterNext(dt time.Time, count uint) time.Time {
 	dt = QuarterStart(dt)
-	for i := 0; i < int(num); i++ {
-		dt = NextQuarter(dt)
+	for i := 0; i < int(count); i++ {
+		dt = quarterNextSingle(dt)
 	}
 	return dt
 }
 
-func PrevQuarter(dt time.Time) time.Time {
+func quarterPrevSingle(dt time.Time) time.Time {
 	return TimeDt6SubNMonths(QuarterStart(dt), 3)
 }
 
-func PrevQuarters(dt time.Time, num uint) time.Time {
+func QuarterPrev(dt time.Time, num uint) time.Time {
 	for i := 0; i < int(num); i++ {
-		dt = PrevQuarter(dt)
+		dt = quarterPrevSingle(dt)
 	}
 	return dt
 }
