@@ -6,7 +6,7 @@ import (
 
 	"github.com/grokify/mogo/log/logutil"
 	"github.com/grokify/mogo/os/osutil"
-	"github.com/jessevdk/go-flags"
+	flags "github.com/jessevdk/go-flags"
 )
 
 type Options struct {
