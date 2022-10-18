@@ -24,7 +24,7 @@ require (
 	golang.org/x/crypto v0.0.0-20221012134737-56aed061732a
 	golang.org/x/image v0.0.0-20220902085622-e7cb96979f69
 	golang.org/x/net v0.0.0-20221014081412-f15817d10f9b
-	golang.org/x/text v0.3.8
+	golang.org/x/text v0.4.0
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/oleiade/reflections.v1 v1.0.0
 )
