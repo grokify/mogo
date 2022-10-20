@@ -42,9 +42,21 @@ func ToCamelCase(s string) string {
 
 // ToPascalCase converts a string to Pascal case as `PascalCase`.
 func ToPascalCase(s string) string {
-	parts := stringsutil.SliceCondenseSpace(rxSplitCase.Split(s, -1), false, false)
+	parts := toParts(s)
 	for i, part := range parts {
 		parts[i] = stringsutil.ToUpperFirst(part, true)
 	}
 	return strings.Join(parts, "")
+}
+
+func ToKebabCase(s string) string {
+	return strings.Join(toParts(strings.ToLower(s)), "-")
+}
+
+func ToSnakeCase(s string) string {
+	return strings.Join(toParts(strings.ToLower(s)), "_")
+}
+
+func toParts(s string) []string {
+	return stringsutil.SliceCondenseSpace(rxSplitCase.Split(s, -1), false, false)
 }

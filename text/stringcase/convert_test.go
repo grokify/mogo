@@ -57,13 +57,15 @@ func TestConv(t *testing.T) {
 var toCaseTests = []struct {
 	anyString  string
 	camelCase  string
+	kebabCase  string
 	pascalCase string
+	snakeCase  string
 }{
-	{"Lorem ipsum dolor sit amet", "loremIpsumDolorSitAmet", "LoremIpsumDolorSitAmet"},
-	{"Lorem IPSUM", "loremIpsum", "LoremIpsum"},
-	{"Lorem Ipsum", "loremIpsum", "LoremIpsum"},
-	{"snake_case", "snakeCase", "SnakeCase"},
-	{"kebab-case", "kebabCase", "KebabCase"},
+	{"Lorem ipsum dolor sit amet", "loremIpsumDolorSitAmet", "lorem-ipsum-dolor-sit-amet", "LoremIpsumDolorSitAmet", "lorem_ipsum_dolor_sit_amet"},
+	{"Lorem IPSUM", "loremIpsum", "lorem-ipsum", "LoremIpsum", "lorem_ipsum"},
+	{"Lorem Ipsum", "loremIpsum", "lorem-ipsum", "LoremIpsum", "lorem_ipsum"},
+	{"snake_case", "snakeCase", "snake-case", "SnakeCase", "snake_case"},
+	{"kebab-case", "kebabCase", "kebab-case", "KebabCase", "kebab_case"},
 }
 
 func TestToCase(t *testing.T) {
@@ -73,10 +75,20 @@ func TestToCase(t *testing.T) {
 			t.Errorf("stringsutil.ToCamelCase(\"%s\") Error: want [%s], got [%s]",
 				tt.anyString, tt.camelCase, tryCamelCase)
 		}
+		tryKebabCase := ToKebabCase(tt.anyString)
+		if tryKebabCase != tt.kebabCase {
+			t.Errorf("stringsutil.ToKebabCase(\"%s\") Error: want [%s], got [%s]",
+				tt.anyString, tt.kebabCase, tryKebabCase)
+		}
 		tryPascalCase := ToPascalCase(tt.anyString)
 		if tryPascalCase != tt.pascalCase {
 			t.Errorf("stringsutil.ToPascalCase(\"%s\") Error: want [%s], got [%s]",
 				tt.anyString, tt.pascalCase, tryPascalCase)
+		}
+		trySnakeCase := ToSnakeCase(tt.anyString)
+		if trySnakeCase != tt.snakeCase {
+			t.Errorf("stringsutil.ToSnakeCase(\"%s\") Error: want [%s], got [%s]",
+				tt.anyString, tt.snakeCase, trySnakeCase)
 		}
 	}
 }
