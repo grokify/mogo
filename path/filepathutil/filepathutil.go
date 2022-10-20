@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
@@ -60,6 +61,13 @@ func TrimLeft(file string) string { return strings.TrimLeft(file, string(os.Path
 
 // TrimRight right trims the provided filepath using `os.PathSeparator`
 func TrimRight(file string) string { return strings.TrimRight(file, string(os.PathSeparator)) }
+
+var rxExt = regexp.MustCompile(`\.[^/.]*$`)
+
+// TrimExt removes the extension, including period.
+func TrimExt(path string) string {
+	return rxExt.ReplaceAllString(path, "")
+}
 
 // FilterFilepaths filters a slice of filepaths using various options.
 func FilterFilepaths(paths []string, inclExists, inclNotExists, inclFiles, inclDirs bool) []string {
