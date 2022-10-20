@@ -18,17 +18,16 @@ func (sx StringSlice) Exists(s string) bool {
 	return false
 }
 
-// Unshift adds an element at the first position
-// of the slice.
-func Unshift(a []string, x string) []string {
-	return append([]string{x}, a...)
+// Unshift adds an element at the first position of the slice.
+func Unshift(elems []string, x string) []string {
+	return append([]string{x}, elems...)
 }
 
 // SliceCondenseSpace trims space from lines and removes
 // empty lines. `unique` dedupes lines and `sort` preforms
 // a sort on the results.
-func SliceCondenseSpace(lines []string, dedupeResults, sortResults bool) []string {
-	results := SliceTrim(lines, " ", true)
+func SliceCondenseSpace(elems []string, dedupeResults, sortResults bool) []string {
+	results := SliceTrim(elems, " ", true)
 	if dedupeResults {
 		results = Dedupe(results)
 	}
@@ -38,40 +37,45 @@ func SliceCondenseSpace(lines []string, dedupeResults, sortResults bool) []strin
 	return results
 }
 
-// SliceTrimSpace removes leading and trailing spaces per string.
-func SliceTrimSpace(s []string) []string {
-	for i, v := range s {
-		s[i] = strings.TrimSpace(v)
-	}
-	return s
-}
-
-// SliceTrim trims each line in a slice of lines using a
-// provided cut string.
-func SliceTrim(lines []string, cutstr string, condense bool) []string {
-	newLines := []string{}
-	for _, line := range lines {
-		line = strings.Trim(line, cutstr)
-		if condense && len(line) == 0 {
+// SliceTrimSpace removes leading and trailing spaces per string. If condense
+// is used, empty strings are removed.
+func SliceTrimSpace(elems []string, condense bool) []string {
+	new := []string{}
+	for _, el := range elems {
+		el := strings.TrimSpace(el)
+		if condense && len(el) == 0 {
 			continue
 		}
-		newLines = append(newLines, line)
+		new = append(new, el)
 	}
-	return newLines
+	return new
+}
+
+// SliceTrim trims each line in a slice of lines using a provided cut string.
+func SliceTrim(elems []string, cutstr string, condense bool) []string {
+	new := []string{}
+	for _, el := range elems {
+		el = strings.Trim(el, cutstr)
+		if condense && len(el) == 0 {
+			continue
+		}
+		new = append(new, el)
+	}
+	return new
 }
 
 // SliceDedupe removes duplicate occurrences of a string
 // from a slice, keeping the first one encountered. It
 // maintains the order of elements in the slice.
-func SliceDedupe(s []string) []string {
+func SliceDedupe(elems []string) []string {
 	unique := []string{}
 	seen := map[string]int{}
-	for _, x := range s {
-		if _, ok := seen[x]; ok {
+	for _, el := range elems {
+		if _, ok := seen[el]; ok {
 			continue
 		}
-		unique = append(unique, x)
-		seen[x] = 1
+		unique = append(unique, el)
+		seen[el] = 1
 	}
 	return unique
 }
@@ -100,23 +104,23 @@ func JoinCondenseTrimSpace(slice []string, sep string) string {
 }
 */
 
-func SliceCondenseRegexps(texts []string, regexps []*regexp.Regexp, replacement string) []string {
+func SliceCondenseRegexps(elems []string, regexps []*regexp.Regexp, replacement string) []string {
 	parts := []string{}
-	for _, part := range texts {
+	for _, el := range elems {
 		for _, rx := range regexps {
-			part = rx.ReplaceAllString(part, replacement)
+			el = rx.ReplaceAllString(el, replacement)
 		}
-		part = strings.TrimSpace(part)
-		if len(part) > 0 {
-			parts = append(parts, part)
+		el = strings.TrimSpace(el)
+		if len(el) > 0 {
+			parts = append(parts, el)
 		}
 	}
 	return parts
 }
 
-func SliceCondensePunctuation(texts []string) []string {
+func SliceCondensePunctuation(elems []string) []string {
 	parts := []string{}
-	for _, part := range texts {
+	for _, part := range elems {
 		part = regexp.MustCompile(`[^a-zA-Z0-9]+`).ReplaceAllString(part, " ")
 		part = regexp.MustCompile(`\s+`).ReplaceAllString(part, " ")
 		part = strings.TrimSpace(part)
@@ -127,8 +131,8 @@ func SliceCondensePunctuation(texts []string) []string {
 	return parts
 }
 
-func SliceCondenseAndQuoteSpace(items []string, quoteLeft, quoteRight string) []string {
-	return SliceCondenseAndQuote(items, " ", " ", quoteLeft, quoteRight)
+func SliceCondenseAndQuoteSpace(elems []string, quoteLeft, quoteRight string) []string {
+	return SliceCondenseAndQuote(elems, " ", " ", quoteLeft, quoteRight)
 }
 
 func SliceCondenseAndQuote(items []string, trimLeft, trimRight, quoteLeft, quoteRight string) []string {
@@ -178,10 +182,10 @@ func SliceToSingleIntOrNeg(vals []string) int {
 
 // Dedupe returns a string slice with duplicate values
 // removed. First observance is kept.
-func Dedupe(vals []string) []string {
+func Dedupe(elems []string) []string {
 	deduped := []string{}
 	seen := map[string]int{}
-	for _, val := range vals {
+	for _, val := range elems {
 		if _, ok := seen[val]; ok {
 			continue
 		}
@@ -347,9 +351,9 @@ func SliceSubtract(real, filter []string) []string {
 	return filtered
 }
 
-func SliceToMap(strs []string) map[string]int {
+func SliceToMap(elems []string) map[string]int {
 	strmap := map[string]int{}
-	for _, s := range strs {
+	for _, s := range elems {
 		if _, ok := strmap[s]; !ok {
 			strmap[s] = 0
 		}
@@ -385,14 +389,14 @@ func SliceIntersectionCondenseSpace(slice1, slice2 []string) []string {
 // SliceIsEmpty checks to see if a slice is empty. If `skipEmptyStrings`
 // it will also return empty if all elements are empty strings or
 // only contain spaces.
-func SliceIsEmpty(slice []string, skipEmptyStrings bool) bool {
-	if len(slice) == 0 {
+func SliceIsEmpty(elems []string, skipEmptyStrings bool) bool {
+	if len(elems) == 0 {
 		return true
 	}
 	if !skipEmptyStrings {
 		return false
 	}
-	for _, s := range slice {
+	for _, s := range elems {
 		s = strings.TrimSpace(s)
 		if len(s) > 0 {
 			return false
@@ -403,9 +407,9 @@ func SliceIsEmpty(slice []string, skipEmptyStrings bool) bool {
 
 // SliceSplitLengthStats returns a `map[int]int` indicating how many
 // strings of which length are present.
-func SliceSplitLengthStats(slice []string, sep string) map[int]int {
+func SliceSplitLengthStats(elems []string, sep string) map[int]int {
 	stats := map[int]int{}
-	for _, s := range slice {
+	for _, s := range elems {
 		p := strings.Split(s, sep)
 		stats[len(p)]++
 	}
@@ -414,9 +418,9 @@ func SliceSplitLengthStats(slice []string, sep string) map[int]int {
 
 // SliceBySplitLength returns lines by split length. This is useful for analyzing
 // what types of data exist with different lengths.
-func SliceBySplitLength(slice []string, sep string) map[int][]string {
+func SliceBySplitLength(elems []string, sep string) map[int][]string {
 	bylen := map[int][]string{}
-	for _, s := range slice {
+	for _, s := range elems {
 		p := strings.Split(s, sep)
 		if _, ok := bylen[len(p)]; !ok {
 			bylen[len(p)] = []string{}
