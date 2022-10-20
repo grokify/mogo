@@ -10,10 +10,12 @@ import (
 
 const errFormatInvalidTzAbbreviation = "invalid timezone abbreviation [%s]"
 
-// LocationTzAbbreviationAndName returns a `*time.Location` given a timezone abbreviation and name.
-// For example: ("PST", "Pacific Standard Time"). This is a wrapper for `github.com/tkuchiki/go-timezone`
+// LoadLocationByAbbreviation returns a `*time.Location` given a timezone abbreviation and name.
+// For example: ("PST", "Pacific Standard Time"). If the abbreviation only represents one timezone
+// the timezone name can be omitted. An error is returned if more than one location is present.
+// This is a wrapper for `github.com/tkuchiki/go-timezone`
 // which defines the timezone abbreviation and names.
-func LocationTzAbbreviationAndName(tzAbbr, tzName string) (*time.Location, error) {
+func LoadLocationByAbbreviation(tzAbbr, tzName string) (*time.Location, error) {
 	tzAbbr = strings.ToUpper(strings.TrimSpace(tzAbbr))
 	tzName = strings.TrimSpace(tzName)
 	tz := timezone.New()
@@ -21,6 +23,8 @@ func LocationTzAbbreviationAndName(tzAbbr, tzName string) (*time.Location, error
 		tzi, err := tz.GetTzAbbreviationInfoByTZName(tzAbbr, tzName)
 		if err != nil {
 			return nil, err
+		} else if tzi == nil || strings.TrimSpace(tzi.Name()) == "" {
+			return nil, fmt.Errorf(errFormatInvalidTzAbbreviation, tzAbbr)
 		}
 		return time.FixedZone(tzi.Name(), tzi.Offset()), nil
 	}
@@ -36,4 +40,30 @@ func LocationTzAbbreviationAndName(tzAbbr, tzName string) (*time.Location, error
 	default:
 		return nil, timezone.ErrAmbiguousTzAbbreviations
 	}
+}
+
+// LoadLocationsByAbbreviation loads all the matching locations by timezone
+// abbreviation and name. Errors are returned as an empty slice.
+func LoadLocationsByAbbreviation(tzAbbr, tzName string) []*time.Location {
+	locs := []*time.Location{}
+	tzAbbr = strings.ToUpper(strings.TrimSpace(tzAbbr))
+	tzName = strings.TrimSpace(tzName)
+	tz := timezone.New()
+	if len(tzName) > 0 {
+		tzi, err := tz.GetTzAbbreviationInfoByTZName(tzAbbr, tzName)
+		if err != nil {
+			return []*time.Location{}
+		} else if tzi == nil || strings.TrimSpace(tzi.Name()) == "" {
+			return []*time.Location{}
+		}
+		return append(locs, time.FixedZone(tzi.Name(), tzi.Offset()))
+	}
+	tzis, err := tz.GetTzAbbreviationInfo(tzAbbr)
+	if err != nil {
+		return locs
+	}
+	for _, tzi := range tzis {
+		locs = append(locs, time.FixedZone(tzi.Name(), tzi.Offset()))
+	}
+	return locs
 }
