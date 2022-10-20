@@ -18,6 +18,7 @@ func GetSplitReqQueryParam(req *http.Request, headerName, sep string) []string {
 		strings.Split(
 			GetReqQueryParam(req, headerName),
 			sep),
+		true,
 	)
 }
 
