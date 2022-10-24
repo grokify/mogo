@@ -13,7 +13,7 @@ func NewMapStringSlice() MapStringSlice {
 }
 
 // Add adds a key and value to the `map[string][]string`. It will
-// panic on a nil struct, so do not preceed with `var mss MapStringSlice`
+// panic on a nil struct, so do not precede with `var mss MapStringSlice`
 func (mss MapStringSlice) Add(key, value string) {
 	if _, ok := mss[key]; !ok {
 		mss[key] = []string{value}
