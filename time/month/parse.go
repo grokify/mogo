@@ -18,7 +18,7 @@ var (
 	ErrMonthNotFound       = errors.New("month not found")
 )
 
-func ParseMonth(format []string, value string, insensitive bool) (time.Month, error) {
+func Parse(format []string, value string, insensitive bool) (time.Month, error) {
 	months := format
 	if len(months) == 1 {
 		months = strings.Split(format[0], ",")

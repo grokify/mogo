@@ -21,7 +21,7 @@ var parseMonthTests = []struct {
 
 func TestParseMonth(t *testing.T) {
 	for _, tt := range parseMonthTests {
-		monthTry, err := ParseMonth(tt.haystack, tt.value, tt.insensiitve)
+		monthTry, err := Parse(tt.haystack, tt.value, tt.insensiitve)
 		if err != nil {
 			t.Errorf(`time.month.Parse("%s". "%s", %v) got error [%v]`,
 				strings.Join(tt.haystack, ","), tt.value, tt.insensiitve, err.Error())
