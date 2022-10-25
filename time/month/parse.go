@@ -18,13 +18,13 @@ var (
 	ErrMonthNotFound       = errors.New("month not found")
 )
 
-func Parse(format []string, value string, insensitive bool) (time.Month, error) {
-	months := format
-	if len(months) == 1 {
-		months = strings.Split(format[0], ",")
+func Parse(months []string, value string, insensitive bool) (time.Month, error) {
+	enums := months
+	if len(enums) == 1 {
+		enums = strings.Split(enums[0], ",")
 	}
-	months = stringsutil.SliceCondenseSpace(months, true, false)
-	if len(months) != 12 {
+	enums = stringsutil.SliceCondenseSpace(enums, true, false)
+	if len(enums) != 12 {
 		return time.January, ErrMonthsFormatInvalid
 	}
 	value = strings.TrimSpace(value)
@@ -32,7 +32,7 @@ func Parse(format []string, value string, insensitive bool) (time.Month, error) 
 		value = strings.ToLower(value)
 	}
 
-	for i, monthTry := range months {
+	for i, monthTry := range enums {
 		if (insensitive && strings.ToLower(monthTry) == value) ||
 			monthTry == value {
 			return time.Month(i + 1), nil
