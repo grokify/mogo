@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-var parseMonthTests = []struct {
+var parseTests = []struct {
 	haystack    []string
 	value       string
 	insensiitve bool
@@ -19,8 +19,8 @@ var parseMonthTests = []struct {
 	{[]string{MonthsEnAbbr3}, "Oct", false, time.October, nil},
 }
 
-func TestParseMonth(t *testing.T) {
-	for _, tt := range parseMonthTests {
+func TestParse(t *testing.T) {
+	for _, tt := range parseTests {
 		monthTry, err := Parse(tt.haystack, tt.value, tt.insensiitve)
 		if err != nil {
 			t.Errorf(`time.month.Parse("%s". "%s", %v) got error [%v]`,
