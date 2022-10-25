@@ -36,8 +36,6 @@ func Parse(months []string, value string, insensitive bool) (time.Month, error) 
 		if (insensitive && strings.ToLower(monthTry) == value) ||
 			monthTry == value {
 			return time.Month(i + 1), nil
-		} else if monthTry == value {
-			return time.Month(i + 1), nil
 		}
 	}
 	return time.January, ErrMonthNotFound
