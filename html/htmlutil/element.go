@@ -83,21 +83,10 @@ func (el Element) String() (string, error) {
 				key,
 				stringsutil.SliceCondenseSpace(vals, true, false),
 				DelimitSpace, true))
-			//escaped := []string{}
-			//for _, val := range vals {
-			//	escaped = append(escaped, html.EscapeString(val))
-			//}
-			//attrs = append(attrs, key+"=\""+strings.Join(escaped, DelimitSpace)+"\"")
 		} else if key == AttributeOnclick {
 			attrs = append(attrs, BuildAttributeHTML(key, vals, DelimitSemicolon, false))
-			//attrs = append(attrs, key+"=\""+strings.Join(vals, DelimitSemicolon)+"\"")
 		} else {
 			attrs = append(attrs, BuildAttributeHTML(key, vals, DelimitSemicolon, true))
-			//escaped := []string{}
-			//for _, val := range vals {
-			//	escaped = append(escaped, html.EscapeString(val))
-			//}
-			//attrs = append(attrs, key+"=\""+strings.Join(escaped, DelimitSemicolon)+"\"")
 		}
 	}
 	attrsStr := strings.Join(attrs, " ")
@@ -120,26 +109,4 @@ func (el Element) String() (string, error) {
 		closingTag = "</" + el.TagName + ">"
 	}
 	return openingTag + innerHTML + closingTag, nil
-
-	/*
-		elString := "<" + el.TagName
-		if len(attrs) > 0 {
-			elString += " " + strings.Join(attrs, " ")
-		}
-		if len(el.InnerHTML) == 0 {
-			if el.SelfClose {
-				elString += " />"
-			} else {
-				elString += "></" + el.TagName + ">"
-			}
-			return elString
-		}
-
-		for _, child := range el.InnerHTML {
-			elString += child.String()
-		}
-		elString += "</" + el.TagName + ">"
-
-		return elString
-	*/
 }
