@@ -3,7 +3,7 @@ module github.com/grokify/mogo
 go 1.18
 
 require (
-	github.com/ProtonMail/go-crypto v0.0.0-20220930113650-c6815a8c17ad
+	github.com/ProtonMail/go-crypto v0.0.0-20221026131551-cf6655e29de4
 	github.com/buger/jsonparser v1.1.1
 	github.com/caarlos0/env/v6 v6.10.1
 	github.com/google/go-querystring v1.1.0
@@ -22,9 +22,9 @@ require (
 	github.com/valyala/fastjson v1.6.3
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
-	golang.org/x/crypto v0.0.0-20221012134737-56aed061732a
-	golang.org/x/image v0.0.0-20221017200508-ffcb3fe7d1bf
-	golang.org/x/net v0.0.0-20221017152216-f25eb7ecb193
+	golang.org/x/crypto v0.1.0
+	golang.org/x/image v0.1.0
+	golang.org/x/net v0.1.0
 	golang.org/x/text v0.4.0
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/oleiade/reflections.v1 v1.0.0
@@ -41,5 +41,5 @@ require (
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/shopspring/decimal v0.0.0-20180709203117-cd690d0c9e24 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	golang.org/x/sys v0.0.0-20221010170243-090e33056c14 // indirect
+	golang.org/x/sys v0.1.0 // indirect
 )
