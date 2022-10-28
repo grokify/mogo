@@ -2,13 +2,36 @@ package maputil
 
 import (
 	"fmt"
-	"reflect"
 	"sort"
 	"strings"
 
 	"github.com/grokify/mogo/sort/sortutil"
 )
 
+func StringKeys[T any](m map[string]T, xf func(s string) string, sortAsc bool) []string {
+	keys := []string{}
+	for k := range m {
+		if xf != nil {
+			k = xf(k)
+		}
+		keys = append(keys, k)
+	}
+	if sortAsc {
+		sort.Strings(keys)
+	}
+	return keys
+}
+
+/*
+func StringKeysLower[T any](m map[string]T, sortAsc bool) []string {
+	return StringKeys(m, strings.ToLower, sortAsc)
+}
+
+func StringKeysUpper[T any](m map[string]T, sortAsc bool) []string {
+	return StringKeys(m, strings.ToUpper, sortAsc)
+}
+*/
+/*
 func StringKeys(mp interface{}) []string {
 	keysVal := reflect.ValueOf(mp).MapKeys()
 	keysArr := []string{}
@@ -25,13 +48,14 @@ func StringKeysSorted(mp interface{}) []string {
 }
 
 func StringKeysToLowerSorted(mp interface{}) []string {
-	keysArr := StringKeys(mp)
+	keysArr := StringKeys(mp, false)
 	for i := range keysArr {
 		keysArr[i] = strings.ToLower(keysArr[i])
 	}
 	sort.Strings(keysArr)
 	return keysArr
 }
+*/
 
 func MapSSMerge(first map[string]string, second map[string]string) map[string]string {
 	newMap := map[string]string{}

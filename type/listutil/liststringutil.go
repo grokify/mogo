@@ -11,8 +11,10 @@ func ListStringsToLowerUniqueSorted(list []string) []string {
 	for _, myString := range list {
 		myMap[myString] = true
 	}
-	listOut := maputil.StringKeysToLowerSorted(myMap)
-	return listOut
+	return maputil.StringKeys(myMap, strings.ToLower, true)
+	// return maputil.StringKeysLower(myMap, true)
+	// listOut := maputil.StringKeysToLowerSorted(myMap)
+	// return listOut
 }
 
 func Include(haystack []string, needle string) bool {
