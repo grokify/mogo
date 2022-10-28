@@ -1,6 +1,8 @@
 package htmlutil
 
 import (
+	"errors"
+	"fmt"
 	"html"
 	"strings"
 
@@ -16,6 +18,11 @@ const (
 	DelimitSpace     = " "
 )
 
+var (
+	ErrAttributeNameIsRequired = errors.New("attribute name is required")
+	ErrTagNameIsRequired       = errors.New("tag name is required")
+)
+
 type Element struct {
 	TagName   string
 	Attrs     map[string][]string
@@ -29,24 +36,37 @@ func NewElement() Element {
 		InnerHTML: []stringsutil.Stringable{}}
 }
 
-func (el Element) Add(key string, values ...string) {
-	key = strings.ToLower(strings.TrimSpace(key))
+func (el Element) AddAttribute(key string, values ...string) error {
+	key = strings.TrimSpace(key)
 	if len(key) == 0 {
-		return
+		return ErrAttributeNameIsRequired
 	}
-	if len(values) == 0 {
-		if _, ok := el.Attrs[key]; !ok {
-			el.Attrs[key] = []string{}
-		}
-		return
+	if _, ok := el.Attrs[key]; !ok {
+		el.Attrs[key] = []string{}
 	}
-	el.Attrs[key] = append(el.Attrs[key], values...)
+	if len(values) > 0 {
+		el.Attrs[key] = append(el.Attrs[key], values...)
+	}
+	return nil
 }
 
-func (el Element) String() string {
-	el.TagName = strings.ToLower(strings.TrimSpace(el.TagName))
+func BuildAttributeHTML(key string, values []string, delimiter string, htmlEscape bool) string {
+	vals2 := []string{}
+	if htmlEscape {
+		for _, val := range values {
+			vals2 = append(vals2, html.EscapeString(val))
+		}
+	} else {
+		vals2 = values
+	}
+	valStr := strings.Join(vals2, delimiter)
+	return fmt.Sprintf(`%s="%s"`, key, valStr)
+}
+
+func (el Element) String() (string, error) {
+	el.TagName = strings.TrimSpace(el.TagName)
 	if len(el.TagName) == 0 {
-		el.TagName = TagDiv
+		return "", ErrTagNameIsRequired
 	}
 	attrs := []string{}
 	keysSorted := maputil.StringKeys(el.Attrs, nil, true)
@@ -55,43 +75,71 @@ func (el Element) String() string {
 		if !ok {
 			panic("key not found")
 		}
-		//}
-		//for key, vals := range el.Attrs {
+		vals = stringsutil.SliceTrimSpace(vals, true)
 		if len(vals) == 0 {
 			attrs = append(attrs, key)
 		} else if key == AttributeClass {
-			escaped := []string{}
-			for _, val := range vals {
-				escaped = append(escaped, html.EscapeString(val))
-			}
-			attrs = append(attrs, key+"=\""+strings.Join(escaped, DelimitSpace)+"\"")
+			attrs = append(attrs, BuildAttributeHTML(
+				key,
+				stringsutil.SliceCondenseSpace(vals, true, false),
+				DelimitSpace, true))
+			//escaped := []string{}
+			//for _, val := range vals {
+			//	escaped = append(escaped, html.EscapeString(val))
+			//}
+			//attrs = append(attrs, key+"=\""+strings.Join(escaped, DelimitSpace)+"\"")
 		} else if key == AttributeOnclick {
-			attrs = append(attrs, key+"=\""+strings.Join(vals, DelimitSemicolon)+"\"")
+			attrs = append(attrs, BuildAttributeHTML(key, vals, DelimitSemicolon, false))
+			//attrs = append(attrs, key+"=\""+strings.Join(vals, DelimitSemicolon)+"\"")
 		} else {
-			escaped := []string{}
-			for _, val := range vals {
-				escaped = append(escaped, html.EscapeString(val))
-			}
-			attrs = append(attrs, key+"=\""+strings.Join(escaped, DelimitSemicolon)+"\"")
+			attrs = append(attrs, BuildAttributeHTML(key, vals, DelimitSemicolon, true))
+			//escaped := []string{}
+			//for _, val := range vals {
+			//	escaped = append(escaped, html.EscapeString(val))
+			//}
+			//attrs = append(attrs, key+"=\""+strings.Join(escaped, DelimitSemicolon)+"\"")
 		}
 	}
-	elString := "<" + el.TagName
-	if len(attrs) > 0 {
-		elString += " " + strings.Join(attrs, " ")
+	attrsStr := strings.Join(attrs, " ")
+	if len(attrsStr) > 0 {
+		attrsStr = " " + attrsStr
 	}
-	if len(el.InnerHTML) == 0 {
-		if el.SelfClose {
-			elString += " />"
-		} else {
-			elString += "></" + el.TagName + ">"
-		}
-		return elString
+	openingTagClose := ">"
+	if el.SelfClose && len(el.InnerHTML) == 0 {
+		openingTagClose = " />"
 	}
+	openingTag := "<" + el.TagName + attrsStr + openingTagClose
 
+	var innerHTML string
 	for _, child := range el.InnerHTML {
-		elString += child.String()
+		innerHTML += child.String()
 	}
-	elString += "</" + el.TagName + ">"
 
-	return elString
+	closingTag := ""
+	if openingTagClose == ">" {
+		closingTag = "</" + el.TagName + ">"
+	}
+	return openingTag + innerHTML + closingTag, nil
+
+	/*
+		elString := "<" + el.TagName
+		if len(attrs) > 0 {
+			elString += " " + strings.Join(attrs, " ")
+		}
+		if len(el.InnerHTML) == 0 {
+			if el.SelfClose {
+				elString += " />"
+			} else {
+				elString += "></" + el.TagName + ">"
+			}
+			return elString
+		}
+
+		for _, child := range el.InnerHTML {
+			elString += child.String()
+		}
+		elString += "</" + el.TagName + ">"
+
+		return elString
+	*/
 }
