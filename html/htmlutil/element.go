@@ -4,6 +4,7 @@ import (
 	"html"
 	"strings"
 
+	"github.com/grokify/mogo/type/maputil"
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
@@ -18,6 +19,7 @@ const (
 type Element struct {
 	TagName   string
 	Attrs     map[string][]string
+	SelfClose bool
 	InnerHTML []stringsutil.Stringable
 }
 
@@ -47,7 +49,14 @@ func (el Element) String() string {
 		el.TagName = TagDiv
 	}
 	attrs := []string{}
-	for key, vals := range el.Attrs {
+	keysSorted := maputil.StringKeys(el.Attrs, nil, true)
+	for _, key := range keysSorted {
+		vals, ok := el.Attrs[key]
+		if !ok {
+			panic("key not found")
+		}
+		//}
+		//for key, vals := range el.Attrs {
 		if len(vals) == 0 {
 			attrs = append(attrs, key)
 		} else if key == AttributeClass {
@@ -68,15 +77,21 @@ func (el Element) String() string {
 	}
 	elString := "<" + el.TagName
 	if len(attrs) > 0 {
-		elString += " " + strings.Join(attrs, " ") + ">"
-	} else {
-		elString += ">"
+		elString += " " + strings.Join(attrs, " ")
 	}
-	if len(el.InnerHTML) > 0 {
-		for _, child := range el.InnerHTML {
-			elString += child.String()
+	if len(el.InnerHTML) == 0 {
+		if el.SelfClose {
+			elString += " />"
+		} else {
+			elString += "></" + el.TagName + ">"
 		}
-		elString += "</" + el.TagName + ">"
+		return elString
 	}
+
+	for _, child := range el.InnerHTML {
+		elString += child.String()
+	}
+	elString += "</" + el.TagName + ">"
+
 	return elString
 }
