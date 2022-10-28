@@ -146,7 +146,7 @@ func ReadDirRxSubmatchCaptures(dir string, rx *regexp.Regexp, subMatchIdx uint, 
 	if len(entryMap) == 0 {
 		return nil, errors.New("no match for ReadDirRxSubmatchGreatestMatch")
 	}
-	keysSorted := maputil.StringKeysSorted(entryMap)
+	keysSorted := maputil.StringKeys(entryMap, nil, true)
 	return keysSorted, nil
 }
 
