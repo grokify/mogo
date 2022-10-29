@@ -24,6 +24,10 @@ type Stringable interface {
 	String() string
 }
 
+type StringableWithErr interface {
+	String() (string, error)
+}
+
 var (
 	rxControl = regexp.MustCompile(`[[:cntrl:]]`)
 	rxSpaces  = regexp.MustCompile(`\s+`)
