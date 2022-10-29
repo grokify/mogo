@@ -62,7 +62,7 @@ func CopyFile(src, dst string) error {
 }
 
 func ReadDirSplit(dirname string, inclDotDirs bool) ([]os.FileInfo, []os.FileInfo, error) {
-	all, err := os.ReadDir(dirname)
+	all, err := ioutil.ReadDir(dirname)
 	if err != nil {
 		return []os.FileInfo{}, []os.FileInfo{}, err
 	}
