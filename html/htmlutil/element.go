@@ -13,7 +13,9 @@ import (
 const (
 	TagDiv           = "div"
 	AttributeClass   = "class"
+	AttributeHref    = "href"
 	AttributeOnclick = "onclick"
+	AttributeStyle   = "style"
 	DelimitSemicolon = ";"
 	DelimitSpace     = " "
 )
@@ -27,19 +29,22 @@ type Element struct {
 	TagName   string
 	Attrs     map[string][]string
 	SelfClose bool
-	InnerHTML []stringsutil.Stringable
+	InnerHTML []stringsutil.StringableWithErr
 }
 
-func NewElement() Element {
-	return Element{
+func NewElement() *Element {
+	return &Element{
 		Attrs:     map[string][]string{},
-		InnerHTML: []stringsutil.Stringable{}}
+		InnerHTML: []stringsutil.StringableWithErr{}}
 }
 
-func (el Element) AddAttribute(key string, values ...string) error {
+func (el *Element) AddAttribute(key string, values ...string) error {
 	key = strings.TrimSpace(key)
 	if len(key) == 0 {
 		return ErrAttributeNameIsRequired
+	}
+	if el.Attrs == nil {
+		el.Attrs = map[string][]string{}
 	}
 	if _, ok := el.Attrs[key]; !ok {
 		el.Attrs[key] = []string{}
@@ -48,6 +53,16 @@ func (el Element) AddAttribute(key string, values ...string) error {
 		el.Attrs[key] = append(el.Attrs[key], values...)
 	}
 	return nil
+}
+
+func (el *Element) AddInnerHTML(innerHTML stringsutil.StringableWithErr) {
+	el.InnerHTML = append(el.InnerHTML, innerHTML)
+}
+
+func (el *Element) AddInnerHTMLText(text string, escaped bool) {
+	el.InnerHTML = append(el.InnerHTML, &Text{
+		Text:    text,
+		Escaped: escaped})
 }
 
 func BuildAttributeHTML(key string, values []string, delimiter string, htmlEscape bool) string {
@@ -63,7 +78,7 @@ func BuildAttributeHTML(key string, values []string, delimiter string, htmlEscap
 	return fmt.Sprintf(`%s="%s"`, key, valStr)
 }
 
-func (el Element) String() (string, error) {
+func (el *Element) String() (string, error) {
 	el.TagName = strings.TrimSpace(el.TagName)
 	if len(el.TagName) == 0 {
 		return "", ErrTagNameIsRequired
@@ -101,7 +116,11 @@ func (el Element) String() (string, error) {
 
 	var innerHTML string
 	for _, child := range el.InnerHTML {
-		innerHTML += child.String()
+		childStr, err := child.String()
+		if err != nil {
+			return "", err
+		}
+		innerHTML += childStr
 	}
 
 	closingTag := ""
