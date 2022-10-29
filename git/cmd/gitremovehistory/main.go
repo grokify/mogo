@@ -46,7 +46,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	} else if !isFile {
-		log.Fatal(fmt.Sprintf("[%s] is not a file.", opts.File))
+		log.Fatalf("[%s] is not a file.", opts.File)
 	}
 
 	cmds := []string{

@@ -10,7 +10,6 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
-	"io/ioutil"
 	"os"
 	"path"
 
@@ -95,7 +94,7 @@ func DecryptAes(text []byte, key []byte) ([]byte, error) {
 }
 
 func ReadFileAes(filename string, key []byte) ([]byte, error) {
-	baFileEnc, err := ioutil.ReadFile(filename)
+	baFileEnc, err := os.ReadFile(filename)
 	if err != nil {
 		return []byte{}, err
 	}
@@ -107,11 +106,11 @@ func WriteFileAes(filename string, baFileUnc []byte, perm os.FileMode, key []byt
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(filename, baFileEnc, perm)
+	return os.WriteFile(filename, baFileEnc, perm)
 }
 
 func EncryptFileAes(filenameUnc string, filenameEnc string, perm os.FileMode, key []byte) error {
-	baFileUnc, err := ioutil.ReadFile(filenameUnc)
+	baFileUnc, err := os.ReadFile(filenameUnc)
 	if err != nil {
 		return err
 	}
@@ -122,7 +121,7 @@ func EncryptFileAes(filenameUnc string, filenameEnc string, perm os.FileMode, ke
 }
 
 func EncryptDirectoryFilesAes(dirUnc string, dirEnc string, perm os.FileMode, key []byte) error {
-	aFilesSrc, err := ioutil.ReadDir(dirUnc)
+	aFilesSrc, err := os.ReadDir(dirUnc)
 	if err != nil {
 		return err
 	}

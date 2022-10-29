@@ -2,7 +2,6 @@ package urlutil
 
 import (
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"path"
@@ -161,7 +160,7 @@ func GetURLBody(absoluteURL string) ([]byte, error) {
 		return []byte{}, err
 	}
 	defer res.Body.Close()
-	return ioutil.ReadAll(res.Body)
+	return io.ReadAll(res.Body)
 }
 
 // GetURLPostBody returns a HTTP post body as a byte array from a
@@ -173,7 +172,7 @@ func GetURLPostBody(absoluteURL string, bodyType string, reqBody io.Reader) ([]b
 		return []byte{}, err
 	}
 	defer res.Body.Close()
-	return ioutil.ReadAll(res.Body)
+	return io.ReadAll(res.Body)
 }
 
 // JoinAbsolute performs a path.Join() while preserving two slashes after the scheme.

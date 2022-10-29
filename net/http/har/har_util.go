@@ -2,13 +2,13 @@ package har
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 )
 
 func ReadLogFile(filename string) (Log, error) {
 	h := Log{}
 
-	bytes, err := ioutil.ReadFile(filename)
+	bytes, err := os.ReadFile(filename)
 	if err != nil {
 		return h, err
 	}

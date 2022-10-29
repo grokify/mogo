@@ -2,7 +2,6 @@ package gpgutil
 
 import (
 	"bytes"
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -62,11 +61,11 @@ func (g *GpgEncrypt) EncryptStringToFile(plaintext string, sPath string, sEmail 
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(sPath, buf.Bytes(), 0600)
+	return os.WriteFile(sPath, buf.Bytes(), 0600)
 }
 
 func (g *GpgEncrypt) EncryptFile(pathPlain string, pathCrypt string, sEmail string) error {
-	bytesPlain, err := ioutil.ReadFile(pathPlain)
+	bytesPlain, err := os.ReadFile(pathPlain)
 	if err != nil {
 		return err
 	}

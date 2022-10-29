@@ -2,7 +2,6 @@ package codegen
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -18,11 +17,11 @@ func ConvertFilesInPlaceNestedstructsToPointers(dir string, rx *regexp.Regexp) (
 		rx = regexp.MustCompile(`.*\.go$`)
 	}
 	entries, err := osutil.ReadDirMore(dir, rx, false, true, false)
-	// files, err := ioutilmore.DirEntriesRxSizeGt0(dir, ioutilmore.File, rx)
+	// files, err := os.DirEntriesRxSizeGt0(dir, ioutilmore.File, rx)
 	if err != nil {
 		return filenames, errorsutil.Wrap(err, "codegen.ConvertFilesInPlace.ReadDirMore")
 	}
-	//filenames := osutil.DirEntries(entries).Names(dir, true)
+	//filenames := os.DirEntries(entries).Names(dir, true)
 	//for _, filename := range filenames {
 	for _, entry := range entries {
 		filename := filepath.Join(dir, entry.Name())
@@ -40,11 +39,11 @@ func ConvertFilesInPlaceNestedstructsToPointers(dir string, rx *regexp.Regexp) (
 }
 
 func ConvertFileNestedstructsToPointers(inFile, outFile string, perm os.FileMode) error {
-	data, err := ioutil.ReadFile(inFile)
+	data, err := os.ReadFile(inFile)
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(
+	return os.WriteFile(
 		outFile,
 		[]byte(GoCodeNestedstructsToPointers(string(data))),
 		perm)

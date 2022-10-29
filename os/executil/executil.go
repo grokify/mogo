@@ -2,7 +2,6 @@ package executil
 
 import (
 	"bytes"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -31,13 +30,13 @@ func ExecToFiles(command, stdoutFile, stderrFile string, perm os.FileMode) (byte
 	stdoutFile = strings.TrimSpace(stdoutFile)
 	stderrFile = strings.TrimSpace(stderrFile)
 	if len(stdoutFile) > 0 {
-		err := ioutil.WriteFile(stdoutFile, stdout.Bytes(), perm)
+		err := os.WriteFile(stdoutFile, stdout.Bytes(), perm)
 		if err != nil {
 			return stdout, stderr, err
 		}
 	}
 	if len(stderrFile) > 0 {
-		err := ioutil.WriteFile(stderrFile, stdout.Bytes(), perm)
+		err := os.WriteFile(stderrFile, stdout.Bytes(), perm)
 		if err != nil {
 			return stdout, stderr, err
 		}

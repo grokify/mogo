@@ -9,7 +9,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime"
 	"mime/multipart"
 	"net/http"
@@ -136,7 +135,7 @@ func (builder *MultipartBuilder) WriteFilePathPlus(partName, srcFilepath string,
 		return err
 	}
 
-	fileBytes, err := ioutil.ReadFile(srcFilepath)
+	fileBytes, err := os.ReadFile(srcFilepath)
 	if err != nil {
 		return err
 	}

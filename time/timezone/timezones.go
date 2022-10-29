@@ -2,7 +2,7 @@ package timezone
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 	"strings"
 	"time"
 
@@ -38,7 +38,7 @@ func ZonesSystem(zoneDirs []string) []string {
 }
 
 func readZoneFile(zoneDir, path string, zones []string) []string {
-	files, _ := ioutil.ReadDir(zoneDir + path)
+	files, _ := os.ReadDir(zoneDir + path)
 	for _, f := range files {
 		if f.Name() != strings.ToUpper(f.Name()[:1])+f.Name()[1:] {
 			continue

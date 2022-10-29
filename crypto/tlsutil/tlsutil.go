@@ -4,7 +4,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"io/ioutil"
+	"os"
 )
 
 type TLSConfig struct {
@@ -30,7 +30,7 @@ func (tc *TLSConfig) LoadX509KeyPair(certFilepath, keyFilepath string) error {
 }
 
 func (tc *TLSConfig) LoadCACert(caCertFilepath string) error {
-	cert, err := ioutil.ReadFile(caCertFilepath)
+	cert, err := os.ReadFile(caCertFilepath)
 	if err != nil {
 		return err
 	}

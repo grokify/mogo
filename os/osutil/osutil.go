@@ -3,7 +3,6 @@ package osutil
 
 import (
 	"bufio"
-	"io/ioutil"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -15,7 +14,7 @@ import (
 // the provided directory. This is different from os.Remove
 // which also removes the directory provided.
 func EmptyAll(name string) error {
-	aEntries, err := ioutil.ReadDir(name)
+	aEntries, err := os.ReadDir(name)
 	if err != nil {
 		return err
 	}

@@ -3,7 +3,7 @@ package httputilmore
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"time"
 
@@ -17,7 +17,7 @@ func ProxyResponse(w http.ResponseWriter, resp *http.Response) ([]byte, error) {
 	if resp == nil {
 		return nil, errors.New("E_NIL_HTTP_RESPONSE")
 	}
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +53,7 @@ func CondenseResponseNot2xxToError(resp *http.Response, err error, msg string) e
 			msg += ": "
 		}
 		more := []string{}
-		body, err := ioutil.ReadAll(resp.Body)
+		body, err := io.ReadAll(resp.Body)
 		if err != nil {
 			more = append(more, err.Error())
 		} else {

@@ -7,7 +7,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"hash"
-	"io/ioutil"
+	"os"
 )
 
 type CryptorOAEP struct {
@@ -36,7 +36,7 @@ func (enc *CryptorOAEP) DecryptOAEPBase64String(ciphertextBase64 string, label [
 }
 
 func (enc *CryptorOAEP) DecryptOAEPBase64StringFromPath(ciphertextBase64Path string, label []byte) ([]byte, error) {
-	ciphertextBase64Bytes, err := ioutil.ReadFile(ciphertextBase64Path)
+	ciphertextBase64Bytes, err := os.ReadFile(ciphertextBase64Path)
 	if err != nil {
 		return []byte(""), err
 	}

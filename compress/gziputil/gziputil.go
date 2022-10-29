@@ -6,7 +6,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"io"
-	"io/ioutil"
 )
 
 func FixCompressLevel(level int) int {
@@ -66,7 +65,7 @@ func Uncompress(compressed []byte) ([]byte, error) {
 		return make([]byte, 0), err
 	}
 	defer gr.Close()
-	return ioutil.ReadAll(gr)
+	return io.ReadAll(gr)
 }
 
 // UncompressWriter gunzips a byte slice and writes the results

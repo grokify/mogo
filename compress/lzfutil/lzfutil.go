@@ -1,7 +1,7 @@
 package lzfutil
 
 import (
-	"io/ioutil"
+	"os"
 
 	lzf "github.com/zhuyie/golzf"
 )
@@ -9,7 +9,7 @@ import (
 // ReadFile reads a LZF compressed file, e.g. one compressed
 // by PHP `lzf_compress`.
 func ReadFile(file string) ([]byte, error) {
-	bytes, err := ioutil.ReadFile(file)
+	bytes, err := os.ReadFile(file)
 	if err != nil {
 		return []byte{}, err
 	}

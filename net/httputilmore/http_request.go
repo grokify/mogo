@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -59,7 +58,7 @@ func GetWriteFileSimple(url string, filename string, perm os.FileMode) ([]byte, 
 	if err != nil {
 		return bytes, err
 	}
-	err = ioutil.WriteFile(filename, bytes, perm)
+	err = os.WriteFile(filename, bytes, perm)
 	return bytes, err
 }
 
@@ -151,7 +150,7 @@ func GetResponseAndBytes(url string) (*http.Response, []byte, error) {
 	if err != nil {
 		return resp, []byte{}, err
 	}
-	bytes, err := ioutil.ReadAll(resp.Body)
+	bytes, err := io.ReadAll(resp.Body)
 	return resp, bytes, err
 }
 

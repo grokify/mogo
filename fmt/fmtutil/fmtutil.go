@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 
 	"github.com/grokify/mogo/encoding/jsonutil"
 )
@@ -67,7 +66,7 @@ func PrintJSONMin(in interface{}) error {
 }
 
 func PrintReader(r io.Reader) error {
-	bytes, err := ioutil.ReadAll(r)
+	bytes, err := io.ReadAll(r)
 	if err != nil {
 		return err
 	}

@@ -6,7 +6,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	"github.com/grokify/mogo/os/osutil"
 )
@@ -41,7 +41,7 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyPath(prvKeyPKCS1Path string) (*rsa.Privat
 		return nil, fmt.Errorf("filepath is not a file or is empty [%v]", prvKeyPKCS1Path)
 	}
 
-	prvKeyPkcs1Bytes, err := ioutil.ReadFile(prvKeyPKCS1Path)
+	prvKeyPkcs1Bytes, err := os.ReadFile(prvKeyPKCS1Path)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyPathWithPassword(prvKeyPKCS1Path string, 
 		return nil, fmt.Errorf("filepath is not a file or is empty [%v]", prvKeyPKCS1Path)
 	}
 
-	prvKeyPkcs1BytesEnc, err := ioutil.ReadFile(prvKeyPKCS1Path)
+	prvKeyPkcs1BytesEnc, err := os.ReadFile(prvKeyPKCS1Path)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +99,7 @@ func GetRsaPublicKeyForPkcs8PublicKeyPath(pubKeyPkcs8Path string) (*rsa.PublicKe
 		return nil, fmt.Errorf("filepath is not a file or is empty [%v]", pubKeyPkcs8Path)
 	}
 
-	pubKeyPkcs8Bytes, err := ioutil.ReadFile(pubKeyPkcs8Path)
+	pubKeyPkcs8Bytes, err := os.ReadFile(pubKeyPkcs8Path)
 	if err != nil {
 		return pubKey, err
 	}

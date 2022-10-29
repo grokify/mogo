@@ -5,7 +5,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"regexp"
 	"strings"
 
@@ -103,11 +102,11 @@ func DecodeGunzipJSON(encoded string, output interface{}) error {
 	return json.Unmarshal(bytes, output)
 }
 
-// ReadAll provides an interface like `ioutil.ReadAll`
+// ReadAll provides an interface like `io.ReadAll`
 // with optional base64 decoding. It is useful for
 // decoding `*http.Response.Body`.
 func ReadAll(r io.Reader) ([]byte, error) {
-	bytes, err := ioutil.ReadAll(r)
+	bytes, err := io.ReadAll(r)
 	if err != nil {
 		return bytes, err
 	}
