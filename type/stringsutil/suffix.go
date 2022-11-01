@@ -2,6 +2,22 @@ package stringsutil
 
 import "strings"
 
+func SuffixStrip(s, suffix string) string {
+	if ReverseIndex(s, suffix) == 0 {
+		return s[:len(s)-len(suffix)]
+	}
+	return s
+}
+
+func SuffixReplace(s, oldSuffix, newSuffix string) string {
+	if len(oldSuffix) == 0 {
+		return s + newSuffix
+	} else if ReverseIndex(s, oldSuffix) == 0 {
+		return SuffixStrip(s, oldSuffix) + newSuffix
+	}
+	return s
+}
+
 func SuffixParse(s, wantSuffix string) (fullstring, prefix, suffix string) {
 	fullstring = s
 	if len(suffix) > len(fullstring) {
