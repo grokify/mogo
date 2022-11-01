@@ -101,6 +101,7 @@ func Match(s string, matchInfo MatchInfo) (bool, error) {
 	}
 }
 
+/*
 func CheckSuffix(input, wantSuffix string) (fullstring, prefix, suffix string) {
 	fullstring = input
 	if len(suffix) > len(fullstring) {
@@ -113,14 +114,15 @@ func CheckSuffix(input, wantSuffix string) (fullstring, prefix, suffix string) {
 		return
 	}
 	return
-}
+}*/
 
+/*
 func SuffixMap(inputs, suffixes []string) (prefixes []string, matches map[string]string, nonmatches []string) {
 	matches = map[string]string{}
 	for _, input := range inputs {
 		gotMatch := false
 		for _, suffix := range suffixes {
-			gotFull, gotPrefix, gotSuffix := CheckSuffix(input, suffix)
+			gotFull, gotPrefix, gotSuffix := SuffixParse(input, suffix)
 			if suffix == gotSuffix {
 				matches[gotSuffix] = gotFull
 				prefixes = append(prefixes, gotPrefix)
@@ -135,3 +137,4 @@ func SuffixMap(inputs, suffixes []string) (prefixes []string, matches map[string
 	nonmatches = SliceCondenseSpace(nonmatches, true, true)
 	return prefixes, matches, nonmatches
 }
+*/
