@@ -8,6 +8,10 @@ import (
 	"github.com/grokify/mogo/sort/sortutil"
 )
 
+// StringKeys takes a map where the keys are strings and reurns a slice fo key names.
+// An optional transform function, `xf`, can be supplied along with an option to sort
+// the results. If both transform and sort are requested, the sort is performed on the
+// transformed strings.
 func StringKeys[T any](m map[string]T, xf func(s string) string, sortAsc bool) []string {
 	keys := []string{}
 	for k := range m {
