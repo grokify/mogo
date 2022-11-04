@@ -24,8 +24,5 @@ func ReadFileByLine(name string, lineFunc func(idx uint, line string) error) err
 		i++
 	}
 
-	if err := scanner.Err(); err != nil {
-		return err
-	}
-	return nil
+	return scanner.Err()
 }
