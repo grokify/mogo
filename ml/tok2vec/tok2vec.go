@@ -7,26 +7,26 @@ import (
 )
 
 type Tok2Vec struct {
-	MapToks2Vecs map[string]int
-	MapVecs2Toks map[int]string
+	toks2VecsMap map[string]int
+	vecs2ToksMap map[int]string
 }
 
 func NewTok2Vec() Tok2Vec {
 	return Tok2Vec{
-		MapToks2Vecs: map[string]int{},
-		MapVecs2Toks: map[int]string{}}
+		toks2VecsMap: map[string]int{},
+		vecs2ToksMap: map[int]string{}}
 }
 
 func (t2v *Tok2Vec) Toks2Vecs(tokens []string) []int {
 	vecs := []int{}
 	for _, tok := range tokens {
-		if vec, ok := t2v.MapToks2Vecs[tok]; ok {
+		if vec, ok := t2v.toks2VecsMap[tok]; ok {
 			vecs = append(vecs, vec)
 			continue
 		}
-		vec := len(t2v.MapToks2Vecs) + 1
-		t2v.MapToks2Vecs[tok] = vec
-		t2v.MapVecs2Toks[vec] = tok
+		vec := len(t2v.toks2VecsMap) + 1
+		t2v.toks2VecsMap[tok] = vec
+		t2v.vecs2ToksMap[vec] = tok
 		vecs = append(vecs, vec)
 	}
 	return vecs
@@ -42,14 +42,14 @@ var (
 )
 
 func (t2v *Tok2Vec) Tok(vec int) (string, error) {
-	if tok, ok := t2v.MapVecs2Toks[vec]; ok {
+	if tok, ok := t2v.vecs2ToksMap[vec]; ok {
 		return tok, nil
 	}
 	return "", ErrVectorNotFound
 }
 
 func (t2v *Tok2Vec) Vec(tok string) (int, error) {
-	if vec, ok := t2v.MapToks2Vecs[tok]; ok {
+	if vec, ok := t2v.toks2VecsMap[tok]; ok {
 		return vec, nil
 	}
 	return -1, ErrTokenNotFound
