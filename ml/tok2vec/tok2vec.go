@@ -1,6 +1,10 @@
 package tok2vec
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/grokify/mogo/type/number"
+)
 
 type Tok2Vec struct {
 	MapToks2Vecs map[string]int
@@ -28,19 +32,8 @@ func (t2v *Tok2Vec) Toks2Vecs(tokens []string) []int {
 	return vecs
 }
 
-func (t2v *Tok2Vec) Doc2VecFloat64(tokens ...string) []float64 {
-	vecs := []float64{}
-	for _, tok := range tokens {
-		if vec, ok := t2v.MapToks2Vecs[tok]; ok {
-			vecs = append(vecs, float64(vec))
-			continue
-		}
-		vec := len(t2v.MapToks2Vecs) + 1
-		t2v.MapToks2Vecs[tok] = vec
-		t2v.MapVecs2Toks[vec] = tok
-		vecs = append(vecs, float64(vec))
-	}
-	return vecs
+func (t2v *Tok2Vec) Toks2VecsFloat64(tokens []string) []float64 {
+	return number.SliceIntsToFloat64(t2v.Toks2Vecs(tokens))
 }
 
 var (
