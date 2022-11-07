@@ -23,6 +23,7 @@ require (
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	golang.org/x/crypto v0.1.0
+	golang.org/x/exp v0.0.0-20221106115401-f9659909a136
 	golang.org/x/image v0.1.0
 	golang.org/x/net v0.1.0
 	golang.org/x/text v0.4.0
@@ -37,6 +38,7 @@ require (
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/oleiade/reflections v1.0.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect

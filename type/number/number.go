@@ -5,9 +5,12 @@ import (
 	"math"
 	"sort"
 	"strconv"
+
+	"golang.org/x/exp/constraints"
 )
 
-func SliceInt64ToFloat64(src []int64) []float64 {
+// SliceIntsToFloat64 converts a slice of Integers to float64.
+func SliceIntsToFloat64[T constraints.Integer](src []T) []float64 {
 	out := []float64{}
 	for _, in := range src {
 		out = append(out, float64(in))
