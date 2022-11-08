@@ -59,3 +59,11 @@ func Int64s(a []int64) { sort.Sort(Int64Slice(a)) }
 
 // Uint16s sorts a slice of uint16s in increasing order.
 func Uint16s(a []uint16) { sort.Sort(Uint16Slice(a)) }
+
+// ReverseSlice reverses the order of a slice.
+// Stack Overflow: https://stackoverflow.com/a/71904070/1908967
+func ReverseSlice[T comparable](s []T) {
+	sort.SliceStable(s, func(i, j int) bool {
+		return i > j
+	})
+}
