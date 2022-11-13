@@ -6,13 +6,14 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/sort/sortutil"
+	"golang.org/x/exp/constraints"
 )
 
-// StringKeys takes a map where the keys are strings and reurns a slice fo key names.
+// StringKeys takes a map where the keys are strings and reurns a slice of key names.
 // An optional transform function, `xf`, can be supplied along with an option to sort
 // the results. If both transform and sort are requested, the sort is performed on the
 // transformed strings.
-func StringKeys[T any](m map[string]T, xf func(s string) string, sortAsc bool) []string {
+func StringKeys[V any](m map[string]V, xf func(s string) string, sortAsc bool) []string {
 	keys := []string{}
 	for k := range m {
 		if xf != nil {
@@ -24,6 +25,30 @@ func StringKeys[T any](m map[string]T, xf func(s string) string, sortAsc bool) [
 		sort.Strings(keys)
 	}
 	return keys
+}
+
+// IntKeys takes a map where the keys are integers and reurns a slice of key names.
+func IntKeys[K constraints.Integer, V any](m map[K]V, sortAsc bool) []int {
+	keys := []int{}
+	for k := range m {
+		keys = append(keys, int(k))
+	}
+	if sortAsc {
+		sort.Ints(keys)
+	}
+	return keys
+}
+
+// NumberValuesAverage returns a `float64` average of a map's values.
+func NumberValuesAverage[K comparable, V constraints.Float | constraints.Integer](m map[K]V) float64 {
+	if len(m) == 0 {
+		return 0
+	}
+	sum := float64(0)
+	for _, v := range m {
+		sum += float64(v)
+	}
+	return sum / float64(len(m))
 }
 
 /*
