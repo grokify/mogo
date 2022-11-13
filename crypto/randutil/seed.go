@@ -19,7 +19,7 @@ func NewSeedInt64Crypto() (int64, error) {
 }
 
 // NewSeedInt64Time creates an `int64` seed value for `math/rand` based on
-// `time.Now()`. This can have reduced entropy if used constanly throughout
+// `time.Now()`. This can have reduced entropy if used constantly throughout
 // with shourl time differentials.
 // See: https://stackoverflow.com/a/12321192/1908967
 func NewSeedInt64Time() int64 {
