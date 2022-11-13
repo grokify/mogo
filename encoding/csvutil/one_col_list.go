@@ -2,15 +2,15 @@ package csvutil
 
 import (
 	"fmt"
-	"io/ioutil"
 	"math"
+	"os"
 
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
 // ReadFileOneColListToGrid parses a file with one value per row.
 func ReadFileOneColListToGrid(filename string, colCount int, validateLength bool) ([][]string, error) {
-	bytes, err := ioutil.ReadFile(filename)
+	bytes, err := os.ReadFile(filename)
 	if err != nil {
 		return [][]string{}, err
 	}

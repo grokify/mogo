@@ -2,7 +2,7 @@ package sql
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"regexp"
 	"strings"
 
@@ -38,7 +38,7 @@ func ReadFileCSVToSQLs(sqlFormat, filename string, sep rune, hasHeader, trimSpac
 }
 
 func ReadFileCSVToSQLsSimple(filename, sqlFormat string, hasHeader bool) ([]string, error) {
-	bytes, err := ioutil.ReadFile(filename)
+	bytes, err := os.ReadFile(filename)
 	if err != nil {
 		return []string{}, err
 	}

@@ -15,6 +15,7 @@ const (
 // This function is available natively in Go 1.10
 //
 // Special cases are:
+//
 //	Round(±0) = ±0
 //	Round(±Inf) = ±Inf
 //	Round(NaN) = NaN

@@ -69,7 +69,7 @@ func MustTypeByFile(name string, useDefault bool) string {
 
 // TypeByFile detects the media type by reading MIME type
 // information of the file content. It relies on
-// `http.DetectContentType``
+// `http.DetectContentType“
 func TypeByFile(name string) (string, error) {
 	file, err := os.Open(name)
 	if err != nil {

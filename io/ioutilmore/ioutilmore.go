@@ -169,7 +169,7 @@ func RemoveAllChildren(dir string) error {
 		err = errors.New("400: Path Is Not Directory")
 		return err
 	}
-	filesAll, err := ioutil.ReadDir(dir)
+	filesAll, err := os.ReadDir(dir)
 	if err != nil {
 		return err
 	}
@@ -213,7 +213,7 @@ func ReaderToBytes(ior io.Reader) ([]byte, error) {
 
 // ReadFileJSON reads and unmarshals a file.
 func ReadFileJSON(file string, v interface{}) error {
-	bytes, err := ioutil.ReadFile(file)
+	bytes, err := os.ReadFile(file)
 	if err != nil {
 		return err
 	}
@@ -225,7 +225,7 @@ func WriteFileJSON(filepath string, data interface{}, perm os.FileMode, prefix, 
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(filepath, bytes, perm)
+	return os.WriteFile(filepath, bytes, perm)
 }
 
 func CloseFileWithError(file *os.File, err error) error {
