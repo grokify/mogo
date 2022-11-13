@@ -22,10 +22,10 @@ require (
 	github.com/valyala/fastjson v1.6.3
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
-	golang.org/x/crypto v0.1.0
-	golang.org/x/exp v0.0.0-20221106115401-f9659909a136
+	golang.org/x/crypto v0.2.0
+	golang.org/x/exp v0.0.0-20221111204811-129d8d6c17ab
 	golang.org/x/image v0.1.0
-	golang.org/x/net v0.1.0
+	golang.org/x/net v0.2.0
 	golang.org/x/text v0.4.0
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/oleiade/reflections.v1 v1.0.0
@@ -33,14 +33,14 @@ require (
 
 require (
 	github.com/aymerick/douceur v0.2.0 // indirect
-	github.com/cloudflare/circl v1.2.0 // indirect
+	github.com/cloudflare/circl v1.1.0 // indirect
 	github.com/cockroachdb/apd v1.1.0 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/oleiade/reflections v1.0.1 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
-	github.com/shopspring/decimal v1.3.1 // indirect
+	github.com/pkg/errors v0.8.1 // indirect
+	github.com/shopspring/decimal v0.0.0-20180709203117-cd690d0c9e24 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	golang.org/x/sys v0.1.0 // indirect
+	golang.org/x/sys v0.2.0 // indirect
 )
