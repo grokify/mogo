@@ -33,7 +33,7 @@ func (t2v *Tok2Vec) Toks2Vecs(tokens []string) []int {
 }
 
 func (t2v *Tok2Vec) Toks2VecsFloat64(tokens []string) []float64 {
-	return number.SliceIntsToFloat64(t2v.Toks2Vecs(tokens))
+	return number.SliceToFloat64(t2v.Toks2Vecs(tokens))
 }
 
 var (
