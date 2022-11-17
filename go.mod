@@ -23,7 +23,7 @@ require (
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	golang.org/x/crypto v0.3.0
-	golang.org/x/exp v0.0.0-20221111204811-129d8d6c17ab
+	golang.org/x/exp v0.0.0-20221114191408-850992195362
 	golang.org/x/image v0.1.0
 	golang.org/x/net v0.2.0
 	golang.org/x/text v0.4.0
