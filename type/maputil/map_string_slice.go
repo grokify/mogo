@@ -2,6 +2,7 @@ package maputil
 
 import (
 	"sort"
+	"strings"
 
 	"github.com/grokify/mogo/type/stringsutil"
 )
@@ -41,4 +42,14 @@ func (mss MapStringSlice) KeysByValueCounts() map[int][]string {
 		byCount[count] = append(byCount[count], key)
 	}
 	return byCount
+}
+
+// MapStringSliceCondenseSpace will trim spaces for keys and values, and remove empty values. It will
+// also optionally dedupe and sort values.
+func MapStringSliceCondenseSpace(m map[string][]string, dedupeVals, sortVals bool) map[string][]string {
+	new := map[string][]string{}
+	for key, vals := range m {
+		new[strings.TrimSpace(key)] = stringsutil.SliceCondenseSpace(vals, dedupeVals, sortVals)
+	}
+	return new
 }
