@@ -2,6 +2,7 @@ run:
   skip-files:
     # golangci-lint cannot yet support syntax for generics.
     - type/generics/matrix.go
+  go: "1.18"
 linters:
   enable:
     - dogsled
