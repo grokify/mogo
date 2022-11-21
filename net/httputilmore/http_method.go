@@ -46,6 +46,12 @@ func ParseHTTPMethod(method string) (HTTPMethod, error) {
 	return MethodConnect, fmt.Errorf("cannot parse method [%v]", method)
 }
 
+// ParseHTTPMethodString returns a HTTPMethod as a string for a string.
+func ParseHTTPMethodString(method string) (string, error) {
+	methodCanonical, err := ParseHTTPMethod(method)
+	return string(methodCanonical), err
+}
+
 func MethodsMap() map[string]int {
 	return map[string]int{
 		http.MethodConnect: 1,
