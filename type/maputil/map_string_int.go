@@ -152,6 +152,7 @@ func (rs RecordSet) Markdown(prefix, sep string, countFirst, addTotal bool) stri
 	return strings.Join(lines, "\n")
 }
 
+/*
 // MapSliceIntersectionExists returns true if one or more of the string needles
 // exists as keys in the map.
 func MapSliceIntersectionExists(haystack map[string]int, needles []string) bool {
@@ -162,3 +163,4 @@ func MapSliceIntersectionExists(haystack map[string]int, needles []string) bool 
 	}
 	return false
 }
+*/
