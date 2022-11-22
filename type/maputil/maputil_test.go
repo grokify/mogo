@@ -25,21 +25,27 @@ func TestMapSSEqual(t *testing.T) {
 }
 
 var stringKeysExistTests = []struct {
-	v          map[string]string
+	v          map[string]any
 	keys       []string
 	requireAll bool
 	keysExist  bool
 }{
-	{map[string]string{"KEY": "num", "VAL": "123"}, []string{"KEY", "VAL"}, true, true},
-	{map[string]string{"KEY": "num", "VAL": "123"}, []string{"KEYVAL"}, true, false},
+	{map[string]any{"Foo": "num", "Bar": "123", "Baz": true}, []string{"Foo", "Bar", "Baz"}, false, true},
+	{map[string]any{"Foo": "num", "Bar": "123", "Baz": true}, []string{"Foo", "Bar", "Baz"}, true, true},
+	{map[string]any{"Foo": "num", "Bar": "123", "Baz": true}, []string{"Foo", "Bar"}, false, true},
+	{map[string]any{"Foo": "num", "Bar": "123", "Baz": true}, []string{"Foo", "Bar"}, true, true},
+	{map[string]any{"Foo": "num", "Bar": "123", "Baz": true}, []string{"Foo", "Bar", "Qux"}, false, true},
+	{map[string]any{"Foo": "num", "Bar": "123", "Baz": true}, []string{"Foo", "Bar", "Qux"}, true, false},
+	{map[string]any{"KEY": "num", "VAL": "123"}, []string{"KEY", "VAL"}, true, true},
+	{map[string]any{"KEY": "num", "VAL": "123"}, []string{"KEYVAL"}, true, false},
 }
 
 func TestStringKeysExist(t *testing.T) {
 	for _, tt := range stringKeysExistTests {
 		keysExistTry := StringKeysExist(tt.v, tt.keys, tt.requireAll)
 		if tt.keysExist != keysExistTry {
-			t.Errorf("maputil.StringKeysExist() params [%v] want [%v] got [%v]",
-				tt.v, tt.keysExist, keysExistTry)
+			t.Errorf("maputil.StringKeysExist() params [%v] keys [%v] reqAll [%v] want [%v] got [%v]",
+				tt.v, tt.keys, tt.requireAll, tt.keysExist, keysExistTry)
 		}
 	}
 }
