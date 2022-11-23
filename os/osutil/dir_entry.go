@@ -9,7 +9,7 @@ import (
 )
 
 // DirEntries provides utility functions for `[]os.DirEntry`. Use as
-// `entries := osutil.DirEntries(slice)``
+// `entries := osutil.DirEntries(slice)`.
 type DirEntries []os.DirEntry
 
 func (entries DirEntries) Len() int           { return len(entries) }
