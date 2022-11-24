@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"strings"
 
-	"gopkg.in/oleiade/reflections.v1"
+	reflections "gopkg.in/oleiade/reflections.v1"
 )
 
 func GetString(i interface{}, key string) string {
