@@ -66,15 +66,14 @@ func MustMarshalIndent(i interface{}, prefix, indent string, embedError bool) []
 	return bytes
 }
 
-// PrettyPrint converts a JSON byte array into a
-// prettified byte array.
-func PrettyPrint(b []byte, prefix, indent string) []byte {
+// IndentBytes converts a JSON byte array into a prettified byte array.
+func IndentBytes(b []byte, prefix, indent string) ([]byte, error) {
 	var out bytes.Buffer
 	err := json.Indent(&out, b, prefix, indent)
 	if err != nil {
-		return b
+		return []byte{}, err
 	}
-	return out.Bytes()
+	return out.Bytes(), nil
 }
 
 func MarshalBase64(i interface{}) (string, error) {
@@ -114,12 +113,16 @@ func UnmarshalStrict(data []byte, v interface{}) error {
 	return dec.Decode(v)
 }
 
-func PrettyPrintReader(r io.Reader, prefix, indent string) ([]byte, error) {
+// PrintReaderIndent returns an indented JSON byte array given an `io.Reader`.
+func PrintReaderIndent(r io.Reader, prefix, indent string) ([]byte, error) {
 	bytes, err := io.ReadAll(r)
 	if err != nil {
 		return bytes, err
 	}
-	outBytes := PrettyPrint(bytes, prefix, indent)
+	outBytes, err := IndentBytes(bytes, prefix, indent)
+	if err != nil {
+		return bytes, err
+	}
 	_, err = fmt.Println(string(outBytes))
 	return outBytes, err
 }
