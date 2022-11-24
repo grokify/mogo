@@ -37,5 +37,5 @@ func (ct *TimeRFC3339Milli) MarshalJSON() ([]byte, error) {
 var nilTime = (time.Time{}).UnixNano()
 
 func (ct *TimeRFC3339Milli) IsSet() bool {
-	return ct.UnixNano() != nilTime
+	return ct.Time.UnixNano() != nilTime
 }

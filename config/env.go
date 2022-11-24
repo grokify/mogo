@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/caarlos0/env/v6"
+	env "github.com/caarlos0/env/v6"
 	"github.com/grokify/mogo/io/ioutilmore"
 	"github.com/joho/godotenv"
 )
