@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -61,13 +60,33 @@ func CopyFile(src, dst string) error {
 	return os.Chmod(dst, si.Mode())
 }
 
+// ReadDirSplit returnsa slides of `os.FileInfo` for directories and files.
+// Note: this isn't as necessary any more since `os.ReadDir()` returns a slice of
+// `os.DirEntry{}` which has a `IsDir()` func.
 func ReadDirSplit(dirname string, inclDotDirs bool) ([]os.FileInfo, []os.FileInfo, error) {
-	all, err := ioutil.ReadDir(dirname)
+	allDEs, err := os.ReadDir(dirname)
 	if err != nil {
 		return []os.FileInfo{}, []os.FileInfo{}, err
 	}
-	subdirs, regular := FileInfosSplit(all, inclDotDirs)
+	allFIs, err := DirEntriesToFileInfos(allDEs)
+	if err != nil {
+		return []os.FileInfo{}, []os.FileInfo{}, err
+	}
+	subdirs, regular := FileInfosSplit(allFIs, inclDotDirs)
 	return subdirs, regular, nil
+}
+
+// DirEntriesToFileInfos converts a slice of `os.DirEntry` to a slice of `os.FileInfo`.
+func DirEntriesToFileInfos(direntries []os.DirEntry) ([]os.FileInfo, error) {
+	fs := []os.FileInfo{}
+	for _, de := range direntries {
+		fi, err := de.Info()
+		if err != nil {
+			return fs, err
+		}
+		fs = append(fs, fi)
+	}
+	return fs, nil
 }
 
 func FileInfosSplit(all []os.FileInfo, inclDotDirs bool) ([]os.FileInfo, []os.FileInfo) {
