@@ -63,3 +63,16 @@ func (entries DirEntries) Infos() ([]os.FileInfo, error) {
 	}
 	return infos, nil
 }
+
+// DirEntriesToFileInfos converts a slice of `os.DirEntry` to a slice of `os.FileInfo`.
+func DirEntriesToFileInfos(direntries []os.DirEntry) ([]os.FileInfo, error) {
+	fs := []os.FileInfo{}
+	for _, de := range direntries {
+		fi, err := de.Info()
+		if err != nil {
+			return fs, err
+		}
+		fs = append(fs, fi)
+	}
+	return fs, nil
+}

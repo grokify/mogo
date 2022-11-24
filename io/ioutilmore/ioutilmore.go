@@ -68,25 +68,12 @@ func ReadDirSplit(dirname string, inclDotDirs bool) ([]os.FileInfo, []os.FileInf
 	if err != nil {
 		return []os.FileInfo{}, []os.FileInfo{}, err
 	}
-	allFIs, err := DirEntriesToFileInfos(allDEs)
+	allFIs, err := osutil.DirEntriesToFileInfos(allDEs)
 	if err != nil {
 		return []os.FileInfo{}, []os.FileInfo{}, err
 	}
 	subdirs, regular := FileInfosSplit(allFIs, inclDotDirs)
 	return subdirs, regular, nil
-}
-
-// DirEntriesToFileInfos converts a slice of `os.DirEntry` to a slice of `os.FileInfo`.
-func DirEntriesToFileInfos(direntries []os.DirEntry) ([]os.FileInfo, error) {
-	fs := []os.FileInfo{}
-	for _, de := range direntries {
-		fi, err := de.Info()
-		if err != nil {
-			return fs, err
-		}
-		fs = append(fs, fi)
-	}
-	return fs, nil
 }
 
 func FileInfosSplit(all []os.FileInfo, inclDotDirs bool) ([]os.FileInfo, []os.FileInfo) {
