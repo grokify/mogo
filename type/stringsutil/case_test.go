@@ -4,32 +4,27 @@ import (
 	"testing"
 
 	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 var equalFoldFullTests = []struct {
-	s    string
-	t    string
-	opts []cases.Option
-	want bool
+	s     string
+	t     string
+	caser cases.Caser
+	want  bool
 }{
-	{"grüßen", "GRÜSSEN", []cases.Option{}, true},
-	{"grüßen", "GRÜSSEN ", []cases.Option{}, false},
-	{"grüßen", "GRÜßEN ", []cases.Option{}, false},
+	{"grüßen", "GRÜSSEN", defaultCaser, true},
+	{"grüßen", "GRÜSSEN ", defaultCaser, false},
+	{"grüßen", "GRÜßEN ", defaultCaser, false},
+	{"grüßen", "GRÜSSEN", cases.Title(language.German, cases.NoLower), false},
 }
 
 func TestEqualFoldFull(t *testing.T) {
 	for _, tt := range equalFoldFullTests {
-		got := EqualFoldFull(tt.s, tt.t, tt.opts...)
+		got := EqualFoldFull(tt.s, tt.t, &tt.caser)
 		if tt.want != got {
 			t.Errorf("stringsutil.EqualFoldFull(\"%s\", \"%s\") Error: want [%v], got [%v]",
 				tt.s, tt.t, tt.want, got)
-		}
-		if len(tt.opts) == 0 {
-			got := EqualFoldFull(tt.s, tt.t)
-			if tt.want != got {
-				t.Errorf("stringsutil.EqualFoldFull(\"%s\", \"%s\") Error: want [%v], got [%v]",
-					tt.s, tt.t, tt.want, got)
-			}
 		}
 	}
 }
