@@ -1,15 +1,21 @@
 package stringsutil
 
-import "strings"
+import (
+	"strings"
 
-// SliceIndex returns the index of the first match
-// using `=`. Returns -1 if not found.
-func SliceIndex(haystack []string, needle string) int {
+	"golang.org/x/text/cases"
+)
+
+// SliceIndex returns the index of the first match using `=`. Returns -1 if not found.
+// if `equalFold` is selected and `caser` is `nil`, the default caser will be used.
+func SliceIndex(haystack []string, needle string, equalFold bool, caser *cases.Caser) int {
 	if len(haystack) == 0 {
 		return -1
 	}
-	for i, el := range haystack {
-		if needle == el {
+	for i, hay := range haystack {
+		if !equalFold && needle == hay {
+			return i
+		} else if equalFold && EqualFoldFull(needle, hay, caser) {
 			return i
 		}
 	}
