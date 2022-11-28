@@ -2,6 +2,8 @@ package maputil
 
 import (
 	"testing"
+
+	"golang.org/x/exp/slices"
 )
 
 var mapSSEqualTests = []struct {
@@ -46,6 +48,23 @@ func TestStringKeysExist(t *testing.T) {
 		if tt.keysExist != keysExistTry {
 			t.Errorf("maputil.StringKeysExist() params [%v] keys [%v] reqAll [%v] want [%v] got [%v]",
 				tt.v, tt.keys, tt.requireAll, tt.keysExist, keysExistTry)
+		}
+	}
+}
+
+var stringValuesTests = []struct {
+	v    map[string]string
+	want []string
+}{
+	{map[string]string{"1": "foo", "2": "bar", "3": "baz"}, []string{"bar", "baz", "foo"}},
+}
+
+func TestStringValues(t *testing.T) {
+	for _, tt := range stringValuesTests {
+		got := StringValues(tt.v, true)
+		if !slices.Equal(tt.want, got) {
+			t.Errorf("maputil.StringValues() params [%v] want [%v] got [%v]",
+				tt.v, tt.want, got)
 		}
 	}
 }

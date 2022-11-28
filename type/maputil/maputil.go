@@ -46,6 +46,18 @@ func StringKeysExist[V any](m map[string]V, keys []string, requireAll bool) bool
 	}
 }
 
+// StringValues returns a string slice of string values.
+func StringValues[K comparable](m map[K]string, sortAsc bool) []string {
+	vals := []string{}
+	for _, val := range m {
+		vals = append(vals, val)
+	}
+	if sortAsc {
+		sort.Strings(vals)
+	}
+	return vals
+}
+
 // IntKeys takes a map where the keys are integers and reurns a slice of key names.
 func IntKeys[K constraints.Integer, V any](m map[K]V, sortAsc bool) []int {
 	keys := []int{}
