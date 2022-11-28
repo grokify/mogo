@@ -80,7 +80,7 @@ func IndentBytes(b []byte, prefix, indent string) ([]byte, error) {
 // It is useful to use with `http.Response.Body` which is an `io.ReadCloser`.
 func IndentReader(r io.Reader, prefix, indent string) ([]byte, error) {
 	b, err := io.ReadAll(r)
-	if err != nil || (prefix == "" && indent == "") {
+	if err != nil {
 		return b, err
 	}
 	return IndentBytes(b, prefix, indent)
