@@ -11,7 +11,7 @@ func ListStringsToLowerUniqueSorted(list []string) []string {
 	for _, myString := range list {
 		myMap[myString] = true
 	}
-	return maputil.StringKeys(myMap, strings.ToLower, true)
+	return maputil.StringKeys(myMap, strings.ToLower)
 	// return maputil.StringKeysLower(myMap, true)
 	// listOut := maputil.StringKeysToLowerSorted(myMap)
 	// return listOut

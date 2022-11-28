@@ -120,7 +120,7 @@ func ReadDirRxSubmatchEntriesGreatest(dir string, rx *regexp.Regexp, subMatchIdx
 	if len(entryMap) == 0 {
 		return []os.DirEntry{}, nil
 	}
-	keysSorted := maputil.StringKeys(entryMap, nil, true)
+	keysSorted := maputil.StringKeys(entryMap, nil)
 	greatest := keysSorted[len(keysSorted)-1]
 	return entryMap[greatest], nil
 }
@@ -146,7 +146,7 @@ func ReadDirRxSubmatchCaptures(dir string, rx *regexp.Regexp, subMatchIdx uint, 
 	if len(entryMap) == 0 {
 		return nil, errors.New("no match for ReadDirRxSubmatchGreatestMatch")
 	}
-	keysSorted := maputil.StringKeys(entryMap, nil, true)
+	keysSorted := maputil.StringKeys(entryMap, nil)
 	return keysSorted, nil
 }
 

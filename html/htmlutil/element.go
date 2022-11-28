@@ -84,7 +84,7 @@ func (el *Element) String() (string, error) {
 		return "", ErrTagNameIsRequired
 	}
 	attrs := []string{}
-	keysSorted := maputil.StringKeys(el.Attrs, nil, true)
+	keysSorted := maputil.StringKeys(el.Attrs, nil)
 	for _, key := range keysSorted {
 		vals, ok := el.Attrs[key]
 		if !ok {
