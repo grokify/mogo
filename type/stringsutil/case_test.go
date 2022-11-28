@@ -15,6 +15,7 @@ var equalFoldFullTests = []struct {
 	caser  cases.Caser
 	want   bool
 }{
+	// grüßen example from: https://stackoverflow.com/q/43059909/1908967
 	{"grüßen", "GRÜSSEN", "grüssen", "grüssen", defaultCaser, true},
 	{"grüßen", "GRÜSSEN ", "grüssen", "grüssen ", defaultCaser, false},
 	{"grüßen", "GRÜßEN ", "grüssen", "grüssen ", defaultCaser, false},
