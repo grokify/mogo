@@ -13,7 +13,7 @@ import (
 // An optional transform function, `xf`, can be supplied along with an option to sort
 // the results. If both transform and sort are requested, the sort is performed on the
 // transformed strings.
-func StringKeys[V any](m map[string]V, xf func(s string) string, sortAsc bool) []string {
+func StringKeys[V any](m map[string]V, xf func(s string) string) []string {
 	keys := []string{}
 	for k := range m {
 		if xf != nil {
@@ -21,9 +21,7 @@ func StringKeys[V any](m map[string]V, xf func(s string) string, sortAsc bool) [
 		}
 		keys = append(keys, k)
 	}
-	if sortAsc {
-		sort.Strings(keys)
-	}
+	sort.Strings(keys)
 	return keys
 }
 
@@ -47,26 +45,22 @@ func StringKeysExist[V any](m map[string]V, keys []string, requireAll bool) bool
 }
 
 // StringValues returns a string slice of string values.
-func StringValues[K comparable](m map[K]string, sortAsc bool) []string {
+func StringValues[K comparable](m map[K]string) []string {
 	vals := []string{}
 	for _, val := range m {
 		vals = append(vals, val)
 	}
-	if sortAsc {
-		sort.Strings(vals)
-	}
+	sort.Strings(vals)
 	return vals
 }
 
 // IntKeys takes a map where the keys are integers and reurns a slice of key names.
-func IntKeys[K constraints.Integer, V any](m map[K]V, sortAsc bool) []int {
+func IntKeys[K constraints.Integer, V any](m map[K]V) []int {
 	keys := []int{}
 	for k := range m {
 		keys = append(keys, int(k))
 	}
-	if sortAsc {
-		sort.Ints(keys)
-	}
+	sort.Ints(keys)
 	return keys
 }
 

@@ -61,7 +61,7 @@ var stringValuesTests = []struct {
 
 func TestStringValues(t *testing.T) {
 	for _, tt := range stringValuesTests {
-		got := StringValues(tt.v, true)
+		got := StringValues(tt.v)
 		if !slices.Equal(tt.want, got) {
 			t.Errorf("maputil.StringValues() params [%v] want [%v] got [%v]",
 				tt.v, tt.want, got)
