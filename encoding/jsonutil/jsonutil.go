@@ -76,6 +76,16 @@ func IndentBytes(b []byte, prefix, indent string) ([]byte, error) {
 	return out.Bytes(), nil
 }
 
+// IndentReader returns a byte slice of indented JSON given an `io.Reader`.
+// It is useful to use with `http.Response.Body` which is an `io.ReadCloser`.
+func IndentReader(r io.Reader, prefix, indent string) ([]byte, error) {
+	b, err := io.ReadAll(r)
+	if err != nil || (prefix == "" && indent == "") {
+		return b, err
+	}
+	return IndentBytes(b, prefix, indent)
+}
+
 func MarshalBase64(i interface{}) (string, error) {
 	data, err := json.Marshal(i)
 	if err != nil {
