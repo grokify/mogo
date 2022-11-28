@@ -4,6 +4,8 @@ import (
 	"go/build"
 	"os"
 	"path/filepath"
+	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -88,3 +90,45 @@ func GoPathSrc(pkgparts ...string) string {
 	return filepath.Join(GoPath(), "src")
 }
 */
+
+// Filenames returns a list of filenames for files only (no directories). If a directory
+// is provided it will return a list of filenames in that directory. If a `Regexp` or
+// `inclEmptyFiles` params are provided, those will be use to filter the output.
+func Filenames(name string, rx *regexp.Regexp, inclEmptyFiles, absPath bool) ([]string, error) {
+	isFile, err := IsFile(name, !inclEmptyFiles)
+	if err != nil {
+		return []string{}, err
+	}
+	if isFile {
+		if rx == nil || rx.MatchString(name) {
+			if absPath {
+				nameAbs, err := AbsFilepath(name)
+				if err != nil {
+					return []string{}, err
+				}
+				name = nameAbs
+			}
+			return []string{name}, nil
+		} else {
+			return []string{}, nil
+		}
+	}
+	filenames := []string{}
+	entries, err := ReadDirMore(name, rx, false, true, inclEmptyFiles)
+	if err != nil {
+		return []string{}, nil
+	}
+	for _, entry := range entries {
+		filename := filepath.Join(name, entry.Name())
+		if absPath {
+			filenameAbs, err := AbsFilepath(filename)
+			if err != nil {
+				return []string{}, err
+			}
+			filename = filenameAbs
+		}
+		filenames = append(filenames, filename)
+	}
+	sort.Strings(filenames)
+	return filenames, nil
+}
