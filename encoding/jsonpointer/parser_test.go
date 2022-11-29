@@ -12,8 +12,9 @@ var jsonPointerTests = []struct {
 	document    string
 	path        []string
 }{
-	{"mydoc.yaml#/components/schemas/FooBar", "mydoc.yaml", []string{"components", "schemas", "FooBar"}},
+	{"/components/schemas/FooBar", "", []string{"components", "schemas", "FooBar"}},
 	{"#/components/schemas/FooBar", "", []string{"components", "schemas", "FooBar"}},
+	{"mydoc.yaml#/components/schemas/FooBar", "mydoc.yaml", []string{"components", "schemas", "FooBar"}},
 }
 
 // TestParseJSONPointer ensures the `ParseJSONPointer` is working properly.

@@ -19,10 +19,16 @@ type JSONPointer struct {
 
 func ParseJSONPointer(s string) (JSONPointer, error) {
 	anchorSlash := "#/"
+	slash := "/"
 	ptr := JSONPointer{String: s}
 	if strings.Index(s, anchorSlash) == 0 {
 		ptr.PathString = s
 		pathTrimmed := strings.TrimLeft(s, anchorSlash)
+		ptr.Path = strings.Split(pathTrimmed, "/")
+		return ptr, nil
+	} else if strings.Index(s, slash) == 0 {
+		ptr.PathString = s
+		pathTrimmed := strings.TrimLeft(s, slash)
 		ptr.Path = strings.Split(pathTrimmed, "/")
 		return ptr, nil
 	}
