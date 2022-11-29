@@ -1,9 +1,12 @@
 package stringcase
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/grokify/mogo/errors/errorsutil"
 )
 
 /*
@@ -20,6 +23,8 @@ const (
 	PascalCase = "PascalCase"
 	SnakeCase  = "snake_case"
 )
+
+var ErrUnknownCaseString = errors.New("unknown case string")
 
 var mapCaseConst = map[string]string{
 	"camel":       CamelCase,
@@ -45,7 +50,7 @@ func Parse(s string) (string, error) {
 	if caseConst, ok := mapCaseConst[s]; ok {
 		return caseConst, nil
 	}
-	return "", fmt.Errorf("case [%s] not parsed", s)
+	return "", errorsutil.Wrapf(ErrUnknownCaseString, "case (%s) not parsed", s)
 }
 
 func IsCase(caseType, s string) (bool, error) {
