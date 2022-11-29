@@ -87,10 +87,12 @@ func FuncToWantCaseOrNoOp(c string) func(string) string {
 	return FuncToWantCaseOrDefault(c, NoOp)
 }
 
-func FuncToWantCaseOrDefault(c string, xfunc func(string) string) func(string) string {
+// FuncToWantCaseOrDefault returns an ToWantCase function, or default if case is not preseent or
+// parseable. For flexibility, if a `nil` func is passed, `nil`, is returned.
+func FuncToWantCaseOrDefault(c string, defaultFunc func(string) string) func(string) string {
 	wantFunc, err := FuncToWantCase(c)
 	if err != nil {
-		return xfunc
+		return defaultFunc
 	}
 	return wantFunc
 }
