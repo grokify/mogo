@@ -21,6 +21,17 @@ func PathMethod(htPath, htMethod string) string {
 	return strings.Join(parts, " ")
 }
 
+var ErrPathMethodInvalid = errors.New("pathmethod string invalid")
+
+func ParsePathMethod(pathmethod string) (string, string, error) {
+	parts := strings.Split(pathmethod, " ")
+	if len(parts) != 2 {
+		return "", "", ErrPathMethodInvalid
+	}
+	method, err := httputilmore.ParseHTTPMethodString(parts[1])
+	return strings.TrimSpace(parts[0]), method, err
+}
+
 type PathMethodSet struct {
 	PathMethods map[string]int
 }
@@ -66,15 +77,4 @@ func (pms *PathMethodSet) StringExists(pathMethod string) bool {
 	pms.init()
 	_, ok := pms.PathMethods[pathMethod]
 	return ok
-}
-
-var ErrPathMethodInvalid = errors.New("pathmethod string invalid")
-
-func ParsePathMethod(pathmethod string) (string, string, error) {
-	parts := strings.Split(pathmethod, " ")
-	if len(parts) != 2 {
-		return "", "", ErrPathMethodInvalid
-	}
-	method, err := httputilmore.ParseHTTPMethodString(parts[1])
-	return strings.TrimSpace(parts[0]), method, err
 }
