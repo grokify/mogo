@@ -2,6 +2,7 @@ package errorsutil
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -12,8 +13,12 @@ func Append(err error, str string) error {
 }
 */
 
-func Wrap(err error, prefix string) error {
-	return errors.New(prefix + ": " + err.Error())
+func Wrap(origErr error, wrapPrefix string) error {
+	return fmt.Errorf("%s: [%w]", wrapPrefix, origErr)
+}
+
+func Wrapf(origErr error, wrapFormat string, wrapVars ...any) error {
+	return Wrap(origErr, fmt.Sprintf(wrapFormat, wrapVars...))
 }
 
 func Join(inclNils bool, errs ...error) error {
