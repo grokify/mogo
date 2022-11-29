@@ -57,6 +57,36 @@ func ToSnakeCase(s string) string {
 	return strings.Join(toParts(strings.ToLower(s)), "_")
 }
 
+func NoOp(s string) string {
+	return s
+}
+
 func toParts(s string) []string {
 	return stringsutil.SliceCondenseSpace(rxSplitCase.Split(s, -1), false, false)
+}
+
+func FuncToWantCase(c string) (func(string) string, error) {
+	parsed, err := Parse(c)
+	if err != nil {
+		return NoOp, err
+	}
+	switch parsed {
+	case CamelCase:
+		return ToCamelCase, nil
+	case KebabCase:
+		return ToKebabCase, nil
+	case PascalCase:
+		return ToPascalCase, nil
+	case SnakeCase:
+		return ToSnakeCase, nil
+	}
+	return NoOp, ErrUnknownCaseString // should never hit this.
+}
+
+func FuncToWantCaseOrNoOp(c string) func(string) string {
+	wantFunc, err := FuncToWantCase(c)
+	if err != nil {
+		return NoOp
+	}
+	return wantFunc
 }
