@@ -1,4 +1,4 @@
-package jsonutil
+package jsonpointer
 
 import (
 	"testing"

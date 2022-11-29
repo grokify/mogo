@@ -1,4 +1,4 @@
-package jsonutil
+package jsonpointer
 
 import (
 	"fmt"
@@ -15,8 +15,7 @@ var rxSlash = regexp.MustCompile(`/`)
 var rxTildeEscaped = regexp.MustCompile(`~0`)
 var rxSlashEscaped = regexp.MustCompile(`~1`)
 
-// PropertyNameEscape escapes JSON property name using
-// JSON Schema rules.
+// PropertyNameEscape escapes JSON property name using JSON Schema rules.
 func PropertyNameEscape(s string) string {
 	// https://opis.io/json-schema/1.x/pointers.html
 	// https://json-schema.org/understanding-json-schema/structuring.html
@@ -25,8 +24,7 @@ func PropertyNameEscape(s string) string {
 		EscapedSlash)
 }
 
-// PropertyNameUnescape unescapes JSON property name using
-// JSON Schema rules.
+// PropertyNameUnescape unescapes JSON property name using JSON Schema rules.
 func PropertyNameUnescape(s string) string {
 	// https://opis.io/json-schema/1.x/pointers.html
 	// https://json-schema.org/understanding-json-schema/structuring.html
