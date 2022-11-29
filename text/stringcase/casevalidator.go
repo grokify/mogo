@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/errors/errorsutil"
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 /*
@@ -31,22 +32,26 @@ var mapCaseConst = map[string]string{
 	"camelcase":   CamelCase,
 	"camel-case":  CamelCase,
 	"camel_case":  CamelCase,
+	"camel case":  CamelCase,
 	"kebab":       KebabCase,
 	"kebabcase":   KebabCase,
 	"kebab-case":  KebabCase,
 	"kebab_case":  KebabCase,
+	"kebab case":  KebabCase,
 	"pascal":      PascalCase,
 	"pascalcase":  PascalCase,
 	"pascal-case": PascalCase,
 	"pascal_case": PascalCase,
+	"pascal case": PascalCase,
 	"snake":       SnakeCase,
 	"snakecase":   SnakeCase,
 	"snake-case":  SnakeCase,
 	"snake_case":  SnakeCase,
+	"snake case":  SnakeCase,
 }
 
 func Parse(s string) (string, error) {
-	s = strings.ToLower(strings.TrimSpace(s))
+	s = strings.ToLower(stringsutil.CondenseSpace(s))
 	if caseConst, ok := mapCaseConst[s]; ok {
 		return caseConst, nil
 	}
