@@ -85,3 +85,10 @@ func Pad(encoded string) string {
 func ValidBase62(encoded string) bool {
 	return rxCheckBase62.MatchString(encoded)
 }
+
+const (
+	AlphabetGobigint = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	AlphabetGMP      = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+	AlphabetLUN      = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	AlphabetULN      = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+)
