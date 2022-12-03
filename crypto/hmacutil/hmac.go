@@ -24,6 +24,24 @@ func HMACSHA256Hex(key, msg []byte) string {
 }
 
 // Validate compares MACs for equality without leaking timing information.
-func Validate(msg, msgMAC, key []byte) bool {
+func Validate(key, msg, msgMAC []byte) bool {
 	return hmac.Equal(msgMAC, HMACSHA256(key, msg))
+}
+
+// ValidateBase32 compares MACs for equality without leaking timing information.
+func ValidateBase32(key, msg []byte, msgMAC string) (bool, error) {
+	msgMacBytes, err := base32.StdEncoding.DecodeString(msgMAC)
+	if err != nil {
+		return false, err
+	}
+	return hmac.Equal(msgMacBytes, HMACSHA256(key, msg)), nil
+}
+
+// ValidateHex compares MACs for equality without leaking timing information.
+func ValidateHex(key, msg []byte, msgMAC string) (bool, error) {
+	msgMacBytes, err := hex.DecodeString(msgMAC)
+	if err != nil {
+		return false, err
+	}
+	return hmac.Equal(msgMacBytes, HMACSHA256(key, msg)), nil
 }
