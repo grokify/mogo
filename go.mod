@@ -26,7 +26,7 @@ require (
 	golang.org/x/exp v0.0.0-20221126150942-6ab00d035af9
 	golang.org/x/image v0.1.0
 	golang.org/x/net v0.2.0
-	golang.org/x/text v0.4.0
+	golang.org/x/text v0.5.0
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/oleiade/reflections.v1 v1.0.0
 )
