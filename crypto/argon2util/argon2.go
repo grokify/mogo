@@ -1,15 +1,15 @@
-package argon2
+package argon2util
 
 import (
 	"encoding/base32"
 	"strings"
 
 	"github.com/martinlindhe/base36"
-	argon2lib "golang.org/x/crypto/argon2"
+	"golang.org/x/crypto/argon2"
 )
 
 func HashSimple(input, salt []byte) []byte {
-	return argon2lib.IDKey(input, salt, 1, 64*1024, 4, 32)
+	return argon2.IDKey(input, salt, 1, 64*1024, 4, 32)
 }
 
 // HashSimple returns an argon2id hashed password encoded in Base36.

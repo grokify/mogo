@@ -1,4 +1,4 @@
-package md5
+package md5util
 
 import (
 	"testing"
@@ -38,10 +38,10 @@ var md5BaseXTests = []struct {
 
 func TestMd5BaseX(t *testing.T) {
 	for _, tt := range md5BaseXTests {
-		enc10 := Md5Base10(tt.v)
-		enc36 := Md5Base36(tt.v)
-		enc62 := Md5Base62(tt.v)
-		enc62u := Md5Base62UpperFirst(tt.v)
+		enc10 := MD5Base10(tt.v)
+		enc36 := MD5Base36(tt.v)
+		enc62 := MD5Base62(tt.v)
+		enc62u := MD5Base62UpperFirst(tt.v)
 
 		if enc10 != tt.want10 {
 			t.Errorf("md5.Md5Base10(%v): want [%v], got [%v]", tt.v, tt.want10, enc10)

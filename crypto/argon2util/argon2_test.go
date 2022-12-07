@@ -1,4 +1,4 @@
-package argon2
+package argon2util
 
 import (
 	"encoding/hex"
