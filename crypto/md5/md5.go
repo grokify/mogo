@@ -9,14 +9,14 @@ import (
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
-// Md5Base36Length is the length for a MD5 Base36 string
 const (
-	// md5Base62Length int    = 22
-	md5Base62Format string = `%022s`
-	// md5Base36Length int    = 25
-	md5Base36Format string = `%025s`
 	// md5Base10Length int    = 39
 	md5Base10Format string = `%039s`
+	// Md5Base36Length is the length for a MD5 Base36 string
+	// md5Base36Length int    = 25
+	md5Base36Format string = `%025s`
+	// md5Base62Length int    = 22
+	md5Base62Format string = `%022s`
 )
 
 // Md5Base10 returns a Base10 encoded MD5 hash of a string.
