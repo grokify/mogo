@@ -4,8 +4,8 @@ package md5
 import (
 	cryptomd5 "crypto/md5" // #nosec G501
 	"fmt"
-	"math/big"
 
+	"github.com/grokify/mogo/math/bigint"
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
@@ -21,24 +21,30 @@ const (
 
 // Md5Base10 returns a Base10 encoded MD5 hash of a string.
 func Md5Base10(s string) string {
-	i := new(big.Int)
-	i.SetString(fmt.Sprintf("%x", cryptomd5.Sum([]byte(s))), 16) // #nosec G401
-	return fmt.Sprintf(md5Base10Format, i.String())
+	sum := cryptomd5.Sum([]byte(s))
+	return fmt.Sprintf(md5Base10Format, bigint.MustEncodeToString(10, sum[:]))
+	// i := new(big.Int)
+	// i.SetString(fmt.Sprintf("%x", cryptomd5.Sum([]byte(s))), 16) // #nosec G401
+	// return fmt.Sprintf(md5Base10Format, i.String())
 }
 
 // Md5Base36 returns a Base36 encoded MD5 hash of a string.
 func Md5Base36(s string) string {
-	i := new(big.Int)
-	i.SetString(fmt.Sprintf("%x", cryptomd5.Sum([]byte(s))), 16) // #nosec G401
-	return fmt.Sprintf(md5Base36Format, i.Text(36))
+	sum := cryptomd5.Sum([]byte(s))
+	return fmt.Sprintf(md5Base36Format, bigint.MustEncodeToString(36, sum[:]))
+	// i := new(big.Int)
+	// i.SetString(fmt.Sprintf("%x", cryptomd5.Sum([]byte(s))), 16) // #nosec G401
+	// return fmt.Sprintf(md5Base36Format, i.Text(36))
 }
 
 // Md5Base62 returns a Base62 encoded MD5 hash of a string.
 // This uses the Golang alphabet [0-9a-zA-Z].
 func Md5Base62(s string) string {
-	i := new(big.Int)
-	i.SetString(fmt.Sprintf("%x", cryptomd5.Sum([]byte(s))), 16) // #nosec G401
-	return fmt.Sprintf(md5Base62Format, i.Text(62))
+	sum := cryptomd5.Sum([]byte(s))
+	return fmt.Sprintf(md5Base62Format, bigint.MustEncodeToString(62, sum[:]))
+	// i := new(big.Int)
+	// i.SetString(fmt.Sprintf("%x", cryptomd5.Sum([]byte(s))), 16) // #nosec G401
+	// return fmt.Sprintf(md5Base62Format, i.Text(62))
 }
 
 // Md5Base62Upper returns a Base62 encoded MD5 hash of a string.

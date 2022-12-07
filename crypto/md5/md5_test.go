@@ -24,7 +24,7 @@ func TestEncodeBase36HexString(t *testing.T) {
 	}
 }
 
-var md5Base36Tests = []struct {
+var md5BaseXTests = []struct {
 	v       string
 	want10  string
 	want36  string
@@ -36,25 +36,24 @@ var md5Base36Tests = []struct {
 	{"Hello World!", "315065379476721403163906509030895717772",
 		"e16cs890ihyk8hvpfezbncfpo", "7dgyuMkhmWALzZmAxQB3Y0", "7DGYUmKHMwalZzMaXqb3y0"}}
 
-func TestMd5Base36(t *testing.T) {
-	for _, tt := range md5Base36Tests {
+func TestMd5BaseX(t *testing.T) {
+	for _, tt := range md5BaseXTests {
+		enc10 := Md5Base10(tt.v)
+		enc36 := Md5Base36(tt.v)
 		enc62 := Md5Base62(tt.v)
 		enc62u := Md5Base62UpperFirst(tt.v)
-		enc36 := Md5Base36(tt.v)
-		enc10 := Md5Base10(tt.v)
 
-		if enc62 != tt.want62 {
-			t.Errorf("md5.Md5Base62(%v): want [%v], got [%v]", tt.v, tt.want62, enc62)
-		}
-
-		if enc62u != tt.want62u {
-			t.Errorf("md5.Md5Base62UpperFirst(%v): want [%v], got [%v]", tt.v, tt.want62u, enc62u)
+		if enc10 != tt.want10 {
+			t.Errorf("md5.Md5Base10(%v): want [%v], got [%v]", tt.v, tt.want10, enc10)
 		}
 		if enc36 != tt.want36 {
 			t.Errorf("md5.Md5Base36(%v): want [%v], got [%v]", tt.v, tt.want36, enc36)
 		}
-		if enc10 != tt.want10 {
-			t.Errorf("md5.Md5Base10(%v): want [%v], got [%v]", tt.v, tt.want10, enc10)
+		if enc62 != tt.want62 {
+			t.Errorf("md5.Md5Base62(%v): want [%v], got [%v]", tt.v, tt.want62, enc62)
+		}
+		if enc62u != tt.want62u {
+			t.Errorf("md5.Md5Base62UpperFirst(%v): want [%v], got [%v]", tt.v, tt.want62u, enc62u)
 		}
 	}
 }
