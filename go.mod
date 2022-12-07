@@ -23,9 +23,9 @@ require (
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	golang.org/x/crypto v0.3.0
-	golang.org/x/exp v0.0.0-20221126150942-6ab00d035af9
-	golang.org/x/image v0.1.0
-	golang.org/x/net v0.2.0
+	golang.org/x/exp v0.0.0-20221205204356-47842c84f3db
+	golang.org/x/image v0.2.0
+	golang.org/x/net v0.4.0
 	golang.org/x/text v0.5.0
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/oleiade/reflections.v1 v1.0.0
@@ -41,6 +41,8 @@ require (
 	github.com/oleiade/reflections v1.0.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
+	github.com/stretchr/testify v1.7.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	golang.org/x/sys v0.2.0 // indirect
+	golang.org/x/sys v0.3.0 // indirect
+	gopkg.in/yaml.v3 v3.0.0 // indirect
 )
