@@ -102,3 +102,21 @@ func TypeByReadSeeker(rs io.ReadSeeker, resetPointer bool) (string, error) {
 	// Returns `application/octet-stream` if media type is unknown.
 	return http.DetectContentType(data), nil
 }
+
+// IsType checks to see if a media type corresponds to a type/subtype
+func IsType(s, mediaType string) bool {
+	if s == mediaType {
+		return true
+	}
+	s = strings.ToLower(strings.TrimSpace(s))
+	if s == mediaType {
+		return true
+	}
+	if !strings.Contains(mediaType, ";") {
+		if strings.Index(s, mediaType+";") == 0 {
+			return true
+		}
+		return regexp.MustCompile(`^(?i)` + regexp.QuoteMeta(mediaType) + `\s*;`).MatchString(s)
+	}
+	return false
+}
