@@ -27,6 +27,7 @@ require (
 	golang.org/x/image v0.2.0
 	golang.org/x/net v0.4.0
 	golang.org/x/text v0.5.0
+	google.golang.org/genproto v0.0.0-20221207170731-23e4bf6bdc37
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/oleiade/reflections.v1 v1.0.0
 )
