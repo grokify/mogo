@@ -66,9 +66,11 @@ func MustParseBool(s string) bool {
 	return parsed
 }
 
-func FormatDecimal[N constraints.Float | constraints.Integer](v N, precision uint) string {
+func FormatDecimal[N constraints.Float | constraints.Integer](v N, precision int) string {
 	if precision == 0 {
 		return strconv.Itoa(int(v))
+	} else if precision < 0 {
+		return strconv.FormatFloat(float64(v), 'f', -1, 64)
 	}
 	return fmt.Sprintf(`%.`+strconv.Itoa(int(precision))+`f`, float64(v))
 }
