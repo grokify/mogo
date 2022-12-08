@@ -38,22 +38,22 @@ var md5BaseXTests = []struct {
 
 func TestMd5BaseX(t *testing.T) {
 	for _, tt := range md5BaseXTests {
-		enc10 := MD5Base10(tt.v)
-		enc36 := MD5Base36(tt.v)
-		enc62 := MD5Base62(tt.v)
-		enc62u := MD5Base62UpperFirst(tt.v)
+		enc10 := MD5Base10([]byte(tt.v))
+		enc36 := MD5Base36([]byte(tt.v))
+		enc62 := MD5Base62([]byte(tt.v))
+		enc62u := MD5Base62UpperFirst([]byte(tt.v))
 
 		if enc10 != tt.want10 {
-			t.Errorf("md5.Md5Base10(%v): want [%v], got [%v]", tt.v, tt.want10, enc10)
+			t.Errorf("md5.Md5Base10(%s): want [%s], got [%s]", tt.v, tt.want10, enc10)
 		}
 		if enc36 != tt.want36 {
-			t.Errorf("md5.Md5Base36(%v): want [%v], got [%v]", tt.v, tt.want36, enc36)
+			t.Errorf("md5.Md5Base36(%s): want [%s], got [%s]", tt.v, tt.want36, enc36)
 		}
 		if enc62 != tt.want62 {
-			t.Errorf("md5.Md5Base62(%v): want [%v], got [%v]", tt.v, tt.want62, enc62)
+			t.Errorf("md5.Md5Base62(%s): want [%s], got [%s]", tt.v, tt.want62, enc62)
 		}
 		if enc62u != tt.want62u {
-			t.Errorf("md5.Md5Base62UpperFirst(%v): want [%v], got [%v]", tt.v, tt.want62u, enc62u)
+			t.Errorf("md5.Md5Base62UpperFirst(%s): want [%s], got [%s]", tt.v, tt.want62u, enc62u)
 		}
 	}
 }
