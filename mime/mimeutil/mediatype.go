@@ -14,6 +14,8 @@ import (
 
 const DefaultMIMEType = httputilmore.ContentTypeAppOctetStream
 
+var ErrUnknownMediaType = errors.New("unknown media type")
+
 // MustTypeByFilename follows the convention of
 // `mime.TypeByExtension` by returning an empty
 // string if type not found. If `useDefault` is
