@@ -6,6 +6,9 @@ import (
 )
 
 // LatLngString returns a string.
-func LatLngString(loc latlng.LatLng, sep string, precision uint) string {
-	return strconvutil.FormatDecimal(loc.Latitude, 0) + sep + strconvutil.FormatDecimal(loc.Longitude, precision)
+func LatLngString(loc *latlng.LatLng, sep string, precision uint) string {
+	if loc == nil {
+		return strconvutil.FormatDecimal(0, precision) + sep + strconvutil.FormatDecimal(0, precision)
+	}
+	return strconvutil.FormatDecimal(loc.Latitude, precision) + sep + strconvutil.FormatDecimal(loc.Longitude, precision)
 }

@@ -41,7 +41,7 @@ var (
 	USCMH = latlng.LatLng{Latitude: 39.9612, Longitude: -82.9988}       // Columbus, OH
 	USDAL = latlng.LatLng{Latitude: 32.7767, Longitude: -96.7970}       // Dallas, TX
 	USDEN = latlng.LatLng{Latitude: 39.7392, Longitude: -104.9903}      // Denver, CO
-	USDET = latlng.LatLng{Latitude: 42.3314, Longitude: -83.0458}       // Detriot
+	USDET = latlng.LatLng{Latitude: 42.3314, Longitude: -83.0458}       // Detroit
 	USDUO = latlng.LatLng{Latitude: 40.1055, Longitude: -83.1375}       // Dublin, Ohio
 	USHNL = latlng.LatLng{Latitude: 21.3099, Longitude: -157.8581}      // Honolulu
 	USHOU = latlng.LatLng{Latitude: 29.7604, Longitude: -95.3698}       // Houston, TX

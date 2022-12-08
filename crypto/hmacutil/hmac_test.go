@@ -26,11 +26,11 @@ func TestHMACSHA256Hex(t *testing.T) {
 		isValid, err := ValidateHex([]byte(tt.key), []byte(tt.msg), gotHex)
 		if err != nil {
 			t.Errorf("hmacutil.ValidateHex(\"%s\", \"%s\", \"%s\"): err [%s]",
-				string(tt.msg), gotHex, string(tt.key), err.Error())
+				tt.msg, gotHex, tt.key, err.Error())
 		}
 		if !isValid {
 			t.Errorf("hmacutil.ValidateHex(\"%s\", \"%s\", \"%s\"): invalid",
-				string(tt.msg), gotHex, string(tt.key))
+				tt.msg, gotHex, tt.key)
 		}
 
 		gotB32 := HMACSHA256Base32([]byte(tt.key), []byte(tt.msg))
@@ -42,12 +42,11 @@ func TestHMACSHA256Hex(t *testing.T) {
 		isValid, err = ValidateBase32([]byte(tt.key), []byte(tt.msg), gotB32)
 		if err != nil {
 			t.Errorf("hmacutil.ValidateBase32(\"%s\", \"%s\", \"%s\"): err [%s]",
-				string(tt.msg), gotB32, string(tt.key), err.Error())
+				tt.msg, gotB32, tt.key, err.Error())
 		}
 		if !isValid {
 			t.Errorf("hmacutil.ValidateBase32(\"%s\", \"%s\", \"%s\"): invalid",
-				string(tt.msg), gotB32, string(tt.key))
+				tt.msg, gotB32, tt.key)
 		}
-
 	}
 }
