@@ -6,6 +6,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"golang.org/x/exp/constraints"
 )
 
 // Float64ToString is a function type to define functions.
@@ -62,6 +64,13 @@ func MustParseBool(s string) bool {
 		return false
 	}
 	return parsed
+}
+
+func FormatDecimal[N constraints.Float | constraints.Integer](v N, precision uint) string {
+	if precision == 0 {
+		return strconv.Itoa(int(v))
+	}
+	return fmt.Sprintf(`%.`+strconv.Itoa(int(precision))+`f`, float64(v))
 }
 
 func FormatFloat64Simple(v float64) string {
