@@ -120,20 +120,6 @@ func MapSSValOrEmpty(data map[string]string, key string) string {
 	return ""
 }
 
-func MapSSEqual(a, b map[string]string) bool {
-	if len(a) != len(b) {
-		return false
-	}
-
-	for k, v := range a {
-		if w, ok := b[k]; !ok || v != w {
-			return false
-		}
-	}
-
-	return true
-}
-
 func MapSSToKeyValues(kvs map[string]string, sep string) string {
 	pairs := []string{}
 	for k, v := range kvs {
