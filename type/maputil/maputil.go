@@ -26,10 +26,10 @@ func StringKeys[V any](m map[string]V, xf func(s string) string) []string {
 	return keys
 }
 
-// StringKeysExist checks to verify if a set of keys exists within a map with string keys.
+// KeysExist checks to verify if a set of keys exists within a map with string keys.
 // If `requireAll` is set, then all keys must be present for the function to return `true`.
 // If `requireAll` is not set, then only one key must exist for the function to return `true`.
-func StringKeysExist[V any](m map[string]V, keys []string, requireAll bool) bool {
+func KeysExist[K comparable, V any](m map[K]V, keys []K, requireAll bool) bool {
 	for _, k := range keys {
 		_, ok := m[k]
 		if requireAll && !ok {

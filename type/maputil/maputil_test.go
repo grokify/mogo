@@ -22,9 +22,9 @@ var stringKeysExistTests = []struct {
 	{map[string]any{"KEY": "num", "VAL": "123"}, []string{"KEYVAL"}, true, false},
 }
 
-func TestStringKeysExist(t *testing.T) {
+func TestKeysExist(t *testing.T) {
 	for _, tt := range stringKeysExistTests {
-		keysExistTry := StringKeysExist(tt.v, tt.keys, tt.requireAll)
+		keysExistTry := KeysExist(tt.v, tt.keys, tt.requireAll)
 		if tt.keysExist != keysExistTry {
 			t.Errorf("maputil.StringKeysExist() params [%v] keys [%v] reqAll [%v] want [%v] got [%v]",
 				tt.v, tt.keys, tt.requireAll, tt.keysExist, keysExistTry)
