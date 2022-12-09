@@ -113,8 +113,8 @@ func MapSSMerge(first map[string]string, second map[string]string) map[string]st
 	return newMap
 }
 
-func MapSSValOrEmpty(data map[string]string, key string) string {
-	if val, ok := data[key]; ok {
+func StringValueOrEmpty[K comparable](m map[K]string, k K) string {
+	if val, ok := m[k]; ok {
 		return val
 	}
 	return ""
