@@ -79,8 +79,8 @@ func NumberValuesAverage[K comparable, V constraints.Float | constraints.Integer
 
 var ErrMapDuplicateValues = errors.New("map has duplicate values")
 
-// MapUniqueValues returns `true` if the number of unique values is the same as the number of keys.
-func MapUniqueValues[C comparable](m map[C]C) bool {
+// UniqueValues returns `true` if the number of unique values is the same as the number of keys.
+func UniqueValues[C comparable](m map[C]C) bool {
 	rev := map[C]C{}
 	for k, v := range m {
 		rev[v] = k
