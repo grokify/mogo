@@ -83,6 +83,9 @@ var ErrMapDuplicateValues = errors.New("map has duplicate values")
 func UniqueValues[C comparable](m map[C]C) bool {
 	rev := map[C]C{}
 	for k, v := range m {
+		if _, ok := rev[v]; ok {
+			return false
+		}
 		rev[v] = k
 	}
 	return len(rev) == len(m)
