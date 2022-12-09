@@ -102,11 +102,18 @@ func StringKeys(mp interface{}) []string {
 }
 */
 
-func StringValueOrEmpty[K comparable](m map[K]string, k K) string {
-	if val, ok := m[k]; ok {
+func StringValueOrDefault[K comparable](m map[K]string, key K, def string) string {
+	if val, ok := m[key]; ok {
 		return val
 	}
-	return ""
+	return def
+}
+
+func IntValueOrDefault[K comparable, V constraints.Integer](m map[K]V, key K, def V) V {
+	if val, ok := m[key]; ok {
+		return val
+	}
+	return def
 }
 
 func MapSSToKeyValues(kvs map[string]string, sep string) string {
