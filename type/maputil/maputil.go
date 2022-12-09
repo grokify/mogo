@@ -92,36 +92,12 @@ func UniqueValues[C comparable](m map[C]C) bool {
 }
 
 /*
-func StringKeysLower[T any](m map[string]T, sortAsc bool) []string {
-	return StringKeys(m, strings.ToLower, sortAsc)
-}
-
-func StringKeysUpper[T any](m map[string]T, sortAsc bool) []string {
-	return StringKeys(m, strings.ToUpper, sortAsc)
-}
-*/
-/*
 func StringKeys(mp interface{}) []string {
 	keysVal := reflect.ValueOf(mp).MapKeys()
 	keysArr := []string{}
 	for _, key := range keysVal {
 		keysArr = append(keysArr, key.String())
 	}
-	return keysArr
-}
-
-func StringKeysSorted(mp interface{}) []string {
-	keysArr := StringKeys(mp)
-	sort.Strings(keysArr)
-	return keysArr
-}
-
-func StringKeysToLowerSorted(mp interface{}) []string {
-	keysArr := StringKeys(mp, false)
-	for i := range keysArr {
-		keysArr[i] = strings.ToLower(keysArr[i])
-	}
-	sort.Strings(keysArr)
 	return keysArr
 }
 */
