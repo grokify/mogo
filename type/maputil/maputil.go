@@ -1,6 +1,7 @@
 package maputil
 
 import (
+	"errors"
 	"fmt"
 	"sort"
 	"strings"
@@ -74,6 +75,16 @@ func NumberValuesAverage[K comparable, V constraints.Float | constraints.Integer
 		sum += float64(v)
 	}
 	return sum / float64(len(m))
+}
+
+var ErrMapDuplicateValues = errors.New("map has duplicate values")
+
+func MapUniqueValues[C comparable](m map[C]C) bool {
+	rev := map[C]C{}
+	for k, v := range m {
+		rev[v] = k
+	}
+	return len(rev) == len(m)
 }
 
 /*
