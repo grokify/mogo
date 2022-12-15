@@ -1,10 +1,12 @@
 package stringcase
 
 import (
+	"errors"
 	"regexp"
 	"strings"
 
 	"github.com/grokify/mogo/type/stringsutil"
+	"github.com/iancoleman/strcase"
 )
 
 func CaseKebabToCamel(s string) string {
@@ -50,11 +52,13 @@ func ToPascalCase(s string) string {
 }
 
 func ToKebabCase(s string) string {
-	return strings.Join(toParts(strings.ToLower(s)), "-")
+	return strcase.ToKebab(s)
+	// return strings.Join(toParts(strings.ToLower(s)), "-")
 }
 
 func ToSnakeCase(s string) string {
-	return strings.Join(toParts(strings.ToLower(s)), "_")
+	return strcase.ToSnake(s)
+	// return strings.Join(toParts(strings.ToLower(s)), "_")
 }
 
 func NoOp(s string) string {
@@ -65,7 +69,43 @@ func toParts(s string) []string {
 	return stringsutil.SliceCondenseSpace(rxSplitCase.Split(s, -1), false, false)
 }
 
+func FuncToWantCaseMore(c string, overrides map[string]string) (func(string) string, error) {
+	tocase, err := FuncToWantCase(c)
+	if err != nil {
+		return NoOp, err
+	}
+	if len(overrides) == 0 {
+		return tocase, nil
+	}
+	return func(s string) string {
+		if ovr, ok := overrides[s]; ok {
+			return ovr
+		}
+		return tocase(s)
+	}, nil
+}
+
 func FuncToWantCase(c string) (func(string) string, error) {
+	canonical, err := Parse(c)
+	if err != nil {
+		return strcase.ToSnake, err
+	}
+	switch canonical {
+	case CamelCase:
+		return strcase.ToLowerCamel, nil
+	case KebabCase:
+		return strcase.ToKebab, nil
+	case PascalCase:
+		return strcase.ToCamel, nil
+	case SnakeCase:
+		return strcase.ToSnake, nil
+	default:
+		return strcase.ToSnake, errors.New("case not supported")
+	}
+}
+
+/*
+func FuncToWantCaseOld(c string) (func(string) string, error) {
 	parsed, err := Parse(c)
 	if err != nil {
 		return NoOp, err
@@ -82,6 +122,7 @@ func FuncToWantCase(c string) (func(string) string, error) {
 	}
 	return NoOp, ErrUnknownCaseString // should never hit this.
 }
+*/
 
 func FuncToWantCaseOrNoOp(c string) func(string) string {
 	return FuncToWantCaseOrDefault(c, NoOp)
