@@ -91,6 +91,22 @@ func UniqueValues[C comparable](m map[C]C) bool {
 	return len(rev) == len(m)
 }
 
+func DuplicateValues[C comparable](m map[C]C) map[C][]C {
+	dupes := map[C][]C{}
+	for k, v := range m {
+		if _, ok := dupes[v]; !ok {
+			dupes[v] = []C{}
+		}
+		dupes[v] = append(dupes[v], k)
+	}
+	for k, v := range dupes {
+		if len(v) == 1 {
+			delete(dupes, k)
+		}
+	}
+	return dupes
+}
+
 /*
 func StringKeys(mp interface{}) []string {
 	keysVal := reflect.ValueOf(mp).MapKeys()
