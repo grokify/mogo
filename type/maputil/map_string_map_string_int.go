@@ -4,7 +4,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/grokify/mogo/type/stringsutil"
+	"github.com/grokify/mogo/type/slicesutil"
 )
 
 // MapStringMapStringInt represents a `map[string]map[string]int`
@@ -98,7 +98,7 @@ func (msmsi MapStringMapStringInt) Flatten(prefix, sep string, fnInclude func(st
 		}
 	}
 	if dedupe {
-		outvals = stringsutil.Dedupe(outvals)
+		outvals = slicesutil.Dedupe(outvals)
 	}
 	if sortResults {
 		sort.Strings(outvals)
