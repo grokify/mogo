@@ -12,12 +12,16 @@ import (
 
 var ErrTokenNotFound = errors.New("token(s) not found")
 
-func NewTokenizerFile(filename string) (*html.Tokenizer, error) {
-	htmlBytes, err := os.ReadFile(filename)
+func NewTokenizerBytes(b []byte) *html.Tokenizer {
+	return html.NewTokenizer(bytes.NewReader(b))
+}
+
+func NewTokenizerFile(name string) (*html.Tokenizer, error) {
+	htmlBytes, err := os.ReadFile(name)
 	if err != nil {
 		return nil, err
 	}
-	return html.NewTokenizer(bytes.NewReader(htmlBytes)), nil
+	return NewTokenizerBytes(htmlBytes), nil
 }
 
 // TokensBetweenAtom returns the tokens that represent the `innerHtml`
