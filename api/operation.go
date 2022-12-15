@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/type/maputil"
+	"github.com/grokify/mogo/type/slicesutil"
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
@@ -32,7 +33,7 @@ func (ops Operations) TrimSpace(sortTags bool) {
 }
 
 func (ops Operations) RemovePaths(paths []string) Operations {
-	paths = stringsutil.SliceDedupe(paths)
+	paths = slicesutil.Dedupe(paths)
 	if len(paths) == 0 {
 		return ops
 	}

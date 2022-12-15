@@ -5,6 +5,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/grokify/mogo/type/slicesutil"
 )
 
 type StringSlice []string
@@ -29,7 +31,7 @@ func Unshift(elems []string, x string) []string {
 func SliceCondenseSpace(elems []string, dedupeResults, sortResults bool) []string {
 	results := SliceTrim(elems, " ", true)
 	if dedupeResults {
-		results = Dedupe(results)
+		results = slicesutil.Dedupe(results)
 	}
 	if sortResults {
 		sort.Strings(results)
@@ -64,6 +66,7 @@ func SliceTrim(elems []string, cutstr string, condense bool) []string {
 	return new
 }
 
+/*
 // SliceDedupe removes duplicate occurrences of a string
 // from a slice, keeping the first one encountered. It
 // maintains the order of elements in the slice.
@@ -79,6 +82,7 @@ func SliceDedupe(elems []string) []string {
 	}
 	return unique
 }
+*/
 
 /*
 // JoinAny takes an array of interface{} and converts
@@ -180,9 +184,9 @@ func SliceToSingleIntOrNeg(vals []string) int {
 	return num
 }
 
-// Dedupe returns a string slice with duplicate values
-// removed. First observance is kept.
-func Dedupe(elems []string) []string {
+/*
+// Dedupe returns a string slice with duplicate values removed. First observance is kept.
+func DedupeStrings(elems []string) []string {
 	deduped := []string{}
 	seen := map[string]int{}
 	for _, val := range elems {
@@ -194,6 +198,7 @@ func Dedupe(elems []string) []string {
 	}
 	return deduped
 }
+*/
 
 func SliceChooseOnePreferredLowerTrimSpace(options, preferenceOrder []string) string {
 	if len(options) == 0 {
