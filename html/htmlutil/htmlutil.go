@@ -5,7 +5,9 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/grokify/mogo/html/tokenizer"
 	"github.com/microcosm-cc/bluemonday"
+	"golang.org/x/net/html/atom"
 )
 
 // ChartColor1 is the color palette for Google Charts as collected by
@@ -101,6 +103,22 @@ func HTMLToText(s string) string {
 		),
 		"\n\n",
 	)
+}
+
+func HTMLToTextH1(b []byte, policy *bluemonday.Policy) (string, error) {
+	return HTMLToTextAtom(b, policy, atom.H1)
+}
+
+func HTMLToTextAtom(b []byte, policy *bluemonday.Policy, a atom.Atom) (string, error) {
+	t := tokenizer.NewTokenizerBytes(b)
+	toks, err := tokenizer.TokensBetweenAtom(t, false, true, a)
+	if err != nil {
+		return "", err
+	}
+	if policy == nil {
+		policy = bluemonday.StrictPolicy()
+	}
+	return strings.TrimSpace(policy.Sanitize(tokenizer.Tokens(toks).String())), nil
 }
 
 func SimplifyHTMLText(s string) string {
