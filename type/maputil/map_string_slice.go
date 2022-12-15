@@ -1,13 +1,17 @@
 package maputil
 
 import (
+	"net/url"
 	"sort"
 	"strings"
 
+	"github.com/grokify/mogo/type/slicesutil"
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
-type MapStringSlice map[string][]string
+// type MapStringSlice map[string][]string
+
+type MapStringSlice url.Values
 
 func NewMapStringSlice() MapStringSlice {
 	return MapStringSlice{}
@@ -26,11 +30,15 @@ func (mss MapStringSlice) Add(key, value string) {
 func (mss MapStringSlice) Sort(dedupe bool) {
 	for key, vals := range mss {
 		if dedupe {
-			vals = stringsutil.Dedupe(vals)
+			vals = slicesutil.Dedupe(vals)
 		}
 		sort.Strings(vals)
 		mss[key] = vals
 	}
+}
+
+func (mss MapStringSlice) Keys() []string {
+	return StringKeys(mss, nil)
 }
 
 // KeysByValueCounts returns a `map[int][]string` where the key is the
