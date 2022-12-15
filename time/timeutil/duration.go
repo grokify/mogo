@@ -12,8 +12,7 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 )
 
-// NewDurationSeconds returns a new `time.Duration` given
-// a number of seconds.
+// NewDurationSeconds returns a new `time.Duration` given a number of seconds.
 func NewDurationSeconds(secs float64) time.Duration {
 	nanos := int64(secs * float64(nanosPerSecond))
 	dur, err := time.ParseDuration(strconv.Itoa(int(nanos)) + "ns")
@@ -23,8 +22,7 @@ func NewDurationSeconds(secs float64) time.Duration {
 	return dur
 }
 
-// NewDurationDays returns `time.Duration` given
-// a number of days
+// NewDurationDays returns `time.Duration` given a number of days
 func NewDurationDays(days uint16) time.Duration {
 	durString := fmt.Sprintf("%dh", 24*days)
 	dur, err := time.ParseDuration(durString)
@@ -119,11 +117,11 @@ func QuarterDuration(dt time.Time) time.Duration {
 }
 
 func SumDurations(durations ...time.Duration) time.Duration {
-	seconds := int64(0)
+	ns := int64(0)
 	for _, dur := range durations {
-		seconds += dur.Nanoseconds()
+		ns += dur.Nanoseconds()
 	}
-	dur, _ := time.ParseDuration(fmt.Sprintf("%dns", seconds))
+	dur, _ := time.ParseDuration(fmt.Sprintf("%dns", ns))
 	return dur
 }
 
