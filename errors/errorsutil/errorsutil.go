@@ -14,10 +14,16 @@ func Append(err error, str string) error {
 */
 
 func Wrap(origErr error, wrapPrefix string) error {
+	if origErr == nil {
+		return origErr
+	}
 	return fmt.Errorf("%s: [%w]", wrapPrefix, origErr)
 }
 
 func Wrapf(origErr error, wrapFormat string, wrapVars ...any) error {
+	if origErr == nil {
+		return origErr
+	}
 	return Wrap(origErr, fmt.Sprintf(wrapFormat, wrapVars...))
 }
 
