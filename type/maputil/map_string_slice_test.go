@@ -19,7 +19,7 @@ var mssTests = []struct {
 
 func TestMapStringSlice(t *testing.T) {
 	for _, tt := range mssTests {
-		mss := NewMapStringSlice()
+		mss := MapStringSlice{}
 		for key, vals := range tt.data {
 			for _, val := range vals {
 				mss.Add(key, val)
