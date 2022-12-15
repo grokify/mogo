@@ -10,6 +10,7 @@ require (
 	github.com/grokify/base36 v1.0.5
 	github.com/grokify/bitcoinmath v0.1.0
 	github.com/huandu/xstrings v1.4.0
+	github.com/iancoleman/strcase v0.2.0
 	github.com/itchyny/base58-go v0.2.0
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/joho/godotenv v1.4.0
@@ -23,7 +24,7 @@ require (
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	golang.org/x/crypto v0.4.0
-	golang.org/x/exp v0.0.0-20221208044002-44028be4359e
+	golang.org/x/exp v0.0.0-20221212164502-fae10dda9338
 	golang.org/x/image v0.2.0
 	golang.org/x/net v0.4.0
 	golang.org/x/text v0.5.0
