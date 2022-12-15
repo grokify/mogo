@@ -4,7 +4,7 @@ import "fmt"
 
 // Matrix2DColRowIndex returns the row index where the string supplied is first
 // encountered for a supplied column index.
-func Matrix2DColRowIndex(mat [][]string, colIdx uint, s string) (int, error) {
+func Matrix2DColRowIndex[C comparable](mat [][]C, colIdx uint, s C) (int, error) {
 	xint := int(colIdx)
 	for y, row := range mat {
 		if xint >= len(row) {
