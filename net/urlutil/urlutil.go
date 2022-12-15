@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/google/go-querystring/query"
-	"github.com/grokify/mogo/type/stringsutil"
+	"github.com/grokify/mogo/type/slicesutil"
 )
 
 // AppendURLValues appends one url.Values to another url.Values.
@@ -203,7 +203,7 @@ func URLValuesEncodeSorted(v url.Values, priorities []string) string {
 	encoded := []string{}
 	priorityKeys := map[string]int{}
 
-	priorities = stringsutil.Dedupe(priorities)
+	priorities = slicesutil.Dedupe(priorities)
 
 	for _, key := range priorities {
 		if vals, ok := v[key]; ok {
