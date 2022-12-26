@@ -1,6 +1,10 @@
 package shautil
 
 import (
+	"bytes"
+	"crypto/sha512"
+	"encoding/base32"
+	"strings"
 	"testing"
 )
 
@@ -59,3 +63,61 @@ func TestShaSumFile(t *testing.T) {
 		}
 	}
 }
+
+var suha512d224CustomPadTests = []struct {
+	input        string
+	raw          []byte
+	base32PadStd string
+	base32Pad1   string
+}{
+	{"foobar",
+		[]byte{57, 231, 201, 91, 243, 249, 45, 205, 23, 29, 69, 45, 6, 10, 61, 195, 183, 202, 151, 158, 4, 87, 241, 12, 165, 176, 228, 179},
+		"HHT4SW7T7EW42FY5IUWQMCR5YO34VF46ARL7CDFFWDSLG===",
+		"HHT4SW7T7EW42FY5IUWQMCR5YO34VF46ARL7CDFFWDSLG111",
+	},
+}
+
+func TestSha512d224CustomPad(t *testing.T) {
+	for _, tt := range suha512d224CustomPadTests {
+		d := sha512.Sum512_224([]byte(tt.input))
+		//fmt.Println(d)
+		d2 := d[:]
+		//fmt.Println(d2)
+		//fmt.Println(string(d2))
+
+		if !bytes.Equal(d2, tt.raw) {
+			t.Errorf("sha512.Sum512_224 output unexpected: want [%v] got [%v]", tt.raw, d2)
+		}
+
+		b32Std := base32.StdEncoding.EncodeToString(d2)
+
+		if b32Std != tt.base32PadStd {
+			t.Errorf("base32.StdEncoding.EncodeToString output unexpected: want [%v] got [%v]", tt.base32PadStd, b32Std)
+		}
+
+		b32P1 := Sum512d224Base32String(tt.input, '1')
+		if b32P1 != tt.base32Pad1 {
+			t.Errorf("shautil.Sum512d224Base32String output unexpected: want [%v] got [%v]", tt.base32Pad1, b32P1)
+		}
+
+		b32P1Reader, err := Sum512d224Base32(strings.NewReader(tt.input), '1')
+		if err != nil {
+			t.Errorf("shautil.Sum512d224Base32(\"%s\") Error: [%v]", tt.input, err.Error())
+		}
+		if b32P1Reader != tt.base32Pad1 {
+			t.Errorf("shautil.Sum512d224Base32 output unexpected: want [%v] got [%v]", tt.base32Pad1, b32P1Reader)
+		}
+	}
+
+}
+
+/*
+
+func size224BytesToSlice(src [sha512.Size224]byte) []byte {
+	out := []byte{}
+	for _, b := range src {
+		out = append(out, b)
+	}
+	return out
+}
+*/
