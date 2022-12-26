@@ -18,6 +18,6 @@ func main() {
 	_, err := flags.Parse(&opts)
 	logutil.FatalErr(err)
 
-	err = imageutil.ResizeFileJPEG(opts.Input, opts.Ouput, opts.Width, opts.Height, imageutil.JPEGQualityMax)
+	err = imageutil.ResizeFileJPEG(opts.Input, opts.Output, opts.Width, opts.Height, imageutil.JPEGQualityMax)
 	logutil.FatalErr(err)
 }
