@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"strings"
 
-	iom "github.com/grokify/mogo/io/ioutilmore"
+	"github.com/grokify/mogo/io/ioutilmore"
 	"github.com/grokify/mogo/os/osutil"
 	"github.com/grokify/mogo/type/slicesutil"
 	"github.com/joho/godotenv"
@@ -46,7 +46,7 @@ func LoadDotEnvSkipEmptyInfo(paths ...string) ([]string, error) {
 		paths = DefaultPaths()
 	}
 
-	envPaths := iom.FilterFilenamesSizeGtZero(paths...)
+	envPaths := ioutilmore.FilterFilenamesSizeGtZero(paths...)
 	envPaths = slicesutil.Dedupe(envPaths)
 
 	if len(envPaths) > 0 {
@@ -65,7 +65,7 @@ func LoadDotEnvFirst(paths ...string) error {
 		paths = DefaultPaths()
 	}
 
-	envPaths := iom.FilterFilenamesSizeGtZero(paths...)
+	envPaths := ioutilmore.FilterFilenamesSizeGtZero(paths...)
 
 	if len(envPaths) > 0 {
 		return godotenv.Load(envPaths[0])
