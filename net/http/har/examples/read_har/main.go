@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 
 	"github.com/grokify/mogo/fmt/fmtutil"
 	"github.com/grokify/mogo/net/http/har"
@@ -13,7 +13,7 @@ import (
 func main() {
 	filename := "path/to/my.har"
 
-	bytes, err := ioutil.ReadFile(filename)
+	bytes, err := os.ReadFile(filename)
 	if err != nil {
 		log.Fatal(err)
 	}

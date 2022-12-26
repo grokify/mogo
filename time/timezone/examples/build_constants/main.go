@@ -4,7 +4,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -24,7 +24,7 @@ func main() {
 }
 
 func ReadFile(path string) {
-	files, _ := ioutil.ReadDir(zoneDir + path)
+	files, _ := os.ReadDir(zoneDir + path)
 	for _, f := range files {
 		if f.Name() != strings.ToUpper(f.Name()[:1])+f.Name()[1:] {
 			continue

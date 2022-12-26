@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 
 	"github.com/grokify/mogo/text/markdown"
 )
@@ -24,7 +24,7 @@ func main() {
 	html := markdown.RemarkHTML(slides)
 	fmt.Println(html)
 
-	err := ioutil.WriteFile("test_slides.html", []byte(html), 0600)
+	err := os.WriteFile("test_slides.html", []byte(html), 0600)
 	if err != nil {
 		log.Fatal(err)
 	}
