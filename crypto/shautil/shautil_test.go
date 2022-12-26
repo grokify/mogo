@@ -80,10 +80,7 @@ var suha512d224CustomPadTests = []struct {
 func TestSha512d224CustomPad(t *testing.T) {
 	for _, tt := range suha512d224CustomPadTests {
 		d := sha512.Sum512_224([]byte(tt.input))
-		//fmt.Println(d)
 		d2 := d[:]
-		//fmt.Println(d2)
-		//fmt.Println(string(d2))
 
 		if !bytes.Equal(d2, tt.raw) {
 			t.Errorf("sha512.Sum512_224 output unexpected: want [%v] got [%v]", tt.raw, d2)
@@ -108,16 +105,4 @@ func TestSha512d224CustomPad(t *testing.T) {
 			t.Errorf("shautil.Sum512d224Base32 output unexpected: want [%v] got [%v]", tt.base32Pad1, b32P1Reader)
 		}
 	}
-
 }
-
-/*
-
-func size224BytesToSlice(src [sha512.Size224]byte) []byte {
-	out := []byte{}
-	for _, b := range src {
-		out = append(out, b)
-	}
-	return out
-}
-*/

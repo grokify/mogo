@@ -72,7 +72,7 @@ func FormatDecimal[N constraints.Float | constraints.Integer](v N, precision int
 	} else if precision < 0 {
 		return strconv.FormatFloat(float64(v), 'f', -1, 64)
 	}
-	return fmt.Sprintf(`%.`+strconv.Itoa(int(precision))+`f`, float64(v))
+	return fmt.Sprintf(`%.`+strconv.Itoa(precision)+`f`, float64(v))
 }
 
 func FormatFloat64Simple(v float64) string {

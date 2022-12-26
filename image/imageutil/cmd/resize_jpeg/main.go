@@ -7,8 +7,8 @@ import (
 )
 
 type cliOptions struct {
-	Input  string `short:"i" long:"input file" description:"A file" value-name:"FILE" required:"true`
-	Output string `short:"o" long:"output file" description:"A file" required:"true`
+	Input  string `short:"i" long:"input file" description:"A file" value-name:"FILE" required:"true"`
+	Output string `short:"o" long:"output file" description:"A file" required:"true"`
 	Height uint   `short:"h" long:"height" description:"Height"`
 	Width  uint   `short:"w" long:"width" description:"width"`
 }
