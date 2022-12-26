@@ -1,23 +1,11 @@
-package ioutilmore
+package ioutil
 
 import (
-	"bufio"
 	"bytes"
-	"encoding/json"
-	"errors"
-	"fmt"
 	"io"
-	"os"
-	"path"
-	"path/filepath"
-	"regexp"
-	"strings"
-
-	"github.com/grokify/mogo/encoding/jsonutil"
-	"github.com/grokify/mogo/errors/errorsutil"
-	"github.com/grokify/mogo/os/osutil"
 )
 
+/*
 type FileType int
 
 const (
@@ -25,7 +13,9 @@ const (
 	Directory
 	Any
 )
+*/
 
+/*
 func CopyFile(src, dst string) error {
 	r, err := os.Open(src)
 	if err != nil {
@@ -59,7 +49,9 @@ func CopyFile(src, dst string) error {
 	}
 	return os.Chmod(dst, si.Mode())
 }
+*/
 
+/*
 // ReadDirSplit returnsa slides of `os.FileInfo` for directories and files.
 // Note: this isn't as necessary any more since `os.ReadDir()` returns a slice of
 // `os.DirEntry{}` which has a `IsDir()` func.
@@ -124,7 +116,9 @@ func DirFromPath(path string) (string, error) {
 	}
 	return dir, nil
 }
+*/
 
+/*
 func SplitBetter(path string) (dir, file string) {
 	isDir, err := osutil.IsDir(path)
 	if err != nil && isDir {
@@ -149,7 +143,9 @@ func SplitBest(path string) (dir, file string, err error) {
 	}
 	return "", "", fmt.Errorf("path is valid but not file or directory: [%v]", path)
 }
+*/
 
+/*
 func FilterFilenamesSizeGtZero(filepaths ...string) []string {
 	filepathsExist := []string{}
 
@@ -165,7 +161,9 @@ func FilterFilenamesSizeGtZero(filepaths ...string) []string {
 	}
 	return filepathsExist
 }
+*/
 
+/*
 func RemoveAllChildren(dir string) error {
 	isDir, err := osutil.IsDir(dir)
 	if err != nil {
@@ -198,7 +196,9 @@ func RemoveAllChildren(dir string) error {
 	}
 	return nil
 }
+*/
 
+/*
 func FileinfosNames(fis []os.FileInfo) []string {
 	s := []string{}
 	for _, e := range fis {
@@ -206,6 +206,7 @@ func FileinfosNames(fis []os.FileInfo) []string {
 	}
 	return s
 }
+*/
 
 // ReaderToBytes reads from an io.Reader, e.g. io.ReadCloser
 func ReaderToBytes(ior io.Reader) ([]byte, error) {
@@ -217,6 +218,7 @@ func ReaderToBytes(ior io.Reader) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
+/*
 // ReadFileJSON reads and unmarshals a file.
 func ReadFileJSON(file string, v interface{}) error {
 	bytes, err := os.ReadFile(file)
@@ -241,7 +243,9 @@ func CloseFileWithError(file *os.File, err error) error {
 	}
 	return err
 }
+*/
 
+/*
 type FileWriter struct {
 	File   *os.File
 	Writer *bufio.Writer
@@ -264,6 +268,7 @@ func (f *FileWriter) Close() {
 	f.Writer.Flush()
 	f.File.Close()
 }
+*/
 
 // ReadAllOrError will successfully return the data
 // or return the error in the value return value.

@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	iom "github.com/grokify/mogo/io/ioutilmore"
+	"github.com/grokify/mogo/os/osutil"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 	src := os.Args[1]
 	dst := os.Args[2]
 
-	err := iom.CopyFile(src, dst)
+	err := osutil.CopyFile(src, dst)
 	if err != nil {
 		log.Fatal(err)
 	}

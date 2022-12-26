@@ -7,7 +7,14 @@ import (
 	"os/user"
 	"path/filepath"
 	"strings"
-	"time"
+)
+
+type FileType int
+
+const (
+	File FileType = iota
+	Directory
+	Any
 )
 
 // EmptyAll will delete all contents of a directory, leaving
@@ -28,23 +35,6 @@ func EmptyAll(name string) error {
 		}
 	}
 	return nil
-}
-
-// FileModAge returns a time.Duration representing the age
-// of the named file from FileInfo.ModTime().
-func FileModAge(name string) (time.Duration, error) {
-	stat, err := os.Stat(name)
-	if err != nil {
-		dur0, _ := time.ParseDuration("0s")
-		return dur0, err
-	}
-	return time.Since(stat.ModTime()), nil
-}
-
-// FileModAgeFromInfo returns the file last modification
-// age as a time.Duration.
-func FileModAgeFromInfo(fi os.FileInfo) time.Duration {
-	return time.Since(fi.ModTime())
 }
 
 // GetFileInfo returns an os.FileInfo from a filepath.

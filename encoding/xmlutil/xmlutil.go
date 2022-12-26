@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"io"
 
-	"github.com/grokify/mogo/io/ioutilmore"
+	"github.com/grokify/mogo/io/ioutil"
 )
 
 func MarshalIndent(v any, prefix, indent string, addDoctype bool) ([]byte, error) {
@@ -17,7 +17,7 @@ func MarshalIndent(v any, prefix, indent string, addDoctype bool) ([]byte, error
 }
 
 func UnmarshalReader(r io.Reader, v any) error {
-	data, err := ioutilmore.ReaderToBytes(r)
+	data, err := ioutil.ReaderToBytes(r)
 	if err != nil {
 		return err
 	}

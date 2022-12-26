@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	env "github.com/caarlos0/env/v6"
-	"github.com/grokify/mogo/io/ioutilmore"
+	"github.com/grokify/mogo/os/osutil"
 	"github.com/joho/godotenv"
 )
 
@@ -23,7 +23,7 @@ func EnvFileToJSONFile(data interface{}, filepathENV, filepathJSON string, perm 
 		return err
 	}
 
-	return ioutilmore.WriteFileJSON(filepathJSON, data, perm, prefix, indent)
+	return osutil.WriteFileJSON(filepathJSON, data, perm, prefix, indent)
 }
 
 // Return a merged environment var which is split into multiple

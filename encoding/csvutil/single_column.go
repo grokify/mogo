@@ -5,7 +5,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/grokify/mogo/io/ioutilmore"
+	"github.com/grokify/mogo/os/osutil"
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
@@ -22,7 +22,7 @@ func ReadCSVFileSingleColumnValuesString(filename string, sep rune, hasHeader, t
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			return values, ioutilmore.CloseFileWithError(file, err)
+			return values, osutil.CloseFileWithError(file, err)
 		}
 		if hasHeader && i == 0 {
 			i++

@@ -1,6 +1,7 @@
 package osutil
 
 import (
+	"fmt"
 	"go/build"
 	"os"
 	"path/filepath"
@@ -131,4 +132,110 @@ func Filenames(name string, rx *regexp.Regexp, inclEmptyFiles, absPath bool) ([]
 	}
 	sort.Strings(filenames)
 	return filenames, nil
+}
+
+func FilenamesFilterSizeGTZero(filepaths ...string) []string {
+	filepathsExist := []string{}
+
+	for _, envPathVal := range filepaths {
+		envPathVals := strings.Split(envPathVal, ",")
+		for _, envPath := range envPathVals {
+			envPath = strings.TrimSpace(envPath)
+
+			if isFile, err := IsFile(envPath, true); isFile && err == nil {
+				filepathsExist = append(filepathsExist, envPath)
+			}
+		}
+	}
+	return filepathsExist
+}
+
+func SplitBetter(path string) (dir, file string) {
+	isDir, err := IsDir(path)
+	if err != nil && isDir {
+		return dir, ""
+	}
+	return filepath.Split(path)
+}
+
+func SplitBest(path string) (dir, file string, err error) {
+	isDir, err := IsDir(path)
+	if err != nil {
+		return "", "", err
+	} else if isDir {
+		return path, "", nil
+	}
+	isFile, err := IsFile(path, false)
+	if err != nil {
+		return "", "", err
+	} else if isFile {
+		dir, file := filepath.Split(path)
+		return dir, file, nil
+	}
+	return "", "", fmt.Errorf("path is valid but not file or directory: [%v]", path)
+}
+
+// ReadDirSplit returnsa slides of `os.FileInfo` for directories and files.
+// Note: this isn't as necessary any more since `os.ReadDir()` returns a slice of
+// `os.DirEntry{}` which has a `IsDir()` func.
+func ReadDirSplit(dirname string, inclDotDirs bool) ([]os.FileInfo, []os.FileInfo, error) {
+	allDEs, err := os.ReadDir(dirname)
+	if err != nil {
+		return []os.FileInfo{}, []os.FileInfo{}, err
+	}
+	allFIs, err := DirEntriesToFileInfos(allDEs)
+	if err != nil {
+		return []os.FileInfo{}, []os.FileInfo{}, err
+	}
+	subdirs, regular := FileInfosSplit(allFIs, inclDotDirs)
+	return subdirs, regular, nil
+}
+
+func FileInfosSplit(all []os.FileInfo, inclDotDirs bool) ([]os.FileInfo, []os.FileInfo) {
+	subdirs := []os.FileInfo{}
+	regular := []os.FileInfo{}
+	for _, f := range all {
+		if f.Mode().IsDir() {
+			if f.Name() == "." && f.Name() == ".." {
+				if inclDotDirs {
+					subdirs = append(subdirs, f)
+				}
+			} else {
+				subdirs = append(subdirs, f)
+			}
+		} else {
+			regular = append(regular, f)
+		}
+	}
+	return subdirs, regular
+}
+
+func DirFromPath(path string) (string, error) {
+	path = strings.TrimRight(path, "/\\")
+	f, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+	fi, err := f.Stat()
+	if err != nil {
+		return "", err
+	}
+	isFile := false
+	switch mode := fi.Mode(); {
+	case mode.IsDir():
+		return path, nil
+	case mode.IsRegular():
+		isFile = true
+	}
+	if !isFile {
+		return "", nil
+	}
+	rx1 := regexp.MustCompile(`^(.+)[/\\][^/\\]+`)
+	rs1 := rx1.FindStringSubmatch(path)
+	dir := ""
+	if len(rs1) > 1 {
+		dir = rs1[1]
+	}
+	return dir, nil
 }

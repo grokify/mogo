@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 	"sort"
@@ -191,6 +192,39 @@ func VisitFiles(name string, visitFunc func(dir string, info fs.FileInfo) error)
 		err := VisitFiles(filepath.Join(name, entry.Name()), visitFunc)
 		if err != nil {
 			return err
+		}
+	}
+	return nil
+}
+
+func DirRemoveAllChildren(dir string) error {
+	isDir, err := IsDir(dir)
+	if err != nil {
+		return err
+	}
+	if !isDir {
+		err = errors.New("400: Path Is Not Directory")
+		return err
+	}
+	filesAll, err := os.ReadDir(dir)
+	if err != nil {
+		return err
+	}
+	for _, fi := range filesAll {
+		if fi.Name() == "." || fi.Name() == ".." {
+			continue
+		}
+		filepath := path.Join(dir, fi.Name())
+		if fi.IsDir() {
+			err = os.RemoveAll(filepath)
+			if err != nil {
+				return err
+			}
+		} else {
+			err = os.Remove(filepath)
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil

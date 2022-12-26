@@ -2,7 +2,10 @@ package osutil
 
 import (
 	"bufio"
+	"encoding/json"
 	"os"
+
+	"github.com/grokify/mogo/errors/errorsutil"
 )
 
 func ReadFileByLine(name string, lineFunc func(idx uint, line string) error) error {
@@ -25,4 +28,21 @@ func ReadFileByLine(name string, lineFunc func(idx uint, line string) error) err
 	}
 
 	return scanner.Err()
+}
+
+// ReadFileJSON reads and unmarshals a file.
+func ReadFileJSON(file string, v interface{}) error {
+	bytes, err := os.ReadFile(file)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(bytes, v)
+}
+
+func CloseFileWithError(file *os.File, err error) error {
+	errFile := file.Close()
+	if err != nil {
+		return errorsutil.Wrap(err, errFile.Error())
+	}
+	return err
 }

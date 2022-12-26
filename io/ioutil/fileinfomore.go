@@ -1,5 +1,6 @@
-package ioutilmore
+package ioutil
 
+/*
 import (
 	"os"
 	"time"
@@ -16,34 +17,34 @@ func NewFileInfoMoreFromPath(path string) (FileInfoMore, error) {
 		return FileInfoMore{}, err
 	}
 	fm := FileInfoMore{FileInfo: fi}
-	modAge, err := GetFileModAge(fi)
+	modAge, err := FileModAge(fi)
 	if err != nil {
 		fm.ModAge = modAge
 	}
 	return fm, nil
 }
 
-func GetFileModAge(fi os.FileInfo) (time.Duration, error) {
+func FileModAge(fi os.FileInfo) (time.Duration, error) {
 	now := time.Now()
 	age := now.Sub(fi.ModTime())
 	return age, nil
 }
 
-func GetFilepathModAge(path string) (time.Duration, error) {
-	fi, err := os.Stat(path)
+func FilenameModAge(filename string) (time.Duration, error) {
+	fi, err := os.Stat(filename)
 	if err != nil {
 		dur, _ := time.ParseDuration("0s")
 		return dur, err
 	}
-	return GetFileModAge(fi)
+	return FileModAge(fi)
 }
 
-func FilepathModAgeGTE(path string, s string) (bool, error) {
+func FilenameModAgeGTE(filename string, s string) (bool, error) {
 	ageCheck, err := time.ParseDuration(s)
 	if err != nil {
 		return false, err
 	}
-	fileAge, err := GetFilepathModAge(path)
+	fileAge, err := FilenameModAge(filename)
 	if err != nil {
 		return false, err
 	}
@@ -54,12 +55,12 @@ func FilepathModAgeGTE(path string, s string) (bool, error) {
 	}
 }
 
-func FilepathModAgeLTE(path string, s string) (bool, error) {
+func FilenameModAgeLTE(filename string, s string) (bool, error) {
 	ageCheck, err := time.ParseDuration(s)
 	if err != nil {
 		return false, err
 	}
-	fileAge, err := GetFilepathModAge(path)
+	fileAge, err := FilenameModAge(filename)
 	if err != nil {
 		return false, err
 	}
@@ -69,3 +70,4 @@ func FilepathModAgeLTE(path string, s string) (bool, error) {
 		return false, nil
 	}
 }
+*/
