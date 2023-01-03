@@ -1,5 +1,13 @@
 package httputilmore
 
+import (
+	"errors"
+	"net/http"
+	"strconv"
+)
+
+var ErrStatus404 = errors.New("Status " + strconv.Itoa(http.StatusNotFound) + " " + http.StatusText(http.StatusNotFound))
+
 type HTTPError struct {
 	HTTPStatus int    `json:"httpStatus"`
 	Stage      string `json:"preOpPost"`
