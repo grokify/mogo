@@ -21,7 +21,7 @@ func (entries DirEntries) Sort() { sort.Sort(entries) }
 
 // Names returns a slice of entry names. It can optionally
 // add the directory path and sort the values.
-func (entries DirEntries) Names(dir string, sortNames bool) []string {
+func (entries DirEntries) Names(dir string) []string {
 	if len(strings.TrimSpace(dir)) == 0 {
 		dir = ""
 	}
@@ -33,18 +33,16 @@ func (entries DirEntries) Names(dir string, sortNames bool) []string {
 			names = append(names, filepath.Join(dir, item.Name()))
 		}
 	}
-	if sortNames {
-		sort.Strings(names)
-	}
+	sort.Strings(names)
 	return names
 }
 
 // WriteFileNames writes a text file with filenames, one per line.
-func (entries DirEntries) WriteFileNames(filename, dir string, sortNames bool, perm os.FileMode) error {
+func (entries DirEntries) WriteFileNames(filename, dir string, perm os.FileMode) error {
 	if len(filename) == 0 {
 		return errors.New("filename required")
 	}
-	names := entries.Names(dir, sortNames)
+	names := entries.Names(dir)
 	return os.WriteFile(
 		filename,
 		[]byte(strings.Join(names, "\n")+"\n"),

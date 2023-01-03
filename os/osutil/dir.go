@@ -13,7 +13,7 @@ import (
 	"github.com/grokify/mogo/type/maputil"
 )
 
-func ReadDirMore(dir string, rx *regexp.Regexp, inclDirs, inclFiles, inclEmptyFiles bool) ([]os.DirEntry, error) {
+func ReadDirMore(dir string, rx *regexp.Regexp, inclDirs, inclFiles, inclEmptyFiles bool) (DirEntries, error) {
 	items, err := os.ReadDir(dir)
 	if err != nil {
 		return nil, err
