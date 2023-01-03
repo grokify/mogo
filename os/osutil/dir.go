@@ -52,7 +52,7 @@ func ReadSubdirMin(dir string, rx *regexp.Regexp) (os.DirEntry, error) {
 	if len(sdirs) == 0 {
 		return nil, fmt.Errorf("no subdirectories for dir [%s]", dir)
 	}
-	sort.Sort(DirEntries(sdirs))
+	sort.Sort(sdirs)
 	return sdirs[0], nil
 }
 
@@ -64,7 +64,7 @@ func ReadSubdirMax(dir string, rx *regexp.Regexp) (os.DirEntry, error) {
 	if len(sdirs) == 0 {
 		return nil, fmt.Errorf("no subdirectories for dir [%s]", dir)
 	}
-	sort.Sort(DirEntries(sdirs))
+	sort.Sort(sdirs)
 	return sdirs[len(sdirs)-1], nil
 }
 
