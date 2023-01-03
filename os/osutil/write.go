@@ -2,9 +2,11 @@ package osutil
 
 import (
 	"bufio"
+	"io"
 	"os"
 
 	"github.com/grokify/mogo/encoding/jsonutil"
+	"github.com/grokify/mogo/io/ioutil"
 )
 
 func WriteFileJSON(filepath string, data interface{}, perm os.FileMode, prefix, indent string) error {
@@ -36,4 +38,22 @@ func NewFileWriter(path string) (FileWriter, error) {
 func (f *FileWriter) Close() {
 	f.Writer.Flush()
 	f.File.Close()
+}
+
+func WriteFileReader(filename string, r io.Reader) error {
+	// https://stackoverflow.com/questions/1821811/how-to-read-write-from-to-a-file-using-go
+	// open output file
+	// fo, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, perm)
+	fo, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	// close fo on exit and check for its returned error
+	defer func() {
+		if err := fo.Close(); err != nil {
+			panic(err)
+		}
+	}()
+	w := bufio.NewWriter(fo)
+	return ioutil.Write(w, r)
 }
