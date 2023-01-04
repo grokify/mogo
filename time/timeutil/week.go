@@ -36,11 +36,9 @@ func WeekdayNext(dow time.Weekday) time.Time {
 	now := time.Now()
 	today := now.Weekday()
 	if dow == today {
-		return now.Add(NewDurationDays(7))
+		return now.Add(NewDuration(7, 0, 0, 0, 0))
 	} else if dow > today {
-		return now.Add(NewDurationDays(
-			uint16(int(dow) - int(today))))
+		return now.Add(NewDuration(float64(int(dow)-int(today)), 0, 0, 0, 0))
 	}
-	return now.Add(NewDurationDays(uint16(
-		int(today) - int(dow) + 7)))
+	return now.Add(NewDuration(float64(int(today)-int(dow)+7), 0, 0, 0, 0))
 }

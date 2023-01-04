@@ -12,14 +12,10 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 )
 
+/*
 // NewDurationSeconds returns a new `time.Duration` given a number of seconds.
 func NewDurationSeconds(secs float64) time.Duration {
-	nanos := int64(secs * float64(nanosPerSecond))
-	dur, err := time.ParseDuration(strconv.Itoa(int(nanos)) + "ns")
-	if err != nil {
-		panic(err)
-	}
-	return dur
+	return time.Duration(int64(secs * float64(nanosPerSecond)))
 }
 
 // NewDurationDays returns `time.Duration` given a number of days
@@ -30,6 +26,16 @@ func NewDurationDays(days uint16) time.Duration {
 		panic(err)
 	}
 	return dur
+}
+*/
+
+func NewDuration(day, hour, min, sec float64, nsec int64) time.Duration {
+	nps := float64(NanosPerSecond)
+	return time.Duration(nsec +
+		int64(sec*nps) +
+		int64(min*60*nps) +
+		int64(hour*60*60*nps) +
+		int64(day*24*60*60*nps))
 }
 
 func NewDurationStrings(h, m, s string) (time.Duration, error) {
@@ -50,11 +56,11 @@ func ParseDuration(s string) (time.Duration, error) {
 			return zeroDuration, err
 		}
 		if units == "d" {
-			s = fmt.Sprintf("%vs", i*DaySeconds)
+			s = fmt.Sprintf("%vs", i*SecondsPerDay)
 		} else if units == "w" {
-			s = fmt.Sprintf("%vs", i*WeekSeconds)
+			s = fmt.Sprintf("%vs", i*SecondsPerWeek)
 		} else if units == "y" {
-			s = fmt.Sprintf("%vs", i*YearSeconds)
+			s = fmt.Sprintf("%vs", i*SecondsPerYear)
 		} else {
 			return zeroDuration, errors.New("timeutil.ParseDuration Parse Error")
 		}
@@ -160,7 +166,7 @@ func MaxDuration(durs []time.Duration) time.Duration {
 // More on protobuf: https://godoc.org/github.com/golang/protobuf/ptypes/duration#Duration
 func DurationFromProtobuf(pdur *durationpb.Duration) time.Duration {
 	dur, err := time.ParseDuration(
-		strconv.Itoa(int((pdur.Seconds*nanosPerSecond)+int64(pdur.Nanos))) + "ns")
+		strconv.Itoa(int((pdur.Seconds*NanosPerSecond)+int64(pdur.Nanos))) + "ns")
 	if err != nil {
 		panic(err)
 	}
