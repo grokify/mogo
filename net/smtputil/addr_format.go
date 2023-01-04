@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/grokify/mogo/sort/sortutil"
+	"github.com/grokify/mogo/type/slicesutil"
 )
 
 // www.example.com@@info
@@ -62,6 +62,6 @@ func EmailUserHostToSwapped(user, host string) string {
 func EmailUserHostToReverse(user, host string) string {
 	user = strings.TrimSpace(user)
 	hostParts := strings.Split(strings.TrimSpace(host), ".")
-	sortutil.ReverseSlice(hostParts)
+	slicesutil.Reverse(hostParts)
 	return strings.Join(hostParts, ".") + "@@@" + user
 }

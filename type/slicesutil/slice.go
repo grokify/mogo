@@ -3,8 +3,6 @@ package slicesutil
 import (
 	"regexp"
 	"sort"
-
-	"golang.org/x/exp/constraints"
 )
 
 // Dedupe returns a string slice with duplicate values removed. First observance is kept.
@@ -19,6 +17,14 @@ func Dedupe[S ~[]E, E comparable](s S) S {
 		deduped = append(deduped, val)
 	}
 	return deduped
+}
+
+// Reverse reverses the order of a slice.
+// Stack Overflow: https://stackoverflow.com/a/71904070/1908967
+func Reverse[E comparable](s []E) {
+	sort.SliceStable(s, func(i, j int) bool {
+		return i > j
+	})
 }
 
 // Sub returns a string slice with duplicate values removed. First observance is kept.
@@ -47,13 +53,6 @@ func SubRegexpString(s []string, r *regexp.Regexp) []string {
 		filtered = append(filtered, val)
 	}
 	return filtered
-}
-
-// Sort sorts a slice of items that comply wth `constraints.Ordered`.
-func Sort[E constraints.Ordered](s []E) {
-	sort.Slice(s, func(i, j int) bool {
-		return s[i] < s[j]
-	})
 }
 
 // MakeMatrix2D returns a 2-dimensional matrix. Usage as follows

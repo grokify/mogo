@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/sort/sortutil"
-	"github.com/grokify/mogo/type/slicesutil"
 	"golang.org/x/exp/constraints"
 )
 
@@ -33,7 +32,7 @@ func Keys[K constraints.Ordered, V any](m map[K]V) []K {
 	for k := range m {
 		keys = append(keys, k)
 	}
-	slicesutil.Sort(keys)
+	sortutil.Slice(keys)
 	return keys
 }
 
