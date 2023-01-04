@@ -31,11 +31,11 @@ func NewDurationDays(days uint16) time.Duration {
 
 func NewDuration(day, hour, min, sec float64, nsec int64) time.Duration {
 	nps := float64(NanosPerSecond)
-	return time.Duration(nsec +
-		int64(sec*nps) +
-		int64(min*60*nps) +
-		int64(hour*60*60*nps) +
-		int64(day*24*60*60*nps))
+	return time.Duration(int64(float64(nsec) +
+		sec*nps +
+		min*60*nps +
+		hour*60*60*nps +
+		day*24*60*60*nps))
 }
 
 func NewDurationStrings(h, m, s string) (time.Duration, error) {
