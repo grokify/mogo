@@ -10,14 +10,6 @@ import (
 	"time"
 )
 
-const (
-	YearSeconds            = (365 * 24 * 60 * 60) + (6 * 60 * 60)
-	WeekSeconds            = 7 * 24 * 60 * 60
-	DaySeconds             = 24 * 60 * 60
-	MonthsEN               = `["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]`
-	MillisToNanoMultiplier = 1000000
-)
-
 // TimeOpts represnts a struct for `time.Date`.
 type TimeOpts struct {
 	Year       int

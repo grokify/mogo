@@ -7,14 +7,6 @@ import (
 	"time"
 )
 
-const (
-	nanosPerSecond      = int64(1000000000)
-	nanosPerMicrosecond = nanosPerSecond / 1000000
-	nanosPerMillisecond = nanosPerSecond / 1000
-	nanosPerMinute      = nanosPerSecond * 60
-	nanosPerHour        = nanosPerMinute * 24
-)
-
 // 00:00:00,309 - 00:00:07,074	 And in conclusion, we have found MySQL to be an excellent database for our website. Any questions?	S1
 
 // DurationInfo is a struct that holds integer values
@@ -34,20 +26,20 @@ type DurationInfo struct {
 func NewDurationInfo(dur time.Duration) DurationInfo {
 	workingNanos := dur.Nanoseconds()
 	dinfo := DurationInfo{}
-	if workingNanos >= nanosPerHour {
-		hrs := float64(workingNanos) / float64(nanosPerHour)
+	if workingNanos >= NanosPerHour {
+		hrs := float64(workingNanos) / float64(NanosPerHour)
 		hrsInt64 := int64(hrs)
 		dinfo.Hours = hrsInt64
-		workingNanos = workingNanos - (hrsInt64 * nanosPerHour)
+		workingNanos = workingNanos - (hrsInt64 * NanosPerHour)
 	}
-	if workingNanos >= nanosPerMinute {
-		min := float64(workingNanos) / float64(nanosPerMinute)
+	if workingNanos >= NanosPerMinute {
+		min := float64(workingNanos) / float64(NanosPerMinute)
 		minInt64 := int64(min)
 		dinfo.Minutes = minInt64
-		workingNanos = workingNanos - (minInt64 * nanosPerMinute)
+		workingNanos = workingNanos - (minInt64 * NanosPerMinute)
 	}
-	if workingNanos >= nanosPerSecond {
-		sec := float64(workingNanos) / float64(nanosPerSecond)
+	if workingNanos >= NanosPerSecond {
+		sec := float64(workingNanos) / float64(NanosPerSecond)
 		secInt64 := int64(sec)
 		dinfo.Seconds = secInt64
 		//workingNanos = workingNanos - (secInt64 * nanosPerSecond)
@@ -108,11 +100,11 @@ func ParseDurationInfoStrings(hr, mn, sc, ms, us, ns string) (DurationInfo, erro
 // TotalNanoseconds returns the total number of nanoseconds
 // represented by the duration.
 func (di *DurationInfo) TotalNanoseconds() int64 {
-	return (di.Hours * nanosPerHour) +
-		(di.Minutes * nanosPerMinute) +
-		(di.Seconds * nanosPerSecond) +
-		(di.Milliseconds * nanosPerMillisecond) +
-		(di.Microseconds * nanosPerMicrosecond) +
+	return (di.Hours * NanosPerHour) +
+		(di.Minutes * NanosPerMinute) +
+		(di.Seconds * NanosPerSecond) +
+		(di.Milliseconds * NanosPerMillisecond) +
+		(di.Microseconds * NanosPerMicrosecond) +
 		di.Nanoseconds
 }
 
