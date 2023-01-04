@@ -47,12 +47,6 @@ func MustParse(layout, value string) time.Time {
 	return t
 }
 
-// TimeForEpochMillis returns the time.Time value for an epoch
-// in milliseconds
-func UnixMillis(epochMillis int64) time.Time {
-	return time.Unix(0, epochMillis*MillisToNanoMultiplier)
-}
-
 // UnixToDay converts an epoch in seconds to a time.Time for the day.
 func UnixToDay(epoch int64) time.Time {
 	t := time.Unix(epoch, 0).UTC()
