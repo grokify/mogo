@@ -26,8 +26,8 @@ require (
 	golang.org/x/crypto v0.4.0
 	golang.org/x/exp v0.0.0-20221230185412-738e83a70c30
 	golang.org/x/image v0.2.0
-	golang.org/x/net v0.4.0
-	golang.org/x/text v0.5.0
+	golang.org/x/net v0.5.0
+	golang.org/x/text v0.6.0
 	google.golang.org/genproto v0.0.0-20221227171554-f9683d7f8bef
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/oleiade/reflections.v1 v1.0.0
@@ -45,6 +45,6 @@ require (
 	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/stretchr/testify v1.7.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	golang.org/x/sys v0.3.0 // indirect
+	golang.org/x/sys v0.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0 // indirect
 )
