@@ -3,7 +3,7 @@ package mimeutil
 import (
 	"testing"
 
-	"github.com/grokify/mogo/net/httputilmore"
+	"github.com/grokify/mogo/net/http/httputilmore"
 )
 
 var isTypeTests = []struct {

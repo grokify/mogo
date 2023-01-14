@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/grokify/mogo/net/httputilmore"
+	"github.com/grokify/mogo/net/http/httputilmore"
 )
 
 // PathMethod returns a path-method string which can be used as a unique identifier for an HTTP endpoint.

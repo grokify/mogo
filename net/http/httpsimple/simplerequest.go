@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/encoding/xmlutil"
-	"github.com/grokify/mogo/net/httputilmore"
+	"github.com/grokify/mogo/net/http/httputilmore"
 	"github.com/grokify/mogo/reflect/reflectutil"
 )
 
