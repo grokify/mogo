@@ -2,13 +2,27 @@ package currency
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/shopspring/decimal"
+	"golang.org/x/exp/slices"
 )
 
 const (
-	USDAbbr            = "USD"
+	CurrencyAUD = "AUD"
+	CurrencyCAD = "CAD"
+	CurrencyCHF = "CHF"
+	CurrencyEUR = "EUR"
+	CurrencyGBP = "GBP"
+	CurrencyJPY = "JPY"
+	CurrencyNOK = "NOK"
+	CurrencyNZD = "NZD"
+	CurrencySEK = "SEK"
+	CurrencyUSD = "USD"
+
 	USDSymbol          = "$"
 	UnitsBillionsDesc  = "billions"
 	UnitsBillionsInt   = 1000000000
@@ -24,6 +38,24 @@ var (
 	rxCurrencyPrefix         = regexp.MustCompile(`^(\D+)(\d.*)$`)
 	rxCurrencySuffix         = regexp.MustCompile(`^(.*)([^\d.,].*)$`)
 )
+
+func CurrencyUnits() []string {
+	return []string{
+		CurrencyAUD,
+		CurrencyCAD,
+		CurrencyCHF,
+		CurrencyEUR,
+		CurrencyGBP,
+		CurrencyJPY,
+		CurrencyNOK,
+		CurrencyNZD,
+		CurrencySEK,
+		CurrencyUSD}
+}
+
+func CurrencyUnitKnown(value string) bool {
+	return slices.Index(CurrencyUnits(), value) >= 0
+}
 
 type ParseCurrencyOpts struct {
 	Comma         string
@@ -60,7 +92,7 @@ func ParseCurrency(opts *ParseCurrencyOpts, s string) (string, float64, error) {
 			currency = strings.ToUpper(prefix)
 		} else if len(prefix) == 1 {
 			if prefix == "$" {
-				currency = USDAbbr
+				currency = CurrencyUSD
 			}
 		} else {
 			return "", 0, ErrUnknownCurrencyPrefix
@@ -112,4 +144,76 @@ func ParseCurrency(opts *ParseCurrencyOpts, s string) (string, float64, error) {
 	}
 
 	return currency, val, nil
+}
+
+type Amount struct {
+	Value decimal.Decimal
+	Unit  string
+}
+
+var (
+	// rxUSD   = regexp.MustCompile(`^USD?\s+\$([0-9,]+\.[0-9]{2})$`)
+	rxCUR   = regexp.MustCompile(`^([A-Z]{1,3})\s+([^0-9])?([0-9,]+\.[0-9]{2})$`)
+	rxComma = regexp.MustCompile(`,`)
+)
+
+func ParseAmount(value string) (Amount, error) {
+	value = strings.TrimSpace(value)
+	m := rxCUR.FindStringSubmatch(value)
+	pr := Amount{}
+	if len(m) > 0 {
+		digits := m[3]
+		digits = rxComma.ReplaceAllString(digits, "")
+		n, err := decimal.NewFromString(digits)
+		if err != nil {
+			return pr, err
+		}
+		pr.Value = n
+		cur, err := ParseCurrencyUnit(m[1], m[2])
+		if err != nil {
+			return pr, err
+		}
+		pr.Unit = cur
+		return pr, nil
+	}
+	return pr, fmt.Errorf("currency not found [%s]", value)
+}
+
+func (amt *Amount) Add(a Amount) error {
+	if a.Value.IsZero() {
+		return nil
+	}
+	amt.Unit = strings.ToUpper(strings.TrimSpace(amt.Unit))
+	a.Unit = strings.ToUpper(strings.TrimSpace(a.Unit))
+	if amt.Unit != a.Unit {
+		if amt.Value.IsZero() && amt.Unit == "" {
+			amt.Unit = a.Unit
+		} else {
+			return fmt.Errorf("mismatch currency units (%s) (%v) (%s) (%v)", amt.Unit, amt.Value, a.Unit, a.Value)
+		}
+	}
+	amt.Value = amt.Value.Add(a.Value)
+	return nil
+}
+
+func ParseCurrencyUnit(abbr, symbol string) (string, error) {
+	abbr = CurrencyCanonical(abbr)
+	if CurrencyUnitKnown(abbr) {
+		return abbr, nil
+	}
+	return "", fmt.Errorf("could not parse currency [%s]", abbr)
+}
+
+func CurrencyCanonical(value string) string {
+	value = strings.TrimSpace(strings.ToUpper(value))
+	abbrs := map[string]string{
+		"AU": CurrencyAUD,
+		"C":  CurrencyCAD,
+		"US": CurrencyUSD,
+	}
+	can, ok := abbrs[value]
+	if ok {
+		return can
+	}
+	return value
 }
