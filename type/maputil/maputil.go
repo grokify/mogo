@@ -55,24 +55,14 @@ func KeysExist[K comparable, V any](m map[K]V, keys []K, requireAll bool) bool {
 	}
 }
 
-// StringValues returns a string slice of string values.
-func StringValues[K comparable](m map[K]string) []string {
-	vals := []string{}
+// Values returns a string slice of sorted values.
+func Values[K comparable, V constraints.Ordered](m map[K]V) []V {
+	vals := []V{}
 	for _, val := range m {
 		vals = append(vals, val)
 	}
-	sort.Strings(vals)
+	sortutil.Slice(vals)
 	return vals
-}
-
-// IntKeys takes a map where the keys are integers and reurns a slice of key names.
-func IntKeys[K constraints.Integer, V any](m map[K]V) []int {
-	keys := []int{}
-	for k := range m {
-		keys = append(keys, int(k))
-	}
-	sort.Ints(keys)
-	return keys
 }
 
 // NumberValuesAverage returns a `float64` average of a map's values.
@@ -118,6 +108,16 @@ func DuplicateValues[C comparable](m map[C]C) map[C][]C {
 }
 
 /*
+// IntKeys takes a map where the keys are integers and reurns a slice of key names.
+func IntKeys[K constraints.Integer, V any](m map[K]V) []int {
+	keys := []int{}
+	for k := range m {
+		keys = append(keys, int(k))
+	}
+	sort.Ints(keys)
+	return keys
+}
+
 func StringKeys(mp interface{}) []string {
 	keysVal := reflect.ValueOf(mp).MapKeys()
 	keysArr := []string{}
@@ -157,12 +157,15 @@ func MapSSToKeyValues(kvs map[string]string, sep string) string {
 type MapInt64Int64 map[int64]int64
 
 func (m MapInt64Int64) KeysSorted() []int64 {
-	keys := []int64{}
-	for k := range m {
-		keys = append(keys, k)
-	}
-	sort.Sort(sortutil.Int64Slice(keys))
-	return keys
+	return Keys(m)
+	/*
+		keys := []int64{}
+		for k := range m {
+			keys = append(keys, k)
+		}
+		sortutil.Slice(keys)
+		return keys
+	*/
 }
 
 func (m MapInt64Int64) ValuesSortedByKeys() []int64 {
