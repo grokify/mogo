@@ -53,6 +53,33 @@ func TokensBetween(z *html.Tokenizer, skipErrors, inclusive bool, begin, end Tok
 	return tokens, nil
 }
 
+func NextToken(z *html.Tokenizer, skipErrors bool, tokFilters ...html.Token) (html.Token, error) {
+	if z == nil {
+		return html.Token{}, errors.New("tokenizer must be supplied")
+	}
+	tokFil := Tokens(tokFilters)
+	for {
+		ttThis := z.Next()
+		switch ttThis {
+		case html.ErrorToken:
+			err := z.Err()
+			if z.Err() == io.EOF {
+				return html.Token{}, ErrTokenNotFound
+			} else if !skipErrors {
+				return html.Token{}, err
+			}
+		default:
+			tok := z.Token()
+			// if tok.DataAtom == atom.Img {
+			//	fmtutil.PrintJSON(tok)
+			// }
+			if len(tokFilters) == 0 || tokFil.MatchLeft(tok) {
+				return tok, nil
+			}
+		}
+	}
+}
+
 // NextTokenMatch returns a string of matches. `includeMatch` is only used
 // when `includeChain` is included.
 func NextTokenMatch(z *html.Tokenizer, skipErrors, includeChain, includeMatch bool, filters ...TokenFilter) ([]html.Token, error) {

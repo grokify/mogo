@@ -46,3 +46,34 @@ func TokenMap(t html.Token) map[string]string {
 		"dataAtom": t.DataAtom.String(),
 		"string":   t.String()}
 }
+
+// Match matches the supplied token with the tokens in the set.
+// only the attributes in the set need to match for a `true` result.
+// One one set token need to match for success.
+func (tokens Tokens) MatchLeft(tok html.Token) bool {
+	for _, tokFilterTry := range tokens {
+		if TokenMatchLeft(tokFilterTry, tok) {
+			return true
+		}
+	}
+	return false
+}
+
+// TokenMatchLeft returns true if the token matches the token filter.
+func TokenMatchLeft(tokFilter, tok html.Token) bool {
+	if tokFilter.Type != tok.Type {
+		return false
+	} else if tokFilter.DataAtom != tok.DataAtom {
+		return false
+	}
+	if len(tokFilter.Attr) == 0 {
+		return true
+	}
+	tokAttrs := Attributes(tok.Attr)
+	for _, filAttr := range tokFilter.Attr {
+		if !tokAttrs.Exists(filAttr) {
+			return false
+		}
+	}
+	return true
+}

@@ -1,9 +1,5 @@
 package tokenizer
 
-import (
-	"golang.org/x/net/html"
-)
-
 type DescriptionLists []DescriptionList
 
 func (dls DescriptionLists) Strings() [][][]string {
@@ -25,8 +21,8 @@ func (dl DescriptionList) Strings() [][]string {
 }
 
 type Description struct {
-	Term        []html.Token
-	Description []html.Token
+	Term        Tokens
+	Description Tokens
 }
 
 func (d *Description) Empty() bool {
