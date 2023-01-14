@@ -5,7 +5,6 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/grokify/mogo/html/tokenizer"
 	"github.com/microcosm-cc/bluemonday"
 	"golang.org/x/net/html/atom"
 )
@@ -110,15 +109,15 @@ func HTMLToTextH1(b []byte, policy *bluemonday.Policy) (string, error) {
 }
 
 func HTMLToTextAtom(b []byte, policy *bluemonday.Policy, a atom.Atom) (string, error) {
-	t := tokenizer.NewTokenizerBytes(b)
-	toks, err := tokenizer.TokensBetweenAtom(t, false, true, a)
+	t := NewTokenizerBytes(b)
+	toks, err := TokensBetweenAtom(t, false, true, a)
 	if err != nil {
 		return "", err
 	}
 	if policy == nil {
 		policy = bluemonday.StrictPolicy()
 	}
-	return strings.TrimSpace(policy.Sanitize(tokenizer.Tokens(toks).String())), nil
+	return strings.TrimSpace(policy.Sanitize(Tokens(toks).String())), nil
 }
 
 func SimplifyHTMLText(s string) string {

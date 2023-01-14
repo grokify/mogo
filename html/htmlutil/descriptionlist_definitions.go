@@ -1,4 +1,6 @@
-package tokenizer
+package htmlutil
+
+// import "github.com/grokify/mogo/html/htmlutil"
 
 type DescriptionLists []DescriptionList
 

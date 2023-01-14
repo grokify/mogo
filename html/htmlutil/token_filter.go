@@ -1,4 +1,4 @@
-package tokenizer
+package htmlutil
 
 import (
 	"golang.org/x/net/html"
