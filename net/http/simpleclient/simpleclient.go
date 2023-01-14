@@ -1,0 +1,68 @@
+package simpleclient
+
+import (
+	"encoding/json"
+	"io"
+	"net/http"
+	"regexp"
+	"strings"
+
+	"github.com/grokify/mogo/net/urlutil"
+)
+
+var rxHTTPURL = regexp.MustCompile(`^(?i)https?://`)
+
+// SimpleClient provides a simple interface to making HTTP requests
+// using `net/http`.
+type SimpleClient struct {
+	BaseURL    string
+	HTTPClient *http.Client
+}
+
+func NewSimpleClient(httpClient *http.Client, baseURL string) SimpleClient {
+	return SimpleClient{HTTPClient: httpClient, BaseURL: baseURL}
+}
+
+func (sc *SimpleClient) Get(reqURL string) (*http.Response, error) {
+	return sc.Do(SimpleRequest{Method: http.MethodGet, URL: reqURL})
+}
+
+func (sc *SimpleClient) Do(req SimpleRequest) (*http.Response, error) {
+	req.Inflate()
+	bodyBytes, err := req.BodyBytes()
+	if err != nil {
+		return nil, err
+	}
+	reqURL := strings.TrimSpace(req.URL)
+	if len(sc.BaseURL) > 0 {
+		if len(reqURL) == 0 {
+			reqURL = sc.BaseURL
+		} else if !rxHTTPURL.MatchString(reqURL) {
+			reqURL = urlutil.JoinAbsolute(sc.BaseURL, reqURL)
+		}
+	}
+	if len(req.Query) > 0 {
+		goURL, err := urlutil.URLAddQueryString(reqURL, req.Query)
+		if err != nil {
+			return nil, err
+		}
+		reqURL = goURL.String()
+	}
+	if sc.HTTPClient == nil {
+		sc.HTTPClient = &http.Client{}
+	}
+	return DoSimple(sc.HTTPClient, req.Method, reqURL, req.Headers, bodyBytes)
+}
+
+func (sc *SimpleClient) DoUnmarshalJSON(req SimpleRequest, resBody any) ([]byte, *http.Response, error) {
+	resp, err := sc.Do(req)
+	if err != nil {
+		return []byte{}, nil, err
+	}
+	bytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return bytes, resp, err
+	}
+	err = json.Unmarshal(bytes, resBody)
+	return bytes, resp, err
+}
