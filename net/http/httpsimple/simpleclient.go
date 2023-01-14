@@ -1,4 +1,4 @@
-package simpleclient
+package httpsimple
 
 import (
 	"encoding/json"
