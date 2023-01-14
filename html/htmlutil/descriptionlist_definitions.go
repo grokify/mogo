@@ -32,11 +32,11 @@ func (d *Description) Empty() bool {
 }
 
 func (d *Description) TermString() string {
-	return Tokens(d.Term).String()
+	return d.Term.String()
 }
 
 func (d *Description) DescriptionString() string {
-	return Tokens(d.Description).String()
+	return d.Description.String()
 }
 
 func (d *Description) Strings() []string {
