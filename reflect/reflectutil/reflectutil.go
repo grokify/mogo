@@ -28,15 +28,23 @@ func GetField(i any, fieldPath ...string) (any, error) {
 	return GetField(nextItem, fieldPath[1:]...)
 }
 
-// TypeName returns the name of a struct. stackoverflow-answerId:1908967
-func TypeName(i any) string {
-	res := ""
+// NameOf returns the name of a struct. If `inclPkgPath` is set to `true`, a
+// fully-qualified name is returned including package path.
+func NameOf(i any, inclPkgPath bool) string {
+	var ptr, name string
 	t := reflect.TypeOf(i)
-	for t.Kind() == reflect.Ptr {
+	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
-		res += "*"
+		ptr = "*"
 	}
-	return res + t.Name()
+	name = t.Name()
+	if inclPkgPath {
+		pkgPath := t.PkgPath()
+		if len(pkgPath) > 0 {
+			name = pkgPath + "." + name
+		}
+	}
+	return ptr + name
 }
 
 // SliceInterfaceToString converts an `interface{}` to a `[]string`.
