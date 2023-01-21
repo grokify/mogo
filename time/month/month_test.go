@@ -181,11 +181,11 @@ var timeSeriesMonthTests = []struct {
 
 func TestTimeSeriesMonth(t *testing.T) {
 	for _, tt := range timeSeriesMonthTests {
-		input, err := timeslice.ParseTimeSlice(time.RFC3339, tt.input)
+		input, err := timeslice.ParseTimes(time.RFC3339, tt.input)
 		if err != nil {
 			t.Errorf("year.TestTimeSeriesMonth cannot parse [%v] Error: [%s]", tt.input, err.Error())
 		}
-		seriesWant, err := timeslice.ParseTimeSlice(time.RFC3339, tt.series)
+		seriesWant, err := timeslice.ParseTimes(time.RFC3339, tt.series)
 		if err != nil {
 			t.Errorf("year.TestTimeSeriesMonth cannot parse [%v] Error: [%s]", tt.series, err.Error())
 		}

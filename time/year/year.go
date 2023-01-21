@@ -9,11 +9,11 @@ import (
 )
 
 // TimeSeriesYear returns time series of months given start and end input times.
-func TimeSeriesYear(sortAsc bool, times ...time.Time) timeslice.TimeSlice {
+func TimeSeriesYear(sortAsc bool, times ...time.Time) timeslice.Times {
 	min, max := timeutil.SliceMinMax(times)
 	minYear := timeutil.YearStart(min)
 	maxYear := timeutil.YearStart(max)
-	timeSeries := timeslice.TimeSlice{}
+	timeSeries := timeslice.Times{}
 	curYear := minYear
 	for curYear.Before(maxYear) || curYear.Equal(maxYear) {
 		timeSeries = append(timeSeries, curYear)

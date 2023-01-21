@@ -119,11 +119,11 @@ func MonthContinuousIsYearBegin(monthc uint64) bool {
 }
 
 // TimeSeriesMonth returns time series of months given start and end input times.
-func TimeSeriesMonth(sortAsc bool, times ...time.Time) timeslice.TimeSlice {
+func TimeSeriesMonth(sortAsc bool, times ...time.Time) timeslice.Times {
 	min, max := timeutil.SliceMinMax(times)
 	minMonth := timeutil.MonthStart(min)
 	maxMonth := timeutil.MonthStart(max)
-	timeSeries := timeslice.TimeSlice{}
+	timeSeries := timeslice.Times{}
 	curMonth := minMonth
 	for curMonth.Before(maxMonth) || curMonth.Equal(maxMonth) {
 		timeSeries = append(timeSeries, curMonth)

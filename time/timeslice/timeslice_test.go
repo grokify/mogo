@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-var timeSliceTests = []struct {
+var timesTests = []struct {
 	rfc3339Times []string
 	wantSorted   []string
 	wantDeduped  []string
@@ -23,34 +23,34 @@ var timeSliceTests = []struct {
 			"2021-01-01T00:00:00Z", "2021-01-01T02:02:02Z"}},
 }
 
-func TestTimeSlice(t *testing.T) {
-	for _, tt := range timeSliceTests {
-		timeSlice, err := ParseTimeSlice(time.RFC3339, tt.rfc3339Times)
+func TestTimes(t *testing.T) {
+	for _, tt := range timesTests {
+		times, err := ParseTimes(time.RFC3339, tt.rfc3339Times)
 		if err != nil {
 			t.Errorf("time slice did not parse as RFC-3339 [%s] error [%s]",
 				strings.Join(tt.rfc3339Times, ","), err.Error())
 		}
-		wantDedupedTimeSlice, err := ParseTimeSlice(time.RFC3339, tt.wantDeduped)
+		wantDedupedTimeSlice, err := ParseTimes(time.RFC3339, tt.wantDeduped)
 		if err != nil {
 			t.Errorf("time slice did not parse as RFC-3339 [%s] error [%s]",
 				strings.Join(tt.wantDeduped, ","), err.Error())
 		}
-		dedupedTimeSlice := timeSlice.Dedupe()
+		dedupedTimeSlice := times.Dedupe()
 		if !wantDedupedTimeSlice.Equal(dedupedTimeSlice) {
-			t.Errorf("timeSlice.Dedupe FAIL want [%s] got [%s]",
+			t.Errorf("times.Dedupe FAIL want [%s] got [%s]",
 				strings.Join(tt.wantDeduped, ","),
 				strings.Join(dedupedTimeSlice.Format(time.RFC3339), ","))
 		}
-		wantSortedTimeSlice, err := ParseTimeSlice(time.RFC3339, tt.wantSorted)
+		wantSortedTimeSlice, err := ParseTimes(time.RFC3339, tt.wantSorted)
 		if err != nil {
 			t.Errorf("time slice did not parse as RFC-3339 [%s] error [%s]",
 				strings.Join(tt.wantSorted, ","), err.Error())
 		}
-		sort.Sort(timeSlice)
-		if !wantSortedTimeSlice.Equal(timeSlice) {
-			t.Errorf("timeSlice.Dedupe FAIL want [%s] got [%s]",
+		sort.Sort(times)
+		if !wantSortedTimeSlice.Equal(times) {
+			t.Errorf("times.Dedupe FAIL want [%s] got [%s]",
 				strings.Join(tt.wantDeduped, ","),
-				strings.Join(timeSlice.Format(time.RFC3339), ","))
+				strings.Join(times.Format(time.RFC3339), ","))
 		}
 	}
 }
@@ -111,7 +111,7 @@ var timeRangeTests = []struct {
 
 func TestTimeRange(t *testing.T) {
 	for _, tt := range timeRangeTests {
-		timeSlice, err := ParseTimeSlice(time.RFC3339, tt.timeRange)
+		timeSlice, err := ParseTimes(time.RFC3339, tt.timeRange)
 		if err != nil {
 			t.Errorf("time slice did not parse as RFC-3339 [%s] error [%s]",
 				strings.Join(tt.timeRange, ","), err.Error())
