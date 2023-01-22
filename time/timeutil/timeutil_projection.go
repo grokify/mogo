@@ -7,7 +7,7 @@ import (
 // QuarterProjection takes a time and numeric value, estimating the
 // value at the end of the quarter using a straight-line projection.
 func QuarterProjection(dt time.Time, current float64) float64 {
-	qtStart := QuarterStart(dt)
+	qtStart := quarterStart(dt)
 	durQ2D := dt.Sub(qtStart)
 	qtNext := TimeDt6AddNMonths(qtStart, 3)
 	durQtr := qtNext.Sub(qtStart)

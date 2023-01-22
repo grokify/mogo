@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+/*
 // QuarterStart returns a time.Time for the beginning of the
 // quarter in UTC time.
 func QuarterStart(dt time.Time) time.Time {
@@ -13,9 +14,10 @@ func QuarterStart(dt time.Time) time.Time {
 	qm := QuarterToMonth(MonthToQuarter(uint8(dt.Month())))
 	return time.Date(dt.Year(), time.Month(qm), 1, 0, 0, 0, 0, time.UTC)
 }
+*/
 
-func QuarterStartString(dt time.Time) string {
-	dtStart := QuarterStart(dt)
+func QuarterStartString(t time.Time) string {
+	dtStart := NewTimeMore(t, 0).QuarterStart()
 	return fmt.Sprintf("%v Q%v", dtStart.Year(), MonthToQuarter(uint8(dtStart.Month())))
 }
 
@@ -31,36 +33,36 @@ func DeltaQuarters(dt time.Time, num int) time.Time {
 }
 */
 
-func quarterNextSingle(dt time.Time) time.Time {
-	return TimeDt6AddNMonths(QuarterStart(dt), 3)
+func quarterNextSingle(t time.Time) time.Time {
+	return TimeDt6AddNMonths(NewTimeMore(t, 0).QuarterStart(), 3)
 }
 
-func QuarterAdd(dt time.Time, count int) time.Time {
+func QuarterAdd(t time.Time, count int) time.Time {
 	if count == 0 {
-		return QuarterStart(dt)
+		return NewTimeMore(t, 0).QuarterStart()
 	} else if count < 0 {
-		return quarterPrev(dt, uint(-1*count))
+		return quarterPrev(t, uint(-1*count))
 	}
-	return quarterNext(dt, uint(count))
+	return quarterNext(t, uint(count))
 }
 
-func quarterNext(dt time.Time, count uint) time.Time {
-	dt = QuarterStart(dt)
+func quarterNext(t time.Time, count uint) time.Time {
+	t = NewTimeMore(t, 0).QuarterStart()
 	for i := 0; i < int(count); i++ {
-		dt = quarterNextSingle(dt)
+		t = quarterNextSingle(t)
 	}
-	return dt
+	return t
 }
 
-func quarterPrevSingle(dt time.Time) time.Time {
-	return TimeDt6SubNMonths(QuarterStart(dt), 3)
+func quarterPrevSingle(t time.Time) time.Time {
+	return TimeDt6SubNMonths(NewTimeMore(t, 0).QuarterStart(), 3)
 }
 
-func quarterPrev(dt time.Time, num uint) time.Time {
+func quarterPrev(t time.Time, num uint) time.Time {
 	for i := 0; i < int(num); i++ {
-		dt = quarterPrevSingle(dt)
+		t = quarterPrevSingle(t)
 	}
-	return dt
+	return t
 }
 
 func IsQuarterStart(t time.Time) bool {

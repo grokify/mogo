@@ -13,7 +13,7 @@ type XOXTimes struct {
 
 func QOQTimes(thisTime time.Time) XOXTimes {
 	xox := XOXTimes{CurrentTime: thisTime.UTC()}
-	xox.CurrentStart = QuarterStart(xox.CurrentTime)
+	xox.CurrentStart = quarterStart(xox.CurrentTime)
 	xox.PreviousStart = QuarterAdd(xox.CurrentStart, -1)
 
 	dur := xox.CurrentTime.Sub(xox.CurrentStart)
@@ -21,11 +21,12 @@ func QOQTimes(thisTime time.Time) XOXTimes {
 	return xox
 }
 
-func YOYTimes(thisTime time.Time) XOXTimes {
-	thisTime = thisTime.UTC()
+func YOYTimes(t time.Time) XOXTimes {
+	t = t.UTC()
+	tm := NewTimeMore(t, 0)
 	xox := XOXTimes{
-		CurrentTime:  thisTime,
-		CurrentStart: YearStart(thisTime)}
+		CurrentTime:  t,
+		CurrentStart: tm.YearStart()}
 	xox.PreviousStart = TimeDt4AddNYears(xox.CurrentStart, -1)
 
 	dur := xox.CurrentTime.Sub(xox.CurrentStart)

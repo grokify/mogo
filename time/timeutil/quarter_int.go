@@ -78,8 +78,8 @@ func MustInQuarterOld(dt time.Time, yyyyq int32) bool {
 */
 
 func InQuarterTime(dt, qtr time.Time) bool {
-	return IsGreaterThan(dt, QuarterStart(qtr), true) &&
-		IsLessThan(dt, QuarterEnd(qtr), true)
+	return IsGreaterThan(dt, quarterStart(qtr), true) &&
+		IsLessThan(dt, quarterEnd(qtr), true)
 }
 
 func EqualQuarter(dt1, dt2 time.Time) bool {
@@ -99,7 +99,7 @@ func ParseQuarterInt32StartEndTimes(yyyyq int32) (time.Time, time.Time, error) {
 	if err != nil {
 		return start, start, err
 	}
-	return start, QuarterEnd(start), nil
+	return start, quarterEnd(start), nil
 }
 
 func ParseQuarterInt32(yyyyq int32) (int32, uint8, error) {
@@ -144,7 +144,7 @@ func QuarterInt32EndTime(yyyyq int32) (time.Time, error) {
 	if err != nil {
 		return qtrBeg, err
 	}
-	return QuarterEnd(qtrBeg), nil
+	return quarterEnd(qtrBeg), nil
 }
 
 func ParseQuarterStringStartTime(yyyyqStr string) (time.Time, error) {

@@ -18,10 +18,12 @@ func TimeSeriesSlice(interval Interval, times []time.Time) []time.Time {
 func TimeSeriesMinMax(interval Interval, min, max time.Time) []time.Time {
 	min, max = MinMax(min, max)
 	series := []time.Time{}
+	tmMin := NewTimeMore(min, 0)
+	tmMax := NewTimeMore(max, 0)
 	switch interval {
 	case Year:
-		min = YearStart(min)
-		max = YearStart(max)
+		min = tmMin.YearStart()
+		max = tmMax.YearStart()
 		series = append(series, min)
 		cur := min
 		for {
@@ -32,8 +34,8 @@ func TimeSeriesMinMax(interval Interval, min, max time.Time) []time.Time {
 			series = append(series, cur)
 		}
 	case Month:
-		min = MonthStart(min)
-		max = MonthStart(max)
+		min = tmMin.MonthStart()
+		max = tmMin.MonthStart()
 		series = append(series, min)
 		cur := min
 		for {

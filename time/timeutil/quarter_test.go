@@ -24,7 +24,7 @@ func TestQuarterStartAdd(t *testing.T) {
 			t.Errorf("time.Parse(%v): want %v, err %v", tt.input, tt.quarterStart, err)
 			continue
 		}
-		got := QuarterStart(dt)
+		got := quarterStart(dt)
 		if got.Format(time.RFC3339) != tt.quarterStart {
 			t.Errorf("QuarterStart(%v): want %v, got %v", tt.input, tt.quarterStart, got.Format(time.RFC3339))
 		}

@@ -289,31 +289,3 @@ func ToMonthStart(t time.Time) time.Time {
 		t.Location())
 }
 */
-// TimeMeta is a struct for holding various times related
-// to a current time, including year start, quarter start,
-// month start, and week start.
-type TimeMeta struct {
-	This         time.Time
-	YearStart    time.Time
-	QuarterStart time.Time
-	MonthStart   time.Time
-	WeekStart    time.Time
-}
-
-// NewTimeMeta returns a TimeMeta struct given `time.Time`
-// and `time.Weekday` parameters.
-func NewTimeMeta(dt time.Time, dow time.Weekday) (TimeMeta, error) {
-	dt = dt.UTC()
-	meta := TimeMeta{
-		This:         dt,
-		YearStart:    YearStart(dt),
-		QuarterStart: QuarterStart(dt),
-		MonthStart:   MonthStart(dt)}
-
-	week, err := WeekStart(dt, dow)
-	if err != nil {
-		return meta, err
-	}
-	meta.WeekStart = week
-	return meta, nil
-}

@@ -59,8 +59,8 @@ func Latest(times []time.Time, skipZeroes bool) (time.Time, error) {
 
 func QuarterSlice(min, max time.Time) []time.Time {
 	min, max = MinMax(min, max)
-	minQ := QuarterStart(min)
-	maxQ := QuarterStart(max)
+	minQ := quarterStart(min)
+	maxQ := quarterStart(max)
 	times := []time.Time{}
 	cur := minQ
 	for cur.Before(maxQ) || cur.Equal(maxQ) {
