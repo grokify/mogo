@@ -6,36 +6,60 @@ import (
 	"time"
 )
 
+const (
+	NanosecondString  = "naonsecond"
+	MicrosecondString = "microsecond"
+	MillisecondString = "millisecond"
+	SecondString      = "second"
+	MinuteString      = "minute"
+	HourString        = "hour"
+	DayString         = "day"
+	WeekString        = "week"
+	MonthString       = "month"
+	QuarterString     = "quarter"
+	YearString        = "year"
+	DecadeString      = "decade"
+	ScoreString       = "score"
+	CenturyString     = "century"
+	MillenniaString   = "millennia"
+)
+
 type Interval int
 
 const (
-	Decade Interval = iota
-	Year
-	Quarter
-	Month
-	Week
-	Day
-	Hour
-	Minute
-	Second
-	Millisecond
+	Nanosecond Interval = iota
 	Microsecond
-	Nanosecond
+	Millisecond
+	Second
+	Minute
+	Hour
+	Day
+	Week
+	Month
+	Quarter
+	Year
+	Decade
+	Score
+	Century
+	Millennia
 )
 
 var intervals = [...]string{
-	"decade",
-	"year",
-	"quarter",
-	"month",
-	"week",
-	"day",
-	"hour",
-	"minute",
-	"second",
-	"millisecond",
-	"microsecond",
-	"nanosecond",
+	NanosecondString,
+	MicrosecondString,
+	MillisecondString,
+	SecondString,
+	MinuteString,
+	HourString,
+	DayString,
+	WeekString,
+	MonthString,
+	QuarterString,
+	YearString,
+	DecadeString,
+	ScoreString,
+	CenturyString,
+	MillenniaString,
 }
 
 func (i Interval) String() string { return intervals[i] }
@@ -47,20 +71,22 @@ func ParseInterval(src string) (Interval, error) {
 			return Interval(i), nil
 		}
 	}
-	return Year, fmt.Errorf("interval [%v] not found", src)
+	return 0, fmt.Errorf("interval [%v] not found", src)
 }
 
-func IntervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time, error) {
+func intervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time, error) {
 	switch interval.String() {
-	case "year":
-		return YearStart(dt), nil
-	case "quarter":
-		return QuarterStart(dt), nil
-	case "month":
-		return MonthStart(dt), nil
-	case "week":
-		return WeekStart(dt, dow)
+	case YearString:
+		return yearStart(dt), nil
+	case QuarterString:
+		return quarterStart(dt), nil
+	case MonthString:
+		return monthStart(dt), nil
+	case WeekString:
+		return weekStart(dt, dow)
+	case DayString:
+		return dayStart(dt), nil
 	default:
-		return time.Time{}, fmt.Errorf("interval [%v] not supported in timeutil.IntervalStart", interval)
+		return time.Time{}, fmt.Errorf("interval (%s) not supported in timeutil.IntervalStart", interval.String())
 	}
 }
