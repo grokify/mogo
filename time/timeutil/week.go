@@ -2,6 +2,8 @@ package timeutil
 
 import (
 	"time"
+
+	"github.com/grokify/mogo/math/mathutil"
 )
 
 // FirstDayOfISOWeek returns a time.Time object for the first day of
@@ -32,13 +34,19 @@ func FirstDayOfISOWeek(year int, week int, timezone *time.Location) time.Time {
 	return date
 }
 
-func WeekdayNext(dow time.Weekday) time.Time {
+func WeekdayNext(d time.Weekday) time.Time {
 	now := time.Now()
 	today := now.Weekday()
-	if dow == today {
+	if d == today {
 		return now.Add(NewDuration(7, 0, 0, 0, 0))
-	} else if dow > today {
-		return now.Add(NewDuration(float64(int(dow)-int(today)), 0, 0, 0, 0))
+	} else if d > today {
+		return now.Add(NewDuration(float64(int(d)-int(today)), 0, 0, 0, 0))
 	}
-	return now.Add(NewDuration(float64(int(today)-int(dow)+7), 0, 0, 0, 0))
+	return now.Add(NewDuration(float64(int(today)-int(d)+7), 0, 0, 0, 0))
+}
+
+// WeekdayNormalized ensures a `time.Weekday` value is within `[0,6]`. It supports
+// converting postiive and negative integers.
+func WeekdayNormalized(d time.Weekday) time.Weekday {
+	return time.Weekday(mathutil.ModInt(int(d), 7))
 }

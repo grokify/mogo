@@ -175,11 +175,10 @@ func TimeZeroUnix() time.Time {
 }
 
 // func (tm TimeMore) IsZero() bool { return tm.Time.Equal(TimeZeroRFC3339()) }
-
 // func IsZeroAny(u time.Time) bool { return TimeIsZeroAny(u) }
 
 func (tm TimeMore) IsZeroAny() bool {
-	return isZeroAny(tm.Time)
+	return isZeroAny(tm.Time())
 }
 
 func isZeroAny(u time.Time) bool {

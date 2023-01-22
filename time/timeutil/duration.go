@@ -114,9 +114,9 @@ func DurationStringMinutesSeconds(durationSeconds int64) (string, error) {
 	return fmt.Sprintf("%v min %v sec", int(dur.Minutes()), modSeconds), nil
 }
 
-// QuarterDuration returns a time.Duration representing the calendar quarter for the time provided.
+// QuarterDuration returns a `time.Duration` representing the calendar quarter for the time provided.
 func (tm TimeMore) QuarterDuration() time.Duration {
-	start := quarterStart(tm.Time)
+	start := quarterStart(tm.Time())
 	end := QuarterAdd(start, 1)
 	return end.Sub(start)
 }

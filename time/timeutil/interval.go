@@ -74,7 +74,7 @@ func ParseInterval(src string) (Interval, error) {
 	return 0, fmt.Errorf("interval [%v] not found", src)
 }
 
-func intervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time, error) {
+func intervalStart(dt time.Time, interval Interval, d time.Weekday) (time.Time, error) {
 	switch interval.String() {
 	case YearString:
 		return yearStart(dt), nil
@@ -83,7 +83,7 @@ func intervalStart(dt time.Time, interval Interval, dow time.Weekday) (time.Time
 	case MonthString:
 		return monthStart(dt), nil
 	case WeekString:
-		return weekStart(dt, dow)
+		return weekStart(dt, d), nil
 	case DayString:
 		return dayStart(dt), nil
 	default:
