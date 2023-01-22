@@ -10,6 +10,7 @@ const (
 	NanosPerMillisecond = NanosPerSecond / 1000
 	NanosPerMinute      = NanosPerSecond * 60
 	NanosPerHour        = NanosPerMinute * 24
+	NanosPerSecondSub1  = NanosPerSecond - 1
 
 	MonthsEN = `["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]`
 )

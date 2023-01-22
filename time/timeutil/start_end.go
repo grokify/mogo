@@ -10,7 +10,7 @@ func dayStart(dt time.Time) time.Time {
 		0, 0, 0, 0, dt.Location())
 }
 
-// weekStart takes a time.Time object and a week start day in the time.Weekday format.
+// weekStart takes a `time.Time` struct and a week start day in the `time.Weekday` format.
 func weekStart(dt time.Time, dow time.Weekday) (time.Time, error) {
 	return TimeDeltaDowInt(dt.UTC(), int(dow), -1, true, true)
 }
@@ -21,17 +21,16 @@ func monthStart(dt time.Time) time.Time {
 		0, 0, 0, 0, dt.Location())
 }
 
-// quarterStart returns a time.Time for the beginning of the quarter in UTC time.
+// quarterStart returns a time.Time for the start of the quarter in UTC time.
 func quarterStart(dt time.Time) time.Time {
-	dt = dt.UTC()
 	qm := QuarterToMonth(MonthToQuarter(uint8(dt.Month())))
 	return time.Date(dt.Year(), time.Month(qm), 1, 0, 0, 0, 0, time.UTC)
 }
 
-func yearStart(dt time.Time) time.Time {
+func yearStart(t time.Time) time.Time {
 	return time.Date(
-		dt.Year(), time.January, 1,
-		0, 0, 0, 0, dt.Location())
+		t.Year(), time.January, 1,
+		0, 0, 0, 0, t.Location())
 }
 
 /*
@@ -68,13 +67,13 @@ func isYearStart(dt time.Time) bool {
 }
 
 // quarterEnd returns a time.Time for the end of the quarter by second in UTC time.
-func quarterEnd(dt time.Time) time.Time {
-	qs := quarterStart(dt.UTC())
+func quarterEnd(t time.Time) time.Time {
+	qs := quarterStart(t)
 	qn := TimeDt6AddNMonths(qs, 3)
-	return time.Date(qn.Year(), qn.Month(), 0, 23, 59, 59, 999999999, time.UTC)
+	return time.Date(qn.Year(), qn.Month(), MonthEndDay(qn.Year(), qn.Month()), 23, 59, 59, int(NanosPerSecondSub1), t.Location())
 }
 
 // yearEnd returns a a time.Time for the end of the year in UTC time.
-func yearEnd(dt time.Time) time.Time {
-	return time.Date(dt.UTC().Year(), time.December, 31, 23, 59, 59, 999999999, time.UTC)
+func yearEnd(t time.Time) time.Time {
+	return time.Date(t.UTC().Year(), time.December, 31, 23, 59, 59, int(NanosPerSecondSub1), t.Location())
 }
