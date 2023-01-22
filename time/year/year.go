@@ -1,25 +1,24 @@
 package year
 
 import (
-	"sort"
 	"time"
 
 	"github.com/grokify/mogo/time/timeutil"
 )
 
-// TimeSeriesYear returns time series of months given start and end input times.
-func TimeSeriesYear(sortAsc bool, times ...time.Time) timeutil.Times {
+// TimesYearStarts returns time series of months given start and end input times.
+func TimesYearStarts(times ...time.Time) timeutil.Times {
+	timesStarts := timeutil.Times{}
+	if len(times) == 0 {
+		return timesStarts
+	}
 	min, max := timeutil.SliceMinMax(times)
-	minYear := timeutil.YearStart(min)
-	maxYear := timeutil.YearStart(max)
-	timeSeries := timeutil.Times{}
+	minYear := timeutil.NewTimeMore(min, 0).YearStart()
+	maxYear := timeutil.NewTimeMore(max, 0).YearStart()
 	curYear := minYear
 	for curYear.Before(maxYear) || curYear.Equal(maxYear) {
-		timeSeries = append(timeSeries, curYear)
+		timesStarts = append(timesStarts, curYear)
 		curYear = curYear.AddDate(1, 0, 0)
 	}
-	if len(timeSeries) > 1 && sortAsc {
-		sort.Sort(timeSeries)
-	}
-	return timeSeries
+	return timesStarts
 }

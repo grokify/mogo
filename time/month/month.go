@@ -2,7 +2,6 @@ package month
 
 import (
 	"fmt"
-	"sort"
 	"time"
 
 	"github.com/grokify/base36"
@@ -117,19 +116,20 @@ func MonthContinuousIsYearBegin(monthc uint64) bool {
 	return month == 1
 }
 
-// TimeSeriesMonth returns time series of months given start and end input times.
-func TimeSeriesMonth(sortAsc bool, times ...time.Time) timeutil.Times {
+// TimesMonthStarts returns time series of months given start and end input times.
+func TimesMonthStarts(times ...time.Time) timeutil.Times {
+	timesStarts := timeutil.Times{}
+	if len(times) == 0 {
+		return timesStarts
+	}
 	min, max := timeutil.SliceMinMax(times)
-	minMonth := timeutil.MonthStart(min)
-	maxMonth := timeutil.MonthStart(max)
-	timeSeries := timeutil.Times{}
+	minMonth := timeutil.NewTimeMore(min, 0).MonthStart()
+	maxMonth := timeutil.NewTimeMore(max, 0).MonthStart()
 	curMonth := minMonth
 	for curMonth.Before(maxMonth) || curMonth.Equal(maxMonth) {
-		timeSeries = append(timeSeries, curMonth)
-		curMonth = timeutil.TimeDt6AddNMonths(curMonth, 1)
+		timesStarts = append(timesStarts, curMonth)
+		// curMonth = timeutil.TimeDt6AddNMonths(curMonth, 1)
+		curMonth = curMonth.AddDate(0, 1, 0)
 	}
-	if len(timeSeries) > 0 && sortAsc {
-		sort.Sort(timeSeries)
-	}
-	return timeSeries
+	return timesStarts
 }

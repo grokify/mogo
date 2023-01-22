@@ -144,7 +144,7 @@ func TestMonthFirst(t *testing.T) {
 	}
 }
 
-var timeSeriesMonthTests = []struct {
+var timesStartsMonthTests = []struct {
 	input  []string
 	series []string
 }{
@@ -178,8 +178,8 @@ var timeSeriesMonthTests = []struct {
 	},
 }
 
-func TestTimeSeriesMonth(t *testing.T) {
-	for _, tt := range timeSeriesMonthTests {
+func TestTimesStartsMonth(t *testing.T) {
+	for _, tt := range timesStartsMonthTests {
 		input, err := timeutil.ParseTimes(time.RFC3339, tt.input)
 		if err != nil {
 			t.Errorf("year.TestTimeSeriesMonth cannot parse [%v] Error: [%s]", tt.input, err.Error())
@@ -188,7 +188,7 @@ func TestTimeSeriesMonth(t *testing.T) {
 		if err != nil {
 			t.Errorf("year.TestTimeSeriesMonth cannot parse [%v] Error: [%s]", tt.series, err.Error())
 		}
-		seriesTry := TimeSeriesMonth(true, input...)
+		seriesTry := TimesMonthStarts(input...)
 		if !seriesTry.Equal(seriesWant) {
 			t.Errorf("year.TimeSeriesMonth series not equal: want [%v] try [%v]", seriesWant, seriesTry)
 		}

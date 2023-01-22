@@ -7,7 +7,7 @@ import (
 	"github.com/grokify/mogo/time/timeutil"
 )
 
-var timeSeriesYearTests = []struct {
+var timesStartsYearTests = []struct {
 	input  []string
 	series []string
 }{
@@ -29,8 +29,8 @@ var timeSeriesYearTests = []struct {
 			"2010-01-01T00:00:00Z"},
 	}}
 
-func TestTimeSeriesYear(t *testing.T) {
-	for _, tt := range timeSeriesYearTests {
+func TestTimesStartsYear(t *testing.T) {
+	for _, tt := range timesStartsYearTests {
 		input, err := timeutil.ParseTimes(time.RFC3339, tt.input)
 		if err != nil {
 			t.Errorf("year.TestTimeSeriesYear cannot parse [%v] Error: [%s]", tt.input, err.Error())
@@ -39,7 +39,7 @@ func TestTimeSeriesYear(t *testing.T) {
 		if err != nil {
 			t.Errorf("year.TestTimeSeriesYear cannot parse [%v] Error: [%s]", tt.series, err.Error())
 		}
-		seriesTry := TimeSeriesYear(true, input...)
+		seriesTry := TimesYearStarts(input...)
 		if !seriesTry.Equal(seriesWant) {
 			t.Errorf("year.TestTimeSeriesYear series not equal: want [%v] try [%v]", seriesWant, seriesTry)
 		}
