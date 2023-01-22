@@ -16,9 +16,10 @@ var encodeBase36HexStringTests = []struct {
 
 func TestEncodeBase36HexString(t *testing.T) {
 	for _, tt := range encodeBase36HexStringTests {
-		enc := base36.Encode36HexString(tt.v)
-
-		if enc != tt.want {
+		enc, err := base36.Encode36HexString(tt.v)
+		if err != nil {
+			t.Errorf("base36.Encode36String(%s): err [%s]", tt.v, err.Error())
+		} else if enc != tt.want {
 			t.Errorf("base36.Encode36String(%v): want [%v], got [%v]", tt.v, tt.want, enc)
 		}
 	}

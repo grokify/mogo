@@ -12,10 +12,11 @@ var encodeBase36StringTests = []struct {
 
 func TestEncodeBase36String(t *testing.T) {
 	for _, tt := range encodeBase36StringTests {
-		enc := Encode36String(tt.v)
-
-		if enc != tt.want {
-			t.Errorf("base36.Encode36String(%v): want [%v], got [%v]", tt.v, tt.want, enc)
+		enc, err := Encode36String(tt.v)
+		if err != nil {
+			t.Errorf("base36.Decode36String(%s) error [%s]", tt.want, err.Error())
+		} else if enc != tt.want {
+			t.Errorf("base36.Encode36String(%s): want [%s], got [%s]", tt.v, tt.want, enc)
 		}
 	}
 }
@@ -24,9 +25,9 @@ func TestDecodeBase36String(t *testing.T) {
 	for _, tt := range encodeBase36StringTests {
 		dec, err := Decode36String(tt.want)
 		if err != nil {
-			t.Errorf("base36.Decode36String(%v) error [%v]", tt.want, err)
+			t.Errorf("base36.Decode36String(%s) error [%s]", tt.want, err.Error())
 		} else if string(dec) != tt.v {
-			t.Errorf("base36.Decode36String(%v): want [%v], got [%v]", tt.v, tt.want, dec)
+			t.Errorf("base36.Decode36String(%s): want [%s], got [%s]", tt.v, tt.want, dec)
 		}
 	}
 }
@@ -41,10 +42,11 @@ var encodeBase36HexStringTests = []struct {
 
 func TestEncodeBase36HexString(t *testing.T) {
 	for _, tt := range encodeBase36HexStringTests {
-		enc := Encode36HexString(tt.v)
-
-		if enc != tt.want {
-			t.Errorf("base36.Encode36String(%v): want [%v], got [%v]", tt.v, tt.want, enc)
+		enc, err := Encode36HexString(tt.v)
+		if err != nil {
+			t.Errorf("base36.Encode36String(%s): err [%s]", tt.v, err.Error())
+		} else if enc != tt.want {
+			t.Errorf("base36.Encode36String(%s): want [%s], got [%s]", tt.v, tt.want, enc)
 		}
 	}
 }

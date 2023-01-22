@@ -1,63 +1,75 @@
 package bigint
 
 import (
+	"errors"
 	"fmt"
 	"math/big"
 )
 
+var ErrSetStringFailure = errors.New("string conversion to `*big.Int` failed")
+
 // NewIntString creates a new `*big.Int` from an uint64.
-func NewIntString(val string) *big.Int {
-	i := new(big.Int)
-	i.SetString(val, 10)
-	return i
+func NewIntString(val string) (*big.Int, error) {
+	i, ok := new(big.Int).SetString(val, 10)
+	if !ok {
+		return nil, ErrSetStringFailure
+	}
+	return i, nil
+}
+
+// NewIntHex converts a hex string to a `*big.Int`.
+func NewIntHex(hexNumStr string) (*big.Int, error) {
+	i, ok := new(big.Int).SetString(hexNumStr, 16)
+	if !ok {
+		return nil, ErrSetStringFailure
+	}
+	return i, nil
 }
 
 // NewIntUint64 creates a new `*big.Int` from an uint64.
 func NewIntUint64(val uint64) *big.Int {
-	i := new(big.Int)
-	i.SetUint64(val)
-	return i
-}
-
-// HexToInt converts a hex string to a `*big.Int`.
-func HexToInt(hexNumStr string) *big.Int {
-	i := new(big.Int)
-	i.SetString(hexNumStr, 16)
-	return i
+	return new(big.Int).SetUint64(val)
 }
 
 // IntToHex converts a `*big.Int` to a hex string.
-func IntToHex(n *big.Int) string {
-	return fmt.Sprintf("%x", n)
+func IntToHex(x *big.Int) string {
+	return fmt.Sprintf("%x", x)
+}
+
+// Copy returns a copy of a `*big.Int`
+func Copy(x *big.Int) *big.Int {
+	return new(big.Int).SetBytes(x.Bytes())
 }
 
 // Div devides a by b and returns a new `*big.Int`
 func Div(a, b *big.Int) *big.Int {
-	amodn := new(big.Int)
-	return amodn.Div(a, b)
+	return new(big.Int).Div(a, b)
+}
+
+// Equal checks if a == b.
+func Equal(x, y *big.Int) bool {
+	// https://tip.golang.org/src/math/big/alias_test.go
+	return x.Cmp(y) == 0
 }
 
 // Mod performs `a mod n`
 func Mod(a, n *big.Int) *big.Int {
-	amodn := new(big.Int)
-	return amodn.Mod(a, n)
+	return new(big.Int).Mod(a, n)
 }
 
-// IsEqual checks if a == b.
-func IsEqual(a, b *big.Int) bool {
-	return a.String() == b.String()
-}
-
-// Copy returns a copy of a `*big.Int`
-func Copy(i *big.Int) *big.Int {
-	newInt := new(big.Int)
-	newInt.SetString(i.String(), 10)
-	return newInt
+// ModInt64 returns an int64 mod
+func ModInt64(a, n int64) int64 {
+	return new(big.Int).Mod(big.NewInt(n), big.NewInt(n)).Int64()
+	// xBig := big.NewInt(x)
+	// yBig := big.NewInt(y)
+	// xBig.Mod(xBig, yBig)
+	// return xBig.Int64()
 }
 
 // Pow is the power function for big ints.
-func Pow(x *big.Int, y *big.Int) *big.Int {
-	if y.String() == "1" {
+func Pow(x, y *big.Int) *big.Int {
+	// if y.String() == "1" {
+	if Equal(y, big.NewInt(1)) {
 		return Copy(x)
 	} else if y.Sign() < 1 {
 		return big.NewInt(1)
@@ -74,12 +86,8 @@ func Pow(x *big.Int, y *big.Int) *big.Int {
 	return res
 }
 
-// Int64Mod returns an int64 mod
-func Int64Mod(x, y int64) int64 {
-	xBig := big.NewInt(x)
-	yBig := big.NewInt(y)
-	xBig.Mod(xBig, yBig)
-	return xBig.Int64()
+func PowInt64(x, y int64) int64 {
+	return Pow(big.NewInt(x), big.NewInt(y)).Int64()
 }
 
 func IntToBaseXString(baseX, val int) string {

@@ -17,22 +17,6 @@ const (
 	md5base36format string = `%025s`
 )
 
-// Encode36 returns an encoded string given a byte array.
-func Encode36(ba []byte) string {
-	return Encode36HexString(hex.EncodeToString(ba))
-}
-
-// Encode36String returns an encoded string given a string.
-func Encode36String(s string) string {
-	return Encode36([]byte(s))
-}
-
-// Encode36HexString returns an encoded string given a string.
-func Encode36HexString(s16 string) string {
-	i := bigint.HexToInt(s16)
-	return strings.ToLower(base36.EncodeBigInt(i))
-}
-
 // Decode36 returns a decoded byte array given an encoded byte array.
 func Decode36(b36 []byte) ([]byte, error) {
 	return Decode36String(string(b36))
@@ -44,10 +28,32 @@ func Decode36String(s36 string) ([]byte, error) {
 	return hex.DecodeString(bigint.IntToHex(bi))
 }
 
+// Encode36 returns an encoded string given a byte array.
+func Encode36(ba []byte) (string, error) {
+	return Encode36HexString(hex.EncodeToString(ba))
+}
+
+// Encode36String returns an encoded string given a string.
+func Encode36String(s string) (string, error) {
+	return Encode36([]byte(s))
+}
+
+// Encode36HexString returns an encoded string given a string.
+func Encode36HexString(s16 string) (string, error) {
+	i, err := bigint.NewIntHex(s16)
+	if err != nil {
+		return "", err
+	}
+	return strings.ToLower(base36.EncodeBigInt(i)), nil
+}
+
 // Md5Base36 returns a Base36 encoded MD5 hash of a string.
 func Md5Base36(s string) string {
-	return fmt.Sprintf(md5base36format,
-		Encode36HexString(fmt.Sprintf("%x", md5.Sum([]byte(s))))) // #nosec G401
+	b36Hex, err := Encode36HexString(fmt.Sprintf("%x", md5.Sum([]byte(s))))
+	if err != nil {
+		panic(err)
+	}
+	return fmt.Sprintf(md5base36format, b36Hex) // #nosec G401
 }
 
 // Md5String is an alias for Md5Base36.
