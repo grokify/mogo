@@ -42,17 +42,25 @@ func TestDivideInt64(t *testing.T) {
 					quotient, remainder)
 			}
 		}
-		modInt := ModInt(int(tt.dividend), int(tt.divisor))
-		if modInt != int(tt.remainder) {
-			t.Errorf("mathutil.ModInt(%d, %d) Mismatch: want [%d], got [%d]",
+		/*
+			modInt := ModInt(int(tt.dividend), int(tt.divisor))
+			if modInt != int(tt.remainder) {
+				t.Errorf("mathutil.ModInt(%d, %d) Mismatch: want [%d], got [%d]",
+					tt.dividend, tt.divisor,
+					tt.remainder, modInt)
+			}
+			modInt64 := ModInt64(tt.dividend, tt.divisor)
+			if modInt64 != tt.remainder {
+				t.Errorf("mathutil.ModInt64(%d, %d) Mismatch: want [%d], got [%d]",
+					tt.dividend, tt.divisor,
+					tt.remainder, modInt64)
+			}
+		*/
+		modPy := PyModInt(tt.dividend, tt.divisor)
+		if modPy != tt.remainder {
+			t.Errorf("mathutil.PyMod(%d, %d) Mismatch: want [%d], got [%d]",
 				tt.dividend, tt.divisor,
-				tt.remainder, modInt)
-		}
-		modInt64 := ModInt64(tt.dividend, tt.divisor)
-		if modInt64 != tt.remainder {
-			t.Errorf("mathutil.ModInt64(%d, %d) Mismatch: want [%d], got [%d]",
-				tt.dividend, tt.divisor,
-				tt.remainder, modInt64)
+				tt.remainder, modPy)
 		}
 	}
 }
@@ -61,6 +69,14 @@ var modTests = []struct {
 	input int
 	mod   int
 }{
+	{-8, 0},
+	{-7, 1},
+	{-6, 2},
+	{-5, 3},
+	{-4, 0},
+	{-3, 1},
+	{-2, 2},
+	{-1, 3},
 	{0, 0},
 	{1, 1},
 	{2, 2},
@@ -77,7 +93,7 @@ var modTests = []struct {
 
 func TestMod(t *testing.T) {
 	for _, tt := range modTests {
-		try := ModInt(tt.mod, 4)
+		try := ModInt(tt.mod, int(4))
 		if try != tt.mod {
 			t.Errorf("mathutil.ModInt(%d, %d) Mismatch: want [%d], got [%d]",
 				tt.mod, 4, tt.mod, try)

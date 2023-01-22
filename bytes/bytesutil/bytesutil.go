@@ -38,7 +38,7 @@ func BytesToIntsMore(bytes []byte, intLength int) []int {
 	for i, b := range bytes {
 		curNum = append(curNum, b)
 		if intLength > 0 {
-			if mod := mathutil.ModInt(i, intLength); mod == intLength-1 {
+			if mod := mathutil.PyModInt(i, intLength); mod == intLength-1 {
 				ints = append(ints, BytesToInt(curNum))
 				curNum = []byte{}
 			}
