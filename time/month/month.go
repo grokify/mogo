@@ -7,7 +7,6 @@ import (
 
 	"github.com/grokify/base36"
 	"github.com/grokify/mogo/math/mathutil"
-	"github.com/grokify/mogo/time/timeslice"
 	"github.com/grokify/mogo/time/timeutil"
 )
 
@@ -119,11 +118,11 @@ func MonthContinuousIsYearBegin(monthc uint64) bool {
 }
 
 // TimeSeriesMonth returns time series of months given start and end input times.
-func TimeSeriesMonth(sortAsc bool, times ...time.Time) timeslice.Times {
+func TimeSeriesMonth(sortAsc bool, times ...time.Time) timeutil.Times {
 	min, max := timeutil.SliceMinMax(times)
 	minMonth := timeutil.MonthStart(min)
 	maxMonth := timeutil.MonthStart(max)
-	timeSeries := timeslice.Times{}
+	timeSeries := timeutil.Times{}
 	curMonth := minMonth
 	for curMonth.Before(maxMonth) || curMonth.Equal(maxMonth) {
 		timeSeries = append(timeSeries, curMonth)

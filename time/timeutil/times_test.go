@@ -1,4 +1,4 @@
-package timeslice
+package timeutil
 
 import (
 	"sort"

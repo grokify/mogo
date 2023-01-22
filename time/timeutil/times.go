@@ -1,4 +1,4 @@
-package timeslice
+package timeutil
 
 import (
 	"errors"
@@ -6,9 +6,15 @@ import (
 	"time"
 )
 
-// Times is used for sorting. e.g.
-// sort.Sort(sort.Reverse(timeSlice))
-// sort.Sort(timeSlice)
+var (
+	ErrEmptyTimeSlice   = errors.New("empty time slice")
+	ErrOutOfBounds      = errors.New("out of bounds")
+	ErrOutOfBoundsLower = errors.New("out of bounds lower")
+	ErrOutOfBoundsUpper = errors.New("out of bounds upper")
+)
+
+// Times is a slice of `time.Time` that supports a number of functions and can be used for sorting,
+// e.g. `sort.Sort(times)` or `sort.Sort(sort.Reverse(times))`.
 type Times []time.Time
 
 func (ts Times) Len() int           { return len(ts) }
@@ -54,13 +60,6 @@ func (ts Times) Duplicate() Times {
 	newTS = append(newTS, ts...)
 	return newTS
 }
-
-var (
-	ErrEmptyTimeSlice   = errors.New("empty time slice")
-	ErrOutOfBounds      = errors.New("out of bounds")
-	ErrOutOfBoundsLower = errors.New("out of bounds lower")
-	ErrOutOfBoundsUpper = errors.New("out of bounds upper")
-)
 
 // RangeLower returns the TimeSlice time value for the range
 // lower than or equal to the supplied time.

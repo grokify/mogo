@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/grokify/mogo/time/timeslice"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 var timeSeriesYearTests = []struct {
@@ -31,11 +31,11 @@ var timeSeriesYearTests = []struct {
 
 func TestTimeSeriesYear(t *testing.T) {
 	for _, tt := range timeSeriesYearTests {
-		input, err := timeslice.ParseTimes(time.RFC3339, tt.input)
+		input, err := timeutil.ParseTimes(time.RFC3339, tt.input)
 		if err != nil {
 			t.Errorf("year.TestTimeSeriesYear cannot parse [%v] Error: [%s]", tt.input, err.Error())
 		}
-		seriesWant, err := timeslice.ParseTimes(time.RFC3339, tt.series)
+		seriesWant, err := timeutil.ParseTimes(time.RFC3339, tt.series)
 		if err != nil {
 			t.Errorf("year.TestTimeSeriesYear cannot parse [%v] Error: [%s]", tt.series, err.Error())
 		}
