@@ -24,7 +24,7 @@ var nameOfTests = []struct {
 	{&currencyutil.Amount{}, "*Amount", "*github.com/grokify/mogo/data/currencyutil.Amount"},
 }
 
-// TestNameOf ensures `reflectutil.NameOf()`` returns correct values.
+// TestNameOf ensures `reflectutil.NameOf()` returns correct values.
 func TestNameOf(t *testing.T) {
 	for _, tt := range nameOfTests {
 		typeNameTry := NameOf(tt.v, false)
