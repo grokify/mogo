@@ -174,7 +174,7 @@ func TimeZeroUnix() time.Time {
 	return t0
 }
 
-func (tm TimeMore) IsZero() bool { return tm.Time.Equal(TimeZeroRFC3339()) }
+// func (tm TimeMore) IsZero() bool { return tm.Time.Equal(TimeZeroRFC3339()) }
 
 // func IsZeroAny(u time.Time) bool { return TimeIsZeroAny(u) }
 
