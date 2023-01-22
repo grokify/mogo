@@ -38,12 +38,15 @@ func NewTimeMoreQuarterEndString(yyyyqStr string, dow time.Weekday) (TimeMore, e
 // func (tm *TimeMore) DOW() time.Weekday       { return tm.dow }
 func (tm TimeMore) DayStart() time.Time     { return dayStart(tm.Time) }
 func (tm TimeMore) MonthStart() time.Time   { return monthStart(tm.Time) }
+func (tm TimeMore) IsMonthStart() bool      { return isMonthStart(tm.Time) }
 func (tm TimeMore) Quarter() int32          { return QuarterInt32ForTime(tm.Time) }
 func (tm TimeMore) QuarterStart() time.Time { return quarterStart(tm.Time) }
 func (tm TimeMore) QuarterEnd() time.Time   { return quarterEnd(tm.Time) }
+func (tm TimeMore) IsQuarterStart() bool    { return isQuarterStart(tm.Time) }
 func (tm TimeMore) Year() int32             { return QuarterInt32ToYear(tm.Quarter()) }
 func (tm TimeMore) YearStart() time.Time    { return yearStart(tm.Time) }
 func (tm TimeMore) YearEnd() time.Time      { return yearEnd(tm.Time) }
+func (tm TimeMore) IsYearStart() bool       { return isYearStart(tm.Time) }
 func (tm TimeMore) IntervalStart(interval Interval) (time.Time, error) {
 	return intervalStart(tm.Time, interval, tm.DOW)
 }

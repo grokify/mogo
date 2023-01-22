@@ -42,7 +42,7 @@ func NextYearStart(dt time.Time) time.Time {
 }
 */
 
-func IsMonthStart(dt time.Time) bool {
+func isMonthStart(dt time.Time) bool {
 	return dt.Day() == 1 &&
 		dt.Hour() == 0 &&
 		dt.Minute() == 0 &&
@@ -50,8 +50,21 @@ func IsMonthStart(dt time.Time) bool {
 		dt.Nanosecond() == 0
 }
 
-func IsYearStart(dt time.Time) bool {
-	return dt.Month() == time.January && IsMonthStart(dt)
+func isQuarterStart(t time.Time) bool {
+	t = t.UTC()
+	return t.Nanosecond() == 0 &&
+		t.Second() == 0 &&
+		t.Minute() == 0 &&
+		t.Hour() == 0 &&
+		t.Day() == 1 &&
+		(t.Month() == time.January ||
+			t.Month() == time.April ||
+			t.Month() == time.July ||
+			t.Month() == time.October)
+}
+
+func isYearStart(dt time.Time) bool {
+	return dt.Month() == time.January && isMonthStart(dt)
 }
 
 // quarterEnd returns a time.Time for the end of the quarter by second in UTC time.

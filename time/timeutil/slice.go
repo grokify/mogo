@@ -36,7 +36,7 @@ func Earliest(times []time.Time, skipZeroes bool) (time.Time, error) {
 		func(i, j int) bool { return times[i].Before(times[j]) })
 
 	first := times[0]
-	if skipZeroes && TimeIsZeroAny(first) {
+	if skipZeroes && isZeroAny(first) {
 		return first, fmt.Errorf("latest time is zero [%s]", first.Format(time.RFC3339))
 	}
 	return first, nil
@@ -51,7 +51,7 @@ func Latest(times []time.Time, skipZeroes bool) (time.Time, error) {
 		func(i, j int) bool { return times[i].Before(times[j]) })
 
 	last := times[len(times)-1]
-	if skipZeroes && TimeIsZeroAny(last) {
+	if skipZeroes && isZeroAny(last) {
 		return last, fmt.Errorf("latest time is zero [%s]", last.Format(time.RFC3339))
 	}
 	return last, nil
@@ -83,7 +83,7 @@ func FirstNonZeroTimeParsed(format string, times []string) (time.Time, error) {
 		if err != nil {
 			return t, err
 		}
-		if !IsZeroAny(t) {
+		if !isZeroAny(t) {
 			return t, nil
 		}
 	}
@@ -95,7 +95,7 @@ func FirstNonZeroTime(times ...time.Time) (time.Time, error) {
 		return time.Now(), errors.New("no times provided")
 	}
 	for _, t := range times {
-		if !IsZeroAny(t) {
+		if !isZeroAny(t) {
 			return t, nil
 		}
 	}

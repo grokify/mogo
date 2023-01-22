@@ -114,10 +114,9 @@ func DurationStringMinutesSeconds(durationSeconds int64) (string, error) {
 	return fmt.Sprintf("%v min %v sec", int(dur.Minutes()), modSeconds), nil
 }
 
-// QuarterDuration returns a time.Duration representing the
-// calendar quarter for the time provided.
-func QuarterDuration(t time.Time) time.Duration {
-	start := quarterStart(t)
+// QuarterDuration returns a time.Duration representing the calendar quarter for the time provided.
+func (tm TimeMore) QuarterDuration() time.Duration {
+	start := quarterStart(tm.Time)
 	end := QuarterAdd(start, 1)
 	return end.Sub(start)
 }
@@ -131,8 +130,7 @@ func SumDurations(durations ...time.Duration) time.Duration {
 	return dur
 }
 
-// SubDuration subtracts one duration from another and
-// returns the result as a `time.Duration`.
+// SubDuration subtracts one duration from another and returns the result as a `time.Duration`.
 func SubDuration(dur1, dur2 time.Duration) time.Duration {
 	ns := dur1.Nanoseconds() - dur2.Nanoseconds()
 	diff, err := time.ParseDuration(fmt.Sprintf("%dns", ns))

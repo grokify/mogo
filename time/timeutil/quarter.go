@@ -65,22 +65,6 @@ func quarterPrev(t time.Time, num uint) time.Time {
 	return t
 }
 
-func IsQuarterStart(t time.Time) bool {
-	t = t.UTC()
-	if t.Nanosecond() == 0 &&
-		t.Second() == 0 &&
-		t.Minute() == 0 &&
-		t.Hour() == 0 &&
-		t.Day() == 1 &&
-		(t.Month() == time.January ||
-			t.Month() == time.April ||
-			t.Month() == time.July ||
-			t.Month() == time.October) {
-		return true
-	}
-	return false
-}
-
 // MonthToQuarter converts a month to a calendar quarter.
 func MonthToQuarter(month uint8) uint8 {
 	return uint8(math.Ceil(float64(month) / 3))

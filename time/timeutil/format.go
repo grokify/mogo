@@ -37,7 +37,7 @@ const (
 const (
 	RFC3339Min         = "0000-01-01T00:00:00Z"
 	RFC3339Max         = "9999-12-31T23:59:59Z"
-	RFC3339Zero        = "0001-01-01T00:00:00Z"
+	RFC3339Zero        = "0001-01-01T00:00:00Z" // Golang zero value
 	RFC3339ZeroUnix    = "1970-01-01T00:00:00Z"
 	RFC3339YMDZeroUnix = int64(-62135596800)
 )
@@ -174,17 +174,18 @@ func TimeZeroUnix() time.Time {
 	return t0
 }
 
-func IsZero(u time.Time) bool { return TimeIsZeroAny(u) }
+func (tm TimeMore) IsZero() bool { return tm.Time.Equal(TimeZeroRFC3339()) }
 
-func IsZeroAny(u time.Time) bool { return TimeIsZeroAny(u) }
+// func IsZeroAny(u time.Time) bool { return TimeIsZeroAny(u) }
 
-func TimeIsZeroAny(u time.Time) bool {
-	if u.Equal(TimeZeroRFC3339()) ||
+func (tm TimeMore) IsZeroAny() bool {
+	return isZeroAny(tm.Time)
+}
+
+func isZeroAny(u time.Time) bool {
+	return u.Equal(TimeZeroRFC3339()) ||
 		u.Equal(TimeMinRFC3339()) ||
-		u.Equal(TimeZeroUnix()) {
-		return true
-	}
-	return false
+		u.Equal(TimeZeroUnix())
 }
 
 type RFC3339YMDTime struct{ time.Time }
