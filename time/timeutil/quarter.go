@@ -34,7 +34,7 @@ func DeltaQuarters(dt time.Time, num int) time.Time {
 */
 
 func quarterNextSingle(t time.Time) time.Time {
-	return TimeDt6AddNMonths(NewTimeMore(t, 0).QuarterStart(), 3)
+	return TimeDT6AddNMonths(NewTimeMore(t, 0).QuarterStart(), 3)
 }
 
 func QuarterAdd(t time.Time, count int) time.Time {
@@ -55,7 +55,7 @@ func quarterNext(t time.Time, count uint) time.Time {
 }
 
 func quarterPrevSingle(t time.Time) time.Time {
-	return TimeDt6SubNMonths(NewTimeMore(t, 0).QuarterStart(), 3)
+	return TimeDT6SubNMonths(NewTimeMore(t, 0).QuarterStart(), 3)
 }
 
 func quarterPrev(t time.Time, num uint) time.Time {

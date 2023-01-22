@@ -87,7 +87,7 @@ func monthEnd(t time.Time) time.Time {
 // quarterEnd returns a time.Time for the end of the quarter by second.
 func quarterEnd(t time.Time) time.Time {
 	qs := quarterStart(t)
-	qn := TimeDt6AddNMonths(qs, 3)
+	qn := TimeDT6AddNMonths(qs, 3)
 	return time.Date(qn.Year(), qn.Month(), MonthEndDay(qn.Year(), qn.Month()), 23, 59, 59, int(NanosPerSecondSub1), t.Location())
 }
 

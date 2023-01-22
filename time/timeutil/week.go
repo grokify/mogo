@@ -47,5 +47,5 @@ func (tm TimeMore) WeekdayNext(d time.Weekday) time.Time {
 // WeekdayNormalized ensures a `time.Weekday` value is within `[0,6]`. It supports
 // converting postiive and negative integers.
 func WeekdayNormalized(d time.Weekday) time.Weekday {
-	return time.Weekday(mathutil.ModInt(int(d), 7))
+	return time.Weekday(mathutil.PyMod(int(d), 7))
 }

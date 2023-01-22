@@ -9,7 +9,7 @@ import (
 func QuarterProjection(dt time.Time, current float64) float64 {
 	qtStart := quarterStart(dt)
 	durQ2D := dt.Sub(qtStart)
-	qtNext := TimeDt6AddNMonths(qtStart, 3)
+	qtNext := TimeDT6AddNMonths(qtStart, 3)
 	durQtr := qtNext.Sub(qtStart)
 
 	projection := current / durQ2D.Seconds() * durQtr.Seconds()
@@ -31,9 +31,6 @@ Gap
 Target
 Shortfall
 
-
 Current
-
-
 
 */

@@ -4,7 +4,6 @@
 package timeutil
 
 import (
-	"encoding/json"
 	"fmt"
 	"strconv"
 	"time"
@@ -49,35 +48,32 @@ func MustParse(layout, value string) time.Time {
 
 // UnixToDay converts an epoch in seconds to a time.Time for the day.
 func UnixToDay(epoch int64) time.Time {
-	t := time.Unix(epoch, 0).UTC()
-	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.UTC)
+	return NewTimeMore(time.Unix(epoch, 0).UTC(), 0).DayStart()
 }
 
-// Dt6ForTime returns the Dt6 value for time.Time.
-func Dt6ForTime(dt time.Time) int32 {
-	dt = dt.UTC()
-	return int32(dt.Year()*100 + int(dt.Month()))
+// DT6 returns the Dt6 value for time.Time.
+func (tm TimeMore) DT6() int32 {
+	return int32(tm.time.Year()*100 + int(tm.time.Month()))
 }
 
-// Dt6ForDt14 returns the Dt6 value for Dt14.
-func Dt6ForDt14(dt14 int64) int32 {
-	dt16f := float64(dt14) / float64(1000000)
-	return int32(dt16f)
+// DT6ForDT14 returns the Dt6 value for Dt14.
+func DT6ForDT14(dt14 int64) int32 {
+	return int32(float64(dt14) / float64(1000000))
 }
 
-// TimeForDt6 returns a time.Time value given a Dt6 value.
-func TimeForDt6(dt6 int32) (time.Time, error) {
+// TimeForDT6 returns a time.Time value given a Dt6 value.
+func TimeForDT6(dt6 int32) (time.Time, error) {
 	return time.Parse(DT6, strconv.FormatInt(int64(dt6), 10))
 }
 
-func Dt6Parse(dt6 int32) (int16, int8) {
+func DT6Parse(dt6 int32) (int16, int8) {
 	year := dt6 / 100
 	month := int(dt6) - (int(year) * 100)
 	return int16(year), int8(month)
 }
 
-func Dt6Prev(dt6 int32) int32 {
-	year, month := Dt6Parse(dt6)
+func DT6Prev(dt6 int32) int32 {
+	year, month := DT6Parse(dt6)
 	if month == 1 {
 		month = 12
 		year = year - 1
@@ -87,8 +83,8 @@ func Dt6Prev(dt6 int32) int32 {
 	return int32(year)*100 + int32(month)
 }
 
-func Dt6Next(dt6 int32) int32 {
-	year, month := Dt6Parse(dt6)
+func DT6Next(dt6 int32) int32 {
+	year, month := DT6Parse(dt6)
 	if month == 12 {
 		month = 1
 		year++
@@ -98,35 +94,35 @@ func Dt6Next(dt6 int32) int32 {
 	return int32(year)*100 + int32(month)
 }
 
-func TimeDt6AddNMonths(dt time.Time, numMonths int) time.Time {
-	dt6 := Dt6ForTime(dt)
+func TimeDT6AddNMonths(t time.Time, numMonths int) time.Time {
+	dt6 := NewTimeMore(t, 0).DT6()
 	for i := 0; i < numMonths; i++ {
-		dt6 = Dt6Next(dt6)
+		dt6 = DT6Next(dt6)
 	}
-	dt6NextMonth, err := TimeForDt6(dt6)
+	dt6NextMonth, err := TimeForDT6(dt6)
 	if err != nil {
-		panic(fmt.Sprintf("Cannot find next month for time: %v\n", dt.Format(time.RFC3339)))
+		panic(fmt.Sprintf("Cannot find next month for time: %v\n", t.Format(time.RFC3339)))
 	}
 	return dt6NextMonth
 }
 
-func TimeDt6SubNMonths(dt time.Time, numMonths int) time.Time {
-	dt6 := Dt6ForTime(dt)
+func TimeDT6SubNMonths(t time.Time, numMonths int) time.Time {
+	dt6 := NewTimeMore(t, 0).DT6()
 	for i := 0; i < numMonths; i++ {
-		dt6 = Dt6Prev(dt6)
+		dt6 = DT6Prev(dt6)
 	}
-	dt6NextMonth, err := TimeForDt6(dt6)
+	dt6NextMonth, err := TimeForDT6(dt6)
 	if err != nil {
-		panic(fmt.Sprintf("Cannot find next month for time: %v\n", dt.Format(time.RFC3339)))
+		panic(fmt.Sprintf("Cannot find next month for time: %v\n", t.Format(time.RFC3339)))
 	}
 	return dt6NextMonth
 }
 
-func TimeDt4AddNYears(dt time.Time, numYears int) time.Time {
-	return time.Date(dt.UTC().Year()+numYears, time.January, 1, 0, 0, 0, 0, time.UTC)
+func TimeDT4AddNYears(t time.Time, numYears int) time.Time {
+	return time.Date(t.Year()+numYears, time.January, 1, 0, 0, 0, 0, t.Location())
 }
 
-func Dt6MinMaxSlice(minDt6 int32, maxDt6 int32) []int32 {
+func DT6MinMaxSlice(minDt6 int32, maxDt6 int32) []int32 {
 	if maxDt6 < minDt6 {
 		tmpDt6 := maxDt6
 		maxDt6 = minDt6
@@ -136,28 +132,30 @@ func Dt6MinMaxSlice(minDt6 int32, maxDt6 int32) []int32 {
 	curDt6 := minDt6
 	for curDt6 < maxDt6+1 {
 		dt6Range = append(dt6Range, curDt6)
-		curDt6 = Dt6Next(curDt6)
+		curDt6 = DT6Next(curDt6)
 	}
 	return dt6Range
 }
 
+/*
 // Dt8Now returns Dt8 value for the current time.
 func Dt8Now() int32 {
 	return Dt8ForTime(time.Now())
 }
+*/
 
-// Dt8ForString returns a Dt8 value given a layout and value to parse to time.Parse.
-func Dt8ForString(layout, value string) (int32, error) {
+// DT8ForString returns a Dt8 value given a layout and value to parse to time.Parse.
+func DT8ForString(layout, value string) (int32, error) {
 	dt8 := int32(0)
 	t, err := time.Parse(layout, value)
 	if err == nil {
-		dt8 = Dt8ForTime(t)
+		dt8 = NewTimeMore(t, 0).DT8()
 	}
 	return dt8, err
 }
 
-// Dt8ForInts returns a Dt8 value for year, month, and day.
-func Dt8ForInts(yyyy, mm, dd int) int32 {
+// DT8ForInts returns a Dt8 value for year, month, and day.
+func DT8ForInts(yyyy, mm, dd int) int32 {
 	sDt8 := fmt.Sprintf("%04d%02d%02d", yyyy, mm, dd)
 	iDt8, err := strconv.ParseInt(sDt8, 10, 32)
 	if err != nil {
@@ -167,9 +165,8 @@ func Dt8ForInts(yyyy, mm, dd int) int32 {
 }
 
 // Dt8ForTime returns a Dt8 value given a time struct.
-func Dt8ForTime(t time.Time) int32 {
-	u := t.UTC()
-	s := u.Format(DT8)
+func (tm TimeMore) DT8() int32 {
+	s := tm.time.Format(DT8)
 	iDt8, err := strconv.ParseInt(s, 10, 32)
 	if err != nil {
 		panic(err)
@@ -177,28 +174,30 @@ func Dt8ForTime(t time.Time) int32 {
 	return int32(iDt8)
 }
 
-// TimeForDt8 returns a time.Time value given a Dt8 value.
-func TimeForDt8(dt8 int32) (time.Time, error) {
+// TimeForDT8 returns a time.Time value given a Dt8 value.
+func TimeForDT8(dt8 int32) (time.Time, error) {
 	return time.Parse(DT8, strconv.FormatInt(int64(dt8), 10))
 }
 
+/*
 // Dt14Now returns a Dt14 value for the current time.
 func Dt14Now() int64 {
 	return Dt14ForTime(time.Now())
 }
+*/
 
-// Dt14ForString returns a Dt14 value given a layout and value to parse to time.Parse.
-func Dt14ForString(layout, value string) (int64, error) {
+// DT14ForString returns a DT14 value given a layout and value to parse to time.Parse.
+func DT14ForString(layout, value string) (int64, error) {
 	dt14 := int64(0)
 	t, err := time.Parse(layout, value)
 	if err == nil {
-		dt14 = Dt14ForTime(t)
+		dt14 = NewTimeMore(t, 0).DT14()
 	}
 	return dt14, err
 }
 
-// Dt8ForInts returns a Dt8 value for a UTC year, month, day, hour, minute and second.
-func Dt14ForInts(yyyy, mm, dd, hr, mn, dy int) int64 {
+// DT14ForInts returns a Dt8 value for a UTC year, month, day, hour, minute and second.
+func DT14ForInts(yyyy, mm, dd, hr, mn, dy int) int64 {
 	sDt14 := fmt.Sprintf("%04d%02d%02d%02d%02d%02d", yyyy, mm, dd, hr, mn, dy)
 	iDt14, err := strconv.ParseInt(sDt14, 10, 64)
 	if err != nil {
@@ -208,9 +207,8 @@ func Dt14ForInts(yyyy, mm, dd, hr, mn, dy int) int64 {
 }
 
 // Dt14ForTime returns a Dt14 value given a time.Time struct.
-func Dt14ForTime(t time.Time) int64 {
-	u := t.UTC()
-	s := u.Format(DT14)
+func (tm TimeMore) DT14() int64 {
+	s := tm.time.Format(DT14)
 	iDt14, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
 		panic(err)
@@ -218,18 +216,9 @@ func Dt14ForTime(t time.Time) int64 {
 	return iDt14
 }
 
-// TimeForDt14 returns a time.Time value given a Dt14 value.
-func TimeForDt14(dt14 int64) (time.Time, error) {
+// TimeForDT14 returns a time.Time value given a Dt14 value.
+func TimeForDT14(dt14 int64) (time.Time, error) {
 	return time.Parse(DT14, strconv.FormatInt(dt14, 10))
-}
-
-func MonthNames() []string {
-	data := []string{}
-	err := json.Unmarshal([]byte(MonthsEN), &data)
-	if err != nil {
-		panic(err)
-	}
-	return data
 }
 
 /*

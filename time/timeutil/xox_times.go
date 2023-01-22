@@ -27,7 +27,7 @@ func YOYTimes(t time.Time) XOXTimes {
 	xox := XOXTimes{
 		CurrentTime:  t,
 		CurrentStart: tm.YearStart()}
-	xox.PreviousStart = TimeDt4AddNYears(xox.CurrentStart, -1)
+	xox.PreviousStart = TimeDT4AddNYears(xox.CurrentStart, -1)
 
 	dur := xox.CurrentTime.Sub(xox.CurrentStart)
 	xox.PreviousTime = xox.PreviousStart.Add(dur)

@@ -66,7 +66,7 @@ func TimeDeltaDowInt(base time.Time, wantDow time.Weekday, deltaUnits int, wantI
 }
 
 func DaysAgoDowStrings(baseDowS string, wantDowS string, wantInclusive bool) (int, error) {
-	daysAgo := int(0)
+	daysAgo := 0
 	baseDow, err := ParseDayOfWeek(baseDowS)
 	if err != nil {
 		return daysAgo, err
@@ -79,10 +79,7 @@ func DaysAgoDowStrings(baseDowS string, wantDowS string, wantInclusive bool) (in
 }
 
 func DaysAgoDow(baseDow, wantDow time.Weekday, wantInclusive bool) int {
-	baseDow = WeekdayNormalized(baseDow)
-	wantDow = WeekdayNormalized(wantDow)
-
-	deltaDays1 := int(baseDow) - int(wantDow)
+	deltaDays1 := int(WeekdayNormalized(baseDow)) - int(WeekdayNormalized(wantDow))
 	deltaDays2 := deltaDays1
 	if deltaDays2 < 0 {
 		deltaDays2 += 7
@@ -107,10 +104,7 @@ func DaysToDowStrings(baseDowS string, wantDowS string, wantInclusive bool) (int
 }
 
 func DaysToDow(baseDow, wantDow time.Weekday, wantInclusive bool) int {
-	baseDow = WeekdayNormalized(baseDow)
-	wantDow = WeekdayNormalized(wantDow)
-
-	deltaDays1 := int(wantDow) - int(baseDow)
+	deltaDays1 := int(WeekdayNormalized(wantDow)) - int(WeekdayNormalized(baseDow))
 	deltaDays2 := deltaDays1
 	if deltaDays2 < 0 {
 		deltaDays2 += 7
@@ -121,8 +115,8 @@ func DaysToDow(baseDow, wantDow time.Weekday, wantInclusive bool) int {
 	return deltaDays2
 }
 
-func ParseDayOfWeek(value string) (time.Weekday, error) {
-	valueLc := strings.ToLower(strings.TrimSpace(value))
+func ParseDayOfWeek(d string) (time.Weekday, error) {
+	valueLc := strings.ToLower(strings.TrimSpace(d))
 	days := []string{"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"}
 	mapping := map[string]int{}
 	for i, dow := range days {
@@ -131,5 +125,5 @@ func ParseDayOfWeek(value string) (time.Weekday, error) {
 	if dow, ok := mapping[valueLc]; ok {
 		return time.Weekday(dow), nil
 	}
-	return 0, fmt.Errorf("name of day not found in English: %v", value)
+	return 0, fmt.Errorf("name of day not found in English: (%s)", d)
 }
