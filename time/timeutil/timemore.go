@@ -36,6 +36,7 @@ func NewTimeMoreQuarterEndString(yyyyqStr string, dow time.Weekday) (TimeMore, e
 
 // func (tm *TimeMore) Time() time.Time         { return tm.thisTime }
 // func (tm *TimeMore) DOW() time.Weekday       { return tm.dow }
+
 func (tm TimeMore) DayStart() time.Time     { return dayStart(tm.Time) }
 func (tm TimeMore) MonthStart() time.Time   { return monthStart(tm.Time) }
 func (tm TimeMore) IsMonthStart() bool      { return isMonthStart(tm.Time) }
@@ -51,6 +52,7 @@ func (tm TimeMore) IntervalStart(interval Interval) (time.Time, error) {
 	return intervalStart(tm.Time, interval, tm.DOW)
 }
 
+// WeekStart takes a `time.Time` struct and a week start day in the `time.Weekday` format.
 func (tm TimeMore) WeekStart() time.Time {
 	week, err := weekStart(tm.Time, tm.DOW)
 	if err != nil {

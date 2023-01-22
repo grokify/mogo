@@ -36,19 +36,19 @@ func YearMonthBase36(yyyy, mm uint64) string {
 	return fmt.Sprintf("%04s", base36.Encode(yyyy*100+mm))
 }
 
-func YearMonthBase36Time(dt time.Time) string {
-	return YearMonthBase36(uint64(dt.Year()), uint64(dt.Month()))
+func YearMonthBase36Time(t time.Time) string {
+	return YearMonthBase36(uint64(t.Year()), uint64(t.Month()))
 }
 
-// MonthBegin allows you to add/subtract months resulting
+// MonthStart allows you to add/subtract months resulting
 // in the first day of each month while avoiding Go's
 // `AddDate` normalization where "adding one month to
 // October 31 yields December 1, the normalized form for
 // November 31." Setting `deltaMonths` to 0 indicates the
 // current month.
-func MonthBegin(dt time.Time, deltaMonths int) time.Time {
-	year := dt.Year()
-	month := int(dt.Month())
+func MonthStart(t time.Time, deltaMonths int) time.Time {
+	year := t.Year()
+	month := int(t.Month())
 	if deltaMonths > 0 {
 		for i := 0; i < deltaMonths; i++ {
 			if month == 12 {
@@ -68,7 +68,7 @@ func MonthBegin(dt time.Time, deltaMonths int) time.Time {
 			}
 		}
 	}
-	return time.Date(year, time.Month(month), 1, 0, 0, 0, 0, dt.Location())
+	return time.Date(year, time.Month(month), 1, 0, 0, 0, 0, t.Location())
 }
 
 // YearMonthToMonthContinuous converts a year and month to
@@ -80,9 +80,9 @@ func YearMonthToMonthContinuous(year, month uint64) uint64 {
 }
 
 // MonthContinuousToYearMonth converts a continuous month value (e.g. number of months from year 0).
-func MonthContinuousToYearMonth(monthc uint64) (uint64, uint64) {
+func MonthContinuousToYearMonth(mc uint64) (uint64, uint64) {
 	quotient, remainder := mathutil.DivideInt64(
-		int64(monthc-1), int64(12))
+		int64(mc-1), int64(12))
 	return uint64(quotient), uint64(remainder + 1)
 }
 
@@ -94,26 +94,20 @@ func TimeToMonthContinuous(t time.Time) uint64 {
 }
 
 // MonthContinuousToTime converts a continuous month value to a `time.Time` value.
-func MonthContinuousToTime(monthc uint64) time.Time {
-	year, month := MonthContinuousToYearMonth(monthc)
+func MonthContinuousToTime(mc uint64) time.Time {
+	year, month := MonthContinuousToYearMonth(mc)
 	return time.Date(
 		int(year), time.Month(int(month)), 1,
 		0, 0, 0, 0, time.UTC)
 }
 
-func MonthContinuousIsQuarterBegin(monthc uint64) bool {
-	t := MonthContinuousToTime(monthc)
-	month := t.Month()
-	if month == 1 || month == 4 || month == 7 || month == 10 {
-		return true
-	}
-	return false
+func MonthContinuousIsQuarterStart(mc uint64) bool {
+	month := MonthContinuousToTime(mc).Month()
+	return month == 1 || month == 4 || month == 7 || month == 10
 }
 
-func MonthContinuousIsYearBegin(monthc uint64) bool {
-	t := MonthContinuousToTime(monthc)
-	month := t.Month()
-	return month == 1
+func MonthContinuousIsYearStart(mc uint64) bool {
+	return MonthContinuousToTime(mc).Month() == 1
 }
 
 // TimesMonthStarts returns time series of months given start and end input times.

@@ -14,18 +14,15 @@ func YearQuarterToQuarterContinuous(year, quarter uint64) uint64 {
 	return year*4 + quarter
 }
 
-// QuarterContinuousToYearQuarter converts a continuous quarter
-// value (e.g. numerof months from year 0).
-func QuarterContinuousToYearQuarter(quarterc uint64) (uint64, uint64) {
+// QuarterContinuousToYearQuarter converts a continuous quarter value (e.g. numerof months from year 0).
+func QuarterContinuousToYearQuarter(qc uint64) (uint64, uint64) {
 	quotient, remainder := mathutil.DivideInt64(
-		int64(quarterc-1), int64(4))
+		int64(qc-1), int64(4))
 	return uint64(quotient), uint64(remainder + 1)
 }
 
-// TimeToQuarterContinuous converts a `time.Time` value
-// to a continuous month.
+// TimeToQuarterContinuous converts a `time.Time` value to a continuous quarter.
 func TimeToQuarterContinuous(t time.Time) uint64 {
-	t = t.UTC()
 	return YearQuarterToQuarterContinuous(
 		uint64(t.Year()), MonthToQuarter(uint64(t.Month())))
 }
@@ -41,10 +38,9 @@ func MonthToQuarter(month uint64) uint64 {
 	return uint64(4)
 }
 
-// QuarterContinuousToTime converts a continuous month
-// value to a `time.Time` value.
-func QuarterContinuousToTime(monthc uint64) time.Time {
-	year, quarter := QuarterContinuousToYearQuarter(monthc)
+// QuarterContinuousToTime converts a continuous quarter value to a `time.Time` value.
+func QuarterContinuousToTime(qc uint64) time.Time {
+	year, quarter := QuarterContinuousToYearQuarter(qc)
 	month := 1
 	if quarter == 2 {
 		month = 4
@@ -58,17 +54,11 @@ func QuarterContinuousToTime(monthc uint64) time.Time {
 		0, 0, 0, 0, time.UTC)
 }
 
-func QuarterContinuousIsQuarterBegin(quarterc uint64) bool {
-	t := QuarterContinuousToTime(quarterc)
-	month := t.Month()
-	if month == 1 || month == 4 || month == 7 || month == 10 {
-		return true
-	}
-	return false
+func QuarterContinuousIsQuarterStart(qc uint64) bool {
+	month := QuarterContinuousToTime(qc).Month()
+	return month == 1 || month == 4 || month == 7 || month == 10
 }
 
-func QuarterContinuousIsYearBegin(quarterc uint64) bool {
-	t := QuarterContinuousToTime(quarterc)
-	month := t.Month()
-	return month == 1
+func QuarterContinuousIsYearStart(qc uint64) bool {
+	return QuarterContinuousToTime(qc).Month() == 1
 }
