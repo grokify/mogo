@@ -79,5 +79,5 @@ func (req *SimpleRequest) BodyBytes() ([]byte, error) {
 			return []byte(v.Encode()), nil
 		}
 	}
-	return []byte{}, fmt.Errorf("body type (%s) not supported", reflectutil.TypeName(req.Body))
+	return []byte{}, fmt.Errorf("body type (%s) not supported", reflectutil.NameOf(req.Body, true))
 }
