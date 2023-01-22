@@ -34,15 +34,14 @@ func FirstDayOfISOWeek(year int, week int, timezone *time.Location) time.Time {
 	return date
 }
 
-func WeekdayNext(d time.Weekday) time.Time {
-	now := time.Now()
-	today := now.Weekday()
+func (tm TimeMore) WeekdayNext(d time.Weekday) time.Time {
+	today := tm.time.Weekday()
 	if d == today {
-		return now.Add(NewDuration(7, 0, 0, 0, 0))
+		return tm.time.Add(NewDuration(7, 0, 0, 0, 0))
 	} else if d > today {
-		return now.Add(NewDuration(float64(int(d)-int(today)), 0, 0, 0, 0))
+		return tm.time.Add(NewDuration(float64(int(d)-int(today)), 0, 0, 0, 0))
 	}
-	return now.Add(NewDuration(float64(int(today)-int(d)+7), 0, 0, 0, 0))
+	return tm.time.Add(NewDuration(float64(int(today)-int(d)+7), 0, 0, 0, 0))
 }
 
 // WeekdayNormalized ensures a `time.Weekday` value is within `[0,6]`. It supports
