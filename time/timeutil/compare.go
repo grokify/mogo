@@ -4,8 +4,7 @@ import (
 	"time"
 )
 
-// IsGreaterThan compares two times and returns true if the left
-// time is greater than the right time.
+// IsGreaterThan compares two times and returns true if the left time is greater than the right time.
 func IsGreaterThan(timeLeft time.Time, timeRight time.Time, orEqual bool) bool {
 	if timeLeft.After(timeRight) {
 		return true
@@ -15,8 +14,7 @@ func IsGreaterThan(timeLeft time.Time, timeRight time.Time, orEqual bool) bool {
 	return false
 }
 
-// IsLessThan compares two times and returns true if the left
-// time is less than the right time.
+// IsLessThan compares two times and returns true if the left time is less than the right time.
 func IsLessThan(timeLeft time.Time, timeRight time.Time, orEqual bool) bool {
 	if timeLeft.Before(timeRight) {
 		return true
