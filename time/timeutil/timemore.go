@@ -34,8 +34,8 @@ func NewTimeMoreQuarterEndString(yyyyqStr string, d time.Weekday) (TimeMore, err
 	return NewTimeMore(dt, d), nil
 }
 
-func (tm *TimeMore) Time() time.Time   { return tm.time }
-func (tm *TimeMore) DOW() time.Weekday { return tm.weekStartDay }
+func (tm *TimeMore) Time() time.Time            { return tm.time }
+func (tm *TimeMore) WeekStartDay() time.Weekday { return tm.weekStartDay }
 
 func (tm TimeMore) DayStart() time.Time     { return dayStart(tm.time) }
 func (tm TimeMore) DayEnd() time.Time       { return dayEnd(tm.time) }
