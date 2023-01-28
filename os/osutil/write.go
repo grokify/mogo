@@ -2,6 +2,8 @@ package osutil
 
 import (
 	"bufio"
+	"errors"
+	"fmt"
 	"io"
 	"os"
 
@@ -16,6 +18,11 @@ func WriteFileJSON(filepath string, data interface{}, perm os.FileMode, prefix, 
 	}
 	return os.WriteFile(filepath, bytes, perm)
 }
+
+var (
+	ErrWriterNotInitialized = errors.New("bufio.Writer not initialized")
+	ErrFileNotInitialized   = errors.New("os.File not initialized")
+)
 
 type FileWriter struct {
 	File   *os.File
@@ -35,9 +42,39 @@ func NewFileWriter(path string) (FileWriter, error) {
 	return fw, nil
 }
 
-func (f *FileWriter) Close() {
-	f.Writer.Flush()
-	f.File.Close()
+func (fw *FileWriter) WriteBytes(b []byte) (int, error) {
+	return fw.Writer.Write(b)
+}
+
+func (fw *FileWriter) WriteString(addLinefeed bool, s ...string) (int, error) {
+	n := 0
+	for _, si := range s {
+		if addLinefeed {
+			si += "\n"
+		}
+		ni, err := fw.Writer.WriteString(si)
+		if err != nil {
+			return n, err
+		}
+		n += ni
+	}
+	return n, nil
+}
+
+func (fw *FileWriter) WriteStringf(addLinefeed bool, format string, a ...any) (int, error) {
+	lf := ""
+	if addLinefeed {
+		lf = "\n"
+	}
+	return fw.Writer.WriteString(fmt.Sprintf(format, a...) + lf)
+}
+
+func (fw *FileWriter) Close() error {
+	err := fw.Writer.Flush()
+	if err != nil {
+		return err
+	}
+	return fw.File.Close()
 }
 
 func WriteFileReader(filename string, r io.Reader) error {
