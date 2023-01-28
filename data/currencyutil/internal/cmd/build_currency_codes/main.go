@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/grokify/mogo/data/currencyutil"
 	"github.com/grokify/mogo/data/currencyutil/internal"
 	"github.com/grokify/mogo/fmt/fmtutil"
+	"github.com/grokify/mogo/log/logutil"
 	"github.com/grokify/mogo/os/osutil"
 	"github.com/grokify/mogo/type/stringsutil"
 )
@@ -17,20 +17,20 @@ func main() {
 	//d, err := os.ReadFile(file)
 	//logutil.FatalErr(err)
 	lines := strings.Split(internal.CurrenciesDataRaw, "\n")
-	fmtutil.PrintJSON(lines)
+	fmtutil.MustPrintJSON(lines)
 
 	currs := []currencyutil.Currency{}
 	for _, line := range lines {
 		c, err := procLine(line)
-		if err != nil {
-			log.Fatal(err)
-		}
+		logutil.FatalErr(err)
+
 		if c != nil {
 			currs = append(currs, *c)
 		}
 	}
 
-	outputConstants("currency_codes.go", currs)
+	err := outputConstants("currency_codes.go", currs)
+	logutil.FatalErr(err)
 
 	fmt.Println("DONE")
 }
@@ -57,7 +57,10 @@ func outputConstants(filename string, currs currencyutil.Currencies) error {
 		if !ok {
 			panic("code not found")
 		}
-		fw.WriteStringf(true, "Currency%s = \"%s\" // %s %s", code, code, curr.Country, curr.Name)
+		_, err := fw.WriteStringf(true, "Currency%s = \"%s\" // %s %s", code, code, curr.Country, curr.Name)
+		if err != nil {
+			return err
+		}
 	}
 	_, err = fw.WriteString(true, ")")
 	if err != nil {
@@ -94,12 +97,12 @@ func outputConstants(filename string, currs currencyutil.Currencies) error {
 
 func procLine(line string) (*currencyutil.Currency, error) {
 	parts := stringsutil.SliceCondenseSpace(strings.Split(line, "\t"), false, false)
-	fmtutil.PrintJSON(parts)
+	fmtutil.MustPrintJSON(parts)
 	if len(parts) == 0 {
 		return nil, nil
 	}
 	if len(parts) < 4 {
-		return nil, fmt.Errorf("wrong number of parts [%d]\n", len(parts))
+		return nil, fmt.Errorf("wrong number of parts (%d) less than 4", len(parts))
 		// panic(fmt.Sprintf("wrong number of parts [%d]\n", len(parts)))
 	}
 	c := &currencyutil.Currency{
@@ -109,6 +112,6 @@ func procLine(line string) (*currencyutil.Currency, error) {
 		Name:    parts[3],
 	}
 	c.TrimSpace()
-	fmtutil.PrintJSON(c)
+	fmtutil.MustPrintJSON(c)
 	return c, nil
 }

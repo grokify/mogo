@@ -7,7 +7,7 @@ import (
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
-// dsnBigQuery generates a DSN for BigQuery. Use `Hostname` for `ProjectID`` and `Database` for `locatin/dataset`.
+// dsnBigQuery generates a DSN for BigQuery. Use `Hostname` for `ProjectID“ and `Database` for `location/dataset`.
 // See https://github.com/go-gorm/bigquery and https://github.com/solcates/go-sql-bigquery .
 func dsnBigQuery(ds DataSource) (string, error) {
 	// "bigquery://projectid/location/dataset"
