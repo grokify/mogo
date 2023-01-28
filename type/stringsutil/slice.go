@@ -20,16 +20,18 @@ func (sx StringSlice) Exists(s string) bool {
 	return false
 }
 
+/*
 // Unshift adds an element at the first position of the slice.
+// EOL: use `slices.Insert()` instead.`
 func Unshift(elems []string, x string) []string {
 	return append([]string{x}, elems...)
 }
+*/
 
-// SliceCondenseSpace trims space from lines and removes
-// empty lines. `unique` dedupes lines and `sort` preforms
-// a sort on the results.
+// SliceCondenseSpace trims space from lines and removes empty lines. `unique` dedupes lines and `sort`
+// preforms a sort on the results.
 func SliceCondenseSpace(elems []string, dedupeResults, sortResults bool) []string {
-	results := SliceTrim(elems, " ", true)
+	results := SliceTrimSpace(elems, true)
 	if dedupeResults {
 		results = slicesutil.Dedupe(results)
 	}
@@ -42,47 +44,25 @@ func SliceCondenseSpace(elems []string, dedupeResults, sortResults bool) []strin
 // SliceTrimSpace removes leading and trailing spaces per string. If condense
 // is used, empty strings are removed.
 func SliceTrimSpace(elems []string, condense bool) []string {
-	new := []string{}
+	var new []string
 	for _, el := range elems {
-		el := strings.TrimSpace(el)
-		if condense && len(el) == 0 {
-			continue
+		if el = strings.TrimSpace(el); el != "" || !condense {
+			new = append(new, el)
 		}
-		new = append(new, el)
 	}
 	return new
 }
 
 // SliceTrim trims each line in a slice of lines using a provided cut string.
 func SliceTrim(elems []string, cutstr string, condense bool) []string {
-	new := []string{}
+	var new []string
 	for _, el := range elems {
-		el = strings.Trim(el, cutstr)
-		if condense && len(el) == 0 {
-			continue
+		if el = strings.Trim(el, cutstr); el != "" || !condense {
+			new = append(new, el)
 		}
-		new = append(new, el)
 	}
 	return new
 }
-
-/*
-// SliceDedupe removes duplicate occurrences of a string
-// from a slice, keeping the first one encountered. It
-// maintains the order of elements in the slice.
-func SliceDedupe(elems []string) []string {
-	unique := []string{}
-	seen := map[string]int{}
-	for _, el := range elems {
-		if _, ok := seen[el]; ok {
-			continue
-		}
-		unique = append(unique, el)
-		seen[el] = 1
-	}
-	return unique
-}
-*/
 
 /*
 // JoinAny takes an array of interface{} and converts
@@ -152,8 +132,7 @@ func SliceCondenseAndQuote(items []string, trimLeft, trimRight, quoteLeft, quote
 	return newItems
 }
 
-// SplitTrimSpace splits a string and trims spaces on
-// remaining elements.
+// SplitTrimSpace splits a string and trims spaces on remaining elements.
 func SplitTrimSpace(s, sep string) []string {
 	split := strings.Split(s, sep)
 	strs := []string{}
@@ -165,14 +144,12 @@ func SplitTrimSpace(s, sep string) []string {
 
 var rxSplitLines = regexp.MustCompile(`(\r\n|\r|\n)`)
 
-// SplitTextLines splits a string on the regxp
-// `(\r\n|\r|\n)`.
+// SplitTextLines splits a string on the regxp `(\r\n|\r|\n)`.
 func SplitTextLines(text string) []string {
 	return rxSplitLines.Split(text, -1)
 }
 
-// SliceToSingleIntOrNeg converts a single element slice
-// with a string to an integer or `-1`
+// SliceToSingleIntOrNeg converts a single element slice with a string to an integer or `-1`
 func SliceToSingleIntOrNeg(vals []string) int {
 	if len(vals) != 1 {
 		return -1
@@ -183,22 +160,6 @@ func SliceToSingleIntOrNeg(vals []string) int {
 	}
 	return num
 }
-
-/*
-// Dedupe returns a string slice with duplicate values removed. First observance is kept.
-func DedupeStrings(elems []string) []string {
-	deduped := []string{}
-	seen := map[string]int{}
-	for _, val := range elems {
-		if _, ok := seen[val]; ok {
-			continue
-		}
-		seen[val] = 1
-		deduped = append(deduped, val)
-	}
-	return deduped
-}
-*/
 
 func SliceChooseOnePreferredLowerTrimSpace(options, preferenceOrder []string) string {
 	if len(options) == 0 {
@@ -340,8 +301,7 @@ func SliceJoinQuoted(slice []string, begQuote, endQuote, sep string) string {
 }
 */
 
-// SliceSubtract uses Set math to remove elements of filter
-// from real.
+// SliceSubtract uses Set math to remove elements of filter from real.
 func SliceSubtract(real, filter []string) []string {
 	filtered := []string{}
 	filterMap := map[string]int{}
