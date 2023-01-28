@@ -1,0 +1,99 @@
+Code	Symbol	Country	Unit	Subunit	Central Bank	
+AFN	؋	Afghanistan	Afghani
+ALL	Lek	Albania	Lek
+ANG	ƒ	Netherlands Antilles	Guilder
+ARS	$	Argentina	Peso
+AUD	$	Australia	Dollar
+AWG	ƒ	Aruba	Guilder
+AZN	ман	Azerbaijan	New Manat
+BAM	KM	Bosnia and Herzegovina	Convertible Marka
+BIF	FBu	Burundian	Franc 
+BBD	$	Barbados	Dollar
+BGN	лв	Bulgaria	Lev
+BHD	BD	Bahrain	Dinar		Central Bank of Bahrain	
+BMD	$	Bermuda	Dollar
+BND	$	Brunei	Darussalam Dollar
+BOB	$b	Bolivia	Bolíviano
+BRL	R$	Brazil	Real
+BWP	P	Botswana	Pula
+BSD	$	Bahamas	Dollar
+BYN	Br	Belarus	Ruble
+BZD	BZ$	Belize	Dollar
+CAD	$	Canada	Dollar
+CHF	Fr.	Switzerland	Franc
+CLP	$	Chile	Peso
+CNY	¥	China	Yuan Renminbi
+CRC	₡	Costa Rica	Colon
+CUP	₱	Cuba	Peso
+DJF	Fdj	Djibouti	Franc
+DKK	Kr.	Danish	Krone	Øre	Danmarks Nationalbank	https://www.nationalbanken.dk/
+EGP	£	Egypt	Pound
+EUR	€	Eurozone	Euro
+FKP	£	Falkland Islands	Pound
+GBP	£	United Kingdom	Pound
+GNF	FG	Guinean	Franc
+HKD	$	Hong Kong	Dollar
+IDR	Rp	Indonesian	Rupiah		Bank Indonesia	bi.go.id
+ILS	₪	Israel	Shekel
+INR	₹	Indian	Rupee	Paisa	Reserve Bank of India	https://www.rbi.org.in/
+IRR	﷼	Iran	Rial
+JPY	¥	Japan	Yen
+JOD	د.ا	Jordan	Dinar	Piastre	Central Bank of Jordan
+KGS	лв	Kyrgyzstan	Som
+KHR	៛	Cambodia	Riel
+KMF	CF	Comorian	Franc
+KPW	₩	North Korea	Won
+KRW	₩	South Korea	Won
+KWD	KD	Kuwait	Dinar	Central Bank of Kuwait
+LKR	₨	Sri Lanka	Rupee
+MGA	Ar	Malagasy	Ariary 
+MNT	₮	Mongolia	Tughrik
+MUR	₨	Mauritius	Rupee
+MXN	$	Mexican	Peso	Centavo	Bank of Mexico	https://www.banxico.org.mx/
+MYR	RM	Malaysia	Ringgit
+NGN	₦	Nigeria	Naira
+NOK	kr	Norway	Krone
+NPR	₨	Nepal	Rupee
+NZD	$	New Zealand	Dollar	Cent	Reserve Bank of New Zealand
+OMR	ر.ع.	Oman	Rial	Baisa	Central Bank of Oman
+PHP	₱	Philippines	Peso
+PKR	₨	Pakistan	Rupee
+PLN	zł	Poland	Zloty
+PYG	₲	Paraguayan	Guarani	Céntimo	Central Bank of Paraguay	https://www.bcp.gov.py/
+QAR	﷼	Qatar	Riyal
+RON	lei	Romania	New Leu
+RSD	Дин.	Serbia	Dinar
+RUB	₽	Russia	Ruble
+RWF	FRw	Rwandan	Franc	Centime	National Bank of Rwanda	https://www.bnr.rw/
+SAR	﷼	Saudi Arabia	Riyal
+SCR	₨	Seychelles	Rupee
+SEK	kr	Sweden	Krona
+SGD	S$	Singapore	Dollar	Cent	Monetary Authority of Singapore	https://www.mas.gov.sg/
+SYP	£	Syria	Pound
+THB	฿	Thailand	Baht
+TND	DT	Tunisia	Dinar	Central Bank of Tunisia
+TRY	₺	Turkey	Lira
+TWD	NT$	Taiwan	Dollar
+UAH	₴	Ukraine	Hryvnia
+UGX	USh	Uganda	Shilling	Cent	Bank of Uganda	https://bou.or.ug
+USD	$	United States	Dollar
+UZS	лв	Uzbekistan	Som
+VND	₫	Viet Nam	Dong
+VUV	VT	Vanuatu	Vatu		Reserve Bank of Vanuatu	https://rbv.gov.vu
+XAF	F.CFA	Central African CFA	Franc	Centime
+XOF	F.CFA	West African CFA	Franc
+XPF	₣	CFP	Franc	Centime	Institut d'émission d'outre-mer	ieom.fr
+YER	﷼	Yemen	Rial
+ZAR	R	South Africa	Rand	Cent	South African Reserve Bank
+
+BTC	₿	Crypto	Bitcoin
+ETH	Ξ	Crypto	Ether
+LTC	Ł	Crypto	Litecoin
+
+XAG	XAG	Metal	Silver
+XAU	XAU	Metal	Gold
+XPD	XPD	Metal	Palladium
+XPT	XPT	Metal	Platinum
+
+XXX	XXX	Undefined	Undefined
+XTS	XTS	Testing	Testing

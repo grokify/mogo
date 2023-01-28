@@ -8,21 +8,9 @@ import (
 	"strings"
 
 	"github.com/shopspring/decimal"
-	"golang.org/x/exp/slices"
 )
 
 const (
-	CurrencyAUD = "AUD"
-	CurrencyCAD = "CAD"
-	CurrencyCHF = "CHF"
-	CurrencyEUR = "EUR"
-	CurrencyGBP = "GBP"
-	CurrencyJPY = "JPY"
-	CurrencyNOK = "NOK"
-	CurrencyNZD = "NZD"
-	CurrencySEK = "SEK"
-	CurrencyUSD = "USD"
-
 	USDSymbol          = "$"
 	UnitsBillionsDesc  = "billions"
 	UnitsBillionsInt   = 1000000000
@@ -38,24 +26,6 @@ var (
 	rxCurrencyPrefix         = regexp.MustCompile(`^(\D+)(\d.*)$`)
 	rxCurrencySuffix         = regexp.MustCompile(`^(.*)([^\d.,].*)$`)
 )
-
-func CurrencyUnits() []string {
-	return []string{
-		CurrencyAUD,
-		CurrencyCAD,
-		CurrencyCHF,
-		CurrencyEUR,
-		CurrencyGBP,
-		CurrencyJPY,
-		CurrencyNOK,
-		CurrencyNZD,
-		CurrencySEK,
-		CurrencyUSD}
-}
-
-func CurrencyUnitKnown(value string) bool {
-	return slices.Index(CurrencyUnits(), value) >= 0
-}
 
 type ParseCurrencyOpts struct {
 	Comma         string
@@ -179,6 +149,12 @@ func ParseAmount(value string) (Amount, error) {
 	return pr, fmt.Errorf("currency not found [%s]", value)
 }
 
+/*
+func (amt *Amount) ValueInt() (int64, error) {
+
+}
+*/
+
 func (amt *Amount) Add(a Amount) error {
 	if a.Value.IsZero() {
 		return nil
@@ -198,7 +174,7 @@ func (amt *Amount) Add(a Amount) error {
 
 func ParseCurrencyUnit(abbr, symbol string) (string, error) {
 	abbr = CurrencyCanonical(abbr)
-	if CurrencyUnitKnown(abbr) {
+	if CurrencyCodeKnown(abbr) {
 		return abbr, nil
 	}
 	return "", fmt.Errorf("could not parse currency [%s]", abbr)
