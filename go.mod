@@ -3,7 +3,7 @@ module github.com/grokify/mogo
 go 1.18
 
 require (
-	github.com/ProtonMail/go-crypto v0.0.0-20230117203413-a47887b8f098
+	github.com/ProtonMail/go-crypto v0.0.0-20230127150802-22e9f3c8043c
 	github.com/buger/jsonparser v1.1.1
 	github.com/caarlos0/env/v6 v6.10.1
 	github.com/google/go-querystring v1.1.0
@@ -25,11 +25,11 @@ require (
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	golang.org/x/crypto v0.5.0
-	golang.org/x/exp v0.0.0-20230118134722-a68e582fa157
+	golang.org/x/exp v0.0.0-20230127193734-31bee513bff7
 	golang.org/x/image v0.3.0
 	golang.org/x/net v0.5.0
 	golang.org/x/text v0.6.0
-	google.golang.org/genproto v0.0.0-20230119192704-9d59e20e5cd1
+	google.golang.org/genproto v0.0.0-20230127162408-596548ed4efa
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/oleiade/reflections.v1 v1.0.0
 )
