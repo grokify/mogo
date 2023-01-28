@@ -24,6 +24,7 @@ func SplitTextLines(text string) []string {
 /*
 
 func ReadCSVFileSingleColumnValuesString(filename string, sep rune, stripBOM, hasHeader, trimSpace bool, colIdx uint, condenseUniqueSort bool) ([]string, error) {
+
 */
 
 func ReadFileCSVToSQLs(sqlFormat, filename string, sep rune, hasHeader, trimSpace bool, colIdx uint) ([]string, []string, error) {
@@ -88,7 +89,8 @@ func SliceToSQL(slice []string) string {
 }
 
 // SliceToSQLs returns a slice of string elements separated by
-// commas without the surrounding parentheses `()`.
+// commas without the surrounding parentheses `()`. This is useful for breaking up
+// a long SQL IN clause into multiple SQL statements.
 func SliceToSQLs(slice []string, maxInsertLength int) []string {
 	if maxInsertLength <= 0 {
 		maxInsertLength = MaxSQLLengthSOQL
