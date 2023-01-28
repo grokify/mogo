@@ -55,6 +55,14 @@ func PadRight(str string, pad string, length int) string {
 	}
 }
 
+func IsLower(s string) bool {
+	return s == strings.ToLower(s)
+}
+
+func IsUpper(s string) bool {
+	return s == strings.ToUpper(s)
+}
+
 // Capitalize returns a string with the first character
 // capitalized and the rest lower cased.
 func Capitalize(s1 string) string {
