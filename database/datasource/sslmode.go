@@ -6,14 +6,16 @@ import (
 )
 
 const (
-	SchemePostgreSQL  = "postgres"
 	SSLModeAllow      = "allow"
 	SSLModeDisable    = "disable"
 	SSLModePrefer     = "prefer"
 	SSLModeRequire    = "require"
 	SSLModeVerifyCA   = "verify-ca"
 	SSLModeVerifyFull = "verify-full"
+	SSLModeDefault    = SSLModeDisable
 )
+
+var ErrSSLModeNotSUpported = errors.New("sslmode not supported")
 
 func SSLModeParseOrDefault(s, d string) string {
 	m, err := SSLModeParse(s)
@@ -43,5 +45,5 @@ func SSLModeParse(s string) (string, error) {
 	case SSLModeVerifyFull:
 		return s, nil
 	}
-	return "", errors.New("sslMode not supported")
+	return "", ErrSSLModeNotSUpported
 }
