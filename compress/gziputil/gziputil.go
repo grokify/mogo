@@ -50,7 +50,7 @@ func CompressBase64(data []byte, level int) (string, error) {
 
 // CompressBase64JSON performs a JSON encoding, gzip compression and
 // then base64 encodes the data.
-func CompressBase64JSON(data interface{}, level int) (string, error) {
+func CompressBase64JSON(data any, level int) (string, error) {
 	uncompressedBytes, err := json.Marshal(data)
 	if err != nil {
 		return "", err
@@ -91,7 +91,7 @@ func UncompressBase64(compressedB64 string) ([]byte, error) {
 
 // UncompressBase64JSON JSON encodes data, compresses it and then
 // base 64 compresses the data.
-func UncompressBase64JSON(compressedB64 string, data interface{}) error {
+func UncompressBase64JSON(compressedB64 string, data any) error {
 	uncompressed, err := UncompressBase64(compressedB64)
 	if err != nil {
 		return err

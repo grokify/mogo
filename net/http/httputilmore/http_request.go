@@ -62,7 +62,7 @@ func GetWriteFileSimple(url string, filename string, perm os.FileMode) ([]byte, 
 	return bytes, err
 }
 
-func GetJSONSimple(requrl string, header http.Header, data interface{}) (*http.Response, error) {
+func GetJSONSimple(requrl string, header http.Header, data any) (*http.Response, error) {
 	req, err := http.NewRequest(http.MethodGet, requrl, nil)
 	if err != nil {
 		return nil, err
@@ -117,7 +117,7 @@ func DoJSONSimple(client *http.Client, httpMethod, requrl string, headers map[st
 	return client.Do(req)
 }
 
-func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string][]string, reqBody, resBody interface{}) ([]byte, *http.Response, error) {
+func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string][]string, reqBody, resBody any) ([]byte, *http.Response, error) {
 	var reqBodyBytes []byte
 	var err error
 	if reqBody != nil {

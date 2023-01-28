@@ -12,7 +12,7 @@ import (
 
 // EnvFileToJSONFile Converts an .env file to a JSON file using the definition
 // provided in data.
-func EnvFileToJSONFile(data interface{}, filepathENV, filepathJSON string, perm os.FileMode, prefix, indent string) error {
+func EnvFileToJSONFile(data any, filepathENV, filepathJSON string, perm os.FileMode, prefix, indent string) error {
 	err := godotenv.Load(filepathENV)
 	if err != nil {
 		return err

@@ -75,7 +75,7 @@ func (builder *MultipartBuilder) WriteFieldString(partName string, data string) 
 }
 
 // WriteFieldAsJSON adds a JSON part.
-func (builder *MultipartBuilder) WriteFieldAsJSON(partName string, data interface{}, base64Encode bool) error {
+func (builder *MultipartBuilder) WriteFieldAsJSON(partName string, data any, base64Encode bool) error {
 	jsonBytes, err := json.Marshal(data)
 	if err != nil {
 		return err

@@ -11,10 +11,10 @@ import (
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
-// Execute takes a template string and an interface{}
+// Execute takes a template string and an `any`
 // struct, substituting struct values for the variables.
 // Field names can be nested.
-func Execute(pattern string, item interface{}) string {
+func Execute(pattern string, item any) string {
 	r := regexp.MustCompile(`{{(.*?)}}`)
 	m := r.FindAllStringSubmatch(pattern, -1)
 
@@ -61,7 +61,7 @@ func ParseFieldInfoString(fieldsRawStr string) []FieldInfo {
 	return fields
 }
 
-func GetFieldFormatted(item interface{}, f FieldInfo) (interface{}, error) {
+func GetFieldFormatted(item any, f FieldInfo) (any, error) {
 	val, err := reflectutil.GetField(item, strings.Split(strings.TrimSpace(f.Name), ".")...)
 	if err != nil {
 		return val, err
@@ -89,11 +89,11 @@ func GetFieldFormatted(item interface{}, f FieldInfo) (interface{}, error) {
 	return val, nil
 }
 
-// GetFieldsFormatted returns an interface{} slice for the struct and fields
+// GetFieldsFormatted returns an `any`` slice for the struct and fields
 // requested. An error is returned if any fields are not found or parsing options
 // fail.
-func GetFieldsFormatted(item interface{}, fs []FieldInfo) ([]interface{}, error) {
-	vals := []interface{}{}
+func GetFieldsFormatted(item any, fs []FieldInfo) ([]any, error) {
+	vals := []any{}
 	for _, f := range fs {
 		val, err := GetFieldFormatted(item, f)
 		if err != nil {
@@ -104,11 +104,11 @@ func GetFieldsFormatted(item interface{}, fs []FieldInfo) ([]interface{}, error)
 	return vals, nil
 }
 
-// GetFieldsFormattedForce returns an interface{} slice for the struct and
+// GetFieldsFormattedForce returns an `any`` slice for the struct and
 // fields requested. An empty string value is returned for anything that
 // encounters an error.
-func GetFieldsFormattedForce(item interface{}, fs []FieldInfo) []interface{} {
-	vals := []interface{}{}
+func GetFieldsFormattedForce(item any, fs []FieldInfo) []any {
+	vals := []any{}
 	for _, f := range fs {
 		val, err := GetFieldFormatted(item, f)
 		if err != nil {

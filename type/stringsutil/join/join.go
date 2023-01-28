@@ -6,9 +6,9 @@ import (
 	"strings"
 )
 
-// JoinAny takes an array of interface{} and converts
+// JoinAny takes an array of `any` and converts
 // each value to a string using fmt.Sprintf("%v")
-func JoinAny(a []interface{}, sep string) string {
+func JoinAny(a []any, sep string) string {
 	strs := []string{}
 	for _, item := range a {
 		strs = append(strs, fmt.Sprintf("%v", item))

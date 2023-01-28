@@ -5,10 +5,10 @@ import (
 )
 
 var unmarshalMSITests = []struct {
-	v   map[string]interface{}
+	v   map[string]any
 	foo string
 }{
-	{map[string]interface{}{"foo": "bar"}, "bar"},
+	{map[string]any{"foo": "bar"}, "bar"},
 }
 
 type testUnmarshalMSIStruct struct {

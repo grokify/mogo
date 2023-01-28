@@ -66,7 +66,7 @@ func BuildURL(baseUrl string, queryValues url.Values) string {
 }
 
 // BuildURLQueryString to be deprecated in favor of URLAddQueryString
-func BuildURLQueryString(baseUrl string, qry interface{}) string {
+func BuildURLQueryString(baseUrl string, qry any) string {
 	v, _ := query.Values(qry)
 	qryString := v.Encode()
 	if len(qryString) > 0 {
@@ -140,7 +140,7 @@ func URLAddQueryValuesString(inputURL string, qry url.Values) (*url.URL, error) 
 	return goURL, nil
 }
 
-func URLAddQueryInterfaceString(inputURL string, qry interface{}) (*url.URL, error) {
+func URLAddQueryInterfaceString(inputURL string, qry any) (*url.URL, error) {
 	urlvals, err := query.Values(qry)
 	if err != nil {
 		return nil, err

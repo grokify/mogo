@@ -31,7 +31,7 @@ func ReadFileByLine(name string, lineFunc func(idx uint, line string) error) err
 }
 
 // ReadFileJSON reads and unmarshals a file.
-func ReadFileJSON(file string, v interface{}) error {
+func ReadFileJSON(file string, v any) error {
 	bytes, err := os.ReadFile(file)
 	if err != nil {
 		return err

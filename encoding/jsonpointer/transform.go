@@ -42,7 +42,7 @@ func PointerCondense(s string) string {
 
 // PointerSubEscapeAll will substitute vars using `fmt.Sprintf()`
 // All strings are escaped.
-func PointerSubEscapeAll(format string, vars ...interface{}) string {
+func PointerSubEscapeAll(format string, vars ...any) string {
 	if len(vars) == 0 {
 		return format
 	}

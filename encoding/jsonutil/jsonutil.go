@@ -21,14 +21,14 @@ type mustMarhshalError struct {
 	MustMarhshalError string `json:"must_marshal_error"`
 }
 
-func MarshalSimple(v interface{}, prefix, indent string) ([]byte, error) {
+func MarshalSimple(v any, prefix, indent string) ([]byte, error) {
 	if prefix == "" && indent == "" {
 		return json.Marshal(v)
 	}
 	return json.MarshalIndent(v, prefix, indent)
 }
 
-func MustMarshalSimple(v interface{}, prefix, indent string) []byte {
+func MustMarshalSimple(v any, prefix, indent string) []byte {
 	bytes, err := MarshalSimple(v, prefix, indent)
 	if err != nil {
 		panic(err)
@@ -36,7 +36,7 @@ func MustMarshalSimple(v interface{}, prefix, indent string) []byte {
 	return bytes
 }
 
-func MustMarshal(i interface{}, embedError bool) []byte {
+func MustMarshal(i any, embedError bool) []byte {
 	bytes, err := json.Marshal(i)
 	if err != nil {
 		if embedError {
@@ -54,11 +54,11 @@ func MustMarshal(i interface{}, embedError bool) []byte {
 	return bytes
 }
 
-func MustMarshalString(i interface{}, embedError bool) string {
+func MustMarshalString(i any, embedError bool) string {
 	return string(MustMarshal(i, embedError))
 }
 
-func MustMarshalIndent(i interface{}, prefix, indent string, embedError bool) []byte {
+func MustMarshalIndent(i any, prefix, indent string, embedError bool) []byte {
 	bytes, err := json.MarshalIndent(i, prefix, indent)
 	if err != nil {
 		panic(err)
@@ -86,7 +86,7 @@ func IndentReader(r io.Reader, prefix, indent string) ([]byte, error) {
 	return IndentBytes(b, prefix, indent)
 }
 
-func MarshalBase64(i interface{}) (string, error) {
+func MarshalBase64(i any) (string, error) {
 	data, err := json.Marshal(i)
 	if err != nil {
 		return "", err
@@ -94,14 +94,14 @@ func MarshalBase64(i interface{}) (string, error) {
 	return base64.StdEncoding.EncodeToString(data), nil
 }
 
-func MustUnmarshal(data []byte, v interface{}) {
+func MustUnmarshal(data []byte, v any) {
 	err := json.Unmarshal(data, v)
 	if err != nil {
 		panic(err.Error())
 	}
 }
 
-func UnmarshalMSI(data map[string]interface{}, v interface{}) error {
+func UnmarshalMSI(data map[string]any, v any) error {
 	bytes, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -109,7 +109,7 @@ func UnmarshalMSI(data map[string]interface{}, v interface{}) error {
 	return json.Unmarshal(bytes, v)
 }
 
-func UnmarshalReader(r io.Reader, v interface{}) ([]byte, error) {
+func UnmarshalReader(r io.Reader, v any) ([]byte, error) {
 	bytes, err := io.ReadAll(r)
 	if err != nil {
 		return bytes, err
@@ -117,7 +117,7 @@ func UnmarshalReader(r io.Reader, v interface{}) ([]byte, error) {
 	return bytes, json.Unmarshal(bytes, v)
 }
 
-func UnmarshalStrict(data []byte, v interface{}) error {
+func UnmarshalStrict(data []byte, v any) error {
 	dec := json.NewDecoder(bytes.NewReader(data))
 	dec.DisallowUnknownFields()
 	return dec.Decode(v)
@@ -137,7 +137,7 @@ func PrintReaderIndent(r io.Reader, prefix, indent string) ([]byte, error) {
 	return outBytes, err
 }
 
-func ReadFile(filename string, v interface{}) ([]byte, error) {
+func ReadFile(filename string, v any) ([]byte, error) {
 	bytes, err := os.ReadFile(filename)
 	if err != nil {
 		return bytes, err
@@ -145,7 +145,7 @@ func ReadFile(filename string, v interface{}) ([]byte, error) {
 	return bytes, json.Unmarshal(bytes, v)
 }
 
-func WriteFile(filename string, v interface{}, prefix, indent string, perm fs.FileMode) error {
+func WriteFile(filename string, v any, prefix, indent string, perm fs.FileMode) error {
 	bytes, err := MarshalSimple(v, prefix, indent)
 	if err != nil {
 		return err

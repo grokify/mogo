@@ -11,7 +11,7 @@ import (
 	"github.com/grokify/mogo/io/ioutil"
 )
 
-func WriteFileJSON(filepath string, data interface{}, perm os.FileMode, prefix, indent string) error {
+func WriteFileJSON(filepath string, data any, perm os.FileMode, prefix, indent string) error {
 	bytes, err := jsonutil.MarshalSimple(data, prefix, indent)
 	if err != nil {
 		return err

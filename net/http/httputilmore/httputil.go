@@ -13,7 +13,7 @@ import (
 
 /*
 // UnmarshalResponseJSON is EOL, use jsonutil.UnmarshalIoReader()
-func UnmarshalResponseJSON(resp *http.Response, data interface{}) ([]byte, error) {
+func UnmarshalResponseJSON(resp *http.Response, data any) ([]byte, error) {
 	bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return bytes, err
@@ -27,7 +27,7 @@ func ResponseBodyJSONMapIndent(res *http.Response, prefix string, indent string)
 	if err != nil {
 		return body, err
 	}
-	any := map[string]interface{}{}
+	any := map[string]any{}
 	err = json.Unmarshal(body, &any)
 	if err != nil {
 		return body, err

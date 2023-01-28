@@ -26,8 +26,8 @@ func (str *StrUtil) Trim(bytes []byte) []byte {
 	return bytes
 }
 
-func InterfaceToSliceString(s interface{}) []string {
-	ss := s.([]interface{})
+func InterfaceToSliceString(s any) []string {
+	ss := s.([]any)
 	a := []string{}
 	for _, i := range ss {
 		a = append(a, i.(string))

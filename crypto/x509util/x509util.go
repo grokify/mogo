@@ -112,7 +112,7 @@ func GetRsaPublicKeyForPkcs8PublicKeyPath(pubKeyPkcs8Path string) (*rsa.PublicKe
 
 	pubKey, ok := pubKeyInterface.(*rsa.PublicKey)
 	if !ok {
-		return pubKey, errors.New("500: Cannot convert pub interface{} to *rsa.PublicKey")
+		return pubKey, errors.New("500: Cannot convert pub `any` to *rsa.PublicKey")
 	}
 	return pubKey, nil
 }

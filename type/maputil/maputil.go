@@ -107,27 +107,6 @@ func DuplicateValues[C comparable](m map[C]C) map[C][]C {
 	return dupes
 }
 
-/*
-// IntKeys takes a map where the keys are integers and reurns a slice of key names.
-func IntKeys[K constraints.Integer, V any](m map[K]V) []int {
-	keys := []int{}
-	for k := range m {
-		keys = append(keys, int(k))
-	}
-	sort.Ints(keys)
-	return keys
-}
-
-func StringKeys(mp interface{}) []string {
-	keysVal := reflect.ValueOf(mp).MapKeys()
-	keysArr := []string{}
-	for _, key := range keysVal {
-		keysArr = append(keysArr, key.String())
-	}
-	return keysArr
-}
-*/
-
 func StringValueOrDefault[K comparable](m map[K]string, key K, def string) string {
 	if val, ok := m[key]; ok {
 		return val
@@ -158,14 +137,6 @@ type MapInt64Int64 map[int64]int64
 
 func (m MapInt64Int64) KeysSorted() []int64 {
 	return Keys(m)
-	/*
-		keys := []int64{}
-		for k := range m {
-			keys = append(keys, k)
-		}
-		sortutil.Slice(keys)
-		return keys
-	*/
 }
 
 func (m MapInt64Int64) ValuesSortedByKeys() []int64 {

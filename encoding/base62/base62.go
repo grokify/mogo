@@ -51,7 +51,7 @@ func DecodeGunzip(encoded string) ([]byte, error) {
 }
 
 // EncodeGzipJSON encodes a struct that is JSON encoded.
-func EncodeGzipJSON(data interface{}, compressLevel int) (string, error) {
+func EncodeGzipJSON(data any, compressLevel int) (string, error) {
 	bytes, err := json.Marshal(data)
 	if err != nil {
 		return "", err
@@ -62,7 +62,7 @@ func EncodeGzipJSON(data interface{}, compressLevel int) (string, error) {
 // DecodeGunzipJSON base62 decodes a string with optoinal
 // gunzip uncompression and then unmarshals the data to a
 // struct.
-func DecodeGunzipJSON(encoded string, output interface{}) error {
+func DecodeGunzipJSON(encoded string, output any) error {
 	encoded = strings.TrimSpace(encoded)
 	if strings.Index(encoded, "{") == 0 || strings.Index(encoded, "[") == 0 {
 		return json.Unmarshal([]byte(encoded), output)

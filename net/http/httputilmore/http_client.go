@@ -71,7 +71,7 @@ func DoRequestRateLimited(client *http.Client, req *http.Request, useXrlHyphen b
 }
 
 func LogRequestRateLimited(rlstat RateLimitInfo) {
-	logInfo := map[string]interface{}{
+	logInfo := map[string]any{
 		"action":                 "http_rate_limited",
 		"status_code":            rlstat.StatusCode,
 		"retry-after":            rlstat.RetryAfter,
@@ -94,7 +94,7 @@ type ClientMore struct {
 	Client *http.Client
 }
 
-func (cm *ClientMore) PostToJSON(postURL string, body interface{}) (*http.Response, error) {
+func (cm *ClientMore) PostToJSON(postURL string, body any) (*http.Response, error) {
 	jsonBytes, err := json.Marshal(body)
 	if err != nil {
 		return &http.Response{}, err

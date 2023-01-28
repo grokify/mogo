@@ -24,7 +24,7 @@ func init() {
 */
 
 // PrintJSON pretty prints anything using a default indentation
-func PrintJSON(in interface{}) error {
+func PrintJSON(in any) error {
 	var j []byte
 	var err error
 	if JSONPretty {
@@ -39,14 +39,14 @@ func PrintJSON(in interface{}) error {
 	return nil
 }
 
-func MustPrintJSON(in interface{}) {
+func MustPrintJSON(in any) {
 	if err := PrintJSON(in); err != nil {
 		panic(err)
 	}
 }
 
 // PrintJSONMore pretty prints anything using supplied indentation.
-func PrintJSONMore(in interface{}, jsonPrefix, jsonIndent string) error {
+func PrintJSONMore(in any, jsonPrefix, jsonIndent string) error {
 	j, err := jsonutil.MarshalSimple(in, jsonPrefix, jsonIndent)
 	if err != nil {
 		return err
@@ -56,7 +56,7 @@ func PrintJSONMore(in interface{}, jsonPrefix, jsonIndent string) error {
 }
 
 // PrintJSONMin pretty prints anything using a default indentation
-func PrintJSONMin(in interface{}) error {
+func PrintJSONMin(in any) error {
 	if j, err := json.Marshal(in); err != nil {
 		return err
 	} else {

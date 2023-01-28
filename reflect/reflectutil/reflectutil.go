@@ -47,7 +47,7 @@ func NameOf(i any, inclPkgPath bool) string {
 	return ptr + name
 }
 
-// SliceInterfaceToString converts an `interface{}` to a `[]string`.
+// SliceInterfaceToString converts an `any` to a `[]string`.
 func SliceInterfaceToString(raws any) []string {
 	out := []string{}
 	switch reflect.TypeOf(raws).Kind() {

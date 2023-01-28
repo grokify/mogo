@@ -16,7 +16,7 @@ import (
 	base58 "github.com/itchyny/base58-go"
 )
 
-func EncryptAesBase58Json(plainitem interface{}, key []byte, encoding *base58.Encoding) ([]byte, error) {
+func EncryptAesBase58Json(plainitem any, key []byte, encoding *base58.Encoding) ([]byte, error) {
 	plaintext, err := json.Marshal(plainitem)
 	if err != nil {
 		return plaintext, err
@@ -24,7 +24,7 @@ func EncryptAesBase58Json(plainitem interface{}, key []byte, encoding *base58.En
 	return EncryptAesBase58(plaintext, key, encoding)
 }
 
-func DecryptAesBase58Json(ciphertext []byte, key []byte, encoding *base58.Encoding, item interface{}) error {
+func DecryptAesBase58Json(ciphertext []byte, key []byte, encoding *base58.Encoding, item any) error {
 	plaintext, err := DecryptAesBase58(ciphertext, key, encoding)
 	if err != nil {
 		return err

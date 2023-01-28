@@ -94,7 +94,7 @@ func (resIn *ResponseInfo) ToJSON() []byte {
 	return bytes
 }
 
-func ResponseWriterWriteJSON(w http.ResponseWriter, statusCode int, body interface{}, prefix, indent string) error {
+func ResponseWriterWriteJSON(w http.ResponseWriter, statusCode int, body any, prefix, indent string) error {
 	if w == nil {
 		return errors.New("nil response writer")
 	}

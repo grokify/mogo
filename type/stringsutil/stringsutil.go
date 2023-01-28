@@ -230,7 +230,7 @@ func JoinTrimSpace(strs []string) string {
 // separator string found within parts. `stripRepeatedSep` strips
 // repeating separators. This flexibility is designed to support
 // joining data for both CSVs and paths.
-func JoinInterface(arr []interface{}, sep string, stripRepeatedSep bool, stripEmbeddedSep bool, altSep string) string {
+func JoinInterface(arr []any, sep string, stripRepeatedSep bool, stripEmbeddedSep bool, altSep string) string {
 	parts := []string{}
 	rx := regexp.MustCompile(sep)
 	for _, el := range arr {

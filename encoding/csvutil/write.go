@@ -37,8 +37,8 @@ func (w *Writer) open(filepath string) error {
 	return nil
 }
 
-// AddLine adds an []interface{} to the file.
-func (w *Writer) AddLine(cells []interface{}) error {
+// AddLine adds an `any`` to the file.
+func (w *Writer) AddLine(cells []any) error {
 	_, err := w.File.WriteString(
 		stringsutil.JoinInterface(
 			cells, w.Separator, false, w.ReplaceSeparator, w.SeparatorAlt) + "\n")

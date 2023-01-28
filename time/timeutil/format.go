@@ -248,7 +248,7 @@ func ParseSlice(layout string, strings []string) ([]time.Time, error) {
 
 // FormatTimeMulti formats a `time.Time` object or
 // an epoch number. It is adapted from `github.com/wcharczuk/go-chart`.
-func FormatTimeMulti(dateFormat string, v interface{}) string {
+func FormatTimeMulti(dateFormat string, v any) string {
 	if typed, isTyped := v.(time.Time); isTyped {
 		return typed.Format(dateFormat)
 	}
