@@ -56,7 +56,9 @@ var dsnTests = []struct {
 		User:     "myuser",
 		Password: "mypass",
 		Database: "mydb",
-		SSLMode:  SSLModeRequire,
+		Query: map[string][]string{
+			PgSSLModeParam: {SSLModeRequire},
+		},
 	}, "postgres://myuser:mypass@127.0.0.1:8888/mydb?sslmode=require", nil},
 	{DataSource{
 		Driver:   DriverPostgres,
@@ -65,7 +67,9 @@ var dsnTests = []struct {
 		User:     "  myuser",
 		Password: "mypass",
 		Database: "mydb",
-		SSLMode:  SSLModeRequire,
+		Query: map[string][]string{
+			PgSSLModeParam: {SSLModeRequire},
+		},
 	}, "postgres://myuser:mypass@127.0.0.1:5432/mydb?sslmode=require", nil},
 	{DataSource{
 		Driver:   DriverSQLite3,

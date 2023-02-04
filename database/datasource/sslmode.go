@@ -6,6 +6,9 @@ import (
 )
 
 const (
+	OracleParamConnectTimeout = "connect_timeout"
+
+	PgSSLModeParam    = "sslmode"
 	SSLModeAllow      = "allow"
 	SSLModeDisable    = "disable"
 	SSLModePrefer     = "prefer"
@@ -17,32 +20,30 @@ const (
 
 var ErrSSLModeNotSUpported = errors.New("sslmode not supported")
 
+// SSLModeParseOrDefault manages Postgres sslmode query param
 func SSLModeParseOrDefault(s, d string) string {
 	m, err := SSLModeParse(s)
 	if err != nil {
-		m2, err := SSLModeParse(d)
-		if err != nil {
-			return ""
-		}
-		return m2
+		return d
 	}
 	return m
 }
 
+func sslModes() map[string]int {
+	return map[string]int{
+		SSLModeAllow:      1,
+		SSLModeDisable:    1,
+		SSLModePrefer:     1,
+		SSLModeRequire:    1,
+		SSLModeVerifyCA:   1,
+		SSLModeVerifyFull: 1}
+}
+
+// SSLModeParse parses Postgres sslmode query param
 func SSLModeParse(s string) (string, error) {
 	s = strings.ToLower(strings.TrimSpace(s))
-	switch s {
-	case SSLModeAllow:
-		return s, nil
-	case SSLModeDisable:
-		return s, nil
-	case SSLModePrefer:
-		return s, nil
-	case SSLModeRequire:
-		return s, nil
-	case SSLModeVerifyCA:
-		return s, nil
-	case SSLModeVerifyFull:
+	modes := sslModes()
+	if _, ok := modes[s]; ok {
 		return s, nil
 	}
 	return "", ErrSSLModeNotSUpported
