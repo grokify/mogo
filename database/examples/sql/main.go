@@ -13,7 +13,7 @@ import (
 
 func main() {
 	files, err := config.LoadDotEnv(
-		".env", os.Getenv("ENV_PATH"))
+		[]string{".env", os.Getenv("ENV_PATH")}, -1)
 	if err != nil {
 		log.Fatal(err)
 	}
