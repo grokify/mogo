@@ -1,6 +1,7 @@
 package stringsutil
 
 import (
+	"errors"
 	"regexp"
 	"strings"
 	"time"
@@ -10,15 +11,15 @@ type MatchType int
 
 const (
 	MatchExact MatchType = iota
-	MatchTrimSpace
-	MatchTrimSpaceLower
-	MatchRegexp
+	MatchStringTrimSpace
+	MatchStringTrimSpaceLower
+	MatchStringPrefix
+	MatchStringSuffix
+	MatchStringRegexp
 	MatchTimeGT
 	MatchTimeGTE
 	MatchTimeLT
 	MatchTimeLTE
-	MatchHasSuffix
-	MatchHasPrefix
 )
 
 type MatchInfo struct {
@@ -30,30 +31,22 @@ type MatchInfo struct {
 	TimeMax    time.Time
 }
 
-// Match provides an canonical way to match strings using multiple
-// approaches
+// Match provides an canonical way to match strings using multiple approaches
 func Match(s string, matchInfo MatchInfo) (bool, error) {
 	switch matchInfo.MatchType {
 	case MatchExact:
-		if s == matchInfo.String {
-			return true, nil
-		}
-		return false, nil
-	case MatchTrimSpace:
-		m := strings.TrimSpace(s)
-		if m == strings.TrimSpace(matchInfo.String) {
-			return true, nil
-		}
-		return false, nil
-	case MatchTrimSpaceLower:
-		m := strings.ToLower(strings.TrimSpace(s))
-		if m == strings.ToLower(strings.TrimSpace(matchInfo.String)) {
-			return true, nil
-		}
-		return false, nil
-	case MatchRegexp:
+		return s == matchInfo.String, nil
+	case MatchStringTrimSpace:
+		return strings.TrimSpace(s) == strings.TrimSpace(matchInfo.String), nil
+	case MatchStringTrimSpaceLower:
+		return strings.EqualFold(strings.TrimSpace(s), strings.TrimSpace(matchInfo.String)), nil
+	case MatchStringPrefix:
+		return strings.Index(s, matchInfo.String) == 0, nil
+	case MatchStringSuffix:
+		return ReverseIndex(s, matchInfo.String) == 0, nil
+	case MatchStringRegexp:
 		if matchInfo.Regexp == nil {
-			return false, nil
+			return false, errors.New("no regexp supplied")
 		}
 		return matchInfo.Regexp.MatchString(s), nil
 	case MatchTimeGT:
