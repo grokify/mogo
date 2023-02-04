@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/microcosm-cc/bluemonday"
+	xhtml "golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
 
@@ -53,10 +54,12 @@ var (
 	bluemondayStrictPolicy                  = bluemonday.StrictPolicy()
 	rxHTMLToTextNewLines     *regexp.Regexp = regexp.MustCompile(`(?i:</?p>)`)
 	rxCarriageReturn         *regexp.Regexp = regexp.MustCompile(`\r`)
+	rxDiv                    *regexp.Regexp = regexp.MustCompile(`(?i)<div>`)
 	rxLineFeed               *regexp.Regexp = regexp.MustCompile(`\n`)
 	rxLineFeedMore           *regexp.Regexp = regexp.MustCompile(`\n+`)
 	rxCarriageReturnLineFeed *regexp.Regexp = regexp.MustCompile(`\r\n`)
 	rxLineFeedMore2          *regexp.Regexp = regexp.MustCompile(`\n\n+`)
+	doubleLinefeed                          = "\n\n"
 	// rxCarriageReturnLineFeedMore *regexp.Regexp = regexp.MustCompile(`[\r\n]+`)
 	// rxEndingSpacesLineFeed       *regexp.Regexp = regexp.MustCompile(`\s+\n`)
 )
@@ -96,11 +99,13 @@ func HTMLToText(s string) string {
 		strings.TrimSpace(
 			html.UnescapeString(
 				bluemondayStrictPolicy.Sanitize(
-					rxHTMLToTextNewLines.ReplaceAllString(s, "$1\n\n"),
+					rxHTMLToTextNewLines.ReplaceAllString(
+						rxDiv.ReplaceAllString(s, doubleLinefeed),
+						"$1"+doubleLinefeed),
 				),
 			),
 		),
-		"\n\n",
+		doubleLinefeed,
 	)
 }
 
@@ -109,8 +114,17 @@ func HTMLToTextH1(b []byte, policy *bluemonday.Policy) (string, error) {
 }
 
 func HTMLToTextAtom(b []byte, policy *bluemonday.Policy, a atom.Atom) (string, error) {
-	t := NewTokenizerBytes(b)
-	toks, err := TokensBetweenAtom(t, false, true, a)
+	z := NewTokenizerBytes(b)
+	// filter := []golanghtml.Token{{DataAtom: a}}
+	opts := NextTokensOpts{
+		SkipErrors:     false,
+		IncludeChain:   true,
+		InclusiveMatch: true,
+		StartFilter:    []xhtml.Token{{DataAtom: a, Type: xhtml.StartTagToken}},
+		EndFilter:      []xhtml.Token{{DataAtom: a, Type: xhtml.EndTagToken}},
+	}
+	toks, err := NextTokens(z, opts)
+	// toks, err := TokensBetweenAtom(t, false, true, a)
 	if err != nil {
 		return "", err
 	}

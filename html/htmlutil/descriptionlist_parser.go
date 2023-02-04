@@ -22,8 +22,15 @@ func TokenizerDescriptionLists(z *html.Tokenizer) (DescriptionLists, error) {
 
 func TokenizerDescriptionListNext(z *html.Tokenizer) (DescriptionList, error) {
 	descriptionList := DescriptionList{}
-	skipErrs := false
-	dlToks, err := TokensBetweenAtom(z, skipErrs, true, atom.Dl)
+	opts := NextTokensOpts{
+		SkipErrors:     false,
+		IncludeChain:   true,
+		InclusiveMatch: true,
+		StartFilter:    []html.Token{{DataAtom: atom.Dl, Type: html.StartTagToken}},
+		EndFilter:      []html.Token{{DataAtom: atom.Dl, Type: html.EndTagToken}},
+	}
+	dlToks, err := NextTokens(z, opts)
+	// dlToks, err := TokensBetweenAtom(z, skipErrs, true, atom.Dl)
 	if err != nil {
 		return descriptionList, err
 	}
@@ -39,24 +46,28 @@ const (
 func ParseDescriptionListTokens(toks ...html.Token) DescriptionList {
 	dl := DescriptionList{}
 	var curDesc Description
-	staDt := NewTokenFilter(html.StartTagToken, atom.Dt)
-	endDt := NewTokenFilter(html.EndTagToken, atom.Dt)
-	staDd := NewTokenFilter(html.StartTagToken, atom.Dd)
-	endDd := NewTokenFilter(html.EndTagToken, atom.Dd)
+	staDt := Tokens([]html.Token{{Type: html.StartTagToken, DataAtom: atom.Dt}})
+	endDt := Tokens([]html.Token{{Type: html.EndTagToken, DataAtom: atom.Dt}})
+	staDd := Tokens([]html.Token{{Type: html.StartTagToken, DataAtom: atom.Dd}})
+	endDd := Tokens([]html.Token{{Type: html.EndTagToken, DataAtom: atom.Dd}})
+	// staDt := NewTokenFilter(html.StartTagToken, atom.Dt)
+	// endDt := NewTokenFilter(html.EndTagToken, atom.Dt)
+	// staDd := NewTokenFilter(html.StartTagToken, atom.Dd)
+	// endDd := NewTokenFilter(html.EndTagToken, atom.Dd)
 	matching := ""
 	for _, tok := range toks {
-		if staDt.Match(tok) {
+		if staDt.MatchLeft(tok, nil) {
 			curDesc.Term = append(curDesc.Term, tok)
 			matching = matchingTerm
-		} else if endDt.Match(tok) {
+		} else if endDt.MatchLeft(tok, nil) {
 			curDesc.Term = append(curDesc.Term, tok)
 			matching = ""
 		} else if matching == matchingTerm {
 			curDesc.Term = append(curDesc.Term, tok)
-		} else if staDd.Match(tok) {
+		} else if staDd.MatchLeft(tok, nil) {
 			curDesc.Description = append(curDesc.Description, tok)
 			matching = matchingDesc
-		} else if endDd.Match(tok) {
+		} else if endDd.MatchLeft(tok, nil) {
 			curDesc.Description = append(curDesc.Description, tok)
 			dl = append(dl, curDesc)
 			matching = ""

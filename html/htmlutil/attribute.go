@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/grokify/mogo/type/stringsutil"
 	"golang.org/x/net/html"
 )
 
@@ -13,12 +14,21 @@ const (
 
 type Attributes []html.Attribute
 
-func (attrs Attributes) Exists(attr html.Attribute) bool {
+func (attrs Attributes) Exists(attr html.Attribute, valMatch *stringsutil.MatchInfo) bool {
 	for _, attrTry := range attrs {
-		if attrTry.Namespace == attr.Namespace &&
-			attrTry.Key == attr.Key &&
-			attrTry.Val == attr.Val {
-			return true
+		if valMatch != nil {
+			isMatch, err := stringsutil.Match(attrTry.Val, *valMatch)
+			if err == nil && isMatch &&
+				attrTry.Namespace == attr.Namespace &&
+				attrTry.Key == attr.Key {
+				return true
+			}
+		} else {
+			if attrTry.Namespace == attr.Namespace &&
+				attrTry.Key == attr.Key &&
+				attrTry.Val == attr.Val {
+				return true
+			}
 		}
 	}
 	return false
