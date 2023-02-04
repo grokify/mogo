@@ -42,16 +42,35 @@ const base36Dictionary = "0123456789abcdefghijklmnopqrstuvwxyz"
 
 func TestIntToBaseXString(t *testing.T) {
 	for _, tt := range intToBaseXStringTests {
-		try := IntToBaseXString(tt.base, tt.dec)
+		try := Int64ToBaseX(int64(tt.dec), tt.base)
 
 		if try != tt.val {
 			t.Errorf("bigint.IntToBaseXString(%v,%v): want [%v], got [%v]",
-				tt.base, tt.dec, tt.val, try)
+				tt.dec, tt.base, tt.val, try)
 		}
 		try2 := string([]rune(base36Dictionary)[tt.dec])
 		if try2 != tt.val {
 			t.Errorf("bigint.IntToBaseXString(%v,%v): want [%s], got [%s]",
-				tt.base, tt.dec, tt.val, try2)
+				tt.dec, tt.base, tt.val, try2)
+		}
+	}
+}
+
+var splitTests = []struct {
+	x     int64
+	scale uint
+	y     int64
+	z     int64
+}{
+	{12345, 2, 123, 45},
+	{8888999, 3, 8888, 999},
+}
+
+func TestSplitInt64(t *testing.T) {
+	for _, tt := range splitTests {
+		y, z := SplitInt64(tt.x, tt.scale)
+		if y != tt.y || z != tt.z {
+			t.Errorf("bigutil.SplitInt64(%v,%v): want [%d,%d], got [%d,%d]", tt.x, tt.scale, tt.y, tt.z, y, z)
 		}
 	}
 }

@@ -90,6 +90,21 @@ func PowInt64(x, y int64) int64 {
 	return Pow(big.NewInt(x), big.NewInt(y)).Int64()
 }
 
-func IntToBaseXString(baseX, val int) string {
-	return big.NewInt(int64(val)).Text(baseX)
+func Int64ToBaseX(x int64, base int) string {
+	return big.NewInt(x).Text(base)
+}
+
+func BaseXToInt64(s string, base int) (int64, error) {
+	x, ok := big.NewInt(0).SetString(s, base)
+	if !ok {
+		return 0, errors.New("failed to set base string")
+	}
+	return x.Int64(), nil
+}
+
+func SplitInt64(x int64, scale uint) (int64, int64) {
+	b := PowInt64(10, int64(scale))
+	y := x / b
+	z := x - y*b
+	return y, z
 }
