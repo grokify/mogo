@@ -127,6 +127,28 @@ var (
 	rxComma = regexp.MustCompile(`,`)
 )
 
+func NewAmountFloat(u string, v float64) (Amount, error) {
+	amt := Amount{
+		Value: decimal.NewFromFloat(v)}
+	can, err := ParseCurrencyUnit(u, "")
+	if err != nil {
+		return amt, err
+	}
+	amt.Unit = can
+	return amt, nil
+}
+
+func NewAmountInt(u string, v int64, exp int32) (Amount, error) {
+	amt := Amount{
+		Value: decimal.New(v, exp)}
+	can, err := ParseCurrencyUnit(u, "")
+	if err != nil {
+		return amt, err
+	}
+	amt.Unit = can
+	return amt, nil
+}
+
 func ParseAmount(value string) (Amount, error) {
 	value = strings.TrimSpace(value)
 	m := rxCUR.FindStringSubmatch(value)
@@ -165,11 +187,15 @@ func (amt *Amount) Add(a Amount) error {
 		if amt.Value.IsZero() && amt.Unit == "" {
 			amt.Unit = a.Unit
 		} else {
-			return fmt.Errorf("mismatch currency units (%s) (%v) (%s) (%v)", amt.Unit, amt.Value, a.Unit, a.Value)
+			return fmt.Errorf("mismatch currency units have (%s %v) adding (%s %v)", amt.Unit, amt.Value, a.Unit, a.Value)
 		}
 	}
 	amt.Value = amt.Value.Add(a.Value)
 	return nil
+}
+
+func (amt *Amount) Equal(a Amount) bool {
+	return amt.Value.Equal(a.Value) && amt.Unit == a.Unit
 }
 
 func ParseCurrencyUnit(abbr, symbol string) (string, error) {
