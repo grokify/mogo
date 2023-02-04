@@ -28,6 +28,14 @@ func ReadAllOrError(r io.Reader) []byte {
 	return data
 }
 
+func ReaderToReadSeeker(r io.Reader) (io.ReadSeeker, error) {
+	ba, err := io.ReadAll(r)
+	if err != nil {
+		return nil, err
+	}
+	return bytes.NewReader(ba), nil
+}
+
 // Write writes from `Writer` to a `Reader`. See `osutil.WriteFileReader()`.
 func Write(w *bufio.Writer, r io.Reader) error {
 	buf := make([]byte, 1024)
