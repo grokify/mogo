@@ -358,3 +358,14 @@ func EmptyError(s string, err error) string {
 	}
 	return s
 }
+
+func StripChars(s, cutset string) string {
+	// from https://github.com/pmalek/stringutils/tree/c5d70074c6b955a8bffc2c4990653843bd3cb1a5
+	// under MIT license: https://github.com/pmalek/stringutils/blob/c5d70074c6b955a8bffc2c4990653843bd3cb1a5/LICENSE
+	return strings.Map(func(r rune) rune {
+		if !strings.ContainsRune(cutset, r) {
+			return r
+		}
+		return -1
+	}, s)
+}
