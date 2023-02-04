@@ -3,9 +3,10 @@ module github.com/grokify/mogo
 go 1.18
 
 require (
-	github.com/ProtonMail/go-crypto v0.0.0-20230127150802-22e9f3c8043c
+	github.com/ProtonMail/go-crypto v0.0.0-20230201104953-d1d05f4e2bfb
 	github.com/buger/jsonparser v1.1.1
 	github.com/caarlos0/env/v6 v6.10.1
+	github.com/go-logfmt/logfmt v0.6.0
 	github.com/google/go-querystring v1.1.0
 	github.com/grokify/base36 v1.0.5
 	github.com/grokify/bitcoinmath v0.1.0
@@ -13,30 +14,30 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/itchyny/base58-go v0.2.0
 	github.com/jessevdk/go-flags v1.5.0
-	github.com/joho/godotenv v1.4.0
+	github.com/joho/godotenv v1.5.0
 	github.com/json-iterator/go v1.1.12
 	github.com/leekchan/accounting v1.0.0
 	github.com/lytics/base62 v0.0.0-20180808010106-0ee4de5a5d6d
 	github.com/martinlindhe/base36 v1.1.1
-	github.com/microcosm-cc/bluemonday v1.0.21
+	github.com/microcosm-cc/bluemonday v1.0.22
 	github.com/shopspring/decimal v1.3.1
 	github.com/tkuchiki/go-timezone v0.2.2
 	github.com/valyala/fastjson v1.6.4
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	golang.org/x/crypto v0.5.0
-	golang.org/x/exp v0.0.0-20230127193734-31bee513bff7
+	golang.org/x/exp v0.0.0-20230203172020-98cc5a0785f9
 	golang.org/x/image v0.3.0
 	golang.org/x/net v0.5.0
 	golang.org/x/text v0.6.0
-	google.golang.org/genproto v0.0.0-20230127162408-596548ed4efa
+	google.golang.org/genproto v0.0.0-20230202175211-008b39050e57
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/oleiade/reflections.v1 v1.0.0
 )
 
 require (
 	github.com/aymerick/douceur v0.2.0 // indirect
-	github.com/cloudflare/circl v1.3.1 // indirect
+	github.com/cloudflare/circl v1.3.2 // indirect
 	github.com/cockroachdb/apd v1.1.0 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
