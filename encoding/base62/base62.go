@@ -12,6 +12,11 @@ import (
 	"github.com/lytics/base62"
 )
 
+const (
+	AlphabetBase62         = encoding.AlphabetBase62
+	AlphabetBase62Gobigint = encoding.AlphabetBase62Gobigint
+)
+
 var (
 	rxCheckBase62 = regexp.MustCompile(`^[0-9A-Za-z]*\+*\s*$`)
 	// rxCheckBase62NoPadding = regexp.MustCompile(`^[0-9A-Za-z]*$`)
@@ -85,10 +90,3 @@ func Pad(encoded string) string {
 func ValidBase62(encoded string) bool {
 	return rxCheckBase62.MatchString(encoded)
 }
-
-const (
-	AlphabetGobigint = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	AlphabetGMP      = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-	AlphabetLUN      = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	AlphabetULN      = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-)
