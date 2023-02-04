@@ -59,7 +59,7 @@ func TypeByFilename(nameOrExt string) (string, error) {
 // which is the default for `http.DetectContentType`.
 func MustTypeByFile(name string, useDefault bool) string {
 	mt, err := TypeByFile(name)
-	if err != nil || len(strings.TrimSpace(mt)) == 0 {
+	if err != nil || strings.TrimSpace(mt) == "" {
 		if useDefault {
 			return DefaultMIMEType
 		} else {
@@ -86,23 +86,34 @@ func TypeByFile(name string) (string, error) {
 // information of an `io.ReadSeeker`. It relies on
 // `http.DetectContentType`
 func TypeByReadSeeker(rs io.ReadSeeker, resetPointer bool) (string, error) {
-	// Only the first 512 bytes are used to sniff the content type.
-	data := make([]byte, 512)
-	_, err := rs.Read(data)
+	// At most the first 512 bytes of data are used:
+	// https://golang.org/src/net/http/sniff.go?s=646:688#L11
+	buf := make([]byte, 512)
+
+	_, err := rs.Seek(0, io.SeekStart)
 	if err != nil {
+		return "", err
+	}
+
+	bytesRead, err := rs.Read(buf)
+	if err != nil && err != io.EOF {
 		return "", err
 	}
 
 	if resetPointer {
 		// Reset the read pointer if necessary.
-		_, err = rs.Seek(0, 0)
+		_, err = rs.Seek(0, io.SeekStart)
 		if err != nil {
 			return "", err
 		}
 	}
 
+	// Slice to remove fill-up zero values which cause a wrong content type detection in the next step
+	// https://gist.github.com/rayrutjes/db9b9ea8e02255d62ce2?permalink_comment_id=3418419#gistcomment-3418419
+	buf = buf[:bytesRead]
+
 	// Returns `application/octet-stream` if media type is unknown.
-	return http.DetectContentType(data), nil
+	return http.DetectContentType(buf), nil
 }
 
 // IsType checks to see if a media type corresponds to a type/subtype
