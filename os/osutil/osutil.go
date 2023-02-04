@@ -3,6 +3,7 @@ package osutil
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -110,4 +111,14 @@ func CreateFileWithLines(filename string, lines []string, lineSuffix string, use
 		}
 	}
 	return w.Flush()
+}
+
+// NewLine uses `os.PathSeparator` to determine the newline characters for the local system.
+func NewLine() string {
+	ps := fmt.Sprintf("%v", os.PathSeparator)
+	nl := "\n"
+	if ps != "/" {
+		nl = "\r\n"
+	}
+	return nl
 }
