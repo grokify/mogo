@@ -13,18 +13,28 @@ func Append(err error, str string) error {
 }
 */
 
-func Wrap(origErr error, wrapPrefix string) error {
-	if origErr == nil {
-		return origErr
+func wrapOne(err error, wrapPrefix string) error {
+	if err == nil {
+		return err
 	}
-	return fmt.Errorf("%s: [%w]", wrapPrefix, origErr)
+	return fmt.Errorf("%s: [%w]", wrapPrefix, err)
+}
+
+func Wrap(err error, wrap ...string) error {
+	if err == nil {
+		return nil
+	}
+	for i := len(wrap) - 1; i >= 0; i-- {
+		err = wrapOne(err, wrap[i])
+	}
+	return err
 }
 
 func Wrapf(origErr error, wrapFormat string, wrapVars ...any) error {
 	if origErr == nil {
 		return origErr
 	}
-	return Wrap(origErr, fmt.Sprintf(wrapFormat, wrapVars...))
+	return wrapOne(origErr, fmt.Sprintf(wrapFormat, wrapVars...))
 }
 
 func Join(inclNils bool, errs ...error) error {
