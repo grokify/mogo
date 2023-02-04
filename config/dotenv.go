@@ -20,6 +20,39 @@ func DefaultPaths() []string {
 	return []string{os.Getenv(EnvPathVar), LocalPath}
 }
 
+// LoadDotEnv loads a set of `.env` files given the supplied path.
+// If no files are supplied, it will load the files from `DefaultPaths()`.
+// A maximum of `n` files will be loaded. If `n` is 0 or less, all files
+// will be loaded.
+func LoadDotEnv(paths []string, n int) ([]string, error) {
+	if len(paths) == 0 {
+		paths = DefaultPaths()
+	}
+
+	envPaths := osutil.FilenamesFilterSizeGTZero(paths...)
+	envPaths = slicesutil.Dedupe(envPaths)
+
+	if len(envPaths) == 0 {
+		return []string{}, nil
+	} else if n < 1 {
+		return envPaths, godotenv.Load(envPaths...)
+	}
+	loaded := []string{}
+	for i, envPath := range envPaths {
+		err := godotenv.Load(envPath)
+		if err != nil {
+			return loaded, err
+		}
+		loaded = append(loaded, envPath)
+		if i+1 == n {
+			break
+		}
+	}
+
+	return loaded, nil
+}
+
+/*
 func LoadEnvDefaults() error {
 	envPathsSet := []string{}
 
@@ -40,20 +73,6 @@ func LoadDotEnv(paths ...string) ([]string, error) {
 	return LoadDotEnvSkipEmptyInfo(paths...)
 }
 
-func LoadDotEnvSkipEmptyInfo(paths ...string) ([]string, error) {
-	if len(paths) == 0 {
-		paths = DefaultPaths()
-	}
-
-	envPaths := osutil.FilenamesFilterSizeGTZero(paths...)
-	envPaths = slicesutil.Dedupe(envPaths)
-
-	if len(envPaths) > 0 {
-		return envPaths, godotenv.Load(envPaths...)
-	}
-	return envPaths, nil
-}
-
 func LoadDotEnvSkipEmpty(paths ...string) error {
 	_, err := LoadDotEnvSkipEmptyInfo(paths...)
 	return err
@@ -71,6 +90,7 @@ func LoadDotEnvFirst(paths ...string) error {
 	}
 	return nil
 }
+*/
 
 // GetDotEnvVal retrieves a single var from a `.env` file path
 func GetDotEnvVal(envPath, varName string) (string, error) {
