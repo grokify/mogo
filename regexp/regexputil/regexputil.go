@@ -1,8 +1,11 @@
 package regexputil
 
 import (
+	"errors"
 	"regexp"
+	"strconv"
 	"strings"
+	"time"
 )
 
 // McReplaceAllString is a single line MustCompile regexp for ReplaceAllString
@@ -75,4 +78,56 @@ func FindStringSubmatchNamedMap(rx *regexp.Regexp, s string) map[string]string {
 		}
 	}
 	return result
+}
+
+// CaptureUint requires first capture to be parseable by `strconv.Atoi` such as `[0-9]+`.
+// Panics is capture is not parseable.
+func CaptureUint(b []byte, expr string) (uint, error) {
+	m := regexp.MustCompile(expr).FindSubmatch(b)
+	if len(m) > 1 {
+		vi, err := strconv.Atoi(string(m[1]))
+		if err != nil {
+			return 0, err
+		}
+		return uint(vi), nil
+	}
+	return 0, ErrMatchNotFound
+}
+
+// MustCaptureUint will return `0` if match is not found. It will panic if strconv fails.
+func MustCaptureUint(b []byte, expr string) uint {
+	v, err := CaptureUint(b, expr)
+	if err != nil {
+		panic(err)
+	}
+	return v
+}
+
+// CaptureString returns the first captured string.
+func CaptureString(b []byte, expr string) string {
+	rx := regexp.MustCompile(expr)
+	m := rx.FindSubmatch(b)
+	if len(m) > 1 {
+		return string(m[1])
+	}
+	return ""
+}
+
+var ErrMatchNotFound = errors.New("match not found")
+
+func CaptureTime(b []byte, expr, layout string) (time.Time, error) {
+	rx := regexp.MustCompile(expr)
+	m := rx.FindSubmatch(b)
+	if len(m) > 1 {
+		return time.Parse(layout, string(m[1]))
+	}
+	return time.Time{}, ErrMatchNotFound
+}
+
+func MustCaptureTime(b []byte, expr, layout string) time.Time {
+	t, err := CaptureTime(b, expr, layout)
+	if err != nil {
+		panic(err)
+	}
+	return t
 }
