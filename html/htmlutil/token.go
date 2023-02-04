@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/errors/errorsutil"
+	"github.com/grokify/mogo/type/stringsutil"
 	"golang.org/x/net/html"
 )
 
@@ -26,6 +27,13 @@ func (tokens Tokens) String() string {
 	return strings.Join(toks, "")
 }
 
+// Table returns a `[][]string` representing table data as text.
+// Currently assumes input tokens represent one table and there are no nested tables.
+// The output can be used with `github.com/grokify/gocharts/data/table`.
+func (tokens Tokens) Table() [][]string {
+	return newTableFromTokens(tokens)
+}
+
 func ParseLink(tokens ...html.Token) (href string, desc string, err error) {
 	if len(tokens) < 3 {
 		return "", "", fmt.Errorf("less than 3 tokens, token count [%d]", len(tokens))
@@ -44,15 +52,16 @@ func TokenMap(t html.Token) map[string]string {
 	return map[string]string{
 		"type":     t.Type.String(),
 		"dataAtom": t.DataAtom.String(),
+		"data":     t.Data,
 		"string":   t.String()}
 }
 
-// Match matches the supplied token with the tokens in the set.
+// MatchLeft matches the supplied token with the tokens in the set.
 // only the attributes in the set need to match for a `true` result.
 // One one set token need to match for success.
-func (tokens Tokens) MatchLeft(tok html.Token) bool {
+func (tokens Tokens) MatchLeft(tok html.Token, attrValMatchinfo *stringsutil.MatchInfo) bool {
 	for _, tokFilterTry := range tokens {
-		if TokenMatchLeft(tokFilterTry, tok) {
+		if TokenMatchLeft(tokFilterTry, tok, attrValMatchinfo) {
 			return true
 		}
 	}
@@ -60,7 +69,7 @@ func (tokens Tokens) MatchLeft(tok html.Token) bool {
 }
 
 // TokenMatchLeft returns true if the token matches the token filter.
-func TokenMatchLeft(tokFilter, tok html.Token) bool {
+func TokenMatchLeft(tokFilter, tok html.Token, attrValMatchinfo *stringsutil.MatchInfo) bool {
 	if tokFilter.Type != tok.Type {
 		return false
 	} else if tokFilter.DataAtom != tok.DataAtom {
@@ -71,7 +80,20 @@ func TokenMatchLeft(tokFilter, tok html.Token) bool {
 	}
 	tokAttrs := Attributes(tok.Attr)
 	for _, filAttr := range tokFilter.Attr {
-		if !tokAttrs.Exists(filAttr) {
+		// since MatchInfo is being used as config against each attribute. If it is nil
+		// set extact match with filter value.
+		if attrValMatchinfo == nil {
+			attrValMatchinfo = &stringsutil.MatchInfo{
+				MatchType: stringsutil.MatchExact,
+				String:    filAttr.Val,
+			}
+		}
+		// since MatchInfo is being used as config against each attribute, populate
+		// `MatchInfo` with `Attribute.Val`.
+		if attrValMatchinfo.Regexp == nil && attrValMatchinfo.String == "" {
+			attrValMatchinfo.String = filAttr.Val
+		}
+		if !tokAttrs.Exists(filAttr, attrValMatchinfo) {
 			return false
 		}
 	}
