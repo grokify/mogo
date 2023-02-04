@@ -107,16 +107,18 @@ func DuplicateValues[C comparable](m map[C]C) map[C][]C {
 	return dupes
 }
 
-func StringValueOrDefault[K comparable](m map[K]string, key K, def string) string {
+func ValueIntOrDefault[K comparable, V constraints.Integer](m map[K]V, key K, def V) V {
 	if val, ok := m[key]; ok {
 		return val
 	}
 	return def
 }
 
-func IntValueOrDefault[K comparable, V constraints.Integer](m map[K]V, key K, def V) V {
+func ValueStringOrDefault[K comparable](m map[K]any, key K, def string) string {
 	if val, ok := m[key]; ok {
-		return val
+		if str, ok2 := val.(string); ok2 {
+			return str
+		}
 	}
 	return def
 }
