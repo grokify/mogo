@@ -78,3 +78,14 @@ func FileInfosNames(fis []os.FileInfo) []string {
 	}
 	return s
 }
+
+// MustFileSize returns value of `FileInfo.Size()` which is length in bytes for
+// regular files; system-dependent for others.
+// It returns `-1` if an error is encountered.
+func MustFileSize(filename string) int64 {
+	fi, err := os.Lstat(filename)
+	if err != nil {
+		return -1
+	}
+	return fi.Size()
+}
