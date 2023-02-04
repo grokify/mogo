@@ -3,6 +3,9 @@ package encoding
 import (
 	"math/rand"
 	"strings"
+
+	"github.com/grokify/mogo/type/slicesutil"
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 const (
@@ -72,6 +75,19 @@ func AlphabetDefault(base uint) string {
 	}
 }
 
+// var ErrInvalidAlphaNumericAlphabet = errors.New("invalid alphanumeric alphabet")
+
+// AlphabetMaps produces maps of alphabets.
+func AlphabetMaps(alphabet string) (map[int]rune, map[rune]int) {
+	m := map[int]rune{}
+	n := map[rune]int{}
+	for i, l := range alphabet {
+		m[i] = l
+		n[l] = i
+	}
+	return m, n
+}
+
 // AlphabetShuffled shuffles an alphabet to provide a random ordering.
 func AlphabetShuffled(alphabet string) string {
 	letters := strings.Split(alphabet, "")
@@ -79,6 +95,15 @@ func AlphabetShuffled(alphabet string) string {
 		letters[i], letters[j] = letters[j], letters[i]
 	})
 	return strings.Join(letters, "")
+}
+
+func IsAlphaNumericAlphabet(alphabet string) bool {
+	if !stringsutil.IsAlphaNumeric(alphabet) {
+		return false
+	} else if !slicesutil.UniqueValues(strings.Split(alphabet, "")) {
+		return false
+	}
+	return true
 }
 
 // ValidAlphabet checks to see if string `s` is within the supplied alphabet.
@@ -101,15 +126,4 @@ func ValidAlphabetMap(alphabet map[rune]int, s string) bool {
 		}
 	}
 	return true
-}
-
-// AlphabetMaps produces maps of alphabets.
-func AlphabetMaps(alphabet string) (map[int]rune, map[rune]int) {
-	m := map[int]rune{}
-	n := map[rune]int{}
-	for i, l := range alphabet {
-		m[i] = l
-		n[l] = i
-	}
-	return m, n
 }
