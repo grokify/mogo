@@ -1,13 +1,10 @@
 package randutil
 
 import (
-	"crypto/rand"
-	"io"
-	"math/big"
 	mrand "math/rand"
-	"time"
 )
 
+/*
 type CryptoRand struct {
 	reader io.Reader
 	mrand  *mrand.Rand
@@ -49,14 +46,13 @@ func (cr *CryptoRand) MustInt64n(n int64) int64 {
 	}
 	return i64
 }
+*/
 
-func CryptoRandInt64(random io.Reader, max int64) (int64, error) {
-	if random == nil {
-		random = rand.Reader
-	}
-	num, err := rand.Int(random, big.NewInt(max))
-	if err != nil {
-		return 0, err
-	}
-	return num.Int64(), nil
+// Intn returns a random number backed by `crypto/rand`.
+func Intn(n uint) int {
+	return mrand.New(NewCryptoRandSource()).Intn(int(n))
+}
+
+func Int64n(n uint) int64 {
+	return int64(Intn(n))
 }

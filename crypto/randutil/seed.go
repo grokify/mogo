@@ -25,3 +25,22 @@ func NewSeedInt64Crypto() (int64, error) {
 func NewSeedInt64Time() int64 {
 	return time.Now().UnixNano()
 }
+
+// CryptoRandSource is a `crypto/rand` backed source that satisfies
+// the `math/rand.Source` interface definition. It can be used as
+// `r := rand.New(NewCryptoRandSource())``
+// See: https://stackoverflow.com/a/35208651/1908967
+type CryptoRandSource struct{}
+
+func NewCryptoRandSource() CryptoRandSource {
+	return CryptoRandSource{}
+}
+
+func (CryptoRandSource) Int63() int64 {
+	var b [8]byte
+	rand.Read(b[:])
+	// mask off sign bit to ensure positive number
+	return int64(binary.LittleEndian.Uint64(b[:]) & (1<<63 - 1))
+}
+
+func (CryptoRandSource) Seed(int64) {}
