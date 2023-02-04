@@ -8,7 +8,6 @@ import (
 
 	"github.com/grokify/mogo/type/stringsutil"
 	"golang.org/x/net/html"
-	xhtml "golang.org/x/net/html"
 )
 
 var (
@@ -89,7 +88,7 @@ func NextToken(z *html.Tokenizer, skipErrors bool, tokFilters ...html.Token) (ht
 		SkipErrors:     skipErrors,
 		IncludeChain:   false,
 		InclusiveMatch: true,
-		StartFilter:    []xhtml.Token{},
+		StartFilter:    []html.Token{},
 		EndFilter:      tokFilters,
 	}
 	toks, err := NextTokens(z, opts)
@@ -112,8 +111,8 @@ type NextTokensOpts struct {
 	EndFilter                Tokens
 }
 
-//func NextTokens(z *html.Tokenizer, skipErrors, includeChain, includeMatch bool, start, end []html.Token) ([]html.Token, error) {
 func NextTokens(z *html.Tokenizer, opts NextTokensOpts) ([]html.Token, error) {
+	// func NextTokens(z *html.Tokenizer, skipErrors, includeChain, includeMatch bool, start, end []html.Token) ([]html.Token, error) {
 	matches := []html.Token{}
 	if z == nil {
 		return matches, ErrTokenizerNotInitialized

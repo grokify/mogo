@@ -28,7 +28,7 @@ func NewSeedInt64Time() int64 {
 
 // CryptoRandSource is a `crypto/rand` backed source that satisfies
 // the `math/rand.Source` interface definition. It can be used as
-// `r := rand.New(NewCryptoRandSource())``
+// `r := rand.New(NewCryptoRandSource())`
 // See: https://stackoverflow.com/a/35208651/1908967
 type CryptoRandSource struct{}
 
@@ -38,7 +38,10 @@ func NewCryptoRandSource() CryptoRandSource {
 
 func (CryptoRandSource) Int63() int64 {
 	var b [8]byte
-	rand.Read(b[:])
+	_, err := rand.Read(b[:])
+	if err != nil {
+		panic(err) // `math/rand.Source` interface only returns `int64`
+	}
 	// mask off sign bit to ensure positive number
 	return int64(binary.LittleEndian.Uint64(b[:]) & (1<<63 - 1))
 }

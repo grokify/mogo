@@ -89,9 +89,8 @@ func GetFieldFormatted(item any, f FieldInfo) (any, error) {
 	return val, nil
 }
 
-// GetFieldsFormatted returns an `any`` slice for the struct and fields
-// requested. An error is returned if any fields are not found or parsing options
-// fail.
+// GetFieldsFormatted returns an `any` slice for the struct and fields requested.
+// An error is returned if any fields are not found or parsing options fail.
 func GetFieldsFormatted(item any, fs []FieldInfo) ([]any, error) {
 	vals := []any{}
 	for _, f := range fs {
@@ -104,7 +103,7 @@ func GetFieldsFormatted(item any, fs []FieldInfo) ([]any, error) {
 	return vals, nil
 }
 
-// GetFieldsFormattedForce returns an `any`` slice for the struct and
+// GetFieldsFormattedForce returns an `any` slice for the struct and
 // fields requested. An empty string value is returned for anything that
 // encounters an error.
 func GetFieldsFormattedForce(item any, fs []FieldInfo) []any {

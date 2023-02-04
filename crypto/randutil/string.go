@@ -2,7 +2,7 @@ package randutil
 
 import "github.com/grokify/mogo/encoding"
 
-// RandString returns a random string of lenght `length` using the supplied alphabet.
+// RandString returns a random string of length `length` using the supplied alphabet.
 // If no alphabet is provided, `AlphabetBase16`, aha hexadecimal is used.
 func RandString(alphabet string, length uint) string {
 	if length == 0 {

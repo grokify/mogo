@@ -32,7 +32,7 @@ func TestBuildAlphabet(t *testing.T) {
 	for _, tt := range buildAlphabetTests {
 		got := BuildAlphabet(tt.v)
 		if got != tt.want {
-			fmtutil.PrintJSON(tt.v)
+			fmtutil.MustPrintJSON(tt.v)
 			t.Errorf("password.BuildAlphabet() Mismatch: want (%s) got (%s)",
 				tt.want, got)
 		}
