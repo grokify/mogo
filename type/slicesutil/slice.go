@@ -67,3 +67,26 @@ func MakeMatrix2D[E any](n, m int) [][]E {
 	}
 	return matrix
 }
+
+func UniqueValues[S ~[]E, E comparable](s S) bool {
+	m := map[E]int{}
+	for _, e := range s {
+		m[e]++
+	}
+	return len(s) == len(m)
+}
+
+func MatrixGetOneOrDefault[C comparable](m [][]C, keyIdx uint, keyValue C, wantIdx uint, defaultValue C) C {
+	for _, row := range m {
+		if int(keyIdx) >= len(row) {
+			continue
+		}
+		if keyValue == row[keyIdx] {
+			if int(wantIdx) > len(row) {
+				continue
+			}
+			return row[wantIdx]
+		}
+	}
+	return defaultValue
+}
