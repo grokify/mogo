@@ -99,3 +99,33 @@ func TokenMatchLeft(tokFilter, tok html.Token, attrValMatchinfo *stringsutil.Mat
 	}
 	return true
 }
+
+func (tokens Tokens) Subset(opts NextTokensOpts) Tokens {
+	// func TokensSubset(startFilter, endFilter *TokenFilter, inclusive, greedy bool, toks []html.Token) []html.Token {
+	// func TokensSubset(toks, start, end []html.Token, inclusive, greedy bool) []html.Token {
+	subset := []html.Token{}
+	if len(opts.StartFilter) == 0 && len(opts.EndFilter) == 0 {
+		return tokens
+	}
+	matching := false
+	if len(opts.StartFilter) == 0 {
+		matching = true
+	}
+
+	for _, tok := range tokens {
+		if opts.EndFilter.MatchLeft(tok, nil) {
+			if matching && opts.InclusiveMatch {
+				subset = append(subset, tok)
+			}
+			break
+		} else if opts.StartFilter.MatchLeft(tok, opts.StartAttributeValueMatch) {
+			if matching || opts.InclusiveMatch {
+				subset = append(subset, tok)
+			}
+			matching = true
+		} else if matching {
+			subset = append(subset, tok)
+		}
+	}
+	return subset
+}
