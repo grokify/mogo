@@ -359,13 +359,27 @@ func EmptyError(s string, err error) string {
 	return s
 }
 
+// StripChars removes chars specified by `cutset` while maintaining order of remaining
+// chars and shortening string per removed chars.
 func StripChars(s, cutset string) string {
-	// from https://github.com/pmalek/stringutils/tree/c5d70074c6b955a8bffc2c4990653843bd3cb1a5
-	// under MIT license: https://github.com/pmalek/stringutils/blob/c5d70074c6b955a8bffc2c4990653843bd3cb1a5/LICENSE
 	return strings.Map(func(r rune) rune {
-		if !strings.ContainsRune(cutset, r) {
+		if strings.ContainsRune(cutset, r) {
+			return -1
+		} else {
 			return r
 		}
-		return -1
 	}, s)
+}
+
+// UniqueRunes checks to see if a string's runes are unique.
+func UniqueRunes(s string) bool {
+	v := map[rune]bool{}
+	for _, r := range s {
+		if v[r] {
+			return false
+		} else {
+			v[r] = true
+		}
+	}
+	return len(s) == len(v)
 }
