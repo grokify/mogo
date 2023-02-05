@@ -4,6 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
+
+	"github.com/grokify/mogo/encoding"
+	"github.com/grokify/mogo/type/stringsutil"
+	"github.com/huandu/xstrings"
 )
 
 var ErrSetStringFailure = errors.New("string conversion to `*big.Int` failed")
@@ -100,6 +104,32 @@ func BaseXToInt64(s string, base int) (int64, error) {
 		return 0, errors.New("failed to set base string")
 	}
 	return x.Int64(), nil
+}
+
+func Int64ToBaseXAlphabet(x int64, alphabet string) (string, error) {
+	if len(alphabet) == 0 {
+		return "", encoding.ErrInvalidAlphabetIsEmpty
+	} else if !stringsutil.UniqueRunes(alphabet) {
+		return "", encoding.ErrInvalidAlphabetHasDuplicates
+	}
+	return xstrings.Translate(
+		Int64ToBaseX(x, len(alphabet)),
+		encoding.AlphabetBase62Gobigint[:len(alphabet)],
+		alphabet), nil
+}
+
+func BaseXAlphabetToInt64(s string, alphabet string) (int64, error) {
+	if len(alphabet) == 0 {
+		return 0, encoding.ErrInvalidAlphabetIsEmpty
+	} else if !stringsutil.UniqueRunes(alphabet) {
+		return 0, encoding.ErrInvalidAlphabetHasDuplicates
+	}
+	return BaseXToInt64(
+		xstrings.Translate(
+			s,
+			alphabet,
+			encoding.AlphabetBase62Gobigint[:len(alphabet)]),
+		len(alphabet))
 }
 
 func SplitInt64(x int64, scale uint) (int64, int64) {

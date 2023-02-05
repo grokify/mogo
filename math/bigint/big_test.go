@@ -3,6 +3,8 @@ package bigint
 import (
 	"math/big"
 	"testing"
+
+	"github.com/grokify/mogo/encoding"
 )
 
 var powBigIntTests = []struct {
@@ -52,6 +54,45 @@ func TestIntToBaseXString(t *testing.T) {
 		if try2 != tt.val {
 			t.Errorf("bigint.IntToBaseXString(%v,%v): want [%s], got [%s]",
 				tt.dec, tt.base, tt.val, try2)
+		}
+	}
+}
+
+var intToBaseXSAlphabetTests = []struct {
+	alphabet string
+	dec      int64
+	val      string
+}{
+	{encoding.AlphabetBase16, 15, "f"},
+	{encoding.AlphabetBase16, 16, "10"},
+	{encoding.AlphabetBase16, 32, "20"},
+	{encoding.AlphabetBase32, 0, "A"},
+	{encoding.AlphabetBase32, 2, string(encoding.AlphabetBase32[2])},
+	{encoding.AlphabetBase32, 31, "7"},
+	{encoding.AlphabetBase32, 32, "BA"},
+	{encoding.AlphabetBase32, 33, "BB"},
+	{encoding.AlphabetBase58, 58, "21"},
+}
+
+func TestIntToBaseXAlphabet(t *testing.T) {
+	for _, tt := range intToBaseXSAlphabetTests {
+		enc, err := Int64ToBaseXAlphabet(int64(tt.dec), tt.alphabet)
+		if err != nil {
+			t.Errorf("bigint.Int64ToBaseXAlphabet(%v,%v): error [%v]",
+				tt.dec, tt.alphabet, err.Error())
+		}
+		if enc != tt.val {
+			t.Errorf("bigint.Int64ToBaseXAlphabet(%v,%v): want [%v], got [%v]",
+				tt.dec, tt.alphabet, tt.val, enc)
+		}
+		dec, err := BaseXAlphabetToInt64(enc, tt.alphabet)
+		if err != nil {
+			t.Errorf("bigint.BaseXAlphabetToInt64(%v,%v): error [%v]",
+				enc, tt.alphabet, err.Error())
+		}
+		if dec != tt.dec {
+			t.Errorf("bigint.BaseXAlphabetToInt64(%v,%v): want [%v], got [%v]",
+				tt.dec, tt.alphabet, tt.val, dec)
 		}
 	}
 }
