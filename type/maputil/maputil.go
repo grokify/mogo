@@ -114,11 +114,9 @@ func ValueIntOrDefault[K comparable, V constraints.Integer](m map[K]V, key K, de
 	return def
 }
 
-func ValueStringOrDefault[K comparable](m map[K]any, key K, def string) string {
+func ValueStringOrDefault[K comparable](m map[K]string, key K, def string) string {
 	if val, ok := m[key]; ok {
-		if str, ok2 := val.(string); ok2 {
-			return str
-		}
+		return val
 	}
 	return def
 }
