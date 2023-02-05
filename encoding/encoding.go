@@ -1,6 +1,7 @@
 package encoding
 
 import (
+	"errors"
 	"math/rand"
 	"strings"
 
@@ -75,10 +76,14 @@ func AlphabetDefault(base uint) string {
 	}
 }
 
-// var ErrInvalidAlphaNumericAlphabet = errors.New("invalid alphanumeric alphabet")
+var (
+	ErrInvalidAlphaNumericAlphabet  = errors.New("invalid alphanumeric alphabet")
+	ErrInvalidAlphabetHasDuplicates = errors.New("invalid alphabet has duplicates")
+	ErrInvalidAlphabetIsEmpty       = errors.New("invalid alphabet is empty")
+)
 
-// AlphabetMaps produces maps of alphabets.
-func AlphabetMaps(alphabet string) (map[int]rune, map[rune]int) {
+// RuneMaps produces maps of alphabets.
+func RuneMaps(alphabet string) (map[int]rune, map[rune]int) {
 	m := map[int]rune{}
 	n := map[rune]int{}
 	for i, l := range alphabet {
@@ -108,7 +113,7 @@ func IsAlphaNumericAlphabet(alphabet string) bool {
 
 // ValidAlphabet checks to see if string `s` is within the supplied alphabet.
 func ValidAlphabet(alphabet, s string) bool {
-	_, n := AlphabetMaps(alphabet)
+	_, n := RuneMaps(alphabet)
 	for _, l := range s {
 		if _, ok := n[l]; !ok {
 			return false
@@ -126,4 +131,20 @@ func ValidAlphabetMap(alphabet map[rune]int, s string) bool {
 		}
 	}
 	return true
+}
+
+// ValidAlphabets validates a pair of alphabets with the second being optional.
+func ValidAlphabets(a1, a2 string, a2optional bool) error {
+	if a1 == "" {
+		return errors.New("alphabet 1 cannot be empty")
+	} else if !stringsutil.UniqueRunes(a1) {
+		return errors.New("alphabet 1 chars are not unique")
+	} else if a2optional && a2 == "" {
+		return nil
+	} else if len(a1) != len(a2) {
+		return errors.New("alphabet 1 and alphabet 2 length mismatch")
+	} else if !stringsutil.UniqueRunes(a2) {
+		return errors.New("alphabet 2 chars are not unique")
+	}
+	return nil
 }
