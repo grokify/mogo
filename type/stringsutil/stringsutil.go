@@ -91,9 +91,7 @@ func ToUpperFirst(s1 string, lowerRest bool) string {
 // to false with everything else being true.
 func ToBool(v string) bool {
 	v = strings.ToLower(strings.TrimSpace(v))
-	if len(v) == 0 {
-		return false
-	} else if v == "0" || v == "f" || v == "false" {
+	if v == "" || v == "0" || v == "f" || v == "false" {
 		return false
 	}
 	return true
