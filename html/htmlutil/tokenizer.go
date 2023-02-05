@@ -111,7 +111,7 @@ type NextTokensOpts struct {
 	EndFilter                Tokens
 }
 
-func NextTokens(z *html.Tokenizer, opts NextTokensOpts) ([]html.Token, error) {
+func NextTokens(z *html.Tokenizer, opts NextTokensOpts) (Tokens, error) {
 	// func NextTokens(z *html.Tokenizer, skipErrors, includeChain, includeMatch bool, start, end []html.Token) ([]html.Token, error) {
 	matches := []html.Token{}
 	if z == nil {

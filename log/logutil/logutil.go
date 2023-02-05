@@ -38,14 +38,12 @@ func LogfmtString(m map[string][]string) (string, error) {
 	e := logfmt.NewEncoder(w)
 	for k, vs := range m {
 		for _, v := range vs {
-			err := e.EncodeKeyval(k, v)
-			if err != nil {
+			if err := e.EncodeKeyval(k, v); err != nil {
 				return "", err
 			}
 		}
 	}
-	err := e.EndRecord()
-	if err != nil {
+	if err := e.EndRecord(); err != nil {
 		return "", err
 	}
 	return buf.String(), nil
