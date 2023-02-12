@@ -6,9 +6,9 @@ import (
 )
 
 const (
-	NewlinePOSIX       = "\n"
-	NewlineMSFT        = "\r\n"
-	NewlineAPPLClassic = "\r"
+	newlinePOSIX       = "\n"
+	newlineMSFT        = "\r\n"
+	newlineAPPLClassic = "\r"
 )
 
 var (
@@ -32,9 +32,9 @@ func SplitLines(s string) []string {
 // there is a max of 2 consecutive line feeds.
 func CondenseLines(s, outNewline string) string {
 	if outNewline == "" {
-		outNewline = NewlinePOSIX
+		outNewline = newlinePOSIX
 	}
-	l := strings.Split(strings.TrimSpace(CarriageReturnsToLinefeeds(s)), NewlinePOSIX)
+	l := strings.Split(strings.TrimSpace(CarriageReturnsToLinefeeds(s)), newlinePOSIX)
 	for i, li := range l {
 		l[i] = strings.TrimSpace(li)
 	}
@@ -45,6 +45,6 @@ func CondenseLines(s, outNewline string) string {
 // CarriageReturnsToLinefeeds replaces `\r\n` with `\n` followed by replacing `\r` by `\n`.
 func CarriageReturnsToLinefeeds(s string) string {
 	return rxCarriageReturn.ReplaceAllString(
-		rxCarriageReturnLineFeed.ReplaceAllString(s, NewlinePOSIX),
-		NewlinePOSIX)
+		rxCarriageReturnLineFeed.ReplaceAllString(s, newlinePOSIX),
+		newlinePOSIX)
 }

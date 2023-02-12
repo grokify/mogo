@@ -10,6 +10,12 @@ import (
 	"strings"
 )
 
+const (
+	NewlinePOSIX       = "\n"
+	NewlineMSFT        = "\r\n"
+	NewlineAPPLClassic = "\r"
+)
+
 type FileType int
 
 const (
@@ -116,9 +122,9 @@ func CreateFileWithLines(filename string, lines []string, lineSuffix string, use
 // NewLine uses `os.PathSeparator` to determine the newline characters for the local system.
 func NewLine() string {
 	ps := fmt.Sprintf("%v", os.PathSeparator)
-	nl := "\n"
+	nl := NewlinePOSIX
 	if ps != "/" {
-		nl = "\r\n"
+		nl = NewlineMSFT
 	}
 	return nl
 }
