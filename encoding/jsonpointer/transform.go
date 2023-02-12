@@ -40,8 +40,7 @@ func PointerCondense(s string) string {
 	return rxSlashMore.ReplaceAllString(s, "/")
 }
 
-// PointerSubEscapeAll will substitute vars using `fmt.Sprintf()`
-// All strings are escaped.
+// PointerSubEscapeAll will substitute vars using `fmt.Sprintf()`. All strings are escaped.
 func PointerSubEscapeAll(format string, vars ...any) string {
 	if len(vars) == 0 {
 		return format
