@@ -63,7 +63,7 @@ func Mod(a, n *big.Int) *big.Int {
 
 // ModInt64 returns an int64 mod
 func ModInt64(a, n int64) int64 {
-	return new(big.Int).Mod(big.NewInt(n), big.NewInt(n)).Int64()
+	return new(big.Int).Mod(big.NewInt(a), big.NewInt(n)).Int64()
 	// xBig := big.NewInt(x)
 	// yBig := big.NewInt(y)
 	// xBig.Mod(xBig, yBig)

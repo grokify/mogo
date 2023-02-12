@@ -7,6 +7,35 @@ import (
 	"github.com/grokify/mogo/encoding/basex"
 )
 
+var modtTests = []struct {
+	a    int64
+	n    int64
+	want int64
+}{
+	{0, 2, 0},
+	{1, 2, 1},
+	{2, 2, 0},
+	{3, 2, 1},
+	{4, 2, 0},
+	{12, 3, 0},
+	{13, 3, 1},
+}
+
+func TestMod(t *testing.T) {
+	for _, tt := range modtTests {
+		got := ModInt64(tt.a, tt.n)
+		if got != tt.want {
+			t.Errorf("bigutil.ModIn64(%d,%d): want [%d], got [%d]", tt.a, tt.n, tt.want, got)
+		}
+		aBig := big.NewInt(tt.a)
+		nBig := big.NewInt(tt.n)
+		gotBig := Mod(aBig, nBig)
+		if gotBig.Int64() != tt.want {
+			t.Errorf("bigutil.Mod(%d,%d): want [%d], got [%d]", tt.a, tt.n, tt.want, gotBig.Int64())
+		}
+	}
+}
+
 var powBigIntTests = []struct {
 	x    int64
 	y    int64
