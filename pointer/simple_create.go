@@ -6,3 +6,10 @@ package pointer
 func Int64(num int64) *int64 {
 	return &num
 }
+
+func ToString(s *string) string {
+	if s == nil {
+		return ""
+	}
+	return *s
+}
