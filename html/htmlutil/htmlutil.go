@@ -131,7 +131,7 @@ func HTMLToTextAtom(b []byte, policy *bluemonday.Policy, a atom.Atom) (string, e
 	if policy == nil {
 		policy = bluemonday.StrictPolicy()
 	}
-	return strings.TrimSpace(policy.Sanitize(Tokens(toks).String())), nil
+	return strings.TrimSpace(policy.Sanitize(toks.String())), nil
 }
 
 func SimplifyHTMLText(s string) string {

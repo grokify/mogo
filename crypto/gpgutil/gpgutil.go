@@ -9,19 +9,19 @@ import (
 	"github.com/ProtonMail/go-crypto/openpgp"
 )
 
-type GpgEncrypt struct {
+type GPGEncrypt struct {
 	PublicKeyringPath string
 	entityList        []*openpgp.Entity
 }
 
-func NewGpgEncrypt(sPublicKeyringPath string) (GpgEncrypt, error) {
-	oGpg := GpgEncrypt{}
+func NewGPGEncrypt(sPublicKeyringPath string) (GPGEncrypt, error) {
+	oGpg := GPGEncrypt{}
 	oGpg.PublicKeyringPath = sPublicKeyringPath
 	err := oGpg.LoadPublicKeyRing()
 	return oGpg, err
 }
 
-func (g *GpgEncrypt) LoadPublicKeyRing() error {
+func (g *GPGEncrypt) LoadPublicKeyRing() error {
 	keyringFileBuffer, err := os.Open(g.PublicKeyringPath)
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func (g *GpgEncrypt) LoadPublicKeyRing() error {
 	return err
 }
 
-func (g *GpgEncrypt) GetKeyByEmail(keyring openpgp.EntityList, email string) *openpgp.Entity {
+func (g *GPGEncrypt) GetKeyByEmail(keyring openpgp.EntityList, email string) *openpgp.Entity {
 	for _, entity := range keyring {
 		for _, ident := range entity.Identities {
 			if ident.UserId.Email == email {
@@ -45,7 +45,7 @@ func (g *GpgEncrypt) GetKeyByEmail(keyring openpgp.EntityList, email string) *op
 	return nil
 }
 
-func (g *GpgEncrypt) EncryptStringToFile(plaintext string, sPath string, sEmail string) error {
+func (g *GPGEncrypt) EncryptStringToFile(plaintext string, sPath string, sEmail string) error {
 	rcptPubKey := g.GetKeyByEmail(g.entityList, sEmail)
 
 	buf := new(bytes.Buffer)
@@ -64,7 +64,7 @@ func (g *GpgEncrypt) EncryptStringToFile(plaintext string, sPath string, sEmail 
 	return os.WriteFile(sPath, buf.Bytes(), 0600)
 }
 
-func (g *GpgEncrypt) EncryptFile(pathPlain string, pathCrypt string, sEmail string) error {
+func (g *GPGEncrypt) EncryptFile(pathPlain string, pathCrypt string, sEmail string) error {
 	bytesPlain, err := os.ReadFile(pathPlain)
 	if err != nil {
 		return err

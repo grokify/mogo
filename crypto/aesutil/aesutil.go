@@ -16,41 +16,40 @@ import (
 	base58 "github.com/itchyny/base58-go"
 )
 
-func EncryptAesBase58Json(plainitem any, key []byte, encoding *base58.Encoding) ([]byte, error) {
+func EncryptAESBase58JSON(plainitem any, key []byte, encoding *base58.Encoding) ([]byte, error) {
 	plaintext, err := json.Marshal(plainitem)
 	if err != nil {
 		return plaintext, err
 	}
-	return EncryptAesBase58(plaintext, key, encoding)
+	return EncryptAESBase58(plaintext, key, encoding)
 }
 
-func DecryptAesBase58Json(ciphertext []byte, key []byte, encoding *base58.Encoding, item any) error {
-	plaintext, err := DecryptAesBase58(ciphertext, key, encoding)
+func DecryptAESBase58JSON(ciphertext []byte, key []byte, encoding *base58.Encoding, item any) error {
+	plaintext, err := DecryptAESBase58(ciphertext, key, encoding)
 	if err != nil {
 		return err
 	}
 	return json.Unmarshal(plaintext, item)
 }
 
-func EncryptAesBase58(plaintext []byte, key []byte, encoding *base58.Encoding) ([]byte, error) {
-	bytes, err := EncryptAes(plaintext, key)
+func EncryptAESBase58(plaintext []byte, key []byte, encoding *base58.Encoding) ([]byte, error) {
+	bytes, err := EncryptAES(plaintext, key)
 	if err != nil {
 		return bytes, err
 	}
 	return encoding.Encode(bytes)
 }
 
-func DecryptAesBase58(ciphertext []byte, key []byte, encoding *base58.Encoding) ([]byte, error) {
+func DecryptAESBase58(ciphertext []byte, key []byte, encoding *base58.Encoding) ([]byte, error) {
 	bytes, err := encoding.Decode(ciphertext)
 	if err != nil {
 		return bytes, err
 	}
-	return DecryptAes(bytes, key)
+	return DecryptAES(bytes, key)
 }
 
-// EncryptAes provides a ciphertext byte array given a plaintext
-// bytearray and key.
-func EncryptAes(plaintext []byte, key []byte) ([]byte, error) {
+// EncryptAes provides a ciphertext byte array given a plaintext bytearray and key.
+func EncryptAES(plaintext []byte, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -66,15 +65,15 @@ func EncryptAes(plaintext []byte, key []byte) ([]byte, error) {
 	return ciphertext, nil
 }
 
-func DecryptAesBase64String(ciphertextBase64 string, key []byte) ([]byte, error) {
+func DecryptAESBase64String(ciphertextBase64 string, key []byte) ([]byte, error) {
 	ciphertext, err := base64.StdEncoding.DecodeString(ciphertextBase64)
 	if err != nil {
 		return []byte{}, err
 	}
-	return DecryptAes(ciphertext, key)
+	return DecryptAES(ciphertext, key)
 }
 
-func DecryptAes(text []byte, key []byte) ([]byte, error) {
+func DecryptAES(text []byte, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -93,23 +92,23 @@ func DecryptAes(text []byte, key []byte) ([]byte, error) {
 	return plaintext, nil
 }
 
-func ReadFileAes(filename string, key []byte) ([]byte, error) {
+func ReadFileAES(filename string, key []byte) ([]byte, error) {
 	baFileEnc, err := os.ReadFile(filename)
 	if err != nil {
 		return []byte{}, err
 	}
-	return DecryptAes(baFileEnc, key)
+	return DecryptAES(baFileEnc, key)
 }
 
-func WriteFileAes(filename string, baFileUnc []byte, perm os.FileMode, key []byte) error {
-	baFileEnc, err := EncryptAes(baFileUnc, key)
+func WriteFileAES(filename string, baFileUnc []byte, perm os.FileMode, key []byte) error {
+	baFileEnc, err := EncryptAES(baFileUnc, key)
 	if err != nil {
 		return err
 	}
 	return os.WriteFile(filename, baFileEnc, perm)
 }
 
-func EncryptFileAes(filenameUnc string, filenameEnc string, perm os.FileMode, key []byte) error {
+func EncryptFileAES(filenameUnc string, filenameEnc string, perm os.FileMode, key []byte) error {
 	baFileUnc, err := os.ReadFile(filenameUnc)
 	if err != nil {
 		return err
@@ -117,10 +116,10 @@ func EncryptFileAes(filenameUnc string, filenameEnc string, perm os.FileMode, ke
 	if len(filenameEnc) == 0 {
 		filenameEnc = filenameUnc
 	}
-	return WriteFileAes(filenameEnc, baFileUnc, perm, key)
+	return WriteFileAES(filenameEnc, baFileUnc, perm, key)
 }
 
-func EncryptDirectoryFilesAes(dirUnc string, dirEnc string, perm os.FileMode, key []byte) error {
+func EncryptDirectoryFilesAES(dirUnc string, dirEnc string, perm os.FileMode, key []byte) error {
 	aFilesSrc, err := os.ReadDir(dirUnc)
 	if err != nil {
 		return err
@@ -133,7 +132,7 @@ func EncryptDirectoryFilesAes(dirUnc string, dirEnc string, perm os.FileMode, ke
 		fileEnc := fileUnc + ".enc"
 		pathUnc := path.Join(dirUnc, fileUnc)
 		pathEnc := path.Join(dirEnc, fileEnc)
-		err := EncryptFileAes(pathUnc, pathEnc, perm, key)
+		err := EncryptFileAES(pathUnc, pathEnc, perm, key)
 		if err != nil {
 			return err
 		}

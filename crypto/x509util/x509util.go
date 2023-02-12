@@ -33,7 +33,7 @@ import (
 
 // GetRsaPrivateKeyForPkcs1PrivateKeyPath returns a *rsa.PrivateKey
 // for a given PKCS#1 private key file path without a password
-func GetRsaPrivateKeyForPkcs1PrivateKeyPath(prvKeyPKCS1Path string) (*rsa.PrivateKey, error) {
+func GetRSAPrivateKeyForPKCS1PrivateKeyPath(prvKeyPKCS1Path string) (*rsa.PrivateKey, error) {
 	isFile, err := osutil.IsFile(prvKeyPKCS1Path, true)
 	if err != nil {
 		return nil, err
@@ -46,10 +46,10 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyPath(prvKeyPKCS1Path string) (*rsa.Privat
 		return nil, err
 	}
 
-	return GetRsaPrivateKeyForPkcs1PrivateKeyBytes(prvKeyPkcs1Bytes)
+	return GetRSAPrivateKeyForPKCS1PrivateKeyBytes(prvKeyPkcs1Bytes)
 }
 
-func GetRsaPrivateKeyForPkcs1PrivateKeyBytes(prvKeyPkcs1Bytes []byte) (*rsa.PrivateKey, error) {
+func GetRSAPrivateKeyForPKCS1PrivateKeyBytes(prvKeyPkcs1Bytes []byte) (*rsa.PrivateKey, error) {
 	block, rest := pem.Decode(prvKeyPkcs1Bytes)
 	if len(rest) > 0 {
 		return nil, fmt.Errorf("extra data included in key len: %v", len(rest))
@@ -57,9 +57,9 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyBytes(prvKeyPkcs1Bytes []byte) (*rsa.Priv
 	return x509.ParsePKCS1PrivateKey(block.Bytes)
 }
 
-// GetRsaPrivateKeyForPkcs1PrivateKeyPathWithPassword returns a *rsa.PrivateKey
+// GetRSAPrivateKeyForPKCS1PrivateKeyPathWithPassword returns a *rsa.PrivateKey
 // for a given PKCS#1 private key file path and password
-func GetRsaPrivateKeyForPkcs1PrivateKeyPathWithPassword(prvKeyPKCS1Path string, password []byte) (*rsa.PrivateKey, error) {
+func GetRSAPrivateKeyForPKCS1PrivateKeyPathWithPassword(prvKeyPKCS1Path string, password []byte) (*rsa.PrivateKey, error) {
 	isFile, err := osutil.IsFile(prvKeyPKCS1Path, true)
 	if err != nil {
 		return nil, err
@@ -72,10 +72,10 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyPathWithPassword(prvKeyPKCS1Path string, 
 		return nil, err
 	}
 
-	return GetRsaPrivateKeyForPkcs1PrivateKeyBytesWithPassword(prvKeyPkcs1BytesEnc, password)
+	return GetRSAPrivateKeyForPKCS1PrivateKeyBytesWithPassword(prvKeyPkcs1BytesEnc, password)
 }
 
-func GetRsaPrivateKeyForPkcs1PrivateKeyBytesWithPassword(prvKeyPkcs1BytesEnc []byte, password []byte) (*rsa.PrivateKey, error) {
+func GetRSAPrivateKeyForPKCS1PrivateKeyBytesWithPassword(prvKeyPkcs1BytesEnc []byte, password []byte) (*rsa.PrivateKey, error) {
 	block, rest := pem.Decode(prvKeyPkcs1BytesEnc)
 	if len(rest) > 0 {
 		return nil, fmt.Errorf("extra data included in key len: %v", len(rest))
@@ -87,9 +87,9 @@ func GetRsaPrivateKeyForPkcs1PrivateKeyBytesWithPassword(prvKeyPkcs1BytesEnc []b
 	return x509.ParsePKCS1PrivateKey(prvKeyBytes)
 }
 
-// GetRsaPublicKeyForPkcs8PublicKeyPath returns a *rsa.PublicKey
+// GetRSAPublicKeyForPKCS8PublicKeyPath returns a *rsa.PublicKey
 // for a given PKCS#8 public key file path.
-func GetRsaPublicKeyForPkcs8PublicKeyPath(pubKeyPkcs8Path string) (*rsa.PublicKey, error) {
+func GetRSAPublicKeyForPKCS8PublicKeyPath(pubKeyPkcs8Path string) (*rsa.PublicKey, error) {
 	var pubKey *rsa.PublicKey
 
 	isFile, err := osutil.IsFile(pubKeyPkcs8Path, true)
