@@ -4,7 +4,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/grokify/mogo/encoding"
+	"github.com/grokify/mogo/encoding/basex"
 )
 
 var powBigIntTests = []struct {
@@ -58,25 +58,25 @@ func TestIntToBaseXString(t *testing.T) {
 	}
 }
 
-var intToBaseXSAlphabetTests = []struct {
+var intToBaseXAlphabetTests = []struct {
 	alphabet string
 	dec      int64
 	val      string
 }{
-	{encoding.AlphabetBase16, 15, "f"},
-	{encoding.AlphabetBase16, 16, "10"},
-	{encoding.AlphabetBase16, 32, "20"},
-	{encoding.AlphabetBase32, 0, "A"},
-	{encoding.AlphabetBase32, 2, string(encoding.AlphabetBase32[2])},
-	{encoding.AlphabetBase32, 31, "7"},
-	{encoding.AlphabetBase32, 32, "BA"},
-	{encoding.AlphabetBase32, 33, "BB"},
-	{encoding.AlphabetBase58, 58, "21"},
+	{basex.AlphabetBase16, 15, "f"},
+	{basex.AlphabetBase16, 16, "10"},
+	{basex.AlphabetBase16, 32, "20"},
+	{basex.AlphabetBase32, 0, "A"},
+	{basex.AlphabetBase32, 2, string(basex.AlphabetBase32[2])},
+	{basex.AlphabetBase32, 31, "7"},
+	{basex.AlphabetBase32, 32, "BA"},
+	{basex.AlphabetBase32, 33, "BB"},
+	{basex.AlphabetBase58, 58, "21"},
 }
 
 func TestIntToBaseXAlphabet(t *testing.T) {
-	for _, tt := range intToBaseXSAlphabetTests {
-		enc, err := Int64ToBaseXAlphabet(int64(tt.dec), tt.alphabet)
+	for _, tt := range intToBaseXAlphabetTests {
+		enc, err := Int64ToBaseXAlphabet(tt.dec, tt.alphabet)
 		if err != nil {
 			t.Errorf("bigint.Int64ToBaseXAlphabet(%v,%v): error [%v]",
 				tt.dec, tt.alphabet, err.Error())

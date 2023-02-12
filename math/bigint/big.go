@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/grokify/mogo/encoding"
+	"github.com/grokify/mogo/encoding/basex"
 	"github.com/grokify/mogo/type/stringsutil"
 	"github.com/huandu/xstrings"
 )
@@ -108,27 +108,27 @@ func BaseXToInt64(s string, base int) (int64, error) {
 
 func Int64ToBaseXAlphabet(x int64, alphabet string) (string, error) {
 	if len(alphabet) == 0 {
-		return "", encoding.ErrInvalidAlphabetIsEmpty
+		return "", basex.ErrInvalidAlphabetIsEmpty
 	} else if !stringsutil.UniqueRunes(alphabet) {
-		return "", encoding.ErrInvalidAlphabetHasDuplicates
+		return "", basex.ErrInvalidAlphabetHasDuplicates
 	}
 	return xstrings.Translate(
 		Int64ToBaseX(x, len(alphabet)),
-		encoding.AlphabetBase62Gobigint[:len(alphabet)],
+		basex.AlphabetBase62Gobigint[:len(alphabet)],
 		alphabet), nil
 }
 
 func BaseXAlphabetToInt64(s string, alphabet string) (int64, error) {
 	if len(alphabet) == 0 {
-		return 0, encoding.ErrInvalidAlphabetIsEmpty
+		return 0, basex.ErrInvalidAlphabetIsEmpty
 	} else if !stringsutil.UniqueRunes(alphabet) {
-		return 0, encoding.ErrInvalidAlphabetHasDuplicates
+		return 0, basex.ErrInvalidAlphabetHasDuplicates
 	}
 	return BaseXToInt64(
 		xstrings.Translate(
 			s,
 			alphabet,
-			encoding.AlphabetBase62Gobigint[:len(alphabet)]),
+			basex.AlphabetBase62Gobigint[:len(alphabet)]),
 		len(alphabet))
 }
 

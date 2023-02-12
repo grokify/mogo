@@ -8,13 +8,14 @@ import (
 
 	"github.com/grokify/mogo/compress/gziputil"
 	"github.com/grokify/mogo/encoding"
+	"github.com/grokify/mogo/encoding/basex"
 	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/lytics/base62"
 )
 
 const (
-	AlphabetBase62         = encoding.AlphabetBase62
-	AlphabetBase62Gobigint = encoding.AlphabetBase62Gobigint
+	AlphabetBase62         = basex.AlphabetBase62
+	AlphabetBase62Gobigint = basex.AlphabetBase62Gobigint
 )
 
 var (

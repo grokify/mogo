@@ -1,6 +1,6 @@
 package randutil
 
-import "github.com/grokify/mogo/encoding"
+import "github.com/grokify/mogo/encoding/basex"
 
 // RandString returns a random string of length `length` using the supplied alphabet.
 // If no alphabet is provided, `AlphabetBase16`, aha hexadecimal is used.
@@ -9,7 +9,7 @@ func RandString(alphabet string, length uint) string {
 		return ""
 	}
 	if len(alphabet) == 0 {
-		alphabet = encoding.AlphabetBase16
+		alphabet = basex.AlphabetBase16
 	}
 	var out string
 	for i := 0; i < int(length); i++ {

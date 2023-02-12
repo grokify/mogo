@@ -30,7 +30,7 @@ var buildAlphabetTests = []struct {
 
 func TestBuildAlphabet(t *testing.T) {
 	for _, tt := range buildAlphabetTests {
-		got := BuildAlphabet(tt.v)
+		got := tt.v.Alphabet()
 		if got != tt.want {
 			fmtutil.MustPrintJSON(tt.v)
 			t.Errorf("password.BuildAlphabet() Mismatch: want (%s) got (%s)",

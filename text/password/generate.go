@@ -4,13 +4,13 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/crypto/randutil"
-	"github.com/grokify/mogo/encoding"
+	"github.com/grokify/mogo/encoding/basex"
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
 // Generate creates passwords using options selected in `GenerateOpts`.
-func Generate(opts GenerateOpts, l uint) string {
-	return randutil.RandString(BuildAlphabet(opts), l)
+func Generate(opts GenerateOpts) string {
+	return randutil.RandString(opts.Alphabet(), opts.Length)
 }
 
 const (
@@ -20,6 +20,7 @@ const (
 )
 
 type GenerateOpts struct {
+	Length        uint
 	InclLower     bool
 	InclUpper     bool
 	InclNumbers   bool
@@ -28,17 +29,17 @@ type GenerateOpts struct {
 	ExclSimilar   bool
 }
 
-// BuildAlphabet builds an alphabet that's useful for passwords.
-func BuildAlphabet(opts GenerateOpts) string {
+// Alphabet builds an alphabet that's useful for passwords.
+func (opts GenerateOpts) Alphabet() string {
 	var alphabet string
 	if opts.InclLower {
-		alphabet += strings.ToLower(encoding.AlphabetBase26)
+		alphabet += strings.ToLower(basex.AlphabetBase26)
 	}
 	if opts.InclNumbers {
-		alphabet += encoding.AlphabetBase10
+		alphabet += basex.AlphabetBase10
 	}
 	if opts.InclUpper {
-		alphabet += strings.ToUpper(encoding.AlphabetBase26)
+		alphabet += strings.ToUpper(basex.AlphabetBase26)
 	}
 	if opts.InclSymbols {
 		alphabet += AlphabetSymbols
