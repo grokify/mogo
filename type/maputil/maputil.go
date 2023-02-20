@@ -55,13 +55,26 @@ func KeysExist[K comparable, V any](m map[K]V, keys []K, requireAll bool) bool {
 	}
 }
 
-// Values returns a string slice of sorted values.
-func Values[K comparable, V constraints.Ordered](m map[K]V) []V {
+// ValuesSorted returns a string slice of sorted values.
+func ValuesSorted[K comparable, V constraints.Ordered](m map[K]V) []V {
 	vals := []V{}
 	for _, val := range m {
 		vals = append(vals, val)
 	}
 	sortutil.Slice(vals)
+	return vals
+}
+
+func Values[K constraints.Ordered, V any](m map[K]V) []V {
+	keys := Keys(m)
+	var vals []V
+	for _, k := range keys {
+		v, ok := m[k]
+		if !ok {
+			panic("key not found")
+		}
+		vals = append(vals, v)
+	}
 	return vals
 }
 
