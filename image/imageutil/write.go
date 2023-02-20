@@ -1,10 +1,12 @@
 package imageutil
 
 import (
+	"bytes"
 	"image"
 	"image/gif"
 	"image/jpeg"
 	"image/png"
+	"io"
 	"os"
 )
 
@@ -40,6 +42,28 @@ func WriteFileJPEG(filename string, img image.Image, quality int) error {
 	if err != nil {
 		return err
 	}
+	return WriteJPEG(out, img, quality)
+	/*
+		var opt jpeg.Options
+		if quality <= 0 {
+			quality = JPEGQualityDefault
+		}
+		if quality > JPEGQualityMax {
+			quality = JPEGQualityMax
+		}
+		opt.Quality = quality
+
+		return jpeg.Encode(out, img, &opt)
+	*/
+}
+
+func WriteJPEG(w io.Writer, img image.Image, quality int) error {
+	/*
+		out, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
+		if err != nil {
+			return err
+		}
+	*/
 
 	var opt jpeg.Options
 	if quality <= 0 {
@@ -50,7 +74,16 @@ func WriteFileJPEG(filename string, img image.Image, quality int) error {
 	}
 	opt.Quality = quality
 
-	return jpeg.Encode(out, img, &opt)
+	return jpeg.Encode(w, img, &opt)
+}
+
+func BytesJPEG(img image.Image, quality int) ([]byte, error) {
+	buf := new(bytes.Buffer)
+	err := WriteJPEG(buf, img, quality)
+	if err != nil {
+		return []byte{}, err
+	}
+	return buf.Bytes(), nil
 }
 
 func WriteFilePNG(filename string, img image.Image) error {
