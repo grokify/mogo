@@ -106,3 +106,11 @@ func Split[S ~[]E, E comparable](s S, n uint) []S {
 	}
 	return sos
 }
+
+func ToMatrix[S ~[]E, E comparable](s S) []S {
+	var m []S
+	for _, e := range s {
+		m = append(m, []E{e})
+	}
+	return m
+}
