@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/grokify/mogo/strconv/strconvutil"
 	"github.com/shopspring/decimal"
 )
 
@@ -138,6 +139,14 @@ func NewAmountFloat(u string, v float64) (Amount, error) {
 	return amt, nil
 }
 
+func MustNewAmountInt(u string, v int64, exp int32) Amount {
+	amt, err := NewAmountInt(u, v, exp)
+	if err != nil {
+		panic(err)
+	}
+	return amt
+}
+
 func NewAmountInt(u string, v int64, exp int32) (Amount, error) {
 	amt := Amount{
 		Value: decimal.New(v, exp)}
@@ -196,6 +205,19 @@ func (amt *Amount) Add(a Amount) error {
 
 func (amt *Amount) Equal(a Amount) bool {
 	return amt.Value.Equal(a.Value) && amt.Unit == a.Unit
+}
+
+var rxIntPrefix = regexp.MustCompile(`^[0-9]+`)
+
+func (amt *Amount) MustStringFixed(places int32) string {
+	i := amt.Value.IntPart()
+	is := strconvutil.Commify(i)
+	if places < 1 {
+		return MustSymbol(amt.Unit) + is
+	}
+	exp := amt.Value.StringFixed(places)
+	exp = rxIntPrefix.ReplaceAllString(exp, "")
+	return MustSymbol(amt.Unit) + is + exp
 }
 
 func ParseCurrencyUnit(abbr, symbol string) (string, error) {

@@ -40,6 +40,14 @@ var SymbolMap = map[string]string{
 	"VND": "₫",
 	"YER": "﷼"}
 
+func MustSymbol(iso4217 string) string {
+	s, err := Symbol(iso4217)
+	if err != nil {
+		panic(err)
+	}
+	return s
+}
+
 func Symbol(iso4217 string) (string, error) {
 	iso4217 = strings.ToUpper(strings.TrimSpace(iso4217))
 	if sym, ok := SymbolMap[iso4217]; ok {
