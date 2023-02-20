@@ -17,12 +17,18 @@ type Float64ToString func(float64) string
 type Int64ToString func(int64) string
 
 // Commify takes an int64 and adds comma for every thousand
-// Stack Overflow: http://stackoverflow.com/users/1705598/icza
-// URL: http://stackoverflow.com/questions/13020308/how-to-fmt-printf-an-integer-with-thousands-comma
 func Commify(n int64) string {
+	// Stack Overflow: http://stackoverflow.com/users/1705598/icza
+	// URL: https://stackoverflow.com/questions/13020308/how-to-fmt-printf-an-integer-with-thousands-comma
 	in := strconv.FormatInt(n, 10)
-	out := make([]byte, len(in)+(len(in)-2+int(in[0]/'0'))/3)
-	if in[0] == '-' {
+	numOfDigits := len(in)
+	if n < 0 {
+		numOfDigits-- // First character is the - sign (not a digit)
+	}
+	numOfCommas := (numOfDigits - 1) / 3
+
+	out := make([]byte, len(in)+numOfCommas)
+	if n < 0 {
 		in, out[0] = in[1:], '-'
 	}
 
@@ -36,6 +42,27 @@ func Commify(n int64) string {
 			out[j] = ','
 		}
 	}
+	// old
+	// Stack Overflow: http://stackoverflow.com/users/1705598/icza
+	// URL: http://stackoverflow.com/questions/13020308/how-to-fmt-printf-an-integer-with-thousands-comma
+	/*
+		in := strconv.FormatInt(n, 10)
+		out := make([]byte, len(in)+(len(in)-2+int(in[0]/'0'))/3)
+		if in[0] == '-' {
+			in, out[0] = in[1:], '-'
+		}
+
+		for i, j, k := len(in)-1, len(out)-1, 0; ; i, j = i-1, j-1 {
+			out[j] = in[i]
+			if i == 0 {
+				return string(out)
+			}
+			if k++; k == 3 {
+				j, k = j-1, 0
+				out[j] = ','
+			}
+		}
+	*/
 }
 
 var RxPlus = regexp.MustCompile(`^\+`)
