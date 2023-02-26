@@ -1,10 +1,13 @@
 package jsonutil
 
 import (
+	"encoding/json"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
 
+	"github.com/grokify/mogo/reflect/reflectutil"
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
@@ -61,4 +64,33 @@ func stringToInt64(s string) int64 {
 		return 0
 	}
 	return int64(intVal)
+}
+
+// String implements a tolerant reader for `string` type, including flexible input conversion to strings from numbers and integers.
+type String string
+
+func (fs *String) UnmarshalJSON(msg []byte) error {
+	var f any
+
+	err := json.Unmarshal(msg, &f)
+	if err != nil {
+		panic(err)
+	}
+
+	if str, ok := f.(string); ok {
+		*fs = String(str)
+		return nil
+	} else if fl, ok := f.(float64); ok {
+		*fs = String(fmt.Sprintf("%g", fl))
+		return nil
+	} else if bl, ok := f.(bool); ok {
+		if bl {
+			*fs = String("true")
+		} else {
+			*fs = String("false")
+		}
+		return nil
+	}
+
+	return fmt.Errorf("json: cannot unmarshal %s into Go type github.com/mogo/encoding/jsonutil.String", reflectutil.NameOf(f, false))
 }

@@ -36,3 +36,39 @@ func TestTolerantReader(t *testing.T) {
 		}
 	}
 }
+
+var stringTests = []struct {
+	v    string
+	want String
+	json string
+}{
+	{`{"value":"mystring"}`, "mystring", `{"value":"mystring"}`},
+	{`{"value":1}`, "1", `{"value":"1"}`},
+	{`{"value":false}`, "false", `{"value":"false"}`},
+}
+
+type field struct {
+	Value String `json:"value"`
+}
+
+func TestString(t *testing.T) {
+	for _, tt := range stringTests {
+		f := &field{}
+		err := json.Unmarshal([]byte(tt.v), f)
+		if err != nil {
+			t.Errorf("json.Unmarshal(%s): err (%s)", tt.v, err.Error())
+			continue
+		}
+		if f.Value != tt.want {
+			t.Errorf("json.Unmarshal(%s): mismatch want (%v), got (%v)", tt.v, tt.want, f.Value)
+			continue
+		}
+		m, err := json.Marshal(f)
+		if err != nil {
+			panic(err) // should not happen
+		}
+		if string(m) != tt.json {
+			t.Errorf("json.Marshal(%v): mismatch want (%v), got (%v)", f, tt.json, string(m))
+		}
+	}
+}
