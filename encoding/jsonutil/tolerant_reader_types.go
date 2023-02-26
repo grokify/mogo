@@ -69,28 +69,28 @@ func stringToInt64(s string) int64 {
 // String implements a tolerant reader for `string` type, including flexible input conversion to strings from numbers and integers.
 type String string
 
-func (fs *String) UnmarshalJSON(msg []byte) error {
-	var f any
+func (s *String) UnmarshalJSON(data []byte) error {
+	var a any
 
-	err := json.Unmarshal(msg, &f)
+	err := json.Unmarshal(data, &a)
 	if err != nil {
 		panic(err)
 	}
 
-	if str, ok := f.(string); ok {
-		*fs = String(str)
+	if str, ok := a.(string); ok {
+		*s = String(str)
 		return nil
-	} else if fl, ok := f.(float64); ok {
-		*fs = String(fmt.Sprintf("%g", fl))
+	} else if fl, ok := a.(float64); ok {
+		*s = String(fmt.Sprintf("%g", fl))
 		return nil
-	} else if bl, ok := f.(bool); ok {
+	} else if bl, ok := a.(bool); ok {
 		if bl {
-			*fs = String("true")
+			*s = String("true")
 		} else {
-			*fs = String("false")
+			*s = String("false")
 		}
 		return nil
 	}
 
-	return fmt.Errorf("json: cannot unmarshal %s into Go type github.com/mogo/encoding/jsonutil.String", reflectutil.NameOf(f, false))
+	return fmt.Errorf("json: cannot unmarshal %s into Go type github.com/mogo/encoding/jsonutil.String", reflectutil.NameOf(a, false))
 }
