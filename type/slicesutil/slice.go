@@ -55,6 +55,24 @@ func SubRegexpString(s []string, r *regexp.Regexp) []string {
 	return filtered
 }
 
+func UniqueValues[S ~[]E, E comparable](s S) bool {
+	m := map[E]int{}
+	for _, e := range s {
+		m[e]++
+	}
+	return len(s) == len(m)
+}
+
+// NewWithDefault creates a slice of length `size` which values populated by default value `d`.
+func NewWithDefault[E any](size uint, d E) []E {
+	var s []E
+	sz := int(size)
+	for i := 0; i < sz; i++ {
+		s = append(s, d)
+	}
+	return s
+}
+
 // MakeMatrix2D returns a 2-dimensional matrix. Usage as follows
 // `a := Make2D[uint8](dy, dx)`.
 // Sourced from: https://stackoverflow.com/a/71781206/1908967
@@ -66,14 +84,6 @@ func MakeMatrix2D[E any](n, m int) [][]E {
 		matrix[i] = rows[startRow:endRow:endRow]
 	}
 	return matrix
-}
-
-func UniqueValues[S ~[]E, E comparable](s S) bool {
-	m := map[E]int{}
-	for _, e := range s {
-		m[e]++
-	}
-	return len(s) == len(m)
 }
 
 func MatrixGetOneOrDefault[C comparable](m [][]C, keyIdx uint, keyValue C, wantIdx uint, defaultValue C) C {
