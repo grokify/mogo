@@ -209,7 +209,7 @@ func (amt *Amount) Equal(a Amount) bool {
 
 var rxIntPrefix = regexp.MustCompile(`^[0-9]+`)
 
-func (amt *Amount) MustStringFixed(places int32) string {
+func (amt Amount) MustStringFixed(places int32, defaultUnit string) string {
 	i := amt.Value.IntPart()
 	is := strconvutil.Commify(i)
 	if places < 1 {
@@ -217,7 +217,11 @@ func (amt *Amount) MustStringFixed(places int32) string {
 	}
 	exp := amt.Value.StringFixed(places)
 	exp = rxIntPrefix.ReplaceAllString(exp, "")
-	return MustSymbol(amt.Unit) + is + exp
+	unit := strings.TrimSpace(amt.Unit)
+	if unit == "" {
+		unit = defaultUnit
+	}
+	return MustSymbol(unit) + is + exp
 }
 
 func ParseCurrencyUnit(abbr, symbol string) (string, error) {
