@@ -16,10 +16,6 @@ type Bool bool
 
 var rxString = regexp.MustCompile(`^"(.*)"$`)
 
-func (b *Bool) Value() bool {
-	return bool(*b)
-}
-
 func (b *Bool) UnmarshalJSON(data []byte) error {
 	s := strings.TrimSpace(string(data))
 	m := rxString.FindStringSubmatch(s)
@@ -32,10 +28,6 @@ func (b *Bool) UnmarshalJSON(data []byte) error {
 
 // Int64 implements a tolerant reader for `int64` type.
 type Int64 int64
-
-func (i64 *Int64) Value() int64 {
-	return int64(*i64)
-}
 
 func (i64 *Int64) UnmarshalJSON(data []byte) error {
 	*i64 = Int64(stringToInt64(string(data)))

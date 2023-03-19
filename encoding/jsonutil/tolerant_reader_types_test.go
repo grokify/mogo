@@ -28,10 +28,10 @@ func TestTolerantReader(t *testing.T) {
 		if err != nil {
 			t.Errorf("jsonutil.Bool Unmarshal(%v): err [%v]", tt.plaintext, err.Error())
 		}
-		if obj.ValBool.Value() != tt.valBool {
+		if bool(obj.ValBool) != tt.valBool {
 			t.Errorf("jsonutil.Bool Unmarshal(%v): want [%v] got [%v]", tt.plaintext, tt.valBool, obj.ValBool)
 		}
-		if obj.ValInt64.Value() != tt.valInt64 {
+		if int64(obj.ValInt64) != tt.valInt64 {
 			t.Errorf("jsonutil.Int64 Unmarshal(%v): want [%v] got [%v]", tt.plaintext, tt.valInt64, obj.ValInt64)
 		}
 	}
