@@ -64,7 +64,7 @@ func TrimRight(file string) string { return strings.TrimRight(file, string(os.Pa
 
 var rxExt = regexp.MustCompile(`\.[^/.]*$`)
 
-// TrimExt removes the extension, including period.
+// TrimExt removes the extension, including a trailing period.
 func TrimExt(path string) string {
 	return rxExt.ReplaceAllString(path, "")
 }

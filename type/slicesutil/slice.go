@@ -20,8 +20,8 @@ func Dedupe[S ~[]E, E comparable](s S) S {
 }
 
 // Reverse reverses the order of a slice.
-// Stack Overflow: https://stackoverflow.com/a/71904070/1908967
 func Reverse[E comparable](s []E) {
+	// sourced from Stack Overflow under MIT license: https://stackoverflow.com/a/71904070/1908967
 	sort.SliceStable(s, func(i, j int) bool {
 		return i > j
 	})
