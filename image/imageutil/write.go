@@ -8,12 +8,36 @@ import (
 	"image/png"
 	"io"
 	"os"
+	"regexp"
+	"strings"
+
+	"github.com/grokify/mogo/io/ioutil"
+	"github.com/grokify/mogo/os/osutil"
 )
 
 const (
-	JPEGQualityDefault int = 80
-	JPEGQualityMax     int = 100
+	JPEGExt            = ".jpeg"
+	JPEGExtJPG         = ".jpg"
+	JPEGQualityDefault = jpeg.DefaultQuality // 75
+	JPEGQualityMax     = 100
+	JPEGQualityMin     = 1
+	JPEGMarkerPrefix   = 0xff
+	JPEGMarkerExif     = 0xe1
+	JPEGMarkerSOI      = 0xd8
 )
+
+var rxJPEGExtension = regexp.MustCompile(`(?i)\.(jpg|jpeg)$`)
+
+func JPEGMarker(b byte) []byte {
+	return []byte{JPEGMarkerPrefix, b}
+}
+
+func ReadDirJPEGFiles(dir string, rx *regexp.Regexp) (osutil.DirEntries, error) {
+	if rx == nil {
+		rx = rxJPEGExtension
+	}
+	return osutil.ReadDirMore(dir, rx, false, true, false)
+}
 
 func WriteFileGIF(filename string, img *gif.GIF) error {
 	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
@@ -28,58 +52,92 @@ func WriteFileGIF(filename string, img *gif.GIF) error {
 	return f.Close()
 }
 
-func ResizeFileJPEG(inputFile, outputFile string, outputWidth, outputHeight uint, quality int) error {
+func ResizeFileJPEG(inputFile, outputFile string, outputWidth, outputHeight uint, opt *JPEGEncodeOptions) error {
 	img, _, err := ReadImageFile(inputFile)
 	if err != nil {
 		return err
 	}
 	img2 := Resize(outputWidth, outputHeight, img, ScalerBest())
-	return WriteFileJPEG(outputFile, img2, quality)
+	return WriteFileJPEG(outputFile, img2, opt)
 }
 
-func WriteFileJPEG(filename string, img image.Image, quality int) error {
+func WriteFileJPEG(filename string, img image.Image, opt *JPEGEncodeOptions) error {
 	out, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		return err
 	}
-	return WriteJPEG(out, img, quality)
-	/*
-		var opt jpeg.Options
-		if quality <= 0 {
-			quality = JPEGQualityDefault
-		}
-		if quality > JPEGQualityMax {
-			quality = JPEGQualityMax
-		}
-		opt.Quality = quality
-
-		return jpeg.Encode(out, img, &opt)
-	*/
+	defer out.Close()
+	return WriteJPEG(out, img, opt)
 }
 
-func WriteJPEG(w io.Writer, img image.Image, quality int) error {
-	/*
-		out, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
-		if err != nil {
+type JPEGEncodeOptions struct {
+	Options            *jpeg.Options
+	Exif               []byte
+	ReadFilenameRegexp *regexp.Regexp
+	WriteExtension     string
+}
+
+func (opts JPEGEncodeOptions) ReadFilenameRegexpOrDefault() *regexp.Regexp {
+	if opts.ReadFilenameRegexp != nil {
+		return opts.ReadFilenameRegexp
+	}
+	return rxJPEGExtension
+}
+
+func (opts JPEGEncodeOptions) WriteExtensionOrDefault() string {
+	if strings.TrimSpace(opts.WriteExtension) == "" {
+		return JPEGExtJPG // default to 3 letter extension to support Microsoft.
+	}
+	return opts.WriteExtension
+}
+
+func WriteJPEG(w io.Writer, img image.Image, opt *JPEGEncodeOptions) error {
+	if opt != nil && len(opt.Exif) > 0 {
+		if wexif, err := newWriterExif(w, opt.Exif); err != nil {
 			return err
+		} else {
+			return jpeg.Encode(wexif, img, opt.Options)
 		}
-	*/
-
-	var opt jpeg.Options
-	if quality <= 0 {
-		quality = JPEGQualityDefault
 	}
-	if quality > JPEGQualityMax {
-		quality = JPEGQualityMax
-	}
-	opt.Quality = quality
-
-	return jpeg.Encode(w, img, &opt)
+	return jpeg.Encode(w, img, opt.Options)
 }
 
-func BytesJPEG(img image.Image, quality int) ([]byte, error) {
+// newWriterExif is used to write Exif to an `io.Writer` before calling `jpeg.Encode()`.
+// It is used with `jpeg.Encode()` to remove the Start of Image (SOI) marker after adding
+// SOI and Exif.
+func newWriterExif(w io.Writer, exif []byte) (io.Writer, error) {
+	// Adapted from the following under MIT license: https://github.com/jdeng/goheif/blob/a0d6a8b3e68f9d613abd9ae1db63c72ba33abd14/heic2jpg/main.go
+	// See more here: https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format
+	// https://www.codeproject.com/Articles/47486/Understanding-and-Reading-Exif-Data
+	wExif := ioutil.NewSkipWriter(w, 2)
+
+	if _, err := w.Write(JPEGMarker(JPEGMarkerSOI)); err != nil {
+		return nil, err
+	}
+
+	if exif == nil {
+		return wExif, nil
+	}
+
+	markerLen := 2 + len(exif)
+	marker := []byte{
+		JPEGMarkerPrefix,
+		JPEGMarkerExif,
+		uint8(markerLen >> 8),
+		uint8(markerLen & JPEGMarkerPrefix)}
+	if _, err := w.Write(marker); err != nil {
+		return nil, err
+	}
+
+	if _, err := w.Write(exif); err != nil {
+		return nil, err
+	}
+	return wExif, nil
+}
+
+func BytesJPEG(img image.Image, opt *JPEGEncodeOptions) ([]byte, error) {
 	buf := new(bytes.Buffer)
-	err := WriteJPEG(buf, img, quality)
+	err := WriteJPEG(buf, img, opt)
 	if err != nil {
 		return []byte{}, err
 	}

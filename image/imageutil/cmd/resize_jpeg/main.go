@@ -1,6 +1,8 @@
 package main
 
 import (
+	"image/jpeg"
+
 	"github.com/grokify/mogo/image/imageutil"
 	"github.com/grokify/mogo/log/logutil"
 	"github.com/jessevdk/go-flags"
@@ -18,6 +20,9 @@ func main() {
 	_, err := flags.Parse(&opts)
 	logutil.FatalErr(err)
 
-	err = imageutil.ResizeFileJPEG(opts.Input, opts.Output, opts.Width, opts.Height, imageutil.JPEGQualityMax)
+	err = imageutil.ResizeFileJPEG(opts.Input, opts.Output, opts.Width, opts.Height,
+		&imageutil.JPEGEncodeOptions{
+			Options: &jpeg.Options{Quality: imageutil.JPEGQualityMax},
+		})
 	logutil.FatalErr(err)
 }
