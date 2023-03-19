@@ -14,24 +14,23 @@ import (
 )
 
 func ReadDirMore(dir string, rx *regexp.Regexp, inclDirs, inclFiles, inclEmptyFiles bool) (DirEntries, error) {
-	items, err := os.ReadDir(dir)
+	entries, err := os.ReadDir(dir)
 	if err != nil {
 		return nil, err
 	}
-	sdirs := []os.DirEntry{}
-	for _, item := range items {
-		if item.IsDir() {
-			if !inclDirs {
-				continue
-			}
-		} else if !inclFiles {
+
+	matches := DirEntries{}
+	for _, entry := range entries {
+		if !inclDirs && entry.IsDir() {
+			continue
+		} else if !inclFiles && !entry.IsDir() {
 			continue
 		}
-		if rx != nil && !rx.MatchString(item.Name()) {
+		if rx != nil && !rx.MatchString(entry.Name()) {
 			continue
 		}
-		if !inclEmptyFiles && !item.IsDir() {
-			fi, err := item.Info()
+		if !inclEmptyFiles && !entry.IsDir() {
+			fi, err := entry.Info()
 			if err != nil {
 				return nil, err
 			}
@@ -39,9 +38,9 @@ func ReadDirMore(dir string, rx *regexp.Regexp, inclDirs, inclFiles, inclEmptyFi
 				continue
 			}
 		}
-		sdirs = append(sdirs, item)
+		matches = append(matches, entry)
 	}
-	return sdirs, nil
+	return matches, nil
 }
 
 func ReadSubdirMin(dir string, rx *regexp.Regexp) (os.DirEntry, error) {
