@@ -19,6 +19,26 @@ func (entries DirEntries) Swap(i, j int)      { entries[i], entries[j] = entries
 // Sort sorts dir entries by name.
 func (entries DirEntries) Sort() { sort.Sort(entries) }
 
+func (entries DirEntries) Dirs() DirEntries {
+	var dirs DirEntries
+	for _, e := range entries {
+		if e.IsDir() {
+			dirs = append(dirs, e)
+		}
+	}
+	return dirs
+}
+
+func (entries DirEntries) Files() DirEntries {
+	var files DirEntries
+	for _, e := range entries {
+		if !e.IsDir() {
+			files = append(files, e)
+		}
+	}
+	return files
+}
+
 // Names returns a slice of entry names. It can optionally
 // add the directory path and sort the values.
 func (entries DirEntries) Names(dir string) []string {
