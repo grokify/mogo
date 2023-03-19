@@ -64,6 +64,14 @@ var (
 	// rxEndingSpacesLineFeed       *regexp.Regexp = regexp.MustCompile(`\s+\n`)
 )
 
+func EscapeStrings(s []string) []string {
+	var n []string
+	for _, si := range s {
+		n = append(n, html.EscapeString(si))
+	}
+	return n
+}
+
 func StreamlineCRLFs(s string) string {
 	newLines := []string{}
 	extLines := strings.Split(s, "\n")
