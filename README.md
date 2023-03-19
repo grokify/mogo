@@ -57,6 +57,10 @@ Documentation is provided using godoc and available on [GoDoc.org](https://godoc
 $ go get github.com/grokify/mogo/...
 ```
 
+## Credits
+
+See [`CREDITS`](CREDITS.md)
+
 ## Contributing
 
 Features, Issues, and Pull Requests are always welcome.
