@@ -6,6 +6,11 @@ import (
 	"io"
 )
 
+type AtReader interface {
+	io.Reader
+	io.ReaderAt
+}
+
 // ReaderToBytes reads from an io.Reader, e.g. io.ReadCloser
 func ReaderToBytes(r io.Reader) ([]byte, error) {
 	buf := new(bytes.Buffer)
@@ -54,4 +59,38 @@ func Write(w *bufio.Writer, r io.Reader) error {
 		}
 	}
 	return w.Flush()
+}
+
+// SkipWriter is an `io.Writer` that skips writing the first `n` bytes passed.
+type SkipWriter struct {
+	// Rewritten from the following under MIT license: https://github.com/jdeng/goheif/blob/a0d6a8b3e68f9d613abd9ae1db63c72ba33abd14/heic2jpg/main.go
+	w      io.Writer
+	offset int
+}
+
+// NewSkipWriter returns an SkipWriter that writes to w skipping the first offset off bytes.
+func NewSkipWriter(w io.Writer, off int) *SkipWriter {
+	return &SkipWriter{w: w, offset: off}
+}
+
+// Write fulfills the `io.Writer` interface.
+func (s *SkipWriter) Write(p []byte) (n int, err error) {
+	if s.offset <= 0 {
+		n, err = s.w.Write(p)
+		return
+	}
+
+	if plen := len(p); plen < s.offset {
+		s.offset -= plen
+		n = plen
+		return
+	}
+
+	n, err = s.w.Write(p[s.offset:])
+	if err != nil {
+		return
+	}
+	n += s.offset
+	s.offset = 0
+	return
 }
