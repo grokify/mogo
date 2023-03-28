@@ -58,8 +58,7 @@ func (msi MapStringInt) MustGet(key string, defaultValue int) int {
 	return defaultValue
 }
 
-// MinMaxValues returns the minium and maximum values
-// of the `map[string]int`.
+// MinMaxValues returns the minium and maximum values of the `map[string]int`.
 func (msi MapStringInt) MinMaxValues() (int, int) {
 	min := 0
 	max := 0
@@ -88,8 +87,7 @@ const (
 	SortValueDesc = "value desc"
 )
 
-// Sorted returns a set of key names and values sorted by
-// the sort type.
+// Sorted returns a set of key names and values sorted by the sort type.
 func (msi MapStringInt) Sorted(sortBy string) []Record {
 	sortBy = strings.ToLower(strings.TrimSpace(sortBy))
 	records := []Record{}
