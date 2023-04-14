@@ -95,6 +95,11 @@ func DT6Next(dt6 int32) int32 {
 }
 
 func TimeDT6AddNMonths(t time.Time, numMonths int) time.Time {
+	if numMonths == 0 {
+		return t
+	} else if numMonths < 0 {
+		return timeDT6SubNMonths(t, uint(-numMonths))
+	}
 	dt6 := NewTimeMore(t, 0).DT6()
 	for i := 0; i < numMonths; i++ {
 		dt6 = DT6Next(dt6)
@@ -106,9 +111,12 @@ func TimeDT6AddNMonths(t time.Time, numMonths int) time.Time {
 	return dt6NextMonth
 }
 
-func TimeDT6SubNMonths(t time.Time, numMonths int) time.Time {
+func timeDT6SubNMonths(t time.Time, numMonths uint) time.Time {
+	if numMonths == 0 {
+		return t
+	}
 	dt6 := NewTimeMore(t, 0).DT6()
-	for i := 0; i < numMonths; i++ {
+	for i := uint(0); i < numMonths; i++ {
 		dt6 = DT6Prev(dt6)
 	}
 	dt6NextMonth, err := TimeForDT6(dt6)
