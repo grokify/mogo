@@ -3,7 +3,7 @@ module github.com/grokify/mogo
 go 1.18
 
 require (
-	github.com/ProtonMail/go-crypto v0.0.0-20230321155629-9a39f2531310
+	github.com/ProtonMail/go-crypto v0.0.0-20230411080316-8b3893ee7fca
 	github.com/buger/jsonparser v1.1.1
 	github.com/caarlos0/env/v6 v6.10.1
 	github.com/go-logfmt/logfmt v0.6.0
@@ -30,7 +30,7 @@ require (
 	golang.org/x/image v0.7.0
 	golang.org/x/net v0.9.0
 	golang.org/x/text v0.9.0
-	google.golang.org/genproto v0.0.0-20230327215041-6ac7f18bb9d5
+	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1
 	google.golang.org/protobuf v1.30.0
 	gopkg.in/oleiade/reflections.v1 v1.0.0
 )
