@@ -21,6 +21,8 @@ const (
 	FormatNameWEBP = "webp"
 )
 
+var RxFileExtensionJPG = regexp.MustCompile(`(?i)^.*\.*jpe?g$`)
+
 func ReadImage(location string) (image.Image, string, error) {
 	if urlutil.IsHTTP(location, true, true) {
 		return ReadImageHTTP(location)
