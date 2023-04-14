@@ -31,7 +31,9 @@ func AddBackgroundWhite(img image.Image) image.Image {
 // to scale the aspect ratio. See gitub.com/nfnt/resize for Lanczos3, etc.
 // https://github.com/nfnt/resize .
 func Resize(width, height uint, src image.Image, scale draw.Scaler) image.Image {
-	if width == 0 && height != 0 {
+	if width == 0 && height == 0 {
+		return src
+	} else if width == 0 && height != 0 {
 		width = uint(ImageAspect(src) * float64(height))
 	} else if height == 0 && width != 0 {
 		height = uint(float64(width) / ImageAspect(src))
