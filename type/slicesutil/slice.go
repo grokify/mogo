@@ -3,6 +3,8 @@ package slicesutil
 import (
 	"regexp"
 	"sort"
+
+	"golang.org/x/exp/slices"
 )
 
 // Dedupe returns a string slice with duplicate values removed. First observance is kept.
@@ -17,6 +19,35 @@ func Dedupe[S ~[]E, E comparable](s S) S {
 		deduped = append(deduped, val)
 	}
 	return deduped
+}
+
+func MatchFilters[E comparable](s, inclFilters, exclFilters []E, inclAll bool) bool {
+	if len(inclFilters) == 0 && len(exclFilters) == 0 {
+		return true
+	}
+	if len(inclFilters) > 0 {
+		matches := 0
+		for _, nf := range inclFilters {
+			idx := slices.Index(s, nf)
+			if idx >= 0 {
+				matches++
+			} else if idx < 0 && inclAll {
+				return false
+			}
+		}
+		if matches == 0 {
+			return false
+		}
+	}
+	if len(exclFilters) > 0 {
+		for _, xf := range exclFilters {
+			idx := slices.Index(s, xf)
+			if idx >= 0 {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 // Reverse reverses the order of a slice.
