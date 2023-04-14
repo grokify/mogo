@@ -61,3 +61,11 @@ func MapStringSliceCondenseSpace(m map[string][]string, dedupeVals, sortVals boo
 	}
 	return new
 }
+
+func KeyValueSliceCounts[K comparable, V any](m map[K][]V) map[K]int {
+	r := map[K]int{}
+	for k, vals := range m {
+		r[k] = len(vals)
+	}
+	return r
+}

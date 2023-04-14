@@ -78,6 +78,16 @@ func Values[K constraints.Ordered, V any](m map[K]V) []V {
 	return vals
 }
 
+func NumberValuesMergeSum[K comparable, V constraints.Float | constraints.Integer](m ...map[K]V) map[K]V {
+	merged := map[K]V{}
+	for _, m1 := range m {
+		for k, v := range m1 {
+			merged[k] += v
+		}
+	}
+	return merged
+}
+
 // NumberValuesAverage returns a `float64` average of a map's values.
 func NumberValuesAverage[K comparable, V constraints.Float | constraints.Integer](m map[K]V) float64 {
 	if len(m) == 0 {
