@@ -78,7 +78,7 @@ Please report issues and feature requests on [Github](https://github.com/grokify
  [used-by-svg]: https://sourcegraph.com/github.com/grokify/mogo/-/badge.svg
  [used-by-url]: https://sourcegraph.com/github.com/grokify/mogo?badge
  [build-status-svg]: https://github.com/grokify/mogo/workflows/test/badge.svg?branch=master
- [build-status-url]: https://github.com/grokify/mogo/actions/workflows/test.yaml
+ [build-status-url]: https://github.com/grokify/mogo/actions/workflows/build.yaml
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/mogo
  [goreport-url]: https://goreportcard.com/report/github.com/grokify/mogo
  [codeclimate-status-svg]: https://codeclimate.com/github/grokify/mogo/badges/gpa.svg
