@@ -50,7 +50,7 @@ func (cr *CryptoRand) MustInt64n(n int64) int64 {
 
 // Intn returns a random number backed by `crypto/rand`.
 func Intn(n uint) int {
-	return mrand.New(NewCryptoRandSource()).Intn(int(n))
+	return mrand.New(NewCryptoRandSource()).Intn(int(n)) // #nosec G404 - `NewCryptoRandSource()` uses `crypto/rand`.
 }
 
 func Int64n(n uint) int64 {

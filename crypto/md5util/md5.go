@@ -21,7 +21,7 @@ const (
 
 // MD5Base10  returns a Base10 encoded MD5 hash of a string.
 func MD5Base10(s []byte) string {
-	sum := md5.Sum(s)
+	sum := md5.Sum(s) // #nosec G401
 	return fmt.Sprintf(md5Base10Format, bigint.MustEncodeToString(10, sum[:]))
 	// i := new(big.Int)
 	// i.SetString(fmt.Sprintf("%x", cryptomd5.Sum([]byte(s))), 16) // #nosec G401
@@ -30,7 +30,7 @@ func MD5Base10(s []byte) string {
 
 // MD5Base36  returns a Base36 encoded MD5 hash of a string.
 func MD5Base36(s []byte) string {
-	sum := md5.Sum(s)
+	sum := md5.Sum(s) // #nosec G401
 	return fmt.Sprintf(md5Base36Format, bigint.MustEncodeToString(36, sum[:]))
 	// i := new(big.Int)
 	// i.SetString(fmt.Sprintf("%x", cryptomd5.Sum([]byte(s))), 16) // #nosec G401
@@ -40,7 +40,7 @@ func MD5Base36(s []byte) string {
 // MD5Base62  returns a Base62 encoded MD5 hash of a string.
 // This uses the Golang alphabet [0-9a-zA-Z].
 func MD5Base62(s []byte) string {
-	sum := md5.Sum(s)
+	sum := md5.Sum(s) // #nosec G401
 	return fmt.Sprintf(md5Base62Format, bigint.MustEncodeToString(62, sum[:]))
 	// i := new(big.Int)
 	// i.SetString(fmt.Sprintf("%x", cryptomd5.Sum([]byte(s))), 16) // #nosec G401

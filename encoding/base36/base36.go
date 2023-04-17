@@ -49,7 +49,7 @@ func Encode36HexString(s16 string) (string, error) {
 
 // Md5Base36 returns a Base36 encoded MD5 hash of a string.
 func Md5Base36(s string) string {
-	b36Hex, err := Encode36HexString(fmt.Sprintf("%x", md5.Sum([]byte(s))))
+	b36Hex, err := Encode36HexString(fmt.Sprintf("%x", md5.Sum([]byte(s)))) // #nosec G401
 	if err != nil {
 		panic(err)
 	}
