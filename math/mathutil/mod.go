@@ -18,7 +18,7 @@ func ModInt64[N Number](x, y N) int64 {
 	return int64(math.Mod(float64(x), float64(y)))
 }
 
-func PyModInt[I constraints.Integer](a, b I) I {
+func ModPyInt[I constraints.Integer](a, b I) I {
 	// https://stackoverflow.com/questions/43018206/modulo-of-negative-integers-in-go
 	// https://www.reddit.com/r/golang/comments/bnvik4/modulo_in_golang/
 	return (a%b + b) % b

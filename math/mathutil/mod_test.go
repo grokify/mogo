@@ -56,7 +56,7 @@ func TestDivideInt64(t *testing.T) {
 					tt.remainder, modInt64)
 			}
 		*/
-		modPy := PyModInt(tt.dividend, tt.divisor)
+		modPy := ModPyInt(tt.dividend, tt.divisor)
 		if modPy != tt.remainder {
 			t.Errorf("mathutil.PyMod(%d, %d) Mismatch: want [%d], got [%d]",
 				tt.dividend, tt.divisor,
