@@ -93,7 +93,10 @@ func TokenMatchLeft(tokFilter, tok html.Token, attrValMatchinfo *stringsutil.Mat
 		if attrValMatchinfo.Regexp == nil && attrValMatchinfo.String == "" {
 			attrValMatchinfo.String = filAttr.Val
 		}
-		if !tokAttrs.Exists(filAttr, attrValMatchinfo) {
+		// if !tokAttrs.Exists(filAttr, attrValMatchinfo) {
+		// 	return false
+		// }
+		if tokAttrs.Index(filAttr, attrValMatchinfo) == -1 {
 			return false
 		}
 	}

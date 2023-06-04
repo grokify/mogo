@@ -14,24 +14,49 @@ const (
 
 type Attributes []html.Attribute
 
-func (attrs Attributes) Exists(attr html.Attribute, valMatch *stringsutil.MatchInfo) bool {
-	for _, attrTry := range attrs {
-		if valMatch != nil {
+// Index returns the index location of the matching `html.Attribute`. If `*stringsutil.MatchInfo` is nil
+// an exact match is required. If no match is found, `-1` is returned.`
+func (attrs Attributes) Index(attr html.Attribute, valMatch *stringsutil.MatchInfo) int {
+	for i, attrTry := range attrs {
+		if valMatch == nil {
+			if attrTry.Namespace == attr.Namespace &&
+				attrTry.Key == attr.Key &&
+				attrTry.Val == attr.Val {
+				return i
+			}
+		} else {
 			isMatch, err := stringsutil.Match(attrTry.Val, *valMatch)
 			if err == nil && isMatch &&
 				attrTry.Namespace == attr.Namespace &&
 				attrTry.Key == attr.Key {
-				return true
-			}
-		} else {
-			if attrTry.Namespace == attr.Namespace &&
-				attrTry.Key == attr.Key &&
-				attrTry.Val == attr.Val {
-				return true
+				return i
 			}
 		}
 	}
-	return false
+	return -1
+}
+
+func (attrs Attributes) IndexFunc(f func(a html.Attribute) bool) int {
+	for i, a := range attrs {
+		if f(a) {
+			return i
+		}
+	}
+	return -1
+}
+
+func (attrs Attributes) IndexSimple(ns, key, val *string) int {
+	for i, a := range attrs {
+		if ns != nil && a.Namespace != *ns {
+			continue
+		} else if key != nil && a.Key != *key {
+			continue
+		} else if val != nil && a.Val != *val {
+			continue
+		}
+		return i
+	}
+	return -1
 }
 
 func (attrs Attributes) Find(ns, key, val *string, n int) []html.Attribute {
@@ -82,11 +107,6 @@ func (attrs Attributes) FindVals(ns, key *string, n int) []string {
 		vals = append(vals, a.Val)
 	}
 	return vals
-}
-
-func (attrs Attributes) FindExists(ns, key, val *string) bool {
-	finds := attrs.Find(ns, key, val, 1)
-	return len(finds) > 0
 }
 
 func TokenAttribute(token html.Token, attrName string) (string, error) {
