@@ -5,6 +5,11 @@ import (
 	"google.golang.org/genproto/googleapis/type/latlng"
 )
 
+type LatLong struct {
+	Latitude  float64
+	Longitude float64
+}
+
 // LatLngString returns a string.
 func LatLngString(loc *latlng.LatLng, sep string, precision int) string {
 	if loc == nil {
