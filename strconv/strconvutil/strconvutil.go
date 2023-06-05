@@ -182,3 +182,7 @@ func Int64Abbreviation(val int64) string {
 	}
 	return fmt.Sprintf("%d", val)
 }
+
+func Itoa[E constraints.Integer](e E) string {
+	return fmt.Sprintf("%d", e)
+}
