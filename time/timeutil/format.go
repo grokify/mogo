@@ -345,7 +345,6 @@ func IsDTX(d int32) (string, error) {
 		if dy < 1 || dy > 31 {
 			return LayoutNameDT6, errors.New("dt8 day value is out of bounds")
 		}
-		dt5
 		return LayoutNameDT8, nil
 	case 14:
 		return LayoutNameDT14, nil
