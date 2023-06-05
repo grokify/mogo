@@ -88,3 +88,23 @@ func TestOffsetFormat(t *testing.T) {
 		}
 	}
 }
+
+var isDTXTests = []struct {
+	v    int32
+	want string
+}{
+	{2004, LayoutNameDT4},
+	{200401, LayoutNameDT6},
+}
+
+func TestIsDTX(t *testing.T) {
+	for _, tt := range isDTXTests {
+		got, err := IsDTX(tt.v)
+		if err != nil {
+			t.Errorf("time.IsDTX(%d) Error: want (%s), err (%v)", tt.v, tt.want, err)
+		}
+		if got != tt.want {
+			t.Errorf("time.IsDTX(%d) Mismatch: want (%s), got (%s)", tt.v, tt.want, got)
+		}
+	}
+}

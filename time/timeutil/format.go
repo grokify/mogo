@@ -321,3 +321,34 @@ func ParseTimeSQLTimestampUsingOffset(timeStr string, offset int) (time.Time, er
 		return dt, err
 	*/
 }
+
+const (
+	LayoutNameDT4  = "dt4"
+	LayoutNameDT6  = "dt6"
+	LayoutNameDT8  = "dt8"
+	LayoutNameDT14 = "dt14"
+)
+
+// IsDTX returns the dtx format if comforming.
+func IsDTX(d int32) (string, error) {
+	switch len(strconv.Itoa(int(d))) {
+	case 4:
+		return LayoutNameDT4, nil
+	case 6:
+		m := d - ((d / 100) * 100)
+		if m < 1 || m > 12 {
+			return LayoutNameDT6, errors.New("dt6 length month value is out of bounds")
+		}
+		return LayoutNameDT6, nil
+	case 8:
+		dy := d - ((d / 100) * 100)
+		if dy < 1 || dy > 31 {
+			return LayoutNameDT6, errors.New("dt8 day value is out of bounds")
+		}
+		return LayoutNameDT8, nil
+	case 14:
+		return LayoutNameDT14, nil
+	default:
+		return "", errors.New("length mismatch")
+	}
+}
