@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/fs"
 	"os"
+	"reflect"
 )
 
 const FileExt = ".json"
@@ -36,8 +37,8 @@ func MustMarshalSimple(v any, prefix, indent string) []byte {
 	return bytes
 }
 
-func MustMarshal(i any, embedError bool) []byte {
-	bytes, err := json.Marshal(i)
+func MustMarshal(v any, embedError bool) []byte {
+	bytes, err := json.Marshal(v)
 	if err != nil {
 		if embedError {
 			e := mustMarhshalError{
@@ -54,12 +55,12 @@ func MustMarshal(i any, embedError bool) []byte {
 	return bytes
 }
 
-func MustMarshalString(i any, embedError bool) string {
-	return string(MustMarshal(i, embedError))
+func MustMarshalString(v any, embedError bool) string {
+	return string(MustMarshal(v, embedError))
 }
 
-func MustMarshalIndent(i any, prefix, indent string, embedError bool) []byte {
-	bytes, err := json.MarshalIndent(i, prefix, indent)
+func MustMarshalIndent(v any, prefix, indent string, embedError bool) []byte {
+	bytes, err := json.MarshalIndent(v, prefix, indent)
 	if err != nil {
 		panic(err)
 	}
@@ -86,16 +87,16 @@ func IndentReader(r io.Reader, prefix, indent string) ([]byte, error) {
 	return IndentBytes(b, prefix, indent)
 }
 
-func MarshalBase64(i any) (string, error) {
-	data, err := json.Marshal(i)
+func MarshalBase64(v any) (string, error) {
+	data, err := json.Marshal(v)
 	if err != nil {
 		return "", err
 	}
 	return base64.StdEncoding.EncodeToString(data), nil
 }
 
-func MustUnmarshal(data []byte, v any) {
-	err := json.Unmarshal(data, v)
+func MustUnmarshal(b []byte, v any) {
+	err := json.Unmarshal(b, v)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -117,8 +118,8 @@ func UnmarshalReader(r io.Reader, v any) ([]byte, error) {
 	return bytes, json.Unmarshal(bytes, v)
 }
 
-func UnmarshalStrict(data []byte, v any) error {
-	dec := json.NewDecoder(bytes.NewReader(data))
+func UnmarshalStrict(b []byte, v any) error {
+	dec := json.NewDecoder(bytes.NewReader(b))
 	dec.DisallowUnknownFields()
 	return dec.Decode(v)
 }
@@ -151,4 +152,42 @@ func WriteFile(filename string, v any, prefix, indent string, perm fs.FileMode) 
 		return err
 	}
 	return os.WriteFile(filename, bytes, perm)
+}
+
+func Equal(x, y io.Reader) (bool, error) {
+	var ax, ay any
+	d := json.NewDecoder(x)
+	if err := d.Decode(&ax); err != nil {
+		return false, err
+	}
+	d = json.NewDecoder(y)
+	if err := d.Decode(&ay); err != nil {
+		return false, err
+	}
+	return reflect.DeepEqual(ax, ay), nil
+}
+
+func EqualBytes(x, y []byte) (bool, error) {
+	var ax, ay any
+	if err := json.Unmarshal(x, &ax); err != nil {
+		return false, err
+	}
+	if err := json.Unmarshal(y, &ay); err != nil {
+		return false, err
+	}
+	return reflect.DeepEqual(ax, ay), nil
+}
+
+func EqualFiles(x, y string) (bool, error) {
+	fx, err := os.Open(x)
+	if err != nil {
+		return false, err
+	}
+	defer fx.Close()
+	fy, err := os.Open(y)
+	if err != nil {
+		return false, err
+	}
+	defer fy.Close()
+	return Equal(fx, fy)
 }
