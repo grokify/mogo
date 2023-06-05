@@ -329,7 +329,7 @@ const (
 	LayoutNameDT14 = "dt14"
 )
 
-// IsDTX returns the dtx format if comforming.
+// IsDTX returns the dtx format if conformant to various DTX values (dt4, dt6, dt8, dt14).
 func IsDTX(d int32) (string, error) {
 	switch len(strconv.Itoa(int(d))) {
 	case 4:
@@ -345,6 +345,7 @@ func IsDTX(d int32) (string, error) {
 		if dy < 1 || dy > 31 {
 			return LayoutNameDT6, errors.New("dt8 day value is out of bounds")
 		}
+		dt5
 		return LayoutNameDT8, nil
 	case 14:
 		return LayoutNameDT14, nil
