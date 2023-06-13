@@ -64,7 +64,7 @@ func Write(w *bufio.Writer, r io.Reader) error {
 }
 
 // SkipWriter is an `io.Writer` that skips writing the first `n` bytes passed. This is
-// useful when the `io.Writer` writes some undesirable data which will be ommited with
+// useful when the `io.Writer` writes some undesirable data which will be omitted with
 // this functionality.
 type SkipWriter struct {
 	// Rewritten from the following under MIT license: https://github.com/jdeng/goheif/blob/a0d6a8b3e68f9d613abd9ae1db63c72ba33abd14/heic2jpg/main.go
