@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/grokify/mogo/math/mathutil"
+	"golang.org/x/exp/constraints"
 )
 
 var changeToXoXPctTests = []struct {
@@ -84,6 +85,41 @@ func TestIntAbbrevations(t *testing.T) {
 		try := Int64Abbreviation(tt.v)
 		if try != tt.want {
 			t.Errorf("strconvutil.Int64Abbreviation(%v) Error: want [%v], got [%v]",
+				tt.v, tt.want, try)
+		}
+	}
+}
+
+type testItoa[T constraints.Integer] struct {
+	// see: https://stackoverflow.com/questions/68166558/generic-structs-with-go
+	v    T
+	want string
+}
+
+var itoaInt64Tests = []testItoa[int64]{
+	// testItoa[int8]{v: 127, want: "256"},
+	testItoa[int64]{v: -9223372036854775808, want: "-9223372036854775808"},
+	testItoa[int64]{v: 9223372036854775807, want: "9223372036854775807"},
+}
+
+var itoaUint64Tests = []testItoa[uint64]{
+	// testItoa[int8]{v: 127, want: "256"},
+	testItoa[uint64]{v: 0, want: "0"},
+	testItoa[uint64]{v: 18446744073709551615, want: "18446744073709551615"},
+}
+
+func TestItoa(t *testing.T) {
+	for _, tt := range itoaInt64Tests {
+		try := Itoa(tt.v)
+		if try != tt.want {
+			t.Errorf("strconvutil.Itoa(%d) Mismatch: want (%v), got (%v)",
+				tt.v, tt.want, try)
+		}
+	}
+	for _, tt := range itoaUint64Tests {
+		try := Itoa(tt.v)
+		if try != tt.want {
+			t.Errorf("strconvutil.Itoa(%d) Mismatch: want (%v), got (%v)",
 				tt.v, tt.want, try)
 		}
 	}
