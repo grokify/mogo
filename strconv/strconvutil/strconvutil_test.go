@@ -98,14 +98,14 @@ type testItoa[T constraints.Integer] struct {
 
 var itoaInt64Tests = []testItoa[int64]{
 	// testItoa[int8]{v: 127, want: "256"},
-	testItoa[int64]{v: -9223372036854775808, want: "-9223372036854775808"},
-	testItoa[int64]{v: 9223372036854775807, want: "9223372036854775807"},
+	{v: -9223372036854775808, want: "-9223372036854775808"},
+	{v: 9223372036854775807, want: "9223372036854775807"},
 }
 
 var itoaUint64Tests = []testItoa[uint64]{
 	// testItoa[int8]{v: 127, want: "256"},
-	testItoa[uint64]{0, "0"},
-	testItoa[uint64]{18446744073709551615, "18446744073709551615"},
+	{0, "0"},
+	{18446744073709551615, "18446744073709551615"},
 }
 
 func TestItoa(t *testing.T) {
