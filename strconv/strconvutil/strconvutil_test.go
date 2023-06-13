@@ -104,8 +104,8 @@ var itoaInt64Tests = []testItoa[int64]{
 
 var itoaUint64Tests = []testItoa[uint64]{
 	// testItoa[int8]{v: 127, want: "256"},
-	testItoa[uint64]{v: 0, want: "0"},
-	testItoa[uint64]{v: 18446744073709551615, want: "18446744073709551615"},
+	testItoa[uint64]{0, "0"},
+	testItoa[uint64]{18446744073709551615, "18446744073709551615"},
 }
 
 func TestItoa(t *testing.T) {
