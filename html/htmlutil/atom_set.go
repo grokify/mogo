@@ -50,8 +50,9 @@ func NewAtomSetString(tagNames ...string) (AtomSet, error) {
 	return atomsSet, nil
 }
 
-func AtomLookupString(tagName string) atom.Atom {
-	return atom.Lookup([]byte(strings.ToLower(strings.TrimSpace(tagName))))
+// AtomLookupString returns the atom whose name is s. It returns zero if there is no such atom. The lookup is case sensitive.
+func AtomLookupString(s string) atom.Atom {
+	return atom.Lookup([]byte(strings.ToLower(strings.TrimSpace(s))))
 }
 
 func (set AtomSet) Len() int {
