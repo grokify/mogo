@@ -33,6 +33,8 @@ func ReadAllOrError(r io.Reader) []byte {
 	return data
 }
 
+// ReaderToReadSeeker converts an `io.Reader` to an `io.ReadSeeker`. It does this
+// by reading all data in `io.Reader`.
 func ReaderToReadSeeker(r io.Reader) (io.ReadSeeker, error) {
 	ba, err := io.ReadAll(r)
 	if err != nil {
@@ -61,7 +63,9 @@ func Write(w *bufio.Writer, r io.Reader) error {
 	return w.Flush()
 }
 
-// SkipWriter is an `io.Writer` that skips writing the first `n` bytes passed.
+// SkipWriter is an `io.Writer` that skips writing the first `n` bytes passed. This is
+// useful when the `io.Writer` writes some undesirable data which will be ommited with
+// this functionality.
 type SkipWriter struct {
 	// Rewritten from the following under MIT license: https://github.com/jdeng/goheif/blob/a0d6a8b3e68f9d613abd9ae1db63c72ba33abd14/heic2jpg/main.go
 	w      io.Writer
