@@ -79,8 +79,8 @@ func DT8ParseString(layout, value string) (DateTime8, error) {
 	return NewTimeMore(t, 0).DT8(), nil
 }
 
-// DT8ParseUnts returns a Dt8 value for year, month, and day.
-func DT8ParseUnts(yyyy, mm, dd uint) (DateTime8, error) {
+// DT8ParseUints returns a Dt8 value for year, month, and day.
+func DT8ParseUints(yyyy, mm, dd uint) (DateTime8, error) {
 	dt8String := fmt.Sprintf("%04d%02d%02d", yyyy, mm, dd)
 	dt8Int, err := strconv.ParseInt(dt8String, 10, 32)
 	if err != nil {
