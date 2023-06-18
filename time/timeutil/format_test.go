@@ -108,3 +108,25 @@ func TestIsDTX(t *testing.T) {
 		}
 	}
 }
+
+var formatsTests = []struct {
+	v      string
+	format string
+	want   string
+}{
+	{"2023-06-18T00:00:00Z", DateTextUS, "June 18, 2023"},
+	{"2023-06-18T00:00:00Z", DateTextUSAbbr3, "Jun 18, 2023"},
+}
+
+func TestFormats(t *testing.T) {
+	for _, tt := range formatsTests {
+		dt, err := time.Parse(time.RFC3339, tt.v)
+		if err != nil {
+			t.Errorf("time.Parse(time.RFC3339, %s) Error: err (%s)", tt.v, err.Error())
+		}
+		got := dt.Format(tt.format)
+		if got != tt.want {
+			t.Errorf("time.Format(%s) dt (%s) Mismatch: want (%s), got (%s)", tt.format, tt.v, tt.want, got)
+		}
+	}
+}

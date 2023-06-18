@@ -33,6 +33,10 @@ const (
 	DateMDYSlash       = "01/02/2006"
 	DateDMYHM2         = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
 	DateYMD            = RFC3339FullDate
+	DateTextUS         = "January _2, 2006"
+	DateTextUSAbbr3    = "Jan _2, 2006"
+	DateTextEU         = "_2 January 2006"
+	DateTextEUAbbr3    = "_2 Jan 2006"
 )
 
 const (
