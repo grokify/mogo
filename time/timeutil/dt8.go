@@ -9,8 +9,8 @@ import (
 // DateTime8 represents a datetime `int32` value in the `yyyymmdd` format.
 type DateTime8 int32
 
-func (dt8 DateTime8) Format(layout string) (string, error) {
-	dt, err := dt8.Time()
+func (dt8 DateTime8) Format(layout string, loc *time.Location) (string, error) {
+	dt, err := dt8.Time(loc)
 	if err != nil {
 		return "", err
 	}
@@ -38,8 +38,8 @@ func (dt8 DateTime8) DurationForNowSubDT8(dt8 int32) (time.Duration, error) {
 */
 
 // Sub returns the duration dt8-u. If the result exceeds the maximum (or minimum) value that can be stored in a Duration, the maximum (or minimum) duration will be returned. To compute dt8-d for a duration d, use t.Add(-d).
-func (dt8 DateTime8) SubTime(u time.Time) (time.Duration, error) {
-	t, err := dt8.Time()
+func (dt8 DateTime8) SubTime(u time.Time, loc *time.Location) (time.Duration, error) {
+	t, err := dt8.Time(loc)
 	if err != nil {
 		return 0, err
 	}
@@ -53,12 +53,16 @@ func (dt8 DateTime8) Parse() time.Time {
 }
 */
 
-func (dt8 DateTime8) Time() (time.Time, error) {
-	return time.Parse(DT8, strconv.FormatInt(int64(dt8), 10))
+func (dt8 DateTime8) Time(loc *time.Location) (time.Time, error) {
+	dt, err := time.Parse(DT8, strconv.FormatInt(int64(dt8), 10))
+	if loc == nil || (loc == dt.Location()) {
+		return dt, err
+	}
+	return time.Date(dt.Year(), dt.Month(), dt.Day(), 0, 0, 0, 0, loc), nil
 }
 
 func (dt8 DateTime8) Validate() error {
-	_, err := dt8.Time()
+	_, err := dt8.Time(time.UTC)
 	if err != nil {
 		return err
 	}

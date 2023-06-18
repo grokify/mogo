@@ -1,6 +1,7 @@
 package timeutil
 
 import (
+	"fmt"
 	"testing"
 	"time"
 )
@@ -10,10 +11,11 @@ var dateTime8Tests = []struct {
 	y      int32
 	m      int32
 	d      int32
+	loc    *time.Location
 	layout string
 	t      string
 }{
-	{20230613, 2023, 6, 13, DateTextUS, "June 13, 2023"},
+	{20230613, 2023, 6, 13, time.UTC, DateTextUS, "June 13, 2023"},
 	// {20230632, 2023, 6, 32, DateTextUS, "June 32, 2023"},
 }
 
@@ -25,7 +27,7 @@ func TestDateTime8(t *testing.T) {
 			t.Errorf("timeutil.DateTime8.Split() val (%d) Mismatch: want (%d,%d,%d) got (%d,%d,%d)",
 				int(tt.dt8), tt.y, tt.m, tt.d, y, m, d)
 		}
-		txt, err := tt.dt8.Format(tt.layout)
+		txt, err := tt.dt8.Format(tt.layout, tt.loc)
 		if txt != tt.t {
 			t.Errorf("timeutil.DateTime8.Format(\"%s\") val (%d) Error: err (%s)",
 				tt.layout, int32(tt.dt8), err.Error())
@@ -35,7 +37,7 @@ func TestDateTime8(t *testing.T) {
 				tt.layout, int32(tt.dt8), tt.t, txt)
 		}
 
-		dt, err := tt.dt8.Time()
+		dt, err := tt.dt8.Time(tt.loc)
 		if err != nil {
 			t.Errorf("timeutil.DateTime8.Time() val (%d) Error: err (%s)",
 				int32(tt.dt8), err.Error())
@@ -44,6 +46,7 @@ func TestDateTime8(t *testing.T) {
 			t.Errorf("timeutil.DateTime8.Time() val (%d) Mismatch: want (%d,%d,%d) got (%d,%d,%d)",
 				int(tt.dt8), tt.y, tt.m, tt.d, dt.Year(), dt.Month(), dt.Day())
 		}
+		fmt.Println(dt.Location().String())
 	}
 }
 
