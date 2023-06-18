@@ -88,6 +88,7 @@ func NowDeltaParseDuration(s string) (time.Time, error) {
 	return time.Now().Add(d), nil
 }
 
+/*
 // DurationForNowSubDt8 returns a duartion struct between a Dt8 value and the current time.
 func DurationForNowSubDT8(dt8 int32) (time.Duration, error) {
 	t, err := TimeForDT8(dt8)
@@ -98,6 +99,7 @@ func DurationForNowSubDT8(dt8 int32) (time.Duration, error) {
 	now := time.Now()
 	return now.Sub(t), nil
 }
+*/
 
 func DurationStringMinutesSeconds(durationSeconds int64) (string, error) {
 	if durationSeconds <= 0 {

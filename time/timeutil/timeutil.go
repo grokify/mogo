@@ -150,7 +150,6 @@ func DT6MinMaxSlice(minDt6 int32, maxDt6 int32) []int32 {
 func Dt8Now() int32 {
 	return Dt8ForTime(time.Now())
 }
-*/
 
 // DT8ForString returns a Dt8 value given a layout and value to parse to time.Parse.
 func DT8ForString(layout, value string) (int32, error) {
@@ -172,27 +171,26 @@ func DT8ForInts(yyyy, mm, dd int) int32 {
 	return int32(iDt8)
 }
 
-// Dt8ForTime returns a Dt8 value given a time struct.
-func (tm TimeMore) DT8() int32 {
-	s := tm.time.Format(DT8)
-	iDt8, err := strconv.ParseInt(s, 10, 32)
-	if err != nil {
-		panic(err)
-	}
-	return int32(iDt8)
-}
-
 // TimeForDT8 returns a time.Time value given a Dt8 value.
 func TimeForDT8(dt8 int32) (time.Time, error) {
 	return time.Parse(DT8, strconv.FormatInt(int64(dt8), 10))
 }
 
-/*
 // Dt14Now returns a Dt14 value for the current time.
 func Dt14Now() int64 {
 	return Dt14ForTime(time.Now())
 }
 */
+
+// Dt8ForTime returns a `DateTime8` value given a time struct.
+func (tm TimeMore) DT8() DateTime8 {
+	s := tm.time.Format(DT8)
+	iDt8, err := strconv.ParseInt(s, 10, 32)
+	if err != nil {
+		panic(err)
+	}
+	return DateTime8(int32(iDt8))
+}
 
 // DT14ForString returns a DT14 value given a layout and value to parse to time.Parse.
 func DT14ForString(layout, value string) (int64, error) {
