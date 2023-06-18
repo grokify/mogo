@@ -55,7 +55,7 @@ var dt8ForStringTests = []struct {
 
 func TestDT8ForString(t *testing.T) {
 	for _, tt := range dt8ForStringTests {
-		got, err := DT8ForString(time.RFC3339, tt.v)
+		got, err := DT8ParseString(time.RFC3339, tt.v)
 		if err != nil {
 			t.Errorf("Dt8ForString(%v): want %v, error %v", tt.v, tt.want, err)
 		}

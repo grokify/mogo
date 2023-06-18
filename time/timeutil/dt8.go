@@ -65,22 +65,23 @@ func (dt8 DateTime8) Validate() error {
 	return nil
 }
 
-// DT8ForString returns a Dt8 value given a layout and value to parse to time.Parse.
-func DT8ForString(layout, value string) (DateTime8, error) {
+// DT8ParseString returns a Dt8 value given a layout and value to parse to time.Parse.
+func DT8ParseString(layout, value string) (DateTime8, error) {
 	dt8 := DateTime8(int32(0))
 	t, err := time.Parse(layout, value)
-	if err == nil {
-		dt8 = NewTimeMore(t, 0).DT8()
+	if err != nil {
+		return dt8, err
 	}
-	return dt8, err
+	return NewTimeMore(t, 0).DT8(), nil
 }
 
-// DT8ForInts returns a Dt8 value for year, month, and day.
-func DT8ForInts(yyyy, mm, dd int) DateTime8 {
-	sDt8 := fmt.Sprintf("%04d%02d%02d", yyyy, mm, dd)
-	iDt8, err := strconv.ParseInt(sDt8, 10, 32)
+// DT8ParseUnts returns a Dt8 value for year, month, and day.
+func DT8ParseUnts(yyyy, mm, dd uint) (DateTime8, error) {
+	dt8String := fmt.Sprintf("%04d%02d%02d", yyyy, mm, dd)
+	dt8Int, err := strconv.ParseInt(dt8String, 10, 32)
 	if err != nil {
 		panic(err)
 	}
-	return DateTime8(int32(iDt8))
+	dt8 := DateTime8(int32(dt8Int))
+	return dt8, dt8.Validate()
 }
