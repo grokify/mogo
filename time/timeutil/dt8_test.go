@@ -40,7 +40,7 @@ func TestDateTime8(t *testing.T) {
 			t.Errorf("timeutil.DateTime8.Time() val (%d) Error: err (%s)",
 				int32(tt.dt8), err.Error())
 		}
-		if int(tt.y) != dt.Year() || int(tt.m) != int(dt.Month()) || int(tt.d) != int(dt.Day()) {
+		if int(tt.y) != dt.Year() || int(tt.m) != int(dt.Month()) || int(tt.d) != dt.Day() {
 			t.Errorf("timeutil.DateTime8.Time() val (%d) Mismatch: want (%d,%d,%d) got (%d,%d,%d)",
 				int(tt.dt8), tt.y, tt.m, tt.d, dt.Year(), dt.Month(), dt.Day())
 		}

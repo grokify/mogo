@@ -20,7 +20,7 @@ func (dt8 DateTime8) Format(layout string) (string, error) {
 func (dt8 DateTime8) Split() (int32, int32, int32) {
 	year := dt8 / 10000
 	month := int(dt8/100) - (int(year) * 100)
-	day := int(dt8) - (int(year) * 10000) - (int(month) * 100)
+	day := int(dt8) - (int(year) * 10000) - (month * 100)
 	return int32(year), int32(month), int32(day)
 }
 
@@ -72,7 +72,7 @@ func DT8ForString(layout, value string) (DateTime8, error) {
 	if err == nil {
 		dt8 = NewTimeMore(t, 0).DT8()
 	}
-	return DateTime8(dt8), err
+	return dt8, err
 }
 
 // DT8ForInts returns a Dt8 value for year, month, and day.
