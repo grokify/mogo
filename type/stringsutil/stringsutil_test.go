@@ -132,3 +132,27 @@ func TestCondenseSpace(t *testing.T) {
 		}
 	}
 }
+
+var repeatTests = []struct {
+	v    string
+	l    uint
+	want string
+}{
+	{"abc", 0, ""},
+	{"abc", 2, "ab"},
+	{"abc", 3, "abc"},
+	{"abc", 4, "abca"},
+	{"abc", 8, "abcabcab"},
+	{"abc", 9, "abcabcabc"},
+}
+
+func TestRepeat(t *testing.T) {
+	for _, tt := range repeatTests {
+		got := Repeat(tt.v, tt.l)
+
+		if got != tt.want {
+			t.Errorf("stringsutil.Repeat(%s, %d) Error: want (%s), got (%s)",
+				tt.v, tt.l, tt.want, got)
+		}
+	}
+}
