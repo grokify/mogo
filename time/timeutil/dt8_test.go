@@ -1,16 +1,16 @@
 package timeutil
 
 import (
-	"fmt"
+	"encoding/json"
 	"testing"
 	"time"
 )
 
 var dateTime8Tests = []struct {
 	dt8    DateTime8
-	y      int32
-	m      int32
-	d      int32
+	y      uint32
+	m      uint32
+	d      uint32
 	loc    *time.Location
 	layout string
 	t      string
@@ -46,7 +46,7 @@ func TestDateTime8(t *testing.T) {
 			t.Errorf("timeutil.DateTime8.Time() val (%d) Mismatch: want (%d,%d,%d) got (%d,%d,%d)",
 				int(tt.dt8), tt.y, tt.m, tt.d, dt.Year(), dt.Month(), dt.Day())
 		}
-		fmt.Println(dt.Location().String())
+		// fmt.Println(dt.Location().String())
 	}
 }
 
@@ -65,5 +65,33 @@ func TestDT8ForString(t *testing.T) {
 		if got != tt.want {
 			t.Errorf("Dt8ForString(%v): want %v, got %v", tt.v, tt.want, got)
 		}
+	}
+}
+
+type testDateTime8UnmarshalStruct struct {
+	DateTime8 DateTime8
+}
+
+var datetime8UnmarshalJSONTests = []struct {
+	v     string
+	isErr bool
+	want  DateTime8
+}{
+	{`{"DateTime8":null}`, true, DateTime8(int32(0))},
+	{`{"DateTime8":"string"}`, true, DateTime8(int32(0))},
+	{`{"DateTime8":20230632}`, true, DateTime8(int32(0))},
+	{`{"DateTime8":20230630}`, false, DateTime8(int32(20230630))},
+}
+
+func TestDateTime8UnmarshalJSON(t *testing.T) {
+	for _, tt := range datetime8UnmarshalJSONTests {
+		var w testDateTime8UnmarshalStruct
+		err := json.Unmarshal([]byte(tt.v), &w)
+		if err != nil {
+			if !tt.isErr {
+				t.Errorf("datetime8: json.Unmarshal(%s): error (%s)", tt.v, err.Error())
+			}
+		}
+		// fmt.Printf("RES (%d)\n", w.DateTime8)
 	}
 }

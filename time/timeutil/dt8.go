@@ -1,13 +1,18 @@
 package timeutil
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 )
 
-// DateTime8 represents a datetime `int32` value in the `yyyymmdd` format.
-type DateTime8 int32
+var ErrDateTime8OutOfBounds = errors.New("datetime8: time.Time is out of bounds")
+
+// DateTime8 represents a datetime `int32` value in the `yyyymmdd` format. It supports
+// dates from 1000-01-01 to 9999-12-31.
+type DateTime8 uint32
 
 func (dt8 DateTime8) Format(layout string, loc *time.Location) (string, error) {
 	dt, err := dt8.Time(loc)
@@ -17,11 +22,11 @@ func (dt8 DateTime8) Format(layout string, loc *time.Location) (string, error) {
 	return dt.Format(layout), nil
 }
 
-func (dt8 DateTime8) Split() (int32, int32, int32) {
+func (dt8 DateTime8) Split() (uint32, uint32, uint32) {
 	year := dt8 / 10000
 	month := int(dt8/100) - (int(year) * 100)
 	day := int(dt8) - (int(year) * 10000) - (month * 100)
-	return int32(year), int32(month), int32(day)
+	return uint32(year), uint32(month), uint32(day)
 }
 
 /*
@@ -46,19 +51,41 @@ func (dt8 DateTime8) SubTime(u time.Time, loc *time.Location) (time.Duration, er
 	return t.Sub(u), nil
 }
 
-/*
-func (dt8 DateTime8) Parse() time.Time {
-	y, m, d := dt8.Split()
-	return time.Date(int(y), time.Month(int(m)), int(d), 0, 0, 0, 0, time.UTC)
-}
-*/
-
 func (dt8 DateTime8) Time(loc *time.Location) (time.Time, error) {
-	dt, err := time.Parse(DT8, strconv.FormatInt(int64(dt8), 10))
-	if loc == nil || (loc == dt.Location()) {
+	dt, err := time.Parse(DT8, strconv.Itoa(int(dt8)))
+	if err != nil || loc == nil || (loc == dt.Location()) {
 		return dt, err
 	}
 	return time.Date(dt.Year(), dt.Month(), dt.Day(), 0, 0, 0, 0, loc), nil
+}
+
+var ErrDateTime8Invalid = errors.New("timeutil.datetime8: invalid value")
+
+type DateTime8UnmarshalError struct {
+	Msg string
+}
+
+func (e *DateTime8UnmarshalError) Error() string {
+	return fmt.Sprintf("timeutil.datetime8: unmarshal error (%s)", e.Msg)
+}
+
+func (dt8 *DateTime8) UnmarshalJSON(data []byte) error {
+	s := strings.TrimSpace(string(data))
+	if len(s) == 0 || s == "0" {
+		*dt8 = 0
+		return nil
+	}
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		return &DateTime8UnmarshalError{Msg: err.Error()}
+	}
+	d8 := DateTime8(uint32(i))
+	err = d8.Validate()
+	if err != nil {
+		return err
+	}
+	*dt8 = d8
+	return nil
 }
 
 func (dt8 DateTime8) Validate() error {
@@ -69,17 +96,17 @@ func (dt8 DateTime8) Validate() error {
 	return nil
 }
 
-// DT8ParseString returns a Dt8 value given a layout and value to parse to time.Parse.
+// DT8ParseString returns a `DateTime8` value given a layout and value to parse to time.Parse.
 func DT8ParseString(layout, value string) (DateTime8, error) {
 	dt8 := DateTime8(int32(0))
 	t, err := time.Parse(layout, value)
 	if err != nil {
 		return dt8, err
 	}
-	return NewTimeMore(t, 0).DT8(), nil
+	return NewTimeMore(t, 0).DT8()
 }
 
-// DT8ParseUints returns a Dt8 value for year, month, and day.
+// DT8ParseUints returns a `DateTime8` value for year, month, and day.
 func DT8ParseUints(yyyy, mm, dd uint) (DateTime8, error) {
 	dt8String := fmt.Sprintf("%04d%02d%02d", yyyy, mm, dd)
 	dt8Int, err := strconv.ParseInt(dt8String, 10, 32)
@@ -88,4 +115,11 @@ func DT8ParseUints(yyyy, mm, dd uint) (DateTime8, error) {
 	}
 	dt8 := DateTime8(int32(dt8Int))
 	return dt8, dt8.Validate()
+}
+
+func dt8TimeInbounds(t time.Time) bool {
+	if t.Year() < 1000 || t.Year() > 9999 {
+		return false
+	}
+	return true
 }

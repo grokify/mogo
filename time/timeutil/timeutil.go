@@ -183,13 +183,16 @@ func Dt14Now() int64 {
 */
 
 // Dt8ForTime returns a `DateTime8` value given a time struct.
-func (tm TimeMore) DT8() DateTime8 {
+func (tm TimeMore) DT8() (DateTime8, error) {
+	if !dt8TimeInbounds(tm.time) {
+		return 0, ErrDateTime8OutOfBounds
+	}
 	s := tm.time.Format(DT8)
 	iDt8, err := strconv.ParseInt(s, 10, 32)
 	if err != nil {
 		panic(err)
 	}
-	return DateTime8(int32(iDt8))
+	return DateTime8(iDt8), nil
 }
 
 // DT14ForString returns a DT14 value given a layout and value to parse to time.Parse.
