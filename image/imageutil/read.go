@@ -1,6 +1,7 @@
 package imageutil
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"image"
@@ -123,4 +124,9 @@ func ReadImageDimensions(imagePath string) (int, int, error) {
 		return -1, -1, err
 	}
 	return img.Width, img.Height, nil
+}
+
+// DecodeBytes wraps Decode which decodes an image that has been encoded in a registered format. The string returned is the format name used during format registration. Format registration is typically done by an init function in the codec- specific package.
+func DecodeBytes(data []byte) (image.Image, string, error) {
+	return image.Decode(bytes.NewReader(data))
 }
