@@ -6,8 +6,7 @@ import (
 	lzf "github.com/zhuyie/golzf"
 )
 
-// ReadFile reads a LZF compressed file, e.g. one compressed
-// by PHP `lzf_compress`.
+// ReadFile reads a LZF compressed file, e.g. one compressed by PHP `lzf_compress`.
 func ReadFile(file string) ([]byte, error) {
 	bytes, err := os.ReadFile(file)
 	if err != nil {
