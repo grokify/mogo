@@ -31,7 +31,7 @@ require (
 	golang.org/x/net v0.11.0
 	golang.org/x/text v0.10.0
 	google.golang.org/genproto v0.0.0-20230530153820-e85fd2cbaebc
-	google.golang.org/protobuf v1.30.0
+	google.golang.org/protobuf v1.31.0
 	gopkg.in/oleiade/reflections.v1 v1.0.0
 )
 
