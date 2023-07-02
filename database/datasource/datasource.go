@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/net/netutil"
 )
 
@@ -41,6 +42,11 @@ func (ds DataSource) Open() (*sql.DB, error) {
 	return sql.Open(ds.Driver, dsn)
 }
 
+var (
+	ErrDriverNameEmpty    = errors.New("driver name cannot be empty")
+	ErrDriverNotSupported = errors.New("driver not supported")
+)
+
 // Name produces a URI DSN connection string
 func (ds *DataSource) Name() (string, error) {
 	ds.trim()
@@ -60,8 +66,10 @@ func (ds *DataSource) Name() (string, error) {
 		return dsnPostgres(ds)
 	case DriverSQLite3:
 		return dsnSQLite3(ds), nil
+	case "":
+		return "", ErrDriverNameEmpty
 	default:
-		return "", errors.New("db driver not supported")
+		return "", errorsutil.Wrapf(ErrDriverNotSupported, "driver name (%s)", ds.Driver)
 	}
 }
 
