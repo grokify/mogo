@@ -1,11 +1,8 @@
 package imageutil
 
 import (
-	"bytes"
-	"image"
 	"image/gif"
 	"image/jpeg"
-	"image/png"
 	"io"
 	"os"
 	"regexp"
@@ -39,7 +36,7 @@ func ReadDirJPEGFiles(dir string, rx *regexp.Regexp) (osutil.DirEntries, error) 
 	return osutil.ReadDirMore(dir, rx, false, true, false)
 }
 
-func WriteFileGIF(filename string, img *gif.GIF) error {
+func WriteGIFFile(filename string, img *gif.GIF) error {
 	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		return err
@@ -58,16 +55,7 @@ func ResizeFileJPEG(inputFile, outputFile string, outputWidth, outputHeight uint
 		return err
 	}
 	img2 := Resize(outputWidth, outputHeight, img, ScalerBest())
-	return WriteFileJPEG(outputFile, img2, opt)
-}
-
-func WriteFileJPEG(filename string, img image.Image, opt *JPEGEncodeOptions) error {
-	out, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
-	if err != nil {
-		return err
-	}
-	defer out.Close()
-	return WriteJPEG(out, img, opt)
+	return writeJPEGFile(outputFile, img2, opt)
 }
 
 type JPEGEncodeOptions struct {
@@ -91,16 +79,9 @@ func (opts JPEGEncodeOptions) WriteExtensionOrDefault() string {
 	return opts.WriteExtension
 }
 
-func WriteJPEG(w io.Writer, img image.Image, opt *JPEGEncodeOptions) error {
-	if opt != nil && len(opt.Exif) > 0 {
-		if wexif, err := newWriterExif(w, opt.Exif); err != nil {
-			return err
-		} else {
-			return jpeg.Encode(wexif, img, opt.Options)
-		}
-	}
-	return jpeg.Encode(w, img, opt.Options)
-}
+var JPEGEncodeOptionsQualityMax = &JPEGEncodeOptions{
+	Options: &jpeg.Options{
+		Quality: JPEGQualityMax}}
 
 // newWriterExif is used to write Exif to an `io.Writer` before calling `jpeg.Encode()`.
 // It is used with `jpeg.Encode()` to remove the Start of Image (SOI) marker after adding
@@ -133,25 +114,4 @@ func newWriterExif(w io.Writer, exif []byte) (io.Writer, error) {
 		return nil, err
 	}
 	return wExif, nil
-}
-
-func BytesJPEG(img image.Image, opt *JPEGEncodeOptions) ([]byte, error) {
-	buf := new(bytes.Buffer)
-	err := WriteJPEG(buf, img, opt)
-	if err != nil {
-		return []byte{}, err
-	}
-	return buf.Bytes(), nil
-}
-
-func WriteFilePNG(filename string, img image.Image) error {
-	out, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
-	if err != nil {
-		return err
-	}
-	err = png.Encode(out, img)
-	if err != nil {
-		return err
-	}
-	return out.Close()
 }
