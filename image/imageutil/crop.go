@@ -87,8 +87,7 @@ func SquareLarger(src image.Image, bgcolor color.Color) image.Image {
 	}
 }
 
-// Square returns an image that is cropped to where the height and weight are equal
-// to the smaller of the source image.
+// Square returns an image that is cropped to where the height and weight are equal to the smaller of the source image.
 func Square(src image.Image) image.Image {
 	width := src.Bounds().Dx()
 	height := src.Bounds().Dy()
