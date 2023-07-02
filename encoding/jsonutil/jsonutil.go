@@ -118,6 +118,7 @@ func UnmarshalReader(r io.Reader, v any) ([]byte, error) {
 	return bytes, json.Unmarshal(bytes, v)
 }
 
+// UnmarshalStrict returns an error when the destination is a struct and the input contains object keys which do not match any non-ignored, exported fields in the destination.
 func UnmarshalStrict(b []byte, v any) error {
 	dec := json.NewDecoder(bytes.NewReader(b))
 	dec.DisallowUnknownFields()
