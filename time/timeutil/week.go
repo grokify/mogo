@@ -39,9 +39,9 @@ func (tm TimeMore) WeekdayNext(d time.Weekday) time.Time {
 	if d == today {
 		return tm.time.Add(NewDuration(7, 0, 0, 0, 0))
 	} else if d > today {
-		return tm.time.Add(NewDuration(float64(int(d)-int(today)), 0, 0, 0, 0))
+		return tm.time.Add(NewDurationFloat(float64(int(d)-int(today)), 0, 0, 0, 0))
 	}
-	return tm.time.Add(NewDuration(float64(int(today)-int(d)+7), 0, 0, 0, 0))
+	return tm.time.Add(NewDurationFloat(float64(int(today)-int(d)+7), 0, 0, 0, 0))
 }
 
 // WeekdayNormalized ensures a `time.Weekday` value is within `[0,6]`. It supports

@@ -8,28 +8,17 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"google.golang.org/protobuf/types/known/durationpb"
 )
 
-/*
-// NewDurationSeconds returns a new `time.Duration` given a number of seconds.
-func NewDurationSeconds(secs float64) time.Duration {
-	return time.Duration(int64(secs * float64(nanosPerSecond)))
+func NewDuration(day, hour, min, sec, nsec int) time.Duration {
+	return time.Duration(int64(day)*NanosPerHour*24 +
+		int64(hour)*NanosPerHour +
+		int64(min)*NanosPerMinute +
+		int64(sec)*NanosPerSecond +
+		int64(nsec))
 }
 
-// NewDurationDays returns `time.Duration` given a number of days
-func NewDurationDays(days uint16) time.Duration {
-	durString := fmt.Sprintf("%dh", 24*days)
-	dur, err := time.ParseDuration(durString)
-	if err != nil {
-		panic(err)
-	}
-	return dur
-}
-*/
-
-func NewDuration(day, hour, min, sec float64, nsec int64) time.Duration {
+func NewDurationFloat(day, hour, min, sec float64, nsec int64) time.Duration {
 	nps := float64(NanosPerSecond)
 	return time.Duration(int64(float64(nsec) +
 		sec*nps +
@@ -161,6 +150,7 @@ func MaxDuration(durs []time.Duration) time.Duration {
 	return max
 }
 
+/*
 // DurationFromProtobuf converts a protobuf duration to a
 // `time.Duration`.
 // More on protobuf: https://godoc.org/github.com/golang/protobuf/ptypes/duration#Duration
@@ -172,6 +162,7 @@ func DurationFromProtobuf(pdur *durationpb.Duration) time.Duration {
 	}
 	return dur
 }
+*/
 
 func DurationDaysInt64(dur time.Duration) int64 { return int64(dur.Hours()/24.0) + 1 }
 
