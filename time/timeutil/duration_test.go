@@ -20,6 +20,7 @@ var durationTests = []struct {
 	{0, 1, 0, 0, 0, NanosPerHour},
 	{0, 0, 1, 0, 0, NanosPerMinute},
 	{0, 0, 0, 1, 0, NanosPerSecond},
+	{0, 0, 0, 0, 1, 1},
 }
 
 func TestNewDuration(t *testing.T) {

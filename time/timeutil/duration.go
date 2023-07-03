@@ -27,8 +27,8 @@ func NewDurationFloat(day, hour, min, sec float64, nsec int64) time.Duration {
 		day*24*60*60*nps))
 }
 
-func NewDurationStrings(h, m, s string) (time.Duration, error) {
-	return time.ParseDuration(fmt.Sprintf("%vh%vm%vs", h, m, s))
+func NewDurationStrings(hour, min, sec string) (time.Duration, error) {
+	return time.ParseDuration(fmt.Sprintf("%vh%vm%vs", hour, min, sec))
 }
 
 // ParseDuration adds days (d), weeks (w), years (y).
