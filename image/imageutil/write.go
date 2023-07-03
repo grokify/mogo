@@ -76,15 +76,13 @@ func ResizePathJPEGDir(src, out string, x, y uint, o *JPEGEncodeOptions) error {
 		return ErrOutDirNotDefined
 	}
 
-	isDirSrc, err := osutil.IsDir(src)
-	if err != nil {
+	if isDirSrc, err := osutil.IsDir(src); err != nil {
 		return err
 	} else if !isDirSrc {
 		return errorsutil.Wrapf(ErrSrcDirNotDir, "src-dir (%s)", src)
 	}
 
-	isDirOut, err := osutil.IsDir(out)
-	if err != nil {
+	if isDirOut, err := osutil.IsDir(out); err != nil {
 		return err
 	} else if !isDirOut {
 		return errorsutil.Wrapf(ErrOutDirNotDir, "out-dir (%s)", src)
@@ -109,12 +107,12 @@ func ResizePathJPEGDir(src, out string, x, y uint, o *JPEGEncodeOptions) error {
 }
 
 func ResizePathJPEGFile(src, out string, x, y uint, o *JPEGEncodeOptions) error {
-	img, _, err := ReadImageFile(src)
-	if err != nil {
+	if img, _, err := ReadImageFile(src); err != nil {
 		return err
+	} else {
+		img2 := Resize(x, y, img, ScalerBest())
+		return writeJPEGFile(out, img2, o)
 	}
-	img2 := Resize(x, y, img, ScalerBest())
-	return writeJPEGFile(out, img2, o)
 }
 
 type JPEGEncodeOptions struct {
