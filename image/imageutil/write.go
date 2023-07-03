@@ -1,13 +1,16 @@
 package imageutil
 
 import (
+	"errors"
 	"image/gif"
 	"image/jpeg"
 	"io"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 
+	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/io/ioutil"
 	"github.com/grokify/mogo/os/osutil"
 )
@@ -49,13 +52,70 @@ func WriteGIFFile(filename string, img *gif.GIF) error {
 	return f.Close()
 }
 
-func ResizeFileJPEG(inputFile, outputFile string, outputWidth, outputHeight uint, opt *JPEGEncodeOptions) error {
-	img, _, err := ReadImageFile(inputFile)
+var (
+	ErrSrcDirNotDefined = errors.New("source directory not defined")
+	ErrOutDirNotDefined = errors.New("output directory not defined")
+	ErrSrcDirNotDir     = errors.New("source directory is not a directory")
+	ErrOutDirNotDir     = errors.New("output direcotry is not a directory")
+)
+
+func ResizePathJPEG(src, out string, x, y uint, o *JPEGEncodeOptions) error {
+	isDirSrc, err := osutil.IsDir(src)
+	if err != nil {
+		return err
+	} else if isDirSrc {
+		return ResizePathJPEGDir(src, out, x, y, o)
+	} else {
+		return ResizePathJPEGFile(src, out, x, y, o)
+	}
+}
+
+func ResizePathJPEGDir(src, out string, x, y uint, o *JPEGEncodeOptions) error {
+	if src == "" {
+		return ErrSrcDirNotDefined
+	} else if out == "" {
+		return ErrOutDirNotDefined
+	}
+
+	isDirSrc, err := osutil.IsDir(src)
+	if err != nil {
+		return err
+	} else if !isDirSrc {
+		return errorsutil.Wrapf(ErrSrcDirNotDir, "src-dir (%s)", src)
+	}
+
+	isDirOut, err := osutil.IsDir(out)
+	if err != nil {
+		return err
+	} else if !isDirOut {
+		return errorsutil.Wrapf(ErrOutDirNotDir, "out-dir (%s)", src)
+	}
+
+	files, err := osutil.ReadDirMore(src, RxFileExtensionJPG, false, true, false)
 	if err != nil {
 		return err
 	}
-	img2 := Resize(outputWidth, outputHeight, img, ScalerBest())
-	return writeJPEGFile(outputFile, img2, opt)
+
+	n := len(files)
+	for i, e := range files {
+		// fmt.Printf("Processing %d of %d: %s\n", i+1, n, e.Name())
+		srcPath := filepath.Join(src, e.Name())
+		outPath := filepath.Join(out, e.Name())
+		err := ResizePathJPEGFile(srcPath, outPath, x, y, o)
+		if err != nil {
+			return errorsutil.Wrapf(err, "failed-on-file (%s) (%d/%d)", e.Name(), i+1, n)
+		}
+	}
+	return nil
+}
+
+func ResizePathJPEGFile(src, out string, x, y uint, o *JPEGEncodeOptions) error {
+	img, _, err := ReadImageFile(src)
+	if err != nil {
+		return err
+	}
+	img2 := Resize(x, y, img, ScalerBest())
+	return writeJPEGFile(out, img2, o)
 }
 
 type JPEGEncodeOptions struct {
