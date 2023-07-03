@@ -60,8 +60,7 @@ var (
 )
 
 func ResizePathJPEG(src, out string, x, y uint, o *JPEGEncodeOptions) error {
-	isDirSrc, err := osutil.IsDir(src)
-	if err != nil {
+	if isDirSrc, err := osutil.IsDir(src); err != nil {
 		return err
 	} else if isDirSrc {
 		return ResizePathJPEGDir(src, out, x, y, o)
