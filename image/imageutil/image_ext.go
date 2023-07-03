@@ -15,11 +15,11 @@ import (
 
 var ErrImageNotSet = errors.New("image not set")
 
-type ImageMore struct {
-	Image image.Image
+type Image struct {
+	image.Image
 }
 
-func (im ImageMore) BytesJPEG(opt *JPEGEncodeOptions) ([]byte, error) {
+func (im Image) BytesJPEG(opt *JPEGEncodeOptions) ([]byte, error) {
 	return bytesJPEG(im.Image, opt)
 }
 
@@ -35,7 +35,7 @@ func bytesJPEG(img image.Image, opt *JPEGEncodeOptions) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func (im ImageMore) BytesPNG() ([]byte, error) {
+func (im Image) BytesPNG() ([]byte, error) {
 	return bytesPNG(im.Image)
 }
 
@@ -51,7 +51,7 @@ func bytesPNG(img image.Image) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func (im ImageMore) WriteJPEG(w io.Writer, opt *JPEGEncodeOptions) error {
+func (im Image) WriteJPEG(w io.Writer, opt *JPEGEncodeOptions) error {
 	return writeJPEG(w, im.Image, opt)
 }
 
@@ -69,7 +69,7 @@ func writeJPEG(w io.Writer, img image.Image, opt *JPEGEncodeOptions) error {
 	return jpeg.Encode(w, img, opt.Options)
 }
 
-func (im ImageMore) WriteJPEGFile(filename string, opt *JPEGEncodeOptions) error {
+func (im Image) WriteJPEGFile(filename string, opt *JPEGEncodeOptions) error {
 	return writeJPEGFile(filename, im.Image, opt)
 }
 
@@ -84,7 +84,7 @@ func writeJPEGFile(filename string, img image.Image, opt *JPEGEncodeOptions) err
 	}
 }
 
-func (im ImageMore) WriteJPEGResponseWriter(w http.ResponseWriter, addContentTypeHeader bool, opt *JPEGEncodeOptions) error {
+func (im Image) WriteJPEGResponseWriter(w http.ResponseWriter, addContentTypeHeader bool, opt *JPEGEncodeOptions) error {
 	return writeJPEGResponseWriter(w, addContentTypeHeader, im.Image, opt)
 }
 
@@ -102,7 +102,7 @@ func writeJPEGResponseWriter(w http.ResponseWriter, addContentTypeHeader bool, i
 	}
 }
 
-func (im ImageMore) WritePNG(w io.Writer) error {
+func (im Image) WritePNG(w io.Writer) error {
 	return writePNG(w, im.Image)
 }
 
@@ -113,7 +113,7 @@ func writePNG(w io.Writer, img image.Image) error {
 	return png.Encode(w, img)
 }
 
-func (im ImageMore) WritePNGFile(filename string) error {
+func (im Image) WritePNGFile(filename string) error {
 	return writePNGFile(filename, im.Image)
 }
 
@@ -129,7 +129,7 @@ func writePNGFile(filename string, img image.Image) error {
 	}
 }
 
-func (im ImageMore) WritePNGResponseWriter(w http.ResponseWriter, addContentTypeHeader bool) error {
+func (im Image) WritePNGResponseWriter(w http.ResponseWriter, addContentTypeHeader bool) error {
 	return writePNGResponseWriter(w, addContentTypeHeader, im.Image)
 }
 
