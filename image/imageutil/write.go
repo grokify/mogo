@@ -56,7 +56,7 @@ var (
 	ErrSrcDirNotDefined = errors.New("source directory not defined")
 	ErrOutDirNotDefined = errors.New("output directory not defined")
 	ErrSrcDirNotDir     = errors.New("source directory is not a directory")
-	ErrOutDirNotDir     = errors.New("output direcotry is not a directory")
+	ErrOutDirNotDir     = errors.New("output directory is not a directory")
 )
 
 func ResizePathJPEG(src, out string, x, y uint, o *JPEGEncodeOptions) error {
