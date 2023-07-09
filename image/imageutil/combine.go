@@ -94,9 +94,8 @@ func (matrix Matrix) AddBackgroundColorHex(hexcolor string) error {
 	return nil
 }
 
-// Merge combines a set of images resizing each row element's
-// height for consistent rows, an each row's width for consistent
-// widths.
+// Merge combines a set of images resizing each row element's height
+// for consistent rows, an each row's width for consistent widths.
 func (matrix Matrix) Merge(largerX, largerY bool) image.Image {
 	if len(matrix) == 0 {
 		return nil

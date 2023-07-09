@@ -13,7 +13,10 @@ import (
 	"github.com/grokify/mogo/net/http/httputilmore"
 )
 
-var ErrImageNotSet = errors.New("image not set")
+var (
+	ErrImageNotSet  = errors.New("image not set")
+	ErrWriterNotSet = errors.New("writer not set")
+)
 
 type Image struct {
 	image.Image
@@ -56,7 +59,9 @@ func (im Image) WriteJPEG(w io.Writer, opt *JPEGEncodeOptions) error {
 }
 
 func writeJPEG(w io.Writer, img image.Image, opt *JPEGEncodeOptions) error {
-	if img == nil {
+	if w == nil {
+		return ErrWriterNotSet
+	} else if img == nil {
 		return ErrImageNotSet
 	}
 	if opt != nil && len(opt.Exif) > 0 {
@@ -66,7 +71,11 @@ func writeJPEG(w io.Writer, img image.Image, opt *JPEGEncodeOptions) error {
 			return jpeg.Encode(wexif, img, opt.Options)
 		}
 	}
-	return jpeg.Encode(w, img, opt.Options)
+	jopt := &jpeg.Options{}
+	if opt != nil {
+		jopt = opt.Options
+	}
+	return jpeg.Encode(w, img, jopt)
 }
 
 func (im Image) WriteJPEGFile(filename string, opt *JPEGEncodeOptions) error {

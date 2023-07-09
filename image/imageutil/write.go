@@ -85,7 +85,7 @@ func ResizePathJPEGDir(src, out string, x, y uint, o *JPEGEncodeOptions) error {
 	if isDirOut, err := osutil.IsDir(out); err != nil {
 		return err
 	} else if !isDirOut {
-		return errorsutil.Wrapf(ErrOutDirNotDir, "out-dir (%s)", src)
+		return errorsutil.Wrapf(ErrOutDirNotDir, "out-dir (%s)", out)
 	}
 
 	files, err := osutil.ReadDirMore(src, RxFileExtensionJPG, false, true, false)
