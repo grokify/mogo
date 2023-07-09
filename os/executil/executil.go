@@ -9,14 +9,12 @@ import (
 
 // ExecSimple provides a simple interface to execute a system command.
 func ExecSimple(command string) (bytes.Buffer, bytes.Buffer, error) {
-	var stdout bytes.Buffer
-	var stderr bytes.Buffer
 	parts := strings.Split(command, " ")
 	cmd := exec.Command(parts[0], parts[1:]...) // #nosec G204
+	var stdout, stderr bytes.Buffer
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
-	err := cmd.Run()
-	return stdout, stderr, err
+	return stdout, stderr, cmd.Run()
 }
 
 // ExecToFiles provides a simple interface to execute a system command.
