@@ -193,3 +193,13 @@ func Delete(client *http.Client, url string) (*http.Response, error) {
 	}
 	return client.Do(req)
 }
+
+// RequestURLParam returns the result of `url.Values.Get()` given an `*http.Response`.
+// An empty string is returned if `*http.Request` or `*url.URL` are `nil`.
+func RequestURLParam(r *http.Request, key string) string {
+	if r == nil || r.URL == nil {
+		return ""
+	} else {
+		return r.URL.Query().Get(key)
+	}
+}
