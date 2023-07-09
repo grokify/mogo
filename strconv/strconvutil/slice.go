@@ -3,6 +3,8 @@ package strconvutil
 import (
 	"sort"
 	"strconv"
+
+	"golang.org/x/exp/constraints"
 )
 
 // SliceAtoi converts a slice of string integers.
@@ -29,10 +31,11 @@ func SliceAtoiSort(strings []string) ([]int, error) {
 	return intSlice, nil
 }
 
-func SliceItoa(ints []int) []string {
+// SliceItoa converts a slice of `constraints.Integer` to a slice of `string`.
+func SliceItoa[S ~[]E, E constraints.Integer](elems S) []string {
 	strs := []string{}
-	for _, intVal := range ints {
-		strs = append(strs, strconv.Itoa(intVal))
+	for _, v := range elems {
+		strs = append(strs, strconv.Itoa(int(v)))
 	}
 	return strs
 }
