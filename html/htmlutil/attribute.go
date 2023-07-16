@@ -8,9 +8,11 @@ import (
 	"golang.org/x/net/html"
 )
 
+/*
 const (
 	AttrHref = "href"
 )
+*/
 
 type Attributes []html.Attribute
 

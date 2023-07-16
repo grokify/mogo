@@ -38,7 +38,7 @@ func ParseLink(tokens ...html.Token) (href string, desc string, err error) {
 	if len(tokens) < 3 {
 		return "", "", fmt.Errorf("less than 3 tokens, token count [%d]", len(tokens))
 	}
-	href, err = TokenAttribute(tokens[0], AttrHref)
+	href, err = TokenAttribute(tokens[0], AttributeHref)
 	if err != nil {
 		return href, "", errorsutil.Wrap(err,
 			fmt.Sprintf("href not found in token [%s]",
