@@ -20,6 +20,7 @@ func wrapOne(err error, wrapPrefix string) error {
 	return fmt.Errorf("%s: [%w]", wrapPrefix, err)
 }
 
+// Wrap wraps an error with the supplied strings.
 func Wrap(err error, wrap ...string) error {
 	if err == nil {
 		return nil
@@ -30,6 +31,7 @@ func Wrap(err error, wrap ...string) error {
 	return err
 }
 
+// Wrapf will wrap the error, first performing a `fmt.Sprintf()` on the supplied params.
 func Wrapf(origErr error, wrapFormat string, wrapVars ...any) error {
 	if origErr == nil {
 		return origErr
@@ -64,6 +66,7 @@ func PanicOnErr(err error) {
 	}
 }
 
+// ErrorsToStrings returns a slice of strings. A count of non-nil errors is also returned.
 func ErrorsToStrings(errs []error) (int, []string) {
 	strs := []string{}
 	count := 0
@@ -76,6 +79,16 @@ func ErrorsToStrings(errs []error) (int, []string) {
 		}
 	}
 	return count, strs
+}
+
+// NilifyIs will return a `nil` for if the supplied `err` `errors.Is() any of the errors in `errs`.`
+func NilifyIs(err error, errs ...error) error {
+	for _, erri := range errs {
+		if errors.Is(err, erri) {
+			return nil
+		}
+	}
+	return err
 }
 
 type ErrorInfo struct {
