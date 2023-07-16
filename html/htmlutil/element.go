@@ -10,18 +10,6 @@ import (
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
-const (
-	TagDiv           = "div"
-	AttributeAlt     = "alt"
-	AttributeClass   = "class"
-	AttributeHref    = "href"
-	AttributeName    = "name"
-	AttributeOnclick = "onclick"
-	AttributeStyle   = "style"
-	DelimitSemicolon = ";"
-	DelimitSpace     = " "
-)
-
 var (
 	ErrAttributeNameIsRequired = errors.New("attribute name is required")
 	ErrTagNameIsRequired       = errors.New("tag name is required")

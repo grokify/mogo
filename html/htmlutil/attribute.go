@@ -8,12 +8,6 @@ import (
 	"golang.org/x/net/html"
 )
 
-/*
-const (
-	AttrHref = "href"
-)
-*/
-
 type Attributes []html.Attribute
 
 // Index returns the index location of the matching `html.Attribute`. If `*stringsutil.MatchInfo` is nil
