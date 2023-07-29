@@ -3,6 +3,7 @@ package xmlutil
 import (
 	"encoding/xml"
 	"io"
+	"os"
 )
 
 func MarshalIndent(v any, prefix, indent string, addDoctype bool) ([]byte, error) {
@@ -12,6 +13,15 @@ func MarshalIndent(v any, prefix, indent string, addDoctype bool) ([]byte, error
 	}
 	out := []byte(xml.Header)
 	return append(out, data...), nil
+}
+
+func UnmarshalFile(name string, v any) error {
+	f, err := os.Open(name)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	return UnmarshalReader(f, v)
 }
 
 func UnmarshalReader(r io.Reader, v any) error {
