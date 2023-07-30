@@ -7,21 +7,21 @@ import (
 )
 
 func MarshalIndent(v any, prefix, indent string, addDoctype bool) ([]byte, error) {
-	data, err := xml.MarshalIndent(v, prefix, indent)
-	if err != nil || !addDoctype {
+	if data, err := xml.MarshalIndent(v, prefix, indent); err != nil || !addDoctype {
 		return data, err
+	} else {
+		out := []byte(xml.Header)
+		return append(out, data...), nil
 	}
-	out := []byte(xml.Header)
-	return append(out, data...), nil
 }
 
 func UnmarshalFile(name string, v any) error {
-	f, err := os.Open(name)
-	if err != nil {
+	if f, err := os.Open(name); err != nil {
 		return err
+	} else {
+		defer f.Close()
+		return UnmarshalReader(f, v)
 	}
-	defer f.Close()
-	return UnmarshalReader(f, v)
 }
 
 func UnmarshalReader(r io.Reader, v any) error {
