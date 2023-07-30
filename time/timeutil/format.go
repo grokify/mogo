@@ -14,6 +14,8 @@ const (
 	DT8                = "20060102"
 	DT6                = "200601"
 	MonthDay           = "1/2"
+	DIN5008FullDate    = "02.01.2006" // German DIN 5008 standard
+	DIN5008Date        = "02.01.06"
 	RFC3339FullDate    = "2006-01-02"
 	RFC3339Milli       = "2006-01-02T15:04:05.999Z07:00"
 	RFC3339Dash        = "2006-01-02T15-04-05Z07-00"
@@ -31,6 +33,7 @@ const (
 	InsightlyAPIQuery  = "_1/_2/2006 _3:04:05 PM"
 	DateMDY            = "1/_2/2006"
 	DateMDYSlash       = "01/02/2006"
+	DateDMYDash        = "_2-01-2006"     // Jira XML Date format
 	DateDMYHM2         = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
 	DateYMD            = RFC3339FullDate
 	DateTextUS         = "January _2, 2006"
