@@ -131,15 +131,6 @@ func SubDuration(dur1, dur2 time.Duration) time.Duration {
 	return diff
 }
 
-func DurationIsZero(dur time.Duration) bool {
-	return dur.Nanoseconds() == 0
-}
-
-func DurationZero() time.Duration {
-	dur, _ := time.ParseDuration("0s")
-	return dur
-}
-
 func MaxDuration(durs []time.Duration) time.Duration {
 	max, _ := time.ParseDuration("0s")
 	for _, dur := range durs {
