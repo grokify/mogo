@@ -13,6 +13,10 @@ import (
 // for each time unit including hours, minutes, seconds
 // milliseconds, microseconds, and nanoseconds.
 type DurationInfo struct {
+	DaysPerWeek  float32
+	HoursPerDay  float32
+	Weeks        int64
+	Days         int64
 	Hours        int64
 	Minutes      int64
 	Seconds      int64
@@ -21,11 +25,39 @@ type DurationInfo struct {
 	Nanoseconds  int64
 }
 
-// NewDurationInfo returns a DurationInfo struct
-// for a duration in nanos.
-func NewDurationInfo(dur time.Duration) DurationInfo {
-	workingNanos := dur.Nanoseconds()
-	dinfo := DurationInfo{}
+// NewDurationInfo returns a DurationInfo struct for a duration in nanos. If 'daysPerWeek` or
+// `hoursPerDay` are set to zero, the default values of 7 and 24 are used.
+func NewDurationInfo(d time.Duration, daysPerWeek, hoursPerDay float32) DurationInfo {
+	dinfo := DurationInfo{
+		DaysPerWeek: daysPerWeek,
+		HoursPerDay: hoursPerDay}
+	workingNanos := d.Nanoseconds()
+	nanosPerWeek := NanosPerWeek
+	if daysPerWeek != 0 || hoursPerDay != 0 {
+		if daysPerWeek == 0 {
+			daysPerWeek = 7
+		}
+		if hoursPerDay == 0 {
+			hoursPerDay = 24
+		}
+		nanosPerWeek = int64(daysPerWeek * hoursPerDay * float32(NanosPerHour))
+	}
+	if workingNanos >= nanosPerWeek {
+		weeks := float64(workingNanos) / float64(NanosPerHour)
+		weeksInt64 := int64(weeks)
+		dinfo.Weeks = weeksInt64
+		workingNanos = workingNanos - (weeksInt64 * nanosPerWeek)
+	}
+	nanosPerDay := NanosPerDay
+	if hoursPerDay != 0 {
+		hoursPerDay = 24
+	}
+	if workingNanos >= nanosPerDay {
+		days := float64(workingNanos) / float64(nanosPerDay)
+		daysInt64 := int64(days)
+		dinfo.Days = daysInt64
+		workingNanos = workingNanos - (daysInt64 * nanosPerDay)
+	}
 	if workingNanos >= NanosPerHour {
 		hrs := float64(workingNanos) / float64(NanosPerHour)
 		hrsInt64 := int64(hrs)
@@ -47,10 +79,25 @@ func NewDurationInfo(dur time.Duration) DurationInfo {
 	return dinfo
 }
 
-// ParseDurationInfoStrings returns a DurationInfo object for
-// various time units.
-func ParseDurationInfoStrings(hr, mn, sc, ms, us, ns string) (DurationInfo, error) {
+// ParseDurationInfoStrings returns a DurationInfo object for various time units.
+func ParseDurationInfoStrings(wk, dy, hr, mn, sc, ms, us, ns string) (DurationInfo, error) {
 	dur := DurationInfo{}
+	wk = strings.TrimSpace(wk)
+	if len(wk) > 0 {
+		weeks, err := strconv.Atoi(wk)
+		if err != nil {
+			return dur, err
+		}
+		dur.Weeks = int64(weeks)
+	}
+	dy = strings.TrimSpace(dy)
+	if len(dy) > 0 {
+		days, err := strconv.Atoi(dy)
+		if err != nil {
+			return dur, err
+		}
+		dur.Days = int64(days)
+	}
 	hr = strings.TrimSpace(hr)
 	if len(hr) > 0 {
 		hours, err := strconv.Atoi(hr)
@@ -59,6 +106,7 @@ func ParseDurationInfoStrings(hr, mn, sc, ms, us, ns string) (DurationInfo, erro
 		}
 		dur.Hours = int64(hours)
 	}
+	mn = strings.TrimSpace(mn)
 	if len(mn) > 0 {
 		minutes, err := strconv.Atoi(mn)
 		if err != nil {
@@ -66,6 +114,7 @@ func ParseDurationInfoStrings(hr, mn, sc, ms, us, ns string) (DurationInfo, erro
 		}
 		dur.Minutes = int64(minutes)
 	}
+	sc = strings.TrimSpace(sc)
 	if len(sc) > 0 {
 		seconds, err := strconv.Atoi(sc)
 		if err != nil {
@@ -73,6 +122,7 @@ func ParseDurationInfoStrings(hr, mn, sc, ms, us, ns string) (DurationInfo, erro
 		}
 		dur.Seconds = int64(seconds)
 	}
+	ms = strings.TrimSpace(ms)
 	if len(ms) > 0 {
 		milliseconds, err := strconv.Atoi(ms)
 		if err != nil {
@@ -80,6 +130,7 @@ func ParseDurationInfoStrings(hr, mn, sc, ms, us, ns string) (DurationInfo, erro
 		}
 		dur.Milliseconds = int64(milliseconds)
 	}
+	us = strings.TrimSpace(us)
 	if len(us) > 0 {
 		microseconds, err := strconv.Atoi(us)
 		if err != nil {
@@ -87,6 +138,7 @@ func ParseDurationInfoStrings(hr, mn, sc, ms, us, ns string) (DurationInfo, erro
 		}
 		dur.Microseconds = int64(microseconds)
 	}
+	ns = strings.TrimSpace(ns)
 	if len(ns) > 0 {
 		nanoseconds, err := strconv.Atoi(ns)
 		if err != nil {
@@ -97,8 +149,8 @@ func ParseDurationInfoStrings(hr, mn, sc, ms, us, ns string) (DurationInfo, erro
 	return dur, nil
 }
 
-// TotalNanoseconds returns the total number of nanoseconds
-// represented by the duration.
+/*
+// TotalNanoseconds returns the total number of nanoseconds represented by the duration.
 func (di *DurationInfo) TotalNanoseconds() int64 {
 	return (di.Hours * NanosPerHour) +
 		(di.Minutes * NanosPerMinute) +
@@ -108,14 +160,93 @@ func (di *DurationInfo) TotalNanoseconds() int64 {
 		di.Nanoseconds
 }
 
-// Duration returns a `time.Duration` struct representing
-// the duration.
+// Duration returns a `time.Duration` struct representing the duration.
 func (di *DurationInfo) Duration() time.Duration {
 	dur, err := time.ParseDuration(strconv.Itoa(int(di.TotalNanoseconds())) + "ns")
 	if err != nil {
 		panic(err)
 	}
 	return dur
+}
+*/
+
+// Duration returns a `time.Duration` struct. Params for `hoursPerDay` and `daysPerWeek` are
+// used for atlernate values such as working hours per day and working days per week, e.g.
+// 8 hours per day and 5 days per week.
+func (di DurationInfo) Duration(hoursPerDay, daysPerWeek float32) time.Duration {
+	dur := time.Duration(di.Nanoseconds) +
+		time.Duration(di.Microseconds)*time.Microsecond +
+		time.Duration(di.Milliseconds)*time.Millisecond +
+		time.Duration(di.Seconds)*time.Second +
+		time.Duration(di.Minutes)*time.Minute +
+		time.Duration(di.Hours)*time.Hour
+	if di.Days != 0 {
+		if hoursPerDay != 0 {
+			dur += time.Duration(di.Days) * time.Duration(hoursPerDay) * time.Hour
+		} else {
+			dur += time.Duration(di.Days) * DurationDay
+		}
+	}
+	if di.Weeks != 0 {
+		if daysPerWeek != 0 {
+			daysPerWeek := time.Duration(daysPerWeek)
+			if hoursPerDay != 0 {
+				dur += time.Duration(di.Weeks) *
+					time.Duration(daysPerWeek) *
+					time.Duration(hoursPerDay) *
+					time.Hour
+			} else {
+				dur += time.Duration(di.Weeks) *
+					daysPerWeek *
+					DurationDay
+			}
+		} else {
+			dur += time.Duration(di.Weeks) * DurationWeek
+		}
+	}
+	return dur
+}
+
+// ParseDurationInfo converts a Jira human readable string into a `DurationInfo` struct.
+func ParseDurationInfo(s string) (DurationInfo, error) {
+	parts := strings.Split(strings.ToLower(s), ",")
+	di := DurationInfo{}
+	for _, p := range parts {
+		p = strings.TrimSpace(p)
+		if len(p) == 0 {
+			continue
+		}
+		ps := strings.Fields(p)
+		if len(ps) != 2 {
+			return di, fmt.Errorf("cannot parse (%s)", p)
+		}
+		v, err := strconv.Atoi(ps[0])
+		if err != nil {
+			return di, err
+		}
+		v64 := int64(v)
+		switch ps[1] {
+		case "week", "weeks", "w":
+			di.Days = v64
+		case "day", "days", "d":
+			di.Days = v64
+		case "hour", "hours", "h":
+			di.Hours = v64
+		case "minute", "minutes", "m":
+			di.Minutes = v64
+		case "second", "seconds", "s":
+			di.Seconds = v64
+		case "millisecond", "milliseconds", "ms":
+			di.Milliseconds = v64
+		case "microsecond", "microseconds", "us", "µs":
+			di.Microseconds = v64
+		case "nanosecond", "nanoseconds", "ns":
+			di.Nanoseconds = v64
+		default:
+			return di, fmt.Errorf("cannot parse (%s)", p)
+		}
+	}
+	return di, nil
 }
 
 // FormatDurationInfoMinSec returns the duration as a simple string
