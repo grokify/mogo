@@ -27,6 +27,7 @@ const (
 	ISO8601CompactZ    = "20060102T150405Z0700"
 	ISO8601CompactNoTZ = "20060102T150405"
 	ISO8601YM          = "2006-01"
+	JiraXMLGenerated   = time.UnixDate               // "Fri Jul 28 01:07:16 UTC 2023"
 	Ruby               = "2006-01-02 15:04:05 -0700" // Ruby Time.now.to_s
 	SQLTimestamp       = "2006-01-02 15:04:05"       // MySQL, BigQuery, etc.
 	SQLTimestampPgTz   = "2006-01-02 15:04:05.999999-07"
