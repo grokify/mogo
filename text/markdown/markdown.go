@@ -44,3 +44,14 @@ func Linkify(url, text string) string {
 	}
 	return "[" + text + "](" + url + ")"
 }
+
+var rxParseLink = regexp.MustCompile(`\[(.*)\]\((.*)\)`)
+
+// ParseLink returns text and url.
+func ParseLink(s string) (string, string) {
+	m := rxParseLink.FindStringSubmatch(s)
+	if len(m) > 0 {
+		return m[1], m[2]
+	}
+	return s, ""
+}
