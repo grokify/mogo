@@ -370,6 +370,18 @@ func SliceIsEmpty(elems []string, skipEmptyStrings bool) bool {
 	return true
 }
 
+// SliceJoinFunc joins a slice passing each elemen through the supplied function `f`.
+func SliceJoinFunc(elems []string, sep string, f func(string) string) string {
+	if f == nil {
+		return strings.Join(elems, sep)
+	}
+	n := []string{}
+	for _, el := range elems {
+		n = append(n, f(el))
+	}
+	return strings.Join(n, sep)
+}
+
 // SliceSplitLengthStats returns a `map[int]int` indicating how many
 // strings of which length are present.
 func SliceSplitLengthStats(elems []string, sep string) map[int]int {
