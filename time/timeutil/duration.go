@@ -159,4 +159,6 @@ func DurationDaysInt64(dur time.Duration) int64 { return int64(dur.Hours()/24.0)
 
 func DurationDays(d time.Duration) float64 { return d.Hours() / 24 }
 
+func DurationWeeks(d time.Duration) float64 { return DurationDays(d) / 7 }
+
 func DurationYears(d time.Duration) float64 { return DurationDays(d) / 365 }
