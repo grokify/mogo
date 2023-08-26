@@ -53,7 +53,10 @@ func (m MapStringString) Gets(inclNonMatches bool, keys []string) []string {
 	return ret
 }
 
-func (m MapStringString) Subset(keys []string, inclUnknown, trimSpace, inclEmpty bool) MapStringString {
+// Subset returns a subset of a `MapStringString`. `trimSpace` removes leading/trailing spaces on from the
+// source values. `inclEmpty` includes keys where the value matches the empty string. `inclUnknown` adds
+// desired keys in the resulting map which are not known in the source map.
+func (m MapStringString) Subset(keys []string, trimSpace, inclEmpty, inclUnknown bool) MapStringString {
 	newMap := map[string]string{}
 	keyMap := map[string]int{}
 	for i, k := range keys {
@@ -68,7 +71,7 @@ func (m MapStringString) Subset(keys []string, inclUnknown, trimSpace, inclEmpty
 				continue
 			}
 			newMap[k] = v
-		} else if inclUnknown {
+		} else if inclUnknown && !inclEmpty {
 			newMap[k] = ""
 		}
 	}
