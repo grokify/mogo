@@ -316,15 +316,34 @@ func SliceSubtract(real, filter []string) []string {
 	return filtered
 }
 
-func SliceToMap(elems []string) map[string]int {
+// SliceToMap returns the slide where the slice elements are the keys of the map,
+// and the value is the number of times it appears.
+func SliceToMap(elems []string, wantFirst bool) map[string]int {
 	strmap := map[string]int{}
 	for _, s := range elems {
-		if _, ok := strmap[s]; !ok {
-			strmap[s] = 0
-		}
 		strmap[s]++
 	}
 	return strmap
+}
+
+// SliceToDoc converts a slice to a map, trimming the values if desired. The `cfg` keys are
+// the document property names or keys and the values are the index location of the slice.
+func SliceToDoc(s []string, cfg map[string]int, trimSpace, inclEmpty bool) map[string]string {
+	dat := map[string]string{}
+	for k, idx := range cfg {
+		if idx <= 0 || idx >= len(s) {
+			continue
+		}
+		v := s[idx]
+		if trimSpace {
+			v = strings.TrimSpace(v)
+		}
+		if v == "" {
+			continue
+		}
+		dat[k] = v
+	}
+	return dat
 }
 
 func SliceIntersection(list1, list2 []string) []string {
