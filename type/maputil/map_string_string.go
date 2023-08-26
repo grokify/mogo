@@ -53,6 +53,28 @@ func (m MapStringString) Gets(inclNonMatches bool, keys []string) []string {
 	return ret
 }
 
+func (m MapStringString) Subset(keys []string, inclUnknown, trimSpace, inclEmpty bool) MapStringString {
+	newMap := map[string]string{}
+	keyMap := map[string]int{}
+	for i, k := range keys {
+		keyMap[k] = i
+	}
+	for k, v := range m {
+		if _, ok := keyMap[k]; ok {
+			if trimSpace {
+				v = strings.TrimSpace(v)
+			}
+			if v == "" && !inclEmpty {
+				continue
+			}
+			newMap[k] = v
+		} else if inclUnknown {
+			newMap[k] = ""
+		}
+	}
+	return newMap
+}
+
 func ParseMapStringString(s string) (MapStringString, error) {
 	mss := make(MapStringString)
 	err := parseQuery(mss, s)
