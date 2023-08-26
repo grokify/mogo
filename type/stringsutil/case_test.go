@@ -36,7 +36,8 @@ func TestEqualFoldFull(t *testing.T) {
 			t.Errorf("caser.String(\"%s\") T Test [%d] Error: want [%v], got [%v]",
 				tt.t, i, tt.tCased, gotTCased)
 		}
-		gotEqualFold := EqualFoldFull(tt.s, tt.t, &tt.caser)
+		caser := tt.caser // address G601: Implicit memory aliasing in for loop. (gosec)
+		gotEqualFold := EqualFoldFull(tt.s, tt.t, &caser)
 		if tt.want != gotEqualFold {
 			t.Errorf("stringsutil.EqualFoldFull(\"%s\", \"%s\") Error: want [%v], got [%v]",
 				tt.s, tt.t, tt.want, gotEqualFold)
