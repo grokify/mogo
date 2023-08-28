@@ -318,7 +318,7 @@ func SliceSubtract(real, filter []string) []string {
 
 // SliceToMap returns the slide where the slice elements are the keys of the map,
 // and the value is the number of times it appears.
-func SliceToMap(elems []string, wantFirst bool) map[string]int {
+func SliceToMap(elems []string) map[string]int {
 	strmap := map[string]int{}
 	for _, s := range elems {
 		strmap[s]++
