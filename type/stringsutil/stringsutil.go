@@ -120,8 +120,7 @@ func SplitCondenseSpace(s, sep string) []string {
 	split := strings.Split(s, sep)
 	strs := []string{}
 	for _, str := range split {
-		str = strings.TrimSpace(str)
-		if len(str) > 0 {
+		if str = strings.TrimSpace(str); len(str) > 0 {
 			strs = append(strs, str)
 		}
 	}
