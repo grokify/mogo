@@ -93,6 +93,14 @@ func MustParseBool(s string) bool {
 	return parsed
 }
 
+func FormatBoolMore(b bool, trueVal, falseVal string) string {
+	if b {
+		return trueVal
+	} else {
+		return falseVal
+	}
+}
+
 func FormatDecimal[N constraints.Float | constraints.Integer](v N, precision int) string {
 	if precision == 0 {
 		return strconv.Itoa(int(v))
