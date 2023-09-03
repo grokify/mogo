@@ -144,3 +144,27 @@ func TestSplitInt64(t *testing.T) {
 		}
 	}
 }
+
+var parseScientificNotationTests = []struct {
+	v    string
+	want string
+	acc  big.Accuracy
+}{
+	{"1.84467440737095E+19", "18446744073709500000", big.Exact},
+}
+
+func TestParseScientificNotation(t *testing.T) {
+	for _, tt := range parseScientificNotationTests {
+		i, acc, err := ParseScientificNotation(tt.v)
+		if err != nil {
+			t.Errorf("biting.ParseScientificNotation(\"%s\"): error (%s)", tt.v, err.Error())
+		}
+		got := i.String()
+		if got != tt.want {
+			t.Errorf("biting.ParseScientificNotation(\"%s\"): mismatch (int): want (%s) got (%s)", tt.v, tt.want, got)
+		}
+		if acc != tt.acc {
+			t.Errorf("biting.ParseScientificNotation(\"%s\"): mismatch (accuracy): want (%s=d) got (%d)", tt.v, tt.acc, acc)
+		}
+	}
+}

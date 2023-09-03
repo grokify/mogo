@@ -138,3 +138,13 @@ func SplitInt64(x int64, scale uint) (int64, int64) {
 	z := x - y*b
 	return y, z
 }
+
+func ParseScientificNotation(s string) (*big.Int, big.Accuracy, error) {
+	flt, _, err := big.ParseFloat(s, 10, 0, big.ToNearestEven)
+	if err != nil {
+		return nil, 0, err
+	}
+	var i = new(big.Int)
+	i, acc := flt.Int(i)
+	return i, acc, nil
+}
