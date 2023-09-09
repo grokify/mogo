@@ -124,3 +124,26 @@ func TestItoa(t *testing.T) {
 		}
 	}
 }
+
+var unquoteMoreOrNotTests = []struct {
+	v    string
+	want string
+}{
+	{"'", "'"},
+	{"''", ""},
+	{"'''", "'"},
+	{"'a'", "a"},
+	{"'foo'", "foo"},
+	{"'foo", "'foo"},
+	{"foo'", "foo'"},
+}
+
+func TestUnquoteMoreOrNot(t *testing.T) {
+	for _, tt := range unquoteMoreOrNotTests {
+		got := UnquoteMoreOrNot(tt.v)
+		if got != tt.want {
+			t.Errorf("strconvutil.UnquoteMoreOrNot(%s) Mismatch: want (%s), got (%s)",
+				tt.v, tt.want, got)
+		}
+	}
+}

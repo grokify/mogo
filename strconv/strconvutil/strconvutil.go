@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/grokify/mogo/unicode/unicodeutil"
 	"golang.org/x/exp/constraints"
 )
 
@@ -191,9 +192,29 @@ func Int64Abbreviation(val int64) string {
 	return fmt.Sprintf("%d", val)
 }
 
-// Itoa is like `strconv.Itoa()` with the additional functionality of
-// converting `uint64` and accepting integer types natively via
-// `constraints.Integer`.
+// Itoa is like `strconv.Itoa()` with the additional functionality of converting `uint64` and accepting
+// integer types natively via `constraints.Integer`.
 func Itoa[E constraints.Integer](e E) string {
 	return fmt.Sprintf("%d", e)
+}
+
+// UnquoteMore wraps `strconv.Unquote()` with additional functionality of allowing more chracters
+// within single quotes.`
+func UnquoteMore(s string) (string, error) {
+	if len(s) < 2 {
+		return s, nil
+	}
+	if string(s[0]) == unicodeutil.Apostrophe && string(s[len(s)-1]) == unicodeutil.Apostrophe {
+		return s[1 : len(s)-1], nil
+	}
+	return strconv.Unquote(s)
+}
+
+// UnquoteMoreOrNot wraps `UnquoteMore()`
+func UnquoteMoreOrNot(s string) string {
+	if u, err := UnquoteMore(s); err == nil {
+		return u
+	} else {
+		return s
+	}
 }
