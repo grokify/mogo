@@ -282,24 +282,29 @@ func (dis DurationInfoString) Duration() (time.Duration, error) {
 	} else {
 		d += dx
 	}
-	timeUnitFuncs := []struct {
+
+	timeUnitData := []struct {
 		v string
-		f func(string) (time.Duration, error)
+		n int64
 	}{
-		{dis.Hours, parseDurationHours},
-		{dis.Minutes, parseDurationMinutes},
-		{dis.Seconds, parseDurationSeconds},
-		{dis.Milliseconds, parseDurationMilliseconds},
-		{dis.Microseconds, parseDurationMicroseconds},
-		{dis.Nanoseconds, parseDurationMicroseconds},
+		{dis.Hours, NanosPerHour},
+		{dis.Minutes, NanosPerMinute},
+		{dis.Seconds, NanosPerSecond},
+		{dis.Milliseconds, NanosPerMillisecond},
+		{dis.Microseconds, NanosPerMicrosecond},
+		{dis.Nanoseconds, 1},
 	}
 
-	for _, tu := range timeUnitFuncs {
-		if dx, err := tu.f(tu.v); err != nil {
-			return d, err
-		} else {
-			d += dx
+	for _, tu := range timeUnitData {
+		v := strings.TrimSpace(tu.v)
+		if v == "" || v == "0" {
+			continue
 		}
+		f, err := strconv.ParseFloat(v, 64)
+		if err != nil {
+			return d, err
+		}
+		d += time.Duration(int64(f * float64(tu.n)))
 	}
 
 	return d, nil
@@ -327,71 +332,5 @@ func parseDurationDays(d string, hoursPerDay float32) (time.Duration, error) {
 			hoursPerDay = HoursPerDay
 		}
 		return time.Duration(int64(f * float64(NanosPerHour) * float64(hoursPerDay))), nil
-	}
-}
-
-func parseDurationHours(d string) (time.Duration, error) {
-	d = strings.TrimSpace(d)
-	if d == "" || d == "0" {
-		return 0, nil
-	} else if f, err := strconv.ParseFloat(d, 64); err != nil {
-		return 0, err
-	} else {
-		return time.Duration(int64(f * float64(NanosPerHour))), nil
-	}
-}
-
-func parseDurationMinutes(d string) (time.Duration, error) {
-	d = strings.TrimSpace(d)
-	if d == "" || d == "0" {
-		return 0, nil
-	} else if f, err := strconv.ParseFloat(d, 64); err != nil {
-		return 0, err
-	} else {
-		return time.Duration(int64(f * float64(NanosPerMinute))), nil
-	}
-}
-
-func parseDurationSeconds(d string) (time.Duration, error) {
-	d = strings.TrimSpace(d)
-	if d == "" || d == "0" {
-		return 0, nil
-	} else if f, err := strconv.ParseFloat(d, 64); err != nil {
-		return 0, err
-	} else {
-		return time.Duration(int64(f * float64(NanosPerSecond))), nil
-	}
-}
-
-func parseDurationMilliseconds(d string) (time.Duration, error) {
-	d = strings.TrimSpace(d)
-	if d == "" || d == "0" {
-		return 0, nil
-	} else if f, err := strconv.ParseFloat(d, 64); err != nil {
-		return 0, err
-	} else {
-		return time.Duration(int64(f * float64(NanosPerMillisecond))), nil
-	}
-}
-
-func parseDurationMicroseconds(d string) (time.Duration, error) {
-	d = strings.TrimSpace(d)
-	if d == "" || d == "0" {
-		return 0, nil
-	} else if f, err := strconv.ParseFloat(d, 64); err != nil {
-		return 0, err
-	} else {
-		return time.Duration(int64(f * float64(NanosPerMicrosecond))), nil
-	}
-}
-
-func parseDurationNanoseconds(d string) (time.Duration, error) {
-	d = strings.TrimSpace(d)
-	if d == "" || d == "0" {
-		return 0, nil
-	} else if f, err := strconv.ParseFloat(d, 64); err != nil {
-		return 0, err
-	} else {
-		return time.Duration(int64(f)), nil
 	}
 }
