@@ -149,27 +149,6 @@ func ParseDurationInfoStrings(wk, dy, hr, mn, sc, ms, us, ns string) (DurationIn
 	return dur, nil
 }
 
-/*
-// TotalNanoseconds returns the total number of nanoseconds represented by the duration.
-func (di *DurationInfo) TotalNanoseconds() int64 {
-	return (di.Hours * NanosPerHour) +
-		(di.Minutes * NanosPerMinute) +
-		(di.Seconds * NanosPerSecond) +
-		(di.Milliseconds * NanosPerMillisecond) +
-		(di.Microseconds * NanosPerMicrosecond) +
-		di.Nanoseconds
-}
-
-// Duration returns a `time.Duration` struct representing the duration.
-func (di *DurationInfo) Duration() time.Duration {
-	dur, err := time.ParseDuration(strconv.Itoa(int(di.TotalNanoseconds())) + "ns")
-	if err != nil {
-		panic(err)
-	}
-	return dur
-}
-*/
-
 // Duration returns a `time.Duration` struct. Params for `hoursPerDay` and `daysPerWeek` are
 // used for atlernate values such as working hours per day and working days per week, e.g.
 // 8 hours per day and 5 days per week.
