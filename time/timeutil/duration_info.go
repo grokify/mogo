@@ -282,36 +282,26 @@ func (dis DurationInfoString) Duration() (time.Duration, error) {
 	} else {
 		d += dx
 	}
-	if dx, err := parseDurationHours(dis.Hours); err != nil {
-		return d, err
-	} else {
-		d += dx
+	timeUnitFuncs := []struct {
+		v string
+		f func(string) (time.Duration, error)
+	}{
+		{dis.Hours, parseDurationHours},
+		{dis.Minutes, parseDurationMinutes},
+		{dis.Seconds, parseDurationSeconds},
+		{dis.Milliseconds, parseDurationMilliseconds},
+		{dis.Microseconds, parseDurationMicroseconds},
+		{dis.Nanoseconds, parseDurationMicroseconds},
 	}
-	if dx, err := parseDurationMinutes(dis.Minutes); err != nil {
-		return d, err
-	} else {
-		d += dx
+
+	for _, tu := range timeUnitFuncs {
+		if dx, err := tu.f(tu.v); err != nil {
+			return d, err
+		} else {
+			d += dx
+		}
 	}
-	if dx, err := parseDurationSeconds(dis.Seconds); err != nil {
-		return d, err
-	} else {
-		d += dx
-	}
-	if dx, err := parseDurationMilliseconds(dis.Milliseconds); err != nil {
-		return d, err
-	} else {
-		d += dx
-	}
-	if dx, err := parseDurationMicroseconds(dis.Microseconds); err != nil {
-		return d, err
-	} else {
-		d += dx
-	}
-	if dx, err := parseDurationNanoseconds(dis.Nanoseconds); err != nil {
-		return d, err
-	} else {
-		d += dx
-	}
+
 	return d, nil
 }
 
