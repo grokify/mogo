@@ -77,6 +77,7 @@ func NewDurationInfo(d time.Duration, daysPerWeek, hoursPerDay float32) Duration
 	return dinfo
 }
 
+/*
 // ParseDurationInfoStrings returns a DurationInfo object for various time units.
 func ParseDurationInfoStrings(wk, dy, hr, mn, sc, ms, us, ns string) (DurationInfo, error) {
 	dur := DurationInfo{}
@@ -146,6 +147,7 @@ func ParseDurationInfoStrings(wk, dy, hr, mn, sc, ms, us, ns string) (DurationIn
 	}
 	return dur, nil
 }
+*/
 
 // Duration returns a `time.Duration` struct. Params for `hoursPerDay` and `daysPerWeek` are
 // used for atlernate values such as working hours per day and working days per week, e.g.
@@ -236,7 +238,7 @@ func FormatDurationInfoMinSec(di DurationInfo) string {
 
 // DurationInfoString represets a set of time duration data. It is useful for converting
 // parsed time data into a `time.Duration` struct. `DaysPerWeek` and `HoursPerDay` are provided
-// as overrids to standard value of 7 and 24 in the case of business context, e.g. 5 days
+// as overrides to standard value of 7 and 24 in the case of business context, e.g. 5 days
 // per week and 8 hours per day.
 type DurationInfoString struct {
 	DaysPerWeek  float32
