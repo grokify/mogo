@@ -344,8 +344,7 @@ func parseDurationHours(d string) (time.Duration, error) {
 	d = strings.TrimSpace(d)
 	if d == "" || d == "0" {
 		return 0, nil
-	}
-	if f, err := strconv.ParseFloat(d, 64); err != nil {
+	} else if f, err := strconv.ParseFloat(d, 64); err != nil {
 		return 0, err
 	} else {
 		return time.Duration(int64(f * float64(NanosPerHour))), nil
@@ -356,8 +355,7 @@ func parseDurationMinutes(d string) (time.Duration, error) {
 	d = strings.TrimSpace(d)
 	if d == "" || d == "0" {
 		return 0, nil
-	}
-	if f, err := strconv.ParseFloat(d, 64); err != nil {
+	} else if f, err := strconv.ParseFloat(d, 64); err != nil {
 		return 0, err
 	} else {
 		return time.Duration(int64(f * float64(NanosPerMinute))), nil
@@ -368,8 +366,7 @@ func parseDurationSeconds(d string) (time.Duration, error) {
 	d = strings.TrimSpace(d)
 	if d == "" || d == "0" {
 		return 0, nil
-	}
-	if f, err := strconv.ParseFloat(d, 64); err != nil {
+	} else if f, err := strconv.ParseFloat(d, 64); err != nil {
 		return 0, err
 	} else {
 		return time.Duration(int64(f * float64(NanosPerSecond))), nil
@@ -380,8 +377,7 @@ func parseDurationMilliseconds(d string) (time.Duration, error) {
 	d = strings.TrimSpace(d)
 	if d == "" || d == "0" {
 		return 0, nil
-	}
-	if f, err := strconv.ParseFloat(d, 64); err != nil {
+	} else if f, err := strconv.ParseFloat(d, 64); err != nil {
 		return 0, err
 	} else {
 		return time.Duration(int64(f * float64(NanosPerMillisecond))), nil
@@ -392,8 +388,7 @@ func parseDurationMicroseconds(d string) (time.Duration, error) {
 	d = strings.TrimSpace(d)
 	if d == "" || d == "0" {
 		return 0, nil
-	}
-	if f, err := strconv.ParseFloat(d, 64); err != nil {
+	} else if f, err := strconv.ParseFloat(d, 64); err != nil {
 		return 0, err
 	} else {
 		return time.Duration(int64(f * float64(NanosPerMicrosecond))), nil
@@ -404,8 +399,7 @@ func parseDurationNanoseconds(d string) (time.Duration, error) {
 	d = strings.TrimSpace(d)
 	if d == "" || d == "0" {
 		return 0, nil
-	}
-	if f, err := strconv.ParseFloat(d, 64); err != nil {
+	} else if f, err := strconv.ParseFloat(d, 64); err != nil {
 		return 0, err
 	} else {
 		return time.Duration(int64(f)), nil
