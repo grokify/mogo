@@ -21,6 +21,14 @@ func Dedupe[S ~[]E, E comparable](s S) S {
 	return deduped
 }
 
+func ElementCounts[E comparable](s []E) map[E]int {
+	m := map[E]int{}
+	for _, si := range s {
+		m[si]++
+	}
+	return m
+}
+
 func MatchFilters[E comparable](s, inclFilters, exclFilters []E, inclAll bool) bool {
 	if len(inclFilters) == 0 && len(exclFilters) == 0 {
 		return true
