@@ -234,6 +234,10 @@ func FormatDurationInfoMinSec(di DurationInfo) string {
 	return fmt.Sprintf(`%02d:%02d`, min, sec)
 }
 
+// DurationInfoString represets a set of time duration data. It is useful for converting
+// parsed time data into a `time.Duration` struct. `DaysPerWeek` and `HoursPerDay` are provided
+// as overrids to standard value of 7 and 24 in the case of business context, e.g. 5 days
+// per week and 8 hours per day.
 type DurationInfoString struct {
 	DaysPerWeek  float32
 	HoursPerDay  float32
@@ -248,22 +252,23 @@ type DurationInfoString struct {
 }
 
 func (dis DurationInfoString) Duration() (time.Duration, error) {
-	d := time.Duration(0)
-	if dx, err := parseDurationWeeks(dis.Days, dis.HoursPerDay, dis.DaysPerWeek); err != nil {
-		return d, err
-	} else {
-		d += dx
+	daysPerWeek := dis.DaysPerWeek
+	if daysPerWeek <= 0 {
+		daysPerWeek = DaysPerWeek
 	}
-	if dx, err := parseDurationDays(dis.Days, dis.HoursPerDay); err != nil {
-		return d, err
-	} else {
-		d += dx
+	hoursPerDay := dis.HoursPerDay
+	if hoursPerDay <= 0 {
+		hoursPerDay = HoursPerDay
 	}
+	nanosPerDay := int64(float64(NanosPerHour) * float64(hoursPerDay))
+	nanosPerWeek := int64(float64(NanosPerHour) * float64(hoursPerDay) * float64(daysPerWeek))
 
 	timeUnitData := []struct {
 		v string
 		n int64
 	}{
+		{dis.Weeks, nanosPerWeek},
+		{dis.Days, nanosPerDay},
 		{dis.Hours, NanosPerHour},
 		{dis.Minutes, NanosPerMinute},
 		{dis.Seconds, NanosPerSecond},
@@ -272,41 +277,17 @@ func (dis DurationInfoString) Duration() (time.Duration, error) {
 		{dis.Nanoseconds, 1},
 	}
 
+	var nanos int64
 	for _, tu := range timeUnitData {
 		v := strings.TrimSpace(tu.v)
 		if v == "" || v == "0" {
 			continue
 		} else if f, err := strconv.ParseFloat(v, 64); err != nil {
-			return d, err
+			return 0, err
 		} else {
-			d += time.Duration(int64(f * float64(tu.n)))
+			nanos += int64(f * float64(tu.n))
 		}
 	}
 
-	return d, nil
-}
-
-func parseDurationWeeks(d string, hoursPerDay, daysPerWeek float32) (time.Duration, error) {
-	if f, err := strconv.ParseFloat(strings.TrimSpace(d), 64); err != nil {
-		return 0, err
-	} else {
-		if daysPerWeek <= 0 {
-			daysPerWeek = DaysPerWeek
-		}
-		if hoursPerDay <= 0 {
-			hoursPerDay = HoursPerDay
-		}
-		return time.Duration(int64(f * float64(NanosPerHour) * float64(hoursPerDay) * float64(daysPerWeek))), nil
-	}
-}
-
-func parseDurationDays(d string, hoursPerDay float32) (time.Duration, error) {
-	if f, err := strconv.ParseFloat(strings.TrimSpace(d), 64); err != nil {
-		return 0, err
-	} else {
-		if hoursPerDay <= 0 {
-			hoursPerDay = HoursPerDay
-		}
-		return time.Duration(int64(f * float64(NanosPerHour) * float64(hoursPerDay))), nil
-	}
+	return time.Duration(nanos), nil
 }
