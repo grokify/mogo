@@ -256,3 +256,158 @@ func FormatDurationInfoMinSec(di DurationInfo) string {
 	sec := di.Seconds
 	return fmt.Sprintf(`%02d:%02d`, min, sec)
 }
+
+type DurationInfoString struct {
+	DaysPerWeek  float32
+	HoursPerDay  float32
+	Weeks        string
+	Days         string
+	Hours        string
+	Minutes      string
+	Seconds      string
+	Milliseconds string
+	Microseconds string
+	Nanoseconds  string
+}
+
+func (dis DurationInfoString) Duration() (time.Duration, error) {
+	d := time.Duration(0)
+	if dx, err := parseDurationWeeks(dis.Days, dis.HoursPerDay, dis.DaysPerWeek); err != nil {
+		return d, err
+	} else {
+		d += dx
+	}
+	if dx, err := parseDurationDays(dis.Days, dis.HoursPerDay); err != nil {
+		return d, err
+	} else {
+		d += dx
+	}
+	if dx, err := parseDurationHours(dis.Hours); err != nil {
+		return d, err
+	} else {
+		d += dx
+	}
+	if dx, err := parseDurationMinutes(dis.Minutes); err != nil {
+		return d, err
+	} else {
+		d += dx
+	}
+	if dx, err := parseDurationSeconds(dis.Seconds); err != nil {
+		return d, err
+	} else {
+		d += dx
+	}
+	if dx, err := parseDurationMilliseconds(dis.Milliseconds); err != nil {
+		return d, err
+	} else {
+		d += dx
+	}
+	if dx, err := parseDurationMicroseconds(dis.Microseconds); err != nil {
+		return d, err
+	} else {
+		d += dx
+	}
+	if dx, err := parseDurationNanoseconds(dis.Nanoseconds); err != nil {
+		return d, err
+	} else {
+		d += dx
+	}
+	return d, nil
+}
+
+func parseDurationWeeks(d string, hoursPerDay, daysPerWeek float32) (time.Duration, error) {
+	if f, err := strconv.ParseFloat(strings.TrimSpace(d), 64); err != nil {
+		return 0, err
+	} else {
+		if daysPerWeek <= 0 {
+			daysPerWeek = DaysPerWeek
+		}
+		if hoursPerDay <= 0 {
+			hoursPerDay = HoursPerDay
+		}
+		return time.Duration(int64(f * float64(NanosPerHour) * float64(hoursPerDay) * float64(daysPerWeek))), nil
+	}
+}
+
+func parseDurationDays(d string, hoursPerDay float32) (time.Duration, error) {
+	if f, err := strconv.ParseFloat(strings.TrimSpace(d), 64); err != nil {
+		return 0, err
+	} else {
+		if hoursPerDay <= 0 {
+			hoursPerDay = HoursPerDay
+		}
+		return time.Duration(int64(f * float64(NanosPerHour) * float64(hoursPerDay))), nil
+	}
+}
+
+func parseDurationHours(d string) (time.Duration, error) {
+	d = strings.TrimSpace(d)
+	if d == "" || d == "0" {
+		return 0, nil
+	}
+	if f, err := strconv.ParseFloat(d, 64); err != nil {
+		return 0, err
+	} else {
+		return time.Duration(int64(f * float64(NanosPerHour))), nil
+	}
+}
+
+func parseDurationMinutes(d string) (time.Duration, error) {
+	d = strings.TrimSpace(d)
+	if d == "" || d == "0" {
+		return 0, nil
+	}
+	if f, err := strconv.ParseFloat(d, 64); err != nil {
+		return 0, err
+	} else {
+		return time.Duration(int64(f * float64(NanosPerMinute))), nil
+	}
+}
+
+func parseDurationSeconds(d string) (time.Duration, error) {
+	d = strings.TrimSpace(d)
+	if d == "" || d == "0" {
+		return 0, nil
+	}
+	if f, err := strconv.ParseFloat(d, 64); err != nil {
+		return 0, err
+	} else {
+		return time.Duration(int64(f * float64(NanosPerSecond))), nil
+	}
+}
+
+func parseDurationMilliseconds(d string) (time.Duration, error) {
+	d = strings.TrimSpace(d)
+	if d == "" || d == "0" {
+		return 0, nil
+	}
+	if f, err := strconv.ParseFloat(d, 64); err != nil {
+		return 0, err
+	} else {
+		return time.Duration(int64(f * float64(NanosPerMillisecond))), nil
+	}
+}
+
+func parseDurationMicroseconds(d string) (time.Duration, error) {
+	d = strings.TrimSpace(d)
+	if d == "" || d == "0" {
+		return 0, nil
+	}
+	if f, err := strconv.ParseFloat(d, 64); err != nil {
+		return 0, err
+	} else {
+		return time.Duration(int64(f * float64(NanosPerMicrosecond))), nil
+	}
+}
+
+func parseDurationNanoseconds(d string) (time.Duration, error) {
+	d = strings.TrimSpace(d)
+	if d == "" || d == "0" {
+		return 0, nil
+	}
+	if f, err := strconv.ParseFloat(d, 64); err != nil {
+		return 0, err
+	} else {
+		return time.Duration(int64(f)), nil
+	}
+}
