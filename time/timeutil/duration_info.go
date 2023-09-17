@@ -7,8 +7,6 @@ import (
 	"time"
 )
 
-// 00:00:00,309 - 00:00:07,074	 And in conclusion, we have found MySQL to be an excellent database for our website. Any questions?	S1
-
 // DurationInfo is a struct that holds integer values
 // for each time unit including hours, minutes, seconds
 // milliseconds, microseconds, and nanoseconds.
@@ -188,6 +186,7 @@ func (di DurationInfo) Duration(hoursPerDay, daysPerWeek float32) time.Duration 
 
 // ParseDurationInfo converts a Jira human readable string into a `DurationInfo` struct.
 func ParseDurationInfo(s string) (DurationInfo, error) {
+	// MySQL format: 00:00:00,309 - 00:00:07,074 And in conclusion, we have found MySQL to be an excellent database for our website. Any questions?	S1
 	parts := strings.Split(strings.ToLower(s), ",")
 	di := DurationInfo{}
 	for _, p := range parts {
@@ -228,8 +227,7 @@ func ParseDurationInfo(s string) (DurationInfo, error) {
 	return di, nil
 }
 
-// FormatDurationInfoMinSec returns the duration as a simple string
-// like 01:01.
+// FormatDurationInfoMinSec returns the duration as a simple string like 01:01.
 func FormatDurationInfoMinSec(di DurationInfo) string {
 	min := di.Hours*60 + di.Minutes
 	sec := di.Seconds
@@ -278,12 +276,11 @@ func (dis DurationInfoString) Duration() (time.Duration, error) {
 		v := strings.TrimSpace(tu.v)
 		if v == "" || v == "0" {
 			continue
-		}
-		f, err := strconv.ParseFloat(v, 64)
-		if err != nil {
+		} else if f, err := strconv.ParseFloat(v, 64); err != nil {
 			return d, err
+		} else {
+			d += time.Duration(int64(f * float64(tu.n)))
 		}
-		d += time.Duration(int64(f * float64(tu.n)))
 	}
 
 	return d, nil
