@@ -77,78 +77,6 @@ func NewDurationInfo(d time.Duration, daysPerWeek, hoursPerDay float32) Duration
 	return dinfo
 }
 
-/*
-// ParseDurationInfoStrings returns a DurationInfo object for various time units.
-func ParseDurationInfoStrings(wk, dy, hr, mn, sc, ms, us, ns string) (DurationInfo, error) {
-	dur := DurationInfo{}
-	wk = strings.TrimSpace(wk)
-	if len(wk) > 0 {
-		weeks, err := strconv.Atoi(wk)
-		if err != nil {
-			return dur, err
-		}
-		dur.Weeks = int64(weeks)
-	}
-	dy = strings.TrimSpace(dy)
-	if len(dy) > 0 {
-		days, err := strconv.Atoi(dy)
-		if err != nil {
-			return dur, err
-		}
-		dur.Days = int64(days)
-	}
-	hr = strings.TrimSpace(hr)
-	if len(hr) > 0 {
-		hours, err := strconv.Atoi(hr)
-		if err != nil {
-			return dur, err
-		}
-		dur.Hours = int64(hours)
-	}
-	mn = strings.TrimSpace(mn)
-	if len(mn) > 0 {
-		minutes, err := strconv.Atoi(mn)
-		if err != nil {
-			return dur, err
-		}
-		dur.Minutes = int64(minutes)
-	}
-	sc = strings.TrimSpace(sc)
-	if len(sc) > 0 {
-		seconds, err := strconv.Atoi(sc)
-		if err != nil {
-			return dur, err
-		}
-		dur.Seconds = int64(seconds)
-	}
-	ms = strings.TrimSpace(ms)
-	if len(ms) > 0 {
-		milliseconds, err := strconv.Atoi(ms)
-		if err != nil {
-			return dur, err
-		}
-		dur.Milliseconds = int64(milliseconds)
-	}
-	us = strings.TrimSpace(us)
-	if len(us) > 0 {
-		microseconds, err := strconv.Atoi(us)
-		if err != nil {
-			return dur, err
-		}
-		dur.Microseconds = int64(microseconds)
-	}
-	ns = strings.TrimSpace(ns)
-	if len(ns) > 0 {
-		nanoseconds, err := strconv.Atoi(ns)
-		if err != nil {
-			return dur, err
-		}
-		dur.Nanoseconds = int64(nanoseconds)
-	}
-	return dur, nil
-}
-*/
-
 // Duration returns a `time.Duration` struct. Params for `hoursPerDay` and `daysPerWeek` are
 // used for atlernate values such as working hours per day and working days per week, e.g.
 // 8 hours per day and 5 days per week.
@@ -207,7 +135,7 @@ func ParseDurationInfo(s string) (DurationInfo, error) {
 		v64 := int64(v)
 		switch ps[1] {
 		case "week", "weeks", "w":
-			di.Days = v64
+			di.Weeks = v64
 		case "day", "days", "d":
 			di.Days = v64
 		case "hour", "hours", "h":
