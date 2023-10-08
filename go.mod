@@ -27,7 +27,7 @@ require (
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	golang.org/x/crypto v0.13.0
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
-	golang.org/x/image v0.12.0
+	golang.org/x/image v0.13.0
 	golang.org/x/net v0.15.0
 	golang.org/x/text v0.13.0
 	google.golang.org/genproto v0.0.0-20230913181813-007df8e322eb
