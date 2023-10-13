@@ -19,7 +19,7 @@ require (
 	github.com/leekchan/accounting v1.0.0
 	github.com/lytics/base62 v0.0.0-20180808010106-0ee4de5a5d6d
 	github.com/martinlindhe/base36 v1.1.1
-	github.com/microcosm-cc/bluemonday v1.0.25
+	github.com/microcosm-cc/bluemonday v1.0.26
 	github.com/shopspring/decimal v1.3.1
 	github.com/tkuchiki/go-timezone v0.2.2
 	github.com/valyala/fastjson v1.6.4
@@ -28,7 +28,7 @@ require (
 	golang.org/x/crypto v0.14.0
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
 	golang.org/x/image v0.13.0
-	golang.org/x/net v0.16.0
+	golang.org/x/net v0.17.0
 	golang.org/x/text v0.13.0
 	google.golang.org/genproto v0.0.0-20230913181813-007df8e322eb
 	gopkg.in/oleiade/reflections.v1 v1.0.0
