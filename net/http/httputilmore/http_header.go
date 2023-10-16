@@ -56,6 +56,9 @@ const (
 	ContentTypeTextXMLUtf8             = "text/xml; charset=utf-8"
 	SchemeHTTPS                        = "https"
 	WWWAuthenticateBasicRestricted     = "Basic realm=Restricted"
+
+	HeaderNgrokSkipBrowserWarning      = "ngrok-skip-browser-warning" // header needs to be present. value can be anything. See more at: https://stackoverflow.com/questions/73017353/how-to-bypass-ngrok-browser-warning
+	HeaderNgrokSkipBrowserWarningValue = "skip-browser-warning"
 )
 
 // NewHeadersMSS returns a `http.Header` struct give a `map[string]string`
