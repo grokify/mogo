@@ -1,9 +1,11 @@
 module github.com/grokify/mogo
 
-go 1.18
+go 1.21
+
+toolchain go1.21.1
 
 require (
-	github.com/ProtonMail/go-crypto v0.0.0-20230828082145-3c4c8a2d2371
+	github.com/ProtonMail/go-crypto v0.0.0-20230923063757-afb1ddc0824c
 	github.com/buger/jsonparser v1.1.1
 	github.com/caarlos0/env/v6 v6.10.1
 	github.com/go-logfmt/logfmt v0.6.0
@@ -19,18 +21,18 @@ require (
 	github.com/leekchan/accounting v1.0.0
 	github.com/lytics/base62 v0.0.0-20180808010106-0ee4de5a5d6d
 	github.com/martinlindhe/base36 v1.1.1
-	github.com/microcosm-cc/bluemonday v1.0.25
+	github.com/microcosm-cc/bluemonday v1.0.26
 	github.com/shopspring/decimal v1.3.1
 	github.com/tkuchiki/go-timezone v0.2.2
 	github.com/valyala/fastjson v1.6.4
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	golang.org/x/crypto v0.14.0
-	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
+	golang.org/x/exp v0.0.0-20231006140011-7918f672742d
 	golang.org/x/image v0.13.0
 	golang.org/x/net v0.17.0
 	golang.org/x/text v0.13.0
-	google.golang.org/genproto v0.0.0-20230913181813-007df8e322eb
+	google.golang.org/genproto v0.0.0-20231012201019-e917dd12ba7a
 	gopkg.in/oleiade/reflections.v1 v1.0.0
 )
 
