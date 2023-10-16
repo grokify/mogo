@@ -38,11 +38,11 @@ func (tc *TLSConfig) LoadCACert(caCertFilepath string) error {
 		tc.Config.RootCAs = x509.NewCertPool()
 	}
 
-	ok := tc.Config.RootCAs.AppendCertsFromPEM(cert)
-	if !ok {
-		return fmt.Errorf("cannot add Root CA cert %v", caCertFilepath)
+	if ok := tc.Config.RootCAs.AppendCertsFromPEM(cert); !ok {
+		return fmt.Errorf("cannot add CA cert (%s)", caCertFilepath)
+	} else {
+		return nil
 	}
-	return nil
 }
 
 /*
