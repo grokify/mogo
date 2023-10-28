@@ -3,15 +3,17 @@
 // 2: https://github.com/openlyinc/pointy
 package pointer
 
-func Int64(num int64) *int64 { return &num }
-func Pointer[E any](e E) *E  { return &e }
+// func Int64(num int64) *int64 { return &num }
+func Pointer[E any](e E) *E { return &e }
 
+/*
 func ToString(s *string) string {
 	if s == nil {
 		return ""
 	}
 	return *s
 }
+*/
 
 func Dereference[E any](e *E) E {
 	if e == nil {
