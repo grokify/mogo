@@ -37,6 +37,14 @@ func CaseSnakeToPascal(s string) string {
 
 var rxSplitCase = regexp.MustCompile(`[\s_\-;:~]`)
 
+func ToCase(c, s string) (string, error) {
+	if f, err := FuncToCase(c); err != nil {
+		return "", err
+	} else {
+		return f(s), nil
+	}
+}
+
 // ToCamelCase converts a string to camel case as `camelCase`.
 func ToCamelCase(s string) string {
 	return stringsutil.ToLowerFirst(ToPascalCase(s))
@@ -69,8 +77,9 @@ func toParts(s string) []string {
 	return stringsutil.SliceCondenseSpace(rxSplitCase.Split(s, -1), false, false)
 }
 
-func FuncToWantCaseMore(c string, overrides map[string]string) (func(string) string, error) {
-	tocase, err := FuncToWantCase(c)
+// FuncToCaseMore returns the function to convert case.
+func FuncToCaseMore(c string, overrides map[string]string) (func(string) string, error) {
+	tocase, err := FuncToCase(c)
 	if err != nil {
 		return NoOp, err
 	}
@@ -85,7 +94,8 @@ func FuncToWantCaseMore(c string, overrides map[string]string) (func(string) str
 	}, nil
 }
 
-func FuncToWantCase(c string) (func(string) string, error) {
+// FuncToCase returns to the ToXCase function given a case.
+func FuncToCase(c string) (func(string) string, error) {
 	canonical, err := Parse(c)
 	if err != nil {
 		return strcase.ToSnake, err
@@ -131,9 +141,25 @@ func FuncToWantCaseOrNoOp(c string) func(string) string {
 // FuncToWantCaseOrDefault returns an ToWantCase function, or default if case is not preseent or
 // parseable. For flexibility, if a `nil` func is passed, `nil`, is returned.
 func FuncToWantCaseOrDefault(c string, defaultFunc func(string) string) func(string) string {
-	wantFunc, err := FuncToWantCase(c)
-	if err != nil {
+	if wantFunc, err := FuncToCase(c); err != nil {
 		return defaultFunc
+	} else {
+		return wantFunc
 	}
-	return wantFunc
+}
+
+func Join(elems []string, sep string, wantCase string) (string, error) {
+	parts := []string{}
+	for _, el := range elems {
+		if wantCase != "" {
+			el, err := ToCase(wantCase, el)
+			if err != nil {
+				return "", err
+			}
+			parts = append(parts, el)
+		} else {
+			parts = append(parts, el)
+		}
+	}
+	return strings.Join(parts, sep), nil
 }
