@@ -69,3 +69,33 @@ func KeyValueSliceCounts[K comparable, V any](m map[K][]V) map[K]int {
 	}
 	return r
 }
+
+// Flatten converts a `map[string][]string{}` to a `map[string]string{}`. The default is to use the first value
+// unless `useLast` is set to true, in which case the last value is used. The default is to use a key with an
+// empty string to represent a key with an empty slice, unless `skipEmpty` is set to `true`, in which case the
+// key with an empty slice is not represented.
+func (mss MapStringSlice) Flatten(useLast, skipEmpty bool) map[string]string {
+	simple := map[string]string{}
+	for k, vals := range mss {
+		if len(vals) == 0 {
+			if !skipEmpty {
+				simple[k] = ""
+			}
+		} else if useLast {
+			simple[k] = vals[len(vals)-1]
+		} else {
+			simple[k] = vals[0]
+		}
+	}
+	return simple
+}
+
+// FlattenAny converst the results of `Flatten()` to a `map[string]any{}`.`
+func (mss MapStringSlice) FlattenAny(useLast, skipEmpty bool) map[string]any {
+	msa := map[string]any{}
+	mssimple := mss.Flatten(useLast, skipEmpty)
+	for k, v := range mssimple {
+		msa[k] = v
+	}
+	return msa
+}
