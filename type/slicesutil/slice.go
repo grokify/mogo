@@ -4,6 +4,7 @@ import (
 	"regexp"
 	"sort"
 
+	"golang.org/x/exp/constraints"
 	"golang.org/x/exp/slices"
 )
 
@@ -64,6 +65,14 @@ func Reverse[E comparable](s []E) {
 	sort.SliceStable(s, func(i, j int) bool {
 		return i > j
 	})
+}
+
+func SortSliceOfSlice[S ~[][]E, E constraints.Ordered | string](s S, indexes ...uint) {
+	for _, idx := range indexes {
+		sort.Slice(s, func(i, j int) bool {
+			return s[i][idx] < s[j][idx]
+		})
+	}
 }
 
 // Sub returns a string slice with duplicate values removed. First observance is kept.
