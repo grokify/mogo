@@ -13,8 +13,7 @@ import (
 )
 
 const (
-	headerContentType = httputilmore.HeaderContentType
-
+	// headerContentType = httputilmore.HeaderContentType
 	BodyTypeForm = "form"
 	BodyTypeJSON = "json"
 	BodyTypeXML  = "xml"
@@ -23,11 +22,18 @@ const (
 type SimpleRequest struct {
 	Method        string
 	URL           string
-	Query         map[string][]string
-	Headers       map[string][]string
+	Query         url.Values
+	Headers       http.Header
 	Body          any
 	BodyType      string
 	AddXMLDocType bool // only used if `Body` is a struct.
+}
+
+func NewSimpleRequest() SimpleRequest {
+	return SimpleRequest{
+		Query:   url.Values{},
+		Headers: http.Header{},
+	}
 }
 
 func (req *SimpleRequest) Inflate() {
@@ -38,7 +44,7 @@ func (req *SimpleRequest) Inflate() {
 		req.Method = strings.ToUpper(strings.TrimSpace(req.Method))
 	}
 	if req.Headers == nil {
-		req.Headers = map[string][]string{}
+		req.Headers = http.Header{}
 	}
 	if len(strings.TrimSpace(req.BodyType)) == 0 {
 		headerCTLc := strings.ToLower(httputilmore.HeaderContentType)
@@ -53,11 +59,14 @@ func (req *SimpleRequest) Inflate() {
 		if !haveCT {
 			switch req.BodyType {
 			case BodyTypeForm:
-				req.Headers[headerContentType] = []string{httputilmore.ContentTypeAppFormURLEncodedUtf8}
+				req.Headers.Add(httputilmore.HeaderContentType, httputilmore.ContentTypeAppFormURLEncodedUtf8)
+				// req.Headers[headerContentType] = []string{httputilmore.ContentTypeAppFormURLEncodedUtf8}
 			case BodyTypeJSON:
-				req.Headers[headerContentType] = []string{httputilmore.ContentTypeAppJSONUtf8}
+				req.Headers.Add(httputilmore.HeaderContentType, httputilmore.ContentTypeAppJSONUtf8)
+				// req.Headers[headerContentType] = []string{httputilmore.ContentTypeAppJSONUtf8}
 			case BodyTypeXML:
-				req.Headers[headerContentType] = []string{httputilmore.ContentTypeAppXMLUtf8}
+				req.Headers.Add(httputilmore.HeaderContentType, httputilmore.ContentTypeAppXMLUtf8)
+				// req.Headers[headerContentType] = []string{httputilmore.ContentTypeAppXMLUtf8}
 			}
 		}
 	}
