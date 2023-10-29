@@ -59,12 +59,23 @@ func MatchFilters[E comparable](s, inclFilters, exclFilters []E, inclAll bool) b
 	return true
 }
 
+func Prepend[S ~[]E, E any](s []E, e E) []E {
+	return append([]E{e}, s...)
+}
+
 // Reverse reverses the order of a slice.
 func Reverse[E comparable](s []E) {
 	// sourced from Stack Overflow under MIT license: https://stackoverflow.com/a/71904070/1908967
 	sort.SliceStable(s, func(i, j int) bool {
 		return i > j
 	})
+}
+
+func Shift[S ~[]E, E any](s S) (E, S) {
+	if len(s) == 0 {
+		return *new(E), []E{}
+	}
+	return s[0], s[1:]
 }
 
 func SortSliceOfSlice[S ~[][]E, E constraints.Ordered | string](s S, indexes ...uint) {
