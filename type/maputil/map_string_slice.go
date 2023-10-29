@@ -90,7 +90,7 @@ func (mss MapStringSlice) Flatten(useLast, skipEmpty bool) map[string]string {
 	return simple
 }
 
-// FlattenAny converst the results of `Flatten()` to a `map[string]any{}`.`
+// FlattenAny converts the results of `Flatten()` to a `map[string]any{}`.`
 func (mss MapStringSlice) FlattenAny(useLast, skipEmpty bool) map[string]any {
 	msa := map[string]any{}
 	mssimple := mss.Flatten(useLast, skipEmpty)
