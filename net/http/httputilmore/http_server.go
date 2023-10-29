@@ -3,6 +3,7 @@ package httputilmore
 import (
 	"log"
 	"net/http"
+	"time"
 )
 
 // Log is a custom Http handler that will log all requests.
@@ -14,4 +15,17 @@ func Log(handler http.Handler) http.Handler {
 		log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL)
 		handler.ServeHTTP(w, r)
 	})
+}
+
+// NewServerTimeouts returns a `*http.Server` with all timeouts set to a single value provided.
+func NewServerTimeouts(addr string, handler http.Handler, timeout time.Duration) *http.Server {
+	return &http.Server{
+		Addr:              addr,
+		Handler:           handler,
+		IdleTimeout:       timeout,
+		ReadHeaderTimeout: timeout,
+		ReadTimeout:       timeout,
+		WriteTimeout:      timeout,
+		MaxHeaderBytes:    1 << 20,
+	}
 }
