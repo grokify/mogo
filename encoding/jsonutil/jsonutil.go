@@ -102,6 +102,20 @@ func MustUnmarshal(b []byte, v any) {
 	}
 }
 
+// UnmarshalAny will unmarshal anything to `v`, including first marshalling anything
+// that is not a byte array to a JSON byte array.
+func UnmarshalAny(data, v any) error {
+	var err error
+	b, ok := data.([]byte)
+	if !ok {
+		b, err = json.Marshal(data)
+		if err != nil {
+			return err
+		}
+	}
+	return json.Unmarshal(b, v)
+}
+
 func UnmarshalMSI(data map[string]any, v any) error {
 	bytes, err := json.Marshal(data)
 	if err != nil {
