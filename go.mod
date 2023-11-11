@@ -30,7 +30,7 @@ require (
 	golang.org/x/crypto v0.15.0
 	golang.org/x/exp v0.0.0-20231006140011-7918f672742d
 	golang.org/x/image v0.14.0
-	golang.org/x/net v0.17.0
+	golang.org/x/net v0.18.0
 	golang.org/x/text v0.14.0
 	google.golang.org/genproto v0.0.0-20231030173426-d783a09b4405
 	gopkg.in/oleiade/reflections.v1 v1.0.0
