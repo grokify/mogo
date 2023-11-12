@@ -10,7 +10,7 @@ var syscallTests = []struct {
 	nsec        int64
 	rfc3339Nano string
 }{
-	{1674382312 * NanosPerSecond, "2023-01-22T10:11:52Z"},
+	{1674382312 * int64(time.Second), "2023-01-22T10:11:52Z"},
 	{1674382312111222333, "2023-01-22T10:11:52.111222333Z"},
 }
 

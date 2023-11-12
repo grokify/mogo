@@ -27,21 +27,21 @@ const (
 type Interval int
 
 const (
-	Nanosecond Interval = iota
-	Microsecond
-	Millisecond
-	Second
-	Minute
-	Hour
-	Day
-	Week
-	Month
-	Quarter
-	Year
-	Decade
-	Score
-	Century
-	Millennia
+	IntervalNanosecond Interval = iota
+	IntervalMicrosecond
+	IntervalMillisecond
+	IntervalSecond
+	IntervalMinute
+	IntervalHour
+	IntervalDay
+	IntervalWeek
+	IntervalMonth
+	IntervalQuarter
+	IntervalYear
+	IntervalDecade
+	IntervalScore
+	IntervalCentury
+	IntervalMillennia
 )
 
 var intervals = [...]string{

@@ -30,7 +30,7 @@ func NewDurationInfo(d time.Duration, daysPerWeek, hoursPerDay float32) Duration
 		DaysPerWeek: daysPerWeek,
 		HoursPerDay: hoursPerDay}
 	workingNanos := d.Nanoseconds()
-	nanosPerWeek := NanosPerWeek
+	nanosPerWeek := int64(Week)
 	if daysPerWeek != 0 || hoursPerDay != 0 {
 		if daysPerWeek == 0 {
 			daysPerWeek = 7
@@ -38,38 +38,38 @@ func NewDurationInfo(d time.Duration, daysPerWeek, hoursPerDay float32) Duration
 		if hoursPerDay == 0 {
 			hoursPerDay = 24
 		}
-		nanosPerWeek = int64(daysPerWeek * hoursPerDay * float32(NanosPerHour))
+		nanosPerWeek = int64(daysPerWeek * hoursPerDay * float32(time.Hour))
 	}
 	if workingNanos >= nanosPerWeek {
-		weeks := float64(workingNanos) / float64(NanosPerHour)
+		weeks := float64(workingNanos) / float64(time.Hour)
 		weeksInt64 := int64(weeks)
 		dinfo.Weeks = weeksInt64
 		workingNanos = workingNanos - (weeksInt64 * nanosPerWeek)
 	}
-	nanosPerDay := NanosPerDay
+	nanosPerDay := Day
 	if hoursPerDay != 0 {
-		nanosPerDay = int64(hoursPerDay * float32(NanosPerHour))
+		nanosPerDay = time.Duration(int64(float32(hoursPerDay) * float32(time.Hour)))
 	}
-	if workingNanos >= nanosPerDay {
-		days := float64(workingNanos) / float64(nanosPerDay)
+	if time.Duration(workingNanos) >= nanosPerDay {
+		days := float64(workingNanos) / float64(Day)
 		daysInt64 := int64(days)
 		dinfo.Days = daysInt64
-		workingNanos = workingNanos - (daysInt64 * nanosPerDay)
+		workingNanos = workingNanos - (daysInt64 * int64(Day))
 	}
-	if workingNanos >= NanosPerHour {
-		hrs := float64(workingNanos) / float64(NanosPerHour)
+	if time.Duration(workingNanos) >= time.Hour {
+		hrs := float64(workingNanos) / float64(time.Hour)
 		hrsInt64 := int64(hrs)
 		dinfo.Hours = hrsInt64
-		workingNanos = workingNanos - (hrsInt64 * NanosPerHour)
+		workingNanos = workingNanos - (hrsInt64 * int64(time.Hour))
 	}
-	if workingNanos >= NanosPerMinute {
-		min := float64(workingNanos) / float64(NanosPerMinute)
+	if time.Duration(workingNanos) >= time.Minute {
+		min := float64(workingNanos) / float64(time.Minute)
 		minInt64 := int64(min)
 		dinfo.Minutes = minInt64
-		workingNanos = workingNanos - (minInt64 * NanosPerMinute)
+		workingNanos = workingNanos - (minInt64 * int64(time.Minute))
 	}
-	if workingNanos >= NanosPerSecond {
-		sec := float64(workingNanos) / float64(NanosPerSecond)
+	if time.Duration(workingNanos) >= time.Second {
+		sec := float64(workingNanos) / float64(time.Second)
 		secInt64 := int64(sec)
 		dinfo.Seconds = secInt64
 		//workingNanos = workingNanos - (secInt64 * nanosPerSecond)
@@ -190,21 +190,21 @@ func (dis DurationInfoString) Duration() (time.Duration, error) {
 	if hoursPerDay <= 0 {
 		hoursPerDay = HoursPerDay
 	}
-	nanosPerDay := int64(float64(NanosPerHour) * float64(hoursPerDay))
-	nanosPerWeek := int64(float64(NanosPerHour) * float64(hoursPerDay) * float64(daysPerWeek))
+	nanosPerDay := time.Duration(int64(float64(time.Hour) * float64(hoursPerDay)))
+	nanosPerWeek := time.Duration(int64(float64(time.Hour) * float64(hoursPerDay) * float64(daysPerWeek)))
 
 	timeUnitData := []struct {
 		v string
-		n int64
+		n time.Duration
 	}{
 		{dis.Weeks, nanosPerWeek},
 		{dis.Days, nanosPerDay},
-		{dis.Hours, NanosPerHour},
-		{dis.Minutes, NanosPerMinute},
-		{dis.Seconds, NanosPerSecond},
-		{dis.Milliseconds, NanosPerMillisecond},
-		{dis.Microseconds, NanosPerMicrosecond},
-		{dis.Nanoseconds, 1},
+		{dis.Hours, time.Hour},
+		{dis.Minutes, time.Minute},
+		{dis.Seconds, time.Second},
+		{dis.Milliseconds, time.Millisecond},
+		{dis.Microseconds, time.Microsecond},
+		{dis.Nanoseconds, time.Nanosecond},
 	}
 
 	var nanos int64

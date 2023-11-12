@@ -70,28 +70,28 @@ func isYearStart(dt time.Time) bool {
 }
 
 func dayEnd(t time.Time) time.Time {
-	return time.Date(t.Year(), t.Month(), t.Day(), 23, 59, 59, int(NanosPerSecondSub1), t.Location())
+	return time.Date(t.Year(), t.Month(), t.Day(), 23, 59, 59, int(time.Second-1), t.Location())
 }
 
 func weekEnd(t time.Time, d time.Weekday) time.Time {
 	ws := weekStart(t, d)
 	we := ws.AddDate(0, 0, 6)
-	return time.Date(we.Year(), we.Month(), we.Day(), 23, 59, 59, int(NanosPerSecondSub1), t.Location())
+	return time.Date(we.Year(), we.Month(), we.Day(), 23, 59, 59, int(time.Second-1), t.Location())
 }
 
 // monthEnd returns a time.Time for the end of the month by second.
 func monthEnd(t time.Time) time.Time {
-	return time.Date(t.Year(), t.Month(), MonthEndDay(t.Year(), t.Month()), 23, 59, 59, int(NanosPerSecondSub1), t.Location())
+	return time.Date(t.Year(), t.Month(), MonthEndDay(t.Year(), t.Month()), 23, 59, 59, int(time.Second-1), t.Location())
 }
 
 // quarterEnd returns a time.Time for the end of the quarter by second.
 func quarterEnd(t time.Time) time.Time {
 	qs := quarterStart(t)
 	qn := TimeDT6AddNMonths(qs, 3)
-	return time.Date(qn.Year(), qn.Month(), MonthEndDay(qn.Year(), qn.Month()), 23, 59, 59, int(NanosPerSecondSub1), t.Location())
+	return time.Date(qn.Year(), qn.Month(), MonthEndDay(qn.Year(), qn.Month()), 23, 59, 59, int(time.Second-1), t.Location())
 }
 
 // yearEnd returns a a time.Time for the end of the year.
 func yearEnd(t time.Time) time.Time {
-	return time.Date(t.Year(), time.December, 31, 23, 59, 59, int(NanosPerSecondSub1), t.Location())
+	return time.Date(t.Year(), time.December, 31, 23, 59, 59, int(time.Second-1), t.Location())
 }

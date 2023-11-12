@@ -11,15 +11,15 @@ import (
 )
 
 func NewDuration(day, hour, min, sec, nsec int) time.Duration {
-	return time.Duration(int64(day)*NanosPerHour*24 +
-		int64(hour)*NanosPerHour +
-		int64(min)*NanosPerMinute +
-		int64(sec)*NanosPerSecond +
+	return time.Duration(int64(day)*int64(time.Hour)*24 +
+		int64(hour)*int64(time.Hour) +
+		int64(min)*int64(time.Minute) +
+		int64(sec)*int64(time.Second) +
 		int64(nsec))
 }
 
 func NewDurationFloat(day, hour, min, sec float64, nsec int64) time.Duration {
-	nps := float64(NanosPerSecond)
+	nps := float64(time.Second)
 	return time.Duration(int64(float64(nsec) +
 		sec*nps +
 		min*60*nps +

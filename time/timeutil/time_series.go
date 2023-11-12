@@ -21,7 +21,7 @@ func TimeSeriesMinMax(interval Interval, min, max time.Time) []time.Time {
 	tmMin := NewTimeMore(min, 0)
 	tmMax := NewTimeMore(max, 0)
 	switch interval {
-	case Year:
+	case IntervalYear:
 		min = tmMin.YearStart()
 		max = tmMax.YearStart()
 		series = append(series, min)
@@ -33,7 +33,7 @@ func TimeSeriesMinMax(interval Interval, min, max time.Time) []time.Time {
 			}
 			series = append(series, cur)
 		}
-	case Month:
+	case IntervalMonth:
 		min = tmMin.MonthStart()
 		max = tmMin.MonthStart()
 		series = append(series, min)
