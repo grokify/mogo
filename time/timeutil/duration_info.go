@@ -91,7 +91,7 @@ func (di DurationInfo) Duration(hoursPerDay, daysPerWeek float32) time.Duration 
 		if hoursPerDay != 0 {
 			dur += time.Duration(di.Days) * time.Duration(hoursPerDay) * time.Hour
 		} else {
-			dur += time.Duration(di.Days) * DurationDay
+			dur += time.Duration(di.Days) * Day
 		}
 	}
 	if di.Weeks != 0 {
@@ -105,10 +105,10 @@ func (di DurationInfo) Duration(hoursPerDay, daysPerWeek float32) time.Duration 
 			} else {
 				dur += time.Duration(di.Weeks) *
 					daysPerWeek *
-					DurationDay
+					Day
 			}
 		} else {
-			dur += time.Duration(di.Weeks) * DurationWeek
+			dur += time.Duration(di.Weeks) * Week
 		}
 	}
 	return dur
