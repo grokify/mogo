@@ -19,6 +19,9 @@ func Log(handler http.Handler) http.Handler {
 
 // NewServerTimeouts returns a `*http.Server` with all timeouts set to a single value provided.
 func NewServerTimeouts(addr string, handler http.Handler, timeout time.Duration) *http.Server {
+	if timeout < 0 {
+		timeout = 0
+	}
 	return &http.Server{
 		Addr:              addr,
 		Handler:           handler,
