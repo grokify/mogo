@@ -1,10 +1,13 @@
 package strconvutil
 
 import (
+	"errors"
 	"regexp"
 	"strconv"
 	"strings"
 )
+
+var ErrValueIsNegative = errors.New("value is negative")
 
 // AtoiOrDefault is like Atoi but takes a default value
 // which it returns in the event of a parse error.
@@ -38,6 +41,16 @@ func Atoi8(s string) (int8, error) {
 		return 0, err
 	}
 	return int8(i8), nil
+}
+
+func Atou(s string) (uint, error) {
+	if i, err := strconv.Atoi(s); err != nil {
+		return 0, err
+	} else if i < 0 {
+		return 0, ErrValueIsNegative
+	} else {
+		return uint(i), nil
+	}
 }
 
 func CanonicalIntStringOrIgnore(s, comma, decimal string) string {
