@@ -48,7 +48,7 @@ func NewDurationInfo(d time.Duration, daysPerWeek, hoursPerDay float32) Duration
 	}
 	nanosPerDay := Day
 	if hoursPerDay != 0 {
-		nanosPerDay = time.Duration(int64(float32(hoursPerDay) * float32(time.Hour)))
+		nanosPerDay = time.Duration(float32(hoursPerDay) * float32(time.Hour))
 	}
 	if time.Duration(workingNanos) >= nanosPerDay {
 		days := float64(workingNanos) / float64(Day)
