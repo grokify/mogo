@@ -40,13 +40,13 @@ func DoSimple(client *http.Client, httpMethod, requrl string, headers map[string
 	return client.Do(req)
 }
 
-func Do(req SimpleRequest) (*http.Response, error) {
-	sc := SimpleClient{}
+func Do(req Request) (*http.Response, error) {
+	sc := Client{}
 	return sc.Do(req)
 }
 
-func DoMore(req SimpleRequest) ([]byte, *http.Response, error) {
-	sc := SimpleClient{}
+func DoMore(req Request) ([]byte, *http.Response, error) {
+	sc := Client{}
 	resp, err := sc.Do(req)
 	if err != nil {
 		return []byte{}, resp, err

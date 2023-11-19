@@ -12,22 +12,21 @@ import (
 
 var rxHTTPURL = regexp.MustCompile(`^(?i)https?://`)
 
-// SimpleClient provides a simple interface to making HTTP requests
-// using `net/http`.
-type SimpleClient struct {
+// Client provides a simple interface to making HTTP requests using `net/http`.
+type Client struct {
 	BaseURL    string
 	HTTPClient *http.Client
 }
 
-func NewSimpleClient(httpClient *http.Client, baseURL string) SimpleClient {
-	return SimpleClient{HTTPClient: httpClient, BaseURL: baseURL}
+func NewSimpleClient(httpClient *http.Client, baseURL string) Client {
+	return Client{HTTPClient: httpClient, BaseURL: baseURL}
 }
 
-func (sc *SimpleClient) Get(reqURL string) (*http.Response, error) {
-	return sc.Do(SimpleRequest{Method: http.MethodGet, URL: reqURL})
+func (sc *Client) Get(reqURL string) (*http.Response, error) {
+	return sc.Do(Request{Method: http.MethodGet, URL: reqURL})
 }
 
-func (sc *SimpleClient) Do(req SimpleRequest) (*http.Response, error) {
+func (sc *Client) Do(req Request) (*http.Response, error) {
 	req.Inflate()
 	bodyBytes, err := req.BodyBytes()
 	if err != nil {
@@ -54,7 +53,7 @@ func (sc *SimpleClient) Do(req SimpleRequest) (*http.Response, error) {
 	return DoSimple(sc.HTTPClient, req.Method, reqURL, req.Headers, bodyBytes)
 }
 
-func (sc *SimpleClient) DoUnmarshalJSON(req SimpleRequest, resBody any) ([]byte, *http.Response, error) {
+func (sc *Client) DoUnmarshalJSON(req Request, resBody any) ([]byte, *http.Response, error) {
 	resp, err := sc.Do(req)
 	if err != nil {
 		return []byte{}, nil, err

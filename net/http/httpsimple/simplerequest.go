@@ -19,7 +19,7 @@ const (
 	BodyTypeXML  = "xml"
 )
 
-type SimpleRequest struct {
+type Request struct {
 	Method        string
 	URL           string
 	Query         url.Values
@@ -29,14 +29,14 @@ type SimpleRequest struct {
 	AddXMLDocType bool // only used if `Body` is a struct.
 }
 
-func NewSimpleRequest() SimpleRequest {
-	return SimpleRequest{
+func NewRequest() Request {
+	return Request{
 		Query:   url.Values{},
 		Headers: http.Header{},
 	}
 }
 
-func (req *SimpleRequest) Inflate() {
+func (req *Request) Inflate() {
 	req.Method = strings.ToUpper(strings.TrimSpace(req.Method))
 	if len(strings.TrimSpace(req.Method)) == 0 {
 		req.Method = http.MethodGet
@@ -72,7 +72,7 @@ func (req *SimpleRequest) Inflate() {
 	}
 }
 
-func (req *SimpleRequest) BodyBytes() ([]byte, error) {
+func (req *Request) BodyBytes() ([]byte, error) {
 	if req.Body == nil {
 		return []byte{}, nil
 	} else if reqBodyBytes, ok := req.Body.([]byte); ok {
