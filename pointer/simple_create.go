@@ -3,22 +3,28 @@
 // 2: https://github.com/openlyinc/pointy
 package pointer
 
-// func Int64(num int64) *int64 { return &num }
-func Pointer[E any](e E) *E { return &e }
-
-/*
-func ToString(s *string) string {
-	if s == nil {
-		return ""
-	}
-	return *s
-}
-*/
-
 func Dereference[E any](e *E) E {
 	if e == nil {
 		return *new(E)
 	} else {
 		return *e
 	}
+}
+
+func DereferenceSlice[S ~[]*E, E any](s S) []E {
+	out := []E{}
+	for _, e := range s {
+		out = append(out, *e)
+	}
+	return out
+}
+
+func Pointer[E any](e E) *E { return &e }
+
+func PointerSlice[S ~[]E, E any](s S) []*E {
+	out := []*E{}
+	for i := range s {
+		out = append(out, &s[i])
+	}
+	return out
 }
