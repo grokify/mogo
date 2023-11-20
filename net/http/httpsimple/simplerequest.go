@@ -38,36 +38,20 @@ func NewRequest() Request {
 
 func (req *Request) Inflate() {
 	req.Method = strings.ToUpper(strings.TrimSpace(req.Method))
-	if len(strings.TrimSpace(req.Method)) == 0 {
+	if req.Method == "" {
 		req.Method = http.MethodGet
-	} else {
-		req.Method = strings.ToUpper(strings.TrimSpace(req.Method))
 	}
 	if req.Headers == nil {
 		req.Headers = http.Header{}
 	}
-	if len(strings.TrimSpace(req.BodyType)) == 0 {
-		headerCTLc := strings.ToLower(httputilmore.HeaderContentType)
-		haveCT := false
-		for hkey := range req.Headers {
-			hkeyCTLc := strings.ToLower(hkey)
-			if hkeyCTLc == headerCTLc {
-				haveCT = true
-				break
-			}
-		}
-		if !haveCT {
-			switch req.BodyType {
-			case BodyTypeForm:
-				req.Headers.Add(httputilmore.HeaderContentType, httputilmore.ContentTypeAppFormURLEncodedUtf8)
-				// req.Headers[headerContentType] = []string{httputilmore.ContentTypeAppFormURLEncodedUtf8}
-			case BodyTypeJSON:
-				req.Headers.Add(httputilmore.HeaderContentType, httputilmore.ContentTypeAppJSONUtf8)
-				// req.Headers[headerContentType] = []string{httputilmore.ContentTypeAppJSONUtf8}
-			case BodyTypeXML:
-				req.Headers.Add(httputilmore.HeaderContentType, httputilmore.ContentTypeAppXMLUtf8)
-				// req.Headers[headerContentType] = []string{httputilmore.ContentTypeAppXMLUtf8}
-			}
+	if strings.TrimSpace(req.Headers.Get(httputilmore.HeaderContentType)) == "" {
+		switch req.BodyType {
+		case BodyTypeForm:
+			req.Headers.Add(httputilmore.HeaderContentType, httputilmore.ContentTypeAppFormURLEncodedUtf8)
+		case BodyTypeJSON:
+			req.Headers.Add(httputilmore.HeaderContentType, httputilmore.ContentTypeAppJSONUtf8)
+		case BodyTypeXML:
+			req.Headers.Add(httputilmore.HeaderContentType, httputilmore.ContentTypeAppXMLUtf8)
 		}
 	}
 }
