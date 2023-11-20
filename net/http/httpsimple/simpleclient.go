@@ -50,7 +50,7 @@ func (sc *Client) Do(req Request) (*http.Response, error) {
 	if sc.HTTPClient == nil {
 		sc.HTTPClient = &http.Client{}
 	}
-	return DoSimple(sc.HTTPClient, req.Method, reqURL, req.Headers, bodyBytes)
+	return doSimple(sc.HTTPClient, req.Method, reqURL, req.Headers, bodyBytes)
 }
 
 func (sc *Client) DoUnmarshalJSON(req Request, resBody any) ([]byte, *http.Response, error) {

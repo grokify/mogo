@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func DoSimple(client *http.Client, httpMethod, requrl string, headers map[string][]string, body []byte) (*http.Response, error) {
+func doSimple(client *http.Client, httpMethod, requrl string, headers map[string][]string, body []byte) (*http.Response, error) {
 	requrl = strings.TrimSpace(requrl)
 	if len(requrl) == 0 {
 		return nil, errors.New("requrl is required but not present")
