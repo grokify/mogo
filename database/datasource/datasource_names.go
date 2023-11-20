@@ -4,8 +4,6 @@ import (
 	"errors"
 	"net/url"
 	"strings"
-
-	"github.com/grokify/mogo/log/logutil"
 )
 
 // dsnBigQuery generates a DSN for BigQuery. Use `Hostname` for `ProjectID“ and `Database` for `location/dataset`.
@@ -20,6 +18,7 @@ func dsnBigQuery(ds *DataSource) (string, error) {
 	return "bigquery://" + dsn, nil
 }
 
+/*
 // dsnGodror builds a logfmt string.
 func dsnGodror(ds *DataSource) (string, error) {
 	// https://github.com/godror/godror
@@ -34,6 +33,7 @@ func dsnGodror(ds *DataSource) (string, error) {
 	}
 	return logutil.LogfmtString(data)
 }
+*/
 
 func ExampleGodrorQueryParams() map[string][]string {
 	// see: https://github.com/godror/godror

@@ -56,8 +56,8 @@ func (ds *DataSource) Name() (string, error) {
 	switch ds.Driver {
 	case DriverBigQuery:
 		return dsnBigQuery(ds)
-	case DriverGodror:
-		return dsnGodror(ds)
+	// case DriverGodror:
+	//	return dsnGodror(ds)
 	case DriverMySQL:
 		return dsnMySQL(ds), nil
 	case DriverOracle:
