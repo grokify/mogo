@@ -2,9 +2,7 @@ package reflectutil
 
 import (
 	"reflect"
-	"strings"
-
-	reflections "gopkg.in/oleiade/reflections.v1"
+	// reflections "gopkg.in/oleiade/reflections.v1"
 )
 
 func GetString(i any, key string) string {
@@ -17,6 +15,7 @@ func Set(i any, key string, value any) {
 	field.Set(reflect.ValueOf(value))
 }
 
+/*
 func GetField(i any, fieldPath ...string) (any, error) {
 	if len(fieldPath) == 0 {
 		return i, nil
@@ -27,6 +26,7 @@ func GetField(i any, fieldPath ...string) (any, error) {
 	}
 	return GetField(nextItem, fieldPath[1:]...)
 }
+*/
 
 // NameOf returns the name of a struct. If `inclPkgPath` is set to `true`, a
 // fully-qualified name is returned including package path.

@@ -30,7 +30,6 @@ require (
 	golang.org/x/net v0.18.0
 	golang.org/x/text v0.14.0
 	google.golang.org/genproto v0.0.0-20231106174013-bbf56f31fb17
-	gopkg.in/oleiade/reflections.v1 v1.0.0
 )
 
 require (
@@ -40,7 +39,6 @@ require (
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	github.com/oleiade/reflections v1.0.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/stretchr/testify v1.7.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
