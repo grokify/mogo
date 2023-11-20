@@ -3,11 +3,9 @@
 package logutil
 
 import (
-	"bufio"
-	"bytes"
 	"log"
 
-	"github.com/go-logfmt/logfmt"
+	// "github.com/go-logfmt/logfmt"
 	"github.com/grokify/mogo/errors/errorsutil"
 )
 
@@ -32,6 +30,7 @@ func PrintlnErr(err error, wrap ...string) {
 	}
 }
 
+/*
 func LogfmtString(m map[string][]string) (string, error) {
 	var buf bytes.Buffer
 	w := bufio.NewWriter(&buf)
@@ -48,3 +47,4 @@ func LogfmtString(m map[string][]string) (string, error) {
 	}
 	return buf.String(), nil
 }
+*/
