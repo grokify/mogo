@@ -24,7 +24,6 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.26
 	github.com/shopspring/decimal v1.3.1
 	github.com/valyala/quicktemplate v1.7.0
-	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	golang.org/x/crypto v0.15.0
 	golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa
 	golang.org/x/image v0.14.0
