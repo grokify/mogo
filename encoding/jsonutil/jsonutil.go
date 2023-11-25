@@ -9,7 +9,10 @@ import (
 	"io/fs"
 	"os"
 	"reflect"
+	// jsoniter "github.com/json-iterator/go"
 )
+
+// var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 const FileExt = ".json"
 
