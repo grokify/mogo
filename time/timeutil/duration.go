@@ -45,11 +45,11 @@ func ParseDuration(s string) (time.Duration, error) {
 			return zeroDuration, err
 		}
 		if units == "d" {
-			s = fmt.Sprintf("%vs", i*SecondsPerDay)
+			s = fmt.Sprintf("%vs", i*DaySeconds)
 		} else if units == "w" {
-			s = fmt.Sprintf("%vs", i*SecondsPerWeek)
+			s = fmt.Sprintf("%vs", i*WeekSeconds)
 		} else if units == "y" {
-			s = fmt.Sprintf("%vs", i*SecondsPerYear)
+			s = fmt.Sprintf("%vs", i*YearSeconds)
 		} else {
 			return zeroDuration, errors.New("timeutil.ParseDuration Parse Error")
 		}
