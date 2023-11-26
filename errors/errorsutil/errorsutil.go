@@ -14,7 +14,7 @@ func Append(err error, str string) error {
 */
 
 func wrapOne(err error, wrapPrefix string) error {
-	if err == nil {
+	if err == nil || wrapPrefix == "" {
 		return err
 	}
 	return fmt.Errorf("%s: [%w]", wrapPrefix, err)
