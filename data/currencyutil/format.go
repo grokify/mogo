@@ -1,5 +1,6 @@
 package currencyutil
 
+/*
 import (
 	"strconv"
 	"strings"
@@ -49,3 +50,4 @@ func (f *Formatter) FormatMoneyString(symbol string, amountString string) (strin
 	}
 	return f.Accounting.FormatMoney(amountFloat), nil
 }
+*/

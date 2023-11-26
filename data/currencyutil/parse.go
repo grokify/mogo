@@ -6,9 +6,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-
-	"github.com/grokify/mogo/strconv/strconvutil"
-	"github.com/shopspring/decimal"
 )
 
 const (
@@ -117,6 +114,7 @@ func ParseCurrency(opts *ParseCurrencyOpts, s string) (string, float64, error) {
 	return currency, val, nil
 }
 
+/*
 type Amount struct {
 	Value decimal.Decimal
 	Unit  string
@@ -157,7 +155,9 @@ func NewAmountInt(u string, v int64, exp int32) (Amount, error) {
 	amt.Unit = can
 	return amt, nil
 }
+*/
 
+/*
 func ParseAmount(value string) (Amount, error) {
 	value = strings.TrimSpace(value)
 	m := rxCUR.FindStringSubmatch(value)
@@ -179,6 +179,7 @@ func ParseAmount(value string) (Amount, error) {
 	}
 	return pr, fmt.Errorf("currency not found [%s]", value)
 }
+*/
 
 /*
 func (amt *Amount) ValueInt() (int64, error) {
@@ -186,6 +187,7 @@ func (amt *Amount) ValueInt() (int64, error) {
 }
 */
 
+/*()
 func (amt *Amount) Add(a Amount) error {
 	if a.Value.IsZero() {
 		return nil
@@ -223,6 +225,7 @@ func (amt Amount) MustStringFixed(places int32, defaultUnit string) string {
 	}
 	return MustSymbol(unit) + is + exp
 }
+*/
 
 func ParseCurrencyUnit(abbr, symbol string) (string, error) {
 	abbr = CurrencyCanonical(abbr)
