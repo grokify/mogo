@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/grokify/mogo/data/currencyutil"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 var nameOfTests = []struct {
@@ -20,8 +20,8 @@ var nameOfTests = []struct {
 	{http.Client{}, "Client", "net/http.Client"},
 	{url.Values{}, "Values", "net/url.Values"},
 	{&url.Values{}, "*Values", "*net/url.Values"},
-	{currencyutil.Amount{}, "Amount", "github.com/grokify/mogo/data/currencyutil.Amount"},
-	{&currencyutil.Amount{}, "*Amount", "*github.com/grokify/mogo/data/currencyutil.Amount"},
+	{timeutil.TimeMore{}, "TimeMore", "github.com/grokify/mogo/time/timeutil.TimeMore"},
+	{&timeutil.TimeMore{}, "*TimeMore", "*github.com/grokify/mogo/time/timeutil.TimeMore"},
 }
 
 // TestNameOf ensures `reflectutil.NameOf()` returns correct values.
