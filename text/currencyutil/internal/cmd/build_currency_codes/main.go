@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/grokify/mogo/data/currencyutil"
-	"github.com/grokify/mogo/data/currencyutil/internal"
 	"github.com/grokify/mogo/fmt/fmtutil"
 	"github.com/grokify/mogo/log/logutil"
 	"github.com/grokify/mogo/os/osutil"
+	"github.com/grokify/mogo/text/currencyutil"
+	"github.com/grokify/mogo/text/currencyutil/internal"
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
