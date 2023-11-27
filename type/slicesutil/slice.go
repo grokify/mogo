@@ -22,6 +22,16 @@ func Dedupe[S ~[]E, E comparable](s S) S {
 	return deduped
 }
 
+// LengthCounts returns a `map[uint]uint` where the keys are element lengths and the values
+// are counts of slices with those lenghts.
+func LengthCounts[E any](s [][]E) map[uint]uint {
+	stats := map[uint]uint{}
+	for _, si := range s {
+		stats[uint(len(si))]++
+	}
+	return stats
+}
+
 func ElementCounts[E comparable](s []E) map[E]int {
 	m := map[E]int{}
 	for _, si := range s {
@@ -76,6 +86,12 @@ func Shift[S ~[]E, E any](s S) (E, S) {
 		return *new(E), []E{}
 	}
 	return s[0], s[1:]
+}
+
+func Sort[E constraints.Ordered](s []E) {
+	sort.Slice(s, func(i, j int) bool {
+		return s[i] < s[j]
+	})
 }
 
 func SortSliceOfSlice[S ~[][]E, E constraints.Ordered | string](s S, indexes ...uint) {
