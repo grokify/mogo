@@ -23,7 +23,7 @@ func Dedupe[S ~[]E, E comparable](s S) S {
 }
 
 // LengthCounts returns a `map[uint]uint` where the keys are element lengths and the values
-// are counts of slices with those lenghts.
+// are counts of slices with those lengths.
 func LengthCounts[E any](s [][]E) map[uint]uint {
 	stats := map[uint]uint{}
 	for _, si := range s {
