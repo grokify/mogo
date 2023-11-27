@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/grokify/mogo/type/slicesutil"
+	"github.com/grokify/mogo/strconv/strconvutil"
 )
 
 var startEndDT6sTests = []struct {
@@ -22,7 +22,7 @@ func TestStartEndDT6sTests(t *testing.T) {
 		gotSta, gotEnd := StartEndDT6s(tt.v)
 		if gotSta != tt.min || gotEnd != tt.max {
 			t.Errorf("month.StartEndDT6s(%s): want (%d, %d), got (%d, %d)",
-				strings.Join(slicesutil.Itoa(tt.v), ","),
+				strings.Join(strconvutil.SliceItoa(tt.v, false, false), ","),
 				tt.min, tt.max,
 				gotSta, gotEnd)
 		}
