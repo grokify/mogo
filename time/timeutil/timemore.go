@@ -1,6 +1,7 @@
 package timeutil
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -37,10 +38,17 @@ func NewTimeMoreQuarterEndString(yyyyq string, d time.Weekday) (TimeMore, error)
 func (tm TimeMore) Time() time.Time            { return tm.time }
 func (tm TimeMore) WeekStartDay() time.Weekday { return tm.weekStartDay }
 
-func (tm TimeMore) DayStart() time.Time     { return dayStart(tm.time) }
-func (tm TimeMore) DayEnd() time.Time       { return dayEnd(tm.time) }
-func (tm TimeMore) WeekStart() time.Time    { return weekStart(tm.time, tm.weekStartDay) }
-func (tm TimeMore) WeekEnd() time.Time      { return weekEnd(tm.time, tm.weekStartDay) }
+func (tm TimeMore) DayStart() time.Time  { return dayStart(tm.time) }
+func (tm TimeMore) DayEnd() time.Time    { return dayEnd(tm.time) }
+func (tm TimeMore) WeekStart() time.Time { return weekStart(tm.time, tm.weekStartDay) }
+func (tm TimeMore) WeekEnd() time.Time   { return weekEnd(tm.time, tm.weekStartDay) }
+func (tm TimeMore) HalfYear() uint8 {
+	if tm.time.Month() < time.July {
+		return 1
+	} else {
+		return 2
+	}
+}
 func (tm TimeMore) MonthStart() time.Time   { return monthStart(tm.time) }
 func (tm TimeMore) MonthEnd() time.Time     { return monthEnd(tm.time) }
 func (tm TimeMore) IsMonthStart() bool      { return isMonthStart(tm.time) }
@@ -54,6 +62,19 @@ func (tm TimeMore) YearEnd() time.Time      { return yearEnd(tm.time) }
 func (tm TimeMore) IsYearStart() bool       { return isYearStart(tm.time) }
 func (tm TimeMore) IntervalStart(interval Interval) (time.Time, error) {
 	return intervalStart(tm.time, interval, tm.weekStartDay)
+}
+
+// YearHalf returns a string in the format of "2006H1"
+func (tm TimeMore) YearHalf() string { return fmt.Sprintf("%dH%d", tm.time.Year(), int(tm.HalfYear())) }
+
+// YearQuarter returns a string in the format of "2006Q1"
+func (tm TimeMore) YearQuarter() string {
+	return fmt.Sprintf("%dQ%d", tm.time.Year(), int(tm.QuarterCalendar()))
+}
+
+// YearMonth returns a string in the format of "2006M1"
+func (tm TimeMore) YearMonth() string {
+	return fmt.Sprintf("%dM%d", tm.time.Year(), int(tm.time.Month()))
 }
 
 // QuarterCalendar returns the quarter of the year specified by tm.Time.
