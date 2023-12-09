@@ -1,6 +1,13 @@
 package timeutil
 
-import "time"
+import (
+	"errors"
+	"fmt"
+	"regexp"
+	"strconv"
+	"strings"
+	"time"
+)
 
 // InRange checks to see if a time is within a provided time range
 // with options whether the start and end ranges are inclusive or
@@ -42,10 +49,94 @@ func (trs TimeRanges) IntersectionAny() time.Duration {
 
 // TimeRange represents a time range with a max and min value.
 type TimeRange struct {
-	Max     time.Time
-	Min     time.Time
-	HaveMax bool
-	HaveMin bool
+	Max    time.Time
+	Min    time.Time
+	MinSet bool
+	MaxSet bool
+}
+
+var rxParseTimeRange = regexp.MustCompile(`^([0-9]+)([MQHY])([0-9]+)$`)
+
+// ParseTimeRangeInterval takes a string in the form of `YYYY[MQY]XX`.
+func ParseTimeRangeInterval(s string) (TimeRange, error) {
+	s1 := strings.ToUpper(strings.TrimSpace(s))
+	m := rxParseTimeRange.FindStringSubmatch(s1)
+	if len(m) == 0 {
+		return TimeRange{}, fmt.Errorf("cannot parse time range rx (%s)", s)
+	}
+	yInt, err := strconv.Atoi(m[1])
+	if err != nil {
+		panic(err)
+	}
+	intVal, err := strconv.Atoi(m[3])
+	if err != nil {
+		panic(err)
+	}
+	// fmtutil.PrintJSON(m)
+	switch m[2] {
+	case "H":
+		if intVal != 1 && intVal != 2 {
+			return TimeRange{}, fmt.Errorf("invalid interval (%s)", s)
+		}
+		switch intVal {
+		case 1:
+			return TimeRange{
+				Min:    time.Date(yInt, time.Month(1), 1, 0, 0, 0, 0, time.UTC),
+				Max:    time.Date(yInt, time.Month(7), 1, 0, 0, 0, 0, time.UTC).Add(-1),
+				MinSet: true,
+				MaxSet: true}, nil
+		case 2:
+			return TimeRange{
+				Min:    time.Date(yInt, time.Month(7), 1, 0, 0, 0, 0, time.UTC),
+				Max:    time.Date(yInt+1, time.Month(1), 1, 0, 0, 0, 0, time.UTC).Add(-1),
+				MinSet: true,
+				MaxSet: true}, nil
+		}
+	case "Q":
+		if intVal < 1 || intVal > 4 {
+			return TimeRange{}, fmt.Errorf("invalid interval (%s)", s)
+		}
+		switch intVal {
+		case 1:
+			return TimeRange{
+				Min:    time.Date(yInt, time.Month(1), 1, 0, 0, 0, 0, time.UTC),
+				Max:    time.Date(yInt, time.Month(4), 1, 0, 0, 0, 0, time.UTC).Add(-1),
+				MinSet: true,
+				MaxSet: true}, nil
+		case 2:
+			return TimeRange{
+				Min:    time.Date(yInt, time.Month(4), 1, 0, 0, 0, 0, time.UTC),
+				Max:    time.Date(yInt, time.Month(7), 1, 0, 0, 0, 0, time.UTC).Add(-1),
+				MinSet: true,
+				MaxSet: true}, nil
+		case 3:
+			return TimeRange{
+				Min:    time.Date(yInt, time.Month(7), 1, 0, 0, 0, 0, time.UTC),
+				Max:    time.Date(yInt, time.Month(10), 1, 0, 0, 0, 0, time.UTC).Add(-1),
+				MinSet: true,
+				MaxSet: true}, nil
+		case 4:
+			return TimeRange{
+				Min:    time.Date(yInt, time.Month(10), 1, 0, 0, 0, 0, time.UTC),
+				Max:    time.Date(yInt+1, time.Month(1), 1, 0, 0, 0, 0, time.UTC).Add(-1),
+				MinSet: true,
+				MaxSet: true}, nil
+		}
+	}
+	return TimeRange{}, fmt.Errorf("time range not supported (%s)", s)
+}
+
+func (tr *TimeRange) Contains(t time.Time, inclusiveMin, inclusiveMax bool) (bool, error) {
+	if !tr.MinSet || !tr.MaxSet {
+		return false, errors.New("timerange must hvae min and max both set")
+	}
+	if t.Before(tr.Min) || t.After(tr.Max) ||
+		(!inclusiveMin && t.Equal(tr.Min)) ||
+		(!inclusiveMax && t.Equal(tr.Max)) {
+		return false, nil
+	} else {
+		return true, nil
+	}
 }
 
 // Insert updates a time range min and max values for a given time.
@@ -56,9 +147,9 @@ func (tr *TimeRange) Insert(t time.Time) {
 
 // InsertMax updates a time range max value for a given time.
 func (tr *TimeRange) InsertMax(t time.Time) {
-	if !tr.HaveMax {
+	if !tr.MaxSet {
 		tr.Max = t
-		tr.HaveMax = true
+		tr.MaxSet = true
 	} else if IsGreaterThan(t, tr.Max, false) {
 		tr.Max = t
 	}
@@ -66,9 +157,9 @@ func (tr *TimeRange) InsertMax(t time.Time) {
 
 // InsertMin updates a time range min value for a given time.
 func (tr *TimeRange) InsertMin(t time.Time) {
-	if !tr.HaveMin {
+	if !tr.MinSet {
 		tr.Min = t
-		tr.HaveMin = true
+		tr.MinSet = true
 	} else if IsLessThan(t, tr.Min, false) {
 		tr.Min = t
 	}

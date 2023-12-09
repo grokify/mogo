@@ -17,6 +17,7 @@ const (
 	WeekString        = "week"
 	MonthString       = "month"
 	QuarterString     = "quarter"
+	HalfYearString    = "halfyear"
 	YearString        = "year"
 	DecadeString      = "decade"
 	ScoreString       = "score"
@@ -37,6 +38,7 @@ const (
 	IntervalWeek
 	IntervalMonth
 	IntervalQuarter
+	IntervalHalfYear
 	IntervalYear
 	IntervalDecade
 	IntervalScore
@@ -55,6 +57,7 @@ var intervals = [...]string{
 	WeekString,
 	MonthString,
 	QuarterString,
+	HalfYearString,
 	YearString,
 	DecadeString,
 	ScoreString,
