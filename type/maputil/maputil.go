@@ -8,6 +8,7 @@ import (
 
 	"github.com/grokify/mogo/sort/sortutil"
 	"golang.org/x/exp/constraints"
+	"golang.org/x/exp/slices"
 )
 
 // StringKeys takes a map where the keys are strings and reurns a slice of key names.
@@ -15,7 +16,7 @@ import (
 // the results. If both transform and sort are requested, the sort is performed on the
 // transformed strings.
 func StringKeys[V any](m map[string]V, xf func(s string) string) []string {
-	keys := []string{}
+	var keys []string
 	for k := range m {
 		if xf != nil {
 			k = xf(k)
@@ -26,9 +27,30 @@ func StringKeys[V any](m map[string]V, xf func(s string) string) []string {
 	return keys
 }
 
+// IsSubset checks to see if `submap` is a subset of `m`.
+func IsSubset[C comparable, K comparable](m, submap map[C]K) bool {
+	for k, v := range submap {
+		if v2, ok := m[k]; !ok || v != v2 {
+			return false
+		}
+	}
+	return true
+}
+
+// IsSubsetOrValues checks to see if any of the values of `submap` are present in `a` where
+// all keys exist`.
+func IsSubsetOrValues[C comparable, K comparable](m map[C]K, submap map[C][]K) bool {
+	for k, vals := range submap {
+		if v, ok := m[k]; !ok || !slices.Contains(vals, v) {
+			return false
+		}
+	}
+	return true
+}
+
 // Keys returns a list of sorted keys.
 func Keys[K constraints.Ordered, V any](m map[K]V) []K {
-	keys := []K{}
+	var keys []K
 	for k := range m {
 		keys = append(keys, k)
 	}
@@ -57,7 +79,7 @@ func KeysExist[K comparable, V any](m map[K]V, keys []K, requireAll bool) bool {
 
 // ValuesSorted returns a string slice of sorted values.
 func ValuesSorted[K comparable, V constraints.Ordered](m map[K]V) []V {
-	vals := []V{}
+	var vals []V
 	for _, val := range m {
 		vals = append(vals, val)
 	}
@@ -145,7 +167,7 @@ func ValueStringOrDefault[K comparable](m map[K]string, key K, def string) strin
 }
 
 func MapSSToKeyValues(kvs map[string]string, sep string) string {
-	pairs := []string{}
+	var pairs []string
 	for k, v := range kvs {
 		k = strings.Trim(k, sep)
 		v = strings.Trim(v, sep)
@@ -163,7 +185,7 @@ func (m MapInt64Int64) KeysSorted() []int64 {
 }
 
 func (m MapInt64Int64) ValuesSortedByKeys() []int64 {
-	vals := []int64{}
+	var vals []int64
 	keys := m.KeysSorted()
 	for _, k := range keys {
 		if v, ok := m[k]; ok {
