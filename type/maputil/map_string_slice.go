@@ -99,3 +99,14 @@ func (mss MapStringSlice) FlattenAny(useLast, skipEmpty bool) map[string]any {
 	}
 	return msa
 }
+
+func (mss MapStringSlice) Lines(m map[string][]string, keyPrefix, valPrefix string) []string {
+	var lines []string
+	for k, vals := range mss {
+		lines = append(lines, keyPrefix+k)
+		for _, v := range vals {
+			lines = append(lines, valPrefix+v)
+		}
+	}
+	return lines
+}
