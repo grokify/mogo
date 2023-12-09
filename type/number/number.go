@@ -11,7 +11,7 @@ import (
 
 // SliceToFloat64 converts a slice of integers or floats to float64.
 func SliceToFloat64[T constraints.Integer | constraints.Float](src []T) []float64 {
-	out := []float64{}
+	var out []float64
 	for _, in := range src {
 		out = append(out, float64(in))
 	}
@@ -22,7 +22,7 @@ func IntSliceDedupe(elems []int, sortElems bool) []int {
 	if len(elems) == 0 {
 		return elems
 	}
-	deduped := []int{}
+	var deduped []int
 	mapInts := map[int]int{}
 	for _, el := range elems {
 		if _, ok := mapInts[el]; !ok {
@@ -36,11 +36,8 @@ func IntSliceDedupe(elems []int, sortElems bool) []int {
 	return deduped
 }
 
-func IntLength(num int) uint {
-	if num < 0 {
-		num = num * -1
-	}
-	return uint(len(strconv.Itoa(num)))
+func IntLength[I int | int8 | int16 | int32 | int64](num I) uint {
+	return uint(len(strconv.Itoa(int(num))))
 }
 
 var ErrOverflow = errors.New("integer overflow")
