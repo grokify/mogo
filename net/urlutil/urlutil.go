@@ -9,18 +9,41 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/google/go-querystring/query"
 	"github.com/grokify/mogo/type/slicesutil"
 )
 
-// AppendURLValues appends one url.Values to another url.Values.
-func AppendURLValues(v1, v2 url.Values) url.Values {
-	for key, vals := range v2 {
-		for _, val := range vals {
-			v1.Add(key, val)
+// AppendValues appends one `url.Values` to another `url.Values`.
+func AppendValues(v1, v2 url.Values, inclDuplicates bool) url.Values {
+	out := url.Values{}
+	if inclDuplicates {
+		for key, vals := range v1 {
+			out[key] = append(out[key], vals...)
+		}
+		for key, vals := range v2 {
+			out[key] = append(out[key], vals...)
+		}
+		return out
+	}
+	exists := map[string]map[string]int{}
+	for k, vals := range v1 {
+		if _, ok := exists[k]; !ok {
+			exists[k] = map[string]int{}
+		}
+		for _, v := range vals {
+			out.Add(k, v)
+			exists[k][v]++
 		}
 	}
-	return v1
+	for k, vals := range v2 {
+		for _, v := range vals {
+			if srcVals, ok := exists[k]; !ok {
+				out.Add(k, v)
+			} else if _, ok := srcVals[v]; !ok {
+				out.Add(k, v)
+			}
+		}
+	}
+	return out
 }
 
 // ToSlug creates a slug byte array from an input byte array.
@@ -76,76 +99,21 @@ func BuildURLQueryString(baseUrl string, qry any) string {
 }
 */
 
-func URLAddQuery(inputURL *url.URL, qry map[string][]string) *url.URL {
+func URLAddQuery(inputURL *url.URL, qry url.Values, inclDuplicates bool) *url.URL {
 	if len(qry) == 0 {
 		return inputURL
 	}
-	allQS := inputURL.Query()
-	for k, vals := range qry {
-		for _, val := range vals {
-			allQS.Set(k, val)
-		}
-	}
+	allQS := AppendValues(inputURL.Query(), qry, inclDuplicates)
 	inputURL.RawQuery = allQS.Encode()
 	return inputURL
 }
 
-func URLAddQueryValues(inputURL *url.URL, qry url.Values) *url.URL {
-	if len(qry) == 0 {
-		return inputURL
-	}
-	allQS := inputURL.Query()
-	for k, vals := range qry {
-		for _, val := range vals {
-			allQS.Set(k, val)
-		}
-	}
-	inputURL.RawQuery = allQS.Encode()
-	return inputURL
-}
-
-func URLAddQueryString(inputURL string, qry map[string][]string) (*url.URL, error) {
-	goURL, err := url.Parse(inputURL)
-	if err != nil {
+func URLStringAddQuery(inputURL string, qry url.Values, inclDuplicates bool) (*url.URL, error) {
+	if goURL, err := url.Parse(inputURL); err != nil {
 		return nil, err
+	} else {
+		return URLAddQuery(goURL, qry, inclDuplicates), nil
 	}
-	if len(qry) == 0 {
-		return goURL, nil
-	}
-	allQS := goURL.Query()
-	for k, vals := range qry {
-		for _, val := range vals {
-			allQS.Set(k, val)
-		}
-	}
-	goURL.RawQuery = allQS.Encode()
-	return goURL, nil
-}
-
-func URLAddQueryValuesString(inputURL string, qry url.Values) (*url.URL, error) {
-	goURL, err := url.Parse(inputURL)
-	if err != nil {
-		return nil, err
-	}
-	if len(qry) == 0 {
-		return goURL, nil
-	}
-	allQS := goURL.Query()
-	for k, vals := range qry {
-		for _, val := range vals {
-			allQS.Set(k, val)
-		}
-	}
-	goURL.RawQuery = allQS.Encode()
-	return goURL, nil
-}
-
-func URLAddQueryInterfaceString(inputURL string, qry any) (*url.URL, error) {
-	urlvals, err := query.Values(qry)
-	if err != nil {
-		return nil, err
-	}
-	return URLAddQueryValuesString(inputURL, urlvals)
 }
 
 // GetURLBody returns an HTTP response byte array body from a URL.

@@ -87,12 +87,13 @@ func TestJoin(t *testing.T) {
 }
 
 var qsAddTests = []struct {
-	baseURL string
-	qryKey  string
-	qryVal  string
-	wantURL string
+	baseURL        string
+	qryKey         string
+	qryVal         string
+	wantURL        string
+	inclDuplicates bool
 }{
-	{"http://example.com", "foo", "bar", "http://example.com?foo=bar"}}
+	{"http://example.com", "foo", "bar", "http://example.com?foo=bar", false}}
 
 func TestURLAddQueryString(t *testing.T) {
 	for _, tt := range qsAddTests {
@@ -101,7 +102,7 @@ func TestURLAddQueryString(t *testing.T) {
 		qsVal := url.Values{}
 		qsVal.Set(tt.qryKey, tt.qryVal)
 
-		goURL1, err := URLAddQueryValuesString(tt.baseURL, qsVal)
+		goURL1, err := URLStringAddQuery(tt.baseURL, qsVal, tt.inclDuplicates)
 		if err != nil {
 			t.Errorf("Got error [%s]", err.Error())
 		}
@@ -110,7 +111,7 @@ func TestURLAddQueryString(t *testing.T) {
 				tt.wantURL, goURL1.String())
 		}
 
-		goURL2, err := URLAddQueryString(tt.baseURL, qsMap)
+		goURL2, err := URLStringAddQuery(tt.baseURL, qsMap, tt.inclDuplicates)
 		if err != nil {
 			t.Errorf("Got error [%s]", err.Error())
 		}
@@ -123,12 +124,12 @@ func TestURLAddQueryString(t *testing.T) {
 		if err != nil {
 			t.Errorf("Got error url.Parse error [%s]", err.Error())
 		}
-		goURL3 := URLAddQuery(goURLInput, qsMap)
+		goURL3 := URLAddQuery(goURLInput, qsMap, tt.inclDuplicates)
 		if goURL3.String() != tt.wantURL {
 			t.Errorf("func URLAddQuery failed want [%v] got [%v]",
 				tt.wantURL, goURL3.String())
 		}
-		goURL4 := URLAddQueryValues(goURLInput, qsVal)
+		goURL4 := URLAddQuery(goURLInput, qsVal, tt.inclDuplicates)
 		if goURL4.String() != tt.wantURL {
 			t.Errorf("func URLAddQueryValues failed want [%v] got [%v]",
 				tt.wantURL, goURL4.String())
