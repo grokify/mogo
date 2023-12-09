@@ -47,8 +47,8 @@ var monthToQuarterTests = []struct {
 
 func TestMonthToQuarter(t *testing.T) {
 	for _, tt := range monthToQuarterTests {
-		got := MonthToQuarter(tt.v)
-		if got != tt.want {
+		got := MonthToQuarter(time.Month(tt.v))
+		if got != Yearquarter(tt.want) {
 			t.Errorf("MonthToQuarter(%v): want %v, got %v", tt.v, tt.want, got)
 		}
 	}
@@ -62,8 +62,8 @@ var quarterToMonthTests = []struct {
 
 func TestQuarterToMonth(t *testing.T) {
 	for _, tt := range quarterToMonthTests {
-		got := QuarterToMonth(tt.v)
-		if got != tt.want {
+		got := QuarterToMonth(Yearquarter(tt.v))
+		if got != time.Month(tt.want) {
 			t.Errorf("QuarterToMonth(%v): want %v, got %v", tt.v, tt.want, got)
 		}
 	}

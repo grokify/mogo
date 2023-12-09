@@ -56,6 +56,35 @@ func (tm TimeMore) IntervalStart(interval Interval) (time.Time, error) {
 	return intervalStart(tm.time, interval, tm.weekStartDay)
 }
 
+// QuarterCalendar returns the quarter of the year specified by tm.Time.
+func (tm TimeMore) QuarterCalendar() Yearquarter {
+	m := tm.time.Month()
+	if m < 4 {
+		return Winter // 1
+	} else if m < 7 {
+		return Spring
+	} else if m < 10 {
+		return Summer
+	} else {
+		return Autumn
+	}
+}
+
+func (tm TimeMore) SeasonMeteorological() Yearquarter {
+	m := tm.time.Month()
+	if m < 3 {
+		return Winter // Starts December 1
+	} else if m < 6 {
+		return Spring // Starts March 1
+	} else if m < 9 {
+		return Summer // Starts June 1
+	} else if m < 12 {
+		return Autumn // Starts September 1
+	} else {
+		return Winter // Starts December 1
+	}
+}
+
 // TimeMeta is a struct for holding various times related
 // to a current time, including year start, quarter start,
 // month start, and week start.

@@ -19,3 +19,25 @@ const (
 
 	MonthsEN = `["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]`
 )
+
+// A Yearquarter specifies a quarter of the year (Winter = 1, ...).
+type Yearquarter uint8
+
+const (
+	Winter Yearquarter = 1 + iota
+	Spring
+	Summer
+	Autumn
+)
+
+/*
+// String returns the English name of the quarter ("Winter", "Spring", ...).
+func (Yearquarter) String() string {
+	if January <= m && m <= December {
+		return longMonthNames[m-1]
+	}
+	buf := make([]byte, 20)
+	n := fmtInt(buf, uint64(m))
+	return "%!Month(" + string(buf[n:]) + ")"
+}
+*/

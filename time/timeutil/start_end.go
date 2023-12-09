@@ -27,7 +27,7 @@ func monthStart(dt time.Time) time.Time {
 
 // quarterStart returns a time.Time for the start of the quarter.
 func quarterStart(t time.Time) time.Time {
-	qm := QuarterToMonth(MonthToQuarter(uint8(t.Month())))
+	qm := QuarterToMonth(MonthToQuarter(t.Month()))
 	return time.Date(t.Year(), time.Month(qm), 1, 0, 0, 0, 0, t.Location())
 }
 

@@ -18,7 +18,7 @@ func QuarterStart(dt time.Time) time.Time {
 
 func QuarterStartString(t time.Time) string {
 	dtStart := NewTimeMore(t, 0).QuarterStart()
-	return fmt.Sprintf("%v Q%v", dtStart.Year(), MonthToQuarter(uint8(dtStart.Month())))
+	return fmt.Sprintf("%v Q%v", dtStart.Year(), MonthToQuarter(dtStart.Month()))
 }
 
 /*
@@ -66,11 +66,15 @@ func quarterPrev(t time.Time, num uint) time.Time {
 }
 
 // MonthToQuarter converts a month to a calendar quarter.
-func MonthToQuarter(month uint8) uint8 {
-	return uint8(math.Ceil(float64(month) / 3))
+func MonthToQuarter(month time.Month) Yearquarter {
+	// func MonthToQuarter(month uint8) uint8 {
+	// return uint8(math.Ceil(float64(month) / 3))
+	return Yearquarter(uint8(math.Ceil(float64(month) / 3)))
 }
 
 // QuarterToMonth converts a calendar quarter to a month.
-func QuarterToMonth(quarter uint8) uint8 {
-	return quarter*3 - 2
+func QuarterToMonth(quarter Yearquarter) time.Month {
+	// func QuarterToMonth(quarter uint8) uint8 {
+	//	return quarter*3 - 2
+	return time.Month(int(quarter)*3 - 2)
 }

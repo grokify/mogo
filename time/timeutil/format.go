@@ -154,17 +154,17 @@ func GetFormat(formatName string) (string, error) {
 
 // FormatQuarter takes quarter time and formats it using "Q# YYYY".
 func FormatQuarter(t time.Time) string {
-	return fmt.Sprintf("Q%d %d", MonthToQuarter(uint8(t.Month())), t.Year())
+	return fmt.Sprintf("Q%d %d", MonthToQuarter(t.Month()), t.Year())
 }
 
 // FormatQuarter takes quarter time and formats it using "YYYY Q#".
 func FormatQuarterYYYYQ(t time.Time) string {
-	return fmt.Sprintf("%d Q%d", t.Year(), MonthToQuarter(uint8(t.Month())))
+	return fmt.Sprintf("%d Q%d", t.Year(), MonthToQuarter(t.Month()))
 }
 
 // FormatQuarterYYQ takes quarter time and formats it using "'YY Q#".
 func FormatQuarterYYQ(t time.Time) string {
-	return fmt.Sprintf("%s Q%d", t.Format("'06"), MonthToQuarter(uint8(t.Month())))
+	return fmt.Sprintf("%s Q%d", t.Format("'06"), MonthToQuarter(t.Month()))
 }
 
 func TimeMinRFC3339() time.Time {
