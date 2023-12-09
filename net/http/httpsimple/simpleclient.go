@@ -6,6 +6,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"net/url"
 	"regexp"
 	"strings"
 
@@ -17,10 +18,11 @@ var rxHTTPURL = regexp.MustCompile(`^(?i)https?://`)
 // Client provides a simple interface to making HTTP requests using `net/http`.
 type Client struct {
 	BaseURL    string
+	Query      url.Values // Add If Not Exists
 	HTTPClient *http.Client
 }
 
-func NewSimpleClient(httpClient *http.Client, baseURL string) Client {
+func NewClient(httpClient *http.Client, baseURL string) Client {
 	return Client{HTTPClient: httpClient, BaseURL: baseURL}
 }
 
@@ -42,8 +44,9 @@ func (sc *Client) Do(req Request) (*http.Response, error) {
 			reqURL = urlutil.JoinAbsolute(sc.BaseURL, reqURL)
 		}
 	}
-	if len(req.Query) > 0 {
-		goURL, err := urlutil.URLAddQueryString(reqURL, req.Query)
+	qry := urlutil.AppendValues(req.Query, sc.Query, false)
+	if len(qry) > 0 {
+		goURL, err := urlutil.URLStringAddQuery(reqURL, qry, false)
 		if err != nil {
 			return nil, err
 		}
@@ -68,9 +71,9 @@ func (sc *Client) DoUnmarshalJSON(req Request, resBody any) ([]byte, *http.Respo
 	return bytes, resp, err
 }
 
-func doSimple(client *http.Client, httpMethod, requrl string, headers map[string][]string, body []byte) (*http.Response, error) {
-	requrl = strings.TrimSpace(requrl)
-	if len(requrl) == 0 {
+func doSimple(client *http.Client, httpMethod, reqURL string, headers map[string][]string, body []byte) (*http.Response, error) {
+	reqURL = strings.TrimSpace(reqURL)
+	if len(reqURL) == 0 {
 		return nil, errors.New("requrl is required but not present")
 	}
 	if client == nil {
@@ -84,9 +87,9 @@ func doSimple(client *http.Client, httpMethod, requrl string, headers map[string
 	var err error
 
 	if len(body) == 0 {
-		req, err = http.NewRequest(httpMethod, requrl, nil)
+		req, err = http.NewRequest(httpMethod, reqURL, nil)
 	} else {
-		req, err = http.NewRequest(httpMethod, requrl, bytes.NewBuffer(body))
+		req, err = http.NewRequest(httpMethod, reqURL, bytes.NewBuffer(body))
 	}
 	if err != nil {
 		return nil, err
