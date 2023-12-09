@@ -7,7 +7,6 @@ go 1.21
 require (
 	github.com/ProtonMail/go-crypto v0.0.0-20230923063757-afb1ddc0824c
 	github.com/caarlos0/env/v6 v6.10.1
-	github.com/google/go-querystring v1.1.0
 	github.com/grokify/base36 v1.0.5
 	github.com/grokify/bitcoinmath v0.1.0
 	github.com/huandu/xstrings v1.4.0
@@ -20,11 +19,11 @@ require (
 	github.com/martinlindhe/base36 v1.1.1
 	github.com/microcosm-cc/bluemonday v1.0.26
 	golang.org/x/crypto v0.16.0
-	golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa
+	golang.org/x/exp v0.0.0-20231206192017-f3f8817b8deb
 	golang.org/x/image v0.14.0
 	golang.org/x/net v0.19.0
 	golang.org/x/text v0.14.0
-	google.golang.org/genproto v0.0.0-20231120223509-83a465c0220f
+	google.golang.org/genproto v0.0.0-20231127180814-3a041ad873d4
 )
 
 require (
