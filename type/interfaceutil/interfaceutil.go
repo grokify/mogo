@@ -63,6 +63,7 @@ func ToInt(v any, defaultValue int) int {
 		return valInt
 	} else if valFloat, ok := v.(float64); ok {
 		return int(valFloat)
+	} else {
+		return defaultValue
 	}
-	return defaultValue
 }

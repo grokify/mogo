@@ -1,7 +1,7 @@
 package number
 
 func MatrixRowsMax(d [][]float64) []float64 {
-	rows := []float64{}
+	var rows []float64
 	if len(d) == 0 {
 		return rows
 	}
@@ -22,7 +22,7 @@ func MatrixRowsMax(d [][]float64) []float64 {
 }
 
 func MatrixColsMax(d [][]float64) []float64 {
-	cols := []float64{}
+	var cols []float64
 	if len(d) == 0 {
 		return cols
 	} else if len(d[0]) == 0 {

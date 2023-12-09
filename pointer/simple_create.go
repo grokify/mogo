@@ -12,7 +12,7 @@ func Dereference[E any](e *E) E {
 }
 
 func DereferenceSlice[S ~[]*E, E any](s S) []E {
-	out := []E{}
+	var out []E
 	for _, e := range s {
 		out = append(out, *e)
 	}
@@ -22,7 +22,7 @@ func DereferenceSlice[S ~[]*E, E any](s S) []E {
 func Pointer[E any](e E) *E { return &e }
 
 func PointerSlice[S ~[]E, E any](s S) []*E {
-	out := []*E{}
+	var out []*E
 	for i := range s {
 		out = append(out, &s[i])
 	}

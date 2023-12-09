@@ -37,7 +37,7 @@ func IncludeCaseInsensitive(haystack []string, needle string) bool {
 }
 
 func StripSliceElements(in []string, strip []string) []string {
-	out := []string{}
+	var out []string
 WORDS:
 	for _, s := range in {
 		for _, try := range strip {
@@ -69,4 +69,6 @@ func SplitCount(slice []string, size int) [][]string {
 	return slices
 }
 
-func Unshift(a []string, x string) []string { return append([]string{x}, a...) }
+func Unshift(a []string, x string) []string {
+	return append([]string{x}, a...)
+}
