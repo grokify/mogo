@@ -128,7 +128,7 @@ func ParseTimeRangeInterval(s string) (TimeRange, error) {
 
 func (tr *TimeRange) Contains(t time.Time, inclusiveMin, inclusiveMax bool) (bool, error) {
 	if !tr.MinSet || !tr.MaxSet {
-		return false, errors.New("timerange must hvae min and max both set")
+		return false, errors.New("timerange must have min and max both set")
 	}
 	if t.Before(tr.Min) || t.After(tr.Max) ||
 		(!inclusiveMin && t.Equal(tr.Min)) ||
