@@ -55,9 +55,9 @@ type TimeRange struct {
 	MaxSet bool
 }
 
-var rxParseTimeRange = regexp.MustCompile(`^([0-9]+)([MQHY])([0-9]+)$`)
+var rxParseTimeRange = regexp.MustCompile(`^([0-9]+)([MQH])([0-9]+)$`)
 
-// ParseTimeRangeInterval takes a string in the form of `YYYY[MQY]XX`.
+// ParseTimeRangeInterval takes a string in the form of `YYYY[MQHX]XX`.
 func ParseTimeRangeInterval(s string) (TimeRange, error) {
 	s1 := strings.ToUpper(strings.TrimSpace(s))
 	m := rxParseTimeRange.FindStringSubmatch(s1)
@@ -76,54 +76,68 @@ func ParseTimeRangeInterval(s string) (TimeRange, error) {
 	switch m[2] {
 	case "H":
 		if intVal != 1 && intVal != 2 {
-			return TimeRange{}, fmt.Errorf("invalid interval (%s)", s)
+			return TimeRange{}, fmt.Errorf("invalid half year interval (%s)", s)
 		}
 		switch intVal {
 		case 1:
-			return TimeRange{
-				Min:    time.Date(yInt, time.Month(1), 1, 0, 0, 0, 0, time.UTC),
-				Max:    time.Date(yInt, time.Month(7), 1, 0, 0, 0, 0, time.UTC).Add(-1),
-				MinSet: true,
-				MaxSet: true}, nil
+			return timeRangeBuilder(yInt, 1, yInt, 7), nil
 		case 2:
-			return TimeRange{
-				Min:    time.Date(yInt, time.Month(7), 1, 0, 0, 0, 0, time.UTC),
-				Max:    time.Date(yInt+1, time.Month(1), 1, 0, 0, 0, 0, time.UTC).Add(-1),
-				MinSet: true,
-				MaxSet: true}, nil
+			return timeRangeBuilder(yInt, 7, yInt+1, 1), nil
 		}
 	case "Q":
 		if intVal < 1 || intVal > 4 {
-			return TimeRange{}, fmt.Errorf("invalid interval (%s)", s)
+			return TimeRange{}, fmt.Errorf("invalid quarter interval (%s)", s)
 		}
 		switch intVal {
 		case 1:
-			return TimeRange{
-				Min:    time.Date(yInt, time.Month(1), 1, 0, 0, 0, 0, time.UTC),
-				Max:    time.Date(yInt, time.Month(4), 1, 0, 0, 0, 0, time.UTC).Add(-1),
-				MinSet: true,
-				MaxSet: true}, nil
+			return timeRangeBuilder(yInt, 1, yInt, 4), nil
 		case 2:
-			return TimeRange{
-				Min:    time.Date(yInt, time.Month(4), 1, 0, 0, 0, 0, time.UTC),
-				Max:    time.Date(yInt, time.Month(7), 1, 0, 0, 0, 0, time.UTC).Add(-1),
-				MinSet: true,
-				MaxSet: true}, nil
+			return timeRangeBuilder(yInt, 4, yInt, 7), nil
 		case 3:
-			return TimeRange{
-				Min:    time.Date(yInt, time.Month(7), 1, 0, 0, 0, 0, time.UTC),
-				Max:    time.Date(yInt, time.Month(10), 1, 0, 0, 0, 0, time.UTC).Add(-1),
-				MinSet: true,
-				MaxSet: true}, nil
+			return timeRangeBuilder(yInt, 7, yInt, 10), nil
 		case 4:
-			return TimeRange{
-				Min:    time.Date(yInt, time.Month(10), 1, 0, 0, 0, 0, time.UTC),
-				Max:    time.Date(yInt+1, time.Month(1), 1, 0, 0, 0, 0, time.UTC).Add(-1),
-				MinSet: true,
-				MaxSet: true}, nil
+			return timeRangeBuilder(yInt, 10, yInt+1, 1), nil
+		}
+	case "M":
+		if intVal < 1 || intVal > 12 {
+			return TimeRange{}, fmt.Errorf("invalid month interval (%s)", s)
+		}
+		switch intVal {
+		case 1:
+			return timeRangeBuilder(yInt, 1, yInt, 2), nil
+		case 2:
+			return timeRangeBuilder(yInt, 2, yInt, 3), nil
+		case 3:
+			return timeRangeBuilder(yInt, 3, yInt, 4), nil
+		case 4:
+			return timeRangeBuilder(yInt, 4, yInt, 5), nil
+		case 5:
+			return timeRangeBuilder(yInt, 5, yInt, 6), nil
+		case 6:
+			return timeRangeBuilder(yInt, 6, yInt, 7), nil
+		case 7:
+			return timeRangeBuilder(yInt, 7, yInt, 8), nil
+		case 8:
+			return timeRangeBuilder(yInt, 8, yInt, 9), nil
+		case 9:
+			return timeRangeBuilder(yInt, 9, yInt, 10), nil
+		case 10:
+			return timeRangeBuilder(yInt, 10, yInt, 11), nil
+		case 11:
+			return timeRangeBuilder(yInt, 11, yInt, 12), nil
+		case 12:
+			return timeRangeBuilder(yInt, 12, yInt+1, 1), nil
 		}
 	}
 	return TimeRange{}, fmt.Errorf("time range not supported (%s)", s)
+}
+
+func timeRangeBuilder(yMin, mMin, yMax, mMaxPlus1 int) TimeRange {
+	return TimeRange{
+		Min:    time.Date(yMin, time.Month(mMin), 1, 0, 0, 0, 0, time.UTC),
+		Max:    time.Date(yMax, time.Month(mMaxPlus1), 1, 0, 0, 0, 0, time.UTC).Add(-1),
+		MinSet: true,
+		MaxSet: true}
 }
 
 func (tr *TimeRange) Contains(t time.Time, inclusiveMin, inclusiveMax bool) (bool, error) {
