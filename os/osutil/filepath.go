@@ -15,8 +15,9 @@ func IsDir(name string) (bool, error) {
 		return false, err
 	} else if !fi.Mode().IsDir() {
 		return false, nil
+	} else {
+		return true, nil
 	}
-	return true, nil
 }
 
 // IsFile verifies a path exists and is a file. It will optionally
@@ -45,14 +46,13 @@ func Exists(name string) (bool, error) {
 }
 
 func MustUserHomeDir(subdirs ...string) string {
-	userhomedir, err := os.UserHomeDir()
-	if err != nil {
+	if userhomedir, err := os.UserHomeDir(); err != nil {
 		panic(err)
-	}
-	if len(subdirs) > 0 {
+	} else if len(subdirs) > 0 {
 		return filepath.Join(userhomedir, filepath.Join(subdirs...))
+	} else {
+		return userhomedir
 	}
-	return userhomedir
 }
 
 func GoPath(parts ...string) string {
@@ -114,7 +114,7 @@ func Filenames(name string, rx *regexp.Regexp, inclEmptyFiles, absPath bool) ([]
 			return []string{}, nil
 		}
 	}
-	filenames := []string{}
+	var filenames []string
 	entries, err := ReadDirMore(name, rx, false, true, inclEmptyFiles)
 	if err != nil {
 		return []string{}, nil
@@ -135,7 +135,7 @@ func Filenames(name string, rx *regexp.Regexp, inclEmptyFiles, absPath bool) ([]
 }
 
 func FilenamesFilterSizeGTZero(filepaths ...string) []string {
-	filepathsExist := []string{}
+	var filepathsExist []string
 
 	for _, envPathVal := range filepaths {
 		envPathVals := strings.Split(envPathVal, ",")
@@ -183,7 +183,9 @@ func ReadDirSplit(dirname string, inclDotDirs bool) ([]os.FileInfo, []os.FileInf
 	if err != nil {
 		return []os.FileInfo{}, []os.FileInfo{}, err
 	}
-	allFIs, err := DirEntriesToFileInfos(allDEs)
+	// allFIs, err := DirEntriesToFileInfos(allDEs)
+	allDEs2 := DirEntries(allDEs)
+	allFIs, err := allDEs2.Infos()
 	if err != nil {
 		return []os.FileInfo{}, []os.FileInfo{}, err
 	}
@@ -192,8 +194,8 @@ func ReadDirSplit(dirname string, inclDotDirs bool) ([]os.FileInfo, []os.FileInf
 }
 
 func FileInfosSplit(all []os.FileInfo, inclDotDirs bool) ([]os.FileInfo, []os.FileInfo) {
-	subdirs := []os.FileInfo{}
-	regular := []os.FileInfo{}
+	var subdirs []os.FileInfo
+	var regular []os.FileInfo
 	for _, f := range all {
 		if f.Mode().IsDir() {
 			if f.Name() == "." && f.Name() == ".." {

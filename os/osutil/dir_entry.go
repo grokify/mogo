@@ -73,15 +73,16 @@ func (entries DirEntries) WriteFileNames(filename, dir string, perm os.FileMode)
 func (entries DirEntries) Infos() ([]os.FileInfo, error) {
 	var infos []os.FileInfo
 	for _, entry := range entries {
-		info, err := entry.Info()
-		if err != nil {
+		if info, err := entry.Info(); err != nil {
 			return infos, err
+		} else {
+			infos = append(infos, info)
 		}
-		infos = append(infos, info)
 	}
 	return infos, nil
 }
 
+/*
 // DirEntriesToFileInfos converts a slice of `os.DirEntry` to a slice of `os.FileInfo`.
 func DirEntriesToFileInfos(direntries []os.DirEntry) ([]os.FileInfo, error) {
 	fs := []os.FileInfo{}
@@ -94,3 +95,4 @@ func DirEntriesToFileInfos(direntries []os.DirEntry) ([]os.FileInfo, error) {
 	}
 	return fs, nil
 }
+*/
