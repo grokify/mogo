@@ -136,7 +136,7 @@ func QuarterInt32StartTime(yyyyq int32) (time.Time, error) {
 		return time.Now(), err
 	}
 	qm := QuarterToMonth(Yearquarter(q))
-	return time.Date(int(yyyy), time.Month(qm), 1, 0, 0, 0, 0, time.UTC), nil
+	return time.Date(int(yyyy), qm, 1, 0, 0, 0, 0, time.UTC), nil
 }
 
 func QuarterInt32EndTime(yyyyq int32) (time.Time, error) {
@@ -166,7 +166,7 @@ func QuarterInt32End(yyyyq int32) (time.Time, error) {
 		q += 1
 	}
 	qm := QuarterToMonth(Yearquarter(q))
-	return time.Date(int(yyyy), time.Month(qm), 0, 23, 59, 59, 0, time.UTC), nil
+	return time.Date(int(yyyy), qm, 0, 23, 59, 59, 0, time.UTC), nil
 }
 
 func ParseHalf(yyyyh int32) (int32, uint8, error) {
