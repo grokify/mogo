@@ -65,3 +65,16 @@ func MethodsMap() map[string]int {
 		http.MethodTrace:   1,
 	}
 }
+
+func Methods() []string {
+	return []string{
+		http.MethodConnect,
+		http.MethodDelete,
+		http.MethodGet,
+		http.MethodHead,
+		http.MethodOptions,
+		http.MethodPatch,
+		http.MethodPost,
+		http.MethodPut,
+		http.MethodTrace}
+}
