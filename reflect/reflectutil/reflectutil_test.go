@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"testing"
 
+	"github.com/grokify/mogo/database/datasource"
 	"github.com/grokify/mogo/time/timeutil"
 )
 
@@ -34,6 +35,27 @@ func TestNameOf(t *testing.T) {
 		typeNamePkgPathTry := NameOf(tt.v, true)
 		if typeNamePkgPathTry != tt.typenameWithPkgPath {
 			t.Errorf("reflectutil.NameOf(\"%v\", true) Mismatch: want [%s], got [%s]", tt.v, typeNamePkgPathTry, tt.typenameWithPkgPath)
+		}
+	}
+}
+
+var fieldTagValueTests = []struct {
+	v         any
+	fieldName string
+	tagName   string
+	tagValue  string
+}{
+	{datasource.DataSource{}, "Driver", "json", "driver"},
+}
+
+func TestFieldTagValue(t *testing.T) {
+	for _, tt := range fieldTagValueTests {
+		tagValue, err := FieldTagValue(tt.v, tt.fieldName, tt.tagName)
+		if err != nil {
+			t.Errorf("reflectutil.FieldTagValue(...) error (%s) want (%s)", err.Error(), tt.tagValue)
+		}
+		if tagValue != tt.tagValue {
+			t.Errorf("reflectutil.FieldTagValue(...) mismatch: want (%s) got (%s)", tt.tagValue, tagValue)
 		}
 	}
 }

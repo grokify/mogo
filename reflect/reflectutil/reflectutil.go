@@ -1,6 +1,7 @@
 package reflectutil
 
 import (
+	"errors"
 	"reflect"
 	// reflections "gopkg.in/oleiade/reflections.v1"
 )
@@ -27,6 +28,18 @@ func GetField(i any, fieldPath ...string) (any, error) {
 	return GetField(nextItem, fieldPath[1:]...)
 }
 */
+
+var ErrFieldNotFound = errors.New("field not found")
+
+// FieldTagValue returns a tar name.
+func FieldTagValue(a any, fieldName, tagName string) (string, error) {
+	val := reflect.ValueOf(a)
+	if field, ok := val.Type().FieldByName(fieldName); !ok {
+		return "", ErrFieldNotFound
+	} else {
+		return field.Tag.Get(tagName), nil
+	}
+}
 
 // NameOf returns the name of a struct. If `inclPkgPath` is set to `true`, a
 // fully-qualified name is returned including package path.
