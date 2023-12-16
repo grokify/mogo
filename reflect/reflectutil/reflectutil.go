@@ -31,7 +31,8 @@ func GetField(i any, fieldPath ...string) (any, error) {
 
 var ErrFieldNotFound = errors.New("field not found")
 
-// FieldTagValue returns a tar name.
+// FieldTagValue returns a tag name. For example, in 'Attribute string: `json:"attribute,omitempty"`', the
+// usage would be `FieldTagValue(s, "Attribute", "json")` which would return `attribute`.
 func FieldTagValue(a any, fieldName, tagName string) (string, error) {
 	val := reflect.ValueOf(a)
 	if field, ok := val.Type().FieldByName(fieldName); !ok {
