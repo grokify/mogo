@@ -102,6 +102,31 @@ func SortSliceOfSlice[S ~[][]E, E constraints.Ordered | string](s S, indexes ...
 	}
 }
 
+// SplitMaxLength returns a slice of slices where each sub-slice has the max length supplied.
+// A supplied `maxLength` of `0` indicates no max length.
+func SplitMaxLength[S ~[]E, E any](s S, maxLen uint) []S {
+	var split []S
+	new := S{}
+	if maxLen == 0 || len(s) <= int(maxLen) {
+		for _, e := range s {
+			new = append(new, e)
+		}
+		split = append(split, new)
+		return split
+	}
+	for _, e := range s {
+		new = append(new, e)
+		if uint(len(new)) >= maxLen {
+			split = append(split, new)
+			new = S{}
+		}
+	}
+	if len(new) > 0 {
+		split = append(split, new)
+	}
+	return split
+}
+
 // Sub returns a string slice with duplicate values removed. First observance is kept.
 func Sub[S ~[]E, E comparable](s, t S) S {
 	filtered := S{}
