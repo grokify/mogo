@@ -108,11 +108,7 @@ func SplitMaxLength[S ~[]E, E any](s S, maxLen uint) []S {
 	var split []S
 	new := S{}
 	if maxLen == 0 || len(s) <= int(maxLen) {
-		for _, e := range s {
-			new = append(new, e)
-		}
-		split = append(split, new)
-		return split
+		return append(split, append(new, s...))
 	}
 	for _, e := range s {
 		new = append(new, e)

@@ -13,6 +13,8 @@ var splitMaxLengthTests = []struct {
 	{v: []uint{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, s: 2, n: 5, l0: 9},
 	{v: []uint{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, s: 3, n: 4, l0: 10},
 	{v: []uint{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, s: 4, n: 3, l0: 9},
+	{v: []uint{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, s: 10, n: 1, l0: 1},
+	{v: []uint{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, s: 100, n: 1, l0: 1},
 }
 
 func TestSplitMaxLength(t *testing.T) {
