@@ -105,11 +105,11 @@ func SortSliceOfSlice[S ~[][]E, E constraints.Ordered | string](s S, indexes ...
 // SplitMaxLength returns a slice of slices where each sub-slice has the max length supplied.
 // A supplied `maxLength` of `0` indicates no max length.
 func SplitMaxLength[S ~[]E, E any](s S, maxLen uint) []S {
+	if maxLen == 0 || len(s) <= int(maxLen) {
+		return []S{append(S{}, s...)}
+	}
 	var split []S
 	new := S{}
-	if maxLen == 0 || len(s) <= int(maxLen) {
-		return append(split, append(new, s...))
-	}
 	for _, e := range s {
 		new = append(new, e)
 		if uint(len(new)) >= maxLen {
