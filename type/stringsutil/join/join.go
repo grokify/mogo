@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 // JoinAny takes an array of `any` and converts
@@ -138,9 +140,13 @@ func JoinQuoteMaxLengthTrimSpaceSkipEmpty(slice []string, begQuote, endQuote, se
 }
 
 func JoinQuote(slice []string, begQuote, endQuote, sep string) string {
-	words := []string{}
+	var words []string
 	for _, word := range slice {
-		words = append(words, begQuote+word+endQuote)
+		if strings.Index(word, begQuote) == 0 && stringsutil.ReverseIndex(word, endQuote) == 0 {
+			words = append(words, word)
+		} else {
+			words = append(words, begQuote+word+endQuote)
+		}
 	}
 	return strings.Join(words, sep)
 }
