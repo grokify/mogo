@@ -54,9 +54,10 @@ func (mss MapStringSlice) KeysByValueCounts() map[int][]string {
 
 // MapStringSliceCondenseSpace will trim spaces for keys and values, and remove empty values. It will
 // also optionally dedupe and sort values.
-func MapStringSliceCondenseSpace(m map[string][]string, dedupeVals, sortVals bool) map[string][]string {
+func (mss MapStringSlice) SliceCondenseSpace(dedupeVals, sortVals bool) map[string][]string {
+	// func MapStringSliceCondenseSpace(m map[string][]string, dedupeVals, sortVals bool) map[string][]string {
 	new := map[string][]string{}
-	for key, vals := range m {
+	for key, vals := range mss {
 		new[strings.TrimSpace(key)] = stringsutil.SliceCondenseSpace(vals, dedupeVals, sortVals)
 	}
 	return new
@@ -109,4 +110,14 @@ func (mss MapStringSlice) Lines(m map[string][]string, keyPrefix, valPrefix stri
 		}
 	}
 	return lines
+}
+
+func (mss MapStringSlice) ReveseFlatten() map[string]string {
+	out := map[string]string{}
+	for k, vals := range mss {
+		for _, v := range vals {
+			out[v] = k
+		}
+	}
+	return out
 }
