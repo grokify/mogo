@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/errors/errorsutil"
+	"github.com/grokify/mogo/type/stringsutil"
 	"golang.org/x/image/colornames"
 )
 
@@ -43,6 +44,37 @@ func MustParse(input string) color.RGBA {
 		panic(err)
 	}
 	return c
+}
+
+func CanonicalHex(hexRGB string, upperCase, addHash bool) (string, error) {
+	rgb, err := ParseHex(hexRGB)
+	if err != nil {
+		return "", err
+	}
+	hex := ColorRGBAToHex(rgb)
+	if upperCase {
+		hex = strings.ToUpper(hex)
+	}
+	if addHash {
+		hex = "#" + hex
+	}
+	return hex, nil
+}
+
+func CanonicalHexes(hexRGBs []string, upperCase, addHash, dedupeResults, sortResults bool) ([]string, error) {
+	var canonical []string
+	for _, h := range hexRGBs {
+		can, err := CanonicalHex(h, upperCase, addHash)
+		if err != nil {
+			return canonical, err
+		}
+		canonical = append(canonical, can)
+	}
+	if dedupeResults || sortResults {
+		return stringsutil.SliceCondenseSpace(canonical, dedupeResults, sortResults), nil
+	}
+
+	return canonical, nil
 }
 
 // ParseHex returns a `color.RGBA` given a hex color code.
