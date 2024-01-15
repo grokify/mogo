@@ -3,6 +3,7 @@ MoGo
 
 [![Build Status][build-status-svg]][build-status-url]
 [![Go Report Card][goreport-svg]][goreport-url]
+[![CodeClimate][codeclimate-status-svg]][codeclimate-status-url]
 [![Docs][docs-godoc-svg]][docs-godoc-url]
 [![SLOC][loc-svg]][repo-url]
 [![License][license-svg]][license-url]
