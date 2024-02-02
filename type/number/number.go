@@ -81,3 +81,17 @@ func fmtInt(buf []byte, v uint64) int {
 	return w
 }
 */
+
+// SliceIntBuildBeginEnd returns of slice of integers from beginning to end, inclusive.
+func SliceIntBuildBeginEnd(beg, end int) []int {
+	if beg > end {
+		return []int{}
+	} else if beg == end {
+		return []int{beg}
+	}
+	var out []int
+	for i := beg; i <= end; i++ {
+		out = append(out, i)
+	}
+	return out
+}
