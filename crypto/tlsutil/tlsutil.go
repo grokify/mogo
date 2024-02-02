@@ -14,21 +14,25 @@ type TLSConfig struct {
 func NewTLSConfig(certFilepath, keyFilepath string, rootCACertFilepaths, clientCACertFilepaths []string, requireAndVerifyClientCert bool) (*TLSConfig, error) {
 	cfg := &tls.Config{
 		Certificates: []tls.Certificate{},
-		MinVersion:   tls.VersionTLS12,
-	}
+		MinVersion:   tls.VersionTLS12}
 	if requireAndVerifyClientCert {
 		cfg.ClientAuth = tls.RequireAndVerifyClientCert
 	}
-	tc := TLSConfig{Config: cfg}
+	tc := &TLSConfig{Config: cfg}
 
 	if certFilepath != "" || keyFilepath != "" {
 		if err := tc.LoadX509KeyPair(certFilepath, keyFilepath); err != nil {
-			return tc, err
+			return nil, err
 		}
 	}
 	for _, rootCaCertFilepath := range rootCACertFilepaths {
-		if err := tc.LoadCACert(rootCaCertFilepath); err != nil {
-			return tc, err
+		if err := tc.LoadRootCACert(rootCaCertFilepath); err != nil {
+			return nil, err
+		}
+	}
+	for _, clientCACertFilepath := range clientCACertFilepaths {
+		if err := tc.LoadClientCACert(clientCACertFilepath); err != nil {
+			return nil, err
 		}
 	}
 	return &TLSConfig{Config: cfg}, nil
@@ -60,12 +64,12 @@ func (tc *TLSConfig) LoadClientCACert(caCertFilepath string) error {
 	if err != nil {
 		return err
 	}
-	if tc.Config.RootCAs == nil {
-		tc.Config.RootCAs = x509.NewCertPool()
+	if tc.Config.ClientCAs == nil {
+		tc.Config.ClientCAs = x509.NewCertPool()
 	}
 
-	if ok := tc.Config.RootCAs.AppendCertsFromPEM(cert); !ok {
-		return fmt.Errorf("cannot add CA cert (%s)", caCertFilepath)
+	if ok := tc.Config.ClientCAs.AppendCertsFromPEM(cert); !ok {
+		return fmt.Errorf("cannot add client CA cert (%s)", caCertFilepath)
 	} else {
 		return nil
 	}
@@ -81,7 +85,7 @@ func (tc *TLSConfig) LoadRootCACert(caCertFilepath string) error {
 	}
 
 	if ok := tc.Config.RootCAs.AppendCertsFromPEM(cert); !ok {
-		return fmt.Errorf("cannot add CA cert (%s)", caCertFilepath)
+		return fmt.Errorf("cannot add root CA cert (%s)", caCertFilepath)
 	} else {
 		return nil
 	}
