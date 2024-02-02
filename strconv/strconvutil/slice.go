@@ -7,9 +7,21 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
+func SliceAtof(s []string, bitSize int) ([]float64, error) {
+	var out []float64
+	for _, si := range s {
+		if fi, err := strconv.ParseFloat(si, bitSize); err != nil {
+			return out, err
+		} else {
+			out = append(out, fi)
+		}
+	}
+	return out, nil
+}
+
 // SliceAtoi converts a slice of string integers.
 func SliceAtoi(s []string, dedupe, sort bool) ([]int, error) {
-	out := []int{}
+	var out []int
 	for _, si := range s {
 		sv, err := strconv.Atoi(si)
 		if err != nil {
@@ -27,7 +39,7 @@ func SliceAtoi(s []string, dedupe, sort bool) ([]int, error) {
 }
 
 func SliceAtou(s []string, dedupe, sort bool) ([]uint, error) {
-	out := []uint{}
+	var out []uint
 	for _, si := range s {
 		sv, err := Atou(si)
 		if err != nil {
@@ -47,7 +59,7 @@ func SliceAtou(s []string, dedupe, sort bool) ([]uint, error) {
 
 // SliceItoa converts a slice of `constraints.Integer` to a slice of `string`.
 func SliceItoa[S ~[]E, E constraints.Integer](s S, dedupe, sort bool) []string {
-	out := []string{}
+	var out []string
 	for _, v := range s {
 		out = append(out, strconv.Itoa(int(v)))
 	}
