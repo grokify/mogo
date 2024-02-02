@@ -1,23 +1,28 @@
 package stringsutil
 
 import (
+	"errors"
 	"regexp"
 	"sort"
 	"strconv"
 	"strings"
 
+	"github.com/grokify/mogo/type/number"
 	"github.com/grokify/mogo/type/slicesutil"
+	"golang.org/x/exp/slices"
 )
 
-type StringSlice []string
+type Strings []string
 
-func (sx StringSlice) Exists(s string) bool {
-	for _, try := range sx {
-		if try == s {
-			return true
+func (strs Strings) FilterIndexes(indexes []uint) (Strings, error) {
+	n := Strings{}
+	for _, idx := range indexes {
+		if int(idx) >= len(strs) {
+			return n, errors.New("index out of bounds")
 		}
+		n = append(n, strs[idx])
 	}
-	return false
+	return n, nil
 }
 
 /*
@@ -88,9 +93,9 @@ func JoinCondenseTrimSpace(slice []string, sep string) string {
 }
 */
 
-func SliceCondenseRegexps(elems []string, regexps []*regexp.Regexp, replacement string) []string {
+func SliceCondenseRegexps(s []string, regexps []*regexp.Regexp, replacement string) []string {
 	parts := []string{}
-	for _, el := range elems {
+	for _, el := range s {
 		for _, rx := range regexps {
 			el = rx.ReplaceAllString(el, replacement)
 		}
@@ -102,9 +107,9 @@ func SliceCondenseRegexps(elems []string, regexps []*regexp.Regexp, replacement 
 	return parts
 }
 
-func SliceCondensePunctuation(elems []string) []string {
+func SliceCondensePunctuation(s []string) []string {
 	parts := []string{}
-	for _, part := range elems {
+	for _, part := range s {
 		part = regexp.MustCompile(`[^a-zA-Z0-9]+`).ReplaceAllString(part, " ")
 		part = regexp.MustCompile(`\s+`).ReplaceAllString(part, " ")
 		part = strings.TrimSpace(part)
@@ -115,13 +120,13 @@ func SliceCondensePunctuation(elems []string) []string {
 	return parts
 }
 
-func SliceCondenseAndQuoteSpace(elems []string, quoteLeft, quoteRight string) []string {
-	return SliceCondenseAndQuote(elems, " ", " ", quoteLeft, quoteRight)
+func SliceCondenseAndQuoteSpace(s []string, quoteLeft, quoteRight string) []string {
+	return SliceCondenseAndQuote(s, " ", " ", quoteLeft, quoteRight)
 }
 
-func SliceCondenseAndQuote(items []string, trimLeft, trimRight, quoteLeft, quoteRight string) []string {
+func SliceCondenseAndQuote(s []string, trimLeft, trimRight, quoteLeft, quoteRight string) []string {
 	newItems := []string{}
-	for _, item := range items {
+	for _, item := range s {
 		item = strings.TrimLeft(item, trimLeft)
 		item = strings.TrimRight(item, trimRight)
 		if len(item) > 0 {
@@ -150,11 +155,11 @@ func SplitTextLines(text string) []string {
 }
 
 // SliceToSingleIntOrNeg converts a single element slice with a string to an integer or `-1`
-func SliceToSingleIntOrNeg(vals []string) int {
-	if len(vals) != 1 {
+func SliceToSingleIntOrNeg(s []string) int {
+	if len(s) != 1 {
 		return -1
 	}
-	num, err := strconv.Atoi(vals[0])
+	num, err := strconv.Atoi(s[0])
 	if err != nil {
 		return -1
 	}
@@ -318,9 +323,9 @@ func SliceSubtract(real, filter []string) []string {
 
 // SliceToMap returns the slide where the slice elements are the keys of the map,
 // and the value is the number of times it appears.
-func SliceToMap(elems []string) map[string]int {
+func SliceToMap(s []string) map[string]int {
 	strmap := map[string]int{}
-	for _, s := range elems {
+	for _, s := range s {
 		strmap[s]++
 	}
 	return strmap
@@ -373,14 +378,14 @@ func SliceIntersectionCondenseSpace(slice1, slice2 []string) []string {
 // SliceIsEmpty checks to see if a slice is empty. If `skipEmptyStrings`
 // it will also return empty if all elements are empty strings or
 // only contain spaces.
-func SliceIsEmpty(elems []string, skipEmptyStrings bool) bool {
-	if len(elems) == 0 {
+func SliceIsEmpty(s []string, skipEmptyStrings bool) bool {
+	if len(s) == 0 {
 		return true
 	}
 	if !skipEmptyStrings {
 		return false
 	}
-	for _, s := range elems {
+	for _, s := range s {
 		s = strings.TrimSpace(s)
 		if len(s) > 0 {
 			return false
@@ -390,22 +395,64 @@ func SliceIsEmpty(elems []string, skipEmptyStrings bool) bool {
 }
 
 // SliceJoinFunc joins a slice passing each elemen through the supplied function `f`.
-func SliceJoinFunc(elems []string, sep string, f func(string) string) string {
+func SliceJoinFunc(s []string, sep string, f func(string) string) string {
 	if f == nil {
-		return strings.Join(elems, sep)
+		return strings.Join(s, sep)
 	}
 	n := []string{}
-	for _, el := range elems {
+	for _, el := range s {
 		n = append(n, f(el))
 	}
 	return strings.Join(n, sep)
 }
 
+// SliceOrderExplicit reoders the values of a slice using a requested input order
+// where the output is ordered by the requested order, minus missing requests, and
+// followed by non-ordered items. In addition to the output slide, an output slice
+// of index locations is also provided.
+func SliceOrderExplicit(s, order []string, inclUnordered bool) ([]string, []int) {
+	if len(s) == 0 {
+		return []string{}, []int{}
+	} else if len(s) == 1 {
+		return []string{s[0]}, []int{0}
+	} else if len(order) == 0 {
+		return slices.Clone(s), number.SliceIntBuildBeginEnd(0, len(s)-1)
+	}
+	smap := map[string]int{}
+	for i, si := range s {
+		smap[si] = i
+	}
+	var strs []string
+	var idxs []int
+	omap := map[string]int{}
+	for i, ord := range order {
+		omap[ord] = i
+		if idx, ok := smap[ord]; ok {
+			strs = append(strs, ord)
+			idxs = append(idxs, idx)
+		}
+	}
+	if inclUnordered {
+		for si, sv := range s {
+			if _, ok := omap[sv]; ok {
+				continue
+			}
+			strs = append(strs, sv)
+			idxs = append(idxs, si)
+		}
+	}
+	if len(strs) != len(idxs) {
+		panic("strs and idxs length mismatch")
+	} else {
+		return strs, idxs
+	}
+}
+
 // SliceSplitLengthStats returns a `map[int]int` indicating how many
 // strings of which length are present.
-func SliceSplitLengthStats(elems []string, sep string) map[int]int {
+func SliceSplitLengthStats(s []string, sep string) map[int]int {
 	stats := map[int]int{}
-	for _, s := range elems {
+	for _, s := range s {
 		p := strings.Split(s, sep)
 		stats[len(p)]++
 	}
@@ -414,9 +461,9 @@ func SliceSplitLengthStats(elems []string, sep string) map[int]int {
 
 // SliceBySplitLength returns lines by split length. This is useful for analyzing
 // what types of data exist with different lengths.
-func SliceBySplitLength(elems []string, sep string) map[int][]string {
+func SliceBySplitLength(s []string, sep string) map[int][]string {
 	bylen := map[int][]string{}
-	for _, s := range elems {
+	for _, s := range s {
 		p := strings.Split(s, sep)
 		if _, ok := bylen[len(p)]; !ok {
 			bylen[len(p)] = []string{}
