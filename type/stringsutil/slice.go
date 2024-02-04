@@ -399,7 +399,7 @@ func SliceJoinFunc(s []string, sep string, f func(string) string) string {
 	if f == nil {
 		return strings.Join(s, sep)
 	}
-	n := []string{}
+	var n []string
 	for _, el := range s {
 		n = append(n, f(el))
 	}
