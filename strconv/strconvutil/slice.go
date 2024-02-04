@@ -66,7 +66,7 @@ func SliceItoa[S ~[]E, E constraints.Integer](s S) []string {
 	return out
 }
 
-// SliceItoaMore converts a slice of `constraints.Integer` to a slice of `string` with additiona
+// SliceItoaMore converts a slice of `constraints.Integer` to a slice of `string` with additional
 // functionality to dedupe and sort.
 func SliceItoaMore[S ~[]E, E constraints.Integer](s S, dedupe, sort bool) []string {
 	out := SliceItoa(s)
