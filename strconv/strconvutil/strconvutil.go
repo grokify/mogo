@@ -111,8 +111,12 @@ func FormatDecimal[N constraints.Float | constraints.Integer](v N, precision int
 	return fmt.Sprintf(`%.`+strconv.Itoa(precision)+`f`, float64(v))
 }
 
-func FormatFloat64Simple(v float64) string {
+func Ftoa(v float64) string {
 	return strconv.FormatFloat(v, 'f', -1, 64)
+}
+
+func FormatFloat64Simple(v float64) string {
+	return Ftoa(v)
 }
 
 func FormatFloat64ToIntStringFunnel(v float64) string {
