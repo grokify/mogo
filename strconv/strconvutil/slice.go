@@ -58,11 +58,18 @@ func SliceAtou(s []string, dedupe, sort bool) ([]uint, error) {
 }
 
 // SliceItoa converts a slice of `constraints.Integer` to a slice of `string`.
-func SliceItoa[S ~[]E, E constraints.Integer](s S, dedupe, sort bool) []string {
+func SliceItoa[S ~[]E, E constraints.Integer](s S) []string {
 	var out []string
 	for _, v := range s {
 		out = append(out, strconv.Itoa(int(v)))
 	}
+	return out
+}
+
+// SliceItoaMore converts a slice of `constraints.Integer` to a slice of `string` with additiona
+// functionality to dedupe and sort.
+func SliceItoaMore[S ~[]E, E constraints.Integer](s S, dedupe, sort bool) []string {
+	out := SliceItoa(s)
 	if dedupe {
 		out = slicesutil.Dedupe(out)
 	}
