@@ -111,44 +111,38 @@ func FormatDecimal[N constraints.Float | constraints.Integer](v N, precision int
 	return fmt.Sprintf(`%.`+strconv.Itoa(precision)+`f`, float64(v))
 }
 
-func Ftoa(v float64) string {
-	return strconv.FormatFloat(v, 'f', -1, 64)
+func Ftoa[F constraints.Float](f F) string {
+	return strconv.FormatFloat(float64(f), 'f', -1, 64)
 }
 
-func FormatFloat64Simple(v float64) string {
-	return Ftoa(v)
-}
-
-func FormatFloat64ToIntStringFunnel(v float64) string {
-	return FormatFloat64ToAnyStringFunnel(v, `%0.0f%%`)
+func FormatFloat64ToIntStringFunnel[F constraints.Float](f F) string {
+	return FormatFloat64ToAnyStringFunnel(float64(f), `%0.0f%%`)
 }
 
 // FormatFloat64ToAnyStringFunnel is used for funnels.
-func FormatFloat64ToAnyStringFunnel(v float64, pattern string) string {
-	return fmt.Sprintf(pattern, ChangeToFunnelPct(v))
+func FormatFloat64ToAnyStringFunnel(f float64, pattern string) string {
+	return fmt.Sprintf(pattern, ChangeToFunnelPct(f))
 }
 
-func FormatFloat64ToIntString(v float64) string {
-	return FormatFloat64ToAnyString(v, `%0.0f%%`)
+func FormatFloat64ToIntString(f float64) string {
+	return FormatFloat64ToAnyString(f, `%0.0f%%`)
 }
 
 // FormatFloat64ToAnyString is used for XoX growth.
-func FormatFloat64ToAnyString(v float64, pattern string) string {
-	return fmt.Sprintf(pattern, ChangeToXoXPct(v))
+func FormatFloat64ToAnyString(f float64, pattern string) string {
+	return fmt.Sprintf(pattern, ChangeToXoXPct(f))
 }
 
-// ChangeToXoXPct converts a 1.0 == 100% based `float64` to a
-// XoX percentage `float64`.
-func ChangeToXoXPct(v float64) float64 {
-	if v < 1.0 {
-		return -1 * 100.0 * (1.0 - v)
+// ChangeToXoXPct converts a 1.0 == 100% based `float64` to a XoX percentage `float64`.
+func ChangeToXoXPct(f float64) float64 {
+	if f < 1.0 {
+		return -1 * 100.0 * (1.0 - f)
 	}
-	return 100.0 * (v - 1.0)
+	return 100.0 * (f - 1.0)
 }
 
-// ChangeToFunnelPct converts a 1.0 == 100% based `float64` to a
-// Funnel percentage `float64`.
-func ChangeToFunnelPct(v float64) float64 { return v * 100.0 }
+// ChangeToFunnelPct converts a 1.0 == 100% based `float64` to a Funnel percentage `float64`.
+func ChangeToFunnelPct(f float64) float64 { return f * 100.0 }
 
 // Int64Len returns the length of an Int64 number.
 func Int64Len(val int64) int {
