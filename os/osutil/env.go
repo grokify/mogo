@@ -2,6 +2,7 @@
 package osutil
 
 import (
+	"net/http"
 	"os"
 	"regexp"
 	"strings"
@@ -30,17 +31,28 @@ func Env() []EnvVar {
 	return envs
 }
 
-// EnvFiltered returns a map[string]string of environment
+// EnvMap returns a map[string]string of environment
 // variables that match a regular expression.
-func EnvFiltered(rx *regexp.Regexp) map[string]string {
+func EnvMap(rx *regexp.Regexp) map[string]string {
 	res := map[string]string{}
 	for _, e := range os.Environ() {
-		pair := strings.Split(e, "=")
-		if rx.MatchString(pair[0]) {
-			res[pair[0]] = pair[1]
+		parts := strings.Split(e, "=")
+		if rx == nil || rx.MatchString(parts[0]) {
+			res[parts[0]] = strings.Join(parts[1:], "=")
 		}
 	}
 	return res
+}
+
+func EnvHeader(rx *regexp.Regexp) http.Header {
+	h := http.Header{}
+	for _, e := range os.Environ() {
+		parts := strings.Split(e, "=")
+		if rx == nil || rx.MatchString(parts[0]) {
+			h.Add(parts[0], strings.Join(parts[1:], "="))
+		}
+	}
+	return h
 }
 
 func EnvExists(fields ...string) (missing []string, haveAll bool) {
