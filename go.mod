@@ -18,7 +18,7 @@ require (
 	github.com/lytics/base62 v0.0.0-20180808010106-0ee4de5a5d6d
 	github.com/martinlindhe/base36 v1.1.1
 	github.com/microcosm-cc/bluemonday v1.0.26
-	golang.org/x/crypto v0.19.0
+	golang.org/x/crypto v0.20.0
 	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225
 	golang.org/x/image v0.15.0
 	golang.org/x/net v0.21.0
