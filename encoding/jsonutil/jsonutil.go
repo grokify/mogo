@@ -9,6 +9,8 @@ import (
 	"io/fs"
 	"os"
 	"reflect"
+
+	"github.com/grokify/mogo/type/maputil"
 	// jsoniter "github.com/json-iterator/go"
 )
 
@@ -28,16 +30,17 @@ type mustMarhshalError struct {
 func MarshalSimple(v any, prefix, indent string) ([]byte, error) {
 	if prefix == "" && indent == "" {
 		return json.Marshal(v)
+	} else {
+		return json.MarshalIndent(v, prefix, indent)
 	}
-	return json.MarshalIndent(v, prefix, indent)
 }
 
 func MustMarshalSimple(v any, prefix, indent string) []byte {
-	bytes, err := MarshalSimple(v, prefix, indent)
-	if err != nil {
+	if b, err := MarshalSimple(v, prefix, indent); err != nil {
 		panic(err)
+	} else {
+		return b
 	}
-	return bytes
 }
 
 func MustMarshal(v any, embedError bool) []byte {
@@ -63,44 +66,43 @@ func MustMarshalString(v any, embedError bool) string {
 }
 
 func MustMarshalIndent(v any, prefix, indent string, embedError bool) []byte {
-	bytes, err := json.MarshalIndent(v, prefix, indent)
-	if err != nil {
+	if b, err := json.MarshalIndent(v, prefix, indent); err != nil {
 		panic(err)
+	} else {
+		return b
 	}
-	return bytes
 }
 
 // IndentBytes converts a JSON byte array into a prettified byte array.
 func IndentBytes(b []byte, prefix, indent string) ([]byte, error) {
 	var out bytes.Buffer
-	err := json.Indent(&out, b, prefix, indent)
-	if err != nil {
+	if err := json.Indent(&out, b, prefix, indent); err != nil {
 		return []byte{}, err
+	} else {
+		return out.Bytes(), nil
 	}
-	return out.Bytes(), nil
 }
 
 // IndentReader returns a byte slice of indented JSON given an `io.Reader`.
 // It is useful to use with `http.Response.Body` which is an `io.ReadCloser`.
 func IndentReader(r io.Reader, prefix, indent string) ([]byte, error) {
-	b, err := io.ReadAll(r)
-	if err != nil {
+	if b, err := io.ReadAll(r); err != nil {
 		return b, err
+	} else {
+		return IndentBytes(b, prefix, indent)
 	}
-	return IndentBytes(b, prefix, indent)
 }
 
 func MarshalBase64(v any) (string, error) {
-	data, err := json.Marshal(v)
-	if err != nil {
+	if data, err := json.Marshal(v); err != nil {
 		return "", err
+	} else {
+		return base64.StdEncoding.EncodeToString(data), nil
 	}
-	return base64.StdEncoding.EncodeToString(data), nil
 }
 
 func MustUnmarshal(b []byte, v any) {
-	err := json.Unmarshal(b, v)
-	if err != nil {
+	if err := json.Unmarshal(b, v); err != nil {
 		panic(err.Error())
 	}
 }
@@ -120,19 +122,19 @@ func UnmarshalAny(data, v any) error {
 }
 
 func UnmarshalMSI(data map[string]any, v any) error {
-	bytes, err := json.Marshal(data)
-	if err != nil {
+	if b, err := json.Marshal(data); err != nil {
 		return err
+	} else {
+		return json.Unmarshal(b, v)
 	}
-	return json.Unmarshal(bytes, v)
 }
 
 func UnmarshalReader(r io.Reader, v any) ([]byte, error) {
-	bytes, err := io.ReadAll(r)
-	if err != nil {
-		return bytes, err
+	if b, err := io.ReadAll(r); err != nil {
+		return b, err
+	} else {
+		return b, json.Unmarshal(b, v)
 	}
-	return bytes, json.Unmarshal(bytes, v)
 }
 
 // UnmarshalStrict returns an error when the destination is a struct and the input contains object keys which do not match any non-ignored, exported fields in the destination.
@@ -156,20 +158,20 @@ func PrintReaderIndent(r io.Reader, prefix, indent string) ([]byte, error) {
 	return outBytes, err
 }
 
-func ReadFile(filename string, v any) ([]byte, error) {
-	bytes, err := os.ReadFile(filename)
-	if err != nil {
-		return bytes, err
+func UnmarshalFile(filename string, v any) ([]byte, error) {
+	if b, err := os.ReadFile(filename); err != nil {
+		return b, err
+	} else {
+		return b, json.Unmarshal(b, v)
 	}
-	return bytes, json.Unmarshal(bytes, v)
 }
 
 func WriteFile(filename string, v any, prefix, indent string, perm fs.FileMode) error {
-	bytes, err := MarshalSimple(v, prefix, indent)
-	if err != nil {
+	if b, err := MarshalSimple(v, prefix, indent); err != nil {
 		return err
+	} else {
+		return os.WriteFile(filename, b, perm)
 	}
-	return os.WriteFile(filename, bytes, perm)
 }
 
 func Equal(x, y io.Reader) (bool, error) {
@@ -189,11 +191,11 @@ func EqualBytes(x, y []byte) (bool, error) {
 	var ax, ay any
 	if err := json.Unmarshal(x, &ax); err != nil {
 		return false, err
-	}
-	if err := json.Unmarshal(y, &ay); err != nil {
+	} else if err := json.Unmarshal(y, &ay); err != nil {
 		return false, err
+	} else {
+		return reflect.DeepEqual(ax, ay), nil
 	}
-	return reflect.DeepEqual(ax, ay), nil
 }
 
 func EqualFiles(x, y string) (bool, error) {
@@ -208,4 +210,21 @@ func EqualFiles(x, y string) (bool, error) {
 	}
 	defer fy.Close()
 	return Equal(fx, fy)
+}
+
+func UnmarshalKeys(b []byte) ([]string, error) {
+	msa := map[string]any{}
+	if err := json.Unmarshal(b, &msa); err != nil {
+		return []string{}, err
+	} else {
+		return maputil.Keys(msa), nil
+	}
+}
+
+func UnmarshalKeysFile(filename string) ([]string, error) {
+	if b, err := os.ReadFile(filename); err != nil {
+		return []string{}, err
+	} else {
+		return UnmarshalKeys(b)
+	}
 }
