@@ -19,7 +19,7 @@ type FakeNumberGenerator struct {
 func NewFakeNumberGenerator(areacodes []uint16) FakeNumberGenerator {
 	return FakeNumberGenerator{
 		AreaCodes: areacodes,
-		rand:      rand.New(randutil.NewCryptoRandSource())} // #nosec G404
+		rand:      rand.New(randutil.NewCryptoRandSource())} // #nosec G404 - `NewCryptoRandSource()` uses `crypto/rand`.
 }
 
 // RandomAreaCode generates a random area code.
