@@ -8,6 +8,7 @@ import (
 
 	"github.com/grokify/mogo/os/osutil"
 	"github.com/grokify/mogo/type/slicesutil"
+	flags "github.com/jessevdk/go-flags"
 	"github.com/joho/godotenv"
 )
 
@@ -51,46 +52,6 @@ func LoadDotEnv(paths []string, n int) ([]string, error) {
 
 	return loaded, nil
 }
-
-/*
-func LoadEnvDefaults() error {
-	envPathsSet := []string{}
-
-	for _, defaultPath := range DefaultPaths() {
-		exists, err := osutil.Exists(defaultPath)
-		if err == nil && exists {
-			envPathsSet = append(envPathsSet, defaultPath)
-		}
-	}
-
-	if len(envPathsSet) > 0 {
-		return godotenv.Load(envPathsSet...)
-	}
-	return godotenv.Load()
-}
-
-func LoadDotEnv(paths ...string) ([]string, error) {
-	return LoadDotEnvSkipEmptyInfo(paths...)
-}
-
-func LoadDotEnvSkipEmpty(paths ...string) error {
-	_, err := LoadDotEnvSkipEmptyInfo(paths...)
-	return err
-}
-
-func LoadDotEnvFirst(paths ...string) error {
-	if len(paths) == 0 {
-		paths = DefaultPaths()
-	}
-
-	envPaths := osutil.FilenamesFilterSizeGTZero(paths...)
-
-	if len(envPaths) > 0 {
-		return godotenv.Load(envPaths[0])
-	}
-	return nil
-}
-*/
 
 // GetDotEnvVal retrieves a single var from a `.env` file path
 func GetDotEnvVal(envPath, varName string) (string, error) {
@@ -147,4 +108,20 @@ func checkEnvPathsPrioritized(fixedPath, envPath string) (string, error) {
 		return thisDirPath, fmt.Errorf("path is not a file or is 0 size [%v]", thisDirPath)
 	}
 	return thisDirPath, nil
+}
+
+type DotEnvOpts interface {
+	DotEnvFilename() string
+}
+
+func ParseFlagsAndLoadDotEnv(opts DotEnvOpts) error {
+	_, err := flags.Parse(opts)
+	if err != nil {
+		return err
+	}
+	if envFilename := opts.DotEnvFilename(); envFilename != "" {
+		_, err := LoadDotEnv([]string{envFilename}, 1)
+		return err
+	}
+	return nil
 }
