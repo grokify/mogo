@@ -5,7 +5,7 @@ go 1.22
 // toolchain go1.21.1
 
 require (
-	github.com/ProtonMail/go-crypto v1.1.0-alpha.2
+	github.com/ProtonMail/go-crypto v1.1.0-alpha.2-proton
 	github.com/caarlos0/env/v6 v6.10.1
 	github.com/grokify/base36 v1.0.5
 	github.com/grokify/bitcoinmath v0.1.0
@@ -19,11 +19,11 @@ require (
 	github.com/martinlindhe/base36 v1.1.1
 	github.com/microcosm-cc/bluemonday v1.0.26
 	golang.org/x/crypto v0.21.0
-	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225
+	golang.org/x/exp v0.0.0-20240314144324-c7f7c6466f7f
 	golang.org/x/image v0.15.0
 	golang.org/x/net v0.22.0
 	golang.org/x/text v0.14.0
-	google.golang.org/genproto v0.0.0-20240308144416-29370a3891b7
+	google.golang.org/genproto v0.0.0-20240314234333-6e1732d8331c
 )
 
 require (
