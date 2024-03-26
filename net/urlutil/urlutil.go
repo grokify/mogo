@@ -203,3 +203,13 @@ func URLValuesEncodeSorted(v url.Values, priorities []string) string {
 	}
 	return strings.Join(encoded, "&")
 }
+
+// URLToAddress converts a string like `https://localhost` to `localhost:https`.
+func URLToAddress(s string) string {
+	delimit := "://"
+	parts := strings.Split(s, delimit)
+	if len(parts) > 0 {
+		return strings.Join(parts[1:], delimit) + ":" + parts[0]
+	}
+	return s
+}
