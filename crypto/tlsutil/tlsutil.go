@@ -5,6 +5,9 @@ import (
 	"crypto/x509"
 	"fmt"
 	"os"
+	"strings"
+
+	"github.com/grokify/mogo/errors/errorsutil"
 )
 
 type TLSConfig struct {
@@ -17,39 +20,37 @@ func NewTLSConfig(certFilepath, keyFilepath string, rootCACertFilepaths, clientC
 		MinVersion:   tls.VersionTLS12}
 	if requireAndVerifyClientCert {
 		cfg.ClientAuth = tls.RequireAndVerifyClientCert
+	} else {
+		cfg.ClientAuth = tls.NoClientCert
 	}
 	tc := &TLSConfig{Config: cfg}
 
 	if certFilepath != "" || keyFilepath != "" {
-		if err := tc.LoadX509KeyPair(certFilepath, keyFilepath); err != nil {
-			return nil, err
+		if err := tc.LoadServerKeyPair(certFilepath, keyFilepath); err != nil {
+			return nil, errorsutil.Wrapf(err, "err on LoadServerKeyPair (%s,%s)", certFilepath, keyFilepath)
 		}
 	}
-	for _, rootCaCertFilepath := range rootCACertFilepaths {
-		if err := tc.LoadRootCACert(rootCaCertFilepath); err != nil {
-			return nil, err
+	for _, rootCACertFilepath := range rootCACertFilepaths {
+		if strings.TrimSpace(rootCACertFilepath) != "" {
+			if err := tc.LoadRootCACert(rootCACertFilepath); err != nil {
+				return nil, errorsutil.Wrap(err, "err on LoadRootCACert")
+			}
 		}
 	}
 	for _, clientCACertFilepath := range clientCACertFilepaths {
-		if err := tc.LoadClientCACert(clientCACertFilepath); err != nil {
-			return nil, err
+		if strings.TrimSpace(clientCACertFilepath) != "" {
+			if err := tc.LoadClientCACert(clientCACertFilepath); err != nil {
+				fmt.Printf("ERR 3")
+				return nil, errorsutil.Wrap(err, "err on LoadClientCACert")
+			}
 		}
 	}
 	return &TLSConfig{Config: cfg}, nil
 }
 
-/*
-tlsConfig := &tls.Config{
-		Certificates: []tls.Certificate{cert},        // server certificate which is validated by the client
-		ClientCAs:    caCertPool,                     // used to verify the client cert is signed by the CA and is therefore valid
-		ClientAuth:   tls.RequireAndVerifyClientCert, // this requires a valid client certificate to be supplied during handshake
-	}
-
-*/
-
-func (tc *TLSConfig) LoadX509KeyPair(certFilepath, keyFilepath string) error {
+func (tc *TLSConfig) LoadServerKeyPair(certFilepath, keyFilepath string) error {
 	if cert, err := tls.LoadX509KeyPair(certFilepath, keyFilepath); err != nil {
-		return err
+		return errorsutil.Wrap(err, "err in LoadServerKeyPair")
 	} else {
 		if tc.Config.Certificates == nil {
 			tc.Config.Certificates = []tls.Certificate{}
@@ -62,7 +63,7 @@ func (tc *TLSConfig) LoadX509KeyPair(certFilepath, keyFilepath string) error {
 func (tc *TLSConfig) LoadClientCACert(caCertFilepath string) error {
 	cert, err := os.ReadFile(caCertFilepath)
 	if err != nil {
-		return err
+		return errorsutil.Wrap(err, "err in LoadClientCACert")
 	}
 	if tc.Config.ClientCAs == nil {
 		tc.Config.ClientCAs = x509.NewCertPool()
@@ -78,7 +79,7 @@ func (tc *TLSConfig) LoadClientCACert(caCertFilepath string) error {
 func (tc *TLSConfig) LoadRootCACert(caCertFilepath string) error {
 	cert, err := os.ReadFile(caCertFilepath)
 	if err != nil {
-		return err
+		return errorsutil.Wrap(err, "err in LoadRootCACert")
 	}
 	if tc.Config.RootCAs == nil {
 		tc.Config.RootCAs = x509.NewCertPool()
