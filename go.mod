@@ -19,11 +19,11 @@ require (
 	github.com/martinlindhe/base36 v1.1.1
 	github.com/microcosm-cc/bluemonday v1.0.26
 	golang.org/x/crypto v0.21.0
-	golang.org/x/exp v0.0.0-20240314144324-c7f7c6466f7f
+	golang.org/x/exp v0.0.0-20240325151524-a685a6edb6d8
 	golang.org/x/image v0.15.0
 	golang.org/x/net v0.22.0
 	golang.org/x/text v0.14.0
-	google.golang.org/genproto v0.0.0-20240314234333-6e1732d8331c
+	google.golang.org/genproto v0.0.0-20240325203815-454cdb8f5daa
 )
 
 require (
