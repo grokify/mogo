@@ -2,20 +2,24 @@ package netutil
 
 import (
 	"bufio"
-	"fmt"
+	"errors"
 	"net"
 	"net/http"
+
+	"github.com/grokify/mogo/errors/errorsutil"
 )
 
 // ModifyConnectionRequest updates the HTTP request for network connection.
-func ModifyConnectionRequest(conn net.Conn, modRequest func(r *http.Request)) {
+func ModifyConnectionRequest(conn net.Conn, modRequest func(r *http.Request)) error {
 	// Code adapted from: https://stackoverflow.com/a/76684845/1908967
+	if conn == nil {
+		return errors.New("net.Conn cannot be nil")
+	}
 	defer conn.Close()
 
 	req, err := http.ReadRequest(bufio.NewReader(conn))
 	if err != nil {
-		fmt.Println("Error reading request:", err)
-		return
+		return errorsutil.Wrap(err, "error reading request")
 	}
 
 	// Modify the request as needed
@@ -25,10 +29,9 @@ func ModifyConnectionRequest(conn net.Conn, modRequest func(r *http.Request)) {
 
 	resp, err := http.DefaultTransport.RoundTrip(req)
 	if err != nil {
-		fmt.Println("Error sending request:", err)
-		return
+		return errorsutil.Wrap(err, "error sending request")
 	}
 	defer resp.Body.Close()
 
-	resp.Write(conn)
+	return resp.Write(conn)
 }
