@@ -10,7 +10,7 @@ import (
 )
 
 // ModifyConnectionRequest updates the HTTP request for network connection.
-func ModifyConnectionRequest(conn net.Conn, modRequest func(r *http.Request)) error {
+func ModifyConnectionRequest(conn net.Conn, modRequest func(r *http.Request) error) error {
 	// Code adapted from: https://stackoverflow.com/a/76684845/1908967
 	if conn == nil {
 		return errors.New("net.Conn cannot be nil")
@@ -24,7 +24,9 @@ func ModifyConnectionRequest(conn net.Conn, modRequest func(r *http.Request)) er
 
 	// Modify the request as needed
 	if modRequest != nil {
-		modRequest(req)
+		if err := modRequest(req); err != nil {
+			return errorsutil.Wrap(err, "error modifying request")
+		}
 	}
 
 	resp, err := http.DefaultTransport.RoundTrip(req)
