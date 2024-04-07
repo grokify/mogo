@@ -2,9 +2,9 @@ package maputil
 
 import (
 	"errors"
-	"slices"
 
 	"golang.org/x/exp/constraints"
+	"golang.org/x/exp/slices"
 )
 
 var (
