@@ -74,12 +74,20 @@ func MustMarshalIndent(v any, prefix, indent string, embedError bool) []byte {
 }
 
 // IndentBytes converts a JSON byte array into a prettified byte array.
-func IndentBytes(b []byte, prefix, indent string) ([]byte, error) {
+func IndentBytes(data []byte, prefix, indent string) ([]byte, error) {
 	var out bytes.Buffer
-	if err := json.Indent(&out, b, prefix, indent); err != nil {
+	if err := json.Indent(&out, data, prefix, indent); err != nil {
 		return []byte{}, err
 	} else {
 		return out.Bytes(), nil
+	}
+}
+
+func WriteFileIndentBytes(name string, data []byte, prefix, indent string, perm fs.FileMode) error {
+	if data, err := IndentBytes(data, prefix, indent); err != nil {
+		return err
+	} else {
+		return os.WriteFile(name, data, perm)
 	}
 }
 
