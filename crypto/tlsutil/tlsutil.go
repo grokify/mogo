@@ -26,8 +26,8 @@ func NewTLSConfig(certFilepath, keyFilepath string, rootCACertFilepaths, clientC
 	tc := &TLSConfig{Config: cfg}
 
 	if certFilepath != "" || keyFilepath != "" {
-		if err := tc.LoadServerKeyPair(certFilepath, keyFilepath); err != nil {
-			return nil, errorsutil.Wrapf(err, "err on LoadServerKeyPair (%s,%s)", certFilepath, keyFilepath)
+		if err := tc.LoadX509KeyPair(certFilepath, keyFilepath); err != nil {
+			return nil, errorsutil.Wrapf(err, "err on LoadX509KeyPair (%s,%s)", certFilepath, keyFilepath)
 		}
 	}
 	for _, rootCACertFilepath := range rootCACertFilepaths {
@@ -48,7 +48,7 @@ func NewTLSConfig(certFilepath, keyFilepath string, rootCACertFilepaths, clientC
 	return &TLSConfig{Config: cfg}, nil
 }
 
-func (tc *TLSConfig) LoadServerKeyPair(certFilepath, keyFilepath string) error {
+func (tc *TLSConfig) LoadX509KeyPair(certFilepath, keyFilepath string) error {
 	if cert, err := tls.LoadX509KeyPair(certFilepath, keyFilepath); err != nil {
 		return errorsutil.Wrap(err, "err in LoadServerKeyPair")
 	} else {
