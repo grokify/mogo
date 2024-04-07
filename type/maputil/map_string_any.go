@@ -1,6 +1,11 @@
 package maputil
 
-import "errors"
+import (
+	"errors"
+	"slices"
+
+	"golang.org/x/exp/constraints"
+)
 
 var (
 	ErrKeyNotExist = errors.New("key not found")
@@ -24,4 +29,21 @@ func (msa MapStrAny) ValueString(k string, errOnNotExist bool) (string, error) {
 		return "", ErrNotString
 	}
 	return s, nil
+}
+
+func KeysEqual[K constraints.Ordered, V any](m1, m2 map[K]V) bool {
+	m1Keys, m2Keys := Keys(m1), Keys(m2)
+	return slices.Equal(m1Keys, m2Keys)
+}
+
+func KeysSubtract[K constraints.Ordered, V any](m1, m2 map[K]V) []K {
+	var out []K
+	for kx := range m1 {
+		if _, ok := m2[kx]; ok {
+			continue
+		}
+		out = append(out, kx)
+	}
+	slices.Sort(out)
+	return out
 }
