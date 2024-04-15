@@ -61,6 +61,14 @@ func CanonicalIntStringOrIgnore(s, comma, decimal string) string {
 	return strconv.Itoa(try)
 }
 
+func AtoiFunc(funcStringToInt64 func(s string) (int, error), s string) (int, error) {
+	if funcStringToInt64 != nil {
+		return funcStringToInt64(s)
+	} else {
+		return strconv.Atoi(s)
+	}
+}
+
 func AtoiMore(s, comma, decimal string) (int, error) {
 	if len(comma) > 0 {
 		s = strings.Replace(s, comma, "", -1)
@@ -69,4 +77,10 @@ func AtoiMore(s, comma, decimal string) (int, error) {
 		s = regexp.MustCompile(regexp.QuoteMeta(decimal)+`.*$`).ReplaceAllString(s, "")
 	}
 	return strconv.Atoi(s)
+}
+
+func AtoiMoreFunc(comma, decimal string) func(s string) (int, error) {
+	return func(s string) (int, error) {
+		return AtoiMore(s, comma, decimal)
+	}
 }
