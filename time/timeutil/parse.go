@@ -17,18 +17,18 @@ func ParseTimeCanonicalFunc(layout string) func(s string) (time.Time, error) {
 
 func CanonicalMonthMap() map[string][]string {
 	return map[string][]string{
-		"Jan": []string{"January"},
-		"Feb": []string{"February"},
-		"Mar": []string{"March"},
-		"Apr": []string{"April"},
-		"May": []string{""},
-		"Jun": []string{"June"},
-		"Jul": []string{"July"},
-		"Aug": []string{"August"},
-		"Sep": []string{"September", "Sept"},
-		"Oct": []string{"October"},
-		"Nov": []string{"November"},
-		"Dec": []string{"December"}}
+		"Jan": {"January"},
+		"Feb": {"February"},
+		"Mar": {"March"},
+		"Apr": {"April"},
+		"May": {""},
+		"Jun": {"June"},
+		"Jul": {"July"},
+		"Aug": {"August"},
+		"Sep": {"September", "Sept"},
+		"Oct": {"October"},
+		"Nov": {"November"},
+		"Dec": {"December"}}
 }
 
 func ReplaceMonthCanonical(s string) string {
