@@ -1,7 +1,9 @@
 package strconvutil
 
 import (
+	"errors"
 	"strconv"
+	"time"
 
 	"github.com/grokify/mogo/type/slicesutil"
 	"golang.org/x/exp/constraints"
@@ -36,6 +38,21 @@ func SliceAtoi(s []string, dedupe, sort bool) ([]int, error) {
 		slicesutil.Sort(out)
 	}
 	return out, nil
+}
+
+func SliceAtotFunc(funcFormat func(s string) (time.Time, error), s []string) ([]time.Time, error) {
+	var times []time.Time
+	if funcFormat == nil {
+		return times, errors.New("funcFormat cannot be nil")
+	}
+	for _, si := range s {
+		if ti, err := funcFormat(si); err != nil {
+			return times, err
+		} else {
+			times = append(times, ti)
+		}
+	}
+	return times, nil
 }
 
 func SliceAtou(s []string, dedupe, sort bool) ([]uint, error) {
