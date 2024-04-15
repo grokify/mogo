@@ -1,8 +1,6 @@
 module github.com/grokify/mogo
 
-go 1.22
-
-// toolchain go1.21.1
+go 1.22.2
 
 require (
 	github.com/ProtonMail/go-crypto v1.1.0-alpha.2-proton
