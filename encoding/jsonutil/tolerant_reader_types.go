@@ -72,6 +72,9 @@ func (s *String) UnmarshalJSON(data []byte) error {
 	if str, ok := a.(string); ok {
 		*s = String(str)
 		return nil
+	} else if in, ok := a.(int64); ok {
+		*s = String(fmt.Sprintf("%d", in))
+		return nil
 	} else if fl, ok := a.(float64); ok {
 		*s = String(fmt.Sprintf("%g", fl))
 		return nil

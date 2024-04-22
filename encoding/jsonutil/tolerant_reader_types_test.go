@@ -44,6 +44,7 @@ var stringTests = []struct {
 }{
 	{`{"value":"mystring"}`, "mystring", `{"value":"mystring"}`},
 	{`{"value":1}`, "1", `{"value":"1"}`},
+	{`{"value":123.456}`, "123.456", `{"value":"123.456"}`},
 	{`{"value":false}`, "false", `{"value":"false"}`},
 }
 
