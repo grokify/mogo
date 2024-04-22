@@ -27,19 +27,21 @@ const (
 	ISO8601CompactZ    = "20060102T150405Z0700"
 	ISO8601CompactNoTZ = "20060102T150405"
 	ISO8601YM          = "2006-01"
-	Ruby               = "2006-01-02 15:04:05 -0700" // Ruby Time.now.to_s
-	SQLTimestamp       = "2006-01-02 15:04:05"       // MySQL, BigQuery, etc.
-	SQLTimestampPgTz   = "2006-01-02 15:04:05.999999-07"
-	InsightlyAPIQuery  = "_1/_2/2006 _3:04:05 PM"
-	DateMDY            = "1/2/2006" // an underscore results in a space.
-	DateMDYSlash       = "01/02/2006"
-	DateDMYDash        = "_2-01-2006"     // Jira XML Date format
-	DateDMYHM2         = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
-	DateYMD            = RFC3339FullDate
-	DateTextUS         = "January _2, 2006"
-	DateTextUSAbbr3    = "Jan _2, 2006"
-	DateTextEU         = "_2 January 2006"
-	DateTextEUAbbr3    = "_2 Jan 2006"
+	ISO9075            = "2006-01-02 15:04:05"           // ISO/IEC 9075, MySQL, BigQuery, etc.
+	ISO9075MicroTZ     = "2006-01-02 15:04:05.999999-07" // ISO 90875 used by PostgreSQL
+	// SQLTimestamp     = "2006-01-02 15:04:05"       // ISO/IEC 9075, MySQL, BigQuery, etc.
+	// SQLTimestampPgTz = "2006-01-02 15:04:05.999999-07" // ISO 90875 used by PostgreSQL
+	Ruby              = "2006-01-02 15:04:05 -0700" // Ruby Time.now.to_s
+	InsightlyAPIQuery = "_1/_2/2006 _3:04:05 PM"
+	DateMDY           = "1/2/2006" // an underscore results in a space.
+	DateMDYSlash      = "01/02/2006"
+	DateDMYDash       = "_2-01-2006"     // Jira XML Date format
+	DateDMYHM2        = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
+	DateYMD           = RFC3339FullDate
+	DateTextUS        = "January _2, 2006"
+	DateTextUSAbbr3   = "Jan _2, 2006"
+	DateTextEU        = "_2 January 2006"
+	DateTextEUAbbr3   = "_2 Jan 2006"
 )
 
 const (
