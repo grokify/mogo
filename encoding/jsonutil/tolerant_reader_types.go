@@ -64,12 +64,9 @@ type String string
 func (s *String) UnmarshalJSON(data []byte) error {
 	var a any
 
-	err := json.Unmarshal(data, &a)
-	if err != nil {
+	if err := json.Unmarshal(data, &a); err != nil {
 		panic(err)
-	}
-
-	if str, ok := a.(string); ok {
+	} else if str, ok := a.(string); ok {
 		*s = String(str)
 		return nil
 	} else if in, ok := a.(int64); ok {
