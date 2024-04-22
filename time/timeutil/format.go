@@ -27,10 +27,10 @@ const (
 	ISO8601CompactZ    = "20060102T150405Z0700"
 	ISO8601CompactNoTZ = "20060102T150405"
 	ISO8601YM          = "2006-01"
-	ISO9075            = "2006-01-02 15:04:05"           // ISO/IEC 9075, MySQL, BigQuery, etc.
-	ISO9075MicroTZ     = "2006-01-02 15:04:05.999999-07" // ISO 90875 used by PostgreSQL
-	// SQLTimestamp     = "2006-01-02 15:04:05"       // ISO/IEC 9075, MySQL, BigQuery, etc.
-	// SQLTimestampPgTz = "2006-01-02 15:04:05.999999-07" // ISO 90875 used by PostgreSQL
+	ISO9075            = "2006-01-02 15:04:05"           // ISO/IEC 9075 used by MySQL, BigQuery, etc.
+	ISO9075MicroTZ     = "2006-01-02 15:04:05.999999-07" // ISO/IEC 9075 used by PostgreSQL
+	// SQLTimestamp     = "2006-01-02 15:04:05"           // ISO/IEC 9075 used by MySQL, BigQuery, etc.
+	// SQLTimestampPgTz = "2006-01-02 15:04:05.999999-07" // ISO/IEC 9075 used by PostgreSQL
 	Ruby              = "2006-01-02 15:04:05 -0700" // Ruby Time.now.to_s
 	InsightlyAPIQuery = "_1/_2/2006 _3:04:05 PM"
 	DateMDY           = "1/2/2006" // an underscore results in a space.
