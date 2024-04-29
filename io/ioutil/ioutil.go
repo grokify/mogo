@@ -4,11 +4,17 @@ import (
 	"bufio"
 	"bytes"
 	"io"
+	"reflect"
 )
 
 type AtReader interface {
 	io.Reader
 	io.ReaderAt
+}
+
+func IsReader(i any) bool {
+	reader := reflect.TypeOf((*io.Reader)(nil)).Elem()
+	return reflect.PointerTo(reflect.TypeOf(i)).Implements(reader)
 }
 
 // ReaderToBytes reads from an io.Reader, e.g. io.ReadCloser
