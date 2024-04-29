@@ -25,6 +25,7 @@ const (
 	HeaderContentTransferEncoding      = "Content-Transfer-Encoding"
 	HeaderContentType                  = "Content-Type"
 	HeaderDate                         = "Date"
+	HeaderExpect                       = "Expect"
 	HeaderIfMatch                      = "If-Match"
 	HeaderIfModifiedSince              = "If-Modified-Since"
 	HeaderIfNoneMatch                  = "If-None-Match"
@@ -54,6 +55,7 @@ const (
 	ContentTypeTextPlainUsASCII        = "text/plain; charset=us-ascii"
 	ContentTypeTextPlainUtf8           = "text/plain; charset=utf-8"
 	ContentTypeTextXMLUtf8             = "text/xml; charset=utf-8"
+	Expect100Continue                  = "100-continue"
 	SchemeHTTPS                        = "https"
 	WWWAuthenticateBasicRestricted     = "Basic realm=Restricted"
 
