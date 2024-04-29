@@ -33,8 +33,8 @@ var ErrFieldNotFound = errors.New("field not found")
 
 // FieldTagValue returns a tag name. For example, in 'Attribute string: `json:"attribute,omitempty"`', the
 // usage would be `FieldTagValue(s, "Attribute", "json")` which would return `attribute`.
-func FieldTagValue(a any, fieldName, tagName string) (string, error) {
-	val := reflect.ValueOf(a)
+func FieldTagValue(i any, fieldName, tagName string) (string, error) {
+	val := reflect.ValueOf(i)
 	if field, ok := val.Type().FieldByName(fieldName); !ok {
 		return "", ErrFieldNotFound
 	} else {
