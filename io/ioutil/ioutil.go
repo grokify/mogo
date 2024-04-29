@@ -14,7 +14,7 @@ type AtReader interface {
 
 func IsReader(i any) bool {
 	reader := reflect.TypeOf((*io.Reader)(nil)).Elem()
-	return reflect.PointerTo(reflect.TypeOf(i)).Implements(reader)
+	return reflect.PointerTo(reflect.TypeOf(i).Elem()).Implements(reader)
 }
 
 // ReaderToBytes reads from an io.Reader, e.g. io.ReadCloser
