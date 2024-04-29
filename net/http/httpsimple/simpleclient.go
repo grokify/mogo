@@ -10,6 +10,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/grokify/mogo/io/ioutil"
 	"github.com/grokify/mogo/net/urlutil"
 )
 
@@ -32,9 +33,19 @@ func (sc *Client) Get(reqURL string) (*http.Response, error) {
 
 func (sc *Client) Do(req Request) (*http.Response, error) {
 	req.Inflate()
-	bodyBytes, err := req.BodyBytes()
-	if err != nil {
-		return nil, err
+	var bodyReader io.Reader
+	if req.BodyType == BodyTypeFile && ioutil.IsReader(req.Body) {
+		if reqBodyReader, ok := req.Body.(io.Reader); ok {
+			bodyReader = reqBodyReader
+		} else {
+			panic("cannot cast `io.Reader` as `io.Reader`")
+		}
+	} else {
+		if bodyBytes, err := req.BodyBytes(); err != nil {
+			return nil, err
+		} else {
+			bodyReader = bytes.NewReader(bodyBytes)
+		}
 	}
 	reqURL := strings.TrimSpace(req.URL)
 	if len(sc.BaseURL) > 0 {
@@ -55,7 +66,7 @@ func (sc *Client) Do(req Request) (*http.Response, error) {
 	if sc.HTTPClient == nil {
 		sc.HTTPClient = &http.Client{}
 	}
-	return doSimple(sc.HTTPClient, req.Method, reqURL, req.Headers, bodyBytes)
+	return doSimple(sc.HTTPClient, req.Method, reqURL, req.Headers, bodyReader)
 }
 
 func (sc *Client) DoUnmarshalJSON(req Request, resBody any) ([]byte, *http.Response, error) {
@@ -71,7 +82,8 @@ func (sc *Client) DoUnmarshalJSON(req Request, resBody any) ([]byte, *http.Respo
 	return bytes, resp, err
 }
 
-func doSimple(client *http.Client, httpMethod, reqURL string, headers map[string][]string, body []byte) (*http.Response, error) {
+func doSimple(client *http.Client, httpMethod, reqURL string, headers map[string][]string, body io.Reader) (*http.Response, error) {
+	// func doSimple(client *http.Client, httpMethod, reqURL string, headers map[string][]string, body []byte) (*http.Response, error) {
 	reqURL = strings.TrimSpace(reqURL)
 	if len(reqURL) == 0 {
 		return nil, errors.New("requrl is required but not present")
@@ -83,14 +95,14 @@ func doSimple(client *http.Client, httpMethod, reqURL string, headers map[string
 	if httpMethod == "" {
 		return nil, errors.New("httpMethod is required but not present")
 	}
-	var req *http.Request
-	var err error
+	//var req *http.Request
+	//var err error
 
-	if len(body) == 0 {
-		req, err = http.NewRequest(httpMethod, reqURL, nil)
-	} else {
-		req, err = http.NewRequest(httpMethod, reqURL, bytes.NewBuffer(body))
-	}
+	//if len(body) == 0 {
+	req, err := http.NewRequest(httpMethod, reqURL, body)
+	//} else {
+	//	req, err = http.NewRequest(httpMethod, reqURL, bytes.NewBuffer(body))
+	//}
 	if err != nil {
 		return nil, err
 	}

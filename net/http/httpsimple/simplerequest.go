@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	// headerContentType = httputilmore.HeaderContentType
+	BodyTypeFile = "file" // Body must be an `io.Reader`. Used for streaming.
 	BodyTypeForm = "form"
 	BodyTypeJSON = "json"
 	BodyTypeXML  = "xml"
