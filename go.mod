@@ -22,8 +22,8 @@ require (
 	golang.org/x/exp v0.0.0-20240416160154-fe59bbe5cc7f
 	golang.org/x/image v0.15.0
 	golang.org/x/net v0.24.0
-	golang.org/x/text v0.14.0
-	google.golang.org/genproto v0.0.0-20240415180920-8c6c420018be
+	golang.org/x/text v0.15.0
+	google.golang.org/genproto v0.0.0-20240429193739-8cf5692501f6
 )
 
 require (
@@ -33,7 +33,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/stretchr/testify v1.7.1 // indirect
-	golang.org/x/sys v0.19.0 // indirect
-	google.golang.org/protobuf v1.33.0 // indirect
+	golang.org/x/sys v0.20.0 // indirect
+	google.golang.org/protobuf v1.34.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0 // indirect
 )
