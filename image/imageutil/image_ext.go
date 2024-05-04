@@ -82,6 +82,14 @@ func (im Image) WriteJPEGFile(filename string, opt *JPEGEncodeOptions) error {
 	return writeJPEGFile(filename, im.Image, opt)
 }
 
+func (im Image) WriteJPEGFileSimple(filename string, quality int) error {
+	return writeJPEGFile(filename, im.Image, &JPEGEncodeOptions{
+		Options: &jpeg.Options{
+			Quality: quality,
+		},
+	})
+}
+
 func writeJPEGFile(filename string, img image.Image, opt *JPEGEncodeOptions) error {
 	if img == nil {
 		return ErrImageNotSet
