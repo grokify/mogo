@@ -1,6 +1,6 @@
 module github.com/grokify/mogo
 
-go 1.22
+go 1.22.0
 
 toolchain go1.22.2
 
@@ -11,7 +11,7 @@ require (
 	github.com/grokify/bitcoinmath v0.1.0
 	github.com/huandu/xstrings v1.4.0
 	github.com/iancoleman/strcase v0.3.0
-	github.com/itchyny/base58-go v0.2.1
+	github.com/itchyny/base58-go v0.2.2
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/joho/godotenv v1.5.1
 	github.com/json-iterator/go v1.1.12
