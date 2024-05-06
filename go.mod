@@ -20,7 +20,7 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.26
 	golang.org/x/crypto v0.22.0
 	golang.org/x/exp v0.0.0-20240416160154-fe59bbe5cc7f
-	golang.org/x/image v0.15.0
+	golang.org/x/image v0.16.0
 	golang.org/x/net v0.24.0
 	golang.org/x/text v0.15.0
 	google.golang.org/genproto v0.0.0-20240429193739-8cf5692501f6
