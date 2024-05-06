@@ -58,6 +58,13 @@ Documentation is provided using godoc and available on [GoDoc.org](https://godoc
 $ go get github.com/grokify/mogo/...
 ```
 
+## SBOM
+
+The SBOM is in the file [`SBOM.spdx.json`]. It is created using GitHub's built-in SBOM feature with the following additions:
+
+1. It is converted to indented JSON for easier reading.
+1. The `packages[0].downloadLocation` value as the commit hash added per [https://spdx.github.io/spdx-spec/v2.3/package-information/](downloadLocation).
+
 ## Credits
 
 See [`CREDITS`](CREDITS.md)
