@@ -5,11 +5,28 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/grokify/mogo/encoding/jsonutil"
 	"github.com/grokify/mogo/errors/errorsutil"
 )
+
+func ResponseIsContentType(ct string, r *http.Response) bool {
+	if r == nil {
+		return false
+	}
+	ct = strings.ToLower(strings.TrimSpace(ct))
+	ctv := strings.ToLower(r.Header.Get(HeaderContentType))
+	if ct == "" {
+		if ct == ctv {
+			return true
+		} else {
+			return false
+		}
+	}
+	return strings.Index(ctv, ct) == 0
+}
 
 // ProxyResponse copies the information from a `*http.Response` to a
 // `http.ResponseWriter`.
