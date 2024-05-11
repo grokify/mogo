@@ -103,18 +103,22 @@ imgWidth := b.Max.X
 imgHeight := b.Max.Y
 */
 
-func ReadImageDimensions(imagePath string) (int, int, error) {
-	file, err := os.Open(imagePath)
+func DecodeConfigFile(filename string) (image.Config, string, error) {
+	file, err := os.Open(filename)
 	if err != nil {
-		return -1, -1, err
+		return image.Config{}, "", err
 	}
 	defer file.Close()
 
-	img, _, err := image.DecodeConfig(file)
-	if err != nil {
-		return -1, -1, err
+	if strings.ToLower(strings.TrimSpace(filepath.Ext(filename))) == FileExtensionWebp {
+		if cfg, err := webp.DecodeConfig(file); err != nil {
+			return cfg, "", err
+		} else {
+			return cfg, FormatNameWEBP, nil
+		}
+	} else {
+		return image.DecodeConfig(file)
 	}
-	return img.Width, img.Height, nil
 }
 
 // DecodeBytes wraps Decode which decodes an image that has been encoded in a registered format. The string returned is the format name used during format registration. Format registration is typically done by an init function in the codec- specific package.
