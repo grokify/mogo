@@ -5,13 +5,16 @@ import (
 	"errors"
 	"fmt"
 	"image"
+	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 
+	"github.com/grokify/mogo/net/http/httputilmore"
 	"github.com/grokify/mogo/net/urlutil"
-	// "github.com/chai2010/webp"
+	"golang.org/x/image/webp" // "github.com/chai2010/webp"
 )
 
 const (
@@ -43,41 +46,26 @@ func ReadImages(locations []string) ([]image.Image, error) {
 	return images, nil
 }
 
-/*
-func isHttpUri(location string) bool {
-	try := strings.ToLower(strings.TrimSpace(location))
-	if strings.Index(try, "http://") == 0 || strings.Index(try, "https://") == 0 {
-		return true
-	}
-	return false
-}
-*/
-
 func ReadImageFile(filename string) (image.Image, string, error) {
 	infile, err := os.Open(filename)
 	if err != nil {
-		return image.NewRGBA(image.Rectangle{}), "", err
-	}
-	defer infile.Close()
-	// if strings.ToLower(strings.TrimSpace(filepath.Ext(filename))) == FileExtensionWebp {
-	// 	return DecodeWebpRGBA(infile)
-	// }
-	return image.Decode(infile)
-}
-
-/*
-func DecodeWebpRGBA(r io.Reader) (image.Image, string, error) {
-	bytes, err := ioutil.ReadAll(r)
-	if err != nil {
 		return nil, "", err
 	}
-	img, err := webp.DecodeRGBA(bytes)
-	if err != nil {
-		return img, "", err
+	defer infile.Close()
+	if strings.ToLower(strings.TrimSpace(filepath.Ext(filename))) == FileExtensionWebp {
+		return DecodeWebP(infile)
+	} else {
+		return image.Decode(infile)
 	}
-	return img, FormatNameWEBP, nil
 }
-*/
+
+func DecodeWebP(r io.Reader) (image.Image, string, error) {
+	if img, err := webp.Decode(r); err != nil {
+		return nil, "", err
+	} else {
+		return img, FormatNameWEBP, nil
+	}
+}
 
 func ReadImageHTTP(imageURL string) (image.Image, string, error) {
 	imageURL = strings.TrimSpace(imageURL)
@@ -86,11 +74,14 @@ func ReadImageHTTP(imageURL string) (image.Image, string, error) {
 	}
 	resp, err := http.Get(imageURL) // #nosec G107
 	if err != nil {
-		return image.NewRGBA(image.Rectangle{}), "", err
+		return nil, "", err
 	} else if resp.StatusCode >= 300 {
-		return image.NewRGBA(image.Rectangle{}), "", fmt.Errorf("HTTP_STATUS_CODE_GTE_300 [%v]", resp.StatusCode)
+		return nil, "", fmt.Errorf("HTTP_STATUS_CODE_GTE_300 [%v]", resp.StatusCode)
+	} else if httputilmore.ResponseIsContentType(httputilmore.ContentTypeImageWebP, resp) {
+		return DecodeWebP(resp.Body)
+	} else {
+		return image.Decode(resp.Body)
 	}
-	return image.Decode(resp.Body)
 }
 
 const (
