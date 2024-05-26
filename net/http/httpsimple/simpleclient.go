@@ -18,7 +18,7 @@ var rxHTTPURL = regexp.MustCompile(`^(?i)https?://`)
 
 // Client provides a simple interface to making HTTP requests using `net/http`.
 type Client struct {
-	BaseURL    string
+	BaseURL    string     // TODO: See if we can do this within Transport: https://gist.github.com/epelc/cc286ad0fd7878fb176a89f2af1177b6
 	Query      url.Values // Add If Not Exists
 	HTTPClient *http.Client
 }
