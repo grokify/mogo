@@ -117,12 +117,12 @@ func TypeByReadSeeker(rs io.ReadSeeker, resetPointer bool) (string, error) {
 }
 
 // IsType checks to see if a media type corresponds to a type/subtype
-func IsType(s, mediaType string) bool {
-	if s == mediaType {
-		return true
-	}
+func IsType(mediaType, s string) bool {
+	mediaType = strings.ToLower(strings.TrimSpace(mediaType))
 	s = strings.ToLower(strings.TrimSpace(s))
 	if s == mediaType {
+		return true
+	} else if strings.Index(s, mediaType) == 0 {
 		return true
 	}
 	if !strings.Contains(mediaType, ";") {

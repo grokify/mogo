@@ -20,7 +20,7 @@ var isTypeTests = []struct {
 
 func TestIsType(t *testing.T) {
 	for _, tt := range isTypeTests {
-		isType := IsType(tt.v, tt.tryType)
+		isType := IsType(tt.tryType, tt.v)
 		if isType != tt.isType {
 			t.Errorf("mimeutil.IsType(\"%s\", \"%s\") Fail: want [%v] got [%v]",
 				tt.v, tt.tryType, tt.isType, isType)
