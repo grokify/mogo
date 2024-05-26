@@ -29,6 +29,7 @@ const (
 	ISO8601YM          = "2006-01"
 	ISO9075            = "2006-01-02 15:04:05"           // ISO/IEC 9075 used by MySQL, BigQuery, etc.
 	ISO9075MicroTZ     = "2006-01-02 15:04:05.999999-07" // ISO/IEC 9075 used by PostgreSQL
+	SQLTimestamp       = ISO9075
 	// SQLTimestamp     = "2006-01-02 15:04:05"           // ISO/IEC 9075 used by MySQL, BigQuery, etc.
 	// SQLTimestampPgTz = "2006-01-02 15:04:05.999999-07" // ISO/IEC 9075 used by PostgreSQL
 	Ruby              = "2006-01-02 15:04:05 -0700" // Ruby Time.now.to_s
