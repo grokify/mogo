@@ -14,10 +14,14 @@ type TLSConfig struct {
 	Config *tls.Config
 }
 
-func NewTLSConfig(certFilepath, keyFilepath string, rootCACertFilepaths, clientCACertFilepaths []string, requireAndVerifyClientCert bool) (*TLSConfig, error) {
-	cfg := &tls.Config{
+func NewTLSConfig() *tls.Config {
+	return &tls.Config{
 		Certificates: []tls.Certificate{},
 		MinVersion:   tls.VersionTLS12}
+}
+
+func NewTLSConfigCerts(certFilepath, keyFilepath string, rootCACertFilepaths, clientCACertFilepaths []string, requireAndVerifyClientCert bool) (*TLSConfig, error) {
+	cfg := NewTLSConfig()
 	if requireAndVerifyClientCert {
 		cfg.ClientAuth = tls.RequireAndVerifyClientCert
 	} else {
