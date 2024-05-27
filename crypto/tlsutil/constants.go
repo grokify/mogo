@@ -24,8 +24,6 @@ func (t TLSVersion) String() string {
 		return "TLS 1.1"
 	case VersionTLS10:
 		return "TLS 1.0"
-	case VersionSSL30:
-		return "SSL 3.0"
 	default:
 		return "Unknown"
 	}
