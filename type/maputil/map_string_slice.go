@@ -27,6 +27,16 @@ func (mss MapStringSlice) Add(key, value string) {
 	}
 }
 
+func (mss MapStringSlice) Clone() MapStringSlice {
+	new := url.Values{}
+	for k, vals := range mss {
+		for _, v := range vals {
+			new.Add(k, v)
+		}
+	}
+	return MapStringSlice(new)
+}
+
 func (mss MapStringSlice) Sort(dedupe bool) {
 	for key, vals := range mss {
 		if dedupe {
