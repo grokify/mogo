@@ -1,6 +1,8 @@
 package httpsimple
 
 import (
+	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -9,6 +11,7 @@ import (
 
 	"github.com/grokify/mogo/encoding/xmlutil"
 	"github.com/grokify/mogo/net/http/httputilmore"
+	"github.com/grokify/mogo/net/urlutil"
 	"github.com/grokify/mogo/reflect/reflectutil"
 )
 
@@ -45,13 +48,8 @@ func (req *Request) Inflate() {
 		req.Headers = http.Header{}
 	}
 	if strings.TrimSpace(req.Headers.Get(httputilmore.HeaderContentType)) == "" {
-		switch req.BodyType {
-		case BodyTypeForm:
-			req.Headers.Add(httputilmore.HeaderContentType, httputilmore.ContentTypeAppFormURLEncodedUtf8)
-		case BodyTypeJSON:
-			req.Headers.Add(httputilmore.HeaderContentType, httputilmore.ContentTypeAppJSONUtf8)
-		case BodyTypeXML:
-			req.Headers.Add(httputilmore.HeaderContentType, httputilmore.ContentTypeAppXMLUtf8)
+		if ct := DefaultContentTypeBodyType(req.BodyType); ct != "" {
+			req.Headers.Add(httputilmore.HeaderContentType, ct)
 		}
 	}
 }
@@ -73,4 +71,47 @@ func (req *Request) BodyBytes() ([]byte, error) {
 		}
 	}
 	return []byte{}, fmt.Errorf("body type (%s) not supported", reflectutil.NameOf(req.Body, true))
+}
+
+func (req *Request) FullURL() (*url.URL, error) {
+	return urlutil.URLStringAddQuery(req.URL, req.Query, true)
+}
+
+func (req *Request) HTTPRequest(ctx context.Context) (*http.Request, error) {
+	bodyBytes, err := req.BodyBytes()
+	if err != nil {
+		return nil, err
+	}
+	u, err := req.FullURL()
+	if err != nil {
+		return nil, err
+	}
+	httpreq, err := http.NewRequestWithContext(ctx, req.Method, u.String(), bytes.NewReader(bodyBytes))
+	if err != nil {
+		return nil, err
+	}
+	for k, vals := range req.Headers {
+		for _, v := range vals {
+			httpreq.Header.Add(k, v)
+		}
+	}
+	if httpreq.Header.Get(httputilmore.HeaderContentType) == "" {
+		if ct := DefaultContentTypeBodyType(req.BodyType); ct != "" {
+			httpreq.Header.Add(httputilmore.HeaderContentType, ct)
+		}
+	}
+	return httpreq, nil
+}
+
+func DefaultContentTypeBodyType(bt string) string {
+	bt = strings.ToLower(strings.TrimSpace(bt))
+	switch bt {
+	case BodyTypeForm:
+		return httputilmore.ContentTypeAppFormURLEncodedUtf8
+	case BodyTypeJSON:
+		return httputilmore.ContentTypeAppJSONUtf8
+	case BodyTypeXML:
+		return httputilmore.ContentTypeAppXMLUtf8
+	}
+	return ""
 }
