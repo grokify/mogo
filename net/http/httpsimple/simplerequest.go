@@ -30,6 +30,7 @@ type Request struct {
 	Body          any
 	BodyType      string
 	AddXMLDocType bool // only used if `Body` is a struct.
+	Cookies       []http.Cookie
 }
 
 func NewRequest() Request {
@@ -86,21 +87,24 @@ func (req *Request) HTTPRequest(ctx context.Context) (*http.Request, error) {
 	if err != nil {
 		return nil, err
 	}
-	httpreq, err := http.NewRequestWithContext(ctx, req.Method, u.String(), bytes.NewReader(bodyBytes))
+	hreq, err := http.NewRequestWithContext(ctx, req.Method, u.String(), bytes.NewReader(bodyBytes))
 	if err != nil {
 		return nil, err
 	}
 	for k, vals := range req.Headers {
 		for _, v := range vals {
-			httpreq.Header.Add(k, v)
+			hreq.Header.Add(k, v)
 		}
 	}
-	if httpreq.Header.Get(httputilmore.HeaderContentType) == "" {
+	if hreq.Header.Get(httputilmore.HeaderContentType) == "" {
 		if ct := DefaultContentTypeBodyType(req.BodyType); ct != "" {
-			httpreq.Header.Add(httputilmore.HeaderContentType, ct)
+			hreq.Header.Add(httputilmore.HeaderContentType, ct)
 		}
 	}
-	return httpreq, nil
+	for _, c := range req.Cookies {
+		hreq.AddCookie(&c)
+	}
+	return hreq, nil
 }
 
 func DefaultContentTypeBodyType(bt string) string {
