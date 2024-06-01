@@ -2,6 +2,7 @@ package httpsimple
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"io"
@@ -12,6 +13,7 @@ import (
 
 	"github.com/grokify/mogo/io/ioutil"
 	"github.com/grokify/mogo/net/urlutil"
+	"golang.org/x/net/context/ctxhttp"
 )
 
 var rxHTTPURL = regexp.MustCompile(`^(?i)https?://`)
@@ -115,17 +117,22 @@ func doSimple(client *http.Client, httpMethod, reqURL string, headers map[string
 	return client.Do(req)
 }
 
-func Do(req Request) (*http.Response, error) {
-	sc := Client{}
-	return sc.Do(req)
+func Do(ctx context.Context, req Request) (*http.Response, error) {
+	if ctx == nil {
+		sc := Client{}
+		return sc.Do(req)
+	} else if hreq, err := req.HTTPRequest(ctx); err != nil {
+		return nil, err
+	} else {
+		return ctxhttp.Do(ctx, &http.Client{}, hreq)
+	}
 }
 
-func DoMore(req Request) ([]byte, *http.Response, error) {
-	sc := Client{}
-	resp, err := sc.Do(req)
-	if err != nil {
+func DoMore(ctx context.Context, req Request) ([]byte, *http.Response, error) {
+	if resp, err := Do(ctx, req); err != nil {
 		return []byte{}, resp, err
+	} else {
+		body, err := io.ReadAll(resp.Body)
+		return body, resp, err
 	}
-	body, err := io.ReadAll(resp.Body)
-	return body, resp, err
 }
