@@ -40,11 +40,9 @@ func ParseDuration(s string) (time.Duration, error) {
 		zeroDuration, _ := time.ParseDuration("0s")
 		quantity := rs[1]
 		units := strings.ToLower(rs[2])
-		i, err := strconv.Atoi(quantity)
-		if err != nil {
+		if i, err := strconv.Atoi(quantity); err != nil {
 			return zeroDuration, err
-		}
-		if units == "d" {
+		} else if units == "d" {
 			s = fmt.Sprintf("%vs", i*DaySeconds)
 		} else if units == "w" {
 			s = fmt.Sprintf("%vs", i*WeekSeconds)
@@ -58,11 +56,11 @@ func ParseDuration(s string) (time.Duration, error) {
 }
 
 func MustParseDuration(s string) time.Duration {
-	dur, err := time.ParseDuration(s)
-	if err != nil {
+	if dur, err := time.ParseDuration(s); err != nil {
 		panic(err)
+	} else {
+		return dur
 	}
-	return dur
 }
 
 func NowDeltaDuration(d time.Duration) time.Time {
@@ -70,11 +68,11 @@ func NowDeltaDuration(d time.Duration) time.Time {
 }
 
 func NowDeltaParseDuration(s string) (time.Time, error) {
-	d, err := ParseDuration(s)
-	if err != nil {
+	if d, err := ParseDuration(s); err != nil {
 		return time.Now(), err
+	} else {
+		return time.Now().Add(d), nil
 	}
-	return time.Now().Add(d), nil
 }
 
 /*

@@ -35,6 +35,23 @@ func (ts Times) Dedupe() Times {
 	return newTimeSlice
 }
 
+func (ts Times) Deltas() Durations {
+	var durs Durations
+	if len(ts) < 2 {
+		return durs
+	}
+	for i := 1; i < len(ts); i++ {
+		durs = append(durs, ts[i].Sub(ts[i-1]))
+	}
+	return durs
+}
+
+func (ts Times) Duplicate() Times {
+	var newTS Times
+	newTS = append(newTS, ts...)
+	return newTS
+}
+
 func (ts Times) Equal(compare Times) bool {
 	if ts.Len() != compare.Len() {
 		return false
@@ -48,17 +65,62 @@ func (ts Times) Equal(compare Times) bool {
 }
 
 func (ts Times) Format(format string) []string {
-	formatted := []string{}
+	var formatted []string
 	for _, dt := range ts {
 		formatted = append(formatted, dt.Format(format))
 	}
 	return formatted
 }
 
-func (ts Times) Duplicate() Times {
-	newTS := Times{}
-	newTS = append(newTS, ts...)
-	return newTS
+func (ts Times) Max() *time.Time {
+	if len(ts) == 0 {
+		return nil
+	}
+	var max time.Time
+	for i, t := range ts {
+		if i == 0 {
+			max = t
+		} else if t.Sub(max) > 0 {
+			max = t
+		}
+	}
+	return &max
+}
+
+func (ts Times) Min() *time.Time {
+	if len(ts) == 0 {
+		return nil
+	}
+	var min time.Time
+	for i, t := range ts {
+		if i == 0 {
+			min = t
+		} else if t.Sub(min) < 0 {
+			min = t
+		}
+	}
+	return &min
+}
+
+func (ts Times) Ordered(asc bool) bool {
+	deltas := ts.Deltas()
+	if len(deltas) == 0 {
+		return true
+	}
+	if asc {
+		for delta := range deltas {
+			if delta < 0 {
+				return false
+			}
+		}
+		return true
+	}
+	for delta := range deltas {
+		if delta > 0 {
+			return false
+		}
+	}
+	return true
 }
 
 // RangeLower returns the TimeSlice time value for the range
@@ -80,8 +142,9 @@ func (ts Times) RangeLower(t time.Time, inclusive bool) (time.Time, error) {
 			return curRangeLower, nil
 		} else if inclusive && t.Equal(nextRangeLower) {
 			return nextRangeLower, nil
+		} else {
+			curRangeLower = nextRangeLower
 		}
-		curRangeLower = nextRangeLower
 	}
 	return sortedTS[len(sortedTS)-1], nil
 }
@@ -107,20 +170,21 @@ func (ts Times) RangeUpper(t time.Time, inclusive bool) (time.Time, error) {
 			return curRangeUpper, nil
 		} else if inclusive && t.Equal(nextRangeUpper) {
 			return nextRangeUpper, nil
+		} else {
+			curRangeUpper = nextRangeUpper
 		}
-		curRangeUpper = nextRangeUpper
 	}
 	return sortedTS[0], nil
 }
 
 func ParseTimes(format string, times []string) (Times, error) {
-	ts := Times{}
+	var ts Times
 	for _, raw := range times {
-		dt, err := time.Parse(format, raw)
-		if err != nil {
+		if dt, err := time.Parse(format, raw); err != nil {
 			return ts, err
+		} else {
+			ts = append(ts, dt)
 		}
-		ts = append(ts, dt)
 	}
 	return ts, nil
 }
