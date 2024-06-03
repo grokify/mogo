@@ -13,13 +13,23 @@ import (
 	"github.com/grokify/mogo/errors/errorsutil"
 )
 
-// Decode decodes a byte array to provide an interface
-// like `base64/DecodeString`.
-func Decode(input []byte) ([]byte, error) {
+// Decode decodes a byte array to provide an interface like `base64/DecodeString`.
+func Decode(b []byte) ([]byte, error) {
+	dst := make([]byte, base64.StdEncoding.DecodedLen(len(string(b))))
+	if n, err := base64.StdEncoding.Decode(dst, []byte(string(b))); err != nil {
+		return []byte{}, err
+	} else {
+		return dst[:n], nil
+	}
+}
+
+/*
+func DecodeOld(input []byte) ([]byte, error) {
 	var output []byte
 	n, err := base64.StdEncoding.Decode(output, input)
 	return output[:n], err
 }
+*/
 
 const (
 	// RxCheckMore is from https://stackoverflow.com/a/8571649/1908967
