@@ -10,6 +10,7 @@ var removeDiacriticsTests = []struct {
 }{
 	{"å", "a"},
 	{"ß", "ss"},
+	{"Jesús", "Jesus"},
 	{"žůžo", "zuzo"},
 }
 
