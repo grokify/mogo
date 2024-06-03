@@ -2,17 +2,17 @@ package hexutil
 
 import "encoding/hex"
 
-// EncodeToString returns hex string using a supplied delimiter. The return
+// EncodeToString returns hex string using a supplied seperator. The return
 // value is lower case.
-func EncodeToString(src []byte, delimit string) string {
-	if delimit == "" {
+func EncodeToString(src []byte, sep string) string {
+	if sep == "" {
 		return hex.EncodeToString(src)
 	}
 	s := ""
 	for i, b := range src {
 		s += hex.EncodeToString([]byte{b})
 		if i+1 < len(src) {
-			s += delimit
+			s += sep
 		}
 	}
 	return s
