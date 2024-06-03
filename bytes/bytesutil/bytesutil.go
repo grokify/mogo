@@ -2,7 +2,6 @@ package bytesutil
 
 import (
 	"bytes"
-	"fmt"
 
 	"github.com/grokify/mogo/math/mathutil"
 )
@@ -11,14 +10,6 @@ const UTF8BOM = "\xef\xbb\xbf"
 
 func TrimUTF8BOM(data []byte) []byte {
 	return bytes.TrimPrefix(data, []byte(UTF8BOM))
-}
-
-func ToHexStrings(b []byte) []string {
-	var s []string
-	for _, bi := range b {
-		s = append(s, fmt.Sprintf("%x", bi))
-	}
-	return s
 }
 
 func BytesToInt(s []byte) int {
