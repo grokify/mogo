@@ -4,14 +4,14 @@ import "encoding/hex"
 
 // EncodeToString returns hex string using a supplied delimiter. The return
 // value is lower case.
-func EncodeToString(b []byte, delimit string) string {
+func EncodeToString(src []byte, delimit string) string {
 	if delimit == "" {
-		return hex.EncodeToString(b)
+		return hex.EncodeToString(src)
 	}
 	s := ""
-	for i, bi := range b {
-		s += hex.EncodeToString([]byte{bi})
-		if i+1 < len(b) {
+	for i, b := range src {
+		s += hex.EncodeToString([]byte{b})
+		if i+1 < len(src) {
 			s += delimit
 		}
 	}
@@ -20,10 +20,10 @@ func EncodeToString(b []byte, delimit string) string {
 
 // EncodeToStrings returns a slice of strings with leading 0s. The return
 // values are lower case.
-func EncodeToStrings(b []byte) []string {
+func EncodeToStrings(src []byte) []string {
 	var s []string
-	for _, bi := range b {
-		s = append(s, hex.EncodeToString([]byte{bi}))
+	for _, b := range src {
+		s = append(s, hex.EncodeToString([]byte{b}))
 	}
 	return s
 }
