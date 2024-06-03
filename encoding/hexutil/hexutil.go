@@ -1,6 +1,9 @@
 package hexutil
 
-import "encoding/hex"
+import (
+	"encoding/hex"
+	"strings"
+)
 
 // EncodeToString returns hex string using a supplied seperator. The return
 // value is lower case.
@@ -20,10 +23,14 @@ func EncodeToString(src []byte, sep string) string {
 
 // EncodeToStrings returns a slice of strings with leading 0s. The return
 // values are lower case.
-func EncodeToStrings(src []byte) []string {
+func EncodeToStrings(src []byte, toUpper bool) []string {
 	var s []string
 	for _, b := range src {
-		s = append(s, hex.EncodeToString([]byte{b}))
+		if toUpper {
+			s = append(s, strings.ToUpper(hex.EncodeToString([]byte{b})))
+		} else {
+			s = append(s, hex.EncodeToString([]byte{b}))
+		}
 	}
 	return s
 }
