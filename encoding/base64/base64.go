@@ -14,9 +14,9 @@ import (
 )
 
 // Decode decodes a byte array to provide an interface like `base64/DecodeString`.
-func Decode(b []byte) ([]byte, error) {
-	dst := make([]byte, base64.StdEncoding.DecodedLen(len(string(b))))
-	if n, err := base64.StdEncoding.Decode(dst, []byte(string(b))); err != nil {
+func Decode(enc []byte) ([]byte, error) {
+	dst := make([]byte, base64.StdEncoding.DecodedLen(len(string(enc))))
+	if n, err := base64.StdEncoding.Decode(dst, []byte(string(enc))); err != nil {
 		return []byte{}, err
 	} else {
 		return dst[:n], nil
@@ -46,22 +46,21 @@ var (
 
 // Encode with optional gzip compression. 0 = no compression.
 // 9 = best compression.
-func EncodeGzip(data []byte, compressLevel int) (string, error) {
+func EncodeGzip(src []byte, compressLevel int) (string, error) {
 	var err error
 	if compressLevel != 0 {
-		data, err = gziputil.Compress(data, compressLevel)
+		src, err = gziputil.Compress(src, compressLevel)
 		if err != nil {
 			return "", err
 		}
 	}
-	return base64.StdEncoding.EncodeToString(data), nil
+	return base64.StdEncoding.EncodeToString(src), nil
 }
 
-// DecodeGunzip base64 decodes a string with optional
-// gzip uncompression.
-func DecodeGunzip(encoded string) ([]byte, error) {
-	encoded = Pad(encoded)
-	bytes, err := base64.StdEncoding.DecodeString(encoded)
+// DecodeGunzip base64 decodes a string with optional gzip uncompression.
+func DecodeGunzip(enc string) ([]byte, error) {
+	enc = Pad(enc)
+	bytes, err := base64.StdEncoding.DecodeString(enc)
 	if err != nil {
 		return bytes, err
 	}
@@ -72,20 +71,20 @@ func DecodeGunzip(encoded string) ([]byte, error) {
 	return bytesUnc, nil
 }
 
-func IsValid(input []byte) bool {
-	return rxCheckMore.Match(input)
+func IsValid(enc []byte) bool {
+	return rxCheckMore.Match(enc)
 }
 
-func IsValidString(input string) bool {
-	return rxCheckMore.MatchString(input)
+func IsValidString(enc string) bool {
+	return rxCheckMore.MatchString(enc)
 }
 
-func StripPadding(str string) string {
-	return strings.Replace(str, "=", "", -1)
+func StripPadding(enc string) string {
+	return strings.Replace(enc, "=", "", -1)
 }
 
-func Pad(encoded string) string {
-	return encoding.Pad4(encoded, "=")
+func Pad(enc string) string {
+	return encoding.Pad4(enc, "=")
 }
 
 // EncodeGzipJSON encodes a struct that is JSON encoded.
@@ -100,12 +99,12 @@ func EncodeGzipJSON(data any, compressLevel int) (string, error) {
 // DecodeGunzipJSON base64 decodes a string with optoinal
 // gunzip uncompression and then unmarshals the data to a
 // struct.
-func DecodeGunzipJSON(encoded string, output any) error {
-	encoded = strings.TrimSpace(encoded)
-	if strings.Index(encoded, "{") == 0 || strings.Index(encoded, "[") == 0 {
-		return json.Unmarshal([]byte(encoded), output)
+func DecodeGunzipJSON(enc string, output any) error {
+	enc = strings.TrimSpace(enc)
+	if strings.Index(enc, "{") == 0 || strings.Index(enc, "[") == 0 {
+		return json.Unmarshal([]byte(enc), output)
 	}
-	bytes, err := DecodeGunzip(encoded)
+	bytes, err := DecodeGunzip(enc)
 	if err != nil {
 		return errorsutil.Wrap(err, "DecodeGunzipJSON.DecodeGunzip")
 	}
