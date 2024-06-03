@@ -17,6 +17,11 @@ type Float64ToString func(float64) string
 // Int64ToString is a function type to define functions.
 type Int64ToString func(int64) string
 
+// Btoa returns "true" or "false" according to the value of b.
+func Btoa(b bool) string {
+	return strconv.FormatBool(b)
+}
+
 // Commify takes an int64 and adds comma for every thousand
 func Commify(n int64) string {
 	// Stack Overflow: http://stackoverflow.com/users/1705598/icza
