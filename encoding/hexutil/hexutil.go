@@ -21,8 +21,8 @@ func EncodeToString(src []byte, sep string) string {
 	return s
 }
 
-// EncodeToStrings returns a slice of strings with leading 0s. The return
-// values are lower case.
+// EncodeToStrings returns a slice of strings with leading 0s. The `toUpper`
+// param optionally returns upper case values.
 func EncodeToStrings(src []byte, toUpper bool) []string {
 	var s []string
 	for _, b := range src {
