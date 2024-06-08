@@ -72,6 +72,27 @@ func (ts Times) Format(format string) []string {
 	return formatted
 }
 
+func (ts Times) IsSorted(asc bool) bool {
+	deltas := ts.Deltas()
+	if len(deltas) == 0 {
+		return true
+	}
+	if asc {
+		for delta := range deltas {
+			if delta < 0 {
+				return false
+			}
+		}
+		return true
+	}
+	for delta := range deltas {
+		if delta > 0 {
+			return false
+		}
+	}
+	return true
+}
+
 func (ts Times) Max() *time.Time {
 	if len(ts) == 0 {
 		return nil
@@ -100,27 +121,6 @@ func (ts Times) Min() *time.Time {
 		}
 	}
 	return &min
-}
-
-func (ts Times) Ordered(asc bool) bool {
-	deltas := ts.Deltas()
-	if len(deltas) == 0 {
-		return true
-	}
-	if asc {
-		for delta := range deltas {
-			if delta < 0 {
-				return false
-			}
-		}
-		return true
-	}
-	for delta := range deltas {
-		if delta > 0 {
-			return false
-		}
-	}
-	return true
 }
 
 // RangeLower returns the TimeSlice time value for the range
