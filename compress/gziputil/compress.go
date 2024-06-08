@@ -9,43 +9,47 @@ import (
 )
 
 func FixCompressLevel(level int) int {
-	if level > 9 {
-		level = 9
-	} else if level < -1 {
-		level = -1
+	if level > gzip.BestCompression {
+		level = gzip.BestCompression
+	} else if level < gzip.DefaultCompression {
+		level = gzip.DefaultCompression
 	}
 	return level
 }
 
-// CompressWriter compresses a byte slide and writes the results
+// Compress compresses a byte slide and writes the results
 // to the supplied `io.Writer`. When writing to a file, a `*os.File`
 // from `os.Create()` can be used as the `io.Writer`.
-func CompressWriter(w io.Writer, data []byte, level int) error {
-	gw, err := gzip.NewWriterLevel(w, level)
+func Compress(w io.Writer, r io.Reader, level int) error {
+	gw, err := gzip.NewWriterLevel(w, FixCompressLevel(level))
 	if err != nil {
 		return err
 	}
 	defer gw.Close()
-	_, err = gw.Write(data)
-	return err
+	if bytes, err := io.ReadAll(r); err != nil {
+		return err
+	} else {
+		_, err = gw.Write(bytes)
+		return err
+	}
 }
 
-// Compress performs gzip compression on a byte slice.
-func Compress(data []byte, level int) ([]byte, error) {
+// CompressBytes performs gzip compression on a byte slice.
+func CompressBytes(data []byte, level int) ([]byte, error) {
 	buf := new(bytes.Buffer)
-	err := CompressWriter(buf, data, FixCompressLevel(level))
+	err := Compress(buf, bytes.NewReader(data), level)
 	return buf.Bytes(), err
 }
 
-// CompressBase64 performs gzip compression and then base64 encodes
+// CompressToBase64String performs gzip compression and then base64 encodes
 // the data. Level includes `compress/gzip.BestSpeed`, `compress/gzip.BestCompression`,
 // and `compress/gzip.DefaultCompression`.
-func CompressBase64(data []byte, level int) (string, error) {
-	compressed, err := Compress(data, level)
-	if err != nil {
+func CompressToBase64String(data []byte, level int) (string, error) {
+	if compressed, err := CompressBytes(data, level); err != nil {
 		return "", err
+	} else {
+		return base64.StdEncoding.EncodeToString(compressed), nil
 	}
-	return base64.StdEncoding.EncodeToString(compressed), nil
 }
 
 // CompressBase64JSON performs a JSON encoding, gzip compression and
@@ -55,14 +59,5 @@ func CompressBase64JSON(data any, level int) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return CompressBase64(uncompressedBytes, level)
+	return CompressToBase64String(uncompressedBytes, level)
 }
-
-/*
-// Uncompress gunzips a byte slice.
-func Uncompress(compressed []byte) ([]byte, error) {
-	gr, err := gzip.NewReader(bytes.NewBuffer(compressed))
- := UncompressBase64(compressedB64)
-	return string(byteSlice), err
-}
-*/
