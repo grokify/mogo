@@ -17,6 +17,7 @@ func IsReader(i any) bool {
 	return reflect.PointerTo(reflect.TypeOf(i).Elem()).Implements(reader)
 }
 
+/*
 // ReaderToBytes reads from an io.Reader, e.g. io.ReadCloser
 func ReaderToBytes(r io.Reader) ([]byte, error) {
 	buf := new(bytes.Buffer)
@@ -26,17 +27,18 @@ func ReaderToBytes(r io.Reader) ([]byte, error) {
 	}
 	return buf.Bytes(), nil
 }
+*/
 
 // ReadAllOrError will successfully return the data
 // or return the error in the value return value.
 // This is useful to simply test scripts where the
 // data is printed for debugging or testing.
 func ReadAllOrError(r io.Reader) []byte {
-	data, err := io.ReadAll(r)
-	if err != nil {
+	if b, err := io.ReadAll(r); err != nil {
 		return []byte(err.Error())
+	} else {
+		return b
 	}
-	return data
 }
 
 // ReadLimit returns the first `limit` bytes from a reader.
@@ -47,11 +49,11 @@ func ReadLimit(r io.Reader, limit uint) ([]byte, error) {
 // ReaderToReadSeeker converts an `io.Reader` to an `io.ReadSeeker`. It does this
 // by reading all data in `io.Reader`.
 func ReaderToReadSeeker(r io.Reader) (io.ReadSeeker, error) {
-	ba, err := io.ReadAll(r)
-	if err != nil {
+	if b, err := io.ReadAll(r); err != nil {
 		return nil, err
+	} else {
+		return bytes.NewReader(b), nil
 	}
-	return bytes.NewReader(ba), nil
 }
 
 // Write writes from `Writer` to a `Reader`. See `osutil.WriteFileReader()`.
