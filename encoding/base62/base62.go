@@ -49,7 +49,7 @@ func DecodeGunzip(encoded string) ([]byte, error) {
 	if err != nil {
 		return bytes, err
 	}
-	bytesUnc, err := gziputil.Uncompress(bytes)
+	bytesUnc, err := gziputil.UncompressBytes(bytes)
 	if err != nil {
 		return bytes, nil
 	}
