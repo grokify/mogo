@@ -26,15 +26,15 @@ type compressTestObject struct {
 
 func TestGzipCompress(t *testing.T) {
 	for _, tt := range compressTests {
-		gotCompress, err := CompressBase64([]byte(tt.uncompressed), gzip.BestCompression)
+		gotCompress, err := CompressToBase64String([]byte(tt.uncompressed), gzip.BestCompression)
 		if err != nil {
-			t.Errorf("gziputil.CompressBase64(<data>, \"%s\") Error [%v]",
+			t.Errorf("gziputil.CompressToBase64String(<data>, \"%s\") Error [%v]",
 				tt.compressedBestCompression, err.Error())
 		}
 
 		if 1 == 0 {
 			if gotCompress != tt.compressedBestSpeed {
-				t.Errorf("gziputil.CompressBase64(\"%s\") Mismatch: want [%v] got [%v]",
+				t.Errorf("gziputil.CompressToBase64String(\"%s\") Mismatch: want [%v] got [%v]",
 					tt.uncompressed, tt.compressedBestSpeed, gotCompress)
 			}
 
@@ -43,7 +43,7 @@ func TestGzipCompress(t *testing.T) {
 				t.Errorf("gziputil.UncompressBase64(\"%s\") Error [%v]",
 					tt.compressedBestSpeed, err.Error())
 			}
-			if gotUncompressString != tt.uncompressed {
+			if string(gotUncompressString) != tt.uncompressed {
 				t.Errorf("gziputil.UncompressBase64(\"%s\") Mismatch: want [%v] got [%v]",
 					tt.compressedBestSpeed, tt.uncompressed, gotUncompressString)
 			}
@@ -53,7 +53,7 @@ func TestGzipCompress(t *testing.T) {
 			t.Errorf("gziputil.UncompressBase64(\"%s\") Error [%v]",
 				tt.compressedBestCompression, err.Error())
 		}
-		if gotUncompressString != tt.uncompressed {
+		if string(gotUncompressString) != tt.uncompressed {
 			t.Errorf("gziputil.UncompressBase64(\"%s\") Mismatch: want [%v] got [%v]",
 				tt.compressedBestCompression, tt.uncompressed, gotUncompressString)
 		}
