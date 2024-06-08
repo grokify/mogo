@@ -49,7 +49,7 @@ var (
 func EncodeGzip(src []byte, compressLevel int) (string, error) {
 	var err error
 	if compressLevel != 0 {
-		src, err = gziputil.Compress(src, compressLevel)
+		src, err = gziputil.CompressBytes(src, compressLevel)
 		if err != nil {
 			return "", err
 		}
@@ -60,15 +60,13 @@ func EncodeGzip(src []byte, compressLevel int) (string, error) {
 // DecodeGunzip base64 decodes a string with optional gzip uncompression.
 func DecodeGunzip(enc string) ([]byte, error) {
 	enc = Pad(enc)
-	bytes, err := base64.StdEncoding.DecodeString(enc)
-	if err != nil {
+	if bytes, err := base64.StdEncoding.DecodeString(enc); err != nil {
 		return bytes, err
-	}
-	bytesUnc, err := gziputil.Uncompress(bytes)
-	if err != nil {
+	} else if bytesUnc, err := gziputil.UncompressBytes(bytes); err != nil {
 		return bytes, nil
+	} else {
+		return bytesUnc, nil
 	}
-	return bytesUnc, nil
 }
 
 func IsValid(enc []byte) bool {
@@ -89,11 +87,11 @@ func Pad(enc string) string {
 
 // EncodeGzipJSON encodes a struct that is JSON encoded.
 func EncodeGzipJSON(data any, compressLevel int) (string, error) {
-	bytes, err := json.Marshal(data)
-	if err != nil {
+	if bytes, err := json.Marshal(data); err != nil {
 		return "", err
+	} else {
+		return EncodeGzip(bytes, compressLevel)
 	}
-	return EncodeGzip(bytes, compressLevel)
 }
 
 // DecodeGunzipJSON base64 decodes a string with optoinal
@@ -103,24 +101,22 @@ func DecodeGunzipJSON(enc string, output any) error {
 	enc = strings.TrimSpace(enc)
 	if strings.Index(enc, "{") == 0 || strings.Index(enc, "[") == 0 {
 		return json.Unmarshal([]byte(enc), output)
-	}
-	bytes, err := DecodeGunzip(enc)
-	if err != nil {
+	} else if bytes, err := DecodeGunzip(enc); err != nil {
 		return errorsutil.Wrap(err, "DecodeGunzipJSON.DecodeGunzip")
+	} else {
+		return json.Unmarshal(bytes, output)
 	}
-	return json.Unmarshal(bytes, output)
 }
 
 // ReadAll provides an interface like `io.ReadAll`
 // with optional base64 decoding. It is useful for
 // decoding `*http.Response.Body`.
 func ReadAll(r io.Reader) ([]byte, error) {
-	bytes, err := io.ReadAll(r)
-	if err != nil {
+	if bytes, err := io.ReadAll(r); err != nil {
+		return bytes, err
+	} else if IsValid(bytes) {
+		return Decode(bytes)
+	} else {
 		return bytes, err
 	}
-	if IsValid(bytes) {
-		return Decode(bytes)
-	}
-	return bytes, err
 }
