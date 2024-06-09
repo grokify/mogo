@@ -5,17 +5,26 @@ import (
 )
 
 var convTests = []struct {
+	v      string
 	camel  string
 	kebab  string
 	pascal string
 	snake  string
 }{
-	{"helloWorld", "hello-world", "HelloWorld", "hello_world"},
-	{"fooBarBazQux", "foo-bar-baz-qux", "FooBarBazQux", "foo_bar_baz_qux"},
+	{"hello: World", "helloWorld", "hello-world", "HelloWorld", "hello_world"},
+	{"hello: World Rúnar", "helloWorldRunar", "hello-world-runar", "HelloWorldRunar", "hello_world_runar"},
+	{"helloWorld", "helloWorld", "hello-world", "HelloWorld", "hello_world"},
+	{"fooBarBazQux", "fooBarBazQux", "foo-bar-baz-qux", "FooBarBazQux", "foo_bar_baz_qux"},
 }
 
 func TestConv(t *testing.T) {
 	for _, tt := range convTests {
+		tryKebabRaw := ToKebabCase(tt.v)
+		if tryKebabRaw != tt.kebab {
+			t.Errorf("stringcase.CaseSnakeToKebab(\"%s\") Mismatch: want [%v] got [%v]",
+				tt.snake, tt.kebab, tryKebabRaw)
+		}
+
 		tryCamel := CaseKebabToCamel(tt.kebab)
 		if tryCamel != tt.camel {
 			t.Errorf("stringcase.CaseKebabToCamel(\"%s\") Mismatch: want [%v] got [%v]",

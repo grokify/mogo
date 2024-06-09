@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/grokify/mogo/text/textutil"
 	"github.com/grokify/mogo/type/stringsutil"
 	"github.com/iancoleman/strcase"
 )
@@ -47,25 +48,34 @@ func ToCase(c, s string) (string, error) {
 
 // ToCamelCase converts a string to camel case as `camelCase`.
 func ToCamelCase(s string) string {
-	return stringsutil.ToLowerFirst(ToPascalCase(s))
+	return stringsutil.ToLowerFirst(ToPascalCase(simplify(s)))
 }
 
 // ToPascalCase converts a string to Pascal case as `PascalCase`.
 func ToPascalCase(s string) string {
-	parts := toParts(s)
+	parts := toParts(simplify(s))
 	for i, part := range parts {
 		parts[i] = stringsutil.ToUpperFirst(part, true)
 	}
 	return strings.Join(parts, "")
 }
 
+func simplify(s string) string {
+	if try, err := textutil.RemoveDiacritics(s); err == nil {
+		s = try
+	}
+	return rxPunctSpace.ReplaceAllString(s, " ")
+}
+
+var rxPunctSpace = regexp.MustCompile(`[[:punct:]]+\s+`)
+
 func ToKebabCase(s string) string {
-	return strcase.ToKebab(s)
+	return strcase.ToKebab(simplify(s))
 	// return strings.Join(toParts(strings.ToLower(s)), "-")
 }
 
 func ToSnakeCase(s string) string {
-	return strcase.ToSnake(s)
+	return strcase.ToSnake(simplify(s))
 	// return strings.Join(toParts(strings.ToLower(s)), "_")
 }
 
@@ -104,7 +114,7 @@ func FuncToCase(c string) (func(string) string, error) {
 	case CamelCase:
 		return strcase.ToLowerCamel, nil
 	case KebabCase:
-		return strcase.ToKebab, nil
+		return ToKebabCase, nil
 	case PascalCase:
 		return strcase.ToCamel, nil
 	case SnakeCase:
