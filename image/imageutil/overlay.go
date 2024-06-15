@@ -8,8 +8,8 @@ import (
 
 func Overlay(src, overlay image.Image, offset image.Point) image.Image {
 	output := image.NewRGBA(src.Bounds())
-	draw.Draw(output, src.Bounds(), src, image.Point{}, draw.Src)
-	draw.Draw(output, overlay.Bounds().Add(offset), overlay, image.Point{}, draw.Src)
+	draw.Draw(output, src.Bounds(), src, image.Point{}, draw.Over)
+	draw.Draw(output, overlay.Bounds().Add(offset), overlay, image.Point{}, draw.Over)
 	return output
 }
 
