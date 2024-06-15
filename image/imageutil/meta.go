@@ -68,3 +68,14 @@ func ImageColors(img image.Image) [][]color.Color {
 	}
 	return rows
 }
+
+type ImageMetadata struct {
+	Width  uint
+	Height uint
+}
+
+func NewImageMetadata(img image.Image) ImageMetadata {
+	return ImageMetadata{
+		Width:  uint(img.Bounds().Dx()),
+		Height: uint(img.Bounds().Dy())}
+}
