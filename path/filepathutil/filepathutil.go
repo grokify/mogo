@@ -64,6 +64,8 @@ func TrimRight(file string) string { return strings.TrimRight(file, string(os.Pa
 
 var rxExt = regexp.MustCompile(`\.[^/.]*$`)
 
+// var rxExt = regexp.MustCompile(`\.[^.]+$`)
+
 // TrimExt removes the extension, including a trailing period.
 func TrimExt(path string) string {
 	return rxExt.ReplaceAllString(path, "")
@@ -93,4 +95,18 @@ func FilterFilepaths(paths []string, inclExists, inclNotExists, inclFiles, inclD
 		filtered = append(filtered, path)
 	}
 	return filtered
+}
+
+func ChangeStripExtension(filepath, newext string) string {
+	if newext != "" {
+		if strings.Index(newext, ".") != 0 {
+			newext = "." + newext
+		}
+	}
+	if strings.Contains(filepath, ".") {
+		filepath = rxExt.ReplaceAllString(filepath, newext)
+	} else {
+		filepath += newext
+	}
+	return filepath
 }
