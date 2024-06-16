@@ -10,39 +10,38 @@ import (
 
 // More predefined layouts for use in Time.Format and time.Parse.
 const (
-	DT14               = "20060102150405"
-	DT8                = "20060102"
-	DT6                = "200601"
-	MonthDay           = "1/2"
-	DIN5008FullDate    = "02.01.2006" // German DIN 5008 standard
-	DIN5008Date        = "02.01.06"
-	RFC3339FullDate    = "2006-01-02"
-	RFC3339Milli       = "2006-01-02T15:04:05.999Z07:00"
-	RFC3339Dash        = "2006-01-02T15-04-05Z07-00"
-	ISO8601            = "2006-01-02T15:04:05Z0700"
-	ISO8601TZHour      = "2006-01-02T15:04:05Z07"
-	ISO8601NoTZ        = "2006-01-02T15:04:05"
-	ISO8601MilliNoTZ   = "2006-01-02T15:04:05.999"
-	ISO8601Milli       = "2006-01-02T15:04:05.999Z0700"
-	ISO8601CompactZ    = "20060102T150405Z0700"
-	ISO8601CompactNoTZ = "20060102T150405"
-	ISO8601YM          = "2006-01"
-	ISO9075            = "2006-01-02 15:04:05"           // ISO/IEC 9075 used by MySQL, BigQuery, etc.
-	ISO9075MicroTZ     = "2006-01-02 15:04:05.999999-07" // ISO/IEC 9075 used by PostgreSQL
-	SQLTimestamp       = ISO9075
-	// SQLTimestamp     = "2006-01-02 15:04:05"           // ISO/IEC 9075 used by MySQL, BigQuery, etc.
-	// SQLTimestampPgTz = "2006-01-02 15:04:05.999999-07" // ISO/IEC 9075 used by PostgreSQL
-	Ruby              = "2006-01-02 15:04:05 -0700" // Ruby Time.now.to_s
-	InsightlyAPIQuery = "_1/_2/2006 _3:04:05 PM"
-	DateMDY           = "1/2/2006" // an underscore results in a space.
-	DateMDYSlash      = "01/02/2006"
-	DateDMYDash       = "_2-01-2006"     // Jira XML Date format
-	DateDMYHM2        = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
-	DateYMD           = RFC3339FullDate
-	DateTextUS        = "January _2, 2006"
-	DateTextUSAbbr3   = "Jan _2, 2006"
-	DateTextEU        = "_2 January 2006"
-	DateTextEUAbbr3   = "_2 Jan 2006"
+	DT14                = "20060102150405"
+	DT8                 = "20060102"
+	DT6                 = "200601"
+	MonthDay            = "1/2"
+	DIN5008FullDate     = "02.01.2006" // German DIN 5008 standard
+	DIN5008Date         = "02.01.06"
+	RFC3339FullDate     = "2006-01-02"
+	RFC3339Milli        = "2006-01-02T15:04:05.999Z07:00"
+	RFC3339Dash         = "2006-01-02T15-04-05Z07-00"
+	ISO8601             = "2006-01-02T15:04:05Z0700"
+	ISO8601TZHour       = "2006-01-02T15:04:05Z07"
+	ISO8601NoTZ         = "2006-01-02T15:04:05"
+	ISO8601MilliNoTZ    = "2006-01-02T15:04:05.999"
+	ISO8601Milli        = "2006-01-02T15:04:05.999Z0700"
+	ISO8601CompactZ     = "20060102T150405Z0700"
+	ISO8601CompactNoTZ  = "20060102T150405"
+	ISO8601YM           = "2006-01"
+	ISO9075             = "2006-01-02 15:04:05"           // ISO/IEC 9075 used by MySQL, BigQuery, etc.
+	ISO9075MicroTZ      = "2006-01-02 15:04:05.999999-07" // ISO/IEC 9075 used by PostgreSQL
+	SQLTimestamp        = ISO9075
+	SQLTimestampMinutes = "2006-01-02 15:04"
+	Ruby                = "2006-01-02 15:04:05 -0700" // Ruby Time.now.to_s
+	InsightlyAPIQuery   = "_1/_2/2006 _3:04:05 PM"
+	DateMDY             = "1/2/2006" // an underscore results in a space.
+	DateMDYSlash        = "01/02/2006"
+	DateDMYDash         = "_2-01-2006"     // Jira XML Date format
+	DateDMYHM2          = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
+	DateYMD             = RFC3339FullDate
+	DateTextUS          = "January _2, 2006"
+	DateTextUSAbbr3     = "Jan _2, 2006"
+	DateTextEU          = "_2 January 2006"
+	DateTextEUAbbr3     = "_2 Jan 2006"
 )
 
 const (
