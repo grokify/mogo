@@ -116,28 +116,6 @@ func FormatDecimal[N constraints.Float | constraints.Integer](v N, precision int
 	return fmt.Sprintf(`%.`+strconv.Itoa(precision)+`f`, float64(v))
 }
 
-func Ftoa[F constraints.Float](f F) string {
-	return strconv.FormatFloat(float64(f), 'f', -1, 64)
-}
-
-func FormatFloat64ToIntStringFunnel[F constraints.Float](f F) string {
-	return FormatFloat64ToAnyStringFunnel(float64(f), `%0.0f%%`)
-}
-
-// FormatFloat64ToAnyStringFunnel is used for funnels.
-func FormatFloat64ToAnyStringFunnel(f float64, pattern string) string {
-	return fmt.Sprintf(pattern, ChangeToFunnelPct(f))
-}
-
-func FormatFloat64ToIntString(f float64) string {
-	return FormatFloat64ToAnyString(f, `%0.0f%%`)
-}
-
-// FormatFloat64ToAnyString is used for XoX growth.
-func FormatFloat64ToAnyString(f float64, pattern string) string {
-	return fmt.Sprintf(pattern, ChangeToXoXPct(f))
-}
-
 // ChangeToXoXPct converts a 1.0 == 100% based `float64` to a XoX percentage `float64`.
 func ChangeToXoXPct(f float64) float64 {
 	if f < 1.0 {
