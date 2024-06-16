@@ -3,6 +3,15 @@ package timeutil
 import "time"
 
 const (
+	UnitSuffixNanosecond  = "ns"
+	UnitSuffixMicrosecond = "us"
+	UnitSuffixMillisecond = "ms"
+	UnitSuffixSecond      = "s"
+	UnitSuffixMinute      = "m"
+	UnitSuffixHour        = "h"
+	UnitSuffixDay         = "d"
+	UnitSuffixWeek        = "w"
+
 	Day         = 24 * time.Hour
 	Week        = 7 * Day
 	WorkDay     = 8 * time.Hour

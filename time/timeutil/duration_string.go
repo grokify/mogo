@@ -9,17 +9,6 @@ import (
 	"github.com/grokify/mogo/strconv/strconvutil"
 )
 
-const (
-	UnitSuffixNanosecond  = "ns"
-	UnitSuffixMicrosecond = "us"
-	UnitSuffixMillisecond = "ms"
-	UnitSuffixSecond      = "s"
-	UnitSuffixMinute      = "m"
-	UnitSuffixHour        = "h"
-	UnitSuffixDay         = "d"
-	UnitSuffixWeek        = "w"
-)
-
 // DurationStringUnit converts a Duration to a string with a fixed time unit.
 // If an invalid `unit`, is provided, the function will return the output of
 // `time.Duration.String()`.
