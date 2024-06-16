@@ -3,7 +3,6 @@ package timeutil
 import (
 	"errors"
 	"fmt"
-	"math"
 	"regexp"
 	"strconv"
 	"strings"
@@ -87,21 +86,6 @@ func DurationForNowSubDT8(dt8 int32) (time.Duration, error) {
 	return now.Sub(t), nil
 }
 */
-
-func DurationStringMinutesSeconds(durationSeconds int64) (string, error) {
-	if durationSeconds <= 0 {
-		return "0 sec", nil
-	}
-	dur, err := time.ParseDuration(fmt.Sprintf("%vs", durationSeconds))
-	if err != nil {
-		return "", err
-	}
-	modSeconds := math.Mod(float64(durationSeconds), float64(60))
-	if dur.Minutes() < 1 {
-		return fmt.Sprintf("%v sec", modSeconds), nil
-	}
-	return fmt.Sprintf("%v min %v sec", int(dur.Minutes()), modSeconds), nil
-}
 
 // QuarterDuration returns a `time.Duration` representing the calendar quarter for the time provided.
 func (tm TimeMore) QuarterDuration() time.Duration {
