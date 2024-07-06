@@ -1,0 +1,101 @@
+package padding
+
+import (
+	"image"
+	"image/color"
+	"image/draw"
+
+	"github.com/grokify/mogo/image/colors"
+)
+
+type IsPaddingFunc func(c color.Color) bool
+
+func CreateIsPaddingFuncSimple(paddingColor color.Color) func(testColor color.Color) bool {
+	return func(testColor color.Color) bool {
+		return colors.Equal(paddingColor, testColor)
+	}
+}
+
+func AddPaddingUniform(im image.Image, paddingWidth uint, paddingColor color.Color) image.Image {
+	out := image.NewRGBA(image.Rect(0, 0, im.Bounds().Dx()+int(2*paddingWidth), im.Bounds().Dy()+int(2*paddingWidth)))
+	draw.Draw(out, out.Bounds(), &image.Uniform{paddingColor}, image.ZP, draw.Src)
+	draw.Draw(out, image.Rect(
+		int(paddingWidth),
+		int(paddingWidth),
+		out.Bounds().Max.X-1-int(paddingWidth),
+		out.Bounds().Max.Y-1-int(paddingWidth)), im, image.ZP, draw.Over)
+	return out
+}
+
+func NonPaddingRectangle(im image.Image, isPadding IsPaddingFunc) image.Rectangle {
+	topP, rightP, bottomP, leftP := PaddingWidths(im, isPadding)
+	return image.Rect(
+		int(leftP)+im.Bounds().Min.X,
+		int(topP)+im.Bounds().Min.Y,
+		int(rightP)*-1+im.Bounds().Max.X,
+		int(bottomP)*-1+im.Bounds().Max.Y)
+}
+
+func PaddingWidths(im image.Image, isPadding IsPaddingFunc) (top uint, right uint, bottom uint, left uint) {
+	top = PaddingWidthTop(im, isPadding)
+	right = PaddingWidthRight(im, isPadding)
+	bottom = PaddingWidthBottom(im, isPadding)
+	left = PaddingWidthLeft(im, isPadding)
+	return
+}
+
+func PaddingWidthTop(im image.Image, isPadding IsPaddingFunc) uint {
+	if im == nil {
+		return 0
+	}
+	for yi := im.Bounds().Min.Y; yi < im.Bounds().Max.Y; yi++ {
+		for xi := im.Bounds().Min.X; xi < im.Bounds().Max.X; xi++ {
+			if !isPadding(im.At(xi, yi)) {
+				return uint(yi - im.Bounds().Min.Y)
+			}
+		}
+	}
+	return uint(im.Bounds().Dy())
+}
+
+func PaddingWidthBottom(im image.Image, isPadding IsPaddingFunc) uint {
+	if im == nil {
+		return 0
+	}
+	for yi := im.Bounds().Max.Y - 1; yi >= im.Bounds().Min.Y; yi-- {
+		for xi := im.Bounds().Min.X; xi < im.Bounds().Max.X; xi++ {
+			if !isPadding(im.At(xi, yi)) {
+				return uint(im.Bounds().Max.Y - 1 - yi)
+			}
+		}
+	}
+	return uint(im.Bounds().Dy())
+}
+
+func PaddingWidthLeft(im image.Image, isPadding IsPaddingFunc) uint {
+	if im == nil {
+		return 0
+	}
+	for xi := im.Bounds().Min.X; xi < im.Bounds().Max.X; xi++ {
+		for yi := im.Bounds().Min.Y; yi < im.Bounds().Max.Y; yi++ {
+			if !isPadding(im.At(xi, yi)) {
+				return uint(xi - im.Bounds().Min.X)
+			}
+		}
+	}
+	return uint(im.Bounds().Dx())
+}
+
+func PaddingWidthRight(im image.Image, isPadding func(c color.Color) bool) uint {
+	if im == nil {
+		return 0
+	}
+	for xi := im.Bounds().Max.X - 1; xi >= im.Bounds().Min.X; xi-- {
+		for yi := im.Bounds().Min.Y; yi < im.Bounds().Max.Y; yi++ {
+			if !isPadding(im.At(xi, yi)) {
+				return uint(im.Bounds().Max.X - 1 - xi)
+			}
+		}
+	}
+	return uint(im.Bounds().Dx())
+}
