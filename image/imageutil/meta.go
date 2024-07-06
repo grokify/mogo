@@ -50,9 +50,10 @@ func RectanglePixelCount(r image.Rectangle) int {
 	return w * h
 }
 
-// ImageColors returns colors for an image covering the pixels
+// ColorsMatrix returns colors for an image covering the pixels
 // described in `image.Rectangle`: https://pkg.go.dev/image#Rectangle
-func ImageColors(img image.Image) [][]color.Color {
+func (meta *ImageMeta) ColorsMatrix() [][]color.Color {
+	img := meta.Image
 	rows := [][]color.Color{}
 	minPt := img.Bounds().Min
 	maxPt := img.Bounds().Max
@@ -67,6 +68,17 @@ func ImageColors(img image.Image) [][]color.Color {
 		rows = append(rows, row)
 	}
 	return rows
+}
+
+func (meta *ImageMeta) ColorsHistogram() map[string]uint {
+	img := meta.Image
+	cm := map[string]uint{}
+	for xi := img.Bounds().Min.X; xi < img.Bounds().Max.X; xi++ {
+		for yi := img.Bounds().Min.Y; yi < img.Bounds().Max.Y; yi++ {
+			cm[colors.ColorString(img.At(xi, yi))]++
+		}
+	}
+	return cm
 }
 
 type ImageMetadata struct {
