@@ -5,6 +5,8 @@ import (
 	"image/color"
 	"image/draw"
 	"strings"
+
+	"github.com/grokify/mogo/image/imageutil/padding"
 )
 
 const (
@@ -64,9 +66,21 @@ func CropY(src image.Image, height uint, align string) image.Image {
 		yMin+int(height)))
 }
 
+func CropPadding(src image.Image, isPadding padding.IsPaddingFunc) image.Image {
+	if src == nil {
+		return nil
+	}
+	return Crop(src, padding.NonPaddingRectangle(src, isPadding))
+}
+
 // SquareLarger returns an image that is cropped to where the height and weight are equal
 // to the larger of the source image.
-func SquareLarger(src image.Image, bgcolor color.Color) image.Image {
+func (im Image) SquareLarger(bgcolor color.Color) image.Image { return squareLarger(im.Image, bgcolor) }
+
+func squareLarger(src image.Image, bgcolor color.Color) image.Image {
+	if src == nil {
+		return nil
+	}
 	width := src.Bounds().Dx()
 	height := src.Bounds().Dy()
 	switch {
@@ -87,8 +101,13 @@ func SquareLarger(src image.Image, bgcolor color.Color) image.Image {
 	}
 }
 
-// Square returns an image that is cropped to where the height and weight are equal to the smaller of the source image.
-func Square(src image.Image) image.Image {
+// SquareSmaller returns an image that is cropped to where the height and weight are equal to the smaller of the source image.
+func (im Image) SquareSmaller() image.Image { return squareSmaller(im.Image) }
+
+func squareSmaller(src image.Image) image.Image {
+	if src == nil {
+		return nil
+	}
 	width := src.Bounds().Dx()
 	height := src.Bounds().Dy()
 	switch {
