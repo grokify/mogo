@@ -16,7 +16,7 @@ const (
 	MonthDay            = "1/2"
 	DIN5008FullDate     = "02.01.2006" // German DIN 5008 standard
 	DIN5008Date         = "02.01.06"
-	RFC3339FullDate     = "2006-01-02"
+	RFC3339FullDate     = time.DateOnly
 	RFC3339Milli        = "2006-01-02T15:04:05.999Z07:00"
 	RFC3339Dash         = "2006-01-02T15-04-05Z07-00"
 	ISO8601             = "2006-01-02T15:04:05Z0700"
@@ -27,7 +27,7 @@ const (
 	ISO8601CompactZ     = "20060102T150405Z0700"
 	ISO8601CompactNoTZ  = "20060102T150405"
 	ISO8601YM           = "2006-01"
-	ISO9075             = "2006-01-02 15:04:05"           // ISO/IEC 9075 used by MySQL, BigQuery, etc.
+	ISO9075             = time.DateTime                   // ISO/IEC 9075 used by MySQL, BigQuery, etc.
 	ISO9075MicroTZ      = "2006-01-02 15:04:05.999999-07" // ISO/IEC 9075 used by PostgreSQL
 	SQLTimestamp        = ISO9075
 	SQLTimestampMinutes = "2006-01-02 15:04"
