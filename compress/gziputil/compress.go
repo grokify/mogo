@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"io"
+	"os"
 )
 
 func FixCompressLevel(level int) int {
@@ -49,6 +50,15 @@ func CompressToBase64String(data []byte, level int) (string, error) {
 		return "", err
 	} else {
 		return base64.StdEncoding.EncodeToString(compressed), nil
+	}
+}
+
+// CompressFileToBase64String compresses a file to base64 encoded string.
+func CompressFileToBase64String(name string, level int) (string, error) {
+	if b, err := os.ReadFile(name); err != nil {
+		return "", err
+	} else {
+		return CompressToBase64String(b, level)
 	}
 }
 
