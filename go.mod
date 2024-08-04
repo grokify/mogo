@@ -23,7 +23,7 @@ require (
 	golang.org/x/image v0.18.0
 	golang.org/x/net v0.27.0
 	golang.org/x/text v0.16.0
-	google.golang.org/genproto v0.0.0-20240725223205-93522f1f2a9f
+	google.golang.org/genproto v0.0.0-20240730163845-b1a4ccb954bf
 )
 
 require (
