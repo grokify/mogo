@@ -42,6 +42,8 @@ const (
 	DateTextUSAbbr3     = "Jan _2, 2006"
 	DateTextEU          = "_2 January 2006"
 	DateTextEUAbbr3     = "_2 Jan 2006"
+	MonthAbbrYear       = "Jan 2006"
+	MonthYear           = "January 2006"
 )
 
 const (
