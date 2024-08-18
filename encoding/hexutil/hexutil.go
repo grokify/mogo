@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// EncodeToString returns hex string using a supplied seperator. The return
+// EncodeToString returns hex string using a supplied separator. The return
 // value is lower case.
 func EncodeToString(src []byte, sep string) string {
 	if sep == "" {
