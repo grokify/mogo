@@ -102,6 +102,7 @@ func (req *Request) HTTPRequest(ctx context.Context) (*http.Request, error) {
 		}
 	}
 	for _, c := range req.Cookies {
+		c := c
 		hreq.AddCookie(&c)
 	}
 	return hreq, nil
