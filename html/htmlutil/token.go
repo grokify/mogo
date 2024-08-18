@@ -34,6 +34,10 @@ func (tokens Tokens) Table() [][]string {
 	return newTableFromTokens(tokens)
 }
 
+func (tokens Tokens) Tokenizer() *html.Tokenizer {
+	return NewTokenizerBytes([]byte(tokens.String()))
+}
+
 func ParseLink(tokens ...html.Token) (href string, desc string, err error) {
 	if len(tokens) < 3 {
 		return "", "", fmt.Errorf("less than 3 tokens, token count [%d]", len(tokens))
