@@ -448,6 +448,57 @@ func SliceOrderExplicit(s, order []string, inclUnordered bool) ([]string, []int)
 	}
 }
 
+/*
+// SliceDedupeOrdered is a function with similar functionality to SliceOrderExplicit().
+func SliceDedupeOrdered(s, ordered []string, sortAsc bool, inclUnordered bool) []string {
+	s = slicesutil.Dedupe(s)
+	ordered = slicesutil.Dedupe(ordered)
+	if len(s) == 0 {
+		return []string{}
+	} else if len(ordered) == 0 {
+		if !inclUnordered {
+			return []string{}
+		} else {
+			var out []string
+			out = append(out, s...)
+			if sortAsc {
+				sort.Strings(out)
+			}
+			return out
+		}
+	}
+
+	srcMap := map[string]int{}
+	for _, s := range s {
+		srcMap[s]++
+	}
+	var out []string
+	outMap := map[string]int{}
+	for _, ord := range ordered {
+		if _, ok := srcMap[ord]; ok {
+			out = append(out, ord)
+			outMap[ord]++
+		}
+	}
+	if inclUnordered {
+		var unordered []string
+		for _, si := range s {
+			if _, ok := outMap[si]; !ok {
+				unordered = append(unordered, si)
+			}
+		}
+		if sortAsc {
+			sort.Strings(unordered)
+		}
+		if len(unordered) > 0 {
+			out = append(out, unordered...)
+		}
+	}
+
+	return out
+}
+*/
+
 // SliceSplitLengthStats returns a `map[int]int` indicating how many
 // strings of which length are present.
 func SliceSplitLengthStats(s []string, sep string) map[int]int {
