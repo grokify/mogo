@@ -16,7 +16,11 @@ import (
 
 // var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
-const FileExt = ".json"
+const (
+	EmptyArray  = "[]"
+	EmptyObject = "{}"
+	FileExt     = ".json"
+)
 
 var (
 	MarshalPrefix = ""
@@ -63,6 +67,24 @@ func MustMarshal(v any, embedError bool) []byte {
 
 func MustMarshalString(v any, embedError bool) string {
 	return string(MustMarshal(v, embedError))
+}
+
+// MarshalOrDefault returns the supplied default value in the event
+// of an error. It also returns the error for processing.
+func MarshalOrDefault(v any, def []byte) ([]byte, error) {
+	if b, err := json.Marshal(v); err != nil {
+		return def, err
+	} else {
+		return b, err
+	}
+}
+
+func MustMarshalOrDefault(v any, def []byte) []byte {
+	if b, err := json.Marshal(v); err != nil {
+		return def
+	} else {
+		return b
+	}
 }
 
 func MustMarshalIndent(v any, prefix, indent string, embedError bool) []byte {
