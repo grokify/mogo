@@ -18,12 +18,12 @@ func CreateIsPaddingFuncSimple(paddingColor color.Color) func(testColor color.Co
 
 func AddPaddingUniform(im image.Image, paddingWidth uint, paddingColor color.Color) image.Image {
 	out := image.NewRGBA(image.Rect(0, 0, im.Bounds().Dx()+int(2*paddingWidth), im.Bounds().Dy()+int(2*paddingWidth)))
-	draw.Draw(out, out.Bounds(), &image.Uniform{paddingColor}, image.ZP, draw.Src)
+	draw.Draw(out, out.Bounds(), &image.Uniform{paddingColor}, image.Point{}, draw.Src)
 	draw.Draw(out, image.Rect(
 		int(paddingWidth),
 		int(paddingWidth),
 		out.Bounds().Max.X-1-int(paddingWidth),
-		out.Bounds().Max.Y-1-int(paddingWidth)), im, image.ZP, draw.Over)
+		out.Bounds().Max.Y-1-int(paddingWidth)), im, image.Point{}, draw.Over)
 	return out
 }
 
