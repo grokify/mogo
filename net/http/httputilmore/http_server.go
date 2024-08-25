@@ -32,3 +32,7 @@ func NewServerTimeouts(addr string, handler http.Handler, timeout time.Duration)
 		MaxHeaderBytes:    1 << 20,
 	}
 }
+
+func ListenAndServeTimeouts(addr string, handler http.Handler, timeout time.Duration) error {
+	return NewServerTimeouts(addr, handler, timeout).ListenAndServe()
+}
