@@ -14,6 +14,8 @@ const (
 
 	Day         = 24 * time.Hour
 	Week        = 7 * Day
+	Year        = 365 * Day
+	Decade      = 10 * Year
 	WorkDay     = 8 * time.Hour
 	WorkWeek    = 5 * WorkDay
 	WorkDay996  = 12 * time.Hour
