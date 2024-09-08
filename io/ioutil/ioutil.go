@@ -3,6 +3,7 @@ package ioutil
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"io"
 	"reflect"
 )
@@ -15,6 +16,14 @@ type AtReader interface {
 func IsReader(i any) bool {
 	reader := reflect.TypeOf((*io.Reader)(nil)).Elem()
 	return reflect.PointerTo(reflect.TypeOf(i).Elem()).Implements(reader)
+}
+
+func MustPrintReader(r io.Reader) {
+	if b, err := io.ReadAll(r); err != nil {
+		panic(err)
+	} else {
+		fmt.Println(string(b))
+	}
 }
 
 /*
