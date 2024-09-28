@@ -38,10 +38,10 @@ const (
 	DateDMYDash         = "_2-01-2006"     // Jira XML Date format
 	DateDMYHM2          = "02:01:06 15:04" // GMT time in format dd:mm:yy hh:mm
 	DateYMD             = RFC3339FullDate
-	DateTextUS          = "January _2, 2006"
-	DateTextUSAbbr3     = "Jan _2, 2006"
-	DateTextEU          = "_2 January 2006"
-	DateTextEUAbbr3     = "_2 Jan 2006"
+	DateTextUS          = "January 2, 2006"
+	DateTextUSAbbr3     = "Jan 2, 2006"
+	DateTextEU          = "2 January 2006"
+	DateTextEUAbbr3     = "2 Jan 2006"
 	MonthAbbrYear       = "Jan 2006"
 	MonthYear           = "January 2006"
 )
