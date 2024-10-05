@@ -65,9 +65,9 @@ func CompressFileToBase64String(name string, level int) (string, error) {
 // CompressBase64JSON performs a JSON encoding, gzip compression and
 // then base64 encodes the data.
 func CompressBase64JSON(data any, level int) (string, error) {
-	uncompressedBytes, err := json.Marshal(data)
-	if err != nil {
+	if uncompressedBytes, err := json.Marshal(data); err != nil {
 		return "", err
+	} else {
+		return CompressToBase64String(uncompressedBytes, level)
 	}
-	return CompressToBase64String(uncompressedBytes, level)
 }

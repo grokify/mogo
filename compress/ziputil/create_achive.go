@@ -94,13 +94,11 @@ func AddFileToZip(zipWriter *zip.Writer, filename string, removePaths bool) erro
 	// See http://golang.org/pkg/archive/zip/#pkg-constants
 	header.Method = zip.Deflate
 
-	writer, err := zipWriter.CreateHeader(header)
-	if err != nil {
+	if writer, err := zipWriter.CreateHeader(header); err != nil {
 		return err
-	}
-	_, err = io.Copy(writer, fileToZip)
-	if err != nil {
+	} else if _, err = io.Copy(writer, fileToZip); err != nil {
 		return closeFileOnError(fileToZip, err)
+	} else {
+		return fileToZip.Close()
 	}
-	return fileToZip.Close()
 }
