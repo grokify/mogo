@@ -1,13 +1,16 @@
 package tlsutil
 
 import (
+	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
+	"net/http"
 	"os"
 	"strings"
 
 	"github.com/grokify/mogo/errors/errorsutil"
+	"golang.org/x/net/context/ctxhttp"
 )
 
 type TLSConfig struct {
@@ -92,6 +95,24 @@ func (tc *TLSConfig) LoadRootCACert(caCertFilepath string) error {
 	if ok := tc.Config.RootCAs.AppendCertsFromPEM(cert); !ok {
 		return fmt.Errorf("cannot add root CA cert (%s)", caCertFilepath)
 	} else {
+		return nil
+	}
+}
+
+// SupportsTLSVersion returns an error if a connection cannot be made and a nil
+// if the connection is successful.
+func SupportsTLSVersion(ctx context.Context, tlsVersion TLSVersion, url string) error {
+	client := &http.Client{Transport: &http.Transport{
+		TLSClientConfig: &tls.Config{
+			MinVersion: uint16(tlsVersion),
+			MaxVersion: uint16(tlsVersion),
+		},
+	}}
+
+	if resp, err := ctxhttp.Head(ctx, client, url); err != nil {
+		return errorsutil.Wrapf(err, "tls version not supported (%s)", tlsVersion.String())
+	} else {
+		defer resp.Body.Close()
 		return nil
 	}
 }
