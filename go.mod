@@ -2,11 +2,9 @@ module github.com/grokify/mogo
 
 go 1.22.0
 
-toolchain go1.22.2
-
 require (
 	github.com/ProtonMail/go-crypto v1.1.2
-	github.com/caarlos0/env/v6 v6.10.1
+	github.com/caarlos0/env/v11 v11.2.2
 	github.com/grokify/base36 v1.0.5
 	github.com/grokify/bitcoinmath v0.1.0
 	github.com/huandu/xstrings v1.5.0
@@ -23,7 +21,7 @@ require (
 	golang.org/x/image v0.22.0
 	golang.org/x/net v0.31.0
 	golang.org/x/text v0.20.0
-	google.golang.org/genproto v0.0.0-20241104194629-dd2ea8efbc28
+	google.golang.org/genproto v0.0.0-20241113202542-65e8d215514f
 )
 
 require (
@@ -33,5 +31,5 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	golang.org/x/sys v0.27.0 // indirect
-	google.golang.org/protobuf v1.35.1 // indirect
+	google.golang.org/protobuf v1.35.2 // indirect
 )
