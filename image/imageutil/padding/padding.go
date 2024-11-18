@@ -10,10 +10,19 @@ import (
 
 type IsPaddingFunc func(c color.Color) bool
 
+// CreateIsPaddingFuncSimple returns a function that fulfills the
+// `IsPaddingFunc` inteface.
 func CreateIsPaddingFuncSimple(paddingColor color.Color) func(testColor color.Color) bool {
 	return func(testColor color.Color) bool {
 		return colors.Equal(paddingColor, testColor)
 	}
+}
+
+// IsPaddingFuncWhite returns a function that fulfills the `IsPaddingFunc`
+// interface. The `unused` parameter is present to fulfill the interface
+// requirements but is not used otherwise.
+func IsPaddingFuncWhite() func(unused color.Color) bool {
+	return CreateIsPaddingFuncSimple(color.White)
 }
 
 func AddPaddingUniform(im image.Image, paddingWidth uint, paddingColor color.Color) image.Image {
@@ -28,6 +37,9 @@ func AddPaddingUniform(im image.Image, paddingWidth uint, paddingColor color.Col
 }
 
 func NonPaddingRectangle(im image.Image, isPadding IsPaddingFunc) image.Rectangle {
+	if isPadding == nil {
+		isPadding = IsPaddingFuncWhite()
+	}
 	topP, rightP, bottomP, leftP := PaddingWidths(im, isPadding)
 	return image.Rect(
 		int(leftP)+im.Bounds().Min.X,
