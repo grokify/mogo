@@ -6,7 +6,7 @@ import (
 	"image/draw"
 	"strings"
 
-	"github.com/grokify/mogo/image/imageutil/padding"
+	"github.com/grokify/mogo/image/padding"
 )
 
 const (
