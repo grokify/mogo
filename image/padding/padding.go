@@ -19,9 +19,8 @@ func CreateIsPaddingFuncSimple(paddingColor color.Color) func(testColor color.Co
 }
 
 // IsPaddingFuncWhite returns a function that fulfills the `IsPaddingFunc`
-// interface. The `unused` parameter is present to fulfill the interface
-// requirements but is not used otherwise.
-func IsPaddingFuncWhite() func(unused color.Color) bool {
+// interface.
+func IsPaddingFuncWhite() func(testColor color.Color) bool {
 	return CreateIsPaddingFuncSimple(color.White)
 }
 
