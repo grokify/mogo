@@ -82,7 +82,9 @@ func ToUpperFirst(s1 string, lowerRest bool) string {
 		s1 = strings.ToLower(s1)
 	}
 	a1 := []rune(s1)
-	a1[0] = unicode.ToUpper(a1[0])
+	if len(a1) > 0 {
+		a1[0] = unicode.ToUpper(a1[0])
+	}
 	return string(a1)
 }
 
