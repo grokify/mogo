@@ -95,3 +95,15 @@ func SliceItoaMore[S ~[]E, E constraints.Integer](s S, dedupe, sort bool) []stri
 	}
 	return out
 }
+
+// JoinBytes joins a slice of strings and returns a byte array.
+func JoinBytes(data []string, sep []byte) []byte {
+	var out []byte
+	for i, r := range data {
+		out = append(out, []byte(r)...)
+		if len(sep) > 0 && i < len(data)-1 {
+			out = append(out, sep...)
+		}
+	}
+	return out
+}
