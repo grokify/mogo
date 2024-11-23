@@ -3,7 +3,11 @@ package markdown
 import (
 	"fmt"
 	"regexp"
+	"sort"
 	"strings"
+
+	"github.com/grokify/mogo/type/slicesutil"
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 // BoldText bodifies the identified text. It looks for start of words
@@ -28,6 +32,35 @@ func URLToMarkdownLinkHostname(url string) string {
 		return fmt.Sprintf("[%v%v](%v)", m[1], suffix, url)
 	}
 	return url
+}
+
+type Link struct {
+	Text string
+	URL  string
+}
+
+func (lnk Link) Markdown() string {
+	return Linkify(lnk.URL, lnk.Text)
+}
+
+type Links []Link
+
+func (lnks Links) Texts(condense, dedupe, sortAsc bool) []string {
+	var out []string
+	for _, lnk := range lnks {
+		out = append(out, lnk.Text)
+	}
+	if condense {
+		out = stringsutil.SliceCondenseSpace(out, dedupe, sortAsc)
+	} else {
+		if dedupe {
+			slicesutil.Dedupe(out)
+		}
+		if sortAsc {
+			sort.Strings(out)
+		}
+	}
+	return out
 }
 
 // Linkify constructs a link from url and text inputs.
