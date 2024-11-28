@@ -1,3 +1,16 @@
+/*
+# httpsversioncheck
+
+## Installation:
+
+`go install github.com/grokify/mogo/crypto/tlsutil/cmd/httpsversioncheck“
+
+## Usage
+
+```
+% httpsversioncheck https://example.com
+````
+*/
 package main
 
 import (
@@ -34,8 +47,7 @@ func main() {
 		tls.VersionTLS13}
 
 	for _, tlsVersion := range tlsVersions {
-		err := tlsutil.SupportsTLSVersion(context.Background(), tlsVersion, url)
-		if err != nil {
+		if err := tlsutil.SupportsTLSVersion(context.Background(), tlsVersion, url); err != nil {
 			fmt.Printf("%s: Not Supported: (%s)\n", tlsVersion.String(), err.Error())
 		} else {
 			fmt.Printf("%s: Supported\n", tlsVersion.String())
