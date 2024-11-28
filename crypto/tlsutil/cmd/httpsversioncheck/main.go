@@ -9,7 +9,7 @@
 
 ```
 % httpsversioncheck https://example.com
-````
+```
 */
 package main
 
