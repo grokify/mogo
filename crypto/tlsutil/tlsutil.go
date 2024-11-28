@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -109,10 +110,20 @@ func SupportsTLSVersion(ctx context.Context, tlsVersion TLSVersion, url string) 
 		},
 	}}
 
-	if resp, err := ctxhttp.Head(ctx, client, url); err != nil {
+	if resp, err := ctxhttp.Get(ctx, client, url); err != nil {
 		return errorsutil.Wrapf(err, "tls version not supported (%s)", tlsVersion.String())
 	} else {
 		defer resp.Body.Close()
 		return nil
+	}
+}
+
+func HTTPResponseTLSVersion(r *http.Response) (TLSVersion, error) {
+	if r == nil {
+		return 0, errors.New("http.Response cannot be nil")
+	} else if r.TLS == nil {
+		return 0, errors.New("http.Response.TLS cannot be nil")
+	} else {
+		return TLSVersion(r.TLS.Version), nil
 	}
 }
