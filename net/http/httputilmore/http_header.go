@@ -5,8 +5,6 @@ import (
 	"net/http"
 )
 
-// rw.Header().Set("WWW-Authenticate", "Basic realm=Restricted")
-
 // Constants ensuring that header names are correctly spelled and consistently cased.
 const (
 	HeaderAccept                       = "Accept"
@@ -24,17 +22,6 @@ const (
 	HeaderContentMD5                   = "Content-MD5"
 	HeaderContentTransferEncoding      = "Content-Transfer-Encoding"
 	HeaderContentType                  = "Content-Type"
-	HeaderDate                         = "Date"
-	HeaderExpect                       = "Expect"
-	HeaderIfMatch                      = "If-Match"
-	HeaderIfModifiedSince              = "If-Modified-Since"
-	HeaderIfNoneMatch                  = "If-None-Match"
-	HeaderIfUnmodifiedSince            = "If-Unmodified-Since"
-	HeaderLocation                     = "Location"
-	HeaderRange                        = "Range"
-	HeaderUserAgent                    = "User-Agent"
-	HeaderWWWAuthenticate              = "WWW-Authenticate"
-	HeaderXContentTypeOptions          = "X-Content-Type-Options"
 	ContentTypeAppJSON                 = "application/json"
 	ContentTypeAppJSONUtf8             = "application/json; charset=utf-8"
 	ContentTypeAppOctetStream          = "application/octet-stream"
@@ -47,6 +34,7 @@ const (
 	ContentTypeImagePNG                = "image/png"
 	ContentTypeImageSVG                = "image/svg+xml"
 	ContentTypeImageWebP               = "image/webp"
+	ContentTypeMultipartFormData       = "multipart/form-data"
 	ContentTypeTextCalendarUtf8Request = "text/calendar; charset=utf-8; method=REQUEST"
 	ContentTypeTextHTML                = "text/html"
 	ContentTypeTextHTMLUtf8            = "text/html; charset=utf-8"
@@ -55,9 +43,26 @@ const (
 	ContentTypeTextPlainUsASCII        = "text/plain; charset=us-ascii"
 	ContentTypeTextPlainUtf8           = "text/plain; charset=utf-8"
 	ContentTypeTextXMLUtf8             = "text/xml; charset=utf-8"
+	HeaderDate                         = "Date"
+	HeaderExpect                       = "Expect"
 	Expect100Continue                  = "100-continue"
-	SchemeHTTPS                        = "https"
+	HeaderIfMatch                      = "If-Match"
+	HeaderIfModifiedSince              = "If-Modified-Since"
+	HeaderIfNoneMatch                  = "If-None-Match"
+	HeaderIfUnmodifiedSince            = "If-Unmodified-Since"
+	HeaderLocation                     = "Location"
+	HeaderPrefer                       = "Prefer" // IETF RFC-7240
+	PreferHandlingStrict               = "handling=strict"
+	PreferRespondAsync                 = "respond-async"
+	PreferReturnMinimal                = "return=minimal"
+	PreferReturnRepresentation         = "return=representation"
+	HeaderRange                        = "Range"
+	HeaderUserAgent                    = "User-Agent"
+	HeaderWWWAuthenticate              = "WWW-Authenticate"
 	WWWAuthenticateBasicRestricted     = "Basic realm=Restricted"
+	HeaderXContentTypeOptions          = "X-Content-Type-Options"
+
+	SchemeHTTPS = "https"
 
 	HeaderNgrokSkipBrowserWarning      = "ngrok-skip-browser-warning" // header needs to be present. value can be anything. See more at: https://stackoverflow.com/questions/73017353/how-to-bypass-ngrok-browser-warning
 	HeaderNgrokSkipBrowserWarningValue = "skip-browser-warning"
