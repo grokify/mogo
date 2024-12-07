@@ -50,7 +50,7 @@ func (ms MultipartSimple) Builder(close bool) (MultipartBuilder, error) {
 }
 
 func (ms MultipartSimple) Strings() (ctHeader, body string, err error) {
-	mb, err := ms.Builder()
+	mb, err := ms.Builder(true)
 	if err != nil {
 		return
 	}
