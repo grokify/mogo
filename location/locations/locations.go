@@ -1,4 +1,4 @@
-package location
+package locations
 
 import (
 	"github.com/grokify/mogo/math/mathutil"
