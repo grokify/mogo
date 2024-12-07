@@ -13,7 +13,7 @@ func NewMultipartSimple() MultipartSimple {
 	return MultipartSimple{Parts: []Part{}}
 }
 
-func (ms MultipartSimple) Builder() (MultipartBuilder, error) {
+func (ms MultipartSimple) Builder(close bool) (MultipartBuilder, error) {
 	mb := NewMultipartBuilder()
 	if len(ms.Parts) == 0 {
 		err := mb.Close()
@@ -38,8 +38,12 @@ func (ms MultipartSimple) Builder() (MultipartBuilder, error) {
 			return mb, fmt.Errorf("type not supported (%s)", p.Type)
 		}
 	}
-	if err := mb.Close(); err != nil {
-		return mb, err
+	if close {
+		if err := mb.Close(); err != nil {
+			return mb, err
+		} else {
+			return mb, nil
+		}
 	} else {
 		return mb, nil
 	}
