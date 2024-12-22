@@ -4,7 +4,7 @@ go 1.22.0
 
 require (
 	github.com/ProtonMail/go-crypto v1.1.3
-	github.com/caarlos0/env/v11 v11.2.2
+	github.com/caarlos0/env/v11 v11.3.0
 	github.com/grokify/base36 v1.0.5
 	github.com/grokify/bitcoinmath v0.1.0
 	github.com/huandu/xstrings v1.5.0
