@@ -105,7 +105,7 @@ func IndentBytes(data []byte, prefix, indent string) ([]byte, error) {
 	}
 }
 
-func WriteFileIndentBytes(name string, data []byte, prefix, indent string, perm fs.FileMode) error {
+func MarshalFileIndentBytes(name string, data []byte, prefix, indent string, perm fs.FileMode) error {
 	if data, err := IndentBytes(data, prefix, indent); err != nil {
 		return err
 	} else {
@@ -207,17 +207,7 @@ func PrintReaderIndent(r io.Reader, prefix, indent string) ([]byte, error) {
 	return outBytes, err
 }
 
-/*
-func UnmarshalFile(filename string, v any) ([]byte, error) {
-	if b, err := os.ReadFile(filename); err != nil {
-		return b, err
-	} else {
-		return b, json.Unmarshal(b, v)
-	}
-}
-*/
-
-func ReadFile(filename string, v any) error {
+func UnmarshalFile(filename string, v any) error {
 	if f, err := os.Open(filename); err != nil {
 		return err
 	} else {
@@ -227,15 +217,23 @@ func ReadFile(filename string, v any) error {
 	}
 }
 
-func WriteFile(filename string, v any, prefix, indent string, perm fs.FileMode) error {
-	f, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, perm)
-	if err != nil {
-		return err
+func UnmarshalFileWithBytes(filename string, v any) ([]byte, error) {
+	if b, err := os.ReadFile(filename); err != nil {
+		return b, err
+	} else {
+		return b, json.Unmarshal(b, v)
 	}
-	defer f.Close()
-	encr := json.NewEncoder(f)
-	encr.SetIndent(prefix, indent)
-	return encr.Encode(v)
+}
+
+func MarshalFile(filename string, v any, prefix, indent string, perm fs.FileMode) error {
+	if f, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, perm); err != nil {
+		return err
+	} else {
+		defer f.Close()
+		encr := json.NewEncoder(f)
+		encr.SetIndent(prefix, indent)
+		return encr.Encode(v)
+	}
 }
 
 func Equal(x, y io.Reader) (bool, error) {
