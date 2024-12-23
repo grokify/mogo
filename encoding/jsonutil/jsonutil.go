@@ -207,11 +207,23 @@ func PrintReaderIndent(r io.Reader, prefix, indent string) ([]byte, error) {
 	return outBytes, err
 }
 
+/*
 func UnmarshalFile(filename string, v any) ([]byte, error) {
 	if b, err := os.ReadFile(filename); err != nil {
 		return b, err
 	} else {
 		return b, json.Unmarshal(b, v)
+	}
+}
+*/
+
+func ReadFile(filename string, v any) error {
+	if f, err := os.Open(filename); err != nil {
+		return err
+	} else {
+		defer f.Close()
+		decr := json.NewDecoder(f)
+		return decr.Decode(v)
 	}
 }
 
