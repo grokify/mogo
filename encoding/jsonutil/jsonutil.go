@@ -216,11 +216,14 @@ func UnmarshalFile(filename string, v any) ([]byte, error) {
 }
 
 func WriteFile(filename string, v any, prefix, indent string, perm fs.FileMode) error {
-	if b, err := MarshalSimple(v, prefix, indent); err != nil {
+	f, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, perm)
+	if err != nil {
 		return err
-	} else {
-		return os.WriteFile(filename, b, perm)
 	}
+	defer f.Close()
+	encr := json.NewEncoder(f)
+	encr.SetIndent(prefix, indent)
+	return encr.Encode(v)
 }
 
 func Equal(x, y io.Reader) (bool, error) {
