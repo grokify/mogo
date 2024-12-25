@@ -21,7 +21,7 @@ require (
 	golang.org/x/image v0.23.0
 	golang.org/x/net v0.33.0
 	golang.org/x/text v0.21.0
-	google.golang.org/genproto v0.0.0-20241219192143-6b3ec007d9bb
+	google.golang.org/genproto v0.0.0-20241223144023-3abc09e42ca8
 )
 
 require (
@@ -31,5 +31,5 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	golang.org/x/sys v0.28.0 // indirect
-	google.golang.org/protobuf v1.36.0 // indirect
+	google.golang.org/protobuf v1.36.1 // indirect
 )
