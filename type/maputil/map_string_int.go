@@ -131,8 +131,8 @@ func (rs Records) String(sep string) string {
 	return strings.Join(recs, sep)
 }
 
-func (rs Records) Total() int {
-	total := 0
+func (rs Records) Sum() int {
+	var total int
 	for _, rec := range rs {
 		total += rec.Value
 	}
@@ -149,7 +149,7 @@ func (rs Records) Markdown(prefix, sep string, countFirst, addTotal bool) string
 		}
 	}
 	if addTotal {
-		total := rs.Total()
+		total := rs.Sum()
 		if countFirst {
 			lines = append(lines, prefix+strconv.Itoa(total)+sep+"Total")
 		} else {
