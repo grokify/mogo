@@ -1,6 +1,7 @@
 package maputil
 
 import (
+	"fmt"
 	"sort"
 	"strconv"
 	"strings"
@@ -120,9 +121,17 @@ type Record struct {
 	Value int
 }
 
-type RecordSet []Record
+type Records []Record
 
-func (rs RecordSet) Total() int {
+func (rs Records) String(sep string) string {
+	var recs []string
+	for _, r := range rs {
+		recs = append(recs, fmt.Sprintf("%s (%d)", r.Name, r.Value))
+	}
+	return strings.Join(recs, sep)
+}
+
+func (rs Records) Total() int {
 	total := 0
 	for _, rec := range rs {
 		total += rec.Value
@@ -130,7 +139,7 @@ func (rs RecordSet) Total() int {
 	return total
 }
 
-func (rs RecordSet) Markdown(prefix, sep string, countFirst, addTotal bool) string {
+func (rs Records) Markdown(prefix, sep string, countFirst, addTotal bool) string {
 	lines := []string{}
 	for _, rec := range rs {
 		if countFirst {
