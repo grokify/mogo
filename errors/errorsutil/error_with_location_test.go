@@ -10,7 +10,7 @@ var errorWithLocationTests = []struct {
 	fn           func() error
 	errMsgSuffix string
 }{
-	{func() error { return errors.New("test err") }, `github.com/grokify/mogo/errors/errorsutil/error_with_location_test.go:22)`},
+	{func() error { return errors.New("test err") }, `mogo/errors/errorsutil/error_with_location_test.go:22)`},
 }
 
 func TestErrorWithLocation(t *testing.T) {
