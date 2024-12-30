@@ -26,11 +26,15 @@ func Sum1HexFile(name string) (string, error) {
 }
 */
 
+func Sum256(b []byte) string {
+	hash := sha256.Sum256(b)
+	return fmt.Sprintf("%x", hash[:])
+}
+
 // Sum256String takes an input string and returns the hexadecimal hash value.
 // It is equivalent to `echo -n "input" | shasum -a 256` on macOS.
 func Sum256String(s string) string {
-	hash := sha256.Sum256([]byte(s))
-	return fmt.Sprintf("%x", hash[:])
+	return Sum256([]byte(s))
 }
 
 func Sum512d224Base32Bytes(b []byte, padding rune) string {
@@ -46,8 +50,9 @@ func Sum512d224Base32(r io.Reader, padding rune) (string, error) {
 	h := sha512.New512_224()
 	if _, err := io.Copy(h, r); err != nil {
 		return "", err
+	} else {
+		return base32.StdEncoding.WithPadding(padding).EncodeToString(h.Sum([]byte{})), nil
 	}
-	return base32.StdEncoding.WithPadding(padding).EncodeToString(h.Sum([]byte{})), nil
 }
 
 func Sum512d224Base32File(name string, padding rune) (string, error) {
@@ -57,4 +62,13 @@ func Sum512d224Base32File(name string, padding rune) (string, error) {
 	}
 	defer f.Close()
 	return Sum512d224Base32(f, padding)
+}
+
+func Sum512d256Base32(r io.Reader, padding rune) (string, error) {
+	h := sha512.New512_256()
+	if _, err := io.Copy(h, r); err != nil {
+		return "", err
+	} else {
+		return base32.StdEncoding.WithPadding(padding).EncodeToString(h.Sum([]byte{})), nil
+	}
 }
