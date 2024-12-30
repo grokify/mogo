@@ -358,6 +358,17 @@ func EmptyError(s string, err error) string {
 	return s
 }
 
+// RemoveNonPrintable removes non-printable characters from a string.
+func RemoveNonPrintable(s string) string {
+	return strings.Map(func(r rune) rune {
+		if unicode.IsPrint(r) {
+			return r
+		} else {
+			return -1
+		}
+	}, s)
+}
+
 // StripChars removes chars specified by `cutset` while maintaining order of remaining
 // chars and shortening string per removed chars.
 func StripChars(s, cutset string) string {

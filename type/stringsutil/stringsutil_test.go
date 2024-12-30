@@ -1,6 +1,7 @@
 package stringsutil
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -153,6 +154,37 @@ func TestRepeat(t *testing.T) {
 		if got != tt.want {
 			t.Errorf("stringsutil.Repeat(%s, %d) Error: want (%s), got (%s)",
 				tt.v, tt.l, tt.want, got)
+		}
+	}
+}
+
+var removeNonPrintableTests = []struct {
+	vBytes  []byte
+	vLen    int
+	want    string
+	wantLen int
+}{
+	{[]byte{52, 69, 88, 81, 78, 89, 72, 73, 77, 69, 87, 52, 76, 82, 77, 68,
+		71, 88, 88, 90, 89, 87, 81, 71, 72, 88, 73, 81, 70, 55, 73, 76,
+		77, 78, 87, 88, 53, 77, 50, 65, 79, 74, 84, 72, 84, 50, 54, 79,
+		72, 89, 73, 81, 0, 0, 0, 0}, 56, "4EXQNYHIMEW4LRMDGXXZYWQGHXIQF7ILMNWX5M2AOJTHT26OHYIQ", 52},
+	{[]byte{0, 0, 0, 0, 52, 0, 0, 0, 0}, 9, "4", 1},
+}
+
+func TestRemoveNonPrintable(t *testing.T) {
+	for _, tt := range removeNonPrintableTests {
+		if len(tt.vBytes) != tt.vLen {
+			panic(fmt.Sprintf("stringsutil.TestTrimNonPrintable(\"%s\") Panic: needLen (%d), got (%d)",
+				string(tt.vBytes), tt.vLen, len(tt.vBytes)))
+		}
+		if len(tt.want) != tt.wantLen {
+			panic(fmt.Sprintf("stringsutil.TestTrimNonPrintable(\"%s\") Panic: needLen (%d), got (%d)",
+				string(tt.vBytes), tt.vLen, len(tt.vBytes)))
+		}
+		try := RemoveNonPrintable(string(tt.vBytes))
+		if try != tt.want {
+			t.Errorf("stringsutil.TestTrimNonPrintable(\"%s\") Mismatch: want (%s) len(%d), got (%s) len(%d)",
+				string(tt.vBytes), tt.want, tt.wantLen, try, len(try))
 		}
 	}
 }
