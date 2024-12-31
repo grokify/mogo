@@ -20,37 +20,15 @@ to make programming Go a bit faster.
 
 In terms of scope, `mogo` is designed to cover all common areas, with a move to fewer dependencies.
 
-:warning: `mogo` is in a deconstruction phase. It currently has many dependencies and the goal is to move external dependences to separate packages in the Mogo family.
-
 See the following modules for extended functionality (with more dependencies):
 
 * GoAuth - [github.com/grokify/goauth](https://github.com/grokify/goauth)
 * GoCharts - [github.com/grokify/gocharts](https://github.com/grokify/gocharts)
-* GoHTTP - [github.com/grokify/gohttp](https://github.com/grokify/gohttp)
-* GoNet - [github.com/grokify/gonet](https://github.com/grokify/gonet)
 * GoPhoneNumbers - [github.com/grokify/gophonenumbers](https://github.com/grokify/gophonenumbers)
 
 ## Documentation
 
 Documentation is provided using godoc and available on [GoDoc.org](https://godoc.org/github.com/grokify/mogo).
-
-- [crypto](https://pkg.go.dev/github.com/grokify/mogo/crypto)
-- html
-  - [tokenizer](https://pkg.go.dev/github.com/grokify/mogo/html/tokenizer)
-- [io](https://pkg.go.dev/github.com/grokify/mogo/io)
-- [log](https://pkg.go.dev/github.com/grokify/mogo/log)
-- [net](https://pkg.go.dev/github.com/grokify/mogo/net)
-  - [net/httputilmore](https://pkg.go.dev/github.com/grokify/mogo/net/httputilmore)
-  - [net/urlutil](https://pkg.go.dev/github.com/grokify/mogo/net/urlutil)
-- [os/osutil](https://pkg.go.dev/github.com/grokify/mogo/os/osutil)
-- mime
-  - [multipart](https://pkg.go.dev/github.com/grokify/mogo/mime/multipart)
-- [sort](https://pkg.go.dev/github.com/grokify/mogo/sort)
-- [strconv](https://pkg.go.dev/github.com/grokify/mogo/strconv)
-- [text](https://pkg.go.dev/github.com/grokify/mogo/text)
-- [time](https://pkg.go.dev/github.com/grokify/mogo/time)
-  - [timeutil](https://pkg.go.dev/github.com/grokify/mogo/time/timeutil)
-- [type](https://pkg.go.dev/github.com/grokify/mogo/type)
 
 ## Installation
 
