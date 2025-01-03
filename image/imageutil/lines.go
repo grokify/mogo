@@ -16,7 +16,7 @@ func RowsFilteredColor(img image.Image, c color.Color, cmore ...color.Color) []i
 	for y := minPt.Y; y <= maxPt.Y; y++ {
 		for x := minPt.X; x <= maxPt.X; x++ {
 			for _, ci := range cmore {
-				if colors.ColorToHex(img.At(x, y)) == colors.ColorToHex(ci) {
+				if colors.ColorToHex(img.At(x, y), false, false) == colors.ColorToHex(ci, false, false) {
 					rows = append(rows, y)
 					continue
 				}
