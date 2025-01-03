@@ -116,9 +116,16 @@ func ColorRGBAToHex(c color.RGBA) string {
 }
 
 // ColorToHex returns 6 byte hex code in lower case.
-func ColorToHex(c color.Color) string {
+func ColorToHex(c color.Color, upperCase, addHash bool) string {
 	r, g, b, _ := c.RGBA()
-	return fmt.Sprintf("%02x%02x%02x", uint8(r), uint8(g), uint8(b))
+	h := fmt.Sprintf("%02x%02x%02x", uint8(r), uint8(g), uint8(b))
+	if upperCase {
+		h = strings.ToUpper(h)
+	}
+	if addHash {
+		h = "#" + h
+	}
+	return h
 }
 
 // ColorString returns a full 16-bit color representation.

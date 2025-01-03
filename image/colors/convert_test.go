@@ -69,7 +69,7 @@ func TestConvertColors(t *testing.T) {
 		if gotRGBAHexLc != strings.ToLower(tt.hexRaw) {
 			t.Errorf("ColorRGBAToHex(%v): want [%v] got [%v]", clr, strings.ToLower(tt.hexRaw), gotRGBAHexLc)
 		}
-		gotHexLc := ColorToHex(clr)
+		gotHexLc := ColorToHex(clr, false, false)
 		if gotHexLc != strings.ToLower(tt.hexRaw) {
 			t.Errorf("ColorToHex(%v): want [%v] got [%v]", clr, strings.ToLower(tt.hexRaw), gotHexLc)
 		}
@@ -94,7 +94,7 @@ func TestAverage(t *testing.T) {
 			}
 		}
 		clrAvg := ColorAverage(ttColors...)
-		clrAvgHex := ColorToHex(clrAvg)
+		clrAvgHex := ColorToHex(clrAvg, false, false)
 		if clrAvgHex != tt.averageHex {
 			t.Errorf("ColorToHex(...): want [%v] got [%v]", tt.averageHex, clrAvgHex)
 		}
