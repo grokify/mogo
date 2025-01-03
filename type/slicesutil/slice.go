@@ -182,6 +182,14 @@ func MakeMatrix2D[E any](n, m int) [][]E {
 	return matrix
 }
 
+func MakeRepeatingElement[V any](l int, v V) []V {
+	var out []V
+	for i := 0; i < l; i++ {
+		out = append(out, v)
+	}
+	return out
+}
+
 func MatrixGetOneOrDefault[C comparable](m [][]C, keyIdx uint, keyValue C, wantIdx uint, defaultValue C) C {
 	for _, row := range m {
 		if int(keyIdx) >= len(row) {
