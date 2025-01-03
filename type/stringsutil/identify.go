@@ -9,10 +9,11 @@ func DigitsOnly(input string) string {
 }
 
 var (
-	rxAlpha        = regexp.MustCompile(`^[A-Za-z]+$`)
-	rxAlphaNumeric = regexp.MustCompile(`^[0-9A-Za-z]+$`)
-	rxNumeric      = regexp.MustCompile(`^[0-9]+$`)
-	rxNonNumeric   = regexp.MustCompile(`[^0-9]`)
+	rxAlpha           = regexp.MustCompile(`^[A-Za-z]+$`)
+	rxAlphaNumeric    = regexp.MustCompile(`^[0-9A-Za-z]+$`)
+	rxAlphaNumericNot = regexp.MustCompile(`[^0-9A-Za-z]`)
+	rxNumeric         = regexp.MustCompile(`^[0-9]+$`)
+	rxNonNumeric      = regexp.MustCompile(`[^0-9]`)
 )
 
 func IsAlpha(s string) bool {
@@ -25,4 +26,8 @@ func IsAlphaNumeric(s string) bool {
 
 func IsNumeric(s string) bool {
 	return rxNumeric.MatchString(s)
+}
+
+func ToAlphaNumeric(s string) string {
+	return rxAlphaNumericNot.ReplaceAllString(s, "")
 }
