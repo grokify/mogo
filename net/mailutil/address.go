@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-type Addresses []*mail.Address
+type Addresses []mail.Address
 
 func (addrs Addresses) TrimSpace(trimName, trimAddress bool) {
 	for i := range addrs {
@@ -22,9 +22,6 @@ func (addrs Addresses) TrimSpace(trimName, trimAddress bool) {
 func (addrs Addresses) Strings(smtpOnly, smtpToLower, sortAsc bool) []string {
 	strs := []string{}
 	for _, addr := range addrs {
-		if addr == nil {
-			continue
-		}
 		var str string
 		if smtpOnly {
 			if smtpToLower {
@@ -41,6 +38,11 @@ func (addrs Addresses) Strings(smtpOnly, smtpToLower, sortAsc bool) []string {
 		sort.Strings(strs)
 	}
 	return strs
+}
+
+func (addrs Addresses) String(smtpOnly, smtpToLower, sortAsc bool) string {
+	strs := addrs.Strings(smtpOnly, smtpToLower, sortAsc)
+	return strings.Join(strs, AddrSep)
 }
 
 /*
