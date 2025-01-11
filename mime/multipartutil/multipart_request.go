@@ -39,6 +39,6 @@ func NewRequest(method, url string, params url.Values, files []FileInfo) (*http.
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set(httputilmore.HeaderContentType, mb.ContentType())
+	req.Header.Set(httputilmore.HeaderContentType, mb.ContentType(httputilmore.ContentTypeMultipartFormData))
 	return req, nil
 }
