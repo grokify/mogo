@@ -1,12 +1,8 @@
 package multipartutil
 
-import (
-	"fmt"
-	"strings"
-)
-
 type MultipartSimple struct {
-	Parts []Part
+	ContentType string
+	Parts       []Part
 }
 
 func NewMultipartSimple() MultipartSimple {
@@ -20,22 +16,8 @@ func (ms MultipartSimple) Builder(close bool) (MultipartBuilder, error) {
 		return mb, err
 	}
 	for _, p := range ms.Parts {
-		typ := strings.ToLower(strings.TrimSpace(p.Type))
-		switch typ {
-		case PartTypeFilepath:
-			if err := mb.WriteFilePathPlus(p.Name, p.Filepath, p.Base64Encode); err != nil {
-				return mb, nil
-			}
-		case PartTypeJSON:
-			if err := mb.WriteFieldAsJSON(p.Name, p.Data, p.Base64Encode); err != nil {
-				return mb, nil
-			}
-		case PartTypeString:
-			if err := mb.WriteFieldString(p.Name, p.String); err != nil {
-				return mb, nil
-			}
-		default:
-			return mb, fmt.Errorf("type not supported (%s)", p.Type)
+		if err := p.Write(mb.Writer); err != nil {
+			return mb, err
 		}
 	}
 	if close {
@@ -49,27 +31,28 @@ func (ms MultipartSimple) Builder(close bool) (MultipartBuilder, error) {
 	}
 }
 
+// Part returns the MultipartSimple as a Part. This can be used for
+// creating parts such as `multipart/alternative`.
+func (ms MultipartSimple) Part() (Part, error) {
+	ct, body, err := ms.Strings()
+	if err != nil {
+		return Part{}, err
+	} else {
+		return Part{
+			Type:         PartTypeRaw,
+			ContentType:  ct,
+			Base64Encode: false,
+			RawBody:      []byte(body),
+		}, nil
+	}
+}
+
 func (ms MultipartSimple) Strings() (ctHeader, body string, err error) {
 	mb, err := ms.Builder(true)
 	if err != nil {
 		return
 	}
-	ctHeader = mb.ContentType()
+	ctHeader = mb.ContentType(ms.ContentType)
 	body = mb.String()
 	return
-}
-
-const (
-	PartTypeJSON     = "json"
-	PartTypeFilepath = "filepath"
-	PartTypeString   = "string"
-)
-
-type Part struct {
-	Type         string
-	Name         string
-	Base64Encode bool
-	Data         any
-	Filepath     string
-	String       string
 }
