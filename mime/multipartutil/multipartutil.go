@@ -188,8 +188,11 @@ func (builder *MultipartBuilder) Close() error {
 }
 
 // ContentType returns the content type for the `Content-Type` header.
-func (builder *MultipartBuilder) ContentType() string {
-	return builder.Writer.FormDataContentType()
+func (builder *MultipartBuilder) ContentType(ct string) string {
+	params := map[string]string{
+		"boundary": builder.Writer.Boundary(),
+	}
+	return mime.FormatMediaType(ct, params)
 }
 
 // String returns the MIME parts as a string.
