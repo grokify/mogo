@@ -1,15 +1,15 @@
 package multipartutil
 
-type MultipartSimple struct {
+type PartsSet struct {
 	ContentType string
 	Parts       []Part
 }
 
-func NewMultipartSimple() MultipartSimple {
-	return MultipartSimple{Parts: []Part{}}
+func NewPartsSet() PartsSet {
+	return PartsSet{Parts: []Part{}}
 }
 
-func (ms MultipartSimple) Builder(close bool) (MultipartBuilder, error) {
+func (ms PartsSet) Builder(close bool) (MultipartBuilder, error) {
 	mb := NewMultipartBuilder()
 	if len(ms.Parts) == 0 {
 		err := mb.Close()
@@ -33,7 +33,7 @@ func (ms MultipartSimple) Builder(close bool) (MultipartBuilder, error) {
 
 // Part returns the MultipartSimple as a Part. This can be used for
 // creating parts such as `multipart/alternative`.
-func (ms MultipartSimple) Part() (Part, error) {
+func (ms PartsSet) Part() (Part, error) {
 	ct, body, err := ms.Strings()
 	if err != nil {
 		return Part{}, err
@@ -47,7 +47,7 @@ func (ms MultipartSimple) Part() (Part, error) {
 	}
 }
 
-func (ms MultipartSimple) Strings() (ctHeader, body string, err error) {
+func (ms PartsSet) Strings() (ctHeader, body string, err error) {
 	mb, err := ms.Builder(true)
 	if err != nil {
 		return

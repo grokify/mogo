@@ -6,7 +6,7 @@ import "github.com/grokify/mogo/net/http/httputilmore"
 // text and HTML alternatives.
 func NewPartAlternativeOrNot(text, html []byte) (Part, error) {
 	if len(text) > 0 && len(html) > 0 {
-		mps := NewMultipartSimpleAlternative(text, html)
+		mps := NewPartsSetAlternative(text, html)
 		return mps.Part()
 	} else if len(html) > 0 {
 		return Part{
@@ -25,8 +25,8 @@ func NewPartAlternativeOrNot(text, html []byte) (Part, error) {
 	}
 }
 
-func NewMultipartSimpleAlternative(text, html []byte) MultipartSimple {
-	return MultipartSimple{
+func NewPartsSetAlternative(text, html []byte) PartsSet {
+	return PartsSet{
 		ContentType: httputilmore.ContentTypeMultipartAlternative,
 		Parts: []Part{
 			{
