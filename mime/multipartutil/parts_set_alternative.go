@@ -1,26 +1,30 @@
 package multipartutil
 
-import "github.com/grokify/mogo/net/http/httputilmore"
+import (
+	"github.com/grokify/mogo/net/http/httputilmore"
+)
 
 // NewPartAlternativeOrNot can be used for email bodies which come with
 // text and HTML alternatives.
-func NewPartAlternativeOrNot(text, html []byte) (Part, error) {
-	if len(text) > 0 && len(html) > 0 {
-		mps := NewPartsSetAlternative(text, html)
+func NewPartAlternativeOrNot(textBody, htmlBody []byte) (Part, error) {
+	if len(textBody) > 0 && len(htmlBody) > 0 {
+		mps := NewPartsSetAlternative(textBody, htmlBody)
 		return mps.Part()
-	} else if len(html) > 0 {
+	} else if len(htmlBody) > 0 {
 		return Part{
-			Type:             PartTypeRaw,
-			ContentType:      httputilmore.ContentTypeTextHTMLUtf8,
-			BodyEncodeBase64: false,
-			BodyDataRaw:      html,
+			Type:               PartTypeRaw,
+			ContentDisposition: httputilmore.ContentDispositionInline,
+			ContentType:        httputilmore.ContentTypeTextHTMLUtf8,
+			BodyEncodeBase64:   false,
+			BodyDataRaw:        htmlBody,
 		}, nil
 	} else {
 		return Part{
-			Type:             PartTypeRaw,
-			ContentType:      httputilmore.ContentTypeTextPlainUtf8,
-			BodyEncodeBase64: false,
-			BodyDataRaw:      text,
+			Type:               PartTypeRaw,
+			ContentDisposition: httputilmore.ContentDispositionInline,
+			ContentType:        httputilmore.ContentTypeTextPlainUtf8,
+			BodyEncodeBase64:   false,
+			BodyDataRaw:        textBody,
 		}, nil
 	}
 }
@@ -30,15 +34,17 @@ func NewPartsSetAlternative(text, html []byte) PartsSet {
 		ContentType: httputilmore.ContentTypeMultipartAlternative,
 		Parts: []Part{
 			{
-				Type:             PartTypeRaw,
-				ContentType:      httputilmore.ContentTypeTextPlain,
-				BodyEncodeBase64: false,
-				BodyDataRaw:      text,
+				Type:               PartTypeRaw,
+				ContentDisposition: httputilmore.ContentDispositionInline,
+				ContentType:        httputilmore.ContentTypeTextPlain,
+				BodyEncodeBase64:   false,
+				BodyDataRaw:        text,
 			}, {
-				Type:             PartTypeRaw,
-				ContentType:      httputilmore.ContentTypeTextHTMLUtf8,
-				BodyEncodeBase64: false,
-				BodyDataRaw:      html,
+				Type:               PartTypeRaw,
+				ContentDisposition: httputilmore.ContentDispositionInline,
+				ContentType:        httputilmore.ContentTypeTextHTMLUtf8,
+				BodyEncodeBase64:   false,
+				BodyDataRaw:        html,
 			},
 		},
 	}
