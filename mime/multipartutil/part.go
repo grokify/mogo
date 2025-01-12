@@ -34,6 +34,17 @@ type Part struct {
 	BodyEncodeBase64   bool
 }
 
+func NewPartEmpty(ct string) Part {
+	p := Part{
+		Type:      PartTypeRaw,
+		HeaderRaw: textproto.MIMEHeader{},
+	}
+	if ct = strings.TrimSpace(ct); ct != "" {
+		p.HeaderRaw[hum.HeaderContentType] = []string{ct}
+	}
+	return p
+}
+
 // HeaderBodyFilepath sets Content-Disposition and Content-Type.
 func (p Part) HeaderBodyFilepath() (textproto.MIMEHeader, []byte, error) {
 	header := textproto.MIMEHeader{}
