@@ -1,3 +1,6 @@
+// aesecb provides ECB (Electronic Codebook) mode for AES. Do not use this approach
+// for new implementations due to weak security. This is provided for compatibility
+// with previous implementations only.
 package aesecb
 
 import (
@@ -58,6 +61,9 @@ func removePKCS7Padding(data []byte, blockSize int) ([]byte, error) {
 	return data[:len(data)-paddingLen], nil
 }
 
+// EncryptBase64 provides ECB (Electronic Codebook) mode for AES. Do not use this approach
+// for new implementations due to weak security. This is provided for compatibility
+// with previous implementations only.
 func EncryptBase64(v, key string) (string, error) {
 	paddedInput := addPKCS5Padding([]byte(v), aes.BlockSize)
 
