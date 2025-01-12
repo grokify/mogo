@@ -1,28 +1,38 @@
 package mailutil
 
 import (
+	"bytes"
+	"io"
 	"mime"
-	"net/http"
 	"net/mail"
+	"net/textproto"
 	"strings"
 	"time"
+
+	"github.com/grokify/mogo/mime/multipartutil"
+	"github.com/grokify/mogo/net/http/httputilmore"
 )
 
-type Header map[string][]string
-
 type MessageWriter struct {
-	To      Addresses
-	Cc      Addresses
-	Bcc     Addresses
-	From    *mail.Address
-	Sender  *mail.Address
-	Date    *time.Time
-	Subject string
-	Header  http.Header
-	Body    string
+	To           Addresses
+	Cc           Addresses
+	Bcc          Addresses
+	From         *mail.Address
+	Sender       *mail.Address
+	Date         *time.Time
+	Subject      string
+	Header       textproto.MIMEHeader
+	BodyPartsSet multipartutil.PartsSet // Attachments or Inline
 }
 
-func (mw MessageWriter) HeaderLines() []string {
+func NewMessageWriter() *MessageWriter {
+	return &MessageWriter{
+		Header:       textproto.MIMEHeader{},
+		BodyPartsSet: multipartutil.NewPartsSet(httputilmore.ContentTypeMultipartMixed),
+	}
+}
+
+func (mw *MessageWriter) HeaderLines() []string {
 	var lines []string
 	if mw.From != nil {
 		if from := mw.From.String(); from != "" {
@@ -41,6 +51,11 @@ func (mw MessageWriter) HeaderLines() []string {
 	if sub := strings.TrimSpace(mw.Subject); sub != "" {
 		lines = append(lines, MustEncodeHeaderLine(HeaderSubject, sub))
 	}
+	for k, vals := range mw.Header {
+		for _, v := range vals {
+			lines = append(lines, MustEncodeHeaderLine(k, v))
+		}
+	}
 	return lines
 }
 
@@ -57,22 +72,51 @@ func EncodeHeaderLine(key, val string) (string, error) {
 	if key == "" {
 		panic("no header key")
 	}
-	return key + HeaderSep + EncodeHeaderValueUTF8(val), nil
+	return key + HeaderSep + mime.QEncoding.Encode("utf-8", val), nil
 }
 
-func EncodeHeaderValueUTF8(s string) string {
-	return mime.QEncoding.Encode("utf-8", s)
+func (mw *MessageWriter) Bytes() ([]byte, error) {
+	var b bytes.Buffer
+	if err := mw.Write(&b); err != nil {
+		return []byte{}, err
+	} else {
+		return b.Bytes(), nil
+	}
 }
 
-func (mw MessageWriter) String() string {
-	lines := mw.HeaderLines()
-	header := strings.Join(lines, "\n")
-	var parts []string
-	if header != "" {
-		parts = append(parts, header)
+func (mw *MessageWriter) String() (string, error) {
+	var b strings.Builder
+	if err := mw.Write(&b); err != nil {
+		return "", err
+	} else {
+		return b.String(), nil
 	}
-	if mw.Body != "" {
-		parts = append(parts, mw.Body)
+}
+
+func (mw *MessageWriter) Write(w io.Writer) error {
+	ctHeader, body, err := mw.BodyPartsSet.Strings()
+	if err != nil {
+		return err
 	}
-	return strings.Join(parts, "\n\n")
+
+	if ctHeader = strings.TrimSpace(ctHeader); ctHeader != "" {
+		if mw.Header == nil {
+			mw.Header = textproto.MIMEHeader{}
+		}
+		mw.Header[httputilmore.HeaderContentType] = []string{ctHeader}
+	}
+
+	if count, err := w.Write([]byte(strings.Join(mw.HeaderLines(), "\n"))); err != nil {
+		return err
+	} else if count > 0 {
+		if _, err := w.Write([]byte("\n\n")); err != nil {
+			return err
+		}
+	}
+	if len(body) > 0 {
+		if _, err := w.Write([]byte(body)); err != nil {
+			return err
+		}
+	}
+	return nil
 }
