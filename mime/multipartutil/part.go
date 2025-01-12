@@ -27,11 +27,11 @@ type Part struct {
 	Name               string
 	ContentType        string
 	ContentDisposition string // short
-	Base64Encode       bool
-	Filepath           string
-	JSONBody           any
-	RawBody            []byte
-	RawHeader          textproto.MIMEHeader
+	HeaderRaw          textproto.MIMEHeader
+	BodyDataFilepath   string
+	BodyDataJSON       any
+	BodyDataRaw        []byte
+	BodyEncodeBase64   bool
 }
 
 // HeaderBodyFilepath sets Content-Disposition and Content-Type.
@@ -42,25 +42,25 @@ func (p Part) HeaderBodyFilepath() (textproto.MIMEHeader, []byte, error) {
 		header.Add(hum.HeaderContentDisposition, cd)
 	}
 
-	_, filename := filepath.Split(p.Filepath)
+	_, filename := filepath.Split(p.BodyDataFilepath)
 	filename = strings.TrimSpace(filename)
-	mimeType := mime.TypeByExtension(filepath.Ext(p.Filepath))
+	mimeType := mime.TypeByExtension(filepath.Ext(p.BodyDataFilepath))
 	if len(mimeType) > 0 {
 		header.Add(hum.HeaderContentType, mimeType)
 	}
 
-	for k, vals := range p.RawHeader {
+	for k, vals := range p.HeaderRaw {
 		for _, v := range vals {
 			header.Add(k, v)
 		}
 	}
 
-	body, err := os.ReadFile(p.Filepath)
+	body, err := os.ReadFile(p.BodyDataFilepath)
 	if err != nil {
 		return header, []byte{}, err
 	}
 
-	if p.Base64Encode {
+	if p.BodyEncodeBase64 {
 		header.Add(hum.HeaderContentTransferEncoding, "base64")
 		body = []byte(base64.StdEncoding.EncodeToString(body))
 	}
@@ -77,9 +77,9 @@ func (p Part) FilepathToRaw() (Part, error) {
 		return Part{}, err
 	}
 	return Part{
-		Type:      PartTypeRaw,
-		RawHeader: header,
-		RawBody:   body,
+		Type:        PartTypeRaw,
+		HeaderRaw:   header,
+		BodyDataRaw: body,
 	}, nil
 }
 
@@ -90,7 +90,7 @@ func (p *Part) ContentDispositionHeader() string {
 	if name != "" {
 		params["name"] = name
 	}
-	_, filename := filepath.Split(p.Filepath)
+	_, filename := filepath.Split(p.BodyDataFilepath)
 	if filename = strings.TrimSpace(filename); filename != "" {
 		params["filename"] = filename
 	}
@@ -108,12 +108,12 @@ func (p *Part) HeaderBodyJSON() (textproto.MIMEHeader, []byte, error) {
 
 	header.Add(hum.HeaderContentType, hum.ContentTypeAppJSONUtf8)
 
-	body, err := json.Marshal(p.JSONBody)
+	body, err := json.Marshal(p.BodyDataJSON)
 	if err != nil {
 		return header, []byte{}, err
 	}
 
-	if p.Base64Encode {
+	if p.BodyEncodeBase64 {
 		header.Add(hum.HeaderContentTransferEncoding, "base64")
 		body = []byte(base64.StdEncoding.EncodeToString(body))
 	}
@@ -126,12 +126,12 @@ func (p Part) HeaderBodyRaw() (textproto.MIMEHeader, []byte, error) {
 	if strings.TrimSpace(p.ContentType) != "" {
 		header.Add(hum.HeaderContentType, p.ContentType)
 	}
-	body := p.RawBody
-	if p.Base64Encode {
+	body := p.BodyDataRaw
+	if p.BodyEncodeBase64 {
 		header.Add(hum.HeaderContentTransferEncoding, "base64")
 		body = []byte(base64.StdEncoding.EncodeToString(body))
 	}
-	for k, vals := range p.RawHeader {
+	for k, vals := range p.HeaderRaw {
 		for _, v := range vals {
 			header.Add(k, v)
 		}

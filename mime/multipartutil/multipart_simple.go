@@ -39,10 +39,10 @@ func (ms MultipartSimple) Part() (Part, error) {
 		return Part{}, err
 	} else {
 		return Part{
-			Type:         PartTypeRaw,
-			ContentType:  ct,
-			Base64Encode: false,
-			RawBody:      []byte(body),
+			Type:             PartTypeRaw,
+			ContentType:      ct,
+			BodyEncodeBase64: false,
+			BodyDataRaw:      []byte(body),
 		}, nil
 	}
 }
