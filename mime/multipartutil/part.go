@@ -173,3 +173,5 @@ func (p Part) Write(w *multipart.Writer) error {
 		return err
 	}
 }
+
+type Parts []Part

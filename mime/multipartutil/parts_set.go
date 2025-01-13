@@ -1,14 +1,32 @@
 package multipartutil
 
+import (
+	"slices"
+
+	"github.com/grokify/mogo/net/http/httputilmore"
+)
+
 type PartsSet struct {
 	ContentType string
-	Parts       []Part
+	Parts       Parts
 }
 
 func NewPartsSet(ct string) PartsSet {
 	return PartsSet{
 		ContentType: ct,
 		Parts:       []Part{}}
+}
+
+// NewPartsSetMail returns a single part that represents an email message.
+func NewPartsSetMail(textBody, htmlBody []byte, additionalParts Parts) (PartsSet, error) {
+	if len(additionalParts) > 0 {
+		ps := NewPartsSet(httputilmore.ContentTypeMultipartMixed)
+		ps.Parts = slices.Clone(additionalParts)
+		err := ps.AddMailBody(textBody, htmlBody)
+		return ps, err
+	} else {
+		return NewPartsSetAlternative(textBody, htmlBody), nil
+	}
 }
 
 func (ps *PartsSet) AddMailBody(textBody, htmlBody []byte) error {
@@ -18,6 +36,12 @@ func (ps *PartsSet) AddMailBody(textBody, htmlBody []byte) error {
 		ps.Parts = append([]Part{p}, ps.Parts...)
 		return nil
 	}
+}
+
+func (ps *PartsSet) Clone() PartsSet {
+	new := NewPartsSet(ps.ContentType)
+	new.Parts = slices.Clone(ps.Parts)
+	return new
 }
 
 func (ms *PartsSet) Builder(close bool) (MultipartBuilder, error) {
