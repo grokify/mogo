@@ -105,7 +105,7 @@ func AlphabetShuffled(alphabet string) string {
 func IsAlphaNumericAlphabet(alphabet string) bool {
 	if !stringsutil.IsAlphaNumeric(alphabet) {
 		return false
-	} else if !slicesutil.UniqueValues(strings.Split(alphabet, "")) {
+	} else if !slicesutil.Unique(strings.Split(alphabet, "")) {
 		return false
 	}
 	return true
