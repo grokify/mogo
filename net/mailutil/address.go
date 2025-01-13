@@ -4,9 +4,66 @@ import (
 	"net/mail"
 	"sort"
 	"strings"
+
+	"github.com/grokify/mogo/pointer"
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 type Addresses []mail.Address
+
+func ParseAddressList(list string) (Addresses, error) {
+	list = strings.TrimSpace(stringsutil.RemoveNonPrintable(list))
+	if list == "" {
+		return Addresses{}, nil
+	} else if addrs, err := mail.ParseAddressList(list); err != nil {
+		return Addresses{}, err
+	} else if len(addrs) == 0 {
+		return Addresses{}, nil
+	} else {
+		addrs := Addresses(pointer.DereferenceSlice(addrs))
+		addrs.CanonialAddresses()
+		return addrs.FilterExclEmpty(), nil
+	}
+}
+
+func (addrs Addresses) CanonialAddresses() {
+	for i, addr := range addrs {
+		if addr2 := strings.TrimSpace(stringsutil.RemoveNonPrintable(addr.Address)); addr2 == addr.Address {
+			addr.Address = addr2
+			addrs[i] = addr
+		}
+	}
+}
+
+func (addrs Addresses) FilterExclEmpty() Addresses {
+	var out Addresses
+	for _, addr := range addrs {
+		if addr.Address != "" || addr.Name != "" {
+			out = append(out, addr)
+		}
+	}
+	return out
+}
+
+func (addrs Addresses) FilterInclWithoutAddress() Addresses {
+	var out Addresses
+	for _, addr := range addrs {
+		if addr.Address == "" {
+			out = append(out, addr)
+		}
+	}
+	return out
+}
+
+func (addrs Addresses) FilterInclWithAddress() Addresses {
+	var out Addresses
+	for _, addr := range addrs {
+		if addr.Address != "" {
+			out = append(out, addr)
+		}
+	}
+	return out
+}
 
 func (addrs Addresses) TrimSpace(trimName, trimAddress bool) {
 	for i := range addrs {
