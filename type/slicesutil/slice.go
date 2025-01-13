@@ -151,7 +151,7 @@ func SubRegexpString(s []string, r *regexp.Regexp) []string {
 	return filtered
 }
 
-func UniqueValues[S ~[]E, E comparable](s S) bool {
+func Unique[S ~[]E, E comparable](s S) bool {
 	m := map[E]int{}
 	for _, e := range s {
 		m[e]++
