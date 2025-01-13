@@ -32,6 +32,12 @@ func NewMessageWriter() *MessageWriter {
 	}
 }
 
+func (mw *MessageWriter) RecipientCount() int {
+	return len(mw.To.FilterInclWithAddress()) +
+		len(mw.Cc.FilterInclWithAddress()) +
+		len(mw.Bcc.FilterInclWithAddress())
+}
+
 func (mw *MessageWriter) HeaderLines() []string {
 	var lines []string
 	if mw.From != nil {
