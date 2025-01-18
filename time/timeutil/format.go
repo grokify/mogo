@@ -12,6 +12,7 @@ import (
 const (
 	DT14                = "20060102150405"
 	DT8                 = "20060102"
+	DT8MDY              = "01022006"
 	DT6                 = "200601"
 	MonthDay            = "1/2"
 	DIN5008FullDate     = "02.01.2006" // German DIN 5008 standard
