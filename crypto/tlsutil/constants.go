@@ -30,3 +30,11 @@ func (t TLSVersion) String() string {
 		return "Unknown"
 	}
 }
+
+func TLSVersions() []TLSVersion {
+	return []TLSVersion{
+		tls.VersionTLS10,
+		tls.VersionTLS11,
+		tls.VersionTLS12,
+		tls.VersionTLS13}
+}
