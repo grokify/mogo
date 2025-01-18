@@ -149,6 +149,16 @@ func ColorString(c color.Color) string {
 		}, ".")
 }
 
+// ConvertBits8To24 converts a 8 bit color (`color.RGBA`) to a 24 bit color.
+// `a` is the alphachannel.
+func ConvertBits8To24(c, a uint8) int {
+	if a < 255 {
+		return int(uint16(c) * uint16(a) / 255)
+	} else {
+		return int(c)
+	}
+}
+
 func ColorAverageImage(i image.Image) color.Color {
 	var r, g, b uint64
 
