@@ -97,6 +97,14 @@ func ParseHex(hexRGB string) (color.RGBA, error) {
 		A: 0xff}, nil
 }
 
+func MustParseHex(hexRGB string) color.RGBA {
+	if c, err := ParseHex(hexRGB); err != nil {
+		panic(err)
+	} else {
+		return c
+	}
+}
+
 func ParseGoogle(googString string) (color.RGBA, error) {
 	m := rxGoogleCol.FindStringSubmatch(googString)
 	if len(m) == 0 {

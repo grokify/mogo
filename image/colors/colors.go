@@ -10,6 +10,15 @@ var (
 	Blue   = color.RGBA{R: 0, G: 0, B: 255, A: 255}
 	Orange = color.RGBA{R: 255, G: 165, B: 0, A: 255}
 
+	ANSIBlackHex   = "000000"
+	ANSIRedHex     = "800000"
+	ANSIGreenHEx   = "008000"
+	ANSIYellowHex  = "808000"
+	ANSIBlueHex    = "000080"
+	ANSIMagentaHex = "800080"
+	ANSICyanHex    = "008080"
+	ANSIWhiteHex   = "c0c0c0"
+
 	// colors from: https://github.com/badges/shields/blob/18e17233c49cf94f9a32115c3fcdc439cb495086/badge-maker/lib/color.js#L7
 	ShieldBlueHex        = "007ec6"
 	ShieldBrightGreenHex = "44cc11"
