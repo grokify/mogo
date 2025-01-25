@@ -12,6 +12,11 @@ import (
 	"strings"
 )
 
+const (
+	ShortcodeWhiteCheckMark = ":white_check_mark:"
+	ShortcodeX              = ":x:"
+)
+
 const gomojiRaw string = `
 :angry:	😠	:@
 :anguished:	😧
