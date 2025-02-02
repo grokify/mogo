@@ -28,3 +28,7 @@ func PointerSlice[S ~[]E, E any](s S) []*E {
 	}
 	return out
 }
+
+func Clone[E any](e *E) *E {
+	return Pointer(Dereference(e))
+}
