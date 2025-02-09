@@ -8,6 +8,17 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+// AppendBulk appends multiple slice to a slice, and skips 0 length slices.
+func AppendBulk[S ~[]E, E any](s S, ss []S) S {
+	out := slices.Clone(s)
+	for _, si := range ss {
+		if len(si) > 0 {
+			out = append(out, si...)
+		}
+	}
+	return out
+}
+
 // Dedupe returns a string slice with duplicate values removed. First observance is kept.
 func Dedupe[S ~[]E, E comparable](s S) S {
 	deduped := []E{}
