@@ -132,7 +132,7 @@ func BaseXAlphabetToInt64(s string, alphabet string) (int64, error) {
 		len(alphabet))
 }
 
-func SplitInt64(x int64, scale uint) (int64, int64) {
+func SplitInt64(x int64, scale uint32) (int64, int64) {
 	b := PowInt64(10, int64(scale))
 	y := x / b
 	z := x - y*b

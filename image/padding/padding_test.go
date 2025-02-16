@@ -14,10 +14,10 @@ import (
 
 var paddingTests = []struct {
 	filename                string
-	topPadding              uint
-	rightPadding            uint
-	bottomPadding           uint
-	leftPadding             uint
+	topPadding              int
+	rightPadding            int
+	bottomPadding           int
+	leftPadding             int
 	isPaddingFunc           IsPaddingFunc
 	nonPaddngColorHistogram map[string]uint
 }{
