@@ -3,6 +3,7 @@ package httputilmore
 import (
 	"bytes"
 	"net/http"
+	"strings"
 )
 
 // Constants ensuring that header names are correctly spelled and consistently cased.
@@ -104,4 +105,10 @@ func HeaderString(h http.Header) (string, error) {
 		return "", err
 	}
 	return b.String(), nil
+}
+
+func HeaderContentTypeContains(h http.Header, ct string) bool {
+	return strings.Contains(
+		strings.ToLower(strings.TrimSpace(h.Get(HeaderContentType))),
+		ct)
 }
