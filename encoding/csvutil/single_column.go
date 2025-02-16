@@ -9,7 +9,7 @@ import (
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
-func ReadCSVFileSingleColumnValuesString(filename string, sep rune, hasHeader, trimSpace bool, colIdx uint, condenseUniqueSort bool) ([]string, error) {
+func ReadCSVFileSingleColumnValuesString(filename string, sep rune, hasHeader, trimSpace bool, colIdx uint32, condenseUniqueSort bool) ([]string, error) {
 	values := []string{}
 	csvReader, file, err := NewReaderFile(filename, sep)
 	if err != nil {
@@ -38,24 +38,14 @@ func ReadCSVFileSingleColumnValuesString(filename string, sep rune, hasHeader, t
 		}
 		values = append(values, val)
 	}
-	/*
-		tbl, err := NewTableDataFileSimple(filename, sep, hasHeader, trimSpace)
-		if err != nil {
-			return []string{}, err
-		}
 
-		for _, row := range tbl.Records {
-			if len(row) > int(col) {
-				values = append(values, row[col])
-			}
-		}*/
 	if condenseUniqueSort {
 		values = stringsutil.SliceCondenseSpace(values, true, true)
 	}
 	return values, nil
 }
 
-func ReadCSVFilesSingleColumnValuesString(files []string, sep rune, hasHeader, trimSpace bool, colIdx uint, condenseUniqueSort bool) ([]string, error) {
+func ReadCSVFilesSingleColumnValuesString(files []string, sep rune, hasHeader, trimSpace bool, colIdx uint32, condenseUniqueSort bool) ([]string, error) {
 	values := []string{}
 	for _, file := range files {
 		fileValues, err := ReadCSVFileSingleColumnValuesString(

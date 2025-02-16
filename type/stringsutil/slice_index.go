@@ -66,13 +66,13 @@ func SliceIndexMore(haystack []string, needle string, trimSpace, toLower bool, m
 	return -1
 }
 
-// SliceIndexOrEmpty returns the element at the index
-// provided or an empty string.
-func SliceIndexOrEmpty(s []string, index uint64) string {
-	if int(index) >= len(s) {
+// SliceIndexOrEmpty returns the element at the index provided or an empty string.
+func SliceIndexOrEmpty(s []string, index int) string {
+	if index < 0 || index >= len(s) {
 		return ""
+	} else {
+		return s[index]
 	}
-	return s[index]
 }
 
 func SliceLineHasIndex(haystack []string, needle string, wantIndex int) bool {
