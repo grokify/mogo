@@ -88,6 +88,23 @@ func CondenseResponseNot2xxToError(resp *http.Response, err error, msg string) e
 	return nil
 }
 
+func ResponseBodyMore(r *http.Response, jsonPrefix, jsonIndent string) ([]byte, error) {
+	b, err := io.ReadAll(r.Body)
+	if err != nil {
+		return []byte{}, err
+	} else if !HeaderContentTypeContains(r.Header, ContentTypeAppJSON) {
+		return b, nil
+	} else if jsonutil.IsJSON(b) {
+		if jsonPrefix != "" || jsonIndent != "" {
+			return jsonutil.IndentBytes(b, jsonPrefix, jsonIndent)
+		} else {
+			return b, nil
+		}
+	} else {
+		return b, nil
+	}
+}
+
 // ResponseInfo is a generic struct to handle response info.
 type ResponseInfo struct {
 	Name       string            `json:"name,omitempty"` // to distinguish from other requests
