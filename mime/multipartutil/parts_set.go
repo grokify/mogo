@@ -44,13 +44,13 @@ func (ps *PartsSet) Clone() PartsSet {
 	return new
 }
 
-func (ms *PartsSet) Builder(close bool) (MultipartBuilder, error) {
+func (ps *PartsSet) Builder(close bool) (MultipartBuilder, error) {
 	mb := NewMultipartBuilder()
-	if len(ms.Parts) == 0 {
+	if len(ps.Parts) == 0 {
 		err := mb.Close()
 		return mb, err
 	}
-	for _, p := range ms.Parts {
+	for _, p := range ps.Parts {
 		if err := p.Write(mb.Writer); err != nil {
 			return mb, err
 		}
@@ -68,8 +68,8 @@ func (ms *PartsSet) Builder(close bool) (MultipartBuilder, error) {
 
 // Part returns the MultipartSimple as a Part. This can be used for
 // creating parts such as `multipart/alternative`.
-func (ms *PartsSet) Part() (Part, error) {
-	ct, body, err := ms.Strings()
+func (ps *PartsSet) Part() (Part, error) {
+	ct, body, err := ps.Strings()
 	if err != nil {
 		return Part{}, err
 	} else {

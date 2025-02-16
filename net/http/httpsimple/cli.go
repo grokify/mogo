@@ -69,7 +69,6 @@ func (cli CLI) Do(ctx context.Context, w io.Writer) error {
 		if _, err := w.Write([]byte(fmt.Sprintf("Body:\n%s", string(b)))); err != nil {
 			return err
 		}
-
 	}
 
 	return nil

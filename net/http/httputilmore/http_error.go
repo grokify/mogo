@@ -7,10 +7,10 @@ import (
 )
 
 var (
-	ErrHTTPResponseCannotBeNil = errors.New("Error: '*http.Response' cannot be nil. Expected a non-nil value.")
+	ErrHTTPResponseCannotBeNil = errors.New("'*http.Response' cannot be nil. Expected a non-nil value")
 )
 
-var ErrStatus404 = errors.New("Status " + strconv.Itoa(http.StatusNotFound) + " " + http.StatusText(http.StatusNotFound))
+var ErrStatus404 = errors.New("status " + strconv.Itoa(http.StatusNotFound) + " " + http.StatusText(http.StatusNotFound))
 
 type HTTPError struct {
 	HTTPStatus int    `json:"httpStatus"`

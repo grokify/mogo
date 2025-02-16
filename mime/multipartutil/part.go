@@ -151,7 +151,7 @@ func (p Part) HeaderBodyRaw() (textproto.MIMEHeader, []byte, error) {
 }
 
 func (p Part) Write(w *multipart.Writer) error {
-	header := textproto.MIMEHeader{}
+	var header textproto.MIMEHeader
 	var body []byte
 	var err error
 	switch p.Type {

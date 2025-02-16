@@ -28,5 +28,5 @@ func main() {
 	}
 
 	res := tlsutil.CheckURLs(os.Args[1:])
-	fmtutil.PrintJSON(res)
+	fmtutil.MustPrintJSON(res)
 }
