@@ -94,7 +94,7 @@ func ResponseBodyMore(r *http.Response, jsonPrefix, jsonIndent string) ([]byte, 
 		return []byte{}, err
 	} else if !HeaderContentTypeContains(r.Header, ContentTypeAppJSON) {
 		return b, nil
-	} else if jsonutil.IsJSON(b) {
+	} else if jsonutil.ValidateQuick(b, true) {
 		if jsonPrefix != "" || jsonIndent != "" {
 			return jsonutil.IndentBytes(b, jsonPrefix, jsonIndent)
 		} else {
