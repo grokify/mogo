@@ -47,3 +47,26 @@ func TestUnmarshalMSI(t *testing.T) {
 		}
 	}
 }
+
+var validateQuickTests = []struct {
+	v     []byte
+	fuzzy bool
+	want  bool
+}{
+	{[]byte(""), true, false},
+	{[]byte(""), false, false},
+	{[]byte(`{"foo":"bar"}`), true, true},
+	{[]byte(`     {"foo":"bar"}    `), true, true},
+	{[]byte(`{"foo":"bar"}`), false, true},
+	{[]byte(`<"foo":"bar">`), false, false},
+	{[]byte(`["foo","bar"]`), false, true},
+}
+
+func TestValidateQuick(t *testing.T) {
+	for _, tt := range validateQuickTests {
+		try := ValidateQuick(tt.v, tt.fuzzy)
+		if try != tt.want {
+			t.Errorf("jsonutil.ValidateQuick(%v,%v): want (%v) got (%v)", tt.v, tt.fuzzy, tt.want, try)
+		}
+	}
+}

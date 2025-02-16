@@ -9,6 +9,7 @@ import (
 	"io/fs"
 	"os"
 	"reflect"
+	"strings"
 
 	"github.com/grokify/mogo/type/maputil"
 	// jsoniter "github.com/json-iterator/go"
@@ -133,6 +134,31 @@ func IndentReader(r io.Reader, prefix, indent string) ([]byte, error) {
 		return b, err
 	} else {
 		return IndentBytes(b, prefix, indent)
+	}
+}
+
+// ValidateQuick checks to see if the first and last bytes match `{}[]`.
+// Set `fuzzy` to true to trim spaces from the beginning and end. It is not
+// Design to provide full validation but quick decision making on whether
+// to attempt JSON parsing.
+func ValidateQuick(b []byte, fuzzy bool) bool {
+	if fuzzy {
+		s := strings.TrimSpace(string(b))
+		if (strings.Index(s, "{") == 0 && strings.HasSuffix(s, "}")) ||
+			(strings.Index(s, "[") == 0 && strings.HasSuffix(s, "]")) {
+			return true
+		} else {
+			return false
+		}
+	} else {
+		if len(b) < 2 {
+			return false
+		} else if (b[0] == 91 && b[len(b)-1] == 93) ||
+			(b[0] == 123 && b[len(b)-1] == 125) {
+			return true
+		} else {
+			return false
+		}
 	}
 }
 
