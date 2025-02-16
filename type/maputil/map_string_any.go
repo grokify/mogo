@@ -1,6 +1,7 @@
 package maputil
 
 import (
+	"encoding/json"
 	"errors"
 
 	"github.com/grokify/mogo/sort/sortutil"
@@ -30,6 +31,14 @@ func (msa MapStrAny) ValueString(k string, errOnNotExist bool) (string, error) {
 		return "", ErrNotString
 	}
 	return s, nil
+}
+
+func (msa MapStrAny) MustMarshal() []byte {
+	if b, err := json.Marshal(msa); err != nil {
+		panic(err)
+	} else {
+		return b
+	}
 }
 
 func KeysEqual[K constraints.Ordered, V any](m1, m2 map[K]V) bool {
