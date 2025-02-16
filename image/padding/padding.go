@@ -39,12 +39,12 @@ func NonPaddingRectangle(im image.Image, isPadding IsPaddingFunc) image.Rectangl
 	if isPadding == nil {
 		isPadding = IsPaddingFuncWhite()
 	}
-	topP, rightP, bottomP, leftP := PaddingWidths(im, isPadding)
+	topP, rhtP, botP, lftP := PaddingWidths(im, isPadding)
 	return image.Rect(
-		int(leftP)+im.Bounds().Min.X,
-		int(topP)+im.Bounds().Min.Y,
-		int(rightP)*-1+im.Bounds().Max.X,
-		int(bottomP)*-1+im.Bounds().Max.Y)
+		lftP+im.Bounds().Min.X,
+		topP+im.Bounds().Min.Y,
+		rhtP*-1+im.Bounds().Max.X,
+		botP*-1+im.Bounds().Max.Y)
 }
 
 func PaddingWidths(im image.Image, isPadding IsPaddingFunc) (top, right, bottom, left int) {
