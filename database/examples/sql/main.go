@@ -30,7 +30,7 @@ func main() {
 		',',
 		true,
 		true,
-		uint(col))
+		uint32(col))
 	if err != nil {
 		log.Fatal(err)
 	}

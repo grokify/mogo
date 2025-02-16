@@ -128,7 +128,7 @@ func TestIntToBaseXAlphabet(t *testing.T) {
 
 var splitTests = []struct {
 	x     int64
-	scale uint
+	scale uint32
 	y     int64
 	z     int64
 }{
