@@ -22,7 +22,7 @@ func TableRowsToMarkdown(rows [][]string, newline string, esc, withHeader bool) 
 			out += newline
 		}
 		if i == 0 && withHeader {
-			out += TableSeparator(uint(len(row)))
+			out += TableSeparator(len(row))
 			if i < len(rows)-1 {
 				out += newline
 			}
@@ -42,7 +42,7 @@ func TableRowToMarkdown(cells []string, esc bool) string {
 	return GFMTableSepStart + strings.Join(new, GFMTableSepMid) + GFMTableSepEnd
 }
 
-func TableSeparator(cellCount uint) string {
+func TableSeparator(cellCount int) string {
 	if cellCount == 0 {
 		return ""
 	}
