@@ -6,7 +6,7 @@ import (
 
 var splitMaxLengthTests = []struct {
 	v  []uint
-	s  uint
+	s  int
 	n  uint
 	l0 uint
 }{

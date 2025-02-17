@@ -115,15 +115,15 @@ func SortSliceOfSlice[S ~[][]E, E constraints.Ordered | string](s S, indexes ...
 
 // SplitMaxLength returns a slice of slices where each sub-slice has the max length supplied.
 // A supplied `maxLength` of `0` indicates no max length.
-func SplitMaxLength[S ~[]E, E any](s S, maxLen uint) []S {
-	if maxLen == 0 || len(s) <= int(maxLen) {
+func SplitMaxLength[S ~[]E, E any](s S, maxLen int) []S {
+	if maxLen <= 0 || len(s) <= maxLen {
 		return []S{append(S{}, s...)}
 	}
 	var split []S
 	new := S{}
 	for _, e := range s {
 		new = append(new, e)
-		if uint(len(new)) >= maxLen {
+		if len(new) >= maxLen {
 			split = append(split, new)
 			new = S{}
 		}
@@ -171,10 +171,12 @@ func Unique[S ~[]E, E comparable](s S) bool {
 }
 
 // NewWithDefault creates a slice of length `size` which values populated by default value `d`.
-func NewWithDefault[E any](size uint, d E) []E {
+func NewWithDefault[E any](size int, d E) []E {
 	var s []E
-	sz := int(size)
-	for i := 0; i < sz; i++ {
+	if size <= 0 {
+		return s
+	}
+	for i := 0; i < size; i++ {
 		s = append(s, d)
 	}
 	return s

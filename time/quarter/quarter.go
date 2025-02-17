@@ -6,7 +6,7 @@ import (
 	"github.com/grokify/mogo/math/mathutil"
 )
 
-// YearQuarterToQuarterContinuous converts a year and quarteer to
+// YearQuarterToQuarterContinuous converts a year and quarter to
 // a continuous quarter integer. This is useful when an even
 // even spacing between months is desired, such as with
 // charting x-axis values.

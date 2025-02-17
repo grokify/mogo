@@ -11,8 +11,8 @@ func ReverseIndex(n, i uint) uint {
 }
 
 // IndexValueOrDefault returns the value at the supplied index or a supplied default value.
-func IndexValueOrDefault[E any](s []E, idx uint, def E) E {
-	if int(idx) >= len(s) {
+func IndexValueOrDefault[E any](s []E, idx int, def E) E {
+	if idx < 0 || idx >= len(s) {
 		return def
 	}
 	return s[idx]
