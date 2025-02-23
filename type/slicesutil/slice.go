@@ -221,10 +221,10 @@ func MatrixGetOneOrDefault[C comparable](m [][]C, keyIdx int, keyValue C, wantId
 	return defaultValue
 }
 
-// Split will split a slice into a slice of slices where each slice ha a max size `n`.
-func Split[S ~[]E, E comparable](s S, n uint) []S {
-	max := int(n)
-	if max == 0 || max >= len(s) {
+// Split will split a slice into a slice of slices where each slice has a max size `n`.
+func Split[S ~[]E, E comparable](s S, n int) []S {
+	max := n
+	if max <= 0 || max >= len(s) {
 		return []S{s}
 	}
 	var sos []S
