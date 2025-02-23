@@ -51,8 +51,11 @@ func ReadAllOrError(r io.Reader) []byte {
 }
 
 // ReadLimit returns the first `limit` bytes from a reader.
-func ReadLimit(r io.Reader, limit uint) ([]byte, error) {
-	return io.ReadAll(io.LimitReader(r, int64(limit)))
+func ReadLimit(r io.Reader, limit int64) ([]byte, error) {
+	if limit <= 0 {
+		return []byte{}, nil
+	}
+	return io.ReadAll(io.LimitReader(r, limit))
 }
 
 // ReaderToReadSeeker converts an `io.Reader` to an `io.ReadSeeker`. It does this

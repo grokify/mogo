@@ -203,13 +203,16 @@ func MakeRepeatingElement[V any](l int, v V) []V {
 	return out
 }
 
-func MatrixGetOneOrDefault[C comparable](m [][]C, keyIdx uint, keyValue C, wantIdx uint, defaultValue C) C {
+func MatrixGetOneOrDefault[C comparable](m [][]C, keyIdx int, keyValue C, wantIdx int, defaultValue C) C {
+	if keyIdx < 0 || wantIdx < 0 {
+		return defaultValue
+	}
 	for _, row := range m {
-		if int(keyIdx) >= len(row) {
+		if keyIdx >= len(row) {
 			continue
 		}
 		if keyValue == row[keyIdx] {
-			if int(wantIdx) > len(row) {
+			if wantIdx > len(row) {
 				continue
 			}
 			return row[wantIdx]
