@@ -14,10 +14,10 @@ import (
 
 type Strings []string
 
-func (strs Strings) FilterIndexes(indexes []uint) (Strings, error) {
+func (strs Strings) FilterIndexes(indexes []int) (Strings, error) {
 	n := Strings{}
 	for _, idx := range indexes {
-		if int(idx) >= len(strs) {
+		if idx < 0 || idx >= len(strs) {
 			return n, errors.New("index out of bounds")
 		}
 		n = append(n, strs[idx])

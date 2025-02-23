@@ -136,7 +136,7 @@ func TestCondenseSpace(t *testing.T) {
 
 var repeatTests = []struct {
 	v    string
-	l    uint
+	l    int
 	want string
 }{
 	{"abc", 0, ""},
