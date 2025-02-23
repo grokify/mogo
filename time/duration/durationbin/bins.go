@@ -108,7 +108,7 @@ func BuildBinsDurationLeftRight(durLeft, durRight time.Duration) Bins {
 			out = append(out, defBin)
 		}
 	}
-	yr := uint(3)
+	yr := int64(3)
 	for out[len(out)-1].Duration < maxBin.Duration {
 		out = append(out, YearsBin(yr))
 		yr++
