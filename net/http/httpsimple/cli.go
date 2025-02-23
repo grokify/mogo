@@ -9,15 +9,17 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/net/http/httputilmore"
+	"github.com/grokify/mogo/net/urlutil"
 )
 
 // CLI executes a HTTP request from CLI params. Attribute tags support usage
 // with `github.com/jessevdk/go-flags`.`
 type CLI struct {
-	Method string   `short:"M" long:"method" description:"Request Method"`
-	URL    string   `short:"U" long:"url" description:"Reaquest URL"`
-	Header []string `short:"H" long:"header" description:"Request Header"`
-	Body   string   `short:"B" long:"body" description:"Request Body"`
+	Method  string   `short:"M" long:"method" description:"Request Method"`
+	URL     string   `short:"U" long:"url" description:"Reaquest URL"`
+	Header  []string `short:"H" long:"header" description:"Request Header"`
+	Body    string   `short:"B" long:"body" description:"Request Body"`
+	BodyJXU string   `short:"J" long:"jxu" description:"Request Body: JSON Map to URL-encoded"`
 }
 
 func (cli CLI) Request() (Request, error) {
@@ -37,6 +39,16 @@ func (cli CLI) Request() (Request, error) {
 			return req, fmt.Errorf("header malformed (%s)", hi)
 		}
 		req.Headers.Add(strings.TrimSpace(parts[0]), strings.TrimSpace(parts[1]))
+	}
+	if strings.TrimSpace(cli.Body) == "" && strings.TrimSpace(cli.BodyJXU) != "" {
+		if uv, err := urlutil.MSABytesToValues([]byte(cli.BodyJXU)); err != nil {
+			return req, err
+		} else if s := uv.Encode(); s != "" {
+			req.Body = s
+			if ct := strings.TrimSpace(req.Headers.Get(httputilmore.HeaderContentType)); ct == "" {
+				req.Headers.Set(httputilmore.HeaderContentType, httputilmore.ContentTypeAppFormURLEncodedUtf8)
+			}
+		}
 	}
 	return req, nil
 }
