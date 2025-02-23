@@ -60,13 +60,13 @@ func BinFromDuration(d time.Duration) Bin {
 	yr := big.NewInt(int64(timeutil.Year))
 	bg, md = bg.DivMod(bg, yr, md)
 	if md.Int64() == 0 {
-		return YearsBin(uint(bg.Uint64()))
+		return YearsBin(bg.Int64())
 	} else {
-		return YearsBin(1 + uint(bg.Uint64()))
+		return YearsBin(1 + bg.Int64())
 	}
 }
 
-func YearsBin(i uint) Bin {
+func YearsBin(i int64) Bin {
 	if i == 1 {
 		return Bin{
 			Name:     "1 Year",

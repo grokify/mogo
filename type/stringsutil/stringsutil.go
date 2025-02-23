@@ -407,7 +407,7 @@ func Repeat(s string, length int) string {
 		if l == length {
 			return str
 		} else if l > length {
-			return str[:int(length)]
+			return str[:length]
 		}
 	}
 }
