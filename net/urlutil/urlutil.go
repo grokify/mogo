@@ -1,6 +1,8 @@
 package urlutil
 
 import (
+	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -212,4 +214,21 @@ func URLToAddress(s string) string {
 		return strings.Join(parts[1:], delimit) + ":" + parts[0]
 	}
 	return s
+}
+
+func MSABytesToValues(b []byte) (url.Values, error) {
+	msa := map[string]any{}
+	if err := json.Unmarshal(b, &msa); err != nil {
+		return url.Values{}, err
+	} else {
+		return MSAToValues(msa), nil
+	}
+}
+
+func MSAToValues(msa map[string]any) url.Values {
+	vs := url.Values{}
+	for k, v := range msa {
+		vs.Add(k, fmt.Sprintf("%v", v))
+	}
+	return vs
 }
