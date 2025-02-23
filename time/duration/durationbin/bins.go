@@ -1,9 +1,9 @@
 package durationbin
 
 import (
+	"fmt"
 	"math/big"
 	"slices"
-	"strconv"
 	"time"
 
 	"github.com/grokify/mogo/time/timeutil"
@@ -73,7 +73,7 @@ func YearsBin(i uint) Bin {
 			Duration: time.Duration(i) * timeutil.Year}
 	} else {
 		return Bin{
-			Name:     strconv.Itoa(int(i)) + " Years",
+			Name:     fmt.Sprintf("%d", i) + " Years",
 			Duration: time.Duration(i) * timeutil.Year}
 	}
 }
