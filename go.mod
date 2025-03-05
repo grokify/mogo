@@ -19,7 +19,7 @@ require (
 	golang.org/x/crypto v0.35.0
 	golang.org/x/exp v0.0.0-20250228200357-dead58393ab7
 	golang.org/x/image v0.24.0
-	golang.org/x/net v0.35.0
+	golang.org/x/net v0.36.0
 	golang.org/x/text v0.22.0
 	google.golang.org/genproto v0.0.0-20250227231956-55c901821b1e
 )
