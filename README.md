@@ -70,7 +70,7 @@ Please report issues and feature requests on [Github](https://github.com/grokify
  [codeclimate-status-url]: https://codeclimate.com/github/grokify/mogo
  [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/mogo
  [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/mogo
- [license-svg]: https://img.shields.io/badge/license-MIT-mogo.svg
+ [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
  [license-url]: https://github.com/grokify/mogo/blob/master/LICENSE
  [loc-svg]: https://tokei.rs/b1/github/grokify/mogo
  [repo-url]: https://github.com/grokify/mogo
