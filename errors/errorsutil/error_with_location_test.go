@@ -19,7 +19,7 @@ func TestErrorWithLocation(t *testing.T) {
 		if tryErr == nil {
 			panic("no error")
 		}
-		tryWithLocation := NewErrorWithLocation(tryErr.Error())
+		tryWithLocation := NewWithLocation(tryErr.Error())
 		if !strings.HasSuffix(tryWithLocation.Error(), tt.errMsgSuffix) {
 			t.Errorf("errorsutil.NewErrorWithLocation(\"%s\"): mismatch want suffix [%s] got [%s]", tryErr.Error(), tt.errMsgSuffix, tryWithLocation.Error())
 		}

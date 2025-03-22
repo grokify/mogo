@@ -18,7 +18,19 @@ func (e *ErrorWithLocation) Error() string {
 	return fmt.Sprintf("%s (at %s:%d)", e.Msg, e.File, e.Line)
 }
 
-func NewErrorWithLocation(msg string) error {
+func WrapWithLocation(err error) error {
+	if err == nil {
+		return nil
+	}
+	_, file, line, ok := runtime.Caller(1)
+	if !ok {
+		file = "unknown"
+		line = -1
+	}
+	return Wrap(err, fmt.Sprintf("error_location: file (%s) line (%d)", file, line))
+}
+
+func NewWithLocation(msg string) error {
 	_, file, line, ok := runtime.Caller(1)
 	if !ok {
 		file = "unknown"
