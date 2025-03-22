@@ -396,7 +396,7 @@ func UniqueRunes(s string) bool {
 
 // Repeat returns atring of length `length` by repeating string `s`. If `length` is less than
 // then length of `s`, the result is cut to `length`.
-func Repeat(s string, length int) string {
+func Repeat(s string, length uint32) string {
 	if length <= 0 {
 		return ""
 	}
@@ -404,9 +404,9 @@ func Repeat(s string, length int) string {
 	for {
 		str += s
 		l := len(str)
-		if l == length {
+		if l == int(length) {
 			return str
-		} else if l > length {
+		} else if l > int(length) {
 			return str[:length]
 		}
 	}
