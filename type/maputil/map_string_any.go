@@ -3,6 +3,7 @@ package maputil
 import (
 	"encoding/json"
 	"errors"
+	"sort"
 
 	"github.com/grokify/mogo/sort/sortutil"
 	"golang.org/x/exp/constraints"
@@ -90,5 +91,15 @@ func ValuesSorted[K comparable, V constraints.Ordered](m map[K]V) []V {
 		vals = append(vals, val)
 	}
 	sortutil.Slice(vals)
+	return vals
+}
+
+// ValuesSorted returns a string slice of sorted values.
+func ValuesString[K comparable](m map[K]string) []string {
+	var vals []string
+	for _, val := range m {
+		vals = append(vals, val)
+	}
+	sort.Strings(vals)
 	return vals
 }
