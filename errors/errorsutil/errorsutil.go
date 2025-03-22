@@ -24,6 +24,8 @@ func wrapOne(err error, wrapPrefix string) error {
 func Wrap(err error, wrap ...string) error {
 	if err == nil {
 		return nil
+	} else if len(wrap) == 0 {
+		return err
 	}
 	for i := len(wrap) - 1; i >= 0; i-- {
 		err = wrapOne(err, wrap[i])
