@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/grokify/mogo/encoding/jsonutil"
+	"github.com/grokify/mogo/encoding/jsonutil/jsonraw"
 	"github.com/grokify/mogo/errors/errorsutil"
 )
 
@@ -96,7 +97,7 @@ func ResponseBodyMore(r *http.Response, jsonPrefix, jsonIndent string) ([]byte, 
 		return b, nil
 	} else if jsonutil.ValidateQuick(b, true) {
 		if jsonPrefix != "" || jsonIndent != "" {
-			return jsonutil.IndentBytes(b, jsonPrefix, jsonIndent)
+			return jsonraw.IndentBytes(b, jsonPrefix, jsonIndent)
 		} else {
 			return b, nil
 		}
