@@ -1,8 +1,28 @@
-package jsonutil
+package jsonraw
 
 import (
 	"encoding/json"
+	"os"
+
+	"github.com/grokify/mogo/type/maputil"
 )
+
+func ObjectKeys(b []byte) ([]string, error) {
+	msa := map[string]any{}
+	if err := json.Unmarshal(b, &msa); err != nil {
+		return []string{}, err
+	} else {
+		return maputil.Keys(msa), nil
+	}
+}
+
+func ObjectKeysFile(filename string) ([]string, error) {
+	if b, err := os.ReadFile(filename); err != nil {
+		return []string{}, err
+	} else {
+		return ObjectKeys(b)
+	}
+}
 
 // ObjectModify creates a new byte slice, from an existing byte slice, with only the supplied field names.
 func ObjectModify(b []byte, fieldNamesInclCopy []string, fieldNameInclUpsertValues map[string]any) ([]byte, error) {

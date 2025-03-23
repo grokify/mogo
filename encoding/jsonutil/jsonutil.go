@@ -8,10 +8,7 @@ import (
 	"io"
 	"io/fs"
 	"os"
-	"reflect"
 	"strings"
-
-	"github.com/grokify/mogo/type/maputil"
 	// jsoniter "github.com/json-iterator/go"
 )
 
@@ -109,34 +106,6 @@ func MustMarshalIndent(v any, prefix, indent string, embedError bool) []byte {
 	}
 }
 
-// IndentBytes converts a JSON byte array into a prettified byte array.
-func IndentBytes(data []byte, prefix, indent string) ([]byte, error) {
-	var out bytes.Buffer
-	if err := json.Indent(&out, data, prefix, indent); err != nil {
-		return []byte{}, err
-	} else {
-		return out.Bytes(), nil
-	}
-}
-
-func MarshalFileIndentBytes(name string, data []byte, prefix, indent string, perm fs.FileMode) error {
-	if data, err := IndentBytes(data, prefix, indent); err != nil {
-		return err
-	} else {
-		return os.WriteFile(name, data, perm)
-	}
-}
-
-// IndentReader returns a byte slice of indented JSON given an `io.Reader`.
-// It is useful to use with `http.Response.Body` which is an `io.ReadCloser`.
-func IndentReader(r io.Reader, prefix, indent string) ([]byte, error) {
-	if b, err := io.ReadAll(r); err != nil {
-		return b, err
-	} else {
-		return IndentBytes(b, prefix, indent)
-	}
-}
-
 // ValidateQuick checks to see if the first and last bytes match `{}[]`.
 // Set `fuzzy` to true to trim spaces from the beginning and end. It is not
 // Design to provide full validation but quick decision making on whether
@@ -159,25 +128,6 @@ func ValidateQuick(b []byte, fuzzy bool) bool {
 		} else {
 			return false
 		}
-	}
-}
-
-type unescapeWrap struct {
-	Raw string `json:"raw"`
-}
-
-// Unescape is designed to unescape a stringified JSON. It is typically used
-// after a stringified JSON has been embedded as a value in an wrapper JSON object.
-// When using this, do not include outer quotes.
-func Unescape(b []byte, prefix, indent string) ([]byte, error) {
-	wrapped := fmt.Sprintf("{\"raw\":\"%s\"}", string(b))
-	w := &unescapeWrap{}
-	if err := json.Unmarshal([]byte(wrapped), w); err != nil {
-		return nil, err
-	} else if formatted, err := IndentBytes([]byte(w.Raw), prefix, indent); err != nil {
-		return nil, err
-	} else {
-		return formatted, nil
 	}
 }
 
@@ -232,20 +182,6 @@ func UnmarshalStrict(b []byte, v any) error {
 	return dec.Decode(v)
 }
 
-// PrintReaderIndent returns an indented JSON byte array given an `io.Reader`.
-func PrintReaderIndent(r io.Reader, prefix, indent string) ([]byte, error) {
-	bytes, err := io.ReadAll(r)
-	if err != nil {
-		return bytes, err
-	}
-	outBytes, err := IndentBytes(bytes, prefix, indent)
-	if err != nil {
-		return bytes, err
-	}
-	_, err = fmt.Println(string(outBytes))
-	return outBytes, err
-}
-
 func UnmarshalFile(filename string, v any) error {
 	if f, err := os.Open(filename); err != nil {
 		return err
@@ -272,60 +208,5 @@ func MarshalFile(filename string, v any, prefix, indent string, perm fs.FileMode
 		encr := json.NewEncoder(f)
 		encr.SetIndent(prefix, indent)
 		return encr.Encode(v)
-	}
-}
-
-func Equal(x, y io.Reader) (bool, error) {
-	var ax, ay any
-	d := json.NewDecoder(x)
-	if err := d.Decode(&ax); err != nil {
-		return false, err
-	}
-	d = json.NewDecoder(y)
-	if err := d.Decode(&ay); err != nil {
-		return false, err
-	}
-	return reflect.DeepEqual(ax, ay), nil
-}
-
-func EqualBytes(x, y []byte) (bool, error) {
-	var ax, ay any
-	if err := json.Unmarshal(x, &ax); err != nil {
-		return false, err
-	} else if err := json.Unmarshal(y, &ay); err != nil {
-		return false, err
-	} else {
-		return reflect.DeepEqual(ax, ay), nil
-	}
-}
-
-func EqualFiles(x, y string) (bool, error) {
-	fx, err := os.Open(x)
-	if err != nil {
-		return false, err
-	}
-	defer fx.Close()
-	fy, err := os.Open(y)
-	if err != nil {
-		return false, err
-	}
-	defer fy.Close()
-	return Equal(fx, fy)
-}
-
-func UnmarshalKeys(b []byte) ([]string, error) {
-	msa := map[string]any{}
-	if err := json.Unmarshal(b, &msa); err != nil {
-		return []string{}, err
-	} else {
-		return maputil.Keys(msa), nil
-	}
-}
-
-func UnmarshalKeysFile(filename string) ([]string, error) {
-	if b, err := os.ReadFile(filename); err != nil {
-		return []string{}, err
-	} else {
-		return UnmarshalKeys(b)
 	}
 }
