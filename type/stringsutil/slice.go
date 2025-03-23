@@ -137,23 +137,6 @@ func SliceCondenseAndQuote(s []string, trimLeft, trimRight, quoteLeft, quoteRigh
 	return newItems
 }
 
-// SplitTrimSpace splits a string and trims spaces on remaining elements.
-func SplitTrimSpace(s, sep string) []string {
-	split := strings.Split(s, sep)
-	strs := []string{}
-	for _, str := range split {
-		strs = append(strs, strings.TrimSpace(str))
-	}
-	return strs
-}
-
-var rxSplitLines = regexp.MustCompile(`(\r\n|\r|\n)`)
-
-// SplitTextLines splits a string on the regxp `(\r\n|\r|\n)`.
-func SplitTextLines(text string) []string {
-	return rxSplitLines.Split(text, -1)
-}
-
 // SliceToSingleIntOrNeg converts a single element slice with a string to an integer or `-1`
 func SliceToSingleIntOrNeg(s []string) int {
 	if len(s) != 1 {

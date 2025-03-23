@@ -15,11 +15,13 @@ const (
 	MaxSQLLengthApex = 18000
 )
 
+/*
 var rxSplitLines = regexp.MustCompile(`(\r\n|\r|\n)`)
 
 func SplitTextLines(text string) []string {
 	return rxSplitLines.Split(text, -1)
 }
+*/
 
 /*
 
@@ -43,7 +45,7 @@ func ReadFileCSVToSQLsSimple(filename, sqlFormat string, hasHeader bool) ([]stri
 	if err != nil {
 		return []string{}, err
 	}
-	lines := stringsutil.SplitTextLines(string(bytes))
+	lines := stringsutil.SplitLines(string(bytes))
 	if len(lines) == 0 {
 		return []string{}, nil
 	}

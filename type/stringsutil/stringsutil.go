@@ -116,19 +116,6 @@ func RemoveSpaces(input string) string {
 	return rxSpace.ReplaceAllString(input, "")
 }
 
-// SplitCondenseSpace splits a string and trims spaces on
-// remaining elements, removing empty elements.
-func SplitCondenseSpace(s, sep string) []string {
-	split := strings.Split(s, sep)
-	strs := []string{}
-	for _, str := range split {
-		if str = strings.TrimSpace(str); len(str) > 0 {
-			strs = append(strs, str)
-		}
-	}
-	return strs
-}
-
 // CondenseString trims whitespace at the ends of the string
 // as well as in between.
 func CondenseString(content string, joinLines bool) string {
