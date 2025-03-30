@@ -81,7 +81,7 @@ func DecodeGunzipJSON(encoded string, output any) error {
 }
 
 func StripPadding(encoded string) string {
-	return strings.Replace(encoded, "+", "", -1)
+	return strings.ReplaceAll(encoded, "+", "")
 }
 
 func Pad(encoded string) string {

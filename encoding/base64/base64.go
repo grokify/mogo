@@ -78,7 +78,7 @@ func IsValidString(enc string) bool {
 }
 
 func StripPadding(enc string) string {
-	return strings.Replace(enc, "=", "", -1)
+	return strings.ReplaceAll(enc, "=", "")
 }
 
 func Pad(enc string) string {
