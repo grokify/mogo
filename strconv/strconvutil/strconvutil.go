@@ -6,10 +6,43 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/grokify/mogo/unicode/unicodeutil"
 	"golang.org/x/exp/constraints"
 )
+
+func AnyToString(v any) string {
+	if v == nil {
+		return ""
+	} else if valStr, ok := v.(string); ok {
+		return valStr
+	} else if valBool, ok := v.(bool); ok {
+		return Btoa(valBool)
+	} else if valInt, ok := v.(int); ok {
+		return strconv.Itoa(valInt)
+	} else if valInt, ok := v.(int8); ok {
+		return Itoa(valInt)
+	} else if valInt, ok := v.(int16); ok {
+		return Itoa(valInt)
+	} else if valInt, ok := v.(int32); ok {
+		return Itoa(valInt)
+	} else if valInt, ok := v.(int64); ok {
+		return Itoa(valInt)
+	} else if valInt, ok := v.(uint8); ok {
+		return Itoa(valInt)
+	} else if valInt, ok := v.(uint16); ok {
+		return Itoa(valInt)
+	} else if valInt, ok := v.(uint32); ok {
+		return Itoa(valInt)
+	} else if valInt, ok := v.(uint64); ok {
+		return Itoa(valInt)
+	} else if valTime, ok := v.(time.Time); ok {
+		return valTime.Format(time.RFC3339)
+	} else {
+		return fmt.Sprintf("%v", v)
+	}
+}
 
 // Float64ToString is a function type to define functions.
 type Float64ToString func(float64) string
