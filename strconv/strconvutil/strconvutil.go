@@ -22,19 +22,19 @@ func AnyToString(v any) string {
 	} else if valInt, ok := v.(int); ok {
 		return strconv.Itoa(valInt)
 	} else if valInt, ok := v.(int8); ok {
-		return Itoa(valInt)
+		return strconv.Itoa(int(valInt))
 	} else if valInt, ok := v.(int16); ok {
-		return Itoa(valInt)
+		return strconv.Itoa(int(valInt))
 	} else if valInt, ok := v.(int32); ok {
-		return Itoa(valInt)
+		return strconv.Itoa(int(valInt))
 	} else if valInt, ok := v.(int64); ok {
-		return Itoa(valInt)
+		return strconv.Itoa(int(valInt))
 	} else if valInt, ok := v.(uint8); ok {
-		return Itoa(valInt)
+		return strconv.Itoa(int(valInt))
 	} else if valInt, ok := v.(uint16); ok {
-		return Itoa(valInt)
+		return strconv.Itoa(int(valInt))
 	} else if valInt, ok := v.(uint32); ok {
-		return Itoa(valInt)
+		return strconv.Itoa(int(valInt))
 	} else if valInt, ok := v.(uint64); ok {
 		return Itoa(valInt)
 	} else if valTime, ok := v.(time.Time); ok {
