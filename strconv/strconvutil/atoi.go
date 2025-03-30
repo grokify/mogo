@@ -71,7 +71,7 @@ func AtoiFunc(funcStringToInt64 func(s string) (int, error), s string) (int, err
 
 func AtoiMore(s, comma, decimal string) (int, error) {
 	if len(comma) > 0 {
-		s = strings.Replace(s, comma, "", -1)
+		s = strings.ReplaceAll(s, comma, "")
 	}
 	if len(decimal) > 0 && strings.Contains(s, decimal) {
 		s = regexp.MustCompile(regexp.QuoteMeta(decimal)+`.*$`).ReplaceAllString(s, "")

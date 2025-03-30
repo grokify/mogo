@@ -20,43 +20,44 @@ func AtoiLang(lang, s string) (int, error) {
 		return 0, err
 	}
 	if len(sepThousands) > 0 {
-		s = strings.Replace(s, sepThousands, "", -1)
+		s = strings.ReplaceAll(s, sepThousands, "")
 	}
 	return strconv.Atoi(s)
 }
 
 func DecimalSeparator(lang string) (string, error) {
-	lang = strings.ToLower(strings.TrimSpace(lang))
-	if lang == languageutil.English ||
-		lang == languageutil.Thai {
+	switch strings.ToLower(strings.TrimSpace(lang)) {
+	case languageutil.English,
+		languageutil.Thai:
 		return ".", nil
-	} else if lang == languageutil.Italian ||
-		lang == languageutil.Norwegian ||
-		lang == languageutil.Spanish {
+	case languageutil.Danish,
+		languageutil.Finnish,
+		languageutil.French,
+		languageutil.German,
+		languageutil.Italian,
+		languageutil.Norwegian,
+		languageutil.Spanish:
 		return ",", nil
-	} else if lang == languageutil.Danish ||
-		lang == languageutil.Finnish ||
-		lang == languageutil.French ||
-		lang == languageutil.German {
-		return ",", nil
+	default:
+		return "", fmt.Errorf("language not found [%s]", lang)
 	}
-	return "", fmt.Errorf("language not found [%s]", lang)
 }
 
 func ThousandsSeparator(lang string) (string, error) {
-	lang = strings.ToLower(strings.TrimSpace(lang))
-	if lang == languageutil.English ||
-		lang == languageutil.Thai {
+	switch strings.ToLower(strings.TrimSpace(lang)) {
+	case languageutil.English,
+		languageutil.Thai:
 		return ",", nil
-	} else if lang == languageutil.Italian ||
-		lang == languageutil.Norwegian ||
-		lang == languageutil.Spanish {
+	case languageutil.Italian,
+		languageutil.Norwegian,
+		languageutil.Spanish:
 		return ".", nil
-	} else if lang == languageutil.Danish ||
-		lang == languageutil.Finnish ||
-		lang == languageutil.French ||
-		lang == languageutil.German {
+	case languageutil.Danish,
+		languageutil.Finnish,
+		languageutil.French,
+		languageutil.German:
 		return " ", nil
+	default:
+		return "", fmt.Errorf("language not found [%s]", lang)
 	}
-	return "", fmt.Errorf("language not found [%s]", lang)
 }
