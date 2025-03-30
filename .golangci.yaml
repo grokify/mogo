@@ -1,30 +1,40 @@
+version: "2"
 run:
-  go: '1.23'
+  go: "1.23"
 linters:
   enable:
     - dogsled
     - dupl
-    - gofmt
-    - goimports
     - gosec
     - misspell
     - nakedret
-    - stylecheck
+    - staticcheck
     - unconvert
     - unparam
     - whitespace
-linters-settings:
-  # gosec:
-  #  excludes:
-  #    - G107 # Url provided to HTTP request as taint input
-  #    - G401 # Detect the usage of DES, RC4, MD5 or SHA1
-  #    - G404 # Use of weak random number generator (math/rand instead of crypto/rand)
-  #    - G501 # Import blocklist: crypto/md5
-  staticcheck:
-    checks:
-      - all
-    #  - '-SA1019' # Using a deprecated function, variable, constant or field: x509.DecryptPEMBlock has been deprecated
-  stylecheck:
-    checks:
-      - all
-      - '-ST1018' # Avoid zero-width and control characters in string literals: Unicode format character `U+` vs. `\u`
+  settings:
+    staticcheck:
+      checks:
+        - -ST1018
+        - all
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
