@@ -6,6 +6,7 @@ import (
 	"sort"
 
 	"github.com/grokify/mogo/sort/sortutil"
+	"github.com/grokify/mogo/strconv/strconvutil"
 	"golang.org/x/exp/constraints"
 	"golang.org/x/exp/slices"
 )
@@ -15,26 +16,26 @@ var (
 	ErrNotString   = errors.New("value not string")
 )
 
-// MapStrAny represents a `map[string]any`
-type MapStrAny map[string]any
+// MapStringAny represents a `map[string]any`
+type MapStringAny map[string]any
 
-func (msa MapStrAny) ValueString(k string, errOnNotExist bool) (string, error) {
-	v, ok := msa[k]
-	if !ok {
-		if errOnNotExist {
-			return "", ErrKeyNotExist
-		} else {
-			return "", nil
-		}
+func (msa MapStringAny) MustValueString(k string, def string) string {
+	if v, err := msa.ValueString(k); err != nil {
+		return def
+	} else {
+		return v
 	}
-	s, ok := v.(string)
-	if !ok {
-		return "", ErrNotString
-	}
-	return s, nil
 }
 
-func (msa MapStrAny) MustMarshal() []byte {
+func (msa MapStringAny) ValueString(k string) (string, error) {
+	if v, ok := msa[k]; !ok {
+		return "", ErrKeyNotExist
+	} else {
+		return strconvutil.AnyToString(v), nil
+	}
+}
+
+func (msa MapStringAny) MustMarshal() []byte {
 	if b, err := json.Marshal(msa); err != nil {
 		panic(err)
 	} else {
