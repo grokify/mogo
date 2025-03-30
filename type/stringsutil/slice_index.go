@@ -49,15 +49,16 @@ func SliceIndexMore(haystack []string, needle string, trimSpace, toLower bool, m
 		if toLower {
 			hay = strings.ToLower(hay)
 		}
-		if matchType == MatchStringSuffix {
+		switch matchType {
+		case MatchStringSuffix:
 			if strings.HasSuffix(needle, hay) {
 				return idx
 			}
-		} else if matchType == MatchStringPrefix {
+		case MatchStringPrefix:
 			if strings.HasPrefix(needle, hay) {
 				return idx
 			}
-		} else {
+		default:
 			if needle == hay {
 				return idx
 			}
