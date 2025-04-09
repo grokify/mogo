@@ -1,4 +1,4 @@
-package stringsutil
+package strslices
 
 import (
 	"strings"
