@@ -1,6 +1,7 @@
 package slicesutil
 
 import (
+	"cmp"
 	"regexp"
 	"sort"
 
@@ -49,6 +50,17 @@ func ElementCounts[E comparable](s []E) map[E]int {
 		m[si]++
 	}
 	return m
+}
+
+func MatchAny[C comparable](s1, s2 []C) bool {
+	for _, s1x := range s1 {
+		for _, s2x := range s2 {
+			if s1x == s2x {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func MatchFilters[E comparable](s, inclFilters, exclFilters []E, inclAll bool) bool {
@@ -132,6 +144,41 @@ func SplitMaxLength[S ~[]E, E any](s S, maxLen int) []S {
 		split = append(split, new)
 	}
 	return split
+}
+
+func SplitVenn2[C comparable](s1, s2 []C) (union []C, anotb []C, bnota []C) {
+	for _, s1x := range s1 {
+		if slices.Contains(s2, s1x) {
+			union = append(union, s1x)
+		} else {
+			anotb = append(anotb, s1x)
+		}
+	}
+	for _, s2x := range s2 {
+		if !slices.Contains(union, s2x) {
+			bnota = append(bnota, s2x)
+		}
+	}
+	return
+}
+
+func SplitVenn2Sort[O cmp.Ordered](s1, s2 []O) (union []O, anotb []O, bnota []O) {
+	for _, s1x := range s1 {
+		if slices.Contains(s2, s1x) {
+			union = append(union, s1x)
+		} else {
+			anotb = append(anotb, s1x)
+		}
+	}
+	for _, s2x := range s2 {
+		if !slices.Contains(union, s2x) {
+			bnota = append(bnota, s2x)
+		}
+	}
+	slices.Sort(union)
+	slices.Sort(anotb)
+	slices.Sort(bnota)
+	return
 }
 
 // Sub returns a string slice with duplicate values removed. First observance is kept.
