@@ -29,3 +29,26 @@ func Contains(s []string, v string) int { // all, some, none
 		return 0 // some have
 	}
 }
+
+func MatchAny(s1, s2 []string, caseInsensive, trimSpace bool) bool {
+	for _, s1x := range s1 {
+		if trimSpace {
+			s1x = strings.TrimSpace(s1x)
+		}
+		if caseInsensive {
+			s1x = strings.ToLower(s1x)
+		}
+		for _, s2x := range s2 {
+			if trimSpace {
+				s2x = strings.TrimSpace(s2x)
+			}
+			if caseInsensive {
+				s2x = strings.ToLower(s2x)
+			}
+			if s1x == s2x {
+				return true
+			}
+		}
+	}
+	return false
+}
