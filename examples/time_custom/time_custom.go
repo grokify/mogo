@@ -26,7 +26,7 @@ func main() {
 		panic(err)
 	}
 	fmt.Println(data.MyTime.String())
-	fmtutil.PrintJSON(data)
+	fmtutil.MustPrintJSON(data)
 
 	_ = json.NewEncoder(os.Stdout).Encode(data)
 }
