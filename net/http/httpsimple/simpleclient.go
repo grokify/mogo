@@ -2,6 +2,7 @@ package httpsimple
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"io"
@@ -12,6 +13,7 @@ import (
 
 	"github.com/grokify/mogo/io/ioutil"
 	"github.com/grokify/mogo/net/urlutil"
+	"golang.org/x/net/context/ctxhttp"
 )
 
 var rxHTTPURL = regexp.MustCompile(`^(?i)https?://`)
@@ -27,11 +29,11 @@ func NewClient(httpClient *http.Client, baseURL string) Client {
 	return Client{HTTPClient: httpClient, BaseURL: baseURL}
 }
 
-func (sc *Client) Get(reqURL string) (*http.Response, error) {
-	return sc.Do(Request{Method: http.MethodGet, URL: reqURL})
+func (sc *Client) Get(ctx context.Context, reqURL string) (*http.Response, error) {
+	return sc.Do(ctx, Request{Method: http.MethodGet, URL: reqURL})
 }
 
-func (sc *Client) Do(req Request) (*http.Response, error) {
+func (sc *Client) Do(ctx context.Context, req Request) (*http.Response, error) {
 	req.Inflate()
 	var bodyReader io.Reader
 	if req.BodyType == BodyTypeFile && ioutil.IsReader(req.Body) {
@@ -66,11 +68,11 @@ func (sc *Client) Do(req Request) (*http.Response, error) {
 	if sc.HTTPClient == nil {
 		sc.HTTPClient = &http.Client{}
 	}
-	return doSimple(sc.HTTPClient, req.Method, reqURL, req.Headers, bodyReader)
+	return doSimple(ctx, sc.HTTPClient, req.Method, reqURL, req.Headers, bodyReader)
 }
 
-func (sc *Client) DoUnmarshalJSON(req Request, resBody any) ([]byte, *http.Response, error) {
-	resp, err := sc.Do(req)
+func (sc *Client) DoUnmarshalJSON(ctx context.Context, req Request, resBody any) ([]byte, *http.Response, error) {
+	resp, err := sc.Do(ctx, req)
 	if err != nil {
 		return []byte{}, nil, err
 	}
@@ -82,7 +84,7 @@ func (sc *Client) DoUnmarshalJSON(req Request, resBody any) ([]byte, *http.Respo
 	return bytes, resp, err
 }
 
-func doSimple(client *http.Client, httpMethod, reqURL string, headers map[string][]string, body io.Reader) (*http.Response, error) {
+func doSimple(ctx context.Context, client *http.Client, httpMethod, reqURL string, headers map[string][]string, body io.Reader) (*http.Response, error) {
 	// func doSimple(client *http.Client, httpMethod, reqURL string, headers map[string][]string, body []byte) (*http.Response, error) {
 	reqURL = strings.TrimSpace(reqURL)
 	if len(reqURL) == 0 {
@@ -112,5 +114,5 @@ func doSimple(client *http.Client, httpMethod, reqURL string, headers map[string
 		}
 	}
 
-	return client.Do(req)
+	return ctxhttp.Do(ctx, client, req)
 }

@@ -126,7 +126,7 @@ func DefaultContentTypeBodyType(bt string) string {
 func (req Request) Do(ctx context.Context) (*http.Response, error) {
 	if ctx == nil {
 		sc := Client{}
-		return sc.Do(req)
+		return sc.Do(ctx, req)
 	} else if hreq, err := req.HTTPRequest(ctx); err != nil {
 		return nil, err
 	} else {
