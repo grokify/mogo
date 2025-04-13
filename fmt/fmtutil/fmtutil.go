@@ -7,6 +7,7 @@ import (
 	"io"
 
 	"github.com/grokify/mogo/encoding/jsonutil"
+	"github.com/grokify/mogo/encoding/jsonutil/jsonraw"
 )
 
 var (
@@ -72,4 +73,21 @@ func PrintReader(r io.Reader) error {
 	}
 	fmt.Println(string(bytes))
 	return nil
+}
+
+func MustPrintJSONReader(r io.Reader, prefix, indent string) {
+	if err := PrintJSONReader(r, prefix, indent); err != nil {
+		panic(err.Error())
+	}
+}
+
+func PrintJSONReader(r io.Reader, prefix, indent string) error {
+	if data, err := io.ReadAll(r); err != nil {
+		return err
+	} else if data2, err := jsonraw.IndentBytes(data, prefix, indent); err != nil {
+		return err
+	} else {
+		fmt.Println(string(data2))
+		return nil
+	}
 }
