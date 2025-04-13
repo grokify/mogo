@@ -35,8 +35,7 @@ func getIncident(t0s, t1s, format string, durRange time.Duration, impactNum, tot
 		panic(err)
 	}
 
-	fmtutil.PrintJSON(inc)
-
+	fmtutil.MustPrintJSON(inc)
 }
 
 func main() {

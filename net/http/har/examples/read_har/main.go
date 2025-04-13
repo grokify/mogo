@@ -24,7 +24,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmtutil.PrintJSON(h)
+	fmtutil.MustPrintJSON(h)
 
 	for _, entry := range h.Log.Entries {
 		method := entry.Request.Method

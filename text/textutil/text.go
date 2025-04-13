@@ -16,7 +16,7 @@ import (
 func RemoveDiacritics(s string) (string, error) {
 	// Should å -> aa: https://stackoverflow.com/questions/11248467/convert-unicode-to-double-ascii-letters-in-python-%C3%9F-ss
 	t := transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
-	result, _, err := transform.String(t, strings.Replace(s, "\u00df", "ss", -1))
+	result, _, err := transform.String(t, strings.ReplaceAll(s, "\u00df", "ss"))
 	return result, err
 }
 
