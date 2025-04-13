@@ -70,7 +70,7 @@ func ReadSubdirMax(dir string, rx *regexp.Regexp) (os.DirEntry, error) {
 // ReadDirRxSubmatch takes a directory, regular expression and boolean to
 // indicate whether to include zero size files and returns the greatest of
 // a single match in the regular expression.
-func ReadDirRxSubmatch(dir string, rx *regexp.Regexp, subMatchIdx uint, inclDirs, inclFiles, inclEmptyFiles bool) (map[string][]os.DirEntry, error) {
+func ReadDirRxSubmatch(dir string, rx *regexp.Regexp, subMatchIdx uint32, inclDirs, inclFiles, inclEmptyFiles bool) (map[string][]os.DirEntry, error) {
 	entryMap := map[string][]os.DirEntry{}
 
 	entries, err := os.ReadDir(dir)
@@ -112,7 +112,7 @@ func ReadDirRxSubmatch(dir string, rx *regexp.Regexp, subMatchIdx uint, inclDirs
 	return entryMap, nil
 }
 
-func ReadDirRxSubmatchEntriesGreatest(dir string, rx *regexp.Regexp, subMatchIdx uint, inclDirs, inclFiles, inclEmptyFiles bool) ([]os.DirEntry, error) {
+func ReadDirRxSubmatchEntriesGreatest(dir string, rx *regexp.Regexp, subMatchIdx uint32, inclDirs, inclFiles, inclEmptyFiles bool) ([]os.DirEntry, error) {
 	entryMap, err := ReadDirRxSubmatch(dir, rx, subMatchIdx, inclDirs, inclFiles, inclEmptyFiles)
 	if err != nil {
 		return []os.DirEntry{}, err
@@ -127,7 +127,7 @@ func ReadDirRxSubmatchEntriesGreatest(dir string, rx *regexp.Regexp, subMatchIdx
 
 // ReadDirRxSubmatchCaptureGreatest takes a directory, regular expression
 // and returns the greatest of a single submatch in the regular expression.
-func ReadDirRxSubmatchCaptureGreatest(dir string, rx *regexp.Regexp, subMatchIdx uint, inclDirs, inclFiles, inclEmptyFiles bool) (string, error) {
+func ReadDirRxSubmatchCaptureGreatest(dir string, rx *regexp.Regexp, subMatchIdx uint32, inclDirs, inclFiles, inclEmptyFiles bool) (string, error) {
 	keysSorted, err := ReadDirRxSubmatchCaptures(dir, rx, subMatchIdx, inclDirs, inclFiles, inclEmptyFiles)
 	if err != nil {
 		return "", err
@@ -138,7 +138,7 @@ func ReadDirRxSubmatchCaptureGreatest(dir string, rx *regexp.Regexp, subMatchIdx
 
 // ReadDirRxSubmatchCaptures takes a directory, regular expression and
 // returns the greatest of captures from the regular expression.
-func ReadDirRxSubmatchCaptures(dir string, rx *regexp.Regexp, subMatchIdx uint, inclDirs, inclFiles, inclEmptyFiles bool) ([]string, error) {
+func ReadDirRxSubmatchCaptures(dir string, rx *regexp.Regexp, subMatchIdx uint32, inclDirs, inclFiles, inclEmptyFiles bool) ([]string, error) {
 	entryMap, err := ReadDirRxSubmatch(dir, rx, subMatchIdx, inclDirs, inclFiles, inclEmptyFiles)
 	if err != nil {
 		return nil, err
