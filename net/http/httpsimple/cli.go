@@ -83,17 +83,17 @@ func (cli CLI) Do(ctx context.Context, w io.Writer) error {
 	}
 
 	if w != nil {
-		if _, err := w.Write([]byte(fmt.Sprintf("Response Status Code: %d\n", resp.StatusCode))); err != nil {
+		if _, err := fmt.Fprintf(w, "Response Status Code: %d\n", resp.StatusCode); err != nil {
 			return err
 		}
-		if _, err := w.Write([]byte(fmt.Sprintf("Response ContentType: %s\n", resp.Header.Get(httputilmore.HeaderContentType)))); err != nil {
+		if _, err := fmt.Fprintf(w, "Response ContentType: %s\n", resp.Header.Get(httputilmore.HeaderContentType)); err != nil {
 			return err
 		}
 		b, err := httputilmore.ResponseBodyMore(resp, "", "  ")
 		if err != nil {
 			return err
 		}
-		if _, err := w.Write([]byte(fmt.Sprintf("Body:\n%s", string(b)))); err != nil {
+		if _, err := fmt.Fprintf(w, "Body:\n%s", string(b)); err != nil {
 			return err
 		}
 	}

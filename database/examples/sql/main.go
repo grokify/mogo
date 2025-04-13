@@ -17,7 +17,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmtutil.PrintJSON(files)
+	fmtutil.MustPrintJSON(files)
 
 	col, err := strconv.Atoi(os.Getenv("SQL_CSV_FILE_COL"))
 	if err != nil {
@@ -35,7 +35,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmtutil.PrintJSON(sqls)
+	fmtutil.MustPrintJSON(sqls)
 
 	fmt.Printf("SQL_ITEMS [%v]\n", len(values))
 	fmt.Printf("SQL_STATEMENTS [%v]\n", len(sqls))
