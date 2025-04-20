@@ -2,6 +2,7 @@ package strconvutil
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -82,5 +83,18 @@ func AtoiMore(s, comma, decimal string) (int, error) {
 func AtoiMoreFunc(comma, decimal string) func(s string) (int, error) {
 	return func(s string) (int, error) {
 		return AtoiMore(s, comma, decimal)
+	}
+}
+
+// ParseUint8 safely parses a string into a uint8 value.
+// It returns an error if the string is not a valid number
+// or if the number is out of the uint8 range.
+func ParseUint8(s string, base int) (uint8, error) {
+	if u64, err := strconv.ParseUint(s, base, 8); err != nil {
+		return 0, err
+	} else if u64 > 255 {
+		return 0, fmt.Errorf("value out of range for uint8 (%s), base (%d)", s, base)
+	} else {
+		return uint8(u64), nil
 	}
 }
