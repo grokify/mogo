@@ -18,18 +18,20 @@ func newTableFromTokens(toks []html.Token) [][]string {
 	cell := []html.Token{}
 	for _, tok := range toks {
 		if tok.DataAtom == atom.Tr {
-			if tok.Type == html.StartTagToken {
+			switch tok.Type {
+			case html.StartTagToken:
 				inRow = true
-			} else if tok.Type == html.EndTagToken {
+			case html.EndTagToken:
 				rows = append(rows, row)
 				row = [][]html.Token{}
 				inRow = false
 			}
 			continue
 		} else if tok.DataAtom == atom.Td || tok.DataAtom == atom.Th {
-			if tok.Type == html.StartTagToken {
+			switch tok.Type {
+			case html.StartTagToken:
 				inCell = true
-			} else if tok.Type == html.EndTagToken {
+			case html.EndTagToken:
 				row = append(row, cell)
 				cell = []html.Token{}
 				inCell = false

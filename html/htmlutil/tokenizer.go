@@ -122,7 +122,7 @@ func NextTokens(z *html.Tokenizer, opts NextTokensOpts) (Tokens, error) {
 			MatchType: stringsutil.MatchExact,
 		}
 	}
-	foundStartToken := false
+	var foundStartToken bool
 	if len(opts.StartFilter) == 0 {
 		foundStartToken = true
 	}
