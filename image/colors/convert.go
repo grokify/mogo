@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/errors/errorsutil"
+	"github.com/grokify/mogo/strconv/strconvutil"
 	"github.com/grokify/mogo/type/stringsutil"
 	"golang.org/x/image/colornames"
 )
@@ -83,17 +84,17 @@ func ParseHex(hexRGB string) (color.RGBA, error) {
 	if len(m) == 0 {
 		return color.RGBA{}, fmt.Errorf("E_COLOR_NOT_HEX_STRING [%s]", hexRGB)
 	}
-	rdecimal, errR := strconv.ParseUint(m[1], 16, 64)
-	gdecimal, errG := strconv.ParseUint(m[2], 16, 64)
-	bdecimal, errB := strconv.ParseUint(m[3], 16, 64)
+	rdecimal, errR := strconvutil.ParseUint8(m[1], 16)
+	gdecimal, errG := strconvutil.ParseUint8(m[2], 16)
+	bdecimal, errB := strconvutil.ParseUint8(m[3], 16)
 	err := errorsutil.Join(false, errR, errG, errB)
 	if err != nil {
 		return color.RGBA{}, fmt.Errorf("E_COLOR_NOT_HEX_PARSE [%s]", err.Error())
 	}
 	return color.RGBA{
-		R: uint8(rdecimal),
-		G: uint8(gdecimal),
-		B: uint8(bdecimal),
+		R: rdecimal,
+		G: gdecimal,
+		B: bdecimal,
 		A: 0xff}, nil
 }
 
@@ -115,7 +116,7 @@ func ParseGoogle(googString string) (color.RGBA, error) {
 	if err != nil {
 		panic(err)
 	}
-	col := GoogleChartColorX(uint64(idxInt))
+	col := GoogleChartColorX(uint32(idxInt))
 	return col, nil
 }
 
