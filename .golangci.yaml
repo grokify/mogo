@@ -15,8 +15,8 @@ linters:
   settings:
     staticcheck:
       checks:
+        - -QF1008 # Disable the "could remove embedded field" check
         - -ST1018
-        - all
   exclusions:
     generated: lax
     presets:
