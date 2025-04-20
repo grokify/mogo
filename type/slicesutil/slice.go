@@ -146,39 +146,61 @@ func SplitMaxLength[S ~[]E, E any](s S, maxLen int) []S {
 	return split
 }
 
-func SplitVenn2[C comparable](s1, s2 []C) (union []C, anotb []C, bnota []C) {
-	for _, s1x := range s1 {
-		if slices.Contains(s2, s1x) {
-			union = append(union, s1x)
-		} else {
-			anotb = append(anotb, s1x)
-		}
-	}
-	for _, s2x := range s2 {
-		if !slices.Contains(union, s2x) {
-			bnota = append(bnota, s2x)
-		}
-	}
-	return
+type SplitVennResultComparable[C comparable] struct {
+	Intersection []C
+	FirstOnly    []C
+	SecondOnly   []C
 }
 
-func SplitVenn2Sort[O cmp.Ordered](s1, s2 []O) (union []O, anotb []O, bnota []O) {
+func SplitVenn2[C comparable](s1, s2 []C) SplitVennResultComparable[C] {
+	intersection, anotb, bnota := []C{}, []C{}, []C{}
 	for _, s1x := range s1 {
 		if slices.Contains(s2, s1x) {
-			union = append(union, s1x)
+			intersection = append(intersection, s1x)
 		} else {
 			anotb = append(anotb, s1x)
 		}
 	}
 	for _, s2x := range s2 {
-		if !slices.Contains(union, s2x) {
+		if !slices.Contains(intersection, s2x) {
 			bnota = append(bnota, s2x)
 		}
 	}
-	slices.Sort(union)
+	return SplitVennResultComparable[C]{
+		Intersection: intersection,
+		FirstOnly:    anotb,
+		SecondOnly:   bnota,
+	}
+}
+
+type SplitVennResultOrdered[O cmp.Ordered] struct {
+	Intersection []O
+	FirstOnly    []O
+	SecondOnly   []O
+}
+
+func SplitVenn2Sort[O cmp.Ordered](s1, s2 []O) SplitVennResultOrdered[O] {
+	intersection, anotb, bnota := []O{}, []O{}, []O{}
+	for _, s1x := range s1 {
+		if slices.Contains(s2, s1x) {
+			intersection = append(intersection, s1x)
+		} else {
+			anotb = append(anotb, s1x)
+		}
+	}
+	for _, s2x := range s2 {
+		if !slices.Contains(intersection, s2x) {
+			bnota = append(bnota, s2x)
+		}
+	}
+	slices.Sort(intersection)
 	slices.Sort(anotb)
 	slices.Sort(bnota)
-	return
+	return SplitVennResultOrdered[O]{
+		Intersection: intersection,
+		FirstOnly:    anotb,
+		SecondOnly:   bnota,
+	}
 }
 
 // Sub returns a string slice with duplicate values removed. First observance is kept.
