@@ -42,11 +42,12 @@ func MonthToQuarter(month uint64) uint64 {
 func QuarterContinuousToTime(qc uint64) time.Time {
 	year, quarter := QuarterContinuousToYearQuarter(qc)
 	month := 1
-	if quarter == 2 {
+	switch quarter {
+	case 2:
 		month = 4
-	} else if quarter == 3 {
+	case 3:
 		month = 7
-	} else if quarter == 4 {
+	case 4:
 		month = 10
 	}
 	return time.Date(

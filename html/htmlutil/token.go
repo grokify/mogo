@@ -114,7 +114,7 @@ func (tokens Tokens) Subset(opts NextTokensOpts) Tokens {
 	if len(opts.StartFilter) == 0 && len(opts.EndFilter) == 0 {
 		return tokens
 	}
-	matching := false
+	var matching bool
 	if len(opts.StartFilter) == 0 {
 		matching = true
 	}
