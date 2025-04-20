@@ -14,8 +14,10 @@ func main() {
 	if 1 == 1 {
 		zones = timezone.ZonesPortable()
 	}
-	fmtutil.PrintJSON(zones)
-	fmtutil.PrintJSONMin(zones)
+	fmtutil.MustPrintJSON(zones)
+	if err := fmtutil.PrintJSONMin(zones); err != nil {
+		log.Fatal(err)
+	}
 
 	tz := "America/New_York"
 	offset, err := timezone.ZoneOffsetSeconds(time.Now(), tz)

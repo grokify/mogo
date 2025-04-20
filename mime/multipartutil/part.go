@@ -53,10 +53,7 @@ func (p Part) HeaderBodyFilepath() (textproto.MIMEHeader, []byte, error) {
 		header.Add(hum.HeaderContentDisposition, cd)
 	}
 
-	_, filename := filepath.Split(p.BodyDataFilepath)
-	filename = strings.TrimSpace(filename)
-	mimeType := mime.TypeByExtension(filepath.Ext(p.BodyDataFilepath))
-	if len(mimeType) > 0 {
+	if mimeType := mime.TypeByExtension(filepath.Ext(p.BodyDataFilepath)); len(mimeType) > 0 {
 		header.Add(hum.HeaderContentType, mimeType)
 	}
 
