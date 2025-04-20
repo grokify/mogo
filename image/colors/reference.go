@@ -45,7 +45,7 @@ func GetGoogleChartColors() []color.RGBA {
 
 var GoogleChartColors = GetGoogleChartColors()
 
-func GoogleChartColorX(index uint64) color.RGBA {
+func GoogleChartColorX(index uint32) color.RGBA {
 	_, remainder := mathutil.DivideInt64(int64(index),
 		int64(len(GoogleChartColorsHex)))
 	return GoogleChartColors[remainder]
