@@ -1,6 +1,8 @@
 package randutil
 
 import (
+	crand "crypto/rand"
+	"encoding/binary"
 	mrand "math/rand"
 )
 
@@ -47,6 +49,26 @@ func (cr *CryptoRand) MustInt64n(n int64) int64 {
 	return i64
 }
 */
+
+func Float64() (float64, error) {
+	var b [8]byte
+	if _, err := crand.Read(b[:]); err != nil {
+		return 0, err
+	}
+
+	// Use the top 53 bits for uniform float64 precision (mimics math/rand.Float64()).
+	// 1 << 53 is 9007199254740992, the number of representable values between 0 and 1 in float64.
+	u := binary.BigEndian.Uint64(b[:]) >> 11 // 64 - 53 = 11
+	return float64(u) / (1 << 53), nil
+}
+
+func MustFloat64() float64 {
+	if f, err := Float64(); err != nil {
+		panic(err)
+	} else {
+		return f
+	}
+}
 
 // Intn returns a random number backed by `crypto/rand`.
 func Intn(n uint) int {
