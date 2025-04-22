@@ -43,6 +43,25 @@ func (msa MapStringAny) MustMarshal() []byte {
 	}
 }
 
+type MapStringAnys []MapStringAny
+
+func (msas MapStringAnys) UniqueKeys() []string {
+	var keys []string
+	m := map[string]int{}
+	for _, msa := range msas {
+		for k := range msa {
+			if _, ok := m[k]; ok {
+				continue
+			} else {
+				keys = append(keys, k)
+				m[k]++
+			}
+		}
+	}
+	sort.Strings(keys)
+	return keys
+}
+
 func KeysEqual[K constraints.Ordered, V any](m1, m2 map[K]V) bool {
 	m1Keys, m2Keys := Keys(m1), Keys(m2)
 	return slices.Equal(m1Keys, m2Keys)
