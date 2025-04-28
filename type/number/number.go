@@ -6,6 +6,7 @@ import (
 	"sort"
 	"strconv"
 
+	"github.com/grokify/mogo/errors/errorsutil"
 	"golang.org/x/exp/constraints"
 )
 
@@ -42,25 +43,36 @@ func IntLength[I int | int8 | int16 | int32 | int64](num I) uint {
 
 var ErrOverflow = errors.New("integer overflow")
 
-func Int32(i int) (int32, error) {
-	if i > math.MaxInt32 || i < math.MinInt32 {
+func Int8(i int) (int8, error) {
+	if i < math.MinInt8 || i > math.MaxInt8 {
 		return 0, ErrOverflow
+	} else {
+		return int8(i), nil
 	}
-	return int32(i), nil
 }
 
 func Int16(i int) (int16, error) {
-	if i > math.MaxInt16 || i < math.MinInt16 {
+	if i < math.MinInt16 || i > math.MaxInt16 {
 		return 0, ErrOverflow
+	} else {
+		return int16(i), nil
 	}
-	return int16(i), nil
 }
 
-func Int8(i int) (int8, error) {
-	if i > math.MaxInt8 || i < math.MinInt8 {
+func Int32(i int) (int32, error) {
+	if i < math.MinInt32 || i > math.MaxInt32 {
 		return 0, ErrOverflow
+	} else {
+		return int32(i), nil
 	}
-	return int8(i), nil
+}
+
+func Uint32(i int) (uint32, error) {
+	if i < 0 || i > int(^uint32(0)) {
+		return 0, errorsutil.Wrapf(ErrOverflow, "int is out of range for uint32 (%d)", i)
+	} else {
+		return uint32(i), nil
+	}
 }
 
 /*
