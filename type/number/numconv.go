@@ -1,8 +1,46 @@
 package number
 
 import (
+	"errors"
+	"math"
+
+	"github.com/grokify/mogo/errors/errorsutil"
 	"golang.org/x/exp/constraints"
 )
+
+var ErrOverflow = errors.New("integer overflow")
+
+func Itoi8(i int) (int8, error) {
+	if i < math.MinInt8 || i > math.MaxInt8 {
+		return 0, ErrOverflow
+	} else {
+		return int8(i), nil
+	}
+}
+
+func Itoi16(i int) (int16, error) {
+	if i < math.MinInt16 || i > math.MaxInt16 {
+		return 0, ErrOverflow
+	} else {
+		return int16(i), nil
+	}
+}
+
+func Itoi32(i int) (int32, error) {
+	if i < math.MinInt32 || i > math.MaxInt32 {
+		return 0, ErrOverflow
+	} else {
+		return int32(i), nil
+	}
+}
+
+func Itou32(i int) (uint32, error) {
+	if i < 0 || i > int(^uint32(0)) {
+		return 0, errorsutil.Wrapf(ErrOverflow, "int is out of range for uint32 (%d)", i)
+	} else {
+		return uint32(i), nil
+	}
+}
 
 /*
 const maxExactInt = 1 << 53  // 9007199254740992
