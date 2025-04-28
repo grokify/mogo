@@ -1,6 +1,10 @@
 package number
 
-import "golang.org/x/exp/constraints"
+import (
+	"fmt"
+
+	"golang.org/x/exp/constraints"
+)
 
 /*
 const maxExactInt = 1 << 53  // 9007199254740992
@@ -25,4 +29,11 @@ func Ntof64[N constraints.Integer | constraints.Float](val N) (float64, bool) {
 		return f, true
 	}
 	return f, false
+}
+
+func IntToUint32(x int) (uint32, error) {
+	if x < 0 || x > int(^uint32(0)) {
+		return 0, fmt.Errorf("int is out of range for uint32 (%d)", x)
+	}
+	return uint32(x), nil
 }
