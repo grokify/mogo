@@ -63,8 +63,7 @@ func (msas MapStringAnys) UniqueKeys() []string {
 }
 
 func KeysEqual[K constraints.Ordered, V any](m1, m2 map[K]V) bool {
-	m1Keys, m2Keys := Keys(m1), Keys(m2)
-	return slices.Equal(m1Keys, m2Keys)
+	return slices.Equal(Keys(m1), Keys(m2))
 }
 
 func KeysSubtract[K constraints.Ordered, V any](m1, m2 map[K]V) []K {
