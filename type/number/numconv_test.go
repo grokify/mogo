@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var uint32Tests = []struct {
+var itou32Tests = []struct {
 	v       int
 	want    uint32
 	wantErr bool
@@ -18,9 +18,9 @@ var uint32Tests = []struct {
 	{v: 4294967295 + 1, want: math.MaxUint32, wantErr: true},
 }
 
-func TestUint32(t *testing.T) {
-	for _, tt := range uint32Tests {
-		got, err := Uint32(tt.v)
+func TestItou32(t *testing.T) {
+	for _, tt := range itou32Tests {
+		got, err := Itou32(tt.v)
 		if err != nil {
 			if !tt.wantErr {
 				t.Errorf("number.Uint32(%d) error (%s)",
