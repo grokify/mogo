@@ -7,6 +7,16 @@ import (
 	"github.com/grokify/mogo/type/maputil"
 )
 
+func Clone[T any](src T) (T, error) {
+	var dst T
+	if data, err := json.Marshal(src); err != nil {
+		return dst, err
+	} else {
+		err := json.Unmarshal(data, &dst)
+		return dst, err
+	}
+}
+
 func ObjectKeys(b []byte) ([]string, error) {
 	msa := map[string]any{}
 	if err := json.Unmarshal(b, &msa); err != nil {
