@@ -12,7 +12,7 @@ var ErrOverflow = errors.New("integer overflow")
 
 func Itoi8(i int) (int8, error) {
 	if i < math.MinInt8 || i > math.MaxInt8 {
-		return 0, ErrOverflow
+		return 0, errorsutil.Wrapf(ErrOverflow, "int is out of range for int8 (%d)", i)
 	} else {
 		return int8(i), nil
 	}
@@ -20,7 +20,7 @@ func Itoi8(i int) (int8, error) {
 
 func Itoi16(i int) (int16, error) {
 	if i < math.MinInt16 || i > math.MaxInt16 {
-		return 0, ErrOverflow
+		return 0, errorsutil.Wrapf(ErrOverflow, "int is out of range for int16 (%d)", i)
 	} else {
 		return int16(i), nil
 	}
@@ -28,7 +28,7 @@ func Itoi16(i int) (int16, error) {
 
 func Itoi32(i int) (int32, error) {
 	if i < math.MinInt32 || i > math.MaxInt32 {
-		return 0, ErrOverflow
+		return 0, errorsutil.Wrapf(ErrOverflow, "int is out of range for int32 (%d)", i)
 	} else {
 		return int32(i), nil
 	}
