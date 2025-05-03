@@ -52,6 +52,15 @@ func ElementCounts[E comparable](s []E) map[E]int {
 	return m
 }
 
+func ElementCountsReverse[E comparable](s []E) map[int][]E {
+	out := map[int][]E{}
+	counts := ElementCounts(s)
+	for k, v := range counts {
+		out[v] = append(out[v], k)
+	}
+	return out
+}
+
 func MatchAny[C comparable](s1, s2 []C) bool {
 	for _, s1x := range s1 {
 		for _, s2x := range s2 {
