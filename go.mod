@@ -21,7 +21,7 @@ require (
 	golang.org/x/image v0.26.0
 	golang.org/x/net v0.39.0
 	golang.org/x/text v0.24.0
-	google.golang.org/genproto v0.0.0-20250425173222-7b384671a197
+	google.golang.org/genproto v0.0.0-20250428153025-10db94c68c34
 )
 
 require (
