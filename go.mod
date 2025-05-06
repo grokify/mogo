@@ -20,7 +20,7 @@ require (
 	golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0
 	golang.org/x/image v0.26.0
 	golang.org/x/net v0.39.0
-	golang.org/x/text v0.24.0
+	golang.org/x/text v0.25.0
 	google.golang.org/genproto v0.0.0-20250428153025-10db94c68c34
 )
 
