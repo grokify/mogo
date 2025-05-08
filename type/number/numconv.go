@@ -34,12 +34,44 @@ func Itoi32(i int) (int32, error) {
 	}
 }
 
+func Itou(i int) (uint, error) {
+	if i < 0 || uint(i) > ^uint(0) {
+		return 0, errorsutil.Wrapf(ErrOverflow, "int is out of range for uint32 (%d)", i)
+	} else {
+		return uint(i), nil
+	}
+}
+
 func Itou32(i int) (uint32, error) {
 	if i < 0 || i > int(^uint32(0)) {
 		return 0, errorsutil.Wrapf(ErrOverflow, "int is out of range for uint32 (%d)", i)
 	} else {
 		return uint32(i), nil
 	}
+}
+
+func Itoi32s(ints []int) ([]int32, error) {
+	var out []int32
+	for _, val := range ints {
+		if vout, err := Itoi32(val); err != nil {
+			return out, err
+		} else {
+			out = append(out, vout)
+		}
+	}
+	return out, nil
+}
+
+func Itous(ints []int) ([]uint, error) {
+	var out []uint
+	for _, val := range ints {
+		if vout, err := Itou(val); err != nil {
+			return out, err
+		} else {
+			out = append(out, vout)
+		}
+	}
+	return out, nil
 }
 
 /*
