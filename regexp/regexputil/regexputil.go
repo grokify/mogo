@@ -3,9 +3,10 @@ package regexputil
 import (
 	"errors"
 	"regexp"
-	"strconv"
 	"strings"
 	"time"
+
+	"github.com/grokify/mogo/strconv/strconvutil"
 )
 
 // McReplaceAllString is a single line MustCompile regexp for ReplaceAllString
@@ -85,11 +86,11 @@ func FindStringSubmatchNamedMap(rx *regexp.Regexp, s string) map[string]string {
 func CaptureUint(b []byte, expr string) (uint, error) {
 	m := regexp.MustCompile(expr).FindSubmatch(b)
 	if len(m) > 1 {
-		vi, err := strconv.Atoi(string(m[1]))
+		vi, err := strconvutil.Atou(string(m[1]))
 		if err != nil {
 			return 0, err
 		}
-		return uint(vi), nil
+		return vi, nil
 	}
 	return 0, ErrMatchNotFound
 }
