@@ -50,8 +50,14 @@ func ModInt64(a, b int64) int64 {
 }
 */
 
-// DivideInt64 performs integer division, returning
-// a quotient and remainder.
+func Divide[T constraints.Integer](dividend, divisor T) (quotient, remainder T) {
+	// from https://stackoverflow.com/questions/43945675/division-with-returning-quotient-and-remainder
+	quotient = dividend / divisor // integer division, decimals are truncated
+	remainder = dividend % divisor
+	return
+}
+
+// DivideInt64 performs integer division, returning a quotient and remainder.
 func DivideInt64(dividend, divisor int64) (quotient, remainder int64) {
 	// from https://stackoverflow.com/questions/43945675/division-with-returning-quotient-and-remainder
 	quotient = dividend / divisor // integer division, decimals are truncated
