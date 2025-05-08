@@ -31,17 +31,17 @@ func TestDayofmonthToEnglish(t *testing.T) {
 }
 
 var yearMonthBase36Tests = []struct {
-	year  uint64
-	month uint64
+	year  uint32
+	month uint32
 	want  string
 }{
-	{uint64(1), uint64(1), "002T"},
-	{uint64(500), uint64(3), "12KZ"},
-	{uint64(1000), uint64(6), "255Y"},
-	{uint64(2010), uint64(8), "4B3K"},
-	{uint64(2019), uint64(8), "4BSK"},
-	{uint64(2038), uint64(1), "4D95"},
-	{uint64(9999), uint64(12), "LFJC"},
+	{uint32(1), uint32(1), "002T"},
+	{uint32(500), uint32(3), "12KZ"},
+	{uint32(1000), uint32(6), "255Y"},
+	{uint32(2010), uint32(8), "4B3K"},
+	{uint32(2019), uint32(8), "4BSK"},
+	{uint32(2038), uint32(1), "4D95"},
+	{uint32(9999), uint32(12), "LFJC"},
 }
 
 func TestYearMonthBase36(t *testing.T) {
@@ -54,18 +54,18 @@ func TestYearMonthBase36(t *testing.T) {
 }
 
 var monthContinuousTests = []struct {
-	year    uint64
-	month   uint64
-	monthc  uint64
+	year    uint32
+	month   uint32
+	monthc  uint32
 	rfc3339 string
 }{
-	{uint64(0), uint64(1), uint64(1), "0000-01-01T00:00:00Z"},
-	{uint64(0), uint64(12), uint64(12), "0000-12-01T00:00:00Z"},
-	{uint64(1), uint64(1), uint64(13), "0001-01-01T00:00:00Z"},
-	{uint64(1), uint64(12), uint64(24), "0001-12-01T00:00:00Z"},
-	{uint64(2), uint64(1), uint64(25), "0002-01-01T00:00:00Z"},
-	{uint64(3), uint64(12), uint64(48), "0003-12-01T00:00:00Z"},
-	{uint64(4), uint64(1), uint64(49), "0004-01-01T00:00:00Z"},
+	{uint32(0), uint32(1), uint32(1), "0000-01-01T00:00:00Z"},
+	{uint32(0), uint32(12), uint32(12), "0000-12-01T00:00:00Z"},
+	{uint32(1), uint32(1), uint32(13), "0001-01-01T00:00:00Z"},
+	{uint32(1), uint32(12), uint32(24), "0001-12-01T00:00:00Z"},
+	{uint32(2), uint32(1), uint32(25), "0002-01-01T00:00:00Z"},
+	{uint32(3), uint32(12), uint32(48), "0003-12-01T00:00:00Z"},
+	{uint32(4), uint32(1), uint32(49), "0004-01-01T00:00:00Z"},
 }
 
 func TestMonthContinuous(t *testing.T) {
@@ -93,7 +93,11 @@ func TestMonthContinuous(t *testing.T) {
 			t.Errorf("TimeToMonthContinuous time.Parse(time.RFC3339, \"%s\") error [%v]",
 				tt.rfc3339, err.Error())
 		}
-		gotMonthc := TimeToMonthContinuous(wantDt)
+		gotMonthc, err := TimeToMonthContinuous(wantDt)
+		if err != nil {
+			t.Errorf("TimeToMonthContinuous(\"%v\") error [%v]",
+				wantDt.Format(time.RFC3339), err.Error())
+		}
 		if gotMonthc != tt.monthc {
 			t.Errorf("TimeToMonthContinuous(\"%s\"): want [%v] got [%v]",
 				tt.rfc3339, tt.monthc, gotMonthc)
