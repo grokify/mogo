@@ -5,7 +5,7 @@ import "github.com/grokify/mogo/math/mathutil"
 
 func Pad4(encoded, char string) string {
 	inputLength := len(encoded)
-	_, rem := mathutil.DivideInt64(int64(inputLength), int64(4))
+	_, rem := mathutil.Divide(int64(inputLength), int64(4))
 	if rem == 0 {
 		return encoded
 	}

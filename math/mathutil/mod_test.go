@@ -34,7 +34,7 @@ var divideInt64Tests = []struct {
 func TestDivideInt64(t *testing.T) {
 	for _, tt := range divideInt64Tests {
 		if tt.quotient > 0 {
-			quotient, remainder := DivideInt64(tt.dividend, tt.divisor)
+			quotient, remainder := Divide(tt.dividend, tt.divisor)
 			if tt.quotient != quotient || tt.remainder != remainder {
 				t.Errorf("mathutil.DivideInt64(%d, %d) Mismatch: want [%d,%d], got [%d,%d]",
 					tt.dividend, tt.divisor,
