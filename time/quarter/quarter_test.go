@@ -6,20 +6,20 @@ import (
 )
 
 var quarterContinuousTests = []struct {
-	year     uint64
-	quarter  uint64
-	quarterc uint64
+	year     uint32
+	quarter  uint32
+	quarterc uint32
 	rfc3339  string
 }{
-	{uint64(0), uint64(1), uint64(1), "0000-01-01T00:00:00Z"},
-	{uint64(0), uint64(2), uint64(2), "0000-04-01T00:00:00Z"},
-	{uint64(0), uint64(3), uint64(3), "0000-07-01T00:00:00Z"},
-	{uint64(0), uint64(4), uint64(4), "0000-10-01T00:00:00Z"},
-	{uint64(1), uint64(1), uint64(5), "0001-01-01T00:00:00Z"},
-	{uint64(1), uint64(4), uint64(8), "0001-10-01T00:00:00Z"},
-	{uint64(2), uint64(1), uint64(9), "0002-01-01T00:00:00Z"},
-	{uint64(3), uint64(4), uint64(16), "0003-10-01T00:00:00Z"},
-	{uint64(4), uint64(1), uint64(17), "0004-01-01T00:00:00Z"},
+	{uint32(0), uint32(1), uint32(1), "0000-01-01T00:00:00Z"},
+	{uint32(0), uint32(2), uint32(2), "0000-04-01T00:00:00Z"},
+	{uint32(0), uint32(3), uint32(3), "0000-07-01T00:00:00Z"},
+	{uint32(0), uint32(4), uint32(4), "0000-10-01T00:00:00Z"},
+	{uint32(1), uint32(1), uint32(5), "0001-01-01T00:00:00Z"},
+	{uint32(1), uint32(4), uint32(8), "0001-10-01T00:00:00Z"},
+	{uint32(2), uint32(1), uint32(9), "0002-01-01T00:00:00Z"},
+	{uint32(3), uint32(4), uint32(16), "0003-10-01T00:00:00Z"},
+	{uint32(4), uint32(1), uint32(17), "0004-01-01T00:00:00Z"},
 }
 
 func TestQuarterContinuous(t *testing.T) {
@@ -37,12 +37,16 @@ func TestQuarterContinuous(t *testing.T) {
 		}
 		wantDt, err := time.Parse(time.RFC3339, tt.rfc3339)
 		if err != nil {
-			t.Errorf("TimeToQuarterContinuous time.Parse(time.RFC3339, \"%s\") error [%v]",
+			t.Errorf("TimeToQuarterContinuous time.Parse(time.RFC3339, \"%s\") error [%s]",
 				tt.rfc3339, err.Error())
 		}
-		gotMonthc := TimeToQuarterContinuous(wantDt)
-		if gotMonthc != tt.quarterc {
-			t.Errorf("TimeToQuarterContinuous(\"%s\"): want [%v] got [%v]",
+		gotQuarterC, err = TimeToQuarterContinuous(wantDt)
+		if err != nil {
+			t.Errorf("TimeToQuarterContinuous(\"%s\") error [%s]",
+				wantDt.Format(time.RFC3339), err.Error())
+		}
+		if gotQuarterC != tt.quarterc {
+			t.Errorf("TimeToQuarterContinuous(\"%s\"): want [%d] got [%d]",
 				tt.rfc3339, tt.quarterc, gotQuarterC)
 		}
 	}
