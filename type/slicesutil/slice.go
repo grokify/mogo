@@ -209,6 +209,7 @@ func Venn2Sort[O cmp.Ordered](s1, s2 []O) Venn2ResultOrdered[O] {
 	slices.Sort(intersection)
 	slices.Sort(anotb)
 	slices.Sort(bnota)
+	slices.Sort(union)
 	return Venn2ResultOrdered[O]{
 		Intersection: intersection,
 		FirstOnly:    anotb,
