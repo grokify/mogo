@@ -182,14 +182,15 @@ func SplitVenn2[C comparable](s1, s2 []C) SplitVennResultComparable[C] {
 	}
 }
 
-type SplitVennResultOrdered[O cmp.Ordered] struct {
+type Venn2ResultOrdered[O cmp.Ordered] struct {
 	Intersection []O
 	FirstOnly    []O
 	SecondOnly   []O
+	Union        []O
 }
 
-func SplitVenn2Sort[O cmp.Ordered](s1, s2 []O) SplitVennResultOrdered[O] {
-	intersection, anotb, bnota := []O{}, []O{}, []O{}
+func Venn2Sort[O cmp.Ordered](s1, s2 []O) Venn2ResultOrdered[O] {
+	intersection, union, anotb, bnota := []O{}, []O{}, []O{}, []O{}
 	for _, s1x := range s1 {
 		if slices.Contains(s2, s1x) {
 			intersection = append(intersection, s1x)
@@ -202,13 +203,17 @@ func SplitVenn2Sort[O cmp.Ordered](s1, s2 []O) SplitVennResultOrdered[O] {
 			bnota = append(bnota, s2x)
 		}
 	}
+	union = append(union, intersection...)
+	union = append(union, anotb...)
+	union = append(union, bnota...)
 	slices.Sort(intersection)
 	slices.Sort(anotb)
 	slices.Sort(bnota)
-	return SplitVennResultOrdered[O]{
+	return Venn2ResultOrdered[O]{
 		Intersection: intersection,
 		FirstOnly:    anotb,
 		SecondOnly:   bnota,
+		Union:        union,
 	}
 }
 
