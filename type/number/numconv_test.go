@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/grokify/mogo/math/mathutil"
+	"github.com/grokify/mogo/type/ordered"
 )
 
 var itou32Tests = []struct {
@@ -66,7 +66,7 @@ func TestMinMax(t *testing.T) {
 		if err != nil {
 			t.Errorf("mathutil.Itoi32s(%v) Error [%s]", tt.vals, err.Error())
 		}
-		min32, max32 := mathutil.MinMaxInt32(int32s...)
+		min32, max32 := ordered.MinMax(int32s...)
 		if int(min32) != tt.min || int(max32) != tt.max {
 			t.Errorf("mathutil.MinMaxInt32(%s) Mismatch: want [%d,%d], got [%d,%d]",
 				strs, tt.min, tt.max, min32, max32)
@@ -77,7 +77,7 @@ func TestMinMax(t *testing.T) {
 			if err != nil {
 				t.Errorf("mathutil.Itous(%v) Error [%s]", tt.vals, err.Error())
 			}
-			minUint, maxUint := mathutil.MinMaxUint(uints...)
+			minUint, maxUint := ordered.MinMax(uints...)
 			if minUint != tt.minU || maxUint != tt.maxU {
 				t.Errorf("mathutil.MinMaxUint(%s) Mismatch: want [%d,%d], got [%d,%d]",
 					strs, tt.min, tt.max, minUint, maxUint)

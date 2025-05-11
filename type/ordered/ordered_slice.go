@@ -1,6 +1,8 @@
 package ordered
 
 import (
+	"cmp"
+
 	"golang.org/x/exp/constraints"
 	"golang.org/x/exp/slices"
 )
@@ -47,6 +49,23 @@ func AppendOrdered[S ~[]E, E constraints.Ordered](dedupe bool, s ...S) S {
 		}
 	}
 	return result
+}
+
+func MinMax[T cmp.Ordered](s ...T) (min, max T) {
+	for i, val := range s {
+		if i == 0 {
+			min = val
+			max = val
+		} else {
+			if val < min {
+				min = val
+			}
+			if val > max {
+				max = val
+			}
+		}
+	}
+	return
 }
 
 // Union returns an ordered set of deduped elements.
