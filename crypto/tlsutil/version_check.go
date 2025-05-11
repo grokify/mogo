@@ -14,7 +14,7 @@ import (
 // if the connection is successful.
 func SupportsTLSVersion(ctx context.Context, tlsVersion TLSVersion, url string) (*int, error) {
 	client := &http.Client{Transport: &http.Transport{
-		TLSClientConfig: &tls.Config{
+		TLSClientConfig: &tls.Config{ // #nosec G402
 			MinVersion: uint16(tlsVersion),
 			MaxVersion: uint16(tlsVersion),
 		},
