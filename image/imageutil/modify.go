@@ -30,15 +30,15 @@ func AddBackgroundWhite(img image.Image) image.Image {
 // Resize scales an image to the provided size units. Use a 0
 // to scale the aspect ratio. See gitub.com/nfnt/resize for Lanczos3, etc.
 // https://github.com/nfnt/resize .
-func Resize(width, height uint, src image.Image, scale draw.Scaler) image.Image {
-	if width == 0 && height == 0 {
+func Resize(width, height int, src image.Image, scale draw.Scaler) image.Image {
+	if width <= 0 && height <= 0 {
 		return image.NewRGBA(image.Rect(0, 0, 0, 0))
 	} else if width == 0 && height != 0 {
-		width = uint(ImageAspect(src) * float64(height))
+		width = int(ImageAspect(src) * float64(height))
 	} else if height == 0 && width != 0 {
-		height = uint(float64(width) / ImageAspect(src))
+		height = int(float64(width) / ImageAspect(src))
 	}
-	rect := image.Rect(0, 0, int(width), int(height))
+	rect := image.Rect(0, 0, width, height)
 	dst := image.NewRGBA(rect)
 	if scale == nil {
 		scale = ScalerBest()
@@ -47,16 +47,16 @@ func Resize(width, height uint, src image.Image, scale draw.Scaler) image.Image 
 	return dst
 }
 
-func ResizeMaxDimension(maxSide uint, src image.Image, scale draw.Scaler) image.Image {
+func ResizeMaxDimension(maxSide int, src image.Image, scale draw.Scaler) image.Image {
 	width := src.Bounds().Dx()
 	height := src.Bounds().Dy()
 	if width > height {
-		if width == int(maxSide) {
+		if width == maxSide {
 			return src
 		}
 		return Resize(maxSide, 0, src, scale)
 	}
-	if height == int(maxSide) {
+	if height == maxSide {
 		return src
 	}
 	return Resize(0, maxSide, src, scale)
@@ -65,14 +65,14 @@ func ResizeMaxDimension(maxSide uint, src image.Image, scale draw.Scaler) image.
 // ResizeMax resizes an image to maximum dimensions. To resize
 // to a maximum of 800 pixels width, the following can be used:
 // `ResizeMax(800, 0, img, nil)`.
-func ResizeMax(maxWidth, maxHeight uint, src image.Image, scale draw.Scaler) image.Image {
-	srcWidth := uint(src.Bounds().Dx())
-	srcHeight := uint(src.Bounds().Dy())
+func ResizeMax(maxWidth, maxHeight int, src image.Image, scale draw.Scaler) image.Image {
+	srcWidth := src.Bounds().Dx()
+	srcHeight := src.Bounds().Dy()
 	if srcWidth <= maxWidth && srcHeight <= maxHeight {
 		return src
 	}
-	outWidth := uint(0)
-	outHeight := uint(0)
+	outWidth := 0
+	outHeight := 0
 	if maxHeight == 0 {
 		outWidth = maxWidth
 	} else if maxWidth == 0 {
@@ -92,14 +92,14 @@ func ResizeMax(maxWidth, maxHeight uint, src image.Image, scale draw.Scaler) ima
 // ResizeMin resizes an image to minimum dimensions. To resize
 // to a minimum of 800 pixels width, the following can be used:
 // `ResizeMin(800, 0, img, nil)`.
-func ResizeMin(minWidth, minHeight uint, src image.Image, scale draw.Scaler) image.Image {
-	srcWidth := uint(src.Bounds().Dx())
-	srcHeight := uint(src.Bounds().Dy())
+func ResizeMin(minWidth, minHeight int, src image.Image, scale draw.Scaler) image.Image {
+	srcWidth := src.Bounds().Dx()
+	srcHeight := src.Bounds().Dy()
 	if srcWidth >= minWidth && srcHeight >= minHeight {
 		return src
 	}
-	outWidth := uint(0)
-	outHeight := uint(0)
+	outWidth := 0
+	outHeight := 0
 	if minHeight == 0 {
 		outWidth = minWidth
 	} else if minWidth == 0 {
@@ -161,9 +161,9 @@ func ResizeSameX(images []image.Image, larger bool) []image.Image {
 	maxX := imgs.DxMax()
 	for i, img := range images {
 		if larger && img.Bounds().Dx() != maxX {
-			images[i] = Resize(uint(maxX), 0, img, ScalerBest())
+			images[i] = Resize(maxX, 0, img, ScalerBest())
 		} else if !larger && img.Bounds().Dx() != minX {
-			images[i] = Resize(uint(minX), 0, img, ScalerBest())
+			images[i] = Resize(minX, 0, img, ScalerBest())
 		}
 	}
 	return images
@@ -176,9 +176,9 @@ func ResizeSameY(images []image.Image, larger bool) []image.Image {
 	maxY := imgs.DyMax()
 	for i, img := range images {
 		if larger && img.Bounds().Dy() != maxY {
-			images[i] = Resize(0, uint(maxY), img, ScalerBest())
+			images[i] = Resize(0, maxY, img, ScalerBest())
 		} else if !larger && img.Bounds().Dy() != minY {
-			images[i] = Resize(0, uint(minY), img, ScalerBest())
+			images[i] = Resize(0, minY, img, ScalerBest())
 		}
 	}
 	return images

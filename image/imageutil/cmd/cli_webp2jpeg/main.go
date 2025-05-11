@@ -27,7 +27,7 @@ func main() {
 	logutil.FatalErr(err)
 	fmt.Printf("GOT: [%s]\n", format)
 	if opts.WidthMin > 0 {
-		img = imageutil.ResizeMin(uint(opts.WidthMin), 0, img, imageutil.ScalerBest())
+		img = imageutil.ResizeMin(opts.WidthMin, 0, img, imageutil.ScalerBest())
 	}
 
 	im := imageutil.Image{Image: img}

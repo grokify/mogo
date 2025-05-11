@@ -11,8 +11,8 @@ import (
 type cliOptions struct {
 	Input   string `short:"i" long:"input dir/file" description:"A dir or file" value-name:"FILE" required:"true"`
 	Output  string `short:"o" long:"output dir/filefile" description:"A dir or file" required:"true"`
-	Height  uint   `short:"h" long:"height" description:"Height"`
-	Width   uint   `short:"w" long:"width" description:"Width"`
+	Height  uint32 `short:"h" long:"height" description:"Height"`
+	Width   uint32 `short:"w" long:"width" description:"Width"`
 	Quality int    `short:"q" long:"quality" description:"Quality"`
 }
 
@@ -23,7 +23,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = imageutil.ResizePathJPEG(opts.Input, opts.Output, opts.Width, opts.Height,
+	err = imageutil.ResizePathJPEG(opts.Input, opts.Output, int(opts.Width), int(opts.Height),
 		&imageutil.JPEGEncodeOptions{
 			Options: &jpeg.Options{Quality: opts.Quality},
 		})

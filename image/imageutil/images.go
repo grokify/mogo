@@ -119,7 +119,7 @@ func (imgs Images) ConsistentSize(scale draw.Scaler, yAlign string) {
 	}
 	for i, img := range imgs {
 		if img.Bounds().Dx() != dxMax {
-			imgs[i] = Resize(uint(dxMax), 0, img, scale)
+			imgs[i] = Resize(dxMax, 0, img, scale)
 		}
 	}
 	dyMin := imgs.DyMin()

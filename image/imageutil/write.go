@@ -59,7 +59,7 @@ var (
 	ErrOutDirNotDir     = errors.New("output directory is not a directory")
 )
 
-func ResizePathJPEG(src, out string, x, y uint, o *JPEGEncodeOptions) error {
+func ResizePathJPEG(src, out string, x, y int, o *JPEGEncodeOptions) error {
 	if isDirSrc, err := osutil.IsDir(src); err != nil {
 		return err
 	} else if isDirSrc {
@@ -69,7 +69,7 @@ func ResizePathJPEG(src, out string, x, y uint, o *JPEGEncodeOptions) error {
 	}
 }
 
-func ResizePathJPEGDir(src, out string, x, y uint, o *JPEGEncodeOptions) error {
+func ResizePathJPEGDir(src, out string, x, y int, o *JPEGEncodeOptions) error {
 	if src == "" {
 		return ErrSrcDirNotDefined
 	} else if out == "" {
@@ -106,7 +106,7 @@ func ResizePathJPEGDir(src, out string, x, y uint, o *JPEGEncodeOptions) error {
 	return nil
 }
 
-func ResizePathJPEGFile(src, out string, x, y uint, o *JPEGEncodeOptions) error {
+func ResizePathJPEGFile(src, out string, x, y int, o *JPEGEncodeOptions) error {
 	if img, _, err := ReadImageFile(src); err != nil {
 		return err
 	} else {
