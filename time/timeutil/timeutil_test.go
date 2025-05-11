@@ -5,10 +5,10 @@ import (
 )
 
 var dt6ForDT14Tests = []struct {
-	v    int64
-	want int32
+	v    int
+	want int
 }{
-	{int64(20060102150405), int32(20060102)}}
+	{20060102150405, 20060102}}
 
 func TestDT6ForDT14(t *testing.T) {
 	for _, tt := range dt6ForDT14Tests {

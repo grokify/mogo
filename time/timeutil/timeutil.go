@@ -75,12 +75,12 @@ func (tm TimeMore) DT6() (uint32, error) {
 }
 
 // DT6ForDT14 returns the Dt6 value for Dt14.
-func DT6ForDT14(dt14 int64) int32 {
-	return int32(float64(dt14) / float64(1000000))
+func DT6ForDT14(dt14 int) int {
+	return int(float64(dt14) / float64(1000000))
 }
 
 // TimeForDT6 returns a time.Time value given a Dt6 value.
-func TimeForDT6(dt6 int32) (time.Time, error) {
+func TimeForDT6(dt6 int) (time.Time, error) {
 	return time.Parse(DT6, strconv.FormatInt(int64(dt6), 10))
 }
 
