@@ -189,6 +189,21 @@ type Venn2ResultOrdered[O cmp.Ordered] struct {
 	Union        []O
 }
 
+func (res Venn2ResultOrdered[O]) Stats() Venn2ResultStats {
+	return Venn2ResultStats{
+		Intersection: len(res.Intersection),
+		FirstOnly:    len(res.FirstOnly),
+		SecondOnly:   len(res.SecondOnly),
+		Union:        len(res.Union)}
+}
+
+type Venn2ResultStats struct {
+	Intersection int
+	FirstOnly    int
+	SecondOnly   int
+	Union        int
+}
+
 func Venn2Sort[O cmp.Ordered](s1, s2 []O) Venn2ResultOrdered[O] {
 	intersection, union, anotb, bnota := []O{}, []O{}, []O{}, []O{}
 	for _, s1x := range s1 {
