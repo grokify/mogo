@@ -19,14 +19,14 @@ const (
 
 // Crop takes an image and crops it to the specified rectangle.
 func Crop(src image.Image, retain image.Rectangle) image.Image {
-	new := image.NewRGBA(retain)
-	draw.Draw(new, new.Bounds(), src, retain.Min, draw.Over)
-	return new
+	out := image.NewRGBA(retain)
+	draw.Draw(out, out.Bounds(), src, retain.Min, draw.Over)
+	return out
 }
 
 // CropX crops an image by its width horizontally.
-func CropX(src image.Image, width uint, align string) image.Image {
-	if int(width) >= src.Bounds().Dx() {
+func CropX(src image.Image, width int, align string) image.Image {
+	if width < 0 || width >= src.Bounds().Dx() {
 		return src
 	}
 	var xMin int
@@ -34,20 +34,20 @@ func CropX(src image.Image, width uint, align string) image.Image {
 	case AlignLeft:
 		xMin = src.Bounds().Min.X
 	case AlignRight:
-		xMin = src.Bounds().Max.X - int(width)
+		xMin = src.Bounds().Max.X - width
 	default:
-		xMin = (src.Bounds().Max.X - int(width)) / 2
+		xMin = (src.Bounds().Max.X - width) / 2
 	}
 	return Crop(src, image.Rect(
 		xMin,
 		src.Bounds().Min.Y,
-		xMin+int(width),
+		xMin+width,
 		src.Bounds().Max.Y))
 }
 
 // CropY crops an image by its height vertically.
-func CropY(src image.Image, height uint, align string) image.Image {
-	if int(height) >= src.Bounds().Dy() {
+func CropY(src image.Image, height int, align string) image.Image {
+	if height < 0 || height >= src.Bounds().Dy() {
 		return src
 	}
 	var yMin int
@@ -55,15 +55,15 @@ func CropY(src image.Image, height uint, align string) image.Image {
 	case AlignTop:
 		yMin = src.Bounds().Min.Y
 	case AlignBottom:
-		yMin = src.Bounds().Max.Y - int(height)
+		yMin = src.Bounds().Max.Y - height
 	default:
-		yMin = (src.Bounds().Max.Y - int(height)) / 2
+		yMin = (src.Bounds().Max.Y - height) / 2
 	}
 	return Crop(src, image.Rect(
 		src.Bounds().Min.X,
 		yMin,
 		src.Bounds().Max.X,
-		yMin+int(height)))
+		yMin+height))
 }
 
 func CropPadding(src image.Image, isPadding padding.IsPaddingFunc) image.Image {
@@ -112,9 +112,9 @@ func squareSmaller(src image.Image) image.Image {
 	height := src.Bounds().Dy()
 	switch {
 	case width > height:
-		return CropX(src, uint(height), AlignCenter)
+		return CropX(src, height, AlignCenter)
 	case width < height:
-		return CropY(src, uint(width), AlignCenter)
+		return CropY(src, width, AlignCenter)
 	default:
 		return src
 	}
