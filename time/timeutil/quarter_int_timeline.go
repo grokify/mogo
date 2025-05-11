@@ -2,6 +2,8 @@ package timeutil
 
 import (
 	"fmt"
+
+	"github.com/grokify/mogo/type/ordered"
 )
 
 func MinInt32(ints []int32) int32 {
@@ -34,36 +36,15 @@ func MaxInt32(ints []int32) int32 {
 	return max
 }
 
-func MinMaxInt32(ints []int32) (int32, int32) {
-	min := int32(0)
-	max := int32(0)
-	init := false
-	for _, this := range ints {
-		if !init {
-			min = this
-			max = this
-			init = true
-			continue
-		}
-		if this < min {
-			min = this
-		}
-		if this > max {
-			max = this
-		}
-	}
-	return min, max
-}
-
-func QuarterInt32Timeline(ints []int32) ([]int32, error) {
-	qtrs := []int32{}
-	min, max := MinMaxInt32(ints)
+func YearQuarterTimeline(yyyyqs []int) ([]int, error) {
+	qtrs := []int{}
+	min, max := ordered.MinMax(yyyyqs...)
 	if min > 0 {
 		qtrs = append(qtrs, min)
 		this := min
 		var err error
 		for this < max {
-			this, err = QuarterInt32Add(this, 1)
+			this, err = YearQuarterAdd(this, 1)
 			if err != nil {
 				return qtrs, err
 			}
@@ -74,19 +55,19 @@ func QuarterInt32Timeline(ints []int32) ([]int32, error) {
 }
 
 type QuarterTimeline struct {
-	min         int32
-	max         int32
+	min         int
+	max         int
 	initialized bool
-	timeline    []int32
+	timeline    []int
 }
 
-func (qt *QuarterTimeline) AddInit(yyyyq int32) {
+func (qt *QuarterTimeline) AddInit(yyyyq int) {
 	qt.min = yyyyq
 	qt.max = yyyyq
 	qt.initialized = true
 }
 
-func (qt *QuarterTimeline) Add(yyyyq int32) {
+func (qt *QuarterTimeline) Add(yyyyq int) {
 	if !qt.initialized {
 		qt.AddInit(yyyyq)
 		return
@@ -108,11 +89,11 @@ func (qt *QuarterTimeline) Inflate() error {
 	return nil
 }
 
-func (qt *QuarterTimeline) Timeline() ([]int32, error) {
-	return QuarterInt32Timeline([]int32{qt.min, qt.max})
+func (qt *QuarterTimeline) Timeline() ([]int, error) {
+	return YearQuarterTimeline([]int{qt.min, qt.max})
 }
 
-func (qt *QuarterTimeline) TimelineIndex(yyyyq int32) (int, error) {
+func (qt *QuarterTimeline) TimelineIndex(yyyyq int) (int, error) {
 	if len(qt.timeline) == 0 {
 		if err := qt.Inflate(); err != nil {
 			return 0, err

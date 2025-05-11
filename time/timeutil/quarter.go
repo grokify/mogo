@@ -4,17 +4,9 @@ import (
 	"fmt"
 	"math"
 	"time"
-)
 
-/*
-// QuarterStart returns a time.Time for the beginning of the
-// quarter in UTC time.
-func QuarterStart(dt time.Time) time.Time {
-	dt = dt.UTC()
-	qm := QuarterToMonth(MonthToQuarter(uint8(dt.Month())))
-	return time.Date(dt.Year(), time.Month(qm), 1, 0, 0, 0, 0, time.UTC)
-}
-*/
+	"github.com/grokify/mogo/pointer"
+)
 
 func QuarterStartString(t time.Time) string {
 	dtStart := NewTimeMore(t, 0).QuarterStart()
@@ -33,36 +25,17 @@ func DeltaQuarters(dt time.Time, num int) time.Time {
 }
 */
 
-func quarterNextSingle(t time.Time) time.Time {
-	return TimeDT6AddNMonths(NewTimeMore(t, 0).QuarterStart(), 3)
-}
-
-func QuarterAdd(t time.Time, count int) time.Time {
-	if count == 0 {
+func QuarterAdd(t time.Time, addQuarters int) time.Time {
+	if addQuarters == 0 {
 		return NewTimeMore(t, 0).QuarterStart()
-	} else if count < 0 {
-		return quarterPrev(t, uint(-1*count))
 	}
-	return quarterNext(t, uint32(count))
-}
-
-func quarterNext(t time.Time, count uint32) time.Time {
-	t = NewTimeMore(t, 0).QuarterStart()
-	for i := 0; i < int(count); i++ {
-		t = quarterNextSingle(t)
-	}
-	return t
-}
-
-func quarterPrevSingle(t time.Time) time.Time {
-	return TimeDT6AddNMonths(NewTimeMore(t, 0).QuarterStart(), -3)
-}
-
-func quarterPrev(t time.Time, num uint) time.Time {
-	for i := 0; i < int(num); i++ {
-		t = quarterPrevSingle(t)
-	}
-	return t
+	y, m := AddMonths(t.Year(), int(t.Month()), addQuarters*3)
+	newTime := time.Date(
+		y, time.Month(m), 1,
+		0, 0, 0, 0,
+		pointer.Pointer(pointer.Dereference(t.Location())),
+	)
+	return NewTimeMore(newTime, 0).QuarterStart()
 }
 
 // MonthToQuarter converts a month to a calendar quarter.

@@ -7,8 +7,8 @@ import (
 
 var mustInQuarterRangeTests = []struct {
 	v     string
-	start int32
-	end   int32
+	start int
+	end   int
 	in    bool
 }{
 	{"2019-11-11T00:00:00Z", 20191, 20194, true},
@@ -21,7 +21,7 @@ func TestMustInQuarterRange(t *testing.T) {
 		if err != nil {
 			t.Errorf("DayTestMustInQuarterRange Date Parse Error [%v]", err.Error())
 		}
-		in := MustInQuarterRange(dt, tt.start, tt.end)
+		in := MustInYearQuarterRange(dt, tt.start, tt.end)
 		if tt.in != in {
 			t.Errorf("MustInQuarterRange(\"%v\", %v, %v): want [%v], got [%v]", tt.v, tt.start, tt.end, tt.in, in)
 		}
@@ -29,8 +29,8 @@ func TestMustInQuarterRange(t *testing.T) {
 }
 
 var numQuartersInt32Tests = []struct {
-	start int32
-	end   int32
+	start int
+	end   int
 	num   int
 }{
 	{20191, 20191, 1},
@@ -55,7 +55,7 @@ func TestNumQuartersInt32(t *testing.T) {
 
 func TestDeltaQuarterInt32(t *testing.T) {
 	for _, tt := range numQuartersInt32Tests {
-		got, err := QuarterInt32Add(tt.start, tt.num-1)
+		got, err := YearQuarterAdd(tt.start, tt.num-1)
 		if err != nil {
 			t.Errorf("DeltaQuarterInt32 Error [%v]", err.Error())
 		}
