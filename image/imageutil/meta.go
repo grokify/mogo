@@ -82,12 +82,12 @@ func (meta *ImageMeta) ColorsHistogram() map[string]uint {
 }
 
 type ImageMetadata struct {
-	Width  uint
-	Height uint
+	Width  int
+	Height int
 }
 
 func NewImageMetadata(img image.Image) ImageMetadata {
 	return ImageMetadata{
-		Width:  uint(img.Bounds().Dx()),
-		Height: uint(img.Bounds().Dy())}
+		Width:  img.Bounds().Dx(),
+		Height: img.Bounds().Dy()}
 }

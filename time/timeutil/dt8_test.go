@@ -30,23 +30,22 @@ func TestDateTime8(t *testing.T) {
 		txt, err := tt.dt8.Format(tt.layout, tt.loc)
 		if txt != tt.t {
 			t.Errorf("timeutil.DateTime8.Format(\"%s\") val (%d) Error: err (%s)",
-				tt.layout, int32(tt.dt8), err.Error())
+				tt.layout, tt.dt8, err.Error())
 		}
 		if txt != tt.t {
 			t.Errorf("timeutil.DateTime8.Format(\"%s\") val (%d) Mismatch: want (%s) got (%s)",
-				tt.layout, int32(tt.dt8), tt.t, txt)
+				tt.layout, tt.dt8, tt.t, txt)
 		}
 
 		dt, err := tt.dt8.Time(tt.loc)
 		if err != nil {
 			t.Errorf("timeutil.DateTime8.Time() val (%d) Error: err (%s)",
-				int32(tt.dt8), err.Error())
+				tt.dt8, err.Error())
 		}
 		if int(tt.y) != dt.Year() || int(tt.m) != int(dt.Month()) || int(tt.d) != dt.Day() {
 			t.Errorf("timeutil.DateTime8.Time() val (%d) Mismatch: want (%d,%d,%d) got (%d,%d,%d)",
 				int(tt.dt8), tt.y, tt.m, tt.d, dt.Year(), dt.Month(), dt.Day())
 		}
-		// fmt.Println(dt.Location().String())
 	}
 }
 
@@ -92,6 +91,29 @@ func TestDateTime8UnmarshalJSON(t *testing.T) {
 				t.Errorf("datetime8: json.Unmarshal(%s): error (%s)", tt.v, err.Error())
 			}
 		}
-		// fmt.Printf("RES (%d)\n", w.DateTime8)
+	}
+}
+
+var dtParseUint32sTests = []struct {
+	yyyy uint32
+	mm   uint32
+	dd   uint32
+	want DateTime8
+}{
+	{1582, 10, 15, 15821015},
+	{1776, 7, 4, 17760704},
+	{1896, 4, 6, 18960406},
+	{2006, 1, 2, 20060102},
+}
+
+func TestDT8ParseUint32s(t *testing.T) {
+	for _, tt := range dtParseUint32sTests {
+		try, err := DT8ParseUint32s(tt.yyyy, tt.mm, tt.dd)
+		if err != nil {
+			t.Errorf("timeutil.DT8ParseUints(%d,%d,%d): error (%s)", tt.yyyy, tt.mm, tt.dd, err.Error())
+		}
+		if try != tt.want {
+			t.Errorf("timeutil.DT8ParseUints(%d,%d,%d): want (%d), got (%d)", tt.yyyy, tt.mm, tt.dd, tt.want, try)
+		}
 	}
 }

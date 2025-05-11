@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+
+	"github.com/grokify/mogo/strconv/strconvutil"
 )
 
 // TimeOpts represnts a struct for `time.Date`.
@@ -187,10 +189,9 @@ func (tm TimeMore) DT8() (DateTime8, error) {
 	if !dt8TimeInbounds(tm.time) {
 		return 0, ErrDateTime8OutOfBounds
 	}
-	s := tm.time.Format(DT8)
-	iDt8, err := strconv.ParseInt(s, 10, 32)
+	iDt8, err := strconvutil.Atou32(tm.time.Format(DT8))
 	if err != nil {
-		panic(err)
+		return 0, err
 	}
 	return DateTime8(iDt8), nil
 }
