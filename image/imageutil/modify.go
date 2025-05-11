@@ -235,11 +235,11 @@ func PaintColor(img draw.Image, clr color.Color, area image.Rectangle) {
 
 // AddBorder adds a border to a `draw.Image`. If you have an `image.Image`,
 // first convert it with `ImageToRGBA(img)`.
-func AddBorder(img draw.Image, clr color.Color, width uint) draw.Image {
-	if img == nil || width == 0 {
+func AddBorder(img draw.Image, clr color.Color, width int) draw.Image {
+	if img == nil || width <= 0 {
 		return img
 	}
-	border := int(width)
+	border := width
 	w, h := img.Bounds().Dx(), img.Bounds().Dy()
 	w2 := w + border*2
 	h2 := h + border*2
@@ -258,8 +258,8 @@ func AddBorder(img draw.Image, clr color.Color, width uint) draw.Image {
 	return i2
 }
 
-func AddBorderAverageColor(img image.Image, width uint) image.Image {
-	if img == nil || width == 0 {
+func AddBorderAverageColor(img image.Image, width int) image.Image {
+	if img == nil || width <= 0 {
 		return img
 	}
 	imgRGBA := ImageToRGBA(img)

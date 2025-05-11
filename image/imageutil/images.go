@@ -128,7 +128,7 @@ func (imgs Images) ConsistentSize(scale draw.Scaler, yAlign string) {
 	}
 	for i, img := range imgs {
 		if img.Bounds().Dy() != dyMin {
-			imgs[i] = CropY(img, uint(dyMin), yAlign)
+			imgs[i] = CropY(img, dyMin, yAlign)
 		}
 	}
 }

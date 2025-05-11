@@ -160,7 +160,7 @@ func ConvertBits8To24(c, a uint8) int {
 }
 
 func ColorAverageImage(i image.Image) color.Color {
-	var r, g, b uint64
+	var r, g, b int
 
 	bounds := i.Bounds()
 
@@ -168,13 +168,13 @@ func ColorAverageImage(i image.Image) color.Color {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
 			pr, pg, pb, _ := i.At(x, y).RGBA()
 
-			r += uint64(pr * pr)
-			g += uint64(pg * pg)
-			b += uint64(pb * pg)
+			r += int(pr * pr)
+			g += int(pg * pg)
+			b += int(pb * pg)
 		}
 	}
 
-	d := uint64(bounds.Dy() * bounds.Dx())
+	d := bounds.Dy() * bounds.Dx()
 
 	r /= d
 	g /= d

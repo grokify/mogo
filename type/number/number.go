@@ -34,8 +34,8 @@ func IntSliceDedupe(elems []int, sortElems bool) []int {
 	return deduped
 }
 
-func IntLength[I int | int8 | int16 | int32 | int64](num I) uint {
-	return uint(len(strconv.Itoa(int(num))))
+func IntLength[I int | int8 | int16 | int32 | int64](num I) int {
+	return len(strconv.Itoa(int(num)))
 }
 
 /*

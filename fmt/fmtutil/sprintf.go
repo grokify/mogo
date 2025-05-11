@@ -7,8 +7,11 @@ import (
 	"github.com/grokify/mogo/type/number"
 )
 
-func SprintfFormatLeadingCharLength(char string, length uint) string {
-	return "%" + char + strconv.Itoa(int(length)) + "d"
+func SprintfFormatLeadingCharLength(char string, length int) string {
+	if length < 0 {
+		length = 0
+	}
+	return "%" + char + strconv.Itoa(length) + "d"
 }
 
 func SprintfFormatLeadingCharMaxIntVal(char string, value int) string {
