@@ -9,7 +9,7 @@ import (
 
 // DT6FormatOrDefault coverts an `int32` to a `layout`, using `def`ault. Panics on
 // `time.Parse()` error.
-func MustDT6FormatOrDefault(layout string, dt6 int32, def string) string {
+func MustDT6FormatOrDefault(layout string, dt6 int, def string) string {
 	str, err := DT6FormatOrDefault(layout, dt6, def)
 	if err != nil {
 		panic(err)
@@ -18,7 +18,7 @@ func MustDT6FormatOrDefault(layout string, dt6 int32, def string) string {
 }
 
 // DT6FormatOrDefault coverts an `int32` to a `layout`, using `def`ault
-func DT6FormatOrDefault(layout string, dt6 int32, def string) (string, error) {
+func DT6FormatOrDefault(layout string, dt6 int, def string) (string, error) {
 	if dt6 <= 0 {
 		return def, nil
 	}
@@ -32,7 +32,7 @@ func DT6FormatOrDefault(layout string, dt6 int32, def string) (string, error) {
 // StartEndDT6s returns a start and end from a range. `-1` is returned if a 0 lenth slice
 // is provided. If only a start date is provided, a `0` is returned to represent "not provided",
 // which can indicate something like "the present".
-func StartEndDT6s(dt6s []int32) (int32, int32) {
+func StartEndDT6s(dt6s []int) (int, int) {
 	if len(dt6s) == 0 {
 		return -1, -1
 	}
@@ -58,7 +58,7 @@ func StartEndDT6s(dt6s []int32) (int32, int32) {
 // DT6sToString returns a formatted date range. This function is can be used to generate a string such as:
 // ` (Jan 2007-Dec2008)` with the call `DT6sToString(200701, 200812, "Jan 2006", "Present", " (", "-", ")")` or
 // ` (Jan 2007-Present)` with the call `DT6sToString(200701, 0, "Jan 2006", "Present", " (", "-", ")")`.
-func DT6sToString(startDT6, endDT6 int32, layout, presentText, prefixText, joinText, suffixText string) (string, error) {
+func DT6sToString(startDT6, endDT6 int, layout, presentText, prefixText, joinText, suffixText string) (string, error) {
 	if startDT6 <= 0 && endDT6 <= 0 {
 		return "", nil
 	}
@@ -76,7 +76,7 @@ func DT6sToString(startDT6, endDT6 int32, layout, presentText, prefixText, joinT
 	return "", nil
 }
 
-func DT6sToStrings(startDT6, endDT6 int32, layout, presentText string) (string, string, error) {
+func DT6sToStrings(startDT6, endDT6 int, layout, presentText string) (string, string, error) {
 	if startDT6 <= 0 && endDT6 <= 0 {
 		return "", "", nil
 	}

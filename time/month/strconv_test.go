@@ -8,13 +8,13 @@ import (
 )
 
 var startEndDT6sTests = []struct {
-	v   []int32
-	min int32
-	max int32
+	v   []int
+	min int
+	max int
 }{
-	{[]int32{}, -1, -1},
-	{[]int32{202301}, 202301, 0},
-	{[]int32{202201, 202312}, 202201, 202312},
+	{[]int{}, -1, -1},
+	{[]int{202301}, 202301, 0},
+	{[]int{202201, 202312}, 202201, 202312},
 }
 
 func TestStartEndDT6sTests(t *testing.T) {
