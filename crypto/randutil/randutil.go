@@ -71,10 +71,6 @@ func MustFloat64() float64 {
 }
 
 // Intn returns a random number backed by `crypto/rand`.
-func Intn(n uint) int {
-	return mrand.New(NewCryptoRandSource()).Intn(int(n)) // #nosec G404 - `NewCryptoRandSource()` uses `crypto/rand`.
-}
-
-func Int64n(n uint) int64 {
-	return int64(Intn(n))
+func Intn(n int) int {
+	return mrand.New(NewCryptoRandSource()).Intn(n) // #nosec G404 - `NewCryptoRandSource()` uses `crypto/rand`.
 }

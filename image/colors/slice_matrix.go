@@ -6,7 +6,7 @@ import (
 	"sort"
 )
 
-func MatrixColumn(m [][]color.Color, colIdx uint) ([]color.Color, error) {
+func MatrixColumn(m [][]color.Color, colIdx uint32) ([]color.Color, error) {
 	colIdxInt := int(colIdx)
 	clrs := []color.Color{}
 	for i, row := range m {

@@ -195,10 +195,11 @@ func (tr *TimeRange) Duration() time.Duration {
 func (tr *TimeRange) Nanoseconds() uint64 {
 	tr.Normalize()
 	dur := tr.Max.Sub(tr.Min)
-	if dur.Nanoseconds() < 0 {
+	if ns := dur.Nanoseconds(); ns < 0 {
 		panic("E_TIMERANGE_DURATION_IS_NEGATIVE")
+	} else {
+		return uint64(ns)
 	}
-	return uint64(dur.Nanoseconds())
 }
 
 func (tr *TimeRange) IntersectionDuration(tr2 TimeRange) time.Duration {

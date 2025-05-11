@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/grokify/mogo/strconv/strconvutil"
 )
 
 var ErrDateTime8OutOfBounds = errors.New("datetime8: time.Time is out of bounds")
@@ -22,11 +24,11 @@ func (dt8 DateTime8) Format(layout string, loc *time.Location) (string, error) {
 	return dt.Format(layout), nil
 }
 
-func (dt8 DateTime8) Split() (uint32, uint32, uint32) {
-	year := dt8 / 10000
-	month := int(dt8/100) - (int(year) * 100)
-	day := int(dt8) - (int(year) * 10000) - (month * 100)
-	return uint32(year), uint32(month), uint32(day)
+func (dt8 DateTime8) Split() (year uint32, month uint32, day uint32) {
+	year = uint32(dt8) / 10000
+	month = uint32(dt8)/100 - (year * 100)
+	day = uint32(dt8) - (year * 10000) - (month * 100)
+	return
 }
 
 /*
@@ -75,11 +77,11 @@ func (dt8 *DateTime8) UnmarshalJSON(data []byte) error {
 		*dt8 = 0
 		return nil
 	}
-	i, err := strconv.Atoi(s)
+	i, err := strconvutil.Atou32(s)
 	if err != nil {
 		return &DateTime8UnmarshalError{Msg: err.Error()}
 	}
-	d8 := DateTime8(uint32(i))
+	d8 := DateTime8(i)
 	err = d8.Validate()
 	if err != nil {
 		return err
@@ -107,13 +109,8 @@ func DT8ParseString(layout, value string) (DateTime8, error) {
 }
 
 // DT8ParseUints returns a `DateTime8` value for year, month, and day.
-func DT8ParseUints(yyyy, mm, dd uint) (DateTime8, error) {
-	dt8String := fmt.Sprintf("%04d%02d%02d", yyyy, mm, dd)
-	dt8Int, err := strconv.ParseInt(dt8String, 10, 32)
-	if err != nil {
-		panic(err)
-	}
-	dt8 := DateTime8(int32(dt8Int))
+func DT8ParseUint32s(yyyy, mm, dd uint32) (DateTime8, error) {
+	dt8 := DateTime8(yyyy*100*100 + mm*100 + dd)
 	return dt8, dt8.Validate()
 }
 

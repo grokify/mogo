@@ -12,8 +12,8 @@ func RandString(alphabet string, length uint) string {
 		alphabet = basex.AlphabetBase16
 	}
 	var out string
-	for i := 0; i < int(length); i++ {
-		idx := Intn(uint(len(alphabet)))
+	for i := uint(0); i < length; i++ {
+		idx := Intn(len(alphabet))
 		if idx >= len(alphabet) {
 			panic("idx too large")
 		}

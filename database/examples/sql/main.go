@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 
 	"github.com/grokify/mogo/config"
 	"github.com/grokify/mogo/database/sql"
 	"github.com/grokify/mogo/fmt/fmtutil"
+	"github.com/grokify/mogo/strconv/strconvutil"
 )
 
 func main() {
@@ -19,7 +19,7 @@ func main() {
 	}
 	fmtutil.MustPrintJSON(files)
 
-	col, err := strconv.Atoi(os.Getenv("SQL_CSV_FILE_COL"))
+	col, err := strconvutil.Atou32(os.Getenv("SQL_CSV_FILE_COL"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -30,7 +30,7 @@ func main() {
 		',',
 		true,
 		true,
-		uint32(col))
+		col)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -43,10 +43,10 @@ func QuarterAdd(t time.Time, count int) time.Time {
 	} else if count < 0 {
 		return quarterPrev(t, uint(-1*count))
 	}
-	return quarterNext(t, uint(count))
+	return quarterNext(t, uint32(count))
 }
 
-func quarterNext(t time.Time, count uint) time.Time {
+func quarterNext(t time.Time, count uint32) time.Time {
 	t = NewTimeMore(t, 0).QuarterStart()
 	for i := 0; i < int(count); i++ {
 		t = quarterNextSingle(t)

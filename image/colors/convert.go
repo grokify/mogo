@@ -6,7 +6,6 @@ import (
 	"image/color"
 	"math"
 	"regexp"
-	"strconv"
 	"strings"
 
 	"github.com/grokify/mogo/errors/errorsutil"
@@ -112,11 +111,11 @@ func ParseGoogle(googString string) (color.RGBA, error) {
 		return color.RGBA{},
 			fmt.Errorf("E_COLOR_NOT_GOOG_MATCH [%s]", googString)
 	}
-	idxInt, err := strconv.Atoi(m[1])
+	idxInt, err := strconvutil.Atou32(m[1])
 	if err != nil {
 		panic(err)
 	}
-	col := GoogleChartColorX(uint32(idxInt))
+	col := GoogleChartColorX(idxInt)
 	return col, nil
 }
 
