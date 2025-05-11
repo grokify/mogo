@@ -4,10 +4,12 @@
 package timeutil
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"time"
 
+	"github.com/grokify/mogo/pointer"
 	"github.com/grokify/mogo/strconv/strconvutil"
 )
 
@@ -53,9 +55,23 @@ func UnixToDay(epoch int64) time.Time {
 	return NewTimeMore(time.Unix(epoch, 0).UTC(), 0).DayStart()
 }
 
-// DT6 returns the Dt6 value for time.Time.
-func (tm TimeMore) DT6() int32 {
-	return int32(tm.time.Year()*100 + int(tm.time.Month()))
+func (tm TimeMore) DT4() (uint32, error) {
+	if yyyy := tm.time.Year(); yyyy < 1000 || yyyy > 9999 {
+		return 0, errors.New("year is not length 4")
+	} else {
+		return uint32(yyyy), nil
+	}
+}
+
+// DT6 returns the DT6 value for time.Time.
+func (tm TimeMore) DT6() (uint32, error) {
+	if y, err := tm.DT4(); err != nil {
+		return 0, err
+	} else if m := int(tm.time.Month()); m < 1 || m > 12 {
+		panic(fmt.Sprintf("month out of range (%d)", m))
+	} else {
+		return y + uint32(m), nil
+	}
 }
 
 // DT6ForDT14 returns the Dt6 value for Dt14.
@@ -68,13 +84,13 @@ func TimeForDT6(dt6 int32) (time.Time, error) {
 	return time.Parse(DT6, strconv.FormatInt(int64(dt6), 10))
 }
 
-func DT6Parse(dt6 int32) (int16, int8) {
-	year := dt6 / 100
-	month := int(dt6) - (int(year) * 100)
-	return int16(year), int8(month)
+func DT6Parse(dt6 uint32) (year uint32, month uint32) {
+	year = dt6 / 100
+	month = dt6 - (year * 100)
+	return
 }
 
-func DT6Prev(dt6 int32) int32 {
+func DT6Prev(dt6 uint32) uint32 {
 	year, month := DT6Parse(dt6)
 	if month == 1 {
 		month = 12
@@ -82,10 +98,10 @@ func DT6Prev(dt6 int32) int32 {
 	} else {
 		month = month - 1
 	}
-	return int32(year)*100 + int32(month)
+	return year*100 + month
 }
 
-func DT6Next(dt6 int32) int32 {
+func DT6Next(dt6 uint32) uint32 {
 	year, month := DT6Parse(dt6)
 	if month == 12 {
 		month = 1
@@ -93,52 +109,39 @@ func DT6Next(dt6 int32) int32 {
 	} else {
 		month++
 	}
-	return int32(year)*100 + int32(month)
+	return year*100 + month
 }
 
-func TimeDT6AddNMonths(t time.Time, numMonths int) time.Time {
-	if numMonths == 0 {
-		return t
-	} else if numMonths < 0 {
-		return timeDT6SubNMonths(t, uint(-numMonths))
-	}
-	dt6 := NewTimeMore(t, 0).DT6()
-	for i := 0; i < numMonths; i++ {
-		dt6 = DT6Next(dt6)
-	}
-	dt6NextMonth, err := TimeForDT6(dt6)
-	if err != nil {
-		panic(fmt.Sprintf("Cannot find next month for time: %v\n", t.Format(time.RFC3339)))
-	}
-	return dt6NextMonth
+// AddMonths adds the given number of months to a (year, month) pair.
+func AddMonths(year, month, addMonths int) (int, int) {
+	totalMonths := year*12 + (month - 1) + addMonths
+	newYear := totalMonths / 12
+	newMonth := (totalMonths % 12) + 1
+	return newYear, newMonth
 }
 
-func timeDT6SubNMonths(t time.Time, numMonths uint) time.Time {
-	if numMonths == 0 {
-		return t
-	}
-	dt6 := NewTimeMore(t, 0).DT6()
-	for i := uint(0); i < numMonths; i++ {
-		dt6 = DT6Prev(dt6)
-	}
-	dt6NextMonth, err := TimeForDT6(dt6)
-	if err != nil {
-		panic(fmt.Sprintf("Cannot find next month for time: %v\n", t.Format(time.RFC3339)))
-	}
-	return dt6NextMonth
+func TimeDT6AddNMonths(t time.Time, addMonths int) time.Time {
+	newYear, newMonth := AddMonths(t.Year(), int(t.Month()), addMonths)
+	return time.Date(
+		newYear, time.Month(newMonth), 1,
+		0, 0, 0, 0,
+		pointer.Pointer(pointer.Dereference(t.Location())),
+	)
 }
 
 func TimeDT4AddNYears(t time.Time, numYears int) time.Time {
-	return time.Date(t.Year()+numYears, time.January, 1, 0, 0, 0, 0, t.Location())
+	return time.Date(t.Year()+numYears, time.January, 1, 0, 0, 0, 0,
+		pointer.Pointer(pointer.Dereference(t.Location())),
+	)
 }
 
-func DT6MinMaxSlice(minDt6 int32, maxDt6 int32) []int32 {
+func DT6MinMaxSlice(minDt6, maxDt6 uint32) []uint32 {
 	if maxDt6 < minDt6 {
 		tmpDt6 := maxDt6
 		maxDt6 = minDt6
 		minDt6 = tmpDt6
 	}
-	dt6Range := []int32{}
+	dt6Range := []uint32{}
 	curDt6 := minDt6
 	for curDt6 < maxDt6+1 {
 		dt6Range = append(dt6Range, curDt6)
