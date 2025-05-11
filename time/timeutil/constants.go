@@ -34,7 +34,7 @@ const (
 )
 
 // A Yearquarter specifies a quarter of the year (Winter = 1, ...).
-type Yearquarter uint8
+type Yearquarter int
 
 const (
 	Winter Yearquarter = 1 + iota

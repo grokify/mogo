@@ -70,7 +70,7 @@ func TestTimeMore(t *testing.T) {
 			t.Errorf("mismatch TimeMore.YearHalf() TimeMore(\"%s\", %v): want [%v], got [%v]", tt.t, tt.dow.String(), tt.yearHalf, yh)
 		}
 
-		yq := tm.YearQuarter()
+		yq := tm.YearQuarterString()
 		if yq != tt.yearQuarter {
 			t.Errorf("mismatch TimeMore.YearQuarrter() TimeMore(\"%s\", %v): want [%v], got [%v]", tt.t, tt.dow.String(), tt.yearQuarter, yq)
 		}

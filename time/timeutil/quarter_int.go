@@ -8,12 +8,11 @@ import (
 	"time"
 
 	"github.com/grokify/mogo/errors/errorsutil"
-	"github.com/grokify/mogo/math/mathutil"
-	"github.com/grokify/mogo/strconv/strconvutil"
+	"github.com/grokify/mogo/type/ordered"
 )
 
-func InQuarter(dt time.Time, yyyyq int32) (bool, error) {
-	thsQtrStart, err := QuarterInt32StartTime(yyyyq)
+func InYearQuarter(dt time.Time, yyyyq int) (bool, error) {
+	thsQtrStart, err := YearQuarterStartTime(yyyyq)
 	if err != nil {
 		return false, err
 	}
@@ -22,8 +21,8 @@ func InQuarter(dt time.Time, yyyyq int32) (bool, error) {
 		nxtQtrStart.After(dt), nil
 }
 
-func MustInQuarter(dt time.Time, yyyyq int32) bool {
-	thsQtrStart, err := QuarterInt32StartTime(yyyyq)
+func MustInYearQuarter(dt time.Time, yyyyq int) bool {
+	thsQtrStart, err := YearQuarterStartTime(yyyyq)
 	if err != nil {
 		panic(err)
 	}
@@ -33,12 +32,12 @@ func MustInQuarter(dt time.Time, yyyyq int32) bool {
 }
 
 // InQuarterRange checks to see if the date is within 2 quarters.
-func InQuarterRange(dt time.Time, yyyyq1, yyyyq2 int32) (bool, error) {
-	dtQ1, err := QuarterInt32StartTime(yyyyq1)
+func InQuarterRange(dt time.Time, yyyyq1, yyyyq2 int) (bool, error) {
+	dtQ1, err := YearQuarterStartTime(yyyyq1)
 	if err != nil {
 		return false, err
 	}
-	dtQ2, err := QuarterInt32StartTime(yyyyq2)
+	dtQ2, err := YearQuarterStartTime(yyyyq2)
 	if err != nil {
 		return false, err
 	}
@@ -47,9 +46,9 @@ func InQuarterRange(dt time.Time, yyyyq1, yyyyq2 int32) (bool, error) {
 	return (dt.Equal(dtQ1) || dt.After(dtQ1)) && (dt.Before(dtQ2Next)), nil
 }
 
-// MustInQuarterRange returns whether a date is within 2 quarters.
+// MustInYearQuarterRange returns whether a date is within 2 quarters.
 // It panics if the quarter integer is not valid.
-func MustInQuarterRange(dt time.Time, yyyyq1, yyyyq2 int32) bool {
+func MustInYearQuarterRange(dt time.Time, yyyyq1, yyyyq2 int) bool {
 	inRange, err := InQuarterRange(dt, yyyyq1, yyyyq2)
 	if err != nil {
 		panic(err)
@@ -83,64 +82,64 @@ func InQuarterTime(dt, qtr time.Time) bool {
 }
 
 func EqualQuarter(dt1, dt2 time.Time) bool {
-	return QuarterInt32ForTime(dt1) == QuarterInt32ForTime(dt2)
+	return YearQuarterForTime(dt1) == YearQuarterForTime(dt2)
 }
 
-func QuarterInt32ForTime(dt time.Time) int32 {
+func YearQuarterForTime(dt time.Time) int {
 	dt = dt.UTC()
 	q := MonthToQuarter(dt.Month())
-	return (int32(dt.Year()) * int32(10)) + int32(q)
+	return (dt.Year() * 10) + int(q)
 }
 
-func QuarterInt32Now() int32 { return QuarterInt32ForTime(time.Now()) }
+func QuarterNow() int { return YearQuarterForTime(time.Now()) }
 
-func ParseQuarterInt32StartEndTimes(yyyyq int32) (time.Time, time.Time, error) {
-	start, err := QuarterInt32StartTime(yyyyq)
+func ParseQuarterInt32StartEndTimes(yyyyq int) (time.Time, time.Time, error) {
+	start, err := YearQuarterStartTime(yyyyq)
 	if err != nil {
 		return start, start, err
 	}
 	return start, quarterEnd(start), nil
 }
 
-func ParseQuarterInt32(yyyyq int32) (int32, uint8, error) {
-	yyyy := int32(float32(yyyyq) / 10.0)
+func ParseYearQuarter(yyyyq int) (int, int, error) {
+	yyyy := int(float32(yyyyq) / 10.0)
 	q := yyyyq - 10*yyyy
 	if q < 0 {
 		q = -1 * q
 	}
 	if q < 1 || q > 4 {
-		return int32(0), uint8(0), fmt.Errorf("quarter '%v' is not valid", q)
+		return 0, 0, fmt.Errorf("quarter '%v' is not valid", q)
 	}
-	return yyyy, uint8(q), nil
+	return yyyy, q, nil
 }
 
-func QuarterStringStartTime(yyyyqStr string) (time.Time, error) {
-	yyyyq32, err := strconvutil.Atoi32(yyyyqStr)
+func YearQuarterStartTimeString(yyyyqStr string) (time.Time, error) {
+	yyyyq, err := strconv.Atoi(yyyyqStr)
 	if err != nil {
 		return time.Now(), err
 	}
-	return QuarterInt32StartTime(yyyyq32)
+	return YearQuarterStartTime(yyyyq)
 }
 
-func QuarterStringEndTime(yyyyqStr string) (time.Time, error) {
-	yyyyq32, err := strconvutil.Atoi32(yyyyqStr)
+func YearQuarterEndTimeString(yyyyqStr string) (time.Time, error) {
+	yyyyq, err := strconv.Atoi(yyyyqStr)
 	if err != nil {
 		return time.Now(), err
 	}
-	return QuarterInt32EndTime(yyyyq32)
+	return YearQuarterEndTime(yyyyq)
 }
 
-func QuarterInt32StartTime(yyyyq int32) (time.Time, error) {
-	yyyy, q, err := ParseQuarterInt32(yyyyq)
+func YearQuarterStartTime(yyyyq int) (time.Time, error) {
+	yyyy, q, err := ParseYearQuarter(yyyyq)
 	if err != nil {
 		return time.Now(), err
 	}
 	qm := QuarterToMonth(Yearquarter(q))
-	return time.Date(int(yyyy), qm, 1, 0, 0, 0, 0, time.UTC), nil
+	return time.Date(yyyy, qm, 1, 0, 0, 0, 0, time.UTC), nil
 }
 
-func QuarterInt32EndTime(yyyyq int32) (time.Time, error) {
-	qtrBeg, err := QuarterInt32StartTime(yyyyq)
+func YearQuarterEndTime(yyyyq int) (time.Time, error) {
+	qtrBeg, err := YearQuarterStartTime(yyyyq)
 	if err != nil {
 		return qtrBeg, err
 	}
@@ -148,15 +147,15 @@ func QuarterInt32EndTime(yyyyq int32) (time.Time, error) {
 }
 
 func ParseQuarterStringStartTime(yyyyqStr string) (time.Time, error) {
-	yyyyq32, err := strconvutil.Atoi32(yyyyqStr)
+	yyyyq32, err := strconv.Atoi(yyyyqStr)
 	if err != nil {
 		return time.Now(), err
 	}
-	return QuarterInt32StartTime(yyyyq32)
+	return YearQuarterStartTime(yyyyq32)
 }
 
-func QuarterInt32End(yyyyq int32) (time.Time, error) {
-	yyyy, q, err := ParseQuarterInt32(yyyyq)
+func QuarterInt32End(yyyyq int) (time.Time, error) {
+	yyyy, q, err := ParseYearQuarter(yyyyq)
 	if err != nil {
 		return time.Now(), err
 	}
@@ -166,33 +165,33 @@ func QuarterInt32End(yyyyq int32) (time.Time, error) {
 		q += 1
 	}
 	qm := QuarterToMonth(Yearquarter(q))
-	return time.Date(int(yyyy), qm, 0, 23, 59, 59, 0, time.UTC), nil
+	return time.Date(yyyy, qm, 0, 23, 59, 59, 0, time.UTC), nil
 }
 
-func ParseHalf(yyyyh int32) (int32, uint8, error) {
-	yyyy := int32(float32(yyyyh) / 10.0)
+func ParseYearHalf(yyyyh int) (int, int, error) {
+	yyyy := int(float32(yyyyh) / 10.0)
 	h := yyyyh - 10*yyyy
 	if h < 0 {
 		h = -1 * h
 	}
 	if h < 1 || h > 2 {
-		return int32(0), uint8(0), fmt.Errorf("half '%v' is not valid", h)
+		return 0, 0, fmt.Errorf("half '%v' is not valid", h)
 	}
-	return yyyy, uint8(h), nil
+	return yyyy, h, nil
 }
 
-func QuarterInt32ToYear(yyyyq int32) int32 { return int32(float32(yyyyq) / 10) }
+func YearQuarterToYear(yyyyq int) int { return int(float32(yyyyq) / 10) }
 
-func quarterInt32NextSingle(yyyyq int32) (int32, error) {
-	t, err := QuarterInt32StartTime(yyyyq)
+func quarterInt32NextSingle(yyyyq int) (int, error) {
+	t, err := YearQuarterStartTime(yyyyq)
 	if err != nil {
-		return int32(0), err
+		return 0, err
 	}
 	tNext := QuarterAdd(t, 1)
-	return QuarterInt32ForTime(tNext), nil
+	return YearQuarterForTime(tNext), nil
 }
 
-func QuarterInt32Add(yyyyq int32, numQuarters int) (int32, error) {
+func YearQuarterAdd(yyyyq int, numQuarters int) (int, error) {
 	if numQuarters < 0 {
 		return -1, fmt.Errorf("use positive number of quarters [%v]", numQuarters)
 	} else if numQuarters == 0 {
@@ -224,18 +223,18 @@ func AnyStringToQuarterTime(yyyyqSrcStr string) time.Time {
 		return time.Now().UTC()
 	}
 	// If cannot parse to integer, return now time.
-	yyyyqSrc32, err := strconvutil.Atoi32(yyyyqSrcStr)
+	yyyyqSrc, err := strconv.Atoi(yyyyqSrcStr)
 	if err != nil {
 		return time.Now().UTC()
 	}
 	// Have good yyyyq
 	// If yyyySrc == yyyyNow, return now time.
-	yyyyqNow := QuarterInt32ForTime(time.Now().UTC())
-	if yyyyqSrc32 == yyyyqNow {
+	yyyyqNow := YearQuarterForTime(time.Now().UTC())
+	if yyyyqSrc == yyyyqNow {
 		return time.Now().UTC()
 	}
 	// return quarter end time
-	dtQtrEnd, err := QuarterInt32EndTime(yyyyqSrc32)
+	dtQtrEnd, err := YearQuarterEndTime(yyyyqSrc)
 	if err != nil {
 		return time.Now().UTC()
 	}
@@ -244,16 +243,16 @@ func AnyStringToQuarterTime(yyyyqSrcStr string) time.Time {
 
 var rxYYYYQ = regexp.MustCompile(`^[0-9]{4}[1-4]$`)
 
-func IsQuarterInt32(q int32) bool {
-	return rxYYYYQ.MatchString(strconv.Itoa(int(q)))
+func IsYearQuarter(yyyyq int) bool {
+	return rxYYYYQ.MatchString(strconv.Itoa(yyyyq))
 }
 
-func NumQuartersInt32(start, end int32) (int, error) {
-	start, end = mathutil.MinMaxInt32(start, end)
-	if !IsQuarterInt32(start) {
+func NumQuartersInt32(start, end int) (int, error) {
+	start, end = ordered.MinMax(start, end)
+	if !IsYearQuarter(start) {
 		return -1, fmt.Errorf("quarterInt32 is not valid [%v] Must end in [1-4]", start)
 	}
-	if !IsQuarterInt32(end) {
+	if !IsYearQuarter(end) {
 		return -1, fmt.Errorf("quarterInt32 is not valid [%v] Must end in [1-4]", end)
 	}
 
@@ -265,7 +264,7 @@ func NumQuartersInt32(start, end int32) (int, error) {
 	var err error
 	for {
 		numQuarters++
-		cur, err = QuarterInt32Add(cur, 1)
+		cur, err = YearQuarterAdd(cur, 1)
 		if err != nil {
 			return -1, err
 		}
@@ -276,19 +275,19 @@ func NumQuartersInt32(start, end int32) (int, error) {
 	return numQuarters, nil
 }
 
-// QuartersInt32RelToAbs is useful relative date queries.
-func QuartersInt32RelToAbs(start, end int32) (int32, int32) {
+// QuartersRelToAbs is useful relative date queries.
+func QuartersRelToAbs(start, end int) (int, int) {
 	if start < 100 {
-		start = QuarterInt32ForTime(
-			QuarterAdd(time.Now(), int(start)))
+		start = YearQuarterForTime(
+			QuarterAdd(time.Now(), start))
 	}
 	if end < 100 {
-		startTime, err := QuarterInt32StartTime(start)
+		startTime, err := YearQuarterStartTime(start)
 		if err != nil {
-			panic(errorsutil.Wrap(err, "timeutil.QuartersInt32RelToAbs"))
+			panic(errorsutil.Wrap(err, "timeutil.YearQuarterStartTime"))
 		}
-		end = QuarterInt32ForTime(
-			QuarterAdd(startTime, int(end-1)))
+		end = YearQuarterForTime(
+			QuarterAdd(startTime, end-1))
 	}
 	return start, end
 }

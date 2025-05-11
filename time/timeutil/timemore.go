@@ -20,7 +20,7 @@ func NewTimeMore(t time.Time, d time.Weekday) TimeMore {
 }
 
 func NewTimeMoreQuarterStartString(yyyyq string, d time.Weekday) (TimeMore, error) {
-	dt, err := QuarterStringStartTime(yyyyq)
+	dt, err := YearQuarterStartTimeString(yyyyq)
 	if err != nil {
 		return TimeMore{}, err
 	}
@@ -28,7 +28,7 @@ func NewTimeMoreQuarterStartString(yyyyq string, d time.Weekday) (TimeMore, erro
 }
 
 func NewTimeMoreQuarterEndString(yyyyq string, d time.Weekday) (TimeMore, error) {
-	dt, err := QuarterStringEndTime(yyyyq)
+	dt, err := YearQuarterEndTimeString(yyyyq)
 	if err != nil {
 		return TimeMore{}, err
 	}
@@ -52,11 +52,11 @@ func (tm TimeMore) HalfYear() uint8 {
 func (tm TimeMore) MonthStart() time.Time   { return monthStart(tm.time) }
 func (tm TimeMore) MonthEnd() time.Time     { return monthEnd(tm.time) }
 func (tm TimeMore) IsMonthStart() bool      { return isMonthStart(tm.time) }
-func (tm TimeMore) Quarter() int32          { return QuarterInt32ForTime(tm.time) }
+func (tm TimeMore) YearQuarter() int        { return YearQuarterForTime(tm.time) }
 func (tm TimeMore) QuarterStart() time.Time { return quarterStart(tm.time) }
 func (tm TimeMore) QuarterEnd() time.Time   { return quarterEnd(tm.time) }
 func (tm TimeMore) IsQuarterStart() bool    { return isQuarterStart(tm.time) }
-func (tm TimeMore) Year() int32             { return QuarterInt32ToYear(tm.Quarter()) }
+func (tm TimeMore) Year() int               { return YearQuarterToYear(tm.YearQuarter()) }
 func (tm TimeMore) YearStart() time.Time    { return yearStart(tm.time) }
 func (tm TimeMore) YearEnd() time.Time      { return yearEnd(tm.time) }
 func (tm TimeMore) IsYearStart() bool       { return isYearStart(tm.time) }
@@ -68,7 +68,7 @@ func (tm TimeMore) IntervalStart(interval Interval) (time.Time, error) {
 func (tm TimeMore) YearHalf() string { return fmt.Sprintf("%dH%d", tm.time.Year(), int(tm.HalfYear())) }
 
 // YearQuarter returns a string in the format of "2006Q1"
-func (tm TimeMore) YearQuarter() string {
+func (tm TimeMore) YearQuarterString() string {
 	return fmt.Sprintf("%dQ%d", tm.time.Year(), int(tm.QuarterCalendar()))
 }
 
