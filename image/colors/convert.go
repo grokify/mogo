@@ -126,7 +126,10 @@ func ColorRGBAToHex(c color.RGBA) string {
 // ColorToHex returns 6 byte hex code in lower case.
 func ColorToHex(c color.Color, upperCase, addHash bool) string {
 	r, g, b, _ := c.RGBA()
-	h := fmt.Sprintf("%02x%02x%02x", uint8(r), uint8(g), uint8(b))
+	r8 := uint8(r >> 8) // #nosec G115
+	g8 := uint8(g >> 8) // #nosec G115
+	b8 := uint8(b >> 8) // #nosec G115
+	h := fmt.Sprintf("%02x%02x%02x", r8, g8, b8)
 	if upperCase {
 		h = strings.ToUpper(h)
 	}
