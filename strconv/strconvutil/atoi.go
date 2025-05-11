@@ -8,7 +8,10 @@ import (
 	"strings"
 )
 
-var ErrValueIsNegative = errors.New("value is negative")
+var (
+	ErrValueIsNegative   = errors.New("value is negative")
+	ErrValueIsOutOfRange = errors.New("value is out of range")
+)
 
 // AtoiOrDefault is like Atoi but takes a default value
 // which it returns in the event of a parse error.
@@ -51,6 +54,18 @@ func Atou(s string) (uint, error) {
 		return 0, ErrValueIsNegative
 	} else {
 		return uint(i), nil
+	}
+}
+
+func Atou32(s string) (uint32, error) {
+	if i, err := strconv.Atoi(s); err != nil {
+		return 0, err
+	} else if i < 0 {
+		return 0, ErrValueIsNegative
+	} else if i > int(^uint32(0)) {
+		return 0, ErrValueIsOutOfRange
+	} else {
+		return uint32(i), nil
 	}
 }
 
