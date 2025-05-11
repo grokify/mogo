@@ -19,6 +19,30 @@ func TestDT6ForDT14(t *testing.T) {
 	}
 }
 
+var addMonthsTests = []struct {
+	year      int
+	month     int
+	add       int
+	wantYear  int
+	wantMonth int
+}{
+	{2025, 1, -1, 2024, 12},
+	{2025, 1, 1, 2025, 2},
+	{2025, 12, 1, 2026, 1},
+}
+
+func TestAddMonths(t *testing.T) {
+	for _, tt := range addMonthsTests {
+		gotYear, gotMonth := AddMonths(tt.year, tt.month, tt.add)
+		if gotYear != tt.wantYear || gotMonth != tt.wantMonth {
+			t.Errorf("AddMonths(%d,%d,%d): want (%d,%d), got (%d,%d)",
+				tt.year, tt.month, tt.add,
+				tt.wantYear, tt.wantMonth,
+				gotYear, gotMonth)
+		}
+	}
+}
+
 /*
 var fromToTests = []struct {
 	v    string
