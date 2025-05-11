@@ -1,7 +1,9 @@
 package imageutil
 
 import (
+	"bytes"
 	"errors"
+	"fmt"
 	"image/gif"
 	"image/jpeg"
 	"io"
@@ -10,8 +12,9 @@ import (
 	"regexp"
 	"strings"
 
+	"image"
+
 	"github.com/grokify/mogo/errors/errorsutil"
-	"github.com/grokify/mogo/io/ioutil"
 	"github.com/grokify/mogo/os/osutil"
 )
 
@@ -140,35 +143,149 @@ var JPEGEncodeOptionsQualityMax = &JPEGEncodeOptions{
 	Options: &jpeg.Options{
 		Quality: JPEGQualityMax}}
 
+// SOIFilterWriter is a writer that filters out the SOI marker (0xFF 0xD8) from JPEG data.
+type SOIFilterWriter struct {
+	w     io.Writer
+	state int // 0: initial, 1: saw 0xFF, 2: saw 0xD8
+}
+
+func NewSOIFilterWriter(w io.Writer) *SOIFilterWriter {
+	return &SOIFilterWriter{w: w}
+}
+
+func (s *SOIFilterWriter) Write(p []byte) (n int, err error) {
+	if len(p) == 0 {
+		return 0, nil
+	}
+
+	// If we're in state 2, we've already seen the SOI marker, write everything
+	if s.state == 2 {
+		return s.w.Write(p)
+	}
+
+	// Process the data byte by byte
+	for i := 0; i < len(p); i++ {
+		switch s.state {
+		case 0: // initial state
+			if p[i] == JPEGMarkerPrefix {
+				s.state = 1
+			} else {
+				if _, err := s.w.Write(p[i : i+1]); err != nil {
+					return n, err
+				}
+				n++
+			}
+		case 1: // saw 0xFF
+			if p[i] == JPEGMarkerSOI {
+				s.state = 2
+			} else {
+				// Write the 0xFF we saw earlier
+				if _, err := s.w.Write([]byte{JPEGMarkerPrefix}); err != nil {
+					return n, err
+				}
+				n++
+				// Write current byte if it's not 0xFF
+				if p[i] != JPEGMarkerPrefix {
+					if _, err := s.w.Write(p[i : i+1]); err != nil {
+						return n, err
+					}
+					n++
+				}
+				s.state = 0
+			}
+		}
+	}
+
+	// If we're still in state 1 at the end of the buffer, write the 0xFF
+	if s.state == 1 {
+		if _, err := s.w.Write([]byte{JPEGMarkerPrefix}); err != nil {
+			return n, err
+		}
+		n++
+		s.state = 0
+	}
+
+	return n, nil
+}
+
+// Close implements io.Closer
+func (s *SOIFilterWriter) Close() error {
+	// If we're in state 1, write the final 0xFF
+	if s.state == 1 {
+		if _, err := s.w.Write([]byte{JPEGMarkerPrefix}); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // newWriterExif is used to write Exif to an `io.Writer` before calling `jpeg.Encode()`.
 // It is used with `jpeg.Encode()` to remove the Start of Image (SOI) marker after adding
 // SOI and Exif.
-func newWriterExif(w io.Writer, exif []byte) (io.Writer, error) {
+func newWriterExif(w io.Writer, exif []byte) (io.WriteCloser, error) {
 	// Adapted from the following under MIT license: https://github.com/jdeng/goheif/blob/a0d6a8b3e68f9d613abd9ae1db63c72ba33abd14/heic2jpg/main.go
 	// See more here: https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format
 	// https://www.codeproject.com/Articles/47486/Understanding-and-Reading-Exif-Data
-	wExif := ioutil.NewSkipWriter(w, 2)
 
-	if _, err := w.Write(JPEGMarker(JPEGMarkerSOI)); err != nil {
+	// Create a buffer to hold the header
+	header := &bytes.Buffer{}
+
+	// Write SOI marker
+	if _, err := header.Write(JPEGMarker(JPEGMarkerSOI)); err != nil {
 		return nil, err
 	}
 
-	if exif == nil {
-		return wExif, nil
+	if exif != nil {
+		// Write Exif marker and data
+		markerLen := 2 + len(exif)
+		if markerLen > 0xFFFF {
+			return nil, fmt.Errorf("exif data too large: %d bytes", markerLen)
+		}
+		marker := []byte{
+			JPEGMarkerPrefix,
+			JPEGMarkerExif,
+			byte(markerLen >> 8),   // High byte
+			byte(markerLen & 0xFF)} // Low byte
+		if _, err := header.Write(marker); err != nil {
+			return nil, err
+		}
+		if _, err := header.Write(exif); err != nil {
+			return nil, err
+		}
 	}
 
+	// Write the header to the underlying writer
+	if _, err := w.Write(header.Bytes()); err != nil {
+		return nil, err
+	}
+
+	// Return a filter writer to handle JPEG encoder output
+	return NewSOIFilterWriter(w), nil
+}
+
+// EncodeJPEGWithExif encodes a JPEG image, inserts Exif data after the SOI marker, and writes to w.
+func EncodeJPEGWithExif(w io.Writer, img image.Image, opts *jpeg.Options, exif []byte) error {
+	buf := &bytes.Buffer{}
+	if err := jpeg.Encode(buf, img, opts); err != nil {
+		return err
+	}
+	jpegData := buf.Bytes()
+	if len(jpegData) < 2 || jpegData[0] != 0xFF || jpegData[1] != 0xD8 {
+		return fmt.Errorf("not a valid JPEG SOI")
+	}
+	if exif == nil || len(exif) == 0 {
+		_, err := w.Write(jpegData)
+		return err
+	}
 	markerLen := 2 + len(exif)
-	marker := []byte{
-		JPEGMarkerPrefix,
-		JPEGMarkerExif,
-		uint8(markerLen >> 8),
-		uint8(markerLen & JPEGMarkerPrefix)}
-	if _, err := w.Write(marker); err != nil {
-		return nil, err
+	if markerLen > 0xFFFF {
+		return fmt.Errorf("exif too large")
 	}
-
-	if _, err := w.Write(exif); err != nil {
-		return nil, err
-	}
-	return wExif, nil
+	exifSegment := []byte{0xFF, 0xE1, byte(markerLen >> 8), byte(markerLen & 0xFF)}
+	exifSegment = append(exifSegment, exif...)
+	final := append([]byte{}, jpegData[:2]...)
+	final = append(final, exifSegment...)
+	final = append(final, jpegData[2:]...)
+	_, err := w.Write(final)
+	return err
 }
