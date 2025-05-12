@@ -2,6 +2,7 @@ MoGo
 ====
 
 [![Build Status][build-status-svg]][build-status-url]
+[![Lint Status][lint-status-svg]][lint-status-url]
 [![Go Report Card][goreport-svg]][goreport-url]
 [![Docs][docs-godoc-svg]][docs-godoc-url]
 [![SLOC][loc-svg]][repo-url]
@@ -64,6 +65,8 @@ Please report issues and feature requests on [Github](https://github.com/grokify
  [used-by-url]: https://sourcegraph.com/github.com/grokify/mogo?badge
  [build-status-svg]: https://github.com/grokify/mogo/actions/workflows/ci.yaml/badge.svg?branch=master
  [build-status-url]: https://github.com/grokify/mogo/actions/workflows/ci.yaml
+ [lint-status-svg]: https://github.com/grokify/mogo/actions/workflows/lint.yaml/badge.svg?branch=master
+ [lint-status-url]: https://github.com/grokify/mogo/actions/workflows/lint.yaml
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/mogo
  [goreport-url]: https://goreportcard.com/report/github.com/grokify/mogo
  [codeclimate-status-svg]: https://codeclimate.com/github/grokify/mogo/badges/gpa.svg
