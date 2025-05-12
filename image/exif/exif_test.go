@@ -16,8 +16,8 @@ func createTestImage(width, height int) *image.RGBA {
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
 			img.Set(x, y, color.RGBA{
-				R: uint8(x * 255 / width),
-				G: uint8(y * 255 / height),
+				R: uint8(float64(x) * 255.0 / float64(width)),
+				G: uint8(float64(y) * 255.0 / float64(height)),
 				B: 0,
 				A: 255,
 			})
