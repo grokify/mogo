@@ -6,6 +6,8 @@ import (
 	"encoding/binary"
 	"fmt"
 	"time"
+
+	"github.com/grokify/mogo/type/number"
 )
 
 // ExifTag represents a single Exif tag with its value
@@ -139,14 +141,25 @@ func (e *Exif) ToBytes() ([]byte, error) {
 
 	// Write Exif header
 	buf.WriteString("Exif\x00\x00")
-	buf.Write([]byte("II"))                              // Intel byte order
-	binary.Write(buf, binary.LittleEndian, uint16(0x2A)) // TIFF identifier
+	buf.Write([]byte("II")) // Intel byte order
 
-	// Write IFD offset (relative to TIFF header, which starts at byte 6)
-	binary.Write(buf, binary.LittleEndian, uint32(8)) // IFD starts right after TIFF header
-
-	// Write number of entries
-	binary.Write(buf, binary.LittleEndian, uint16(len(tags)))
+	// Check for tag count overflow before writing as uint16
+	if len(tags) > int(^uint16(0)) {
+		return nil, fmt.Errorf("too many tags for Exif")
+	}
+	if err := binary.Write(buf, binary.LittleEndian, uint16(0x2A)); err != nil {
+		return nil, err
+	}
+	if err := binary.Write(buf, binary.LittleEndian, uint32(8)); err != nil {
+		return nil, err
+	}
+	if len(tags) > int(^uint16(0)) {
+		return nil, fmt.Errorf("too many tags for Exif")
+	} else if lenTagsU16, err := number.Itou16(len(tags)); err != nil {
+		return nil, err
+	} else if err := binary.Write(buf, binary.LittleEndian, lenTagsU16); err != nil {
+		return nil, err
+	}
 
 	// Write tag entries (without values)
 	tagEntries := make([]byte, len(tags)*12)
@@ -167,8 +180,27 @@ func (e *Exif) ToBytes() ([]byte, error) {
 		switch tag.Type {
 		case TypeASCII:
 			str := tag.Value.(string)
-			count = uint32(len(str) + 1) // Include null terminator
-			value = uint32(valueOffset)
+			strLen := len(str) + 1
+			if strLen > int(^uint32(0)) {
+				return nil, fmt.Errorf("string too long for Exif tag")
+			}
+			var err error
+			count, err = number.Itou32(strLen)
+			//count = uint32(strLen)
+			if err != nil {
+				return nil, err
+			}
+			if valueOffset > int(^uint32(0)) {
+				return nil, fmt.Errorf("offset too large for Exif tag")
+			}
+			value, err = number.Itou32(valueOffset)
+			//value = uint32(valueOffset)
+			if err != nil {
+				return nil, err
+			}
+			if err != nil {
+				return nil, err
+			}
 			buf.WriteString(str)
 			buf.WriteByte(0) // Null terminator
 			valueOffset = buf.Len()
@@ -177,12 +209,24 @@ func (e *Exif) ToBytes() ([]byte, error) {
 			value = uint32(tag.Value.(uint16))
 		case TypeLong:
 			count = 1
-			value = uint32(tag.Value.(uint32))
+			value = tag.Value.(uint32)
 		case TypeRational:
 			count = 1
-			value = uint32(valueOffset)
-			binary.Write(buf, binary.LittleEndian, uint32(tag.Value.(float64)*100))
-			binary.Write(buf, binary.LittleEndian, uint32(100))
+			if valueOffset > int(^uint32(0)) {
+				return nil, fmt.Errorf("offset too large for Exif tag")
+			}
+			var err error
+			value, err = number.Itou32(valueOffset)
+			//value = uint32(valueOffset)
+			if err != nil {
+				return nil, err
+			}
+			if err := binary.Write(buf, binary.LittleEndian, uint32(tag.Value.(float64)*100)); err != nil {
+				return nil, err
+			}
+			if err := binary.Write(buf, binary.LittleEndian, uint32(100)); err != nil {
+				return nil, err
+			}
 			valueOffset = buf.Len()
 		default:
 			return nil, fmt.Errorf("unsupported Exif type: %d", tag.Type)
@@ -195,13 +239,22 @@ func (e *Exif) ToBytes() ([]byte, error) {
 	buf.Reset()
 	buf.WriteString("Exif\x00\x00")
 	buf.Write([]byte("II"))
-	binary.Write(buf, binary.LittleEndian, uint16(0x2A))
-	binary.Write(buf, binary.LittleEndian, uint32(8))
-	binary.Write(buf, binary.LittleEndian, uint16(len(tags)))
+	if err := binary.Write(buf, binary.LittleEndian, uint16(0x2A)); err != nil {
+		return nil, err
+	}
+	if err := binary.Write(buf, binary.LittleEndian, uint32(8)); err != nil {
+		return nil, err
+	}
+	if len(tags) > int(^uint16(0)) {
+		return nil, fmt.Errorf("too many tags for Exif")
+	} else if lenTagsU16, err := number.Itou16(len(tags)); err != nil {
+		return nil, err
+	} else if err := binary.Write(buf, binary.LittleEndian, lenTagsU16); err != nil {
+		return nil, err
+	}
 	buf.Write(tagEntries)
 
 	// Write values
-	valueOffset = buf.Len()
 	for _, tag := range tags {
 		switch tag.Type {
 		case TypeASCII:
@@ -209,17 +262,16 @@ func (e *Exif) ToBytes() ([]byte, error) {
 			buf.WriteString(str)
 			buf.WriteByte(0) // Null terminator
 		case TypeRational:
-			binary.Write(buf, binary.LittleEndian, uint32(tag.Value.(float64)*100))
-			binary.Write(buf, binary.LittleEndian, uint32(100))
+			if err := binary.Write(buf, binary.LittleEndian, uint32(tag.Value.(float64)*100)); err != nil {
+				return nil, err
+			}
+			if err := binary.Write(buf, binary.LittleEndian, uint32(100)); err != nil {
+				return nil, err
+			}
 		}
 	}
 
 	data := buf.Bytes()
-	/*
-		fmt.Printf("Debug ToBytes:\n")
-		fmt.Printf("  Final data length: %d\n", len(data))
-		fmt.Printf("  First 20 bytes: % x\n", data[:min(20, len(data))])
-	*/
 	return data, nil
 }
 
