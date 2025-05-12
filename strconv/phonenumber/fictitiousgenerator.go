@@ -28,26 +28,35 @@ func (fng *FakeNumberGenerator) RandomAreaCode() uint16 {
 }
 
 // RandomLineNumber generates a random line number
-func (fng *FakeNumberGenerator) RandomLineNumber() uint16 {
+func (fng *FakeNumberGenerator) RandomLineNumber() (uint16, error) {
 	return fng.RandomLineNumberMinMax(fakeLineNumberMin, fakeLineNumberMax)
 }
 
 // RandomLineNumber generates a random line number
-func (fng *FakeNumberGenerator) RandomLineNumberMinMax(min, max uint16) uint16 {
-	return uint16(fng.rand.Intn(int(max)-int(min))) + min
+func (fng *FakeNumberGenerator) RandomLineNumberMinMax(min, max uint16) (uint16, error) {
+	return randutil.CryptoRandIntInRange(min, max)
+	// return uint16(fng.rand.Intn(int(max)-int(min))) + min
 }
 
 // RandomLocalNumberUS returns a US E.164 number
 // AreaCode + Prefix + Line Number
-func (fng *FakeNumberGenerator) RandomLocalNumberUS() uint64 {
-	return fng.LocalNumberUS(fng.RandomAreaCode(), fng.RandomLineNumber())
+func (fng *FakeNumberGenerator) RandomLocalNumberUS() (uint64, error) {
+	if randomLineNumber, err := fng.RandomLineNumber(); err != nil {
+		return 0, err
+	} else {
+		return fng.LocalNumberUS(fng.RandomAreaCode(), randomLineNumber), nil
+	}
 }
 
 // RandomLocalNumberUS returns a US E.164 number
 // AreaCode + Prefix + Line Number
-func (fng *FakeNumberGenerator) RandomLocalNumberUSAreaCodes(acs []uint16) uint64 {
+func (fng *FakeNumberGenerator) RandomLocalNumberUSAreaCodes(acs []uint16) (uint64, error) {
 	ac := acs[fng.rand.Intn(len(acs))]
-	return fng.LocalNumberUS(ac, fng.RandomLineNumber())
+	if randomLineNumber, err := fng.RandomLineNumber(); err != nil {
+		return 0, err
+	} else {
+		return fng.LocalNumberUS(ac, randomLineNumber), nil
+	}
 }
 
 // LocalNumberUS returns a US E.164 number given an areacode and line number
@@ -57,28 +66,40 @@ func (fng *FakeNumberGenerator) LocalNumberUS(ac uint16, ln uint16) uint64 {
 
 // RandomLocalNumberUSUnique returns a US E.164 number
 // AreaCode + Prefix + Line Number
-func (fng *FakeNumberGenerator) RandomLocalNumberUSUnique(set map[uint64]int8) (uint64, map[uint64]int8) {
-	try := fng.RandomLocalNumberUS()
+func (fng *FakeNumberGenerator) RandomLocalNumberUSUnique(set map[uint64]int8) (uint64, map[uint64]int8, error) {
+	try, err := fng.RandomLocalNumberUS()
+	if err != nil {
+		return try, set, err
+	}
 	_, ok := set[try]
 	for ok {
-		try := fng.RandomLocalNumberUS()
-		_, ok = set[try]
+		if try, err := fng.RandomLocalNumberUS(); err != nil {
+			return try, set, err
+		} else {
+			_, ok = set[try]
+		}
 	}
 	set[try] = 1
-	return try, set
+	return try, set, nil
 }
 
 // RandomLocalNumberUSUnique returns a US E.164 number
 // AreaCode + Prefix + Line Number
-func (fng *FakeNumberGenerator) RandomLocalNumberUSUniqueAreaCodeSet(set map[uint64]int8, acs []uint16) (uint64, map[uint64]int8) {
-	try := fng.RandomLocalNumberUSAreaCodes(acs)
+func (fng *FakeNumberGenerator) RandomLocalNumberUSUniqueAreaCodeSet(set map[uint64]int8, acs []uint16) (uint64, map[uint64]int8, error) {
+	try, err := fng.RandomLocalNumberUSAreaCodes(acs)
+	if err != nil {
+		return try, set, err
+	}
 	_, ok := set[try]
 	for ok {
-		try := fng.RandomLocalNumberUSAreaCodes(acs)
-		_, ok = set[try]
+		if try, err := fng.RandomLocalNumberUSAreaCodes(acs); err != nil {
+			return try, set, err
+		} else {
+			_, ok = set[try]
+		}
 	}
 	set[try] = 1
-	return try, set
+	return try, set, nil
 }
 
 // LocalNumberUS returns a US E.164 number given an areacode and line number
