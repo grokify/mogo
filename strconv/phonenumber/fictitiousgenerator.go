@@ -1,7 +1,7 @@
 package phonenumber
 
 import (
-	"math/rand"
+	"errors"
 
 	"github.com/grokify/mogo/crypto/randutil"
 )
@@ -13,18 +13,24 @@ const (
 
 type FakeNumberGenerator struct {
 	AreaCodes []uint16
-	rand      *rand.Rand
+	//rand      *rand.Rand
 }
 
 func NewFakeNumberGenerator(areacodes []uint16) FakeNumberGenerator {
 	return FakeNumberGenerator{
 		AreaCodes: areacodes,
-		rand:      rand.New(randutil.NewCryptoRandSource())} // #nosec G404 - `NewCryptoRandSource()` uses `crypto/rand`.
+	}
 }
 
 // RandomAreaCode generates a random area code.
-func (fng *FakeNumberGenerator) RandomAreaCode() uint16 {
-	return fng.AreaCodes[fng.rand.Intn(len(fng.AreaCodes))]
+func (fng *FakeNumberGenerator) RandomAreaCode() (uint16, error) {
+	if len(fng.AreaCodes) == 0 {
+		return 0, errors.New("no area codes")
+	} else if idx, err := randutil.CryptoRandIntInRange(0, len(fng.AreaCodes)-1); err != nil {
+		return 0, err
+	} else {
+		return fng.AreaCodes[idx], nil
+	}
 }
 
 // RandomLineNumber generates a random line number
@@ -43,19 +49,27 @@ func (fng *FakeNumberGenerator) RandomLineNumberMinMax(min, max uint16) (uint16,
 func (fng *FakeNumberGenerator) RandomLocalNumberUS() (uint64, error) {
 	if randomLineNumber, err := fng.RandomLineNumber(); err != nil {
 		return 0, err
+	} else if randomAreaCode, err := fng.RandomAreaCode(); err != nil {
+		return 0, err
 	} else {
-		return fng.LocalNumberUS(fng.RandomAreaCode(), randomLineNumber), nil
+		return fng.LocalNumberUS(randomAreaCode, randomLineNumber), nil
 	}
 }
 
 // RandomLocalNumberUS returns a US E.164 number
 // AreaCode + Prefix + Line Number
 func (fng *FakeNumberGenerator) RandomLocalNumberUSAreaCodes(acs []uint16) (uint64, error) {
-	ac := acs[fng.rand.Intn(len(acs))]
-	if randomLineNumber, err := fng.RandomLineNumber(); err != nil {
+	if len(acs) == 0 {
+		return 0, errors.New("no area codes")
+	} else if idx, err := randutil.CryptoRandIntInRange(0, len(acs)-1); err != nil {
 		return 0, err
 	} else {
-		return fng.LocalNumberUS(ac, randomLineNumber), nil
+		ac := acs[idx]
+		if randomLineNumber, err := fng.RandomLineNumber(); err != nil {
+			return 0, err
+		} else {
+			return fng.LocalNumberUS(ac, randomLineNumber), nil
+		}
 	}
 }
 

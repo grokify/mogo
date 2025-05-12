@@ -9,7 +9,7 @@ import (
 )
 
 // Generate creates passwords using options selected in `GenerateOpts`.
-func Generate(opts GenerateOpts) string {
+func Generate(opts GenerateOpts) (string, error) {
 	return randutil.RandString(opts.Alphabet(), opts.Length)
 }
 

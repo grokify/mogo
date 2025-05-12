@@ -4,7 +4,6 @@ import (
 	crand "crypto/rand"
 	"encoding/binary"
 	"math"
-	"math/rand"
 	"time"
 
 	"github.com/grokify/mogo/type/number"
@@ -34,6 +33,7 @@ func NewSeedInt64Time() (int64, error) {
 	return time.Now().UnixNano(), nil
 }
 
+/*
 // CryptoRandSource is a `crypto/rand` backed source that satisfies
 // the `math/rand.Source` and `math/rand.Source64` interface definitions.
 // It can be used as `r := rand.New(NewCryptoRandSource())`
@@ -74,3 +74,4 @@ func (s *CryptoRandSource) Uint64() uint64 {
 
 // #nosec G404 -- fallback to math/rand is acceptable here for non-crypto use
 var mathrand = rand.New(rand.NewSource(time.Now().UnixNano()))
+*/
