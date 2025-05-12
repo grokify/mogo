@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"image"
 	"image/gif"
 	"image/jpeg"
 	"io"
@@ -11,8 +12,6 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
-
-	"image"
 
 	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/os/osutil"
