@@ -57,6 +57,18 @@ func Atou(s string) (uint, error) {
 	}
 }
 
+func Atou16(s string) (uint16, error) {
+	if i, err := strconv.Atoi(s); err != nil {
+		return 0, err
+	} else if i < 0 {
+		return 0, ErrValueIsNegative
+	} else if i > int(^uint16(0)) {
+		return 0, ErrValueIsOutOfRange
+	} else {
+		return uint16(i), nil
+	}
+}
+
 func Atou32(s string) (uint32, error) {
 	if i, err := strconv.Atoi(s); err != nil {
 		return 0, err
