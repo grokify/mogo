@@ -42,6 +42,14 @@ func Itou(i int) (uint, error) {
 	}
 }
 
+func Itou16(i int) (uint16, error) {
+	if i < 0 || i > int(^uint16(0)) {
+		return 0, errorsutil.Wrapf(ErrOverflow, "int is out of range for uint16 (%d)", i)
+	} else {
+		return uint16(i), nil
+	}
+}
+
 func Itou32(i int) (uint32, error) {
 	if i < 0 || i > int(^uint32(0)) {
 		return 0, errorsutil.Wrapf(ErrOverflow, "int is out of range for uint32 (%d)", i)
