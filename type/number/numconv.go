@@ -12,7 +12,7 @@ var ErrOverflow = errors.New("integer overflow")
 
 func Itoi8(i int) (int8, error) {
 	if i < math.MinInt8 || i > math.MaxInt8 {
-		return 0, errorsutil.Wrapf(ErrOverflow, "int is out of range for int8 (%d)", i)
+		return 0, errorsutil.Wrapf(ErrOverflow, "int value (%d) overflows int8", i)
 	} else {
 		return int8(i), nil
 	}
@@ -20,7 +20,7 @@ func Itoi8(i int) (int8, error) {
 
 func Itoi16(i int) (int16, error) {
 	if i < math.MinInt16 || i > math.MaxInt16 {
-		return 0, errorsutil.Wrapf(ErrOverflow, "int is out of range for int16 (%d)", i)
+		return 0, errorsutil.Wrapf(ErrOverflow, "int value (%d) overflows int16", i)
 	} else {
 		return int16(i), nil
 	}
@@ -28,7 +28,7 @@ func Itoi16(i int) (int16, error) {
 
 func Itoi32(i int) (int32, error) {
 	if i < math.MinInt32 || i > math.MaxInt32 {
-		return 0, errorsutil.Wrapf(ErrOverflow, "int is out of range for int32 (%d)", i)
+		return 0, errorsutil.Wrapf(ErrOverflow, "int value (%d) overflows int32", i)
 	} else {
 		return int32(i), nil
 	}
@@ -36,7 +36,7 @@ func Itoi32(i int) (int32, error) {
 
 func Itou(i int) (uint, error) {
 	if i < 0 || uint(i) > ^uint(0) {
-		return 0, errorsutil.Wrapf(ErrOverflow, "int is out of range for uint32 (%d)", i)
+		return 0, errorsutil.Wrapf(ErrOverflow, "int value (%d) overflows uint", i)
 	} else {
 		return uint(i), nil
 	}
@@ -44,7 +44,7 @@ func Itou(i int) (uint, error) {
 
 func Itou16(i int) (uint16, error) {
 	if i < 0 || i > int(^uint16(0)) {
-		return 0, errorsutil.Wrapf(ErrOverflow, "int is out of range for uint16 (%d)", i)
+		return 0, errorsutil.Wrapf(ErrOverflow, "int value (%d) overflows uint16", i)
 	} else {
 		return uint16(i), nil
 	}
@@ -52,7 +52,7 @@ func Itou16(i int) (uint16, error) {
 
 func Itou32(i int) (uint32, error) {
 	if i < 0 || i > int(^uint32(0)) {
-		return 0, errorsutil.Wrapf(ErrOverflow, "int is out of range for uint32 (%d)", i)
+		return 0, errorsutil.Wrapf(ErrOverflow, "int value (%d) overflows uint32", i)
 	} else {
 		return uint32(i), nil
 	}
@@ -105,4 +105,12 @@ func Ntof64[N constraints.Integer | constraints.Float](val N) (float64, bool) {
 		return f, true
 	}
 	return f, false
+}
+
+func U64toi64(u uint64) (int64, error) {
+	if u > math.MaxInt64 {
+		return 0, errorsutil.Wrapf(ErrOverflow, "uint64 value (%d) overflows int64", u)
+	} else {
+		return int64(u), nil
+	}
 }
