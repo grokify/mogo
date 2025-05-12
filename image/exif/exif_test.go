@@ -1,4 +1,4 @@
-package exif_test
+package exif
 
 import (
 	"bytes"
@@ -27,19 +27,19 @@ func createTestImage(width, height int) *image.RGBA {
 }
 
 func TestExifToBytes(t *testing.T) {
-	exif := New()
-	exif.Make = "Test Camera"
-	exif.Model = "Test Model"
-	exif.DateTime = time.Date(2024, 3, 15, 12, 0, 0, 0, time.UTC)
-	exif.ExposureTime = "1/125"
-	exif.FNumber = 2.8
-	exif.ISOSpeed = 100
-	exif.FocalLength = 50.0
-	exif.Software = "Test Software"
-	exif.Copyright = "Test Copyright"
-	exif.Description = "Test Description"
+	exf := New()
+	exf.Make = "Test Camera"
+	exf.Model = "Test Model"
+	exf.DateTime = time.Date(2024, 3, 15, 12, 0, 0, 0, time.UTC)
+	exf.ExposureTime = "1/125"
+	exf.FNumber = 2.8
+	exf.ISOSpeed = 100
+	exf.FocalLength = 50.0
+	exf.Software = "Test Software"
+	exf.Copyright = "Test Copyright"
+	exf.Description = "Test Description"
 
-	data, err := exif.ToBytes()
+	data, err := exf.ToBytes()
 	if err != nil {
 		t.Fatalf("ToBytes failed: %v", err)
 	}
@@ -77,12 +77,12 @@ func TestExifToBytes(t *testing.T) {
 
 func TestExifFromBytes(t *testing.T) {
 	// Create test Exif data
-	exif := New()
-	exif.Make = "Test Camera"
-	exif.Model = "Test Model"
-	exif.DateTime = time.Date(2024, 3, 15, 12, 0, 0, 0, time.UTC)
+	exf := New()
+	exf.Make = "Test Camera"
+	exf.Model = "Test Model"
+	exf.DateTime = time.Date(2024, 3, 15, 12, 0, 0, 0, time.UTC)
 
-	data, err := exif.ToBytes()
+	data, err := exf.ToBytes()
 	if err != nil {
 		t.Fatalf("ToBytes failed: %v", err)
 	}
@@ -94,14 +94,14 @@ func TestExifFromBytes(t *testing.T) {
 	}
 
 	// Verify parsed data
-	if parsed.Make != exif.Make {
-		t.Errorf("Make mismatch: got %q, want %q", parsed.Make, exif.Make)
+	if parsed.Make != exf.Make {
+		t.Errorf("Make mismatch: got %q, want %q", parsed.Make, exf.Make)
 	}
-	if parsed.Model != exif.Model {
-		t.Errorf("Model mismatch: got %q, want %q", parsed.Model, exif.Model)
+	if parsed.Model != exf.Model {
+		t.Errorf("Model mismatch: got %q, want %q", parsed.Model, exf.Model)
 	}
-	if !parsed.DateTime.Equal(exif.DateTime) {
-		t.Errorf("DateTime mismatch: got %v, want %v", parsed.DateTime, exif.DateTime)
+	if !parsed.DateTime.Equal(exf.DateTime) {
+		t.Errorf("DateTime mismatch: got %v, want %v", parsed.DateTime, exf.DateTime)
 	}
 }
 
