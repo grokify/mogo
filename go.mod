@@ -3,7 +3,7 @@ module github.com/grokify/mogo
 go 1.23.2
 
 require (
-	github.com/ProtonMail/go-crypto v1.2.0
+	github.com/ProtonMail/go-crypto v1.3.0
 	github.com/caarlos0/env/v11 v11.3.1
 	github.com/grokify/base36 v1.0.5
 	github.com/grokify/bitcoinmath v0.1.0
@@ -21,7 +21,7 @@ require (
 	golang.org/x/image v0.27.0
 	golang.org/x/net v0.40.0
 	golang.org/x/text v0.25.0
-	google.golang.org/genproto v0.0.0-20250505200425-f936aa4a68b2
+	google.golang.org/genproto v0.0.0-20250519155744-55703ea1f237
 )
 
 require (
