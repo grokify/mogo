@@ -2,9 +2,9 @@ package maputil
 
 import "strconv"
 
-type MapComparableInt[C comparable] map[C]int
+type MapCompInt[C comparable] map[C]int
 
-func (mci MapComparableInt[C]) ReverseCounts() map[int]int {
+func (mci MapCompInt[C]) ReverseCounts() map[int]int {
 	out := map[int]int{}
 	for _, v := range mci {
 		out[v]++
@@ -12,7 +12,7 @@ func (mci MapComparableInt[C]) ReverseCounts() map[int]int {
 	return out
 }
 
-func (mci MapComparableInt[C]) ReverseCountsString() map[string]int {
+func (mci MapCompInt[C]) ReverseCountsString() map[string]int {
 	out := map[string]int{}
 	for _, v := range mci {
 		out[strconv.Itoa(v)]++
