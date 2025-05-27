@@ -53,6 +53,17 @@ func (m MapStringString) Gets(inclNonMatches bool, keys []string) []string {
 	return ret
 }
 
+func (m MapStringString) ReverseMapStringSlice(sortAsc bool) MapStringSlice {
+	out := MapStringSlice{}
+	for k, v := range m {
+		out.Add(v, k)
+	}
+	if sortAsc {
+		out.Sort(false)
+	}
+	return out
+}
+
 // Subset returns a subset of a `MapStringString`. `trimSpace` removes leading/trailing spaces on from the
 // source values. `inclEmpty` includes keys where the value matches the empty string. `inclUnknown` adds
 // desired keys in the resulting map which are not known in the source map.
