@@ -90,7 +90,7 @@ func TestOffsetFormat(t *testing.T) {
 }
 
 var isDTXTests = []struct {
-	v    int32
+	v    int
 	want string
 }{
 	{2004, LayoutNameDT4},
