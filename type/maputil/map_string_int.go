@@ -116,6 +116,23 @@ func (msi MapStringInt) Sorted(sortBy string) []Record {
 	return records
 }
 
+func (msi MapStringInt) String(vlayout, sep1, sep2 string) string {
+	var parts []string
+	keys := msi.Keys(true)
+	for _, k := range keys {
+		v, ok := msi[k]
+		if !ok {
+			panic("key not found")
+		}
+		parts = append(parts, strings.Join(
+			[]string{
+				k,
+				fmt.Sprintf(vlayout, v),
+			}, sep1))
+	}
+	return strings.Join(parts, sep2)
+}
+
 type Record struct {
 	Name  string
 	Value int
