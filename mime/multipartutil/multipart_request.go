@@ -30,15 +30,14 @@ func NewRequest(method, url string, params url.Values, files []FileInfo) (*http.
 			return nil, err
 		}
 	}
-	err = mb.Close()
-	if err != nil {
+	if err = mb.Close(); err != nil {
 		return nil, err
-	}
-
-	req, err := http.NewRequest(method, url, mb.Buffer)
-	if err != nil {
+	} else if req, err := http.NewRequest(method, url, mb.Buffer); err != nil {
 		return nil, err
+	} else if ct, err := mb.ContentType(httputilmore.ContentTypeMultipartFormData); err != nil {
+		return nil, err
+	} else {
+		req.Header.Set(httputilmore.HeaderContentType, ct)
+		return req, nil
 	}
-	req.Header.Set(httputilmore.HeaderContentType, mb.ContentType(httputilmore.ContentTypeMultipartFormData))
-	return req, nil
 }

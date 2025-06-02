@@ -23,15 +23,15 @@ const (
 )
 
 type Part struct {
-	Type               string
-	Name               string
-	ContentType        string
-	ContentDisposition string // short
-	HeaderRaw          textproto.MIMEHeader
-	BodyDataFilepath   string
-	BodyDataJSON       any
-	BodyDataRaw        []byte
-	BodyEncodeBase64   bool
+	Type             string
+	Name             string
+	ContentType      string
+	DispositionType  string // short
+	HeaderRaw        textproto.MIMEHeader
+	BodyDataFilepath string
+	BodyDataJSON     any
+	BodyDataRaw      []byte
+	BodyEncodeBase64 bool
 }
 
 func NewPartEmpty(ct string) Part {
@@ -45,11 +45,49 @@ func NewPartEmpty(ct string) Part {
 	return p
 }
 
+// ContentDispositionHeader returns the value of a `Content-Disposition` header.
+func (p *Part) ContentDispositionHeader() (string, error) {
+	dispositionType := strings.ToLower(strings.TrimSpace(p.DispositionType))
+	params := map[string]string{}
+	name := strings.TrimSpace(p.Name)
+	if name != "" {
+		params["name"] = name
+	}
+	_, filename := filepath.Split(p.BodyDataFilepath)
+	if filename = strings.TrimSpace(filename); filename != "" {
+		params["filename"] = filename
+	}
+	if dispositionType == "" && len(params) == 0 {
+		return "", nil
+	} else if dispositionType == "" {
+		return "", errors.New("disposition type cannot be empty in Content-Disposition header per RFC 6266 §3")
+	} else {
+		return mime.FormatMediaType(dispositionType, params), nil
+	}
+}
+
+func (p Part) FilepathToRaw() (Part, error) {
+	if p.Type != PartTypeFilepath {
+		return Part{}, errors.New("part is not filepath type")
+	}
+	header, body, err := p.HeaderBodyFilepath()
+	if err != nil {
+		return Part{}, err
+	}
+	return Part{
+		Type:        PartTypeRaw,
+		HeaderRaw:   header,
+		BodyDataRaw: body,
+	}, nil
+}
+
 // HeaderBodyFilepath sets Content-Disposition and Content-Type.
 func (p Part) HeaderBodyFilepath() (textproto.MIMEHeader, []byte, error) {
 	header := textproto.MIMEHeader{}
 
-	if cd := p.ContentDispositionHeader(); cd != "" {
+	if cd, err := p.ContentDispositionHeader(); err != nil {
+		return header, []byte{}, err
+	} else if cd != "" {
 		header.Add(hum.HeaderContentDisposition, cd)
 	}
 
@@ -76,41 +114,13 @@ func (p Part) HeaderBodyFilepath() (textproto.MIMEHeader, []byte, error) {
 	return header, body, nil
 }
 
-func (p Part) FilepathToRaw() (Part, error) {
-	if p.Type != PartTypeFilepath {
-		return Part{}, errors.New("part is not filepath type")
-	}
-	header, body, err := p.HeaderBodyFilepath()
-	if err != nil {
-		return Part{}, err
-	}
-	return Part{
-		Type:        PartTypeRaw,
-		HeaderRaw:   header,
-		BodyDataRaw: body,
-	}, nil
-}
-
-func (p *Part) ContentDispositionHeader() string {
-	disposition := strings.TrimSpace(p.ContentDisposition)
-	params := map[string]string{}
-	name := strings.TrimSpace(p.Name)
-	if name != "" {
-		params["name"] = name
-	}
-	_, filename := filepath.Split(p.BodyDataFilepath)
-	if filename = strings.TrimSpace(filename); filename != "" {
-		params["filename"] = filename
-	}
-
-	return mime.FormatMediaType(disposition, params)
-}
-
 // HeaderBodyJSON adds a JSON part.
 func (p *Part) HeaderBodyJSON() (textproto.MIMEHeader, []byte, error) {
 	header := textproto.MIMEHeader{}
 
-	if cd := p.ContentDispositionHeader(); cd != "" {
+	if cd, err := p.ContentDispositionHeader(); err != nil {
+		return header, []byte{}, err
+	} else if cd != "" {
 		header.Add(hum.HeaderContentDisposition, cd)
 	}
 

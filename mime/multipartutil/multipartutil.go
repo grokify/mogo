@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"mime"
@@ -188,11 +189,15 @@ func (builder *MultipartBuilder) Close() error {
 }
 
 // ContentType returns the content type for the `Content-Type` header.
-func (builder *MultipartBuilder) ContentType(ct string) string {
+func (builder *MultipartBuilder) ContentType(ct string) (string, error) {
+	ct = strings.ToLower(strings.TrimSpace(ct))
+	if ct == "" {
+		return "", errors.New("content-type cannot be empty")
+	}
 	params := map[string]string{
 		"boundary": builder.Writer.Boundary(),
 	}
-	return mime.FormatMediaType(ct, params)
+	return mime.FormatMediaType(ct, params), nil
 }
 
 // String returns the MIME parts as a string.
