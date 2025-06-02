@@ -91,7 +91,10 @@ func (ps *PartsSet) Strings() (ctHeader, body string, err error) {
 	if err != nil {
 		return
 	}
-	ctHeader = mb.ContentType(ps.ContentType)
+	ctHeader, err = mb.ContentType(ps.ContentType)
+	if err != nil {
+		return
+	}
 	body = mb.String()
 	return
 }
