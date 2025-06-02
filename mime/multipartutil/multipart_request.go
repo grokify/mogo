@@ -34,7 +34,7 @@ func NewRequest(method, url string, params url.Values, files []FileInfo) (*http.
 		return nil, err
 	} else if req, err := http.NewRequest(method, url, mb.Buffer); err != nil {
 		return nil, err
-	} else if ct, err := mb.ContentType(httputilmore.ContentTypeMultipartFormData); err != nil {
+	} else if ct, err := mb.ContentTypeHeader(httputilmore.ContentTypeMultipartFormData); err != nil {
 		return nil, err
 	} else {
 		req.Header.Set(httputilmore.HeaderContentType, ct)
