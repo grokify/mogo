@@ -12,19 +12,19 @@ func NewPartAlternativeOrNot(textBody, htmlBody []byte) (Part, error) {
 		return mps.Part()
 	} else if len(htmlBody) > 0 {
 		return Part{
-			Type:               PartTypeRaw,
-			ContentDisposition: httputilmore.ContentDispositionInline,
-			ContentType:        httputilmore.ContentTypeTextHTMLUtf8,
-			BodyEncodeBase64:   false,
-			BodyDataRaw:        htmlBody,
+			Type:             PartTypeRaw,
+			DispositionType:  httputilmore.DispositionTypeInline,
+			ContentType:      httputilmore.ContentTypeTextHTMLUtf8,
+			BodyEncodeBase64: false,
+			BodyDataRaw:      htmlBody,
 		}, nil
 	} else {
 		return Part{
-			Type:               PartTypeRaw,
-			ContentDisposition: httputilmore.ContentDispositionInline,
-			ContentType:        httputilmore.ContentTypeTextPlainUtf8,
-			BodyEncodeBase64:   false,
-			BodyDataRaw:        textBody,
+			Type:             PartTypeRaw,
+			DispositionType:  httputilmore.DispositionTypeInline,
+			ContentType:      httputilmore.ContentTypeTextPlainUtf8,
+			BodyEncodeBase64: false,
+			BodyDataRaw:      textBody,
 		}, nil
 	}
 }
@@ -34,17 +34,17 @@ func NewPartsSetAlternative(text, html []byte) PartsSet {
 		ContentType: httputilmore.ContentTypeMultipartAlternative,
 		Parts: []Part{
 			{
-				Type:               PartTypeRaw,
-				ContentDisposition: httputilmore.ContentDispositionInline,
-				ContentType:        httputilmore.ContentTypeTextPlain,
-				BodyEncodeBase64:   false,
-				BodyDataRaw:        text,
+				Type:             PartTypeRaw,
+				DispositionType:  httputilmore.DispositionTypeInline,
+				ContentType:      httputilmore.ContentTypeTextPlain,
+				BodyEncodeBase64: false,
+				BodyDataRaw:      text,
 			}, {
-				Type:               PartTypeRaw,
-				ContentDisposition: httputilmore.ContentDispositionInline,
-				ContentType:        httputilmore.ContentTypeTextHTMLUtf8,
-				BodyEncodeBase64:   false,
-				BodyDataRaw:        html,
+				Type:             PartTypeRaw,
+				DispositionType:  httputilmore.DispositionTypeInline,
+				ContentType:      httputilmore.ContentTypeTextHTMLUtf8,
+				BodyEncodeBase64: false,
+				BodyDataRaw:      html,
 			},
 		},
 	}
