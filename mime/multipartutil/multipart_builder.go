@@ -12,7 +12,6 @@ import (
 	"io"
 	"mime"
 	"mime/multipart"
-	"net/http"
 	"net/textproto"
 	"net/url"
 	"os"
@@ -21,25 +20,6 @@ import (
 
 	hum "github.com/grokify/mogo/net/http/httputilmore"
 )
-
-func NewReaderBodyBytes(body []byte, boundary string) *multipart.Reader {
-	return multipart.NewReader(bytes.NewReader(body), boundary)
-}
-
-func NewMultipartReaderForHTTPResponse(resp *http.Response) (*multipart.Reader, error) {
-	contentType := resp.Header.Get(hum.HeaderContentType)
-	mediaType, params, err := mime.ParseMediaType(contentType)
-	if err != nil {
-		return nil, err
-	} else if !strings.HasPrefix(mediaType, "multipart/") {
-		return nil, fmt.Errorf("MediaType is not multipart [%v]", mediaType)
-	}
-	if boundary, ok := params["boundary"]; !ok {
-		return nil, fmt.Errorf("MIME Boundary not found in Content-Type header [%v]", contentType)
-	} else {
-		return multipart.NewReader(resp.Body, boundary), nil
-	}
-}
 
 // MultipartBuilder is a multipart helper.
 type MultipartBuilder struct {
