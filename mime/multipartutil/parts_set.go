@@ -91,7 +91,7 @@ func (ps *PartsSet) Strings() (ctHeader, body string, err error) {
 	if err != nil {
 		return
 	}
-	ctHeader, err = mb.ContentType(ps.ContentType)
+	ctHeader, err = mb.ContentTypeHeader(ps.ContentType)
 	if err != nil {
 		return
 	}

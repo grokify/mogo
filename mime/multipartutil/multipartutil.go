@@ -188,8 +188,8 @@ func (builder *MultipartBuilder) Close() error {
 	return builder.Writer.Close()
 }
 
-// ContentType returns the content type for the `Content-Type` header.
-func (builder *MultipartBuilder) ContentType(ct string) (string, error) {
+// ContentType returns the value for the `Content-Type` header.
+func (builder *MultipartBuilder) ContentTypeHeader(ct string) (string, error) {
 	ct = strings.ToLower(strings.TrimSpace(ct))
 	if ct == "" {
 		return "", errors.New("content-type cannot be empty")
