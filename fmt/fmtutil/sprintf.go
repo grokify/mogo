@@ -1,4 +1,3 @@
-// Package fmtutil implements some formatting utility functions.
 package fmtutil
 
 import (
