@@ -3,23 +3,8 @@ package number
 import (
 	"errors"
 
-	"github.com/grokify/mogo/strconv/strconvutil"
 	"golang.org/x/exp/constraints"
 )
-
-type Integers[C constraints.Integer] []C
-
-func (s Integers[C]) Sum() C {
-	var sum C
-	for _, v := range s {
-		sum += v
-	}
-	return sum
-}
-
-func (s Integers[C]) SumString() string {
-	return strconvutil.Itoa(s.Sum())
-}
 
 type IntegersMatrix[C constraints.Integer] [][]C
 
@@ -35,8 +20,8 @@ func (m IntegersMatrix[C]) ColumnSums(colIdx int, zeroOnEmpty bool) ([]C, error)
 	}
 	var sums []C
 	var zero C
-	for _, r := range m {
-		if len(r) == 0 || len(r)-1 > colIdx {
+	for _, row := range m {
+		if len(row) == 0 || len(row)-1 > colIdx {
 			if zeroOnEmpty {
 				sums = append(sums, zero)
 				continue
@@ -44,7 +29,7 @@ func (m IntegersMatrix[C]) ColumnSums(colIdx int, zeroOnEmpty bool) ([]C, error)
 				return []C{}, errors.New("column index for row is missing")
 			}
 		}
-		for i, ri := range r {
+		for i, ri := range row {
 			if i < len(sums) {
 				sums[i] += ri
 			} else if i == len(sums) {
@@ -55,6 +40,29 @@ func (m IntegersMatrix[C]) ColumnSums(colIdx int, zeroOnEmpty bool) ([]C, error)
 		}
 	}
 	return sums, nil
+}
+
+func (m IntegersMatrix[C]) ColumnSumsSimple() []C {
+	sums := []C{}
+	for _, r := range m {
+		for ci, c := range r {
+			for ci >= len(sums) {
+				sums = append(sums, 0)
+			}
+			sums[ci] += c
+		}
+	}
+	return sums
+}
+
+func (m IntegersMatrix[C]) Sum() C {
+	var out C
+	for _, r := range m {
+		for _, v := range r {
+			out += v
+		}
+	}
+	return out
 }
 
 func MatrixRowsMax(d [][]float64) []float64 {
