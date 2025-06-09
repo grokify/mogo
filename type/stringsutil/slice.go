@@ -10,6 +10,7 @@ import (
 	"github.com/grokify/mogo/type/number"
 	"github.com/grokify/mogo/type/slicesutil"
 	"golang.org/x/exp/slices"
+	"golang.org/x/text/cases"
 )
 
 type Strings []string
@@ -23,6 +24,22 @@ func (strs Strings) FilterIndexes(indexes []int) (Strings, error) {
 		n = append(n, strs[idx])
 	}
 	return n, nil
+}
+
+func (strs Strings) IndexEqualFoldFull(needle string, equalFold bool, caser *cases.Caser) int {
+	if len(strs) == 0 {
+		return -1
+	}
+	for i, try := range strs {
+		if needle == try {
+			return i
+		} else if equalFold {
+			if EqualFoldFull(needle, try, caser) {
+				return i
+			}
+		}
+	}
+	return -1
 }
 
 /*
