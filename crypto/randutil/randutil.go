@@ -1,17 +1,19 @@
 package randutil
 
 import (
-	crand "crypto/rand"
+	"crypto/rand"
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"math"
+	"math/big"
 
 	"github.com/grokify/mogo/type/number"
 )
 
 func Float64() (float64, error) {
 	var b [8]byte
-	if _, err := crand.Read(b[:]); err != nil {
+	if _, err := rand.Read(b[:]); err != nil {
 		return 0, err
 	}
 
@@ -26,6 +28,19 @@ func MustFloat64() float64 {
 		panic(err)
 	} else {
 		return f
+	}
+}
+
+// Intn returns a cryptographically secure random int in [0, n). It panics if n <= 0.
+func Intn(n int) int {
+	if n <= 0 {
+		panic("randutil: Intn requires n > 0")
+	}
+	max := big.NewInt(int64(n))
+	if result, err := rand.Int(rand.Reader, max); err != nil {
+		panic(fmt.Sprintf("randutil: failed to generate random number (%s)", err.Error()))
+	} else {
+		return int(result.Int64())
 	}
 }
 
@@ -68,7 +83,7 @@ func CryptoRandIntInRange[T number.Integer](min, max T) (T, error) {
 	limit := maxUint - (maxUint % span)
 	b := make([]byte, nBytes)
 	for {
-		if _, err := crand.Read(b); err != nil {
+		if _, err := rand.Read(b); err != nil {
 			return 0, err
 		}
 		var n uint64
