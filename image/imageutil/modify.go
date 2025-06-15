@@ -47,19 +47,22 @@ func Resize(width, height int, src image.Image, scale draw.Scaler) image.Image {
 	return dst
 }
 
-func ResizeMaxDimension(maxSide int, src image.Image, scale draw.Scaler) image.Image {
+// ResizeMaxDimension resizes an image so that the max dimension matches what is supplied.
+// If `maxDimension` is `0` or less a zero value `image.Image` is returned.
+func ResizeMaxDimension(maxDimension int, src image.Image, scale draw.Scaler) image.Image {
 	width := src.Bounds().Dx()
 	height := src.Bounds().Dy()
 	if width > height {
-		if width == maxSide {
+		if width == maxDimension {
 			return src
+		} else {
+			return Resize(maxDimension, 0, src, scale)
 		}
-		return Resize(maxSide, 0, src, scale)
-	}
-	if height == maxSide {
+	} else if height == maxDimension {
 		return src
+	} else {
+		return Resize(0, maxDimension, src, scale)
 	}
-	return Resize(0, maxSide, src, scale)
 }
 
 // ResizeMax resizes an image to maximum dimensions. To resize
