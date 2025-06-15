@@ -57,6 +57,7 @@ func (cm *CertManager) TLSConfig() *tls.Config {
 		ClientCAs:    cm.clientCACertPool,
 		RootCAs:      cm.rootCACertPool,
 		Certificates: []tls.Certificate{cm.clientCert},
+		MinVersion:   tls.VersionTLS12,
 	}
 	if cm.requireAndVerifyClientCert {
 		cfg.ClientAuth = tls.RequireAndVerifyClientCert
