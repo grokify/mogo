@@ -69,12 +69,15 @@ func CropY(src image.Image, height int, align string) image.Image {
 func CropPadding(src image.Image, isPadding padding.IsPaddingFunc) image.Image {
 	if src == nil {
 		return nil
+	} else if isPadding == nil {
+		return src
+	} else {
+		return Crop(src, padding.NonPaddingRectangle(src, isPadding))
 	}
-	return Crop(src, padding.NonPaddingRectangle(src, isPadding))
 }
 
-// SquareLarger returns an image that is cropped to where the height and weight are equal
-// to the larger of the source image.
+// SquareLarger returns a square image that is cropped to where the height and weight are equal
+// to the larger of the source image. Additional padding is added, if necessary.
 func (im Image) SquareLarger(bgcolor color.Color) image.Image { return squareLarger(im.Image, bgcolor) }
 
 func squareLarger(src image.Image, bgcolor color.Color) image.Image {
@@ -101,7 +104,9 @@ func squareLarger(src image.Image, bgcolor color.Color) image.Image {
 	}
 }
 
-// SquareSmaller returns an image that is cropped to where the height and weight are equal to the smaller of the source image.
+// SquareSmaller returns a square image that is cropped to where the height and weight
+// are equal to the smaller of the source image. Source image pixes may be cropped and
+// no additional pixels are added.
 func (im Image) SquareSmaller() image.Image { return squareSmaller(im.Image) }
 
 func squareSmaller(src image.Image) image.Image {
