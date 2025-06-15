@@ -22,7 +22,7 @@ func RectangleBorderXMin(rect image.Rectangle, pixels int) image.Rectangle {
 	if pixels <= 0 {
 		return image.Rect(rect.Min.X, rect.Min.Y, rect.Max.X, rect.Max.Y)
 	}
-	maxY := rect.Min.Y + int(pixels)
+	maxY := rect.Min.Y + pixels
 	if maxY > rect.Max.Y {
 		maxY = rect.Max.Y
 	}
@@ -33,7 +33,7 @@ func RectangleBorderXMax(rect image.Rectangle, pixels int) image.Rectangle {
 	if pixels <= 0 {
 		return image.Rect(rect.Min.X, rect.Min.Y, rect.Max.X, rect.Max.Y)
 	}
-	minY := rect.Max.Y - int(pixels)
+	minY := rect.Max.Y - pixels
 	if minY < rect.Min.Y {
 		minY = rect.Min.Y
 	}
@@ -44,7 +44,7 @@ func RectangleBorderYMin(rect image.Rectangle, pixels int) image.Rectangle {
 	if pixels <= 0 {
 		return image.Rect(rect.Min.X, rect.Min.Y, rect.Max.X, rect.Max.Y)
 	}
-	maxX := rect.Min.X + int(pixels)
+	maxX := rect.Min.X + pixels
 	if maxX > rect.Max.X {
 		maxX = rect.Max.X
 	}
@@ -55,7 +55,7 @@ func RectangleBorderYMax(rect image.Rectangle, pixels int) image.Rectangle {
 	if pixels <= 0 {
 		return image.Rect(rect.Min.X, rect.Min.Y, rect.Max.X, rect.Max.Y)
 	}
-	minX := rect.Max.X - int(pixels)
+	minX := rect.Max.X - pixels
 	if minX < rect.Min.X {
 		minX = rect.Min.X
 	}
