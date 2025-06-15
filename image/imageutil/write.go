@@ -5,10 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"image"
-	"image/gif"
 	"image/jpeg"
 	"io"
-	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -39,19 +37,6 @@ func ReadDirJPEGFiles(dir string, rx *regexp.Regexp) (osutil.DirEntries, error) 
 		rx = rxJPEGExtension
 	}
 	return osutil.ReadDirMore(dir, rx, false, true, false)
-}
-
-func WriteGIFFile(filename string, img *gif.GIF) error {
-	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	err = gif.EncodeAll(f, img)
-	if err != nil {
-		return err
-	}
-	return f.Close()
 }
 
 var (

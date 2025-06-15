@@ -5,6 +5,9 @@ import (
 	"errors"
 	"image"
 	"image/color"
+	"image/color/palette"
+	"image/draw"
+	"image/gif"
 	"image/jpeg"
 	"image/png"
 	"io"
@@ -55,6 +58,40 @@ func bytesPNG(img image.Image) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
+func (im Image) GIF() (*gif.GIF, error) {
+	if pal, err := im.Paletted(); err != nil {
+		return nil, err
+	} else {
+		return &gif.GIF{
+			Image:    []*image.Paletted{pal},
+			Delay:    []int{0},
+			Disposal: []byte{gif.DisposalNone},
+		}, nil
+	}
+}
+
+func (im Image) GIFBytes(w io.Writer) ([]byte, error) {
+	var buf bytes.Buffer
+	if g, err := im.GIF(); err != nil {
+		return nil, err
+	} else if err := gif.EncodeAll(&buf, g); err != nil {
+		return nil, err
+	} else {
+		return buf.Bytes(), nil
+	}
+}
+
+func (im Image) Paletted() (*image.Paletted, error) {
+	if im.Image == nil {
+		return nil, errors.New("image cannot be nil")
+	}
+	img := im.Image
+	bounds := img.Bounds()
+	paletted := image.NewPaletted(bounds, palette.Plan9) // or palette.WebSafe
+	draw.FloydSteinberg.Draw(paletted, bounds, img, image.Point{})
+	return paletted, nil
+}
+
 func (im Image) SplitHorz(sqLarger bool, bgcolor color.Color) (imgLeft, imgRight image.Image, err error) {
 	if im.Image == nil {
 		err = errors.New("image cannot be nil")
@@ -69,6 +106,23 @@ func (im Image) SplitHorz(sqLarger bool, bgcolor color.Color) (imgLeft, imgRight
 		imgRight = imgRightMore.SquareLarger(bgcolor)
 	}
 	return
+}
+
+func (im Image) WriteGIFFile(filename string) error {
+	g, err := im.GIF()
+	if err != nil {
+		return err
+	}
+	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	err = gif.EncodeAll(f, g)
+	if err != nil {
+		return err
+	}
+	return f.Close()
 }
 
 func (im Image) WriteJPEG(w io.Writer, opt *JPEGEncodeOptions) error {
