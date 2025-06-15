@@ -83,7 +83,7 @@ func pngBytes(img image.Image) ([]byte, error) {
 
 func (im Image) Paletted() (*image.Paletted, error) {
 	if im.Image == nil {
-		return nil, errors.New("image cannot be nil")
+		return nil, ErrImageNotSet
 	}
 	img := im.Image
 	bounds := img.Bounds()
@@ -94,7 +94,7 @@ func (im Image) Paletted() (*image.Paletted, error) {
 
 func (im Image) SplitHorz(sqLarger bool, bgcolor color.Color) (imgLeft, imgRight image.Image, err error) {
 	if im.Image == nil {
-		err = errors.New("image cannot be nil")
+		err = ErrImageNotSet
 		return
 	}
 	imgLeft = CropX(im.Image, im.Image.Bounds().Dx()/2, AlignLeft)
