@@ -26,38 +26,6 @@ type Image struct {
 	image.Image
 }
 
-func (im Image) BytesJPEG(opt *JPEGEncodeOptions) ([]byte, error) {
-	return bytesJPEG(im.Image, opt)
-}
-
-func bytesJPEG(img image.Image, opt *JPEGEncodeOptions) ([]byte, error) {
-	if img == nil {
-		return []byte{}, ErrImageNotSet
-	}
-	buf := new(bytes.Buffer)
-	err := writeJPEG(buf, img, opt)
-	if err != nil {
-		return []byte{}, err
-	}
-	return buf.Bytes(), nil
-}
-
-func (im Image) BytesPNG() ([]byte, error) {
-	return bytesPNG(im.Image)
-}
-
-func bytesPNG(img image.Image) ([]byte, error) {
-	if img == nil {
-		return []byte{}, ErrImageNotSet
-	}
-	buf := new(bytes.Buffer)
-	err := png.Encode(buf, img)
-	if err != nil {
-		return []byte{}, err
-	}
-	return buf.Bytes(), nil
-}
-
 func (im Image) GIF() (*gif.GIF, error) {
 	if pal, err := im.Paletted(); err != nil {
 		return nil, err
@@ -70,7 +38,7 @@ func (im Image) GIF() (*gif.GIF, error) {
 	}
 }
 
-func (im Image) GIFBytes(w io.Writer) ([]byte, error) {
+func (im Image) GIFBytes() ([]byte, error) {
 	var buf bytes.Buffer
 	if g, err := im.GIF(); err != nil {
 		return nil, err
@@ -79,6 +47,38 @@ func (im Image) GIFBytes(w io.Writer) ([]byte, error) {
 	} else {
 		return buf.Bytes(), nil
 	}
+}
+
+func (im Image) JPEGBytes(opt *JPEGEncodeOptions) ([]byte, error) {
+	return jpegBytes(im.Image, opt)
+}
+
+func jpegBytes(img image.Image, opt *JPEGEncodeOptions) ([]byte, error) {
+	if img == nil {
+		return []byte{}, ErrImageNotSet
+	}
+	buf := new(bytes.Buffer)
+	err := writeJPEG(buf, img, opt)
+	if err != nil {
+		return []byte{}, err
+	}
+	return buf.Bytes(), nil
+}
+
+func (im Image) PNGBytes() ([]byte, error) {
+	return pngBytes(im.Image)
+}
+
+func pngBytes(img image.Image) ([]byte, error) {
+	if img == nil {
+		return []byte{}, ErrImageNotSet
+	}
+	buf := new(bytes.Buffer)
+	err := png.Encode(buf, img)
+	if err != nil {
+		return []byte{}, err
+	}
+	return buf.Bytes(), nil
 }
 
 func (im Image) Paletted() (*image.Paletted, error) {
@@ -179,7 +179,7 @@ func (im Image) WriteJPEGResponseWriter(w http.ResponseWriter, addContentTypeHea
 func writeJPEGResponseWriter(w http.ResponseWriter, addContentTypeHeader bool, img image.Image, opt *JPEGEncodeOptions) error {
 	if img == nil {
 		return ErrImageNotSet
-	} else if b, err := bytesJPEG(img, opt); err != nil {
+	} else if b, err := jpegBytes(img, opt); err != nil {
 		return err
 	} else {
 		if addContentTypeHeader {
@@ -224,7 +224,7 @@ func (im Image) WritePNGResponseWriter(w http.ResponseWriter, addContentTypeHead
 func writePNGResponseWriter(w http.ResponseWriter, addContentTypeHeader bool, img image.Image) error {
 	if img == nil {
 		return ErrImageNotSet
-	} else if b, err := bytesPNG(img); err != nil {
+	} else if b, err := pngBytes(img); err != nil {
 		return err
 	} else {
 		if addContentTypeHeader {
