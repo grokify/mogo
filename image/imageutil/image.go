@@ -60,8 +60,8 @@ func (im Image) SplitHorz(sqLarger bool, bgcolor color.Color) (imgLeft, imgRight
 		err = errors.New("image cannot be nil")
 		return
 	}
-	imgLeft = CropX(im.Image, int(im.Image.Bounds().Dx()/2), AlignLeft)
-	imgRight = CropX(im.Image, int(im.Image.Bounds().Dx()/2), AlignRight)
+	imgLeft = CropX(im.Image, im.Image.Bounds().Dx()/2, AlignLeft)
+	imgRight = CropX(im.Image, im.Image.Bounds().Dx()/2, AlignRight)
 	if sqLarger {
 		imgLeftMore := Image{Image: imgLeft}
 		imgLeft = imgLeftMore.SquareLarger(bgcolor)
