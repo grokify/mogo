@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"image"
+	"image/color"
 	"image/jpeg"
 	"image/png"
 	"io"
@@ -52,6 +53,22 @@ func bytesPNG(img image.Image) ([]byte, error) {
 		return []byte{}, err
 	}
 	return buf.Bytes(), nil
+}
+
+func (im Image) SplitHorz(sqLarger bool, bgcolor color.Color) (imgLeft, imgRight image.Image, err error) {
+	if im.Image == nil {
+		err = errors.New("image cannot be nil")
+		return
+	}
+	imgLeft = CropX(im.Image, int(im.Image.Bounds().Dx()/2), AlignLeft)
+	imgRight = CropX(im.Image, int(im.Image.Bounds().Dx()/2), AlignRight)
+	if sqLarger {
+		imgLeftMore := Image{Image: imgLeft}
+		imgLeft = imgLeftMore.SquareLarger(bgcolor)
+		imgRightMore := Image{Image: imgRight}
+		imgRight = imgRightMore.SquareLarger(bgcolor)
+	}
+	return
 }
 
 func (im Image) WriteJPEG(w io.Writer, opt *JPEGEncodeOptions) error {
