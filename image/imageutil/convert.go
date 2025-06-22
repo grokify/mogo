@@ -61,7 +61,6 @@ func GammaCorrect(src image.Image, gamma float64) *image.RGBA {
 
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
-
 			dst.Set(x, y, colors.GammaCorrect(src.At(x, y), gamma))
 		}
 	}

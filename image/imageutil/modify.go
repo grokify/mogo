@@ -39,10 +39,10 @@ func Bleach(img image.Image) image.Image {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
 			r, g, b, a := rgba.At(x, y).RGBA()
 			// RGBA returns values in 16-bit (0-65535), so normalize to 8-bit
-			r8 := uint8(r >> 8)
-			g8 := uint8(g >> 8)
-			b8 := uint8(b >> 8)
-			a8 := uint8(a >> 8)
+			r8 := uint8(r >> 8) // #nosec G115 // This is intentional truncation.
+			g8 := uint8(g >> 8) // #nosec G115 // This is intentional truncation.
+			b8 := uint8(b >> 8) // #nosec G115 // This is intentional truncation.
+			a8 := uint8(a >> 8) // #nosec G115 // This is intentional truncation.
 
 			// If it's close to white (e.g., light gray), snap to white
 			if r8 > nearWhite && g8 > nearWhite && b8 > nearWhite {
