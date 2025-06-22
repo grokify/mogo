@@ -10,6 +10,7 @@ import (
 
 	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/strconv/strconvutil"
+	"github.com/grokify/mogo/type/number"
 	"github.com/grokify/mogo/type/stringsutil"
 	"golang.org/x/image/colornames"
 )
@@ -219,4 +220,17 @@ func ColorAverage(c ...color.Color) color.Color {
 		uint8(math.Sqrt(float64(g)) / 0x101),
 		uint8(math.Sqrt(float64(b)) / 0x101),
 		uint8(255)}
+}
+
+func GammaCorrectionColor(c color.Color, gamma float64) color.Color {
+	r, g, b, a := c.RGBA()
+	rf := math.Pow(float64(r)/65535.0, gamma)
+	gf := math.Pow(float64(g)/65535.0, gamma)
+	bf := math.Pow(float64(b)/65535.0, gamma)
+	return color.RGBA{
+		R: uint8(number.Clamp255Float64(rf * 255)),
+		G: uint8(number.Clamp255Float64(gf * 255)),
+		B: uint8(number.Clamp255Float64(bf * 255)),
+		A: uint8(a >> 8),
+	}
 }
