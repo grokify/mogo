@@ -231,6 +231,6 @@ func GammaCorrect(c color.Color, gamma float64) color.Color {
 		R: uint8(number.Clamp255Float64(rf * 255)),
 		G: uint8(number.Clamp255Float64(gf * 255)),
 		B: uint8(number.Clamp255Float64(bf * 255)),
-		A: uint8(a >> 8),
+		A: uint8(a >> 8), // #nosec G115 // This is intentional truncation.
 	}
 }
