@@ -27,6 +27,32 @@ func AddBackgroundWhite(img image.Image) image.Image {
 	return AddBackgroundColor(img, color.White)
 }
 
+// Bleach modifies near-white values to true-white.
+func Bleach(img image.Image) image.Image {
+	bounds := img.Bounds()
+	rgba := image.NewRGBA(bounds)
+	draw.Draw(rgba, bounds, img, bounds.Min, draw.Src)
+
+	// Normalize near-white pixels to true white
+	nearWhite := uint8(230)
+	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+		for x := bounds.Min.X; x < bounds.Max.X; x++ {
+			r, g, b, a := rgba.At(x, y).RGBA()
+			// RGBA returns values in 16-bit (0-65535), so normalize to 8-bit
+			r8 := uint8(r >> 8)
+			g8 := uint8(g >> 8)
+			b8 := uint8(b >> 8)
+			a8 := uint8(a >> 8)
+
+			// If it's close to white (e.g., light gray), snap to white
+			if r8 > nearWhite && g8 > nearWhite && b8 > nearWhite {
+				rgba.Set(x, y, color.RGBA{255, 255, 255, a8})
+			}
+		}
+	}
+	return rgba
+}
+
 // Resize scales an image to the provided size units. Use a 0
 // to scale the aspect ratio. See gitub.com/nfnt/resize for Lanczos3, etc.
 // https://github.com/nfnt/resize .

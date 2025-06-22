@@ -5,8 +5,11 @@ import (
 	"image/color"
 	"image/color/palette"
 	"image/draw"
+
+	"github.com/grokify/mogo/image/colors"
 )
 
+// ImageToPaletted is used for GIF conversion.
 func ImageToPaletted(src image.Image, p color.Palette) *image.Paletted {
 	if dst, ok := src.(*image.Paletted); ok {
 		return dst
@@ -24,7 +27,8 @@ func ImageToPalettedPlan9(src image.Image) *image.Paletted {
 	return ImageToPaletted(src, palette.Plan9)
 }
 
-// ImageToPalettedWebSafe uses the 216 color palete created by Netscape.
+// ImageToPalettedWebSafe uses the 216 color palette created by Netscape.
+// This is only necessary for legacy/old applications.
 // See more here: https://en.wikipedia.org/wiki/Web_colors#Web-safe_colors
 func ImageToPalettedWebSafe(src image.Image) *image.Paletted {
 	return ImageToPaletted(src, palette.WebSafe)
@@ -48,6 +52,20 @@ func ImageToRGBA(src image.Image) *image.RGBA {
 	b := src.Bounds()
 	dst := image.NewRGBA(image.Rect(0, 0, b.Dx(), b.Dy()))
 	draw.Draw(dst, dst.Rect, src, src.Bounds().Min, draw.Src)
+	return dst
+}
+
+func GammaCorrect(src image.Image, gamma float64) *image.RGBA {
+	bounds := src.Bounds()
+	dst := image.NewRGBA(bounds)
+
+	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+		for x := bounds.Min.X; x < bounds.Max.X; x++ {
+
+			dst.Set(x, y, colors.GammaCorrect(src.At(x, y), gamma))
+		}
+	}
+
 	return dst
 }
 
