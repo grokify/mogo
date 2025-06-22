@@ -12,3 +12,14 @@ type Signed interface {
 type Unsigned interface {
 	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64
 }
+
+// Clamp255Float64 ensures values are within 0–255 range
+func Clamp255Float64(v float64) float64 {
+	if v < 0 {
+		return 0
+	}
+	if v > 255 {
+		return 255
+	}
+	return v
+}

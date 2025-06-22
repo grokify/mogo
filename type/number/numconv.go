@@ -114,3 +114,11 @@ func U64toi64(u uint64) (int64, error) {
 		return int64(u), nil
 	}
 }
+
+func Utoi(u uint) (int, error) {
+	if u > math.MaxInt {
+		return 0, errorsutil.Wrapf(ErrOverflow, "uint value (%d) overflows int", u)
+	} else {
+		return int(u), nil
+	}
+}
