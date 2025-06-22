@@ -5,10 +5,12 @@ import (
 )
 
 var (
+	Black  = color.RGBA{R: 0, G: 0, B: 0, A: 255}
 	Red    = color.RGBA{R: 255, G: 0, B: 0, A: 255}
+	Orange = color.RGBA{R: 255, G: 165, B: 0, A: 255}
 	Green  = color.RGBA{R: 0, G: 255, B: 0, A: 255}
 	Blue   = color.RGBA{R: 0, G: 0, B: 255, A: 255}
-	Orange = color.RGBA{R: 255, G: 165, B: 0, A: 255}
+	White  = color.RGBA{R: 255, G: 255, B: 255, A: 255}
 
 	ANSIBlackHex   = "000000"
 	ANSIRedHex     = "800000"
