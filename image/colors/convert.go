@@ -222,7 +222,7 @@ func ColorAverage(c ...color.Color) color.Color {
 		uint8(255)}
 }
 
-func GammaCorrectionColor(c color.Color, gamma float64) color.Color {
+func GammaCorrect(c color.Color, gamma float64) color.Color {
 	r, g, b, a := c.RGBA()
 	rf := math.Pow(float64(r)/65535.0, gamma)
 	gf := math.Pow(float64(g)/65535.0, gamma)
