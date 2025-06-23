@@ -8,6 +8,7 @@ import (
 	"math"
 	"math/big"
 
+	"github.com/grokify/mogo/math/mathutil"
 	"github.com/grokify/mogo/type/number"
 )
 
@@ -29,6 +30,11 @@ func MustFloat64() float64 {
 	} else {
 		return f
 	}
+}
+
+// Int63 returns a non-negative pseudo-random 63-bit integer as an int64
+func Int63() int64 {
+	return int64(Intn(mathutil.MaxInt63 + 1))
 }
 
 // Intn returns a cryptographically secure random int in [0, n). It panics if n <= 0.
