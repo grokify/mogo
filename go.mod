@@ -18,9 +18,9 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.27
 	golang.org/x/crypto v0.39.0
 	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b
-	golang.org/x/image v0.28.0
+	golang.org/x/image v0.29.0
 	golang.org/x/net v0.41.0
-	golang.org/x/text v0.26.0
+	golang.org/x/text v0.27.0
 	google.golang.org/genproto v0.0.0-20250603155806-513f23925822
 )
 
