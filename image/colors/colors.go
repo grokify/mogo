@@ -51,3 +51,20 @@ func Equal(c1, c2 color.Color) bool {
 	r2, g2, b2, a2 := c2.RGBA()
 	return r1 == r2 && g1 == g2 && b1 == b2 && a1 == a2
 }
+
+func IsNearWhite(c color.Color) bool {
+	// Normalize near-white pixels to true white
+	nearWhite := uint8(230)
+	r, g, b, _ := c.RGBA()
+	// RGBA returns values in 16-bit (0-65535), so normalize to 8-bit
+	r8 := uint8(r >> 8) // #nosec G115 // This is intentional truncation.
+	g8 := uint8(g >> 8) // #nosec G115 // This is intentional truncation.
+	b8 := uint8(b >> 8) // #nosec G115 // This is intentional truncation.
+
+	// If it's close to white (e.g., light gray), snap to white
+	if r8 > nearWhite && g8 > nearWhite && b8 > nearWhite {
+		return true
+	} else {
+		return false
+	}
+}
