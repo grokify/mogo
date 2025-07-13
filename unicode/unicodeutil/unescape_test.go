@@ -9,6 +9,7 @@ var unescapeTests = []struct {
 	want string
 }{
 	{`M\u00fcnchen`, "München"},
+	{`"M\u00fcnchen"`, `"München"`},
 }
 
 func TestUnescape(t *testing.T) {
