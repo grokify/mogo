@@ -24,6 +24,12 @@ func IsPaddingFuncWhite() func(testColor color.Color) bool {
 	return CreateIsPaddingFuncSimple(color.White)
 }
 
+func IsPaddingFuncNearWhite() func(testColor color.Color) bool {
+	return func(testColor color.Color) bool {
+		return colors.IsNearWhite(testColor)
+	}
+}
+
 func AddPaddingUniform(im image.Image, paddingWidth uint32, paddingColor color.Color) image.Image {
 	out := image.NewRGBA(image.Rect(0, 0, im.Bounds().Dx()+int(2*paddingWidth), im.Bounds().Dy()+int(2*paddingWidth)))
 	draw.Draw(out, out.Bounds(), &image.Uniform{paddingColor}, image.Point{}, draw.Src)
