@@ -5,7 +5,7 @@ import (
 	"image/gif"
 )
 
-func BuildGifAnimationSimpleRead(src *gif.GIF, delay int, names []string, f ToPalettedFunc, consistentSize bool) (*gif.GIF, error) {
+func BuildGIFAnimationSimpleRead(src *gif.GIF, delay int, names []string, f ToPalettedFunc, consistentSize bool) (*gif.GIF, error) {
 	imgs, err := ReadImages(names)
 	if err != nil {
 		return nil, err
@@ -15,12 +15,12 @@ func BuildGifAnimationSimpleRead(src *gif.GIF, delay int, names []string, f ToPa
 		imgs2.ConsistentSize(ScalerBest(), AlignCenter)
 		imgs = []image.Image(imgs2)
 	}
-	return BuildGifAnimationSimple(src, delay, imgs, f), nil
+	return BuildGIFAnimationSimple(src, delay, imgs, f), nil
 }
 
 // BuildGifAnimationSimple assembles a set of images in an animated GIF file.
 // Set `delay` to `0`.
-func BuildGifAnimationSimple(src *gif.GIF, delay int, imgs []image.Image, f ToPalettedFunc) *gif.GIF {
+func BuildGIFAnimationSimple(src *gif.GIF, delay int, imgs []image.Image, f ToPalettedFunc) *gif.GIF {
 	if src == nil {
 		src = &gif.GIF{}
 	}
