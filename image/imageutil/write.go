@@ -202,6 +202,9 @@ func EncodeJPEGWithExif(w io.Writer, img image.Image, opts *jpeg.Options, exif [
 
 // WriteGIFFile writes a `*gif.GIF` to a filename.
 func WriteGIFFile(filename string, img *gif.GIF, perm os.FileMode) error {
+	if img == nil {
+		return errors.New("param `img` cannot be nil pointer")
+	}
 	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, perm)
 	if err != nil {
 		return err
