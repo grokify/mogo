@@ -5,8 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"image"
+	"image/gif"
 	"image/jpeg"
 	"io"
+	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -196,4 +198,14 @@ func EncodeJPEGWithExif(w io.Writer, img image.Image, opts *jpeg.Options, exif [
 	final = append(final, jpegData[2:]...)
 	_, err := w.Write(final)
 	return err
+}
+
+// WriteGIFFile writes a `*gif.GIF` to a filename.
+func WriteGIFFile(filename string, img *gif.GIF, perm os.FileMode) error {
+	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, perm)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	return gif.EncodeAll(f, img)
 }
