@@ -77,7 +77,7 @@ func (cli CLI) Do(ctx context.Context, w io.Writer) error {
 		ctx = context.Background()
 	}
 
-	resp, err := req.Do(ctx)
+	resp, err := req.Do(ctx, nil)
 	if err != nil {
 		return err
 	}

@@ -123,19 +123,19 @@ func DefaultContentTypeBodyType(bt string) string {
 	return ""
 }
 
-func (req Request) Do(ctx context.Context) (*http.Response, error) {
-	if ctx == nil {
-		sc := Client{}
-		return sc.Do(ctx, req)
-	} else if hreq, err := req.HTTPRequest(ctx); err != nil {
+func (req Request) Do(ctx context.Context, client *http.Client) (*http.Response, error) {
+	if client == nil {
+		client = &http.Client{}
+	}
+	if hreq, err := req.HTTPRequest(ctx); err != nil {
 		return nil, err
 	} else {
-		return ctxhttp.Do(ctx, &http.Client{}, hreq)
+		return ctxhttp.Do(ctx, client, hreq)
 	}
 }
 
-func (req Request) DoMore(ctx context.Context) ([]byte, *http.Response, error) {
-	if resp, err := req.Do(ctx); err != nil {
+func (req Request) DoMore(ctx context.Context, client *http.Client) ([]byte, *http.Response, error) {
+	if resp, err := req.Do(ctx, client); err != nil {
 		return []byte{}, resp, err
 	} else {
 		body, err := io.ReadAll(resp.Body)
