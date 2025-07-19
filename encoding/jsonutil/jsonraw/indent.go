@@ -12,7 +12,9 @@ import (
 // IndentBytes converts a JSON byte array into a prettified byte array.
 func IndentBytes(data []byte, prefix, indent string) ([]byte, error) {
 	var out bytes.Buffer
-	if err := json.Indent(&out, data, prefix, indent); err != nil {
+	if len(data) == 0 {
+		return []byte{}, nil
+	} else if err := json.Indent(&out, data, prefix, indent); err != nil {
 		return []byte{}, err
 	} else {
 		return out.Bytes(), nil
