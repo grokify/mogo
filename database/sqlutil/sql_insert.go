@@ -3,7 +3,6 @@ package sqlutil
 import (
 	"errors"
 	"fmt"
-	"regexp"
 	"slices"
 	"sort"
 	"strings"
@@ -14,7 +13,6 @@ func BuildSQLXInsertSQLNamedParams(tblName string, colNames []string) (string, e
 	if tblName == "" {
 		return "", errors.New("table name cannot be empty")
 	}
-	rx := regexp.MustCompile(`[^0-9a-zA-Z]`)
 
 	// clone to prevent unintended side-effects if caller doesn't anticipate
 	// colNames being sorted.
@@ -24,8 +22,8 @@ func BuildSQLXInsertSQLNamedParams(tblName string, colNames []string) (string, e
 	for _, colName := range colNamesLocal {
 		if colName == "" {
 			return "", errors.New("column name cannot be empty")
-		} else if rx.MatchString(colName) {
-			return "", fmt.Errorf("column name (%s) has non-alphanumeric characters", colName)
+		} else if !IsUnquotedIdentifier(colName) {
+			return "", fmt.Errorf("column name (%s) is not a valid unquoted identifier", colName)
 		} else {
 			colNamesVars = append(colNamesVars, ":"+colName)
 		}
