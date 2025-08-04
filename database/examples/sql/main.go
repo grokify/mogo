@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/grokify/mogo/config"
-	"github.com/grokify/mogo/database/sql"
+	"github.com/grokify/mogo/database/sqlutil"
 	"github.com/grokify/mogo/fmt/fmtutil"
 	"github.com/grokify/mogo/strconv/strconvutil"
 )
@@ -24,7 +24,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	sqls, values, err := sql.ReadFileCSVToSQLs(
+	sqls, values, err := sqlutil.ReadFileCSVToSQLs(
 		os.Getenv("SQL_FORMAT"),
 		os.Getenv("SQL_CSV_FILE"),
 		',',
