@@ -78,16 +78,23 @@ func MarshalOrDefault(v any, def []byte) ([]byte, error) {
 }
 
 // MarshalSlice marshals any slice, using `fmt.Sprintf()` for non-strings.
-func MarshalSlice(v ...any) ([]byte, error) {
+func MarshalSlice[T any](v []T, stripBrackets bool) ([]byte, error) {
 	var out []string
 	for _, vi := range v {
-		if s, ok := vi.(string); ok {
+		via := any(vi)
+		if s, ok := via.(string); ok {
 			out = append(out, s)
 		} else {
 			out = append(out, fmt.Sprintf("%v", vi))
 		}
 	}
-	return json.Marshal(out)
+	if b, err := json.Marshal(out); err != nil {
+		return []byte{}, err
+	} else if !stripBrackets {
+		return b, nil
+	} else {
+		return b[1 : len(b)-1], nil
+	}
 }
 
 func MustMarshalOrDefault(v any, def []byte) []byte {
