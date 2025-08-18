@@ -1,12 +1,13 @@
 package randutil
 
 import (
-	"crypto/rand"
+	crand "crypto/rand"
 	"encoding/binary"
 	"errors"
 	"fmt"
 	"math"
 	"math/big"
+	"math/rand"
 
 	"github.com/grokify/mogo/math/mathutil"
 	"github.com/grokify/mogo/type/number"
@@ -14,7 +15,7 @@ import (
 
 func Float64() (float64, error) {
 	var b [8]byte
-	if _, err := rand.Read(b[:]); err != nil {
+	if _, err := crand.Read(b[:]); err != nil {
 		return 0, err
 	}
 
@@ -43,7 +44,7 @@ func Intn(n int) int {
 		panic("randutil: Intn requires n > 0")
 	}
 	max := big.NewInt(int64(n))
-	if result, err := rand.Int(rand.Reader, max); err != nil {
+	if result, err := crand.Int(crand.Reader, max); err != nil {
 		panic(fmt.Sprintf("randutil: failed to generate random number (%s)", err.Error()))
 	} else {
 		return int(result.Int64())
@@ -89,7 +90,7 @@ func CryptoRandIntInRange[T number.Integer](min, max T) (T, error) {
 	limit := maxUint - (maxUint % span)
 	b := make([]byte, nBytes)
 	for {
-		if _, err := rand.Read(b); err != nil {
+		if _, err := crand.Read(b); err != nil {
 			return 0, err
 		}
 		var n uint64
@@ -107,4 +108,14 @@ func CryptoRandIntInRange[T number.Integer](min, max T) (T, error) {
 			return min + T(n%span), nil
 		}
 	}
+}
+
+// NewMathRandCryptoSource generates a `*math/rand.Rand` using a random seed.
+func NewMathRandCryptoSource() *rand.Rand {
+	var seed int64
+	err := binary.Read(crand.Reader, binary.LittleEndian, &seed)
+	if err != nil {
+		panic(fmt.Sprintf("failed to seed math/rand: %v", err))
+	}
+	return rand.New(rand.NewSource(seed)) // #nosec G404
 }
