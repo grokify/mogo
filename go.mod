@@ -1,6 +1,6 @@
 module github.com/grokify/mogo
 
-go 1.23.2
+go 1.22.0
 
 require (
 	github.com/ProtonMail/go-crypto v1.3.0
@@ -17,11 +17,11 @@ require (
 	github.com/martinlindhe/base36 v1.1.1
 	github.com/microcosm-cc/bluemonday v1.0.27
 	golang.org/x/crypto v0.41.0
-	golang.org/x/exp v0.0.0-20250808145144-a408d31f581a
+	golang.org/x/exp v0.0.0-20250819193227-8b4c13bb791b
 	golang.org/x/image v0.30.0
 	golang.org/x/net v0.43.0
 	golang.org/x/text v0.28.0
-	google.golang.org/genproto v0.0.0-20250804133106-a7a43d27e69b
+	google.golang.org/genproto v0.0.0-20250818200422-3122310a409c
 )
 
 require (
@@ -31,5 +31,5 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	golang.org/x/sys v0.35.0 // indirect
-	google.golang.org/protobuf v1.36.7 // indirect
+	google.golang.org/protobuf v1.36.8 // indirect
 )
