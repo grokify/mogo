@@ -311,7 +311,7 @@ func MatrixGetOneOrDefault[C comparable](m [][]C, keyIdx int, keyValue C, wantId
 			continue
 		}
 		if keyValue == row[keyIdx] {
-			if wantIdx > len(row) {
+			if wantIdx >= len(row) {
 				continue
 			}
 			return row[wantIdx]

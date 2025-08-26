@@ -15,7 +15,7 @@ func LetterToNumberMap() map[string]int {
 	l2n := map[string]int{}
 
 	for _, m2 := range m {
-		if len(m2) > 0 {
+		if len(m2) >= 3 {
 			num, err := strconv.Atoi(m2[1])
 			if err != nil {
 				panic(err)
