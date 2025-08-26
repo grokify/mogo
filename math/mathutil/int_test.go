@@ -24,3 +24,11 @@ func TestIntLen(t *testing.T) {
 		}
 	}
 }
+
+func TestMaxInt63(t *testing.T) {
+	want := int64(4611686018427387903)
+	if MaxInt63 != want {
+		t.Errorf("mathutil.MaxInt63 Mismatch: want [%d], got [%d]",
+			want, MaxInt63)
+	}
+}
