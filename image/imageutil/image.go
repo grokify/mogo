@@ -108,7 +108,7 @@ func (im Image) SplitHorz(sqLarger bool, bgcolor color.Color) (imgLeft, imgRight
 	return
 }
 
-func (im Image) WriteGIFFile(filename string) error {
+func (im Image) WriteGIFFile(filename string) (err error) {
 	g, err := im.GIF()
 	if err != nil {
 		return err
@@ -117,12 +117,12 @@ func (im Image) WriteGIFFile(filename string) error {
 	if err != nil {
 		return err
 	}
-	defer f.Close()
-	err = gif.EncodeAll(f, g)
-	if err != nil {
-		return err
-	}
-	return f.Close()
+	defer func() {
+		if cerr := f.Close(); cerr != nil && err == nil {
+			err = cerr
+		}
+	}()
+	return gif.EncodeAll(f, g)
 }
 
 func (im Image) WriteJPEG(w io.Writer, opt *JPEGEncodeOptions) error {
@@ -161,13 +161,17 @@ func (im Image) WriteJPEGFileSimple(filename string, quality int) error {
 	})
 }
 
-func writeJPEGFile(filename string, img image.Image, opt *JPEGEncodeOptions) error {
+func writeJPEGFile(filename string, img image.Image, opt *JPEGEncodeOptions) (err error) {
 	if img == nil {
 		return ErrImageNotSet
 	} else if w, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600); err != nil {
 		return err
 	} else {
-		defer w.Close()
+		defer func() {
+			if cerr := w.Close(); cerr != nil && err == nil {
+				err = cerr
+			}
+		}()
 		return writeJPEG(w, img, opt)
 	}
 }

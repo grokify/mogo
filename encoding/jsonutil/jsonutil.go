@@ -207,11 +207,15 @@ func UnmarshalFileWithBytes(filename string, v any) ([]byte, error) {
 	}
 }
 
-func MarshalFile(filename string, v any, prefix, indent string, perm fs.FileMode) error {
+func MarshalFile(filename string, v any, prefix, indent string, perm fs.FileMode) (err error) {
 	if f, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, perm); err != nil {
 		return err
 	} else {
-		defer f.Close()
+		defer func() {
+			if cerr := f.Close(); cerr != nil && err == nil {
+				err = cerr
+			}
+		}()
 		encr := json.NewEncoder(f)
 		encr.SetIndent(prefix, indent)
 		return encr.Encode(v)
