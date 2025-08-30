@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
 	"strings"
 
@@ -39,6 +40,16 @@ func NewRequest() Request {
 	return Request{
 		Query:   url.Values{},
 		Headers: http.Header{},
+	}
+}
+
+func (req *Request) Bytes(inclBody, inclClientHeaders bool) ([]byte, error) {
+	if hreq, err := req.HTTPRequest(context.Background()); err != nil {
+		return []byte{}, err
+	} else if inclClientHeaders {
+		return httputil.DumpRequestOut(hreq, inclBody)
+	} else {
+		return httputil.DumpRequest(hreq, inclBody)
 	}
 }
 
