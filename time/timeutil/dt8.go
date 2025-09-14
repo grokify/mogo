@@ -7,7 +7,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/grokify/gotilla/time/timeutil"
 	"github.com/grokify/mogo/strconv/strconvutil"
+	"golang.org/x/exp/constraints"
 )
 
 var ErrDateTime8OutOfBounds = errors.New("datetime8: time.Time is out of bounds")
@@ -119,4 +121,16 @@ func dt8TimeInbounds(t time.Time) bool {
 		return false
 	}
 	return true
+}
+
+func MustParseDT8Int[T constraints.Integer](dt8 T) time.Time {
+	if t, err := ParseDT8Int(dt8); err != nil {
+		panic(err)
+	} else {
+		return t
+	}
+}
+
+func ParseDT8Int[T constraints.Integer](dt8 T) (time.Time, error) {
+	return time.Parse(timeutil.DT8, strconvutil.Itoa(dt8))
 }
