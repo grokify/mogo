@@ -2,6 +2,7 @@ package maputil
 
 import (
 	"net/url"
+	"slices"
 	"sort"
 	"strings"
 
@@ -74,6 +75,21 @@ func (mss MapStringSlice) FlattenAny(useLast, skipEmpty bool) map[string]any {
 		msa[k] = v
 	}
 	return msa
+}
+
+func (mss MapStringSlice) FlattenJoin(dedupe, sortAsc bool, sep string) map[string]string {
+	out := map[string]string{}
+	for k, vs := range mss {
+		vs2 := slices.Clone(vs)
+		if dedupe {
+			vs2 = slicesutil.Dedupe(vs2)
+		}
+		if sortAsc {
+			sort.Strings(vs2)
+		}
+		out[k] = strings.Join(vs2, sep)
+	}
+	return out
 }
 
 func (mss MapStringSlice) Keys() []string {
