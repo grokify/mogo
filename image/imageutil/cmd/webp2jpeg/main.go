@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
+	"log/slog"
+	"os"
 
 	"github.com/grokify/mogo/image/imageutil"
 	"github.com/grokify/mogo/log/logutil"
@@ -23,8 +25,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	img, format, err := imageutil.ReadImageHTTP(opts.Input)
-	logutil.FatalErr(err)
+	img, format, err := imageutil.ReadImage(opts.Input)
+	if err != nil {
+		slog.Error("error on `imageutil.ReadImageHTTP()`", "msg", err.Error())
+		os.Exit(1)
+	}
+
 	fmt.Printf("GOT: [%s]\n", format)
 	if opts.WidthMin > 0 {
 		img = imageutil.ResizeMin(opts.WidthMin, 0, img, imageutil.ScalerBest())
