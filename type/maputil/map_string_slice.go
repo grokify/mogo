@@ -9,8 +9,6 @@ import (
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
-// type MapStringSlice map[string][]string
-
 type MapStringSlice url.Values
 
 func NewMapStringSlice() MapStringSlice {
@@ -37,31 +35,6 @@ func (mss MapStringSlice) Clone() MapStringSlice {
 	return MapStringSlice(new)
 }
 
-func (mss MapStringSlice) Sort(dedupe bool) {
-	for key, vals := range mss {
-		if dedupe {
-			vals = slicesutil.Dedupe(vals)
-		}
-		sort.Strings(vals)
-		mss[key] = vals
-	}
-}
-
-func (mss MapStringSlice) Keys() []string {
-	return StringKeys(mss, nil)
-}
-
-// KeysByValueCounts returns a `map[int][]string` where the key is the
-// count of values and the values are the keys with that value count.
-func (mss MapStringSlice) KeysByValueCounts() map[int][]string {
-	byCount := map[int][]string{}
-	for key, vals := range mss {
-		count := len(vals)
-		byCount[count] = append(byCount[count], key)
-	}
-	return byCount
-}
-
 // CondenseSpace will trim spaces for keys and values, and remove empty values. It will
 // also optionally dedupe and sort values.
 func (mss MapStringSlice) CondenseSpace(dedupeVals, sortVals bool) map[string][]string {
@@ -71,14 +44,6 @@ func (mss MapStringSlice) CondenseSpace(dedupeVals, sortVals bool) map[string][]
 		new[strings.TrimSpace(key)] = stringsutil.SliceCondenseSpace(vals, dedupeVals, sortVals)
 	}
 	return new
-}
-
-func KeyValueSliceCounts[K comparable, V any](m map[K][]V) map[K]int {
-	r := map[K]int{}
-	for k, vals := range m {
-		r[k] = len(vals)
-	}
-	return r
 }
 
 // Flatten converts a `map[string][]string{}` to a `map[string]string{}`. The default is to use the first value
@@ -111,6 +76,29 @@ func (mss MapStringSlice) FlattenAny(useLast, skipEmpty bool) map[string]any {
 	return msa
 }
 
+func (mss MapStringSlice) Keys() []string {
+	return StringKeys(mss, nil)
+}
+
+// KeysByValueCounts returns a `map[int][]string` where the key is the
+// count of values and the values are the keys with that value count.
+func (mss MapStringSlice) KeysByValueCounts() map[int][]string {
+	byCount := map[int][]string{}
+	for key, vals := range mss {
+		count := len(vals)
+		byCount[count] = append(byCount[count], key)
+	}
+	return byCount
+}
+
+func KeyValueSliceCounts[K comparable, V any](m map[K][]V) map[K]int {
+	r := map[K]int{}
+	for k, vals := range m {
+		r[k] = len(vals)
+	}
+	return r
+}
+
 func (mss MapStringSlice) Lines(m map[string][]string, keyPrefix, valPrefix string) []string {
 	var lines []string
 	for k, vals := range mss {
@@ -130,4 +118,14 @@ func (mss MapStringSlice) ReveseFlatten() map[string]string {
 		}
 	}
 	return out
+}
+
+func (mss MapStringSlice) Sort(dedupe bool) {
+	for key, vals := range mss {
+		if dedupe {
+			vals = slicesutil.Dedupe(vals)
+		}
+		sort.Strings(vals)
+		mss[key] = vals
+	}
 }
