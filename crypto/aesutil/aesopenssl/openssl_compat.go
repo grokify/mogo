@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/md5"
+	"crypto/md5" // #nosec G501 // used for key expansion and doesn't require collision resistance
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
@@ -31,7 +31,7 @@ func (c *Crypter) Decrypt(ciphertext string) (string, error) {
 func deriveKeyAndIV(password []byte, salt []byte, keyLen, ivLen int) (key, iv []byte) {
 	var d, dI []byte
 	for len(d) < keyLen+ivLen {
-		h := md5.New()
+		h := md5.New() // #nosec G401 // used for key expansion and doesn't require collision resistance
 		h.Write(dI)
 		h.Write(password)
 		if salt != nil {
