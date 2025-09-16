@@ -4,6 +4,7 @@ go 1.24.0
 
 require (
 	github.com/ProtonMail/go-crypto v1.3.0
+	github.com/btcsuite/btcutil v1.0.2
 	github.com/caarlos0/env/v11 v11.3.1
 	github.com/grokify/base36 v1.0.5
 	github.com/grokify/bitcoinmath v0.1.0
@@ -20,6 +21,7 @@ require (
 	golang.org/x/exp v0.0.0-20250911091902-df9299821621
 	golang.org/x/image v0.31.0
 	golang.org/x/net v0.44.0
+	golang.org/x/term v0.35.0
 	golang.org/x/text v0.29.0
 	google.golang.org/genproto v0.0.0-20250908214217-97024824d090
 )
