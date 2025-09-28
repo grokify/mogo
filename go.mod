@@ -23,7 +23,7 @@ require (
 	golang.org/x/net v0.44.0
 	golang.org/x/term v0.35.0
 	golang.org/x/text v0.29.0
-	google.golang.org/genproto v0.0.0-20250908214217-97024824d090
+	google.golang.org/genproto v0.0.0-20250922171735-9219d122eba9
 )
 
 require (
