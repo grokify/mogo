@@ -28,7 +28,7 @@ func TableRowsToMarkdown(rows [][]string, newline string, esc, withHeader bool) 
 			}
 		}
 	}
-	return out
+	return TableAlign(out)
 }
 
 func TableRowToMarkdown(cells []string, esc bool) string {
