@@ -22,7 +22,7 @@ require (
 	golang.org/x/image v0.31.0
 	golang.org/x/net v0.44.0
 	golang.org/x/term v0.35.0
-	golang.org/x/text v0.29.0
+	golang.org/x/text v0.30.0
 	google.golang.org/genproto v0.0.0-20251002232023-7c0ddcbb5797
 )
 
