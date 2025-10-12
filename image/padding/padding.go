@@ -1,6 +1,7 @@
 package padding
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"image/draw"
@@ -15,6 +16,12 @@ type IsPaddingFunc func(c color.Color) bool
 func CreateIsPaddingFuncSimple(paddingColor color.Color) func(testColor color.Color) bool {
 	return func(testColor color.Color) bool {
 		return colors.Equal(paddingColor, testColor)
+	}
+}
+
+func CreateIsPaddingFuncMagicWand(paddingColor color.Color, tolerance uint32) func(testColor color.Color) bool {
+	return func(testColor color.Color) bool {
+		return colors.MagicWandMatch(testColor, paddingColor, tolerance)
 	}
 }
 
@@ -41,11 +48,17 @@ func AddPaddingUniform(im image.Image, paddingWidth uint32, paddingColor color.C
 	return out
 }
 
-func NonPaddingRectangle(im image.Image, isPadding IsPaddingFunc) image.Rectangle {
+func NonPaddingRectangle(im image.Image, isPadding IsPaddingFunc, retainPaddingWidth uint32) image.Rectangle {
 	if isPadding == nil {
 		isPadding = IsPaddingFuncWhite()
 	}
-	topP, rhtP, botP, lftP := PaddingWidths(im, isPadding)
+	topP, rhtP, botP, lftP := PaddingWidths(im, isPadding, retainPaddingWidth)
+	m := map[string]int{
+		"top":   topP,
+		"right": rhtP,
+		"bot":   botP,
+		"left":  lftP,
+	}
 	return image.Rect(
 		lftP+im.Bounds().Min.X,
 		topP+im.Bounds().Min.Y,
@@ -53,15 +66,15 @@ func NonPaddingRectangle(im image.Image, isPadding IsPaddingFunc) image.Rectangl
 		botP*-1+im.Bounds().Max.Y)
 }
 
-func PaddingWidths(im image.Image, isPadding IsPaddingFunc) (top, right, bottom, left int) {
-	top = PaddingWidthTop(im, isPadding)
-	right = PaddingWidthRight(im, isPadding)
-	bottom = PaddingWidthBottom(im, isPadding)
-	left = PaddingWidthLeft(im, isPadding)
+func PaddingWidths(im image.Image, isPadding IsPaddingFunc, retainPaddingWidth uint32) (top, right, bottom, left int) {
+	top = PaddingWidthTop(im, isPadding, retainPaddingWidth)
+	right = PaddingWidthRight(im, isPadding, retainPaddingWidth)
+	bottom = PaddingWidthBottom(im, isPadding, retainPaddingWidth)
+	left = PaddingWidthLeft(im, isPadding, retainPaddingWidth)
 	return
 }
 
-func PaddingWidthTop(im image.Image, isPadding IsPaddingFunc) int {
+func PaddingWidthTop(im image.Image, isPadding IsPaddingFunc, retainPaddingWidth uint32) int {
 	if im == nil {
 		return 0
 	}
@@ -71,7 +84,7 @@ func PaddingWidthTop(im image.Image, isPadding IsPaddingFunc) int {
 				if out := yi - im.Bounds().Min.Y; out < 0 {
 					panic("padding width cannot be less than zero")
 				} else {
-					return out
+					return paddingWidthReduce(out, int(retainPaddingWidth))
 				}
 			}
 		}
@@ -79,7 +92,7 @@ func PaddingWidthTop(im image.Image, isPadding IsPaddingFunc) int {
 	return im.Bounds().Dy()
 }
 
-func PaddingWidthBottom(im image.Image, isPadding IsPaddingFunc) int {
+func PaddingWidthBottom(im image.Image, isPadding IsPaddingFunc, retainPaddingWidth uint32) int {
 	if im == nil {
 		return 0
 	}
@@ -89,7 +102,7 @@ func PaddingWidthBottom(im image.Image, isPadding IsPaddingFunc) int {
 				if out := im.Bounds().Max.Y - 1 - yi; out < 0 {
 					panic("padding width cannot be less than zero")
 				} else {
-					return out
+					return paddingWidthReduce(out, int(retainPaddingWidth))
 				}
 			}
 		}
@@ -97,7 +110,7 @@ func PaddingWidthBottom(im image.Image, isPadding IsPaddingFunc) int {
 	return im.Bounds().Dy()
 }
 
-func PaddingWidthLeft(im image.Image, isPadding IsPaddingFunc) int {
+func PaddingWidthLeft(im image.Image, isPadding IsPaddingFunc, retainPaddingWidth uint32) int {
 	if im == nil {
 		return 0
 	}
@@ -107,7 +120,8 @@ func PaddingWidthLeft(im image.Image, isPadding IsPaddingFunc) int {
 				if out := xi - im.Bounds().Min.X; out < 0 {
 					panic("padding width cannot be less than zero")
 				} else {
-					return out
+					fmt.Printf("X %d Y %d\n", xi, yi)
+					return paddingWidthReduce(out, int(retainPaddingWidth))
 				}
 			}
 		}
@@ -115,7 +129,7 @@ func PaddingWidthLeft(im image.Image, isPadding IsPaddingFunc) int {
 	return im.Bounds().Dx()
 }
 
-func PaddingWidthRight(im image.Image, isPadding func(c color.Color) bool) int {
+func PaddingWidthRight(im image.Image, isPadding IsPaddingFunc, retainPaddingWidth uint32) int {
 	if im == nil {
 		return 0
 	}
@@ -125,10 +139,26 @@ func PaddingWidthRight(im image.Image, isPadding func(c color.Color) bool) int {
 				if out := im.Bounds().Max.X - 1 - xi; out < 0 {
 					panic("padding width cannot be less than zero")
 				} else {
-					return out
+					return paddingWidthReduce(out, int(retainPaddingWidth))
 				}
 			}
 		}
 	}
 	return im.Bounds().Dx()
+}
+
+func paddingWidthReduce(paddingWidth int, retainPadding int) int {
+	if paddingWidth < 0 {
+		paddingWidth = 0
+	}
+	if retainPadding < 0 {
+		retainPadding = 0
+	}
+	if retainPadding == 0 {
+		return paddingWidth
+	} else if modWidth := paddingWidth - retainPadding; modWidth < 0 {
+		return 0
+	} else {
+		return modWidth
+	}
 }

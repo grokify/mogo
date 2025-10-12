@@ -66,13 +66,13 @@ func CropY(src image.Image, height int, align string) image.Image {
 		yMin+height))
 }
 
-func CropPadding(src image.Image, isPadding padding.IsPaddingFunc) image.Image {
+func CropPadding(src image.Image, isPadding padding.IsPaddingFunc, retainPaddingWidth uint32) image.Image {
 	if src == nil {
 		return nil
 	} else if isPadding == nil {
 		return src
 	} else {
-		return Crop(src, padding.NonPaddingRectangle(src, isPadding))
+		return Crop(src, padding.NonPaddingRectangle(src, isPadding, retainPaddingWidth))
 	}
 }
 
