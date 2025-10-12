@@ -55,12 +55,6 @@ func NonPaddingRectangle(im image.Image, isPadding IsPaddingFunc, retainPaddingW
 		isPadding = IsPaddingFuncWhite()
 	}
 	topP, rhtP, botP, lftP := PaddingWidths(im, isPadding, retainPaddingWidth)
-	m := map[string]int{
-		"top":   topP,
-		"right": rhtP,
-		"bot":   botP,
-		"left":  lftP,
-	}
 	return image.Rect(
 		lftP+im.Bounds().Min.X,
 		topP+im.Bounds().Min.Y,
