@@ -19,6 +19,8 @@ func CreateIsPaddingFuncSimple(paddingColor color.Color) func(testColor color.Co
 	}
 }
 
+// CreateIsPaddingFuncMagicWand creates a padding func that matches a color with a `tolerance`
+// for matching nearby colors.
 func CreateIsPaddingFuncMagicWand(paddingColor color.Color, tolerance uint32) func(testColor color.Color) bool {
 	return func(testColor color.Color) bool {
 		return colors.MagicWandMatch(testColor, paddingColor, tolerance)
