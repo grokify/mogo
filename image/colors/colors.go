@@ -2,6 +2,7 @@ package colors
 
 import (
 	"image/color"
+	"math"
 )
 
 var (
@@ -67,4 +68,25 @@ func IsNearWhite(c color.Color) bool {
 	} else {
 		return false
 	}
+}
+
+// MagicWandMatch returns true if color c matches reference color ref within the given tolerance.
+// Tolerance works similar to Photoshop's Magic Wand tool, where 0 means exact match
+// and higher values allow more color variation.
+func MagicWandMatch(c, ref color.Color, tolerance uint32) bool {
+	r1, g1, b1, _ := c.RGBA()
+	r2, g2, b2, _ := ref.RGBA()
+
+	// Convert from uint32 (0-65535) to uint8 (0-255) for easier comparison
+	r1, g1, b1 = r1>>8, g1>>8, b1>>8
+	r2, g2, b2 = r2>>8, g2>>8, b2>>8
+
+	// Calculate Euclidean distance in RGB color space
+	dr := float64(r1) - float64(r2)
+	dg := float64(g1) - float64(g2)
+	db := float64(b1) - float64(b2)
+
+	distance := math.Sqrt(dr*dr + dg*dg + db*db)
+
+	return distance <= float64(tolerance)
 }
