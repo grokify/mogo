@@ -107,6 +107,18 @@ func FormatString(s string, options []string) string {
 	return s
 }
 
+func HasPrefixAny(s string, prefixes []string) bool {
+	if len(prefixes) == 0 {
+		return true
+	}
+	for _, prefix := range prefixes {
+		if strings.HasPrefix(s, prefix) {
+			return true
+		}
+	}
+	return false
+}
+
 func IsLower(s string) bool {
 	return s == strings.ToLower(s)
 }
