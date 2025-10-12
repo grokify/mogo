@@ -15,20 +15,22 @@ const (
 
 func TableRowsToMarkdown(rows [][]string, newline string, esc, withHeader bool) string {
 	var out string
+	sepLineRowIdx := -1
+
 	for i, row := range rows {
 		md := TableRowToMarkdown(row, esc)
 		out += md
 		if i < len(rows)-1 {
 			out += newline
 		}
-		if i == 0 && withHeader {
+		if i == 0 && withHeader && len(rows) >= 2 {
 			out += TableSeparator(len(row))
-			if i < len(rows)-1 {
-				out += newline
-			}
+			out += newline
+			sepLineRowIdx = i + 1
 		}
 	}
-	return TableAlign(out)
+
+	return TableAlign(out, sepLineRowIdx)
 }
 
 func TableRowToMarkdown(cells []string, esc bool) string {
