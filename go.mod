@@ -17,13 +17,13 @@ require (
 	github.com/lytics/base62 v0.0.0-20180808010106-0ee4de5a5d6d
 	github.com/martinlindhe/base36 v1.1.1
 	github.com/microcosm-cc/bluemonday v1.0.27
-	golang.org/x/crypto v0.42.0
-	golang.org/x/exp v0.0.0-20251002181428-27f1f14c8bb9
-	golang.org/x/image v0.31.0
-	golang.org/x/net v0.44.0
-	golang.org/x/term v0.35.0
-	golang.org/x/text v0.29.0
-	google.golang.org/genproto v0.0.0-20251002232023-7c0ddcbb5797
+	golang.org/x/crypto v0.43.0
+	golang.org/x/exp v0.0.0-20251009144603-d2f985daa21b
+	golang.org/x/image v0.32.0
+	golang.org/x/net v0.46.0
+	golang.org/x/term v0.36.0
+	golang.org/x/text v0.30.0
+	google.golang.org/genproto v0.0.0-20251007200510-49b9836ed3ff
 )
 
 require (
@@ -32,6 +32,6 @@ require (
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	golang.org/x/sys v0.36.0 // indirect
+	golang.org/x/sys v0.37.0 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 )
