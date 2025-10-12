@@ -19,7 +19,7 @@ var paddingTests = []struct {
 	bottomPadding           int
 	leftPadding             int
 	isPaddingFunc           IsPaddingFunc
-	retainPaddingWidth      int
+	retainPaddingWidth      uint32
 	nonPaddngColorHistogram map[string]uint
 }{
 	{"testdata/padding_example.png",
@@ -48,7 +48,7 @@ func TestPadding(t *testing.T) {
 		if err != nil {
 			panic(err)
 		}
-		tryTop, tryRight, tryBottom, tryLeft := PaddingWidths(img, tt.isPaddingFunc, uint32(tt.retainPaddingWidth))
+		tryTop, tryRight, tryBottom, tryLeft := PaddingWidths(img, tt.isPaddingFunc, tt.retainPaddingWidth)
 		if tryTop != tt.topPadding ||
 			tryRight != tt.rightPadding ||
 			tryBottom != tt.bottomPadding ||
@@ -57,7 +57,7 @@ func TestPadding(t *testing.T) {
 				tt.topPadding, tt.rightPadding, tt.bottomPadding, tt.leftPadding, tryTop, tryRight, tryBottom, tryLeft)
 		}
 
-		tryRect := NonPaddingRectangle(img, tt.isPaddingFunc, uint32(tt.retainPaddingWidth))
+		tryRect := NonPaddingRectangle(img, tt.isPaddingFunc, tt.retainPaddingWidth)
 		new := image.NewRGBA(tryRect)
 		draw.Draw(new, new.Bounds(), img, tryRect.Min, draw.Over)
 		cs := imageColors(new)
