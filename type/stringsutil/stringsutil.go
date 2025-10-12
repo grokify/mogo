@@ -1,9 +1,7 @@
 package stringsutil
 
 import (
-	"fmt"
 	"regexp"
-	"sort"
 	"strings"
 	"unicode"
 
@@ -33,6 +31,99 @@ var (
 	rxSpaces  = regexp.MustCompile(`\s+`)
 )
 
+// Capitalize returns a string with the first character
+// capitalized and the rest lower cased.
+func Capitalize(s1 string) string {
+	return ToUpperFirst(s1, true)
+}
+
+// CondenseSpace removes extra spaces.
+func CondenseSpace(s string) string {
+	return strings.Join(strings.Fields(s), " ")
+}
+
+// CondenseString trims whitespace at the ends of the string
+// as well as in between.
+func CondenseString(content string, joinLines bool) string {
+	if joinLines {
+		content = regexp.MustCompile(`\n`).ReplaceAllString(content, " ")
+	}
+	// Beginning
+	content = regexp.MustCompile(`^\s+`).ReplaceAllString(content, "")
+	// End
+	content = regexp.MustCompile(`\s+$`).ReplaceAllString(content, "")
+	// Middle
+	content = regexp.MustCompile(`\n[\s\t\r]*\n`).ReplaceAllString(content, "\n")
+	// Indentation
+	content = regexp.MustCompile(`\n[\s\t\r]*`).ReplaceAllString(content, "\n")
+	// Collapse
+	content = regexp.MustCompile(`\s+`).ReplaceAllString(content, " ")
+	return strings.TrimSpace(content)
+}
+
+// EmptyError takes a string and error, returning
+// the string value or an empty string if an error
+// is encountered. It is used for simplifying code
+// that returns a value or an error if not present.
+func EmptyError(s string, err error) string {
+	if err != nil {
+		return ""
+	}
+	return s
+}
+
+func FirstNonEmpty(vals ...string) string {
+	for _, val := range vals {
+		if len(val) > 0 {
+			return val
+		}
+	}
+	return ""
+}
+
+// FirstNotEmptyTrimSpace returns the first non-empty string
+// after applying `strings.TrimSpace()`.`
+func FirstNotEmptyTrimSpace(vals ...string) string {
+	for _, s := range vals {
+		s = strings.TrimSpace(s)
+		if len(s) > 0 {
+			return s
+		}
+	}
+	return ""
+}
+
+func FormatString(s string, options []string) string {
+	for _, opt := range options {
+		switch strings.TrimSpace(opt) {
+		case StringToLower:
+			s = strings.ToLower(s)
+		case SpaceToHyphen:
+			s = regexp.MustCompile(`[\s-]+`).ReplaceAllString(s, "-")
+		case SpaceToUnderscore:
+			s = regexp.MustCompile(`[\s_]+`).ReplaceAllString(s, "_")
+		}
+	}
+	return s
+}
+
+func IsLower(s string) bool {
+	return s == strings.ToLower(s)
+}
+
+func IsUpper(s string) bool {
+	return s == strings.ToUpper(s)
+}
+
+var (
+	rxRN = regexp.MustCompile(`\r\n`)
+	rxR  = regexp.MustCompile(`\r`)
+)
+
+func NewlineToLinux(input string) string {
+	return rxR.ReplaceAllString(rxRN.ReplaceAllString(input, "\n"), "\n")
+}
+
 // PadLeft prepends a string to a base string until the string
 // length is greater or equal to the desired length.
 func PadLeft(str string, pad string, length int) string {
@@ -55,18 +146,74 @@ func PadRight(str string, pad string, length int) string {
 	}
 }
 
-func IsLower(s string) bool {
-	return s == strings.ToLower(s)
+// RemoveNonPrintable removes non-printable characters from a string.
+func RemoveNonPrintable(s string) string {
+	return strings.Map(func(r rune) rune {
+		if unicode.IsPrint(r) {
+			return r
+		} else {
+			return -1
+		}
+	}, s)
 }
 
-func IsUpper(s string) bool {
-	return s == strings.ToUpper(s)
+var rxSpace = regexp.MustCompile(`\s+`)
+
+// RemoveSpaces eliminates all spaces in a string.
+func RemoveSpaces(input string) string {
+	return rxSpace.ReplaceAllString(input, "")
 }
 
-// Capitalize returns a string with the first character
-// capitalized and the rest lower cased.
-func Capitalize(s1 string) string {
-	return ToUpperFirst(s1, true)
+// Repeat returns atring of length `length` by repeating string `s`. If `length` is less than
+// then length of `s`, the result is cut to `length`.
+func Repeat(s string, length uint32) string {
+	if length <= 0 {
+		return ""
+	}
+	str := ""
+	for {
+		str += s
+		l := len(str)
+		if l == int(length) {
+			return str
+		} else if l > int(length) {
+			return str[:length]
+		}
+	}
+}
+
+// StripChars removes chars specified by `cutset` while maintaining order of remaining
+// chars and shortening string per removed chars.
+func StripChars(s, cutset string) string {
+	return strings.Map(func(r rune) rune {
+		if strings.ContainsRune(cutset, r) {
+			return -1
+		} else {
+			return r
+		}
+	}, s)
+}
+
+func StripControl(s string) string { return rxControl.ReplaceAllString(s, "") }
+
+func StripSubstring(s, substr string, insensitive bool) string {
+	var rx *regexp.Regexp
+	if insensitive {
+		rx = regexp.MustCompile(`(?i)` + regexp.QuoteMeta(substr))
+	} else {
+		rx = regexp.MustCompile(regexp.QuoteMeta(substr))
+	}
+	return rx.ReplaceAllString(s, "")
+}
+
+func SubstringIsSuffix(s1, s2 string) bool {
+	len1 := len(s1)
+	len2 := len(s2)
+	idx := strings.Index(s1, s2)
+	if len1 >= len2 && idx > -1 && idx == (len1-len2) {
+		return true
+	}
+	return false
 }
 
 // ToLowerFirst lower cases the first letter in the string
@@ -99,59 +246,6 @@ func ToBool(v string) bool {
 	return true
 }
 
-func SubstringIsSuffix(s1, s2 string) bool {
-	len1 := len(s1)
-	len2 := len(s2)
-	idx := strings.Index(s1, s2)
-	if len1 >= len2 && idx > -1 && idx == (len1-len2) {
-		return true
-	}
-	return false
-}
-
-var rxSpace = regexp.MustCompile(`\s+`)
-
-// RemoveSpaces eliminates all spaces in a string.
-func RemoveSpaces(input string) string {
-	return rxSpace.ReplaceAllString(input, "")
-}
-
-// CondenseString trims whitespace at the ends of the string
-// as well as in between.
-func CondenseString(content string, joinLines bool) string {
-	if joinLines {
-		content = regexp.MustCompile(`\n`).ReplaceAllString(content, " ")
-	}
-	// Beginning
-	content = regexp.MustCompile(`^\s+`).ReplaceAllString(content, "")
-	// End
-	content = regexp.MustCompile(`\s+$`).ReplaceAllString(content, "")
-	// Middle
-	content = regexp.MustCompile(`\n[\s\t\r]*\n`).ReplaceAllString(content, "\n")
-	// Indentation
-	content = regexp.MustCompile(`\n[\s\t\r]*`).ReplaceAllString(content, "\n")
-	// Collapse
-	content = regexp.MustCompile(`\s+`).ReplaceAllString(content, " ")
-	return strings.TrimSpace(content)
-}
-
-// CondenseSpace removes extra spaces.
-func CondenseSpace(s string) string {
-	return strings.Join(strings.Fields(s), " ")
-}
-
-func StripControl(s string) string { return rxControl.ReplaceAllString(s, "") }
-
-func StripSubstring(s, substr string, insensitive bool) string {
-	var rx *regexp.Regexp
-	if insensitive {
-		rx = regexp.MustCompile(`(?i)` + regexp.QuoteMeta(substr))
-	} else {
-		rx = regexp.MustCompile(regexp.QuoteMeta(substr))
-	}
-	return rx.ReplaceAllString(s, "")
-}
-
 /*
 func OrDefault(s, defaultValue string) string {
 	if len(s) == 0 {
@@ -160,15 +254,6 @@ func OrDefault(s, defaultValue string) string {
 	return s
 }
 */
-
-func FirstNonEmpty(vals ...string) string {
-	for _, val := range vals {
-		if len(val) > 0 {
-			return val
-		}
-	}
-	return ""
-}
 
 // TrimSpaceOrDefault trims spaces and replaces default value if
 // result is empty string.
@@ -192,103 +277,6 @@ func TrimSentenceLength(sentenceInput string, maxLength int) string {
 		return sentencePunct
 	}
 	return sentenceLen
-}
-
-// FirstNotEmptyTrimSpace returns the first non-empty string
-// after applying `strings.TrimSpace()`.`
-func FirstNotEmptyTrimSpace(candidates ...string) string {
-	for _, s := range candidates {
-		s = strings.TrimSpace(s)
-		if len(s) > 0 {
-			return s
-		}
-	}
-	return ""
-}
-
-func JoinTrimSpace(strs []string) string {
-	return rxSpaces.ReplaceAllString(strings.Join(strs, " "), " ")
-}
-
-// JoinInterface joins an interface and returns a string. It takes
-// a join separator, boolean to replace the join separator in the
-// string parts and a separator alternate. `stripEmbeddedSep` strips
-// separator string found within parts. `stripRepeatedSep` strips
-// repeating separators. This flexibility is designed to support
-// joining data for both CSVs and paths.
-func JoinInterface(arr []any, sep string, stripRepeatedSep bool, stripEmbeddedSep bool, altSep string) string {
-	parts := []string{}
-	rx := regexp.MustCompile(sep)
-	for _, el := range arr {
-		part := fmt.Sprintf("%v", el)
-		if stripEmbeddedSep {
-			part = rx.ReplaceAllString(part, altSep)
-		}
-		parts = append(parts, part)
-	}
-	joined := strings.Join(parts, sep)
-	if stripRepeatedSep {
-		joined = regexp.MustCompile(fmt.Sprintf("%s+", sep)).
-			ReplaceAllString(joined, sep)
-	}
-	return joined
-}
-
-func JoinLiterary(slice []string, sep, joinWord string) string {
-	switch len(slice) {
-	case 0:
-		return ""
-	case 1:
-		return slice[0]
-	case 2:
-		return slice[0] + " " + joinWord + " " + slice[1]
-	default:
-		last, rest := slice[len(slice)-1], slice[:len(slice)-1]
-		rest = append(rest, joinWord+" "+last)
-		return strings.Join(rest, sep+" ")
-	}
-}
-
-func JoinLiteraryQuote(slice []string, leftQuote, rightQuote, sep, joinWord string) string {
-	newSlice := SliceCondenseAndQuoteSpace(slice, leftQuote, rightQuote)
-	switch len(newSlice) {
-	case 0:
-		return ""
-	case 1:
-		return newSlice[0]
-	case 2:
-		return newSlice[0] + " " + joinWord + " " + newSlice[1]
-	default:
-		last, rest := newSlice[len(newSlice)-1], newSlice[:len(newSlice)-1]
-		rest = append(rest, joinWord+" "+last)
-		return strings.Join(rest, sep+" ")
-	}
-}
-
-func JoinStringsTrimSpaceToLowerSort(strs []string, sep string) string {
-	wip := []string{}
-	for _, s := range strs {
-		s = strings.ToLower(strings.TrimSpace(s))
-		if len(s) > 0 {
-			wip = append(wip, s)
-		}
-	}
-	sort.Strings(wip)
-	return strings.Join(wip, sep)
-}
-
-func FormatString(s string, options []string) string {
-	for _, opt := range options {
-		switch strings.TrimSpace(opt) {
-		case StringToLower:
-			s = strings.ToLower(s)
-		case SpaceToHyphen:
-			s = regexp.MustCompile(`[\s-]+`).ReplaceAllString(s, "-")
-		case SpaceToUnderscore:
-			s = regexp.MustCompile(`[\s_]+`).ReplaceAllString(s, "_")
-		}
-	}
-	return s
 }
 
 // CommonInitialisms is the listed by Go Lint.
@@ -325,49 +313,6 @@ func ToOpposite(s string) string {
 	return xstrings.Translate(s, lowerUpper, upperLower)
 }
 
-var (
-	rxRN = regexp.MustCompile(`\r\n`)
-	rxR  = regexp.MustCompile(`\r`)
-)
-
-func NewlineToLinux(input string) string {
-	return rxR.ReplaceAllString(rxRN.ReplaceAllString(input, "\n"), "\n")
-}
-
-// EmptyError takes a string and error, returning
-// the string value or an empty string if an error
-// is encountered. It is used for simplifying code
-// that returns a value or an error if not present.
-func EmptyError(s string, err error) string {
-	if err != nil {
-		return ""
-	}
-	return s
-}
-
-// RemoveNonPrintable removes non-printable characters from a string.
-func RemoveNonPrintable(s string) string {
-	return strings.Map(func(r rune) rune {
-		if unicode.IsPrint(r) {
-			return r
-		} else {
-			return -1
-		}
-	}, s)
-}
-
-// StripChars removes chars specified by `cutset` while maintaining order of remaining
-// chars and shortening string per removed chars.
-func StripChars(s, cutset string) string {
-	return strings.Map(func(r rune) rune {
-		if strings.ContainsRune(cutset, r) {
-			return -1
-		} else {
-			return r
-		}
-	}, s)
-}
-
 // UniqueRunes checks to see if a string's runes are unique.
 func UniqueRunes(s string) bool {
 	v := map[rune]bool{}
@@ -379,22 +324,4 @@ func UniqueRunes(s string) bool {
 		}
 	}
 	return len(s) == len(v)
-}
-
-// Repeat returns atring of length `length` by repeating string `s`. If `length` is less than
-// then length of `s`, the result is cut to `length`.
-func Repeat(s string, length uint32) string {
-	if length <= 0 {
-		return ""
-	}
-	str := ""
-	for {
-		str += s
-		l := len(str)
-		if l == int(length) {
-			return str
-		} else if l > int(length) {
-			return str[:length]
-		}
-	}
 }
