@@ -24,8 +24,7 @@ func TableRowsToMarkdown(rows [][]string, newline string, esc, withHeader bool) 
 			out += newline
 		}
 		if i == 0 && withHeader && len(rows) >= 2 {
-			out += TableSeparator(len(row))
-			out += newline
+			out += TableSeparator(len(row)) + newline
 			sepLineRowIdx = i + 1
 		}
 	}
