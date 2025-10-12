@@ -5,14 +5,14 @@ import (
 )
 
 // TableAlign takes a markdown table string and aligns the pipes.
-func TableAlign(input string) string {
+func TableAlign(input string, sepLineRowIdx int) string {
 	lines := strings.Split(strings.TrimSpace(input), "\n")
 	if len(lines) == 0 {
 		return ""
 	}
 
 	// Split rows into columns
-	table := make([][]string, len(lines))
+	tbl := make([][]string, len(lines))
 	colWidths := []int{}
 
 	for i, line := range lines {
@@ -22,7 +22,7 @@ func TableAlign(input string) string {
 		for j := range cols {
 			cols[j] = strings.TrimSpace(cols[j])
 		}
-		table[i] = cols
+		tbl[i] = cols
 
 		// Track max width per column
 		for j, col := range cols {
@@ -36,13 +36,20 @@ func TableAlign(input string) string {
 
 	// Rebuild table with aligned columns
 	var sb strings.Builder
-	for _, row := range table {
+	for i, row := range tbl {
 		sb.WriteString("|")
-		for j, col := range row {
-			padding := colWidths[j] - len(col)
-			sb.WriteString(" " + col + strings.Repeat(" ", padding) + " |")
+		paddingChar := " "
+		if i == sepLineRowIdx {
+			paddingChar = "-"
 		}
-		sb.WriteString("\n")
+		for j, cellVal := range row {
+			paddingLen := colWidths[j] - len(cellVal)
+			sb.WriteString(" " + cellVal + strings.Repeat(paddingChar, paddingLen) + " |")
+		}
+		// add newline except for last line
+		if i < len(tbl)-1 {
+			sb.WriteString("\n")
+		}
 	}
 
 	return sb.String()
