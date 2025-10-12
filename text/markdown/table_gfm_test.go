@@ -7,11 +7,10 @@ import (
 
 func TestTableRowsToMarkdown(t *testing.T) {
 	var markdownFormatTests = []struct {
-		columns      []string
-		rows         [][]string
-		sepLineIndex int
+		columns []string
+		rows    [][]string
 	}{
-		{[]string{"a", "a"}, [][]string{{"bb", "bbb"}, {"cccc", "ccccc"}}, 1},
+		{[]string{"a", "a"}, [][]string{{"bb", "bbb"}, {"cccc", "ccccc"}}},
 	}
 
 	for _, tt := range markdownFormatTests {
