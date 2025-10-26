@@ -5,20 +5,6 @@ import (
 	"time"
 )
 
-type Unit string
-
-const (
-	SlugYear   Unit = "year"
-	SlugMonth  Unit = "month"
-	SlugWeek   Unit = "week"
-	SlugDay    Unit = "day"
-	SlugHour   Unit = "hour"
-	SlugMinute Unit = "minute"
-	SlugSecond Unit = "second"
-
-	SlugBusinessDay = "businessday"
-)
-
 type Spec struct {
 	Value int64 `json:"value" yaml:"value"`
 	Unit  Unit  `json:"unit" yaml:"unit"`
@@ -26,18 +12,24 @@ type Spec struct {
 
 func (s Spec) Duration() (time.Duration, error) {
 	switch s.Unit {
-	case SlugYear:
+	case UnitYear:
 		return time.Duration(s.Value) * Year, nil
-	case SlugMonth:
+	case UnitMonth:
 		return time.Duration(s.Value) * 30 * Day, nil
-	case SlugDay:
+	case UnitDay:
 		return time.Duration(s.Value) * Day, nil
-	case SlugHour:
+	case UnitHour:
 		return time.Duration(s.Value) * time.Hour, nil
-	case SlugMinute:
+	case UnitMinute:
 		return time.Duration(s.Value) * time.Minute, nil
-	case SlugSecond:
+	case UnitSecond:
 		return time.Duration(s.Value) * time.Second, nil
+	case UnitMillisecond:
+		return time.Duration(s.Value) * time.Millisecond, nil
+	case UnitMicrosecond:
+		return time.Duration(s.Value) * time.Microsecond, nil
+	case UnitNanosecond:
+		return time.Duration(s.Value), nil
 	default:
 		return 0, fmt.Errorf("unknown time duration unit (%s)", string(s.Unit))
 	}

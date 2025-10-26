@@ -2,7 +2,22 @@ package duration
 
 import "time"
 
+type Unit string
+
 const (
+	UnitYear        Unit = "year"
+	UnitMonth       Unit = "month"
+	UnitWek         Unit = "week"
+	UnitDay         Unit = "day"
+	UnitHour        Unit = "hour"
+	UnitMinute      Unit = "minute"
+	UnitSecond      Unit = "second"
+	UnitMillisecond Unit = "millisecond"
+	UnitMicrosecond Unit = "microsecond"
+	UnitNanosecond  Unit = "nanosecond"
+
+	UnitBusinessDay = "businessday"
+
 	UnitSuffixNanosecond  = "ns"
 	UnitSuffixMicrosecond = "us"
 	UnitSuffixMillisecond = "ms"
