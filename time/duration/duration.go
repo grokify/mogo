@@ -1,4 +1,4 @@
-package timeutil
+package duration
 
 import (
 	"errors"
@@ -48,7 +48,7 @@ func ParseDuration(s string) (time.Duration, error) {
 		} else if units == "y" {
 			s = fmt.Sprintf("%vs", i*YearSeconds)
 		} else {
-			return zeroDuration, errors.New("timeutil.ParseDuration Parse Error")
+			return zeroDuration, errors.New("duration.ParseDuration Parse Error")
 		}
 	}
 	return time.ParseDuration(s)
@@ -86,13 +86,6 @@ func DurationForNowSubDT8(dt8 int32) (time.Duration, error) {
 	return now.Sub(t), nil
 }
 */
-
-// QuarterDuration returns a `time.Duration` representing the calendar quarter for the time provided.
-func (tm TimeMore) QuarterDuration() time.Duration {
-	start := quarterStart(tm.Time())
-	end := QuarterAdd(start, 1)
-	return end.Sub(start)
-}
 
 func SumDurations(durations ...time.Duration) time.Duration {
 	ns := int64(0)
