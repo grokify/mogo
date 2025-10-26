@@ -20,8 +20,8 @@ const (
 )
 
 type Spec struct {
-	Value int64
-	Unit  Unit
+	Value int64 `json:"value"`
+	Unit  Unit  `json:"unit"`
 }
 
 func (s Spec) Duration() (time.Duration, error) {
