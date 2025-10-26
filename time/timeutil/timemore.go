@@ -64,6 +64,13 @@ func (tm TimeMore) IntervalStart(interval Interval) (time.Time, error) {
 	return intervalStart(tm.time, interval, tm.weekStartDay)
 }
 
+// QuarterDuration returns a `time.Duration` representing the calendar quarter for the time provided.
+func (tm TimeMore) QuarterDuration() time.Duration {
+	start := quarterStart(tm.Time())
+	end := QuarterAdd(start, 1)
+	return end.Sub(start)
+}
+
 // YearHalf returns a string in the format of "2006H1"
 func (tm TimeMore) YearHalf() string { return fmt.Sprintf("%dH%d", tm.time.Year(), int(tm.HalfYear())) }
 

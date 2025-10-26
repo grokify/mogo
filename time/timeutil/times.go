@@ -4,6 +4,8 @@ import (
 	"errors"
 	"sort"
 	"time"
+
+	"github.com/grokify/mogo/time/duration"
 )
 
 var (
@@ -35,8 +37,8 @@ func (ts Times) Dedupe() Times {
 	return newTimeSlice
 }
 
-func (ts Times) Deltas() Durations {
-	var durs Durations
+func (ts Times) Deltas() duration.Durations {
+	var durs duration.Durations
 	if len(ts) < 2 {
 		return durs
 	}
