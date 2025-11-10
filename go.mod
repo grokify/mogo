@@ -23,7 +23,7 @@ require (
 	golang.org/x/net v0.46.0
 	golang.org/x/term v0.36.0
 	golang.org/x/text v0.30.0
-	google.golang.org/genproto v0.0.0-20251022142026-3a174f9686a8
+	google.golang.org/genproto v0.0.0-20251103181224-f26f9409b101
 )
 
 require (
@@ -32,6 +32,6 @@ require (
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	golang.org/x/sys v0.37.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 )
