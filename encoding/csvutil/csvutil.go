@@ -15,14 +15,14 @@ func NewReader(rs io.ReadSeeker, comma rune) (*csv.Reader, error) {
 	var csvReader *csv.Reader
 	// remove UTF-8 BOM, csv.Reader.Read() will return error = "line 1, column 1: bare \" in non-quoted-field"
 	bom := make([]byte, 3)
-	_, err := rs.Read(bom)
+	n, err := rs.Read(bom)
 	if err != nil {
-		return csvReader, err
+		return nil, err
 	}
-	if bom[0] != 0xef || bom[1] != 0xbb || bom[2] != 0xbf {
+	if n < 3 || (bom[0] != 0xef || bom[1] != 0xbb || bom[2] != 0xbf) {
 		_, err = rs.Seek(0, 0) // Not a BOM -- seek back to the beginning
 		if err != nil {
-			return csvReader, err
+			return nil, err
 		}
 	}
 	csvReader = csv.NewReader(rs)
