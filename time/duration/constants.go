@@ -7,7 +7,7 @@ type Unit string
 const (
 	UnitYear        Unit = "year"
 	UnitMonth       Unit = "month"
-	UnitWek         Unit = "week"
+	UnitWeek        Unit = "week"
 	UnitDay         Unit = "day"
 	UnitHour        Unit = "hour"
 	UnitMinute      Unit = "minute"
@@ -15,6 +15,17 @@ const (
 	UnitMillisecond Unit = "millisecond"
 	UnitMicrosecond Unit = "microsecond"
 	UnitNanosecond  Unit = "nanosecond"
+
+	UnitYearPlural        = "years"
+	UnitMonthPlural       = "months"
+	UnitWeekPlural        = "weeks"
+	UnitDayPlural         = "days"
+	UnitHourPlural        = "hours"
+	UnitMinutePlural      = "minutes"
+	UnitSecondPlural      = "seconds"
+	UnitMillisecondPlural = "milliseconds"
+	UnitMicrosecondPlural = "microseconds"
+	UnitNanosecondPlural  = "nanoseconds"
 
 	UnitBusinessDay = "businessday"
 
