@@ -19,7 +19,7 @@ func NewReader(rs io.ReadSeeker, comma rune) (*csv.Reader, error) {
 	if err != nil {
 		return nil, err
 	}
-	if n < 3 || (bom[0] != 0xef || bom[1] != 0xbb || bom[2] != 0xbf) {
+	if n < 3 || (n >= 3 && (bom[0] != 0xef || bom[1] != 0xbb || bom[2] != 0xbf)) {
 		_, err = rs.Seek(0, 0) // Not a BOM -- seek back to the beginning
 		if err != nil {
 			return nil, err
