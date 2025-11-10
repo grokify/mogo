@@ -19,7 +19,8 @@ func NewReader(rs io.ReadSeeker, comma rune) (*csv.Reader, error) {
 	if err != nil {
 		return nil, err
 	}
-	if n < 3 || (n >= 3 && (bom[0] != 0xef || bom[1] != 0xbb || bom[2] != 0xbf)) {
+	hasBOM := n >= 3 && bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf
+	if !hasBOM {
 		_, err = rs.Seek(0, 0) // Not a BOM -- seek back to the beginning
 		if err != nil {
 			return nil, err
@@ -66,7 +67,7 @@ func (ch *CSVHeader) Index(want string) int {
 func (ch *CSVHeader) RecordMatch(row []string, andFilter map[string]stringsutil.MatchInfo) (bool, error) {
 	for colName, matchInfo := range andFilter {
 		idx := ch.Index(colName)
-		if idx >= len(row) {
+		if idx < 0 || idx >= len(row) {
 			return false, nil
 		}
 		match, err := stringsutil.Match(row[idx], matchInfo)
