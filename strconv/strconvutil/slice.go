@@ -2,6 +2,8 @@ package strconvutil
 
 import (
 	"errors"
+	"fmt"
+	"regexp"
 	"strconv"
 	"time"
 
@@ -19,6 +21,23 @@ func SliceAtof(s []string, bitSize int) ([]float64, error) {
 		}
 	}
 	return out, nil
+}
+
+// ParseInts parses all integers from a string, ignoring non-digit separators
+func ParseInts(input string) ([]int, error) {
+	// Match sequences of digits with optional leading minus sign
+	re := regexp.MustCompile(`-?\d+`)
+	matches := re.FindAllString(input, -1)
+
+	result := make([]int, 0, len(matches))
+	for _, m := range matches {
+		num, err := strconv.Atoi(m)
+		if err != nil {
+			return nil, fmt.Errorf("invalid integer %q: %w", m, err)
+		}
+		result = append(result, num)
+	}
+	return result, nil
 }
 
 // SliceAtoi converts a slice of string integers.
