@@ -35,6 +35,7 @@ const (
 	SQLTimestampMinutes = "2006-01-02 15:04"
 	Ruby                = "2006-01-02 15:04:05 -0700" // Ruby Time.now.to_s
 	InsightlyAPIQuery   = "_1/_2/2006 _3:04:05 PM"
+	HumanDateTime       = "Mon Jan _2 2006 3:04 PM MST"
 	DateMDY             = "1/2/2006" // an underscore results in a space.
 	DateMDYSlash        = "01/02/2006"
 	DateDMYDash         = "_2-01-2006"     // Jira XML Date format
