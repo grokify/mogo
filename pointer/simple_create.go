@@ -3,6 +3,10 @@
 // 2: https://github.com/openlyinc/pointy
 package pointer
 
+func Clone[E any](e *E) *E {
+	return Pointer(Dereference(e))
+}
+
 func Dereference[E any](e *E) E {
 	if e == nil {
 		return *new(E)
@@ -27,8 +31,4 @@ func PointerSlice[S ~[]E, E any](s S) []*E {
 		out = append(out, &s[i])
 	}
 	return out
-}
-
-func Clone[E any](e *E) *E {
-	return Pointer(Dereference(e))
 }
