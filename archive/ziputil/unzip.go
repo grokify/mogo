@@ -49,20 +49,27 @@ func SecureUnzip(zr *zip.Reader, dest string) error {
 		}
 		rc, err := f.Open()
 		if err != nil {
-			out.Close()
+			if closeErr := out.Close(); closeErr != nil {
+				return fmt.Errorf("failed to close output file: %w (after open error: %v)", closeErr, err)
+			}
 			return err
 		}
 
 		// #nosec G110 - Decompression bomb protection via LimitReader
 		limitedReader := io.LimitReader(rc, MaxExtractedFileSize)
 		if _, err := io.Copy(out, limitedReader); err != nil {
-			out.Close()
-			rc.Close()
+			_ = out.Close()
+			_ = rc.Close()
 			return err
 		}
 
-		out.Close()
-		rc.Close()
+		if err := out.Close(); err != nil {
+			_ = rc.Close()
+			return fmt.Errorf("failed to close output file: %w", err)
+		}
+		if err := rc.Close(); err != nil {
+			return fmt.Errorf("failed to close zip file reader: %w", err)
+		}
 	}
 
 	return nil
