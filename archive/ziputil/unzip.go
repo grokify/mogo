@@ -26,11 +26,16 @@ func SecureUnzip(zr *zip.Reader, dest string) error {
 		}
 
 		if f.FileInfo().IsDir() {
-			os.MkdirAll(fpath, os.ModePerm)
-			continue
+			if err := os.MkdirAll(fpath, os.ModePerm); err != nil {
+				return err
+			} else {
+				continue
+			}
 		}
 
-		os.MkdirAll(filepath.Dir(fpath), os.ModePerm)
+		if err := os.MkdirAll(filepath.Dir(fpath), os.ModePerm); err != nil {
+			return err
+		}
 
 		out, err := os.OpenFile(fpath, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, f.Mode())
 		if err != nil {
