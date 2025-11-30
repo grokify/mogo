@@ -4,13 +4,13 @@ go 1.24.0
 
 require (
 	github.com/ProtonMail/go-crypto v1.3.0
+	github.com/btcsuite/btcd/btcutil v1.1.6
 	github.com/btcsuite/btcutil v1.0.2
 	github.com/caarlos0/env/v11 v11.3.1
 	github.com/grokify/base36 v1.0.5
 	github.com/grokify/bitcoinmath v0.1.0
 	github.com/huandu/xstrings v1.5.0
 	github.com/iancoleman/strcase v0.3.0
-	github.com/itchyny/base58-go v0.2.2
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/joho/godotenv v1.5.1
 	github.com/json-iterator/go v1.1.12

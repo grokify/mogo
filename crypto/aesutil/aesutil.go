@@ -13,38 +13,35 @@ import (
 	"os"
 	"path"
 
-	base58 "github.com/itchyny/base58-go"
+	"github.com/btcsuite/btcd/btcutil/base58"
 )
 
-func EncryptAESBase58JSON(plainitem any, key []byte, encoding *base58.Encoding) ([]byte, error) {
+func EncryptAESBase58JSON(plainitem any, key []byte) ([]byte, error) {
 	plaintext, err := json.Marshal(plainitem)
 	if err != nil {
 		return plaintext, err
 	}
-	return EncryptAESBase58(plaintext, key, encoding)
+	return EncryptAESBase58(plaintext, key)
 }
 
-func DecryptAESBase58JSON(ciphertext []byte, key []byte, encoding *base58.Encoding, item any) error {
-	plaintext, err := DecryptAESBase58(ciphertext, key, encoding)
+func DecryptAESBase58JSON(ciphertext []byte, key []byte, item any) error {
+	plaintext, err := DecryptAESBase58(ciphertext, key)
 	if err != nil {
 		return err
 	}
 	return json.Unmarshal(plaintext, item)
 }
 
-func EncryptAESBase58(plaintext []byte, key []byte, encoding *base58.Encoding) ([]byte, error) {
+func EncryptAESBase58(plaintext []byte, key []byte) ([]byte, error) {
 	bytes, err := EncryptAES(plaintext, key)
 	if err != nil {
 		return bytes, err
 	}
-	return encoding.Encode(bytes)
+	return []byte(base58.Encode(bytes)), nil
 }
 
-func DecryptAESBase58(ciphertext []byte, key []byte, encoding *base58.Encoding) ([]byte, error) {
-	bytes, err := encoding.Decode(ciphertext)
-	if err != nil {
-		return bytes, err
-	}
+func DecryptAESBase58(ciphertext []byte, key []byte) ([]byte, error) {
+	bytes := base58.Decode(string(ciphertext))
 	return DecryptAES(bytes, key)
 }
 
