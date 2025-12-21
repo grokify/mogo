@@ -6,6 +6,22 @@ import (
 	"log/slog"
 )
 
+type loggerKey struct{}
+
+// ContextWithLogger returns a new context with the given logger attached.
+func ContextWithLogger(ctx context.Context, logger *slog.Logger) context.Context {
+	return context.WithValue(ctx, loggerKey{}, logger)
+}
+
+// LoggerFromContext returns the logger from context if present,
+// otherwise returns the fallback logger.
+func LoggerFromContext(ctx context.Context, fallback *slog.Logger) *slog.Logger {
+	if logger, ok := ctx.Value(loggerKey{}).(*slog.Logger); ok && logger != nil {
+		return logger
+	}
+	return fallback
+}
+
 type NullHandler struct{}
 
 func (NullHandler) Enabled(_ context.Context, _ slog.Level) bool  { return false }
