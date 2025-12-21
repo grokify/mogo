@@ -6,9 +6,12 @@ import (
 	"log/slog"
 )
 
+// loggerKey is the context key for storing a request-scoped logger
 type loggerKey struct{}
 
 // ContextWithLogger returns a new context with the given logger attached.
+// Use this to pass request-scoped loggers (with trace IDs, user IDs, etc.)
+// that will be used for logging within that request.
 func ContextWithLogger(ctx context.Context, logger *slog.Logger) context.Context {
 	return context.WithValue(ctx, loggerKey{}, logger)
 }
@@ -16,6 +19,9 @@ func ContextWithLogger(ctx context.Context, logger *slog.Logger) context.Context
 // LoggerFromContext returns the logger from context if present,
 // otherwise returns the fallback logger.
 func LoggerFromContext(ctx context.Context, fallback *slog.Logger) *slog.Logger {
+	if ctx == nil {
+		return fallback
+	}
 	if logger, ok := ctx.Value(loggerKey{}).(*slog.Logger); ok && logger != nil {
 		return logger
 	}
