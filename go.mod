@@ -22,13 +22,13 @@ require (
 	golang.org/x/image v0.34.0
 	golang.org/x/net v0.48.0
 	golang.org/x/term v0.39.0
-	golang.org/x/text v0.32.0
-	google.golang.org/genproto v0.0.0-20251213004720-97cd9d5aeac2
+	golang.org/x/text v0.33.0
+	google.golang.org/genproto v0.0.0-20251222181119-0a764e51fe1b
 )
 
 require (
 	github.com/aymerick/douceur v0.2.0 // indirect
-	github.com/cloudflare/circl v1.6.1 // indirect
+	github.com/cloudflare/circl v1.6.2 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
