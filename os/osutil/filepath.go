@@ -241,3 +241,92 @@ func DirFromPath(path string) (string, error) {
 	}
 	return dir, nil
 }
+
+// SanitizeOpts configures path sanitization behavior.
+type SanitizeOpts struct {
+	// MustExist requires the path to exist on the filesystem.
+	MustExist bool
+	// MustBeFile requires the path to be a regular file (not a directory).
+	MustBeFile bool
+	// MustBeDir requires the path to be a directory.
+	MustBeDir bool
+	// AllowedExts restricts the path to files with these extensions (e.g., ".mp4", ".srt").
+	// Extensions should include the leading dot. If empty, any extension is allowed.
+	AllowedExts []string
+}
+
+// SanitizePath cleans and validates a file path for safe use in subprocesses.
+// It expands ~ to the user's home directory, cleans the path, resolves it to
+// an absolute path, and optionally validates existence and type constraints.
+//
+// This function is useful for sanitizing user-provided paths before passing
+// them to exec.Command or similar functions.
+func SanitizePath(path string, opts *SanitizeOpts) (string, error) {
+	path = strings.TrimSpace(path)
+	if path == "" {
+		return "", fmt.Errorf("path is empty")
+	}
+
+	// Expand ~ and convert to absolute path
+	absPath, err := AbsFilepath(path)
+	if err != nil {
+		return "", fmt.Errorf("failed to resolve absolute path: %w", err)
+	}
+
+	// Clean the path to remove . and .. components
+	absPath = filepath.Clean(absPath)
+
+	// If no options provided, just return the cleaned absolute path
+	if opts == nil {
+		return absPath, nil
+	}
+
+	// Validate existence
+	if opts.MustExist {
+		exists, err := Exists(absPath)
+		if err != nil {
+			return "", fmt.Errorf("failed to check path existence: %w", err)
+		}
+		if !exists {
+			return "", fmt.Errorf("path does not exist: %s", absPath)
+		}
+	}
+
+	// Validate file vs directory
+	if opts.MustBeFile {
+		isFile, err := IsFile(absPath, false)
+		if err != nil {
+			return "", fmt.Errorf("failed to check if path is file: %w", err)
+		}
+		if !isFile {
+			return "", fmt.Errorf("path is not a file: %s", absPath)
+		}
+	}
+
+	if opts.MustBeDir {
+		isDir, err := IsDir(absPath)
+		if err != nil {
+			return "", fmt.Errorf("failed to check if path is directory: %w", err)
+		}
+		if !isDir {
+			return "", fmt.Errorf("path is not a directory: %s", absPath)
+		}
+	}
+
+	// Validate extension
+	if len(opts.AllowedExts) > 0 {
+		ext := strings.ToLower(filepath.Ext(absPath))
+		allowed := false
+		for _, allowedExt := range opts.AllowedExts {
+			if strings.ToLower(allowedExt) == ext {
+				allowed = true
+				break
+			}
+		}
+		if !allowed {
+			return "", fmt.Errorf("invalid file extension %q, allowed: %v", ext, opts.AllowedExts)
+		}
+	}
+
+	return absPath, nil
+}
