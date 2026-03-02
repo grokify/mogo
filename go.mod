@@ -3,7 +3,7 @@ module github.com/grokify/mogo
 go 1.25.0
 
 require (
-	github.com/ProtonMail/go-crypto v1.3.0
+	github.com/ProtonMail/go-crypto v1.4.0
 	github.com/btcsuite/btcd/btcutil v1.1.6
 	github.com/btcsuite/btcutil v1.0.2
 	github.com/caarlos0/env/v11 v11.4.0
@@ -18,12 +18,12 @@ require (
 	github.com/martinlindhe/base36 v1.1.1
 	github.com/microcosm-cc/bluemonday v1.0.27
 	golang.org/x/crypto v0.48.0
-	golang.org/x/exp v0.0.0-20260212183809-81e46e3db34a
+	golang.org/x/exp v0.0.0-20260218203240-3dfff04db8fa
 	golang.org/x/image v0.36.0
 	golang.org/x/net v0.51.0
 	golang.org/x/term v0.40.0
 	golang.org/x/text v0.34.0
-	google.golang.org/genproto v0.0.0-20260209200024-4cfbd4190f57
+	google.golang.org/genproto v0.0.0-20260226221140-a57be14db171
 )
 
 require (
