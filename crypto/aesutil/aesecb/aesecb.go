@@ -88,6 +88,7 @@ func encryptECB(block cipher.Block, dst, src []byte) {
 
 func addPKCS5Padding(data []byte, blockSize int) []byte {
 	padding := blockSize - len(data)%blockSize
+	// #nosec G115 -- padding is always 1-16, safe for byte conversion
 	padText := bytes.Repeat([]byte{byte(padding)}, padding)
 	return append(data, padText...)
 }

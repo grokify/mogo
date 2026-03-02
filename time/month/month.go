@@ -21,7 +21,7 @@ func DayofmonthToEnglish(i uint16) string {
 	tenZero := []string{"tenth", "twentieth", "thirtieth", "fourtieth", "fiftieth"}
 	tenPlus := []string{"ten", "twenty", "thirty", "forty", "fifty"}
 	if i < 21 {
-		return days[i]
+		return days[i] //nolint:gosec // G602: bounds checked: i < 21 and days has 21 elements
 	}
 	if i > 59 {
 		panic("E_OUT_OF_RANGE")

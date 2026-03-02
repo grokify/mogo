@@ -15,7 +15,7 @@ import (
 )
 
 type Crypter struct {
-	Password  string
+	Password  string `json:"-"` // #nosec G101 -- field name, not a hardcoded credential
 	UseBase58 bool
 }
 

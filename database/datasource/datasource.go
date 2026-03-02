@@ -29,7 +29,7 @@ type DataSource struct {
 	Hostname string              `json:"hostname"` // does not include port
 	Port     uint16              `json:"port"`     // 0-65535
 	User     string              `json:"user,omitempty"`
-	Password string              `json:"password,omitempty"`
+	Password string              `json:"password,omitempty"` //nolint:gosec // G117: field name, not a hardcoded credential
 	Database string              `json:"database,omitempty"`
 	Query    map[string][]string `json:"query,omitempty"`
 }
