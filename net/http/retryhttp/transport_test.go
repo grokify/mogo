@@ -290,7 +290,7 @@ func TestContextCancellation(t *testing.T) {
 
 	req, _ := http.NewRequestWithContext(ctx, "GET", server.URL, nil)
 	client := rt.Client()
-	_, err := client.Do(req)
+	_, err := client.Do(req) //nolint:gosec // G704: test code using test server URL
 
 	if err == nil {
 		t.Error("expected context error, got nil")

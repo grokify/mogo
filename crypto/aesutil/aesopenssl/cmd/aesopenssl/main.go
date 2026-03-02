@@ -29,6 +29,7 @@ func main() {
 
 	// Read password securely
 	fmt.Print("Enter password: ")
+	// #nosec G115 -- os.Stdin.Fd() returns a safe file descriptor
 	bytePassword, err := term.ReadPassword(int(os.Stdin.Fd()))
 	fmt.Println()
 	if err != nil {

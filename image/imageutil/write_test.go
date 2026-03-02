@@ -118,6 +118,7 @@ func TestNewWriterExif(t *testing.T) {
 				}
 				gotHigh := data[4]
 				gotLow := data[5]
+				// #nosec G115 -- markerLen is bounded by exif size limit (< 65535)
 				wantHigh := byte(markerLen >> 8)
 				wantLow := byte(markerLen & 0xFF)
 				if gotHigh != wantHigh || gotLow != wantLow {
@@ -199,6 +200,7 @@ func TestExifEndToEnd(t *testing.T) {
 	if markerLen > 0xFFFF {
 		t.Fatalf("Exif too large")
 	}
+	// #nosec G115 -- markerLen is bounded by exif size limit (< 65535)
 	exifSegment := []byte{0xFF, 0xE1, byte(markerLen >> 8), byte(markerLen & 0xFF)}
 	exifSegment = append(exifSegment, exifData...)
 

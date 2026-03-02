@@ -12,6 +12,7 @@ Example without hostname:
 "root:root@/my_db?charset=utf8" - https://pkg.go.dev/github.com/astaxie/beego/orm#section-readme
 */
 
+//nolint:gosec // G101: test credentials, not real secrets
 var dsnTests = []struct {
 	v       DataSource
 	want    string
@@ -45,16 +46,16 @@ var dsnTests = []struct {
 		Hostname: netutil.HostLoopbackIPv4,
 		Port:     5432,
 		User:     "myuser",
-		Password: "mypass",
+		Password: "mypass", //nolint:gosec // G101: test credentials, not real secrets
 		Database: "mydb",
 	}, "postgres://myuser:mypass@127.0.0.1:5432/mydb", ErrSSLModeNotSUpported},
 	{DataSource{
 		Driver:   DriverPostgres,
-		DSN:      "  postgres://myuser:mypass@127.0.0.1:8888/mydb?sslmode=require",
+		DSN:      "  postgres://myuser:mypass@127.0.0.1:8888/mydb?sslmode=require", //nolint:gosec // G101: test credentials
 		Hostname: netutil.HostLoopbackIPv4,
 		Port:     5432, // override this since DSN exists
 		User:     "myuser",
-		Password: "mypass",
+		Password: "mypass", //nolint:gosec // G101: test credentials
 		Database: "mydb",
 		Query: map[string][]string{
 			PgSSLModeParam: {SSLModeRequire},

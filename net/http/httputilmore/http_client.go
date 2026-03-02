@@ -45,7 +45,7 @@ func GetRequestRateLimited(client *http.Client, reqURL string, useXrlHyphen bool
 // DoRequestRateLimited will pause a request for the time specified in the
 // HTTP response headers.
 func DoRequestRateLimited(client *http.Client, req *http.Request, useXrlHyphen bool, fnLog FnLogRateLimitInfo) (*http.Response, error) {
-	resp, err := client.Do(req)
+	resp, err := client.Do(req) //nolint:gosec // G704: URL provided by caller; SSRF prevention is caller's responsibility
 	if err != nil {
 		return resp, err
 	}
@@ -65,7 +65,7 @@ func DoRequestRateLimited(client *http.Client, req *http.Request, useXrlHyphen b
 		} else {
 			time.Sleep(time.Duration(60) * time.Second)
 		}
-		return client.Do(req)
+		return client.Do(req) //nolint:gosec // G704: URL provided by caller
 	}
 	return resp, nil
 }
@@ -104,5 +104,5 @@ func (cm *ClientMore) PostToJSON(postURL string, body any) (*http.Response, erro
 		return &http.Response{}, err
 	}
 	req.Header.Set(HeaderContentType, ContentTypeAppJSONUtf8)
-	return cm.Client.Do(req)
+	return cm.Client.Do(req) //nolint:gosec // G704: URL provided by caller
 }

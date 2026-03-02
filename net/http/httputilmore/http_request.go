@@ -69,7 +69,7 @@ func GetJSONSimple(requrl string, header http.Header, data any) (*http.Response,
 	}
 	req.Header = header
 	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := client.Do(req) //nolint:gosec // G704: URL provided by caller
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +114,7 @@ func DoJSONSimple(client *http.Client, httpMethod, requrl string, headers map[st
 		req.Header.Set(HeaderContentType, ContentTypeAppJSONUtf8)
 	}
 
-	return client.Do(req)
+	return client.Do(req) //nolint:gosec // G704: URL provided by caller
 }
 
 func DoJSON(client *http.Client, httpMethod, reqURL string, headers map[string][]string, reqBody, resBody any) ([]byte, *http.Response, error) {
@@ -165,7 +165,7 @@ func SendWWWFormURLEncodedSimple(method, urlStr string, data url.Values) (*http.
 	req.Header.Add(HeaderContentType, ContentTypeAppFormURLEncoded)
 	req.Header.Add(HeaderContentLength, strconv.Itoa(len(data.Encode())))
 	client := &http.Client{}
-	return client.Do(req)
+	return client.Do(req) //nolint:gosec // G704: URL provided by caller
 }
 
 // GetURLOrReadFile takes a string and will either call HTTP GET if the
@@ -191,7 +191,7 @@ func Delete(client *http.Client, url string) (*http.Response, error) {
 	if client == nil {
 		client = &http.Client{}
 	}
-	return client.Do(req)
+	return client.Do(req) //nolint:gosec // G704: URL provided by caller
 }
 
 // RequestURLParam returns the result of `url.Values.Get()` given an `*http.Response`.

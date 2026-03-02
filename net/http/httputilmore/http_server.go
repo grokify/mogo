@@ -12,6 +12,7 @@ import (
 // From: https://groups.google.com/forum/#!topic/golang-nuts/s7Xk1q0LSU0
 func Log(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		//nolint:gosec // G706: slog handles structured logging safely; values are not interpolated into format string
 		slog.Info("log handler func", "remote-addr", r.RemoteAddr, "req-method", r.Method, "req-url", r.URL)
 		handler.ServeHTTP(w, r)
 	})

@@ -119,13 +119,14 @@ func URLStringAddQuery(inputURL string, qry url.Values, inclDuplicates bool) (*u
 }
 
 // GetURLBody returns an HTTP response byte array body from a URL.
+// #nosec G107 -- URL provided by caller; SSRF prevention is caller's responsibility
 func GetURLBody(absoluteURL string) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodGet, absoluteURL, nil)
 	if err != nil {
 		return []byte{}, err
 	}
 	cli := &http.Client{}
-	res, err := cli.Do(req)
+	res, err := cli.Do(req) //nolint:gosec // G704: URL provided by caller
 	if err != nil {
 		return []byte{}, err
 	}
