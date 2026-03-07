@@ -91,7 +91,7 @@ func LimitRequestBodyMultipart(w http.ResponseWriter, r *http.Request) {
 //	    // ... handle form data
 //	}
 func ParseFormLimited(w http.ResponseWriter, r *http.Request, maxBytes int64) error {
-	LimitRequestBody(w, r, maxBytes)
+	r.Body = http.MaxBytesReader(w, r.Body, maxBytes)
 	return r.ParseForm()
 }
 
