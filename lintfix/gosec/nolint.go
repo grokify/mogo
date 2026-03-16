@@ -103,10 +103,10 @@ var CommonReasons = struct {
 	DocumentationExample string
 
 	// G115 reasons
-	BoundedByValidation    string
-	DomainConstraint       string
-	YearValueSafeRange     string
-	SmallEnumValue         string
+	BoundedByValidation string
+	DomainConstraint    string
+	YearValueSafeRange  string
+	SmallEnumValue      string
 
 	// G117 reasons
 	OAuthTokenResponse        string
@@ -135,10 +135,10 @@ var CommonReasons = struct {
 	DocumentationExample: "Documentation example",
 
 	// G115
-	BoundedByValidation:    "Value bounded by prior validation",
-	DomainConstraint:       "Domain constraint ensures safe range",
-	YearValueSafeRange:     "Year value always fits in target type",
-	SmallEnumValue:         "Small enum value, no overflow possible",
+	BoundedByValidation: "Value bounded by prior validation",
+	DomainConstraint:    "Domain constraint ensures safe range",
+	YearValueSafeRange:  "Year value always fits in target type",
+	SmallEnumValue:      "Small enum value, no overflow possible",
 
 	// G117
 	OAuthTokenResponse:        "OAuth token response per RFC 6749",
