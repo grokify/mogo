@@ -1,7 +1,7 @@
 {
   "irVersion": "1.0",
   "project": "mogo",
-  "repository": "github.com/grokify/mogo",
+  "repository": "https://github.com/grokify/mogo",
   "versioning": "semver",
   "commitConvention": "conventional",
   "releases": [
