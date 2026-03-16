@@ -6,6 +6,35 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.74.0",
+      "date": "2026-03-16",
+      "highlights": [
+        { "description": "New `lintfix` package providing lint remediation database and nolint generators for gosec rules" }
+      ],
+      "breaking": [
+        { "description": "`os/osutil`: `WriteFileReader()` signature changed from `(filename, r)` to `(filename, r, perm)` for explicit permission control", "commit": "282752d" }
+      ],
+      "added": [
+        { "description": "`lintfix`: add lint remediation database with embedded JSON and query API", "commit": "3dd6bbb" },
+        { "description": "`lintfix/gosec`: add nolint comment generators for G101, G115, G117, G118, G703, G704", "commit": "3dd6bbb" },
+        { "description": "`lintfix/gosec`: add `CommonReasons` constants for frequently used justifications", "commit": "3dd6bbb" },
+        { "description": "`text/markdown`: add `Children` field to `Link` for hierarchical link structures", "commit": "4f3408d" }
+      ],
+      "changed": [
+        { "description": "`os/osutil`: simplify `WriteFileReader()` using `io.Copy` instead of buffered writer", "commit": "282752d" },
+        { "description": "`os/osutil`: remove panic on `Close()` error in `WriteFileReader()`", "commit": "282752d" }
+      ],
+      "documentation": [
+        { "description": "add `docs/lintfix/` with gosec version caveats and remediation decision tree", "commit": "3dd6bbb" },
+        { "description": "`README.md`: update internal style", "commit": "dc27ab4" },
+        { "description": "add `CHANGELOG.json` and generate `CHANGELOG.md`", "commit": "f4b3df3" }
+      ],
+      "fixed": [
+        { "description": "add `https://` prefix to repository URL in `CHANGELOG.json`", "commit": "03d5dda" },
+        { "description": "fix `gofmt` lint error", "commit": "19b604d" }
+      ]
+    },
+    {
       "version": "v0.73.5",
       "date": "2026-03-14",
       "added": [
