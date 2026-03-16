@@ -35,8 +35,9 @@ func URLToMarkdownLinkHostname(url string) string {
 }
 
 type Link struct {
-	Text string
-	URL  string
+	Text     string
+	URL      string
+	Children []Link
 }
 
 func (lnk Link) Markdown() string {
