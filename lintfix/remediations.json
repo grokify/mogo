@@ -1,0 +1,209 @@
+{
+  "version": "1.0.0",
+  "description": "Lint remediation database for Go projects",
+  "linters": {
+    "gosec": {
+      "G101": {
+        "name": "Hardcoded credentials",
+        "description": "Potential hardcoded credentials detected",
+        "severity": "high",
+        "category": "security",
+        "remediation": {
+          "type": "refactor",
+          "summary": "Move credentials to environment variables or secure storage",
+          "explanation": "Hardcoded credentials can be extracted from binaries or source code. Use environment variables, secret managers, or configuration files excluded from version control.",
+          "example": "os.Getenv(\"API_KEY\")",
+          "avoid": [
+            "const apiKey = \"sk-abc123\"",
+            "var password = \"secret\""
+          ]
+        },
+        "references": [
+          "https://cwe.mitre.org/data/definitions/798.html"
+        ]
+      },
+      "G115": {
+        "name": "Integer overflow conversion",
+        "description": "Integer conversion may overflow the target type",
+        "severity": "medium",
+        "category": "correctness",
+        "remediation": {
+          "type": "nolint",
+          "summary": "Add nolint if the value is bounded by validation or domain constraints",
+          "pattern": "//nolint:gosec // G115: {reason}",
+          "explanation": "Converting between integer types can cause overflow if the source value exceeds the target type's range. Use nolint when prior validation or domain knowledge guarantees the value fits.",
+          "when": "Value is bounded by validation, domain constraints, or is a small constant/enum",
+          "example": "b := byte(value) //nolint:gosec // G115: Value bounded by prior validation (0-255)"
+        },
+        "references": [
+          "https://cwe.mitre.org/data/definitions/190.html"
+        ]
+      },
+      "G117": {
+        "name": "Secret in JSON response",
+        "description": "Marshaled struct field matches secret pattern (access_token, client_secret, etc.)",
+        "severity": "medium",
+        "category": "security",
+        "remediation": {
+          "type": "nolint",
+          "summary": "Add nolint comment if the field is intentionally in the response",
+          "pattern": "//nolint:gosec // G117: {reason}",
+          "explanation": "This warning triggers when JSON-encoding structs with fields matching secret patterns. For OAuth/auth responses, these fields are intentionally included per specification.",
+          "when": "The secret field is intentionally part of the API response (OAuth tokens, registration responses)",
+          "example": "_ = json.NewEncoder(w).Encode(resp) //nolint:gosec // G117: OAuth token response per RFC 6749"
+        }
+      },
+      "G118": {
+        "name": "context.Background in goroutine",
+        "description": "Goroutine uses context.Background/TODO while request-scoped context is available",
+        "severity": "low",
+        "category": "correctness",
+        "remediation": {
+          "type": "nolint",
+          "summary": "Add nolint if context.Background is intentional (e.g., shutdown handlers)",
+          "pattern": "//nolint:gosec // G118: {reason}",
+          "explanation": "Using context.Background in a goroutine when a request context exists may indicate a bug. However, some cases require a fresh context, such as graceful shutdown handlers where the original context is already cancelled.",
+          "when": "The goroutine intentionally outlives the request context (cleanup, shutdown, background jobs)",
+          "example": "//nolint:gosec // G118: Shutdown handler runs after request context is cancelled\ngo func() { ... }()"
+        }
+      },
+      "G120": {
+        "name": "Unbounded request body",
+        "description": "Parsing form data without limiting request body size can allow memory exhaustion",
+        "severity": "medium",
+        "category": "security",
+        "remediation": {
+          "type": "code",
+          "summary": "Use http.MaxBytesReader inline before parsing form data",
+          "package": "github.com/grokify/mogo/net/http/httputilmore",
+          "function": "LimitRequestBody",
+          "pattern": "r.Body = http.MaxBytesReader(w, r.Body, maxBytes)",
+          "example": "r.Body = http.MaxBytesReader(w, r.Body, 1<<20) // 1MB\nif err := r.ParseForm(); err != nil { ... }\nvalue := r.Form.Get(\"key\") // Use Form.Get, not FormValue",
+          "explanation": "Without a body size limit, an attacker can send arbitrarily large requests to exhaust server memory. Always limit body size before ParseForm, ParseMultipartForm, or reading the body directly.",
+          "caveats": [
+            "gosec 2.11+ only recognizes inline http.MaxBytesReader, not helper functions",
+            "gosec 2.11+ flags r.FormValue() even after ParseForm - use r.Form.Get() instead",
+            "Keep local golangci-lint version in sync with CI to catch these issues early"
+          ]
+        },
+        "references": [
+          "https://cwe.mitre.org/data/definitions/400.html"
+        ]
+      },
+      "G401": {
+        "name": "Weak cryptographic primitive",
+        "description": "Use of weak cryptographic primitive (MD5, SHA1 for security)",
+        "severity": "high",
+        "category": "security",
+        "remediation": {
+          "type": "refactor",
+          "summary": "Use SHA-256 or stronger hash functions",
+          "explanation": "MD5 and SHA1 are cryptographically broken and should not be used for security purposes. Use SHA-256 or SHA-3 for cryptographic hashing.",
+          "example": "hash := sha256.Sum256(data)",
+          "when": "Hash is used for security (passwords, signatures, integrity)",
+          "avoid": [
+            "md5.Sum(data)",
+            "sha1.Sum(data)"
+          ]
+        }
+      },
+      "G501": {
+        "name": "Blocklisted import crypto/md5",
+        "description": "Import of weak cryptographic package",
+        "severity": "medium",
+        "category": "security",
+        "remediation": {
+          "type": "refactor",
+          "summary": "Replace with crypto/sha256 or stronger",
+          "explanation": "The crypto/md5 package is blocklisted because MD5 is cryptographically broken.",
+          "example": "import \"crypto/sha256\""
+        }
+      },
+      "G601": {
+        "name": "Implicit memory aliasing in for loop",
+        "description": "Taking address of loop variable creates aliasing bugs",
+        "severity": "medium",
+        "category": "correctness",
+        "remediation": {
+          "type": "code",
+          "summary": "Create a local copy of the loop variable before taking its address",
+          "example": "for _, v := range items {\n    v := v // Create local copy\n    process(&v)\n}",
+          "explanation": "In Go versions before 1.22, the loop variable is reused across iterations. Taking its address causes all pointers to reference the same memory location. Go 1.22+ fixes this, but explicit copying remains clearer."
+        }
+      },
+      "G703": {
+        "name": "Path traversal via taint analysis",
+        "description": "File path constructed from user input may allow directory traversal",
+        "severity": "high",
+        "category": "security",
+        "remediation": {
+          "type": "nolint",
+          "summary": "Add nolint if path input is validated or comes from trusted source",
+          "pattern": "//nolint:gosec // G703: {reason}",
+          "explanation": "Path traversal occurs when user input is used to construct file paths without validation. Attackers can use '../' sequences to access files outside the intended directory.",
+          "when": "Path is validated to reject separators, sanitized with filepath.Base, or from trusted config",
+          "example": "if strings.ContainsAny(name, `/\\`) {\n    return errors.New(\"invalid name\")\n}\npath := filepath.Join(dir, name) //nolint:gosec // G703: name validated above"
+        },
+        "references": [
+          "https://cwe.mitre.org/data/definitions/22.html"
+        ]
+      },
+      "G704": {
+        "name": "SSRF via taint analysis",
+        "description": "Potential Server-Side Request Forgery - HTTP request with user-controlled URL",
+        "severity": "high",
+        "category": "security",
+        "remediation": {
+          "type": "nolint",
+          "summary": "Add nolint if URL is validated or comes from trusted source",
+          "pattern": "//nolint:gosec // G704: {reason}",
+          "when": "URL is from trusted source (test httptest server, validated allowlist, internal config)",
+          "example": "resp, err := http.DefaultClient.Do(req) //nolint:gosec // G704: Test uses httptest server URL",
+          "explanation": "SSRF occurs when an attacker can control the URL of an outbound HTTP request, potentially accessing internal services. Validate URLs against an allowlist or ensure they come from trusted sources."
+        },
+        "references": [
+          "https://cwe.mitre.org/data/definitions/918.html"
+        ]
+      }
+    },
+    "staticcheck": {
+      "SA1019": {
+        "name": "Deprecated API usage",
+        "description": "Using a deprecated function, variable, constant, or field",
+        "severity": "low",
+        "category": "maintenance",
+        "remediation": {
+          "type": "refactor",
+          "summary": "Replace with the recommended alternative from deprecation notice",
+          "explanation": "Deprecated APIs may be removed in future versions. The deprecation notice typically suggests a replacement.",
+          "example": "// Instead of ioutil.ReadFile, use os.ReadFile"
+        }
+      },
+      "SA4006": {
+        "name": "Unused value",
+        "description": "Value assigned to variable is never used",
+        "severity": "low",
+        "category": "correctness",
+        "remediation": {
+          "type": "code",
+          "summary": "Remove unused assignment or use blank identifier",
+          "example": "_ = someFunc() // Explicitly ignore return value"
+        }
+      }
+    },
+    "errcheck": {
+      "unchecked": {
+        "name": "Unchecked error",
+        "description": "Error return value not checked",
+        "severity": "medium",
+        "category": "correctness",
+        "remediation": {
+          "type": "code",
+          "summary": "Check the error or explicitly ignore with blank identifier and comment",
+          "example": "if err := doSomething(); err != nil {\n    return fmt.Errorf(\"doing something: %w\", err)\n}",
+          "explanation": "Unchecked errors can lead to silent failures. Either handle the error or explicitly ignore it with _ and a comment explaining why."
+        }
+      }
+    }
+  }
+}
