@@ -8,7 +8,6 @@ import (
 	"os"
 
 	"github.com/grokify/mogo/encoding/jsonutil"
-	"github.com/grokify/mogo/io/ioutil"
 )
 
 func WriteFileJSON(filepath string, data any, perm os.FileMode, prefix, indent string) error {
@@ -77,20 +76,13 @@ func (fw *FileWriter) Close() error {
 	return fw.File.Close()
 }
 
-func WriteFileReader(filename string, r io.Reader) error {
-	// https://stackoverflow.com/questions/1821811/how-to-read-write-from-to-a-file-using-go
-	// open output file
-	// fo, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, perm)
-	fo, err := os.Create(filename)
+func WriteFileReader(filename string, r io.Reader, perm os.FileMode) error {
+	f, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, perm)
 	if err != nil {
 		return err
 	}
-	// close fo on exit and check for its returned error
-	defer func() {
-		if err := fo.Close(); err != nil {
-			panic(err)
-		}
-	}()
-	w := bufio.NewWriter(fo)
-	return ioutil.Write(w, r)
+	defer f.Close()
+
+	_, err = io.Copy(f, r)
+	return err
 }
