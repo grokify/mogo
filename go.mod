@@ -3,7 +3,7 @@ module github.com/grokify/mogo
 go 1.25.0
 
 require (
-	github.com/ProtonMail/go-crypto v1.4.0
+	github.com/ProtonMail/go-crypto v1.4.1
 	github.com/btcsuite/btcd/btcutil v1.1.6
 	github.com/btcsuite/btcutil v1.0.2
 	github.com/caarlos0/env/v11 v11.4.0
