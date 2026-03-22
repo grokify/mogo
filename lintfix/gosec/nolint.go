@@ -4,7 +4,10 @@
 
 package gosec
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 // Nolint formats a nolint:gosec comment with the given rule and reason.
 //
@@ -160,4 +163,70 @@ var CommonReasons = struct {
 	ValidatedAllowlist:  "URL from validated allowlist",
 	InternalServiceURL:  "Internal service URL from config",
 	TrustedConstantsURL: "URL constructed from trusted constants",
+}
+
+// G120 Fix Helpers
+//
+// G120 warns about parsing form data without limiting request body size.
+// Unlike other gosec rules, G120 requires code changes rather than nolint.
+//
+// The fix requires:
+//  1. Call http.MaxBytesReader to limit body size (MUST be inline, not a helper)
+//  2. Call r.ParseForm() or r.ParseMultipartForm()
+//  3. Use r.Form.Get() instead of r.FormValue()
+//
+// Caveats (gosec 2.11+):
+//   - Only inline http.MaxBytesReader is recognized; helper functions are not
+//   - r.FormValue() is still flagged even after ParseForm; use r.Form.Get()
+
+// G120MaxBytes provides common max body size limits for G120 fixes.
+var G120MaxBytes = struct {
+	// Form is the default limit for simple form submissions (1MB).
+	Form int64
+
+	// Multipart is the limit for file uploads (32MB).
+	Multipart int64
+
+	// Webhook is the limit for webhook payloads (64KB).
+	Webhook int64
+
+	// Twilio is the limit for Twilio webhook callbacks (64KB).
+	// Twilio webhook bodies are typically small (under 10KB).
+	Twilio int64
+}{
+	Form:      1 << 20,  // 1MB
+	Multipart: 32 << 20, // 32MB
+	Webhook:   64 << 10, // 64KB
+	Twilio:    64 << 10, // 64KB
+}
+
+// LimitAndParseForm limits the request body and parses form data.
+// This is the recommended pattern to fix G120, but note that gosec 2.11+
+// may not recognize helper functions - copy the inline pattern if needed.
+//
+// After calling this, use r.Form.Get() instead of r.FormValue().
+//
+// Example:
+//
+//	if err := gosec.LimitAndParseForm(w, r, gosec.G120MaxBytes.Webhook); err != nil {
+//	    http.Error(w, "Bad Request", http.StatusBadRequest)
+//	    return
+//	}
+//	value := r.Form.Get("key")
+func LimitAndParseForm(w http.ResponseWriter, r *http.Request, maxBytes int64) error {
+	r.Body = http.MaxBytesReader(w, r.Body, maxBytes)
+	return r.ParseForm()
+}
+
+// G120InlinePattern returns a code comment with the inline fix pattern.
+// Use this as documentation when gosec doesn't recognize helper functions.
+func G120InlinePattern() string {
+	return `// G120 fix pattern (inline for gosec 2.11+ compatibility):
+//
+//   r.Body = http.MaxBytesReader(w, r.Body, 64<<10) // 64KB
+//   if err := r.ParseForm(); err != nil {
+//       http.Error(w, "Bad Request", http.StatusBadRequest)
+//       return
+//   }
+//   value := r.Form.Get("key") // NOT r.FormValue("key")`
 }
