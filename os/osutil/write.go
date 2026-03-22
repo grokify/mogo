@@ -76,12 +76,16 @@ func (fw *FileWriter) Close() error {
 	return fw.File.Close()
 }
 
-func WriteFileReader(filename string, r io.Reader, perm os.FileMode) error {
+func WriteFileReader(filename string, r io.Reader, perm os.FileMode) (err error) {
 	f, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, perm)
 	if err != nil {
 		return err
 	}
-	defer f.Close()
+	defer func() {
+		if cerr := f.Close(); err == nil && cerr != nil {
+			err = cerr
+		}
+	}()
 
 	_, err = io.Copy(f, r)
 	return err
