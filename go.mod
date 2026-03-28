@@ -1,6 +1,6 @@
 module github.com/grokify/mogo
 
-go 1.25.0
+go 1.26.0
 
 require (
 	github.com/ProtonMail/go-crypto v1.4.1
@@ -23,7 +23,7 @@ require (
 	golang.org/x/net v0.52.0
 	golang.org/x/term v0.41.0
 	golang.org/x/text v0.35.0
-	google.golang.org/genproto v0.0.0-20260311181403-84a4fc48630c
+	google.golang.org/genproto v0.0.0-20260319201613-d00831a3d3e7
 )
 
 require (
