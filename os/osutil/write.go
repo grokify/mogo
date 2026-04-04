@@ -90,3 +90,17 @@ func WriteFileReader(filename string, r io.Reader, perm os.FileMode) (err error)
 	_, err = io.Copy(f, r)
 	return err
 }
+
+// WriteFileSecure writes data to the specified path after validating it does
+// not contain path traversal sequences (".."). This is the recommended function
+// for library code that receives paths from callers.
+//
+// For CLI entry points where the user explicitly provides paths, use
+// os.WriteFile directly with a //nolint:gosec comment instead.
+func WriteFileSecure(path string, data []byte, perm os.FileMode) error {
+	cleanPath, err := CleanPathSecure(path)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(cleanPath, data, perm)
+}
