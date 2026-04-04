@@ -6,6 +6,20 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.74.1",
+      "date": "2026-04-04",
+      "added": [
+        { "description": "`os/osutil`: add `ReadDirFilesSecure()` for symlink-safe directory reading using `os.Root` (G122)", "commit": "6d4689b" },
+        { "description": "`os/osutil`: add `WriteFileSecure()`, `CopyFileSecure()` for path-traversal-safe operations (G703)", "commit": "6d4689b" },
+        { "description": "`os/osutil`: add `ValidateNoTraversal()`, `CleanPathSecure()`, `AbsPathSecure()` path validation", "commit": "6d4689b" },
+        { "description": "`lintfix/gosec`: add `NolintG122()` for filepath.Walk TOCTOU race conditions", "commit": "3a6d415" }
+      ],
+      "changed": [
+        { "description": "`lintfix/gosec`: update G703 guidance to recommend secure functions for pkg/ code", "commit": "3a6d415" },
+        { "description": "`lintfix`: add G122 to remediations.json with `os.Root` and `osutil.ReadDirFilesSecure` recommendations", "commit": "3a6d415" }
+      ]
+    },
+    {
       "version": "v0.74.0",
       "date": "2026-03-16",
       "highlights": [
