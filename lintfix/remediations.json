@@ -137,12 +137,19 @@
         "severity": "high",
         "category": "security",
         "remediation": {
-          "type": "nolint",
-          "summary": "Add nolint if path input is validated or comes from trusted source",
+          "type": "context-dependent",
+          "summary": "Use nolint in cmd/, use secure functions in library code",
           "pattern": "//nolint:gosec // G703: {reason}",
-          "explanation": "Path traversal occurs when user input is used to construct file paths without validation. Attackers can use '../' sequences to access files outside the intended directory.",
-          "when": "Path is validated to reject separators, sanitized with filepath.Base, or from trusted config",
-          "example": "if strings.ContainsAny(name, `/\\`) {\n    return errors.New(\"invalid name\")\n}\npath := filepath.Join(dir, name) //nolint:gosec // G703: name validated above"
+          "package": "github.com/grokify/mogo/os/osutil",
+          "function": "WriteFileSecure, CopyFileSecure, CleanPathSecure",
+          "explanation": "Path traversal occurs when user input containing '../' sequences is used to access files outside the intended directory. The fix depends on where the code lives:\n\n**cmd/ directories (CLI entry points):**\nUse filepath.Clean() before calling library functions, then use //nolint:gosec. The user explicitly provides the path and is trusted.\n\n**pkg/ directories (library code):**\nUse osutil.WriteFileSecure, osutil.CopyFileSecure, or osutil.CleanPathSecure which reject paths containing '..'. Libraries should receive already-cleaned paths without traversal sequences, ideally fully qualified.",
+          "when": "cmd/: User explicitly provides path via CLI flag or config. pkg/: Path has been validated by caller to not contain '..'",
+          "example": "// In cmd/:\ncleanPath := filepath.Clean(userPath)\nif err := os.WriteFile(cleanPath, data, 0600); err != nil { //nolint:gosec // G703: Path from CLI flag\n\n// In pkg/:\nimport \"github.com/grokify/mogo/os/osutil\"\nif err := osutil.WriteFileSecure(path, data, 0600); err != nil { // Rejects '..' automatically",
+          "caveats": [
+            "Library code should never use nolint for G703 - use secure functions instead",
+            "cmd/ code should clean paths with filepath.Clean before passing to libraries",
+            "Libraries should expect fully qualified paths or paths without '..' sequences"
+          ]
         },
         "references": [
           "https://cwe.mitre.org/data/definitions/22.html"
@@ -163,6 +170,32 @@
         },
         "references": [
           "https://cwe.mitre.org/data/definitions/918.html"
+        ]
+      },
+      "G122": {
+        "name": "filepath.Walk TOCTOU race",
+        "description": "Filesystem operation in filepath.Walk/WalkDir callback uses race-prone path",
+        "severity": "medium",
+        "category": "security",
+        "remediation": {
+          "type": "context-dependent",
+          "summary": "Use os.Root (Go 1.24+) in pkg/, nolint only in cmd/",
+          "pattern": "//nolint:gosec // G122: {reason}",
+          "package": "github.com/grokify/mogo/os/osutil",
+          "function": "ReadDirFilesSecure",
+          "explanation": "filepath.Walk/WalkDir callbacks receive paths that can be race-prone to symlink attacks (TOCTOU). Between when Walk stats the file and when your callback operates on it, an attacker could replace a path component with a symlink.\n\n**cmd/ directories (CLI entry points):**\nUse nolint - the user explicitly provides the directory and is trusted.\n\n**pkg/ directories (library code):**\nUse os.Root (Go 1.24+) directly, or use osutil.ReadDirFilesSecure for reading all files in a directory.",
+          "when": "cmd/: User explicitly provides directory via CLI flag. pkg/: Use os.Root or osutil.ReadDirFilesSecure instead of nolint.",
+          "example": "// In cmd/:\nos.ReadFile(path) //nolint:gosec // G122: Directory from CLI flag\n\n// In pkg/ - use osutil helper:\nfiles, err := osutil.ReadDirFilesSecure(dir)\n\n// In pkg/ - or use os.Root directly:\nroot, err := os.OpenRoot(baseDir)\ndefer root.Close()\ncontent, err := root.ReadFile(relativePath)",
+          "caveats": [
+            "os.Root requires Go 1.24+",
+            "Library code in pkg/ must use os.Root or osutil.ReadDirFilesSecure, not nolint",
+            "os.Root.ReadFile only accepts relative paths within the root"
+          ]
+        },
+        "references": [
+          "https://go.dev/blog/osroot",
+          "https://github.com/golang/go/issues/67002",
+          "https://cwe.mitre.org/data/definitions/367.html"
         ]
       }
     },

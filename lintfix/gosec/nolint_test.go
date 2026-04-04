@@ -160,15 +160,15 @@ func TestCommonReasons(t *testing.T) {
 		t.Error("CommonReasons.IndependentCancel is empty")
 	}
 
-	// G703 reasons
-	if CommonReasons.InputValidatedNoPathSep == "" {
-		t.Error("CommonReasons.InputValidatedNoPathSep is empty")
+	// G703 reasons (use only in cmd/, not library code)
+	if CommonReasons.PathFromCLIFlag == "" {
+		t.Error("CommonReasons.PathFromCLIFlag is empty")
 	}
 	if CommonReasons.PathFromConfig == "" {
 		t.Error("CommonReasons.PathFromConfig is empty")
 	}
-	if CommonReasons.FilenameSanitized == "" {
-		t.Error("CommonReasons.FilenameSanitized is empty")
+	if CommonReasons.OutputPathByUser == "" {
+		t.Error("CommonReasons.OutputPathByUser is empty")
 	}
 
 	// G704 reasons
@@ -209,8 +209,8 @@ func TestNolintWithCommonReasons(t *testing.T) {
 			got:  NolintG118(CommonReasons.ShutdownHandler),
 		},
 		{
-			name: "G703 with InputValidatedNoPathSep",
-			got:  NolintG703(CommonReasons.InputValidatedNoPathSep),
+			name: "G703 with PathFromCLIFlag",
+			got:  NolintG703(CommonReasons.PathFromCLIFlag),
 		},
 		{
 			name: "G704 with HttptestServer",

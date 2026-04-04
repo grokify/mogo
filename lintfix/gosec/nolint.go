@@ -73,12 +73,18 @@ func NolintG118(reason string) string {
 
 // NolintG703 returns a nolint comment for G703 (path traversal via taint analysis).
 //
-// Use this when file path input has been validated or comes from trusted sources.
+// IMPORTANT: Only use this in cmd/ directories (CLI entry points) where users
+// explicitly provide paths. For library code in pkg/, use osutil.WriteFileSecure,
+// osutil.CopyFileSecure, or osutil.CleanPathSecure instead.
 //
-// Example reasons:
-//   - "Input validated to reject path separators"
-//   - "Path from trusted configuration"
-//   - "Filename sanitized by filepath.Base"
+// CLI entry points should:
+//  1. Use filepath.Clean() on user-provided paths before calling libraries
+//  2. Use this nolint comment to suppress the warning
+//
+// Example reasons for cmd/:
+//   - "Path from CLI flag"
+//   - "Path from user config"
+//   - "Output path specified by user"
 func NolintG703(reason string) string {
 	return Nolint("G703", reason)
 }
@@ -94,6 +100,34 @@ func NolintG703(reason string) string {
 //   - "URL constructed from trusted constants"
 func NolintG704(reason string) string {
 	return Nolint("G704", reason)
+}
+
+// NolintG122 returns a nolint comment for G122 (filepath.Walk TOCTOU race).
+//
+// IMPORTANT: Only use this in cmd/ directories (CLI entry points) where users
+// explicitly provide directories. For library code in pkg/, use os.Root (Go 1.24+)
+// or osutil.ReadDirFilesSecure to perform symlink-safe filesystem operations.
+//
+// G122 detects TOCTOU (time-of-check-time-of-use) race conditions in
+// filepath.Walk/WalkDir callbacks where filesystem operations use the
+// potentially race-prone path provided by Walk.
+//
+// For pkg/ code, use osutil.ReadDirFilesSecure or os.Root directly:
+//
+//	// Option 1: Use osutil helper
+//	files, err := osutil.ReadDirFilesSecure(dir)
+//
+//	// Option 2: Use os.Root directly
+//	root, err := os.OpenRoot(dir)
+//	if err != nil { return err }
+//	defer root.Close()
+//	content, err := root.ReadFile(relativePath) // Symlink-safe
+//
+// Example reasons for cmd/:
+//   - "Directory from CLI flag"
+//   - "Walking config directory from trusted source"
+func NolintG122(reason string) string {
+	return Nolint("G122", reason)
 }
 
 // CommonReasons provides pre-written reason strings for common scenarios.
@@ -121,16 +155,20 @@ var CommonReasons = struct {
 	CleanupRoutine    string
 	IndependentCancel string
 
-	// G703 reasons
-	InputValidatedNoPathSep string
-	PathFromConfig          string
-	FilenameSanitized       string
+	// G703 reasons (use only in cmd/, not library code)
+	PathFromCLIFlag  string
+	PathFromConfig   string
+	OutputPathByUser string
 
 	// G704 reasons
 	HttptestServer      string
 	ValidatedAllowlist  string
 	InternalServiceURL  string
 	TrustedConstantsURL string
+
+	// G122 reasons (cmd/ only - use os.Root in pkg/)
+	DirectoryFromCLIFlag string
+	TrustedConfigDir     string
 }{
 	// G101
 	URLPathNotCredential: "URL path, not a credential",
@@ -153,16 +191,20 @@ var CommonReasons = struct {
 	CleanupRoutine:    "Cleanup routine needs independent timeout",
 	IndependentCancel: "Requires independent cancellation from request",
 
-	// G703
-	InputValidatedNoPathSep: "Input validated to reject path separators",
-	PathFromConfig:          "Path from trusted configuration",
-	FilenameSanitized:       "Filename sanitized by filepath.Base",
+	// G703 (use only in cmd/, not library code)
+	PathFromCLIFlag:  "Path from CLI flag",
+	PathFromConfig:   "Path from user config",
+	OutputPathByUser: "Output path specified by user",
 
 	// G704
 	HttptestServer:      "Test uses httptest server URL",
 	ValidatedAllowlist:  "URL from validated allowlist",
 	InternalServiceURL:  "Internal service URL from config",
 	TrustedConstantsURL: "URL constructed from trusted constants",
+
+	// G122 (cmd/ only - use os.Root in pkg/)
+	DirectoryFromCLIFlag: "Directory from CLI flag",
+	TrustedConfigDir:     "Walking config directory from trusted source",
 }
 
 // G120 Fix Helpers
