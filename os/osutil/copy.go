@@ -38,3 +38,17 @@ func CopyFile(src, dst string) error {
 	}
 	return os.Chmod(dst, si.Mode())
 }
+
+// CopyFileSecure copies a file from src to dst after validating the destination
+// path does not contain path traversal sequences (".."). This is the recommended
+// function for library code that receives destination paths from callers.
+//
+// For CLI entry points where the user explicitly provides paths, use
+// CopyFile directly with a //nolint:gosec comment instead.
+func CopyFileSecure(src, dst string) error {
+	cleanDst, err := CleanPathSecure(dst)
+	if err != nil {
+		return err
+	}
+	return CopyFile(src, cleanDst)
+}

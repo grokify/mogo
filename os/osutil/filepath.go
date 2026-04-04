@@ -1,6 +1,7 @@
 package osutil
 
 import (
+	"errors"
 	"fmt"
 	"go/build"
 	"os"
@@ -9,6 +10,45 @@ import (
 	"sort"
 	"strings"
 )
+
+// ErrPathTraversal is returned when a path contains ".." sequences.
+var ErrPathTraversal = errors.New("path contains '..' traversal sequence")
+
+// ValidateNoTraversal checks that a path does not contain ".." sequences.
+// This should be used in library code to reject paths that could escape
+// a base directory. Returns ErrPathTraversal if ".." is found.
+//
+// Note: This validates the literal path string, not the resolved path.
+// Use filepath.EvalSymlinks for symlink-aware validation.
+func ValidateNoTraversal(path string) error {
+	if strings.Contains(path, "..") {
+		return fmt.Errorf("%w: %s", ErrPathTraversal, path)
+	}
+	return nil
+}
+
+// CleanPathSecure validates that a path contains no traversal sequences,
+// then returns the cleaned path. This is the recommended function for
+// library code receiving paths from callers.
+//
+// For CLI entry points where the user explicitly provides paths,
+// use filepath.Clean directly with a //nolint:gosec comment.
+func CleanPathSecure(path string) (string, error) {
+	if err := ValidateNoTraversal(path); err != nil {
+		return "", err
+	}
+	return filepath.Clean(path), nil
+}
+
+// AbsPathSecure validates that a path contains no traversal sequences,
+// then returns the absolute, cleaned path. This is the recommended function
+// for library code that needs fully qualified paths.
+func AbsPathSecure(path string) (string, error) {
+	if err := ValidateNoTraversal(path); err != nil {
+		return "", err
+	}
+	return AbsFilepath(path)
+}
 
 func IsDir(name string) (bool, error) {
 	if fi, err := os.Stat(name); err != nil {
