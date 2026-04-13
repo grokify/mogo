@@ -26,4 +26,4 @@ on:
 
 jobs:
   sast:
-    uses: grokify/.github/.github/workflows/go-sast-codeql.yaml@d216972968c791e80ce3b159939c79b98903c3de
+    uses: grokify/.github/.github/workflows/go-sast-codeql.yaml@1b3151f7c83da4465c5fb6b587d01cf3997a8765
