@@ -166,6 +166,9 @@ var CommonReasons = struct {
 	InternalServiceURL  string
 	TrustedConstantsURL string
 
+	// G120 reasons (test code only - use code fix in production)
+	TestHttptestControlled string
+
 	// G122 reasons (cmd/ only - use os.Root in pkg/)
 	DirectoryFromCLIFlag string
 	TrustedConfigDir     string
@@ -202,17 +205,33 @@ var CommonReasons = struct {
 	InternalServiceURL:  "Internal service URL from config",
 	TrustedConstantsURL: "URL constructed from trusted constants",
 
+	// G120 (test code only - use code fix in production)
+	TestHttptestControlled: "Test uses httptest with controlled input",
+
 	// G122 (cmd/ only - use os.Root in pkg/)
 	DirectoryFromCLIFlag: "Directory from CLI flag",
 	TrustedConfigDir:     "Walking config directory from trusted source",
 }
 
+// NolintG120 returns a nolint comment for G120 (form parsing without body limit).
+//
+// IMPORTANT: For production code, use code fixes (http.MaxBytesReader) instead
+// of nolint comments. Only use NolintG120 for test code where input is controlled.
+//
+// Example reasons:
+//   - "Test uses httptest with controlled input"
+//   - "Integration test with known payload size"
+func NolintG120(reason string) string {
+	return Nolint("G120", reason)
+}
+
 // G120 Fix Helpers
 //
 // G120 warns about parsing form data without limiting request body size.
-// Unlike other gosec rules, G120 requires code changes rather than nolint.
+// For production code, use code fixes rather than nolint.
+// For test code with controlled input (httptest), nolint is acceptable.
 //
-// The fix requires:
+// Production fix requires:
 //  1. Call http.MaxBytesReader to limit body size (MUST be inline, not a helper)
 //  2. Call r.ParseForm() or r.ParseMultipartForm()
 //  3. Use r.Form.Get() instead of r.FormValue()
