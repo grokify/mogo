@@ -222,6 +222,22 @@
           "summary": "Remove unused assignment or use blank identifier",
           "example": "_ = someFunc() // Explicitly ignore return value"
         }
+      },
+      "QF1012": {
+        "name": "Use fmt.Fprintf instead of WriteString(fmt.Sprintf)",
+        "description": "WriteString(fmt.Sprintf(...)) is less efficient than fmt.Fprintf",
+        "severity": "low",
+        "category": "performance",
+        "remediation": {
+          "type": "code",
+          "summary": "Replace sb.WriteString(fmt.Sprintf(...)) with fmt.Fprintf(&sb, ...)",
+          "explanation": "Using WriteString with fmt.Sprintf creates an intermediate string allocation. fmt.Fprintf writes directly to the io.Writer, avoiding the allocation.",
+          "example": "// Before:\nsb.WriteString(fmt.Sprintf(\"[%s] %s\", level, msg))\n\n// After:\nfmt.Fprintf(&sb, \"[%s] %s\", level, msg)",
+          "avoid": [
+            "sb.WriteString(fmt.Sprintf(...))",
+            "buf.WriteString(fmt.Sprintf(...))"
+          ]
+        }
       }
     },
     "errcheck": {
