@@ -6,6 +6,16 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.74.2",
+      "date": "2026-04-20",
+      "added": [
+        { "description": "`path/filepathutil`: add `NormalizePath()` for cross-platform path comparison", "commit": "2ae676a" }
+      ],
+      "fixed": [
+        { "description": "`path/filepathutil`: fix variable shadowing in `ChangeStripExtension()` (filepath -> fp)", "commit": "2ae676a" }
+      ]
+    },
+    {
       "version": "v0.74.1",
       "date": "2026-04-04",
       "added": [
