@@ -97,16 +97,27 @@ func FilterFilepaths(paths []string, inclExists, inclNotExists, inclFiles, inclD
 	return filtered
 }
 
-func ChangeStripExtension(filepath, newext string) string {
+func ChangeStripExtension(fp, newext string) string {
 	if newext != "" {
 		if strings.Index(newext, ".") != 0 {
 			newext = "." + newext
 		}
 	}
-	if strings.Contains(filepath, ".") {
-		filepath = rxExt.ReplaceAllString(filepath, newext)
+	if strings.Contains(fp, ".") {
+		fp = rxExt.ReplaceAllString(fp, newext)
 	} else {
-		filepath += newext
+		fp += newext
 	}
-	return filepath
+	return fp
+}
+
+// NormalizePath converts a file path to use forward slashes for consistent
+// cross-platform comparison. This is useful when comparing paths that may
+// come from different sources (e.g., Unix-style paths in config files on Windows).
+//
+// The path is first cleaned using filepath.Clean, then all backslashes are
+// converted to forward slashes.
+func NormalizePath(p string) string {
+	p = filepath.Clean(p)
+	return strings.ReplaceAll(p, "\\", "/")
 }
