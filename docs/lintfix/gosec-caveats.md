@@ -93,9 +93,49 @@ The stricter detection in gosec 2.11+ means:
 
 ## G703: Path Traversal
 
-### Remediation Pattern
+G703 warns about file paths constructed from user input that may allow directory traversal attacks.
 
-When dealing with G703 (path traversal via taint analysis), the fix depends on the source of the path:
+### cmd/ vs Library Code
+
+The fix depends on where your code lives:
+
+**In `cmd/` (CLI entry points)** - User explicitly provides the path, use nolint:
+
+```go
+// User provides path via CLI flag - they own the risk
+cleanPath := filepath.Clean(userPath)
+if err := os.WriteFile(cleanPath, data, 0600); err != nil { //nolint:gosec // G703: Path from CLI flag
+    return err
+}
+```
+
+**In library code** - Use secure functions that reject `..` sequences:
+
+```go
+import "github.com/grokify/mogo/os/osutil"
+
+// Library code - reject paths with traversal sequences
+data, err := osutil.ReadFileSecure(path)
+if err != nil {
+    // Returns: "path contains '..' traversal sequence: ../etc/passwd"
+    return err
+}
+
+if err := osutil.WriteFileSecure(path, data, 0600); err != nil {
+    return err
+}
+```
+
+**Error handling:**
+
+```go
+// Check for path traversal error specifically
+if errors.Is(err, osutil.ErrPathTraversal) {
+    log.Println("Invalid path:", err)
+}
+```
+
+### Additional Validation Patterns
 
 **Validate input to reject path separators:**
 
