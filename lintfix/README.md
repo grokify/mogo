@@ -44,6 +44,46 @@ comment := gosec.NolintG117(gosec.CommonReasons.OAuthTokenResponse)
 - **staticcheck** - Static analysis (SA1019, SA4006)
 - **errcheck** - Error handling
 
+## G703: Path Traversal
+
+G703 warns about file paths constructed from user input. The fix depends on where your code lives:
+
+**In `cmd/` (CLI entry points)** - User explicitly provides the path, use nolint:
+
+```go
+// User provides path via CLI flag - they own the risk
+cleanPath := filepath.Clean(userPath)
+if err := os.WriteFile(cleanPath, data, 0600); err != nil { //nolint:gosec // G703: Path from CLI flag
+    return err
+}
+```
+
+**In library code** - Use secure functions that reject `..` sequences:
+
+```go
+import "github.com/grokify/mogo/os/osutil"
+
+// Library code - reject paths with traversal sequences
+data, err := osutil.ReadFileSecure(path)
+if err != nil {
+    // Returns: "path contains '..' traversal sequence: ../etc/passwd"
+    return err
+}
+
+if err := osutil.WriteFileSecure(path, data, 0600); err != nil {
+    return err
+}
+```
+
+**Error returned:** `osutil.ErrPathTraversal` is returned when a path contains `..`:
+
+```go
+// errors.Is check
+if errors.Is(err, osutil.ErrPathTraversal) {
+    log.Println("Invalid path:", err)
+}
+```
+
 ## Nolint Generators
 
 The `gosec` subpackage provides type-safe nolint comment generators:
@@ -53,7 +93,7 @@ gosec.NolintG101(reason)  // Hardcoded credentials (false positive)
 gosec.NolintG115(reason)  // Integer overflow (bounded value)
 gosec.NolintG117(reason)  // Secret in JSON response
 gosec.NolintG118(reason)  // context.Background in goroutine
-gosec.NolintG703(reason)  // Path traversal (validated input)
+gosec.NolintG703(reason)  // Path traversal (CLI entry point only)
 gosec.NolintG704(reason)  // SSRF (trusted URL)
 ```
 

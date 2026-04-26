@@ -141,8 +141,8 @@
           "summary": "Use nolint in cmd/, use secure functions in library code",
           "pattern": "//nolint:gosec // G703: {reason}",
           "package": "github.com/grokify/mogo/os/osutil",
-          "function": "WriteFileSecure, CopyFileSecure, CleanPathSecure",
-          "explanation": "Path traversal occurs when user input containing '../' sequences is used to access files outside the intended directory. The fix depends on where the code lives:\n\n**cmd/ directories (CLI entry points):**\nUse filepath.Clean() before calling library functions, then use //nolint:gosec. The user explicitly provides the path and is trusted.\n\n**pkg/ directories (library code):**\nUse osutil.WriteFileSecure, osutil.CopyFileSecure, or osutil.CleanPathSecure which reject paths containing '..'. Libraries should receive already-cleaned paths without traversal sequences, ideally fully qualified.",
+          "function": "ReadFileSecure, WriteFileSecure, CopyFileSecure, CleanPathSecure",
+          "explanation": "Path traversal occurs when user input containing '../' sequences is used to access files outside the intended directory. The fix depends on where the code lives:\n\n**cmd/ directories (CLI entry points):**\nUse filepath.Clean() before calling library functions, then use //nolint:gosec. The user explicitly provides the path and is trusted.\n\n**pkg/ directories (library code):**\nUse osutil.ReadFileSecure, osutil.WriteFileSecure, osutil.CopyFileSecure, or osutil.CleanPathSecure which reject paths containing '..'. These functions return osutil.ErrPathTraversal when traversal is detected. Libraries should receive already-cleaned paths without traversal sequences, ideally fully qualified.",
           "when": "cmd/: User explicitly provides path via CLI flag or config. pkg/: Path has been validated by caller to not contain '..'",
           "example": "// In cmd/:\ncleanPath := filepath.Clean(userPath)\nif err := os.WriteFile(cleanPath, data, 0600); err != nil { //nolint:gosec // G703: Path from CLI flag\n\n// In pkg/:\nimport \"github.com/grokify/mogo/os/osutil\"\nif err := osutil.WriteFileSecure(path, data, 0600); err != nil { // Rejects '..' automatically",
           "caveats": [
@@ -170,6 +170,23 @@
         },
         "references": [
           "https://cwe.mitre.org/data/definitions/918.html"
+        ]
+      },
+      "G705": {
+        "name": "XSS via taint analysis",
+        "description": "Potential Cross-Site Scripting - HTTP response written with user-controlled data",
+        "severity": "high",
+        "category": "security",
+        "remediation": {
+          "type": "nolint",
+          "summary": "Add nolint if content is from trusted/embedded sources, not user input",
+          "pattern": "//nolint:gosec // G705: {reason}",
+          "when": "Content is from embedded static assets, pre-sanitized sources, or template with auto-escaping",
+          "example": "if _, err = w.Write(svg); err != nil { //nolint:gosec // G705: SVG from embedded static assets",
+          "explanation": "XSS occurs when user-controlled data is written to HTTP responses without proper sanitization. Use nolint when the data comes from trusted sources (embedded assets, pre-sanitized content) rather than user input. For user-controlled content, use html/template with auto-escaping or explicit sanitization."
+        },
+        "references": [
+          "https://cwe.mitre.org/data/definitions/79.html"
         ]
       },
       "G122": {
