@@ -49,6 +49,8 @@ Helper functions referenced by code remediations:
 | Rule | Package | Function |
 |------|---------|----------|
 | G120 | `mogo/net/http/httputilmore` | `LimitRequestBody` |
+| G703 | `mogo/os/osutil` | `ReadFileSecure`, `WriteFileSecure`, `CopyFileSecure` |
+| G122 | `mogo/os/osutil` | `ReadDirFilesSecure` |
 
 ## Contributing
 
