@@ -91,9 +91,27 @@ func WriteFileReader(filename string, r io.Reader, perm os.FileMode) (err error)
 	return err
 }
 
+// ReadFileSecure reads the file at the specified path after validating it does
+// not contain path traversal sequences (".."). This is the recommended function
+// for library code that receives paths from callers.
+//
+// Returns ErrPathTraversal (wrapped) if the path contains "..".
+//
+// For CLI entry points where the user explicitly provides paths, use
+// os.ReadFile directly with a //nolint:gosec comment instead.
+func ReadFileSecure(path string) ([]byte, error) {
+	cleanPath, err := CleanPathSecure(path)
+	if err != nil {
+		return nil, err
+	}
+	return os.ReadFile(cleanPath)
+}
+
 // WriteFileSecure writes data to the specified path after validating it does
 // not contain path traversal sequences (".."). This is the recommended function
 // for library code that receives paths from callers.
+//
+// Returns ErrPathTraversal (wrapped) if the path contains "..".
 //
 // For CLI entry points where the user explicitly provides paths, use
 // os.WriteFile directly with a //nolint:gosec comment instead.
