@@ -102,6 +102,20 @@ func NolintG704(reason string) string {
 	return Nolint("G704", reason)
 }
 
+// NolintG705 returns a nolint comment for G705 (XSS via taint analysis).
+//
+// Use this when writing content to HTTP responses where the data comes from
+// trusted sources rather than user input.
+//
+// Example reasons:
+//   - "Content from embedded static assets"
+//   - "Pre-sanitized HTML from trusted source"
+//   - "Static SVG/image served with appropriate Content-Type"
+//   - "Template output with auto-escaping enabled"
+func NolintG705(reason string) string {
+	return Nolint("G705", reason)
+}
+
 // NolintG122 returns a nolint comment for G122 (filepath.Walk TOCTOU race).
 //
 // IMPORTANT: Only use this in cmd/ directories (CLI entry points) where users
@@ -166,6 +180,12 @@ var CommonReasons = struct {
 	InternalServiceURL  string
 	TrustedConstantsURL string
 
+	// G705 reasons
+	EmbeddedStaticAssets   string
+	PreSanitizedHTML       string
+	StaticContentType      string
+	TemplateWithAutoEscape string
+
 	// G120 reasons (test code only - use code fix in production)
 	TestHttptestControlled string
 
@@ -204,6 +224,12 @@ var CommonReasons = struct {
 	ValidatedAllowlist:  "URL from validated allowlist",
 	InternalServiceURL:  "Internal service URL from config",
 	TrustedConstantsURL: "URL constructed from trusted constants",
+
+	// G705
+	EmbeddedStaticAssets:   "Content from embedded static assets",
+	PreSanitizedHTML:       "Pre-sanitized HTML from trusted source",
+	StaticContentType:      "Static content served with appropriate Content-Type",
+	TemplateWithAutoEscape: "Template output with auto-escaping enabled",
 
 	// G120 (test code only - use code fix in production)
 	TestHttptestControlled: "Test uses httptest with controlled input",
