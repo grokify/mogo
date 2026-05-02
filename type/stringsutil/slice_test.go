@@ -1,11 +1,11 @@
 package stringsutil
 
 import (
+	"slices"
 	"strings"
 	"testing"
 
 	"github.com/grokify/mogo/strconv/strconvutil"
-	"golang.org/x/exp/slices"
 )
 
 var sliceTests = []struct {
