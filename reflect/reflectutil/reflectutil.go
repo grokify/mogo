@@ -47,7 +47,7 @@ func FieldTagValue(i any, fieldName, tagName string) (string, error) {
 func NameOf(i any, inclPkgPath bool) string {
 	var ptr, name string
 	t := reflect.TypeOf(i)
-	if t.Kind() == reflect.Ptr {
+	if t.Kind() == reflect.Pointer {
 		t = t.Elem()
 		ptr = "*"
 	}
@@ -82,7 +82,7 @@ func IsNil(i any) bool {
 		return true
 	}
 	switch reflect.TypeOf(i).Kind() {
-	case reflect.Ptr, reflect.Map, reflect.Array, reflect.Chan, reflect.Slice:
+	case reflect.Pointer, reflect.Map, reflect.Array, reflect.Chan, reflect.Slice:
 		return reflect.ValueOf(i).IsNil()
 	}
 	return false
