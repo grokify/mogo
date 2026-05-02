@@ -1,9 +1,8 @@
 package maputil
 
 import (
+	"slices"
 	"testing"
-
-	"golang.org/x/exp/slices"
 )
 
 var stringKeysExistTests = []struct {
