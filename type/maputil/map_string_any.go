@@ -1,14 +1,14 @@
 package maputil
 
 import (
+	"cmp"
 	"encoding/json"
 	"errors"
+	"slices"
 	"sort"
 
 	"github.com/grokify/mogo/sort/sortutil"
 	"github.com/grokify/mogo/strconv/strconvutil"
-	"golang.org/x/exp/constraints"
-	"golang.org/x/exp/slices"
 )
 
 var (
@@ -62,11 +62,11 @@ func (msas MapStringAnys) UniqueKeys() []string {
 	return keys
 }
 
-func KeysEqual[K constraints.Ordered, V any](m1, m2 map[K]V) bool {
+func KeysEqual[K cmp.Ordered, V any](m1, m2 map[K]V) bool {
 	return slices.Equal(Keys(m1), Keys(m2))
 }
 
-func KeysSubtract[K constraints.Ordered, V any](m1, m2 map[K]V) []K {
+func KeysSubtract[K cmp.Ordered, V any](m1, m2 map[K]V) []K {
 	var out []K
 	for kx := range m1 {
 		if _, ok := m2[kx]; ok {
@@ -78,7 +78,7 @@ func KeysSubtract[K constraints.Ordered, V any](m1, m2 map[K]V) []K {
 	return out
 }
 
-func Values[K constraints.Ordered, V any](m map[K]V) []V {
+func Values[K cmp.Ordered, V any](m map[K]V) []V {
 	keys := Keys(m)
 	var vals []V
 	for _, k := range keys {
@@ -104,7 +104,7 @@ func ValuesByKeys[K comparable, V any](m map[K]V, keys []K, def V) []V {
 }
 
 // ValuesSorted returns a string slice of sorted values.
-func ValuesSorted[K comparable, V constraints.Ordered](m map[K]V) []V {
+func ValuesSorted[K comparable, V cmp.Ordered](m map[K]V) []V {
 	var vals []V
 	for _, val := range m {
 		vals = append(vals, val)
