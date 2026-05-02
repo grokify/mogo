@@ -2,13 +2,13 @@ package strslices
 
 import (
 	"regexp"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
 
 	"github.com/grokify/mogo/type/number"
 	"github.com/grokify/mogo/type/slicesutil"
-	"golang.org/x/exp/slices"
 )
 
 /*
