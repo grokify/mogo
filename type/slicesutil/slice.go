@@ -3,10 +3,8 @@ package slicesutil
 import (
 	"cmp"
 	"regexp"
+	"slices"
 	"sort"
-
-	"golang.org/x/exp/constraints"
-	"golang.org/x/exp/slices"
 )
 
 // AppendBulk appends multiple slice to a slice, and skips 0 length slices.
@@ -120,13 +118,13 @@ func Shift[S ~[]E, E any](s S) (E, S) {
 	return s[0], s[1:]
 }
 
-func Sort[E constraints.Ordered](s []E) {
+func Sort[E cmp.Ordered](s []E) {
 	sort.Slice(s, func(i, j int) bool {
 		return s[i] < s[j]
 	})
 }
 
-func SortSliceOfSlice[S ~[][]E, E constraints.Ordered | string](s S, indexes ...uint) {
+func SortSliceOfSlice[S ~[][]E, E cmp.Ordered | string](s S, indexes ...uint) {
 	for _, idx := range indexes {
 		sort.Slice(s, func(i, j int) bool {
 			return s[i][idx] < s[j][idx]
