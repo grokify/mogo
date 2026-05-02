@@ -1,10 +1,9 @@
 package stringsutil
 
 import (
+	"slices"
 	"strings"
 	"testing"
-
-	"golang.org/x/exp/slices"
 )
 
 var splitTrimSpaceTests = []struct {
