@@ -1,14 +1,15 @@
 package maputil
 
 import (
+	"cmp"
 	"errors"
 	"fmt"
+	"slices"
 	"sort"
 	"strings"
 
 	"github.com/grokify/mogo/sort/sortutil"
 	"golang.org/x/exp/constraints"
-	"golang.org/x/exp/slices"
 )
 
 // StringKeys takes a map where the keys are strings and reurns a slice of key names.
@@ -49,7 +50,7 @@ func IsSubsetOrValues[C comparable, K comparable](m map[C]K, submap map[C][]K) b
 }
 
 // Keys returns a list of sorted keys.
-func Keys[K constraints.Ordered, V any](m map[K]V) []K {
+func Keys[K cmp.Ordered, V any](m map[K]V) []K {
 	var keys []K
 	for k := range m {
 		keys = append(keys, k)
