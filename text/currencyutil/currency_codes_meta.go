@@ -1,7 +1,7 @@
 package currencyutil
 
 import (
-	"golang.org/x/exp/slices"
+	"slices"
 )
 
 // activate when rebuilding this func.
