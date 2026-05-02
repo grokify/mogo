@@ -1,15 +1,14 @@
 package sortutil
 
 import (
+	"cmp"
 	"errors"
 	"sort"
 	"strings"
-
-	"golang.org/x/exp/constraints"
 )
 
-// Slice sorts a slice of items that comply wth `constraints.Ordered`.
-func Slice[E constraints.Ordered](s []E) {
+// Slice sorts a slice of items that comply wth `cmp.Ordered`.
+func Slice[E cmp.Ordered](s []E) {
 	sort.Slice(s, func(i, j int) bool {
 		return s[i] < s[j]
 	})
