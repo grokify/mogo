@@ -2,13 +2,11 @@ package ordered
 
 import (
 	"cmp"
-
-	"golang.org/x/exp/constraints"
-	"golang.org/x/exp/slices"
+	"slices"
 )
 
-// Dedupe is like `slices.Dedupe()` but operates on elements conforming to `constraints.Ordered`.
-func Dedupe[S ~[]E, E constraints.Ordered](s S) S {
+// Dedupe is like `slices.Dedupe()` but operates on elements conforming to `cmp.Ordered`.
+func Dedupe[S ~[]E, E cmp.Ordered](s S) S {
 	deduped := []E{}
 	seen := map[E]int{}
 	for _, val := range s {
@@ -21,8 +19,8 @@ func Dedupe[S ~[]E, E constraints.Ordered](s S) S {
 	return deduped
 }
 
-// dedupeOrderedMore is like `Dedupe()` but operates on elements conforming to `constraints.Ordered`.
-func dedupeOrderedMore[S ~[]E, E constraints.Ordered](s S, seen map[E]int) (S, map[E]int) {
+// dedupeOrderedMore is like `Dedupe()` but operates on elements conforming to `cmp.Ordered`.
+func dedupeOrderedMore[S ~[]E, E cmp.Ordered](s S, seen map[E]int) (S, map[E]int) {
 	deduped := []E{}
 	for _, val := range s {
 		if _, ok := seen[val]; ok {
@@ -34,7 +32,7 @@ func dedupeOrderedMore[S ~[]E, E constraints.Ordered](s S, seen map[E]int) (S, m
 	return deduped, seen
 }
 
-func AppendOrdered[S ~[]E, E constraints.Ordered](dedupe bool, s ...S) S {
+func AppendOrdered[S ~[]E, E cmp.Ordered](dedupe bool, s ...S) S {
 	result := S{}
 	if len(s) == 0 {
 		return result
@@ -69,7 +67,7 @@ func MinMax[T cmp.Ordered](s ...T) (min, max T) {
 }
 
 // Union returns an ordered set of deduped elements.
-func Union[S ~[]E, E constraints.Ordered](s ...S) S {
+func Union[S ~[]E, E cmp.Ordered](s ...S) S {
 	union := S{}
 	if len(s) == 0 {
 		return union
