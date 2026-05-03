@@ -1,6 +1,7 @@
 package httputilmore
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -127,6 +128,23 @@ func (resIn *ResponseInfo) ToJSON() []byte {
 		return bytes
 	}
 	return bytes
+}
+
+// MustWriteJSON writes JSON to the ResponseWriter with Content-Type header.
+// Panics on marshal or write error. Use in tests where data is controlled.
+func MustWriteJSON(w http.ResponseWriter, v any) {
+	w.Header().Set(HeaderContentType, ContentTypeAppJSONUtf8)
+	if err := json.NewEncoder(w).Encode(v); err != nil {
+		panic("MustWriteJSON: " + err.Error())
+	}
+}
+
+// MustWriteBytes writes bytes to the ResponseWriter.
+// Panics on write error. Use in tests with httptest.ResponseRecorder.
+func MustWriteBytes(w http.ResponseWriter, b []byte) {
+	if _, err := w.Write(b); err != nil {
+		panic("MustWriteBytes: " + err.Error())
+	}
 }
 
 func ResponseWriterWriteJSON(w http.ResponseWriter, statusCode int, body any, prefix, indent string) error {
