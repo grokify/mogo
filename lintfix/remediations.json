@@ -214,6 +214,44 @@
           "https://github.com/golang/go/issues/67002",
           "https://cwe.mitre.org/data/definitions/367.html"
         ]
+      },
+      "G124": {
+        "name": "Insecure HTTP cookie configuration",
+        "description": "http.Cookie missing Secure, HttpOnly, or SameSite attribute",
+        "severity": "medium",
+        "category": "security",
+        "remediation": {
+          "type": "code",
+          "summary": "Set Secure, HttpOnly, and SameSite attributes on http.Cookie",
+          "explanation": "Cookies without security attributes are vulnerable to interception and attacks:\n\n- **Secure**: Cookie only sent over HTTPS. Without this, cookies can be intercepted on HTTP connections.\n- **HttpOnly**: Cookie inaccessible to JavaScript (document.cookie). Prevents XSS attacks from stealing session cookies.\n- **SameSite**: Controls cross-site request behavior. Use Strict or Lax to prevent CSRF attacks.",
+          "example": "cookie := http.Cookie{\n    Name:     \"session\",\n    Value:    token,\n    Secure:   true,\n    HttpOnly: true,\n    SameSite: http.SameSiteStrictMode,\n}",
+          "caveats": [
+            "SameSite=None requires Secure=true; browsers reject SameSite=None without Secure",
+            "Use SameSiteStrictMode for sensitive cookies (sessions, auth tokens)",
+            "Use SameSiteLaxMode if cross-site GET navigation needs the cookie"
+          ]
+        },
+        "references": [
+          "https://cwe.mitre.org/data/definitions/614.html",
+          "https://cwe.mitre.org/data/definitions/1004.html"
+        ]
+      }
+    },
+    "govet": {
+      "inline": {
+        "name": "Constant should be inlined",
+        "description": "Using deprecated constant name instead of canonical name",
+        "severity": "low",
+        "category": "maintenance",
+        "remediation": {
+          "type": "code",
+          "summary": "Replace deprecated constant with canonical name",
+          "explanation": "Go renames some constants over time while keeping the old names for backward compatibility. The linter prefers the canonical names.",
+          "example": "// Before (deprecated):\nif v.Kind() != reflect.Ptr { ... }\n\n// After (canonical):\nif v.Kind() != reflect.Pointer { ... }",
+          "common_replacements": {
+            "reflect.Ptr": "reflect.Pointer"
+          }
+        }
       }
     },
     "staticcheck": {
