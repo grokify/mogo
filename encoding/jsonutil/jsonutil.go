@@ -182,6 +182,14 @@ func UnmarshalReader(r io.Reader, v any) ([]byte, error) {
 	}
 }
 
+// MustUnmarshalReader reads from r and unmarshals JSON into v.
+// Panics on read or unmarshal error. Use in tests where input is controlled.
+func MustUnmarshalReader(r io.Reader, v any) {
+	if _, err := UnmarshalReader(r, v); err != nil {
+		panic("MustUnmarshalReader: " + err.Error())
+	}
+}
+
 // UnmarshalStrict returns an error when the destination is a struct and the input contains object keys which do not match any non-ignored, exported fields in the destination.
 func UnmarshalStrict(b []byte, v any) error {
 	dec := json.NewDecoder(bytes.NewReader(b))
