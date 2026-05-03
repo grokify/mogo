@@ -2,6 +2,7 @@ package httputilmore
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net"
