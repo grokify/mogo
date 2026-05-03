@@ -6,6 +6,20 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.74.4",
+      "date": "2026-05-03",
+      "added": [
+        { "description": "`encoding/jsonutil`: add `MustUnmarshalReader()` for test code", "commit": "835b8ed" },
+        { "description": "`net/http/httputilmore`: add `MustWriteJSON()` and `MustWriteBytes()` for test code", "commit": "835b8ed" }
+      ],
+      "changed": [
+        { "description": "`net/http/httputilmore`: replace json-iterator with stdlib `encoding/json`", "commit": "40ff465" }
+      ],
+      "internal": [
+        { "description": "remove `json-iterator/go` dependency and empty `vars.go`", "commit": "042f770" }
+      ]
+    },
+    {
       "version": "v0.74.3",
       "date": "2026-05-02",
       "added": [
