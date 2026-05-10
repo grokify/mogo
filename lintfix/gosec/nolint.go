@@ -116,6 +116,34 @@ func NolintG705(reason string) string {
 	return Nolint("G705", reason)
 }
 
+// NolintG710 returns a nolint comment for G710 (open redirect via taint analysis).
+//
+// Use this when redirecting to URLs from trusted sources or validated allowlists.
+// For untrusted user input, validate the URL against an allowlist first.
+//
+// Example reasons:
+//   - "URL validated against allowlist"
+//   - "URL from server-controlled OAuth config"
+//   - "Internal redirect path, not user-controlled"
+//   - "Post-login redirect validated by session"
+func NolintG710(reason string) string {
+	return Nolint("G710", reason)
+}
+
+// NolintG124 returns a nolint comment for G124 (insecure cookie attributes).
+//
+// Use this when cookie security attributes (Secure, HttpOnly, SameSite) are
+// set dynamically or from configuration, which the linter cannot verify.
+//
+// Example reasons:
+//   - "Cookie has Secure, HttpOnly, SameSite set from config"
+//   - "Security attributes set dynamically based on TLS"
+//   - "Cookie clearing (MaxAge=-1) doesn't need security attributes"
+//   - "Test code - security attributes not needed for httptest"
+func NolintG124(reason string) string {
+	return Nolint("G124", reason)
+}
+
 // NolintG122 returns a nolint comment for G122 (filepath.Walk TOCTOU race).
 //
 // IMPORTANT: Only use this in cmd/ directories (CLI entry points) where users
@@ -186,6 +214,18 @@ var CommonReasons = struct {
 	StaticContentType      string
 	TemplateWithAutoEscape string
 
+	// G710 reasons
+	ValidatedAllowlistRedirect string
+	ServerControlledOAuthURL   string
+	InternalRedirectPath       string
+	PostLoginRedirectValidated string
+
+	// G124 reasons
+	CookieSecurityFromConfig    string
+	CookieSecurityDynamicTLS    string
+	CookieClearingNoAttrsNeeded string
+	TestCodeHttptest            string
+
 	// G120 reasons (test code only - use code fix in production)
 	TestHttptestControlled string
 
@@ -230,6 +270,18 @@ var CommonReasons = struct {
 	PreSanitizedHTML:       "Pre-sanitized HTML from trusted source",
 	StaticContentType:      "Static content served with appropriate Content-Type",
 	TemplateWithAutoEscape: "Template output with auto-escaping enabled",
+
+	// G710
+	ValidatedAllowlistRedirect: "URL validated against allowlist",
+	ServerControlledOAuthURL:   "URL from server-controlled OAuth config",
+	InternalRedirectPath:       "Internal redirect path, not user-controlled",
+	PostLoginRedirectValidated: "Post-login redirect validated by session",
+
+	// G124
+	CookieSecurityFromConfig:    "Cookie has Secure, HttpOnly, SameSite set from config",
+	CookieSecurityDynamicTLS:    "Security attributes set dynamically based on TLS",
+	CookieClearingNoAttrsNeeded: "Cookie clearing (MaxAge=-1) doesn't need security attributes",
+	TestCodeHttptest:            "Test code - security attributes not needed for httptest",
 
 	// G120 (test code only - use code fix in production)
 	TestHttptestControlled: "Test uses httptest with controlled input",
