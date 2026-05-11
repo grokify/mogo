@@ -20,7 +20,7 @@ require (
 	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f
 	golang.org/x/image v0.39.0
 	golang.org/x/net v0.53.0
-	golang.org/x/term v0.42.0
+	golang.org/x/term v0.43.0
 	golang.org/x/text v0.36.0
 	google.golang.org/genproto v0.0.0-20260427160629-7cedc36a6bc4
 )
@@ -29,6 +29,6 @@ require (
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/cloudflare/circl v1.6.3 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
-	golang.org/x/sys v0.43.0 // indirect
+	golang.org/x/sys v0.44.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 )
