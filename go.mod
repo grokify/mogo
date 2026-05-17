@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/ProtonMail/go-crypto v1.4.1
-	github.com/btcsuite/btcd/btcutil v1.1.6
+	github.com/btcsuite/btcd/btcutil v1.2.0
 	github.com/btcsuite/btcutil v1.0.2
 	github.com/caarlos0/env/v11 v11.4.1
 	github.com/grokify/base36 v1.0.5
@@ -16,13 +16,13 @@ require (
 	github.com/lytics/base62 v0.0.0-20180808010106-0ee4de5a5d6d
 	github.com/martinlindhe/base36 v1.1.1
 	github.com/microcosm-cc/bluemonday v1.0.27
-	golang.org/x/crypto v0.50.0
-	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f
-	golang.org/x/image v0.39.0
-	golang.org/x/net v0.53.0
+	golang.org/x/crypto v0.51.0
+	golang.org/x/exp v0.0.0-20260508232706-74f9aab9d74a
+	golang.org/x/image v0.40.0
+	golang.org/x/net v0.54.0
 	golang.org/x/term v0.43.0
-	golang.org/x/text v0.36.0
-	google.golang.org/genproto v0.0.0-20260427160629-7cedc36a6bc4
+	golang.org/x/text v0.37.0
+	google.golang.org/genproto v0.0.0-20260511170946-3700d4141b60
 )
 
 require (
