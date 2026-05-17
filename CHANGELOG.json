@@ -6,91 +6,248 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.74.5",
+      "date": "2026-05-17",
+      "added": [
+        {
+          "description": "`net/mailutil/threading`: add email thread reconstruction package with `ThreadableMessage` interface",
+          "commit": "cc0731e"
+        },
+        {
+          "description": "`crypto/tlsutil`: add comprehensive TLS checker library",
+          "commit": "37c9e05"
+        },
+        {
+          "description": "`crypto/tlsutil`: add post-quantum cryptography support",
+          "commit": "6cdb6d7"
+        },
+        {
+          "description": "`crypto/tlsutil`: add TLS 1.2 cipher suite mappings",
+          "commit": "04a6efb"
+        },
+        {
+          "description": "`lintfix/gosec`: add G710 and G124 nolint helpers",
+          "commit": "c4b22bf"
+        },
+        {
+          "description": "`lintfix`: add G124 (cookie security) and govet inline remediations",
+          "commit": "6c89c1c"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`crypto/tlsutil`: simplify cipherscheck CLI using library",
+          "commit": "9906949"
+        }
+      ],
+      "tests": [
+        {
+          "description": "`crypto/tlsutil`: add unit tests with mock TLS server",
+          "commit": "dfc4e85"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update dependencies",
+          "commit": "a5b93c0"
+        },
+        {
+          "description": "bump `golang.org/x/term` from 0.42.0 to 0.43.0",
+          "commit": "74624ec"
+        },
+        {
+          "description": "update copyright years",
+          "commit": "daa01d8"
+        }
+      ]
+    },
+    {
       "version": "v0.74.4",
       "date": "2026-05-03",
       "added": [
-        { "description": "`encoding/jsonutil`: add `MustUnmarshalReader()` for test code", "commit": "835b8ed" },
-        { "description": "`net/http/httputilmore`: add `MustWriteJSON()` and `MustWriteBytes()` for test code", "commit": "835b8ed" }
+        {
+          "description": "`encoding/jsonutil`: add `MustUnmarshalReader()` for test code",
+          "commit": "835b8ed"
+        },
+        {
+          "description": "`net/http/httputilmore`: add `MustWriteJSON()` and `MustWriteBytes()` for test code",
+          "commit": "835b8ed"
+        }
       ],
       "changed": [
-        { "description": "`net/http/httputilmore`: replace json-iterator with stdlib `encoding/json`", "commit": "40ff465" }
+        {
+          "description": "`net/http/httputilmore`: replace json-iterator with stdlib `encoding/json`",
+          "commit": "40ff465"
+        }
       ],
       "internal": [
-        { "description": "remove `json-iterator/go` dependency and empty `vars.go`", "commit": "042f770" }
+        {
+          "description": "remove `json-iterator/go` dependency and empty `vars.go`",
+          "commit": "042f770"
+        }
       ]
     },
     {
       "version": "v0.74.3",
       "date": "2026-05-02",
       "added": [
-        { "description": "`time/duration`: add `DurationMilliseconds` type for JSON millisecond marshaling", "commit": "6282941" },
-        { "description": "`lintfix/gosec`: add `NolintG705` helper for XSS false positives", "commit": "26dff39" },
-        { "description": "`os/osutil`: add `ReadFileSecure` for path-traversal-safe file reading", "commit": "4d866be" }
+        {
+          "description": "`time/duration`: add `DurationMilliseconds` type for JSON millisecond marshaling",
+          "commit": "6282941"
+        },
+        {
+          "description": "`lintfix/gosec`: add `NolintG705` helper for XSS false positives",
+          "commit": "26dff39"
+        },
+        {
+          "description": "`os/osutil`: add `ReadFileSecure` for path-traversal-safe file reading",
+          "commit": "4d866be"
+        }
       ],
       "fixed": [
-        { "description": "`reflect/reflectutil`: replace deprecated `reflect.Ptr` with `reflect.Pointer`", "commit": "6f8613e" },
-        { "description": "replace `golang.org/x/exp/constraints.Ordered` with stdlib `cmp.Ordered` across multiple packages", "commit": "bfb9ece" },
-        { "description": "replace `golang.org/x/exp/slices` with stdlib `slices` across multiple packages", "commit": "d0b589e" }
+        {
+          "description": "`reflect/reflectutil`: replace deprecated `reflect.Ptr` with `reflect.Pointer`",
+          "commit": "6f8613e"
+        },
+        {
+          "description": "replace `golang.org/x/exp/constraints.Ordered` with stdlib `cmp.Ordered` across multiple packages",
+          "commit": "bfb9ece"
+        },
+        {
+          "description": "replace `golang.org/x/exp/slices` with stdlib `slices` across multiple packages",
+          "commit": "d0b589e"
+        }
       ],
       "documentation": [
-        { "description": "`docs/lintfix`: update G703 section with osutil secure functions", "commit": "a85c79c" },
-        { "description": "`docs/lintfix`: add G705 and improve G703 documentation", "commit": "8e98d85" }
+        {
+          "description": "`docs/lintfix`: update G703 section with osutil secure functions",
+          "commit": "a85c79c"
+        },
+        {
+          "description": "`docs/lintfix`: add G705 and improve G703 documentation",
+          "commit": "8e98d85"
+        }
       ],
       "internal": [
-        { "description": "`go mod`: update dependencies", "commit": "a4438df" }
+        {
+          "description": "`go mod`: update dependencies",
+          "commit": "a4438df"
+        }
       ]
     },
     {
       "version": "v0.74.2",
       "date": "2026-04-20",
       "added": [
-        { "description": "`path/filepathutil`: add `NormalizePath()` for cross-platform path comparison", "commit": "2ae676a" }
+        {
+          "description": "`path/filepathutil`: add `NormalizePath()` for cross-platform path comparison",
+          "commit": "2ae676a"
+        }
       ],
       "fixed": [
-        { "description": "`path/filepathutil`: fix variable shadowing in `ChangeStripExtension()` (filepath -> fp)", "commit": "2ae676a" }
+        {
+          "description": "`path/filepathutil`: fix variable shadowing in `ChangeStripExtension()` (filepath -> fp)",
+          "commit": "2ae676a"
+        }
       ]
     },
     {
       "version": "v0.74.1",
       "date": "2026-04-04",
       "added": [
-        { "description": "`os/osutil`: add `ReadDirFilesSecure()` for symlink-safe directory reading using `os.Root` (G122)", "commit": "6d4689b" },
-        { "description": "`os/osutil`: add `WriteFileSecure()`, `CopyFileSecure()` for path-traversal-safe operations (G703)", "commit": "6d4689b" },
-        { "description": "`os/osutil`: add `ValidateNoTraversal()`, `CleanPathSecure()`, `AbsPathSecure()` path validation", "commit": "6d4689b" },
-        { "description": "`lintfix/gosec`: add `NolintG122()` for filepath.Walk TOCTOU race conditions", "commit": "3a6d415" }
+        {
+          "description": "`os/osutil`: add `ReadDirFilesSecure()` for symlink-safe directory reading using `os.Root` (G122)",
+          "commit": "6d4689b"
+        },
+        {
+          "description": "`os/osutil`: add `WriteFileSecure()`, `CopyFileSecure()` for path-traversal-safe operations (G703)",
+          "commit": "6d4689b"
+        },
+        {
+          "description": "`os/osutil`: add `ValidateNoTraversal()`, `CleanPathSecure()`, `AbsPathSecure()` path validation",
+          "commit": "6d4689b"
+        },
+        {
+          "description": "`lintfix/gosec`: add `NolintG122()` for filepath.Walk TOCTOU race conditions",
+          "commit": "3a6d415"
+        }
       ],
       "changed": [
-        { "description": "`lintfix/gosec`: update G703 guidance to recommend secure functions for pkg/ code", "commit": "3a6d415" },
-        { "description": "`lintfix`: add G122 to remediations.json with `os.Root` and `osutil.ReadDirFilesSecure` recommendations", "commit": "3a6d415" }
+        {
+          "description": "`lintfix/gosec`: update G703 guidance to recommend secure functions for pkg/ code",
+          "commit": "3a6d415"
+        },
+        {
+          "description": "`lintfix`: add G122 to remediations.json with `os.Root` and `osutil.ReadDirFilesSecure` recommendations",
+          "commit": "3a6d415"
+        }
       ]
     },
     {
       "version": "v0.74.0",
       "date": "2026-03-16",
       "highlights": [
-        { "description": "New `lintfix` package providing lint remediation database and nolint generators for gosec rules" }
+        {
+          "description": "New `lintfix` package providing lint remediation database and nolint generators for gosec rules"
+        }
       ],
       "breaking": [
-        { "description": "`os/osutil`: `WriteFileReader()` signature changed from `(filename, r)` to `(filename, r, perm)` for explicit permission control", "commit": "282752d" }
+        {
+          "description": "`os/osutil`: `WriteFileReader()` signature changed from `(filename, r)` to `(filename, r, perm)` for explicit permission control",
+          "commit": "282752d"
+        }
       ],
       "added": [
-        { "description": "`lintfix`: add lint remediation database with embedded JSON and query API", "commit": "3dd6bbb" },
-        { "description": "`lintfix/gosec`: add nolint comment generators for G101, G115, G117, G118, G703, G704", "commit": "3dd6bbb" },
-        { "description": "`lintfix/gosec`: add `CommonReasons` constants for frequently used justifications", "commit": "3dd6bbb" },
-        { "description": "`text/markdown`: add `Children` field to `Link` for hierarchical link structures", "commit": "4f3408d" }
+        {
+          "description": "`lintfix`: add lint remediation database with embedded JSON and query API",
+          "commit": "3dd6bbb"
+        },
+        {
+          "description": "`lintfix/gosec`: add nolint comment generators for G101, G115, G117, G118, G703, G704",
+          "commit": "3dd6bbb"
+        },
+        {
+          "description": "`lintfix/gosec`: add `CommonReasons` constants for frequently used justifications",
+          "commit": "3dd6bbb"
+        },
+        {
+          "description": "`text/markdown`: add `Children` field to `Link` for hierarchical link structures",
+          "commit": "4f3408d"
+        }
       ],
       "changed": [
-        { "description": "`os/osutil`: simplify `WriteFileReader()` using `io.Copy` instead of buffered writer", "commit": "282752d" },
-        { "description": "`os/osutil`: remove panic on `Close()` error in `WriteFileReader()`", "commit": "282752d" }
+        {
+          "description": "`os/osutil`: simplify `WriteFileReader()` using `io.Copy` instead of buffered writer",
+          "commit": "282752d"
+        },
+        {
+          "description": "`os/osutil`: remove panic on `Close()` error in `WriteFileReader()`",
+          "commit": "282752d"
+        }
       ],
       "documentation": [
-        { "description": "add `docs/lintfix/` with gosec version caveats and remediation decision tree", "commit": "3dd6bbb" },
-        { "description": "`README.md`: update internal style", "commit": "dc27ab4" },
-        { "description": "add `CHANGELOG.json` and generate `CHANGELOG.md`", "commit": "f4b3df3" }
+        {
+          "description": "add `docs/lintfix/` with gosec version caveats and remediation decision tree",
+          "commit": "3dd6bbb"
+        },
+        {
+          "description": "`README.md`: update internal style",
+          "commit": "dc27ab4"
+        },
+        {
+          "description": "add `CHANGELOG.json` and generate `CHANGELOG.md`",
+          "commit": "f4b3df3"
+        }
       ],
       "fixed": [
-        { "description": "add `https://` prefix to repository URL in `CHANGELOG.json`", "commit": "03d5dda" },
-        { "description": "fix `gofmt` lint error", "commit": "19b604d" }
+        {
+          "description": "add `https://` prefix to repository URL in `CHANGELOG.json`",
+          "commit": "03d5dda"
+        },
+        {
+          "description": "fix `gofmt` lint error",
+          "commit": "19b604d"
+        }
       ]
     },
     {
@@ -10688,7 +10845,7 @@
           "commit": "84586d6"
         },
         {
-          "description": "add base62 \u0026 base64 EncodeGzip, DecodeGunzip, EncodeGzipJSON, DecodeGunzipJSON",
+          "description": "add base62 & base64 EncodeGzip, DecodeGunzip, EncodeGzipJSON, DecodeGunzipJSON",
           "commit": "ffd1d9b"
         },
         {
@@ -11636,7 +11793,7 @@
           "commit": "a243ad6"
         },
         {
-          "description": "add strconv.SliceStringToInt \u0026\u0026 SliceStringToIntSort",
+          "description": "add strconv.SliceStringToInt && SliceStringToIntSort",
           "commit": "4679a52"
         },
         {
@@ -11840,7 +11997,7 @@
           "commit": "b19fced"
         },
         {
-          "description": "add tlsutil \u0026 pkcs12util",
+          "description": "add tlsutil & pkcs12util",
           "commit": "a471f2c"
         },
         {
