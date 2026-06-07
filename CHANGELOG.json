@@ -6,6 +6,30 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.74.6",
+      "date": "2026-06-07",
+      "added": [
+        {
+          "description": "`path/filepathutil`: add `IsAbsAny()` for cross-platform absolute path detection",
+          "commit": "764ff58"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "bump `golang.org/x/image` from 0.40.0 to 0.41.0",
+          "commit": "d9bee59"
+        },
+        {
+          "description": "bump `golang.org/x/crypto` from 0.51.0 to 0.52.0",
+          "commit": "bbc3f08"
+        },
+        {
+          "description": "bump `golang.org/x/net` from 0.54.0 to 0.55.0",
+          "commit": "6cc10f7"
+        }
+      ]
+    },
+    {
       "version": "v0.74.5",
       "date": "2026-05-17",
       "added": [
