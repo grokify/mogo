@@ -56,3 +56,43 @@ func TestNormalizePath(t *testing.T) {
 		})
 	}
 }
+
+func TestIsAbsAny(t *testing.T) {
+	tests := []struct {
+		name     string
+		path     string
+		expected bool
+	}{
+		// Unix absolute paths
+		{"unix root", "/", true},
+		{"unix absolute", "/Users/test/file.txt", true},
+		{"unix home", "/home/user/file.txt", true},
+
+		// Windows absolute paths
+		{"windows drive backslash", `C:\Users\test\file.txt`, true},
+		{"windows drive forward", "C:/Users/test/file.txt", true},
+		{"windows lowercase drive", "c:\\Windows\\System32", true},
+		{"windows drive only", "D:", true},
+
+		// Relative paths
+		{"relative simple", "relative/path.txt", false},
+		{"relative dot", "./relative/path.txt", false},
+		{"relative dotdot", "../parent/path.txt", false},
+		{"filename only", "file.txt", false},
+
+		// Edge cases
+		{"empty string", "", false},
+		{"single char", "a", false},
+		{"colon only", ":", false},
+		{"colon in path", "foo:bar", false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsAbsAny(tt.path)
+			if result != tt.expected {
+				t.Errorf("IsAbsAny(%q) = %v, expected %v", tt.path, result, tt.expected)
+			}
+		})
+	}
+}

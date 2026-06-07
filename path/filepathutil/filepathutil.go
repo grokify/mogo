@@ -121,3 +121,36 @@ func NormalizePath(p string) string {
 	p = filepath.Clean(p)
 	return strings.ReplaceAll(p, "\\", "/")
 }
+
+// IsAbsAny returns true if the path is absolute on any platform.
+// Unlike filepath.IsAbs, this function recognizes both Unix-style paths
+// (starting with /) and Windows-style paths (starting with drive letter like C:\)
+// regardless of the current operating system.
+//
+// This is useful when handling paths that may come from different platforms,
+// such as in cross-platform tools, SARIF output, or configuration files.
+//
+// Examples:
+//
+//	IsAbsAny("/Users/test/file.txt")     // true (Unix absolute)
+//	IsAbsAny("C:\\Users\\test\\file.txt") // true (Windows absolute)
+//	IsAbsAny("C:/Users/test/file.txt")    // true (Windows with forward slashes)
+//	IsAbsAny("relative/path.txt")         // false
+//	IsAbsAny("./relative/path.txt")       // false
+func IsAbsAny(path string) bool {
+	if path == "" {
+		return false
+	}
+	// Unix-style absolute path
+	if path[0] == '/' {
+		return true
+	}
+	// Windows-style absolute path (drive letter)
+	if len(path) >= 2 && path[1] == ':' {
+		c := path[0]
+		if (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') {
+			return true
+		}
+	}
+	return false
+}
