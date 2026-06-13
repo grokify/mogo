@@ -308,6 +308,25 @@
           "explanation": "Unchecked errors can lead to silent failures. Either handle the error or explicitly ignore it with _ and a comment explaining why."
         }
       }
+    },
+    "dupl": {
+      "duplicate": {
+        "name": "Duplicate code block",
+        "description": "Code block is duplicated across multiple locations",
+        "severity": "low",
+        "category": "maintainability",
+        "remediation": {
+          "type": "refactor",
+          "summary": "Extract duplicated code into a shared helper function",
+          "explanation": "Duplicate code increases maintenance burden - changes must be made in multiple places. Extract the common logic into a shared function, then call it from both locations. Place the helper in a common file (e.g., root.go for CLI commands, helpers.go for packages).",
+          "example": "// Before (duplicated in multiple files):\nfunc cmdA() error {\n    data, err := loadData(path)\n    if err != nil { return err }\n    // use data...\n}\nfunc cmdB() error {\n    data, err := loadData(path)\n    if err != nil { return err }\n    // use data...\n}\n\n// After (shared helper in common file):\n// helpers.go\nfunc loadData() (*Data, error) {\n    data, err := loadData(path)\n    if err != nil { return nil, err }\n    return data, nil\n}\n\n// cmd_a.go\nfunc cmdA() error {\n    data, err := loadData()\n    if err != nil { return err }\n    // use data...\n}\n\n// cmd_b.go\nfunc cmdB() error {\n    data, err := loadData()\n    if err != nil { return err }\n    // use data...\n}",
+          "caveats": [
+            "Sometimes duplication is intentional for clarity - use judgment",
+            "Don't over-abstract: a helper used only twice with different customization needs may not be worth it",
+            "For CLI commands, place helpers in root.go or a dedicated helpers.go file"
+          ]
+        }
+      }
     }
   }
 }
