@@ -18,10 +18,10 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.27
 	golang.org/x/crypto v0.53.0
 	golang.org/x/exp v0.0.0-20260603202125-055de637280b
-	golang.org/x/image v0.43.0
+	golang.org/x/image v0.44.0
 	golang.org/x/net v0.56.0
 	golang.org/x/term v0.44.0
-	golang.org/x/text v0.38.0
+	golang.org/x/text v0.40.0
 	google.golang.org/genproto v0.0.0-20260526163538-3dc84a4a5aaa
 )
 
