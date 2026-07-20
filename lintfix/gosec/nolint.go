@@ -21,13 +21,17 @@ func Nolint(rule, reason string) string {
 
 // NolintG101 returns a nolint comment for G101 (hardcoded credentials).
 //
-// Use this when a string matches credential patterns but is not actually
-// a credential (e.g., URL paths, test fixtures, documentation).
+// Use this when a string, or a struct literal with credential-named fields (ClientSecret,
+// APIKey, Password, Token, etc.), matches gosec's credential heuristic but does not
+// actually contain a hardcoded credential (e.g., URL paths, test fixtures, documentation,
+// or a config struct whose fields are set from caller-supplied parameters rather than
+// literals).
 //
 // Example reasons:
 //   - "URL path, not a credential"
 //   - "Test fixture with fake credentials"
 //   - "Documentation example"
+//   - "Field populated from a caller-supplied parameter, not a hardcoded literal"
 func NolintG101(reason string) string {
 	return Nolint("G101", reason)
 }
@@ -87,6 +91,21 @@ func NolintG118(reason string) string {
 //   - "Output path specified by user"
 func NolintG703(reason string) string {
 	return Nolint("G703", reason)
+}
+
+// NolintG706 returns a nolint comment for G706 (log injection via taint analysis).
+//
+// IMPORTANT: Prefer the code fix over nolint. Wrapping the tainted value with
+// strconv.Quote (not just changing the format verb to %q) is recognized by gosec's
+// taint analysis as a sanitizing call and clears the finding without a nolint at all.
+// Reserve this nolint for cases where the value cannot be quoted (e.g. it is written to
+// a non-text log sink) or for test code with controlled input.
+//
+// Example reasons:
+//   - "Test uses controlled input, no untrusted source"
+//   - "Value already sanitized by an upstream validator"
+func NolintG706(reason string) string {
+	return Nolint("G706", reason)
 }
 
 // NolintG704 returns a nolint comment for G704 (SSRF via taint analysis).
@@ -180,6 +199,7 @@ var CommonReasons = struct {
 	URLPathNotCredential string
 	TestFixture          string
 	DocumentationExample string
+	ParameterNotLiteral  string
 
 	// G115 reasons
 	BoundedByValidation string
@@ -207,6 +227,10 @@ var CommonReasons = struct {
 	ValidatedAllowlist  string
 	InternalServiceURL  string
 	TrustedConstantsURL string
+
+	// G706 reasons (prefer the strconv.Quote code fix; see NolintG706)
+	TestControlledInputNoUntrustedSource string
+	AlreadySanitizedUpstream             string
 
 	// G705 reasons
 	EmbeddedStaticAssets   string
@@ -237,6 +261,7 @@ var CommonReasons = struct {
 	URLPathNotCredential: "URL path, not a credential",
 	TestFixture:          "Test fixture with fake credentials",
 	DocumentationExample: "Documentation example",
+	ParameterNotLiteral:  "Field populated from a caller-supplied parameter, not a hardcoded literal",
 
 	// G115
 	BoundedByValidation: "Value bounded by prior validation",
@@ -264,6 +289,10 @@ var CommonReasons = struct {
 	ValidatedAllowlist:  "URL from validated allowlist",
 	InternalServiceURL:  "Internal service URL from config",
 	TrustedConstantsURL: "URL constructed from trusted constants",
+
+	// G706 (prefer the strconv.Quote code fix; see NolintG706)
+	TestControlledInputNoUntrustedSource: "Test uses controlled input, no untrusted source",
+	AlreadySanitizedUpstream:             "Value already sanitized by an upstream validator",
 
 	// G705
 	EmbeddedStaticAssets:   "Content from embedded static assets",

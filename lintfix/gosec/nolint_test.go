@@ -112,6 +112,16 @@ func TestNolintG704(t *testing.T) {
 	}
 }
 
+func TestNolintG706(t *testing.T) {
+	got := NolintG706("Test uses controlled input, no untrusted source")
+	if !strings.Contains(got, "G706") {
+		t.Errorf("NolintG706() = %q, does not contain G706", got)
+	}
+	if !strings.Contains(got, "//nolint:gosec") {
+		t.Errorf("NolintG706() = %q, does not contain //nolint:gosec", got)
+	}
+}
+
 func TestCommonReasons(t *testing.T) {
 	// G101 reasons
 	if CommonReasons.URLPathNotCredential == "" {
@@ -122,6 +132,9 @@ func TestCommonReasons(t *testing.T) {
 	}
 	if CommonReasons.DocumentationExample == "" {
 		t.Error("CommonReasons.DocumentationExample is empty")
+	}
+	if CommonReasons.ParameterNotLiteral == "" {
+		t.Error("CommonReasons.ParameterNotLiteral is empty")
 	}
 
 	// G115 reasons
@@ -184,6 +197,14 @@ func TestCommonReasons(t *testing.T) {
 	if CommonReasons.TrustedConstantsURL == "" {
 		t.Error("CommonReasons.TrustedConstantsURL is empty")
 	}
+
+	// G706 reasons
+	if CommonReasons.TestControlledInputNoUntrustedSource == "" {
+		t.Error("CommonReasons.TestControlledInputNoUntrustedSource is empty")
+	}
+	if CommonReasons.AlreadySanitizedUpstream == "" {
+		t.Error("CommonReasons.AlreadySanitizedUpstream is empty")
+	}
 }
 
 func TestNolintWithCommonReasons(t *testing.T) {
@@ -215,6 +236,10 @@ func TestNolintWithCommonReasons(t *testing.T) {
 		{
 			name: "G704 with HttptestServer",
 			got:  NolintG704(CommonReasons.HttptestServer),
+		},
+		{
+			name: "G706 with TestControlledInputNoUntrustedSource",
+			got:  NolintG706(CommonReasons.TestControlledInputNoUntrustedSource),
 		},
 	}
 
