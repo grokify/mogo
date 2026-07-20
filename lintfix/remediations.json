@@ -22,6 +22,30 @@
           "https://cwe.mitre.org/data/definitions/798.html"
         ]
       },
+      "G112": {
+        "name": "Potential Slowloris Attack",
+        "description": "http.Server missing ReadHeaderTimeout allows slow header attacks",
+        "severity": "medium",
+        "category": "security",
+        "remediation": {
+          "type": "code",
+          "summary": "Set ReadHeaderTimeout on http.Server to limit header read time",
+          "package": "github.com/grokify/mogo/net/http/httputilmore",
+          "function": "NewServerTimeouts",
+          "explanation": "Without ReadHeaderTimeout, an attacker can open connections and send headers slowly, exhausting server resources (Slowloris attack). Set ReadHeaderTimeout to a reasonable value (e.g., 10 seconds) to limit how long the server waits for request headers.",
+          "example": "httpServer := &http.Server{\n    Addr:              addr,\n    Handler:           handler,\n    ReadHeaderTimeout: 10 * time.Second,\n}",
+          "alternative": "// Using mogo helper with all timeouts:\nimport \"github.com/grokify/mogo/net/http/httputilmore\"\n\nhttpServer := httputilmore.NewServerTimeouts(addr, handler, 10*time.Second)",
+          "caveats": [
+            "10 seconds is typical; adjust based on expected client behavior",
+            "Consider also setting ReadTimeout, WriteTimeout, and IdleTimeout",
+            "NewServerTimeouts sets all timeouts uniformly; customize if needed"
+          ]
+        },
+        "references": [
+          "https://cwe.mitre.org/data/definitions/400.html",
+          "https://en.wikipedia.org/wiki/Slowloris_(computer_security)"
+        ]
+      },
       "G115": {
         "name": "Integer overflow conversion",
         "description": "Integer conversion may overflow the target type",
@@ -235,6 +259,51 @@
           "https://cwe.mitre.org/data/definitions/614.html",
           "https://cwe.mitre.org/data/definitions/1004.html"
         ]
+      },
+      "G706": {
+        "name": "Log injection via taint analysis",
+        "description": "Potential log injection - unsanitized request-derived value written to a log call",
+        "severity": "medium",
+        "category": "security",
+        "remediation": {
+          "type": "code",
+          "summary": "Wrap the tainted value with strconv.Quote before logging",
+          "package": "strconv",
+          "function": "Quote",
+          "pattern": "log.Printf(\"...%s...\", strconv.Quote(taintedValue))",
+          "example": "log.Printf(\"Proxy error for %s: %v\", strconv.Quote(r.Host), err)",
+          "explanation": "Values derived from client input (request Host, headers, path, etc.) may contain newlines or control characters. Written to a log unescaped, they let an attacker forge fake log lines (CWE-117). strconv.Quote escapes such characters and is recognized by gosec's taint analysis as a sanitizing call, which clears the finding.",
+          "caveats": [
+            "Changing only the format verb (e.g. log.Printf(\"%q\", r.Host)) does NOT clear the finding - gosec inspects the argument expression passed to the call, not the verb string, so the raw tainted value is still flagged",
+            "The value must pass through an actual function call (strconv.Quote) that gosec recognizes as a sanitizer boundary before reaching the log call"
+          ]
+        },
+        "references": [
+          "https://cwe.mitre.org/data/definitions/117.html"
+        ]
+      },
+      "G710": {
+        "name": "Open redirect via taint analysis",
+        "description": "Potential open redirect - HTTP redirect target built from request-derived input",
+        "severity": "medium",
+        "category": "security",
+        "remediation": {
+          "type": "code",
+          "summary": "Build the redirect target with a net/url.URL struct instead of string concatenation, and separately validate the host against known/allowed values",
+          "package": "net/url",
+          "function": "URL",
+          "pattern": "target := url.URL{Scheme: \"https\", Host: r.Host, Path: r.URL.Path, RawQuery: r.URL.RawQuery}; http.Redirect(w, r, target.String(), code)",
+          "example": "if !isKnownHost(r.Host) {\n    http.NotFound(w, r)\n    return\n}\ntarget := url.URL{Scheme: \"https\", Host: r.Host, Path: r.URL.Path, RawQuery: r.URL.RawQuery}\nhttp.Redirect(w, r, target.String(), http.StatusMovedPermanently)",
+          "explanation": "gosec flags string concatenation into an http.Redirect target built from request data (e.g. \"https://\" + r.Host + r.RequestURI) because an attacker who controls the Host header could make the server redirect anywhere (CWE-601). Constructing the target with a net/url.URL struct and calling .String() is the recognized safe code shape and clears the finding.",
+          "caveats": [
+            "Verified empirically: gosec clears this finding purely on the url.URL{}+.String() code shape, independent of whether any host validation exists nearby. It does not detect or require an allowlist check.",
+            "The code-shape fix alone silences the linter but does not make the redirect safe by itself. When scheme/host may include request-derived data, also validate the host against a known allowlist (e.g. configured backends) before redirecting - do not rely on gosec's silence as evidence of safety.",
+            "A nolint is only appropriate when the target is fully server-controlled (e.g. a constant string), never when it is built from request data."
+          ]
+        },
+        "references": [
+          "https://cwe.mitre.org/data/definitions/601.html"
+        ]
       }
     },
     "govet": {
@@ -306,6 +375,25 @@
           "summary": "Check the error or explicitly ignore with blank identifier and comment",
           "example": "if err := doSomething(); err != nil {\n    return fmt.Errorf(\"doing something: %w\", err)\n}",
           "explanation": "Unchecked errors can lead to silent failures. Either handle the error or explicitly ignore it with _ and a comment explaining why."
+        }
+      }
+    },
+    "dupl": {
+      "duplicate": {
+        "name": "Duplicate code block",
+        "description": "Code block is duplicated across multiple locations",
+        "severity": "low",
+        "category": "maintainability",
+        "remediation": {
+          "type": "refactor",
+          "summary": "Extract duplicated code into a shared helper function",
+          "explanation": "Duplicate code increases maintenance burden - changes must be made in multiple places. Extract the common logic into a shared function, then call it from both locations. Place the helper in a common file (e.g., root.go for CLI commands, helpers.go for packages).",
+          "example": "// Before (duplicated in multiple files):\nfunc cmdA() error {\n    data, err := loadData(path)\n    if err != nil { return err }\n    // use data...\n}\nfunc cmdB() error {\n    data, err := loadData(path)\n    if err != nil { return err }\n    // use data...\n}\n\n// After (shared helper in common file):\n// helpers.go\nfunc loadData() (*Data, error) {\n    data, err := loadData(path)\n    if err != nil { return nil, err }\n    return data, nil\n}\n\n// cmd_a.go\nfunc cmdA() error {\n    data, err := loadData()\n    if err != nil { return err }\n    // use data...\n}\n\n// cmd_b.go\nfunc cmdB() error {\n    data, err := loadData()\n    if err != nil { return err }\n    // use data...\n}",
+          "caveats": [
+            "Sometimes duplication is intentional for clarity - use judgment",
+            "Don't over-abstract: a helper used only twice with different customization needs may not be worth it",
+            "For CLI commands, place helpers in root.go or a dedicated helpers.go file"
+          ]
         }
       }
     }
