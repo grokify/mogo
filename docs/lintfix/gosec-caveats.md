@@ -162,6 +162,117 @@ safeName := filepath.Base(userInput)
 fullPath := filepath.Join(baseDir, safeName)
 ```
 
+## G706: Log Injection via Taint Analysis
+
+G706 flags request-derived values (Host, headers, path, etc.) passed to a log call, since
+an unescaped newline or control character lets an attacker forge fake log lines (CWE-117).
+
+### Format Verb vs. Sanitizing Call
+
+Changing only the `Printf` verb does **not** clear the finding - gosec's taint analysis
+inspects the argument *expression*, not the verb string, so a raw tainted value is still
+flagged even when quoted for display purposes only:
+
+**Does NOT clear G706:**
+
+```go
+log.Printf("Proxy error for %q: %v", r.Host, err) // still flagged - r.Host is unchanged
+```
+
+**Clears G706** - wrap the value in an actual call to `strconv.Quote`, which gosec
+recognizes as a sanitizer boundary:
+
+```go
+import "strconv"
+
+log.Printf("Proxy error for %s: %v", strconv.Quote(r.Host), err)
+```
+
+This is verified empirically (golangci-lint 2.12.2 / gosec bundled therein), not merely
+inferred from the rule name. It is also a genuine fix, not just linter appeasement:
+`strconv.Quote` escapes newlines and control characters, so injected log lines are
+rendered inert (visible as `\n` inside the quoted string) rather than executed as literal
+line breaks in the log stream.
+
+### When Nolint Is Appropriate Instead
+
+Use `gosec.NolintG706` only when the value cannot reasonably be quoted (e.g., written to a
+structured/non-text log sink) or in test code with fully controlled input - not as a
+substitute for the `strconv.Quote` fix in production code that logs request data.
+
+## G710: Open Redirect via Taint Analysis
+
+G710 flags an `http.Redirect` target built by string concatenation from request-derived
+data (e.g. `"https://" + r.Host + r.RequestURI`), since an attacker controlling the Host
+header could make the server redirect anywhere (CWE-601).
+
+### Code Shape vs. Actual Validation
+
+**Does NOT clear G710** - string concatenation, even downstream of a validation check:
+
+```go
+if rp.findProxy(r.Host) == nil { // real validation - but gosec doesn't see it
+    http.NotFound(w, r)
+    return
+}
+target := "https://" + r.Host + r.RequestURI // still flagged
+http.Redirect(w, r, target, http.StatusMovedPermanently)
+```
+
+**Clears G710** - construct the target with `net/url.URL` and call `.String()`:
+
+```go
+import "net/url"
+
+target := url.URL{Scheme: "https", Host: r.Host, Path: r.URL.Path, RawQuery: r.URL.RawQuery}
+http.Redirect(w, r, target.String(), http.StatusMovedPermanently)
+```
+
+**Verified empirically that this is a pure code-shape check**: the `url.URL{}` +
+`.String()` construction clears G710 *on its own*, with the host-validation check removed
+entirely. gosec has no way to detect or require an allowlist check - it is matching the
+construction pattern only.
+
+### This Means the Linter and the Vulnerability Are Two Different Things
+
+Do not treat a clean gosec run as evidence that a request-derived redirect is safe. The
+`url.URL{}` shape satisfies the linter; an allowlist/known-host check is what actually
+prevents the open redirect. Ship both:
+
+```go
+if !isKnownHost(r.Host) {
+    http.NotFound(w, r)
+    return
+}
+target := url.URL{Scheme: "https", Host: r.Host, Path: r.URL.Path, RawQuery: r.URL.RawQuery}
+http.Redirect(w, r, target.String(), http.StatusMovedPermanently)
+```
+
+A `nolint` is appropriate only when the redirect target is fully server-controlled (e.g. a
+constant string) - never when any part of it derives from the request.
+
+## G101: Credential-Named Fields Set From Parameters
+
+G101 pattern-matches on struct fields/variables whose *names* look like credentials
+(`ClientSecret`, `APIKey`, `Password`, `Token`, ...), independent of whether the assigned
+*value* is a literal. This makes it a reliable false positive on any config/options struct
+built from caller-supplied parameters:
+
+```go
+func (s *OAuthService) ConfigureGoogle(clientID, clientSecret, redirectURL string) {
+	s.RegisterProvider(&OAuthProvider{ //nolint:gosec // G101: ClientID/ClientSecret are set from caller-supplied parameters, not hardcoded literals
+		ClientID:     clientID,     // parameter, not a literal
+		ClientSecret: clientSecret, // parameter, not a literal
+		RedirectURL:  redirectURL,
+	})
+}
+```
+
+There is no code-shape fix for this one (unlike G706/G710 above) - the struct literal
+*is* the correct code, and gosec cannot distinguish "field set from a parameter" from
+"field set from a literal" by field name alone. `gosec.NolintG101` with
+`gosec.CommonReasons.ParameterNotLiteral` is the right remediation.
+
 ## G115: Integer Overflow Conversion
 
 ### When to Use Nolint

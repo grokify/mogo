@@ -69,6 +69,18 @@ func TestRemediationDB_Get(t *testing.T) {
 			wantName: "SSRF via taint analysis",
 		},
 		{
+			name:     "gosec G706",
+			linter:   "gosec",
+			code:     "G706",
+			wantName: "Log injection via taint analysis",
+		},
+		{
+			name:     "gosec G710",
+			linter:   "gosec",
+			code:     "G710",
+			wantName: "Open redirect via taint analysis",
+		},
+		{
 			name:     "staticcheck SA1019",
 			linter:   "staticcheck",
 			code:     "SA1019",
@@ -206,6 +218,24 @@ func TestRuleFix_HasHelper(t *testing.T) {
 	}
 	if rf117.HasHelper() {
 		t.Error("G117.HasHelper() = true, want false")
+	}
+
+	// G706 has a code-fix helper (strconv.Quote)
+	rf706 := db.GetGosec("G706")
+	if rf706 == nil {
+		t.Fatal("GetGosec(G706) = nil")
+	}
+	if !rf706.HasHelper() {
+		t.Error("G706.HasHelper() = false, want true")
+	}
+
+	// G710 has a code-fix helper (net/url.URL)
+	rf710 := db.GetGosec("G710")
+	if rf710 == nil {
+		t.Fatal("GetGosec(G710) = nil")
+	}
+	if !rf710.HasHelper() {
+		t.Error("G710.HasHelper() = false, want true")
 	}
 
 	// Test nil case
