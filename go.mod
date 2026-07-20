@@ -16,10 +16,10 @@ require (
 	github.com/lytics/base62 v0.0.0-20180808010106-0ee4de5a5d6d
 	github.com/martinlindhe/base36 v1.1.1
 	github.com/microcosm-cc/bluemonday v1.0.27
-	golang.org/x/crypto v0.53.0
+	golang.org/x/crypto v0.54.0
 	golang.org/x/exp v0.0.0-20260603202125-055de637280b
 	golang.org/x/image v0.44.0
-	golang.org/x/net v0.56.0
+	golang.org/x/net v0.57.0
 	golang.org/x/term v0.45.0
 	golang.org/x/text v0.40.0
 	google.golang.org/genproto v0.0.0-20260526163538-3dc84a4a5aaa
