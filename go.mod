@@ -17,17 +17,17 @@ require (
 	github.com/martinlindhe/base36 v1.1.1
 	github.com/microcosm-cc/bluemonday v1.0.27
 	golang.org/x/crypto v0.54.0
-	golang.org/x/exp v0.0.0-20260603202125-055de637280b
+	golang.org/x/exp v0.0.0-20260727155853-b88d891fe743
 	golang.org/x/image v0.44.0
 	golang.org/x/net v0.57.0
 	golang.org/x/term v0.45.0
 	golang.org/x/text v0.40.0
-	google.golang.org/genproto v0.0.0-20260526163538-3dc84a4a5aaa
+	google.golang.org/genproto v0.0.0-20260807164820-c8921c73eeea
 )
 
 require (
 	github.com/aymerick/douceur v0.2.0 // indirect
-	github.com/cloudflare/circl v1.6.3 // indirect
+	github.com/cloudflare/circl v1.6.5 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	golang.org/x/sys v0.47.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
