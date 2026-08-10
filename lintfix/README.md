@@ -30,6 +30,22 @@ comment := gosec.NolintG117(gosec.CommonReasons.OAuthTokenResponse)
 // "//nolint:gosec // G117: OAuth token response per RFC 6749"
 ```
 
+```go
+import "github.com/grokify/mogo/lintfix/dupl"
+
+comment := dupl.Nolint(dupl.CommonReasons.ParallelResourceWrapper)
+// "//nolint:dupl // Structurally parallel to sibling wrapper methods over
+// distinct generated types; not meaningfully extractable without reflection
+// or per-type adapters"
+```
+
+```go
+import "github.com/grokify/mogo/lintfix/unparam"
+
+comment := unparam.Nolint(unparam.CommonReasons.InterfaceSignature)
+// "//nolint:unparam // Signature fixed by an interface method set this type implements"
+```
+
 ## Remediation Types
 
 | Type | Description | Example |
@@ -44,7 +60,8 @@ comment := gosec.NolintG117(gosec.CommonReasons.OAuthTokenResponse)
 - **staticcheck** - Static analysis (SA1019, SA4006, QF1012)
 - **errcheck** - Error handling
 - **govet** - Inline remediation notes
-- **dupl** - Duplicate code detection
+- **dupl** - Duplicate code detection; see the `dupl` subpackage for nolint generators covering the generated-client-wrapper case
+- **unparam** - Unused function parameters/results; see the `unparam` subpackage for nolint generators covering interface/callback-constrained signatures
 
 ## G703: Path Traversal
 
@@ -131,6 +148,28 @@ Prefer this code fix over `nolint` in library code - it's a real fix (escapes in
 control characters), not just linter appeasement, and it's what `gosec.NolintG706` is
 documented to defer to.
 
+## G101: Environment Variable Names and Enum/Const Identifiers
+
+G101's identifier-name heuristic also fires on constants whose Go *name*
+merely contains a credential-flagged substring (`secret`, `cred`, `apikey`,
+...) even though the *value* is not a secret at all - an environment variable
+name to read at runtime, or a plain enum tag:
+
+```go
+const (
+	EnvAPIKey = "POSTMAN_API_KEY" //nolint:gosec // G101: This is an environment variable name, not a credential
+)
+
+const (
+	SecretTypeOriginTeamRegex SecretTypeOrigin = "TEAM_REGEX" //nolint:gosec // G101: Enum/constant identifier matches the credential-name heuristic, but the value is a public tag, not a secret
+)
+```
+
+Use `gosec.CommonReasons.EnvVarName` and `gosec.CommonReasons.EnumTagNotCredential`
+for these. gosec's match is per-identifier, not per-`const` block, so only
+annotate the specific line(s) it actually flags - a sibling constant in the
+same block often isn't flagged at all.
+
 ## G710: Open Redirect
 
 G710 warns when an `http.Redirect` target is built by concatenating request-derived data
@@ -164,6 +203,109 @@ http.Redirect(w, r, target.String(), http.StatusMovedPermanently)
 Do both. Do not treat "gosec is clean" as evidence that a request-derived redirect target
 is actually safe.
 
+## dupl: Structurally Parallel Generated-Client Wrappers
+
+dupl's default remediation - extract a shared helper - is usually right. But
+one shape recurs across generated-client wrappers (ogen, openapi-generator,
+protoc): sibling methods per resource kind (`CreateFolder` / `CreateRequest` /
+`CreateResponse`, or `GetX` / `DeleteX` repeated per `X`) that each switch over
+a *distinct*, codegen-produced response/error union:
+
+```go
+func (s *Service) GetFolder(ctx context.Context, collectionID, folderID string, opts *GetOptions) (*FolderResult, error) {
+	// ...
+	switch r := res.(type) {
+	case *api.CollectionFolderInfo:
+		// ...
+	case *api.GetCollectionFolderNotFound:
+		return nil, postmanerr.FromProblemDetails([]byte(*r), http.StatusNotFound)
+	// ...
+	}
+}
+
+//nolint:dupl // Structurally parallel to sibling wrapper methods over distinct generated types; not meaningfully extractable without reflection or per-type adapters
+func (s *Service) GetRequest(ctx context.Context, collectionID, requestID string, opts *GetOptions) (*RequestResult, error) {
+	// ...
+	switch r := res.(type) {
+	case *api.CollectionRequestInfo:  // <- unrelated type to CollectionFolderInfo
+		// ...
+	case *api.GetCollectionRequestNotFound:  // <- unrelated type to GetCollectionFolderNotFound
+		return nil, postmanerr.FromProblemDetails([]byte(*r), http.StatusNotFound)
+	// ...
+	}
+}
+```
+
+`CollectionFolderInfo` and `CollectionRequestInfo` share no common interface -
+a real extraction needs reflection or a per-type adapter layer, which is
+harder to follow than the duplication it removes. Use `dupl.Nolint` from the
+`dupl` subpackage:
+
+```go
+import "github.com/grokify/mogo/lintfix/dupl"
+
+comment := dupl.Nolint(dupl.CommonReasons.ParallelResourceWrapper)
+// "//nolint:dupl // Structurally parallel to sibling wrapper methods over
+// distinct generated types; not meaningfully extractable without reflection
+// or per-type adapters"
+```
+
+The same reasoning applies to test files: standalone, one-test-per-endpoint
+httptest cases are usually clearer than a table-driven consolidation forced
+just to satisfy dupl. Use `dupl.CommonReasons.StandaloneTestClarity` there.
+
+**Reach for the real refactor first** when the duplicated blocks operate on
+the *same* concrete type, or the difference is a single value trivial to lift
+into a function parameter - see `remediations.json`'s `dupl.duplicate` entry
+for the general case.
+
+## unparam: Unused Parameters and Results
+
+unparam (mvdan.cc/unparam) flags a function parameter (or result) that never
+actually varies across its call sites - most often leftover generality from
+an earlier version of the function, and especially common in test helpers as
+call sites accumulate over time:
+
+```go
+// unparam: category always receives ClaimStatistical
+func verifiedClaim(id string, category ClaimCategory) Claim {
+    return Claim{ID: id, Category: category}
+}
+```
+
+**The default remediation - delete the parameter, hardcode the constant - is
+almost always right** in unexported code, and is a real simplification, not
+just linter appeasement:
+
+```go
+func verifiedClaim(id string) Claim {
+    return Claim{ID: id, Category: ClaimStatistical}
+}
+```
+
+**Exception: the signature is constrained by something other than its own
+call sites.** unparam only sees call sites within the analyzed code - it
+can't see that a signature is fixed by an interface method set, a
+function-type variable (`http.HandlerFunc`, `sort.Interface`, a callback
+struct field), or an exported API whose signature is a compatibility
+contract. Deleting the parameter there isn't possible (or isn't safe)
+without breaking the thing the signature exists to satisfy - use `nolint`:
+
+```go
+func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) { //nolint:unparam // r required by http.Handler
+    w.WriteHeader(http.StatusOK)
+}
+```
+
+Use the `unparam` subpackage to generate the comment:
+
+```go
+import "github.com/grokify/mogo/lintfix/unparam"
+
+comment := unparam.Nolint(unparam.CommonReasons.InterfaceSignature)
+// "//nolint:unparam // Signature fixed by an interface method set this type implements"
+```
+
 ## Nolint Generators
 
 The `gosec` subpackage provides type-safe nolint comment generators:
@@ -182,6 +324,18 @@ gosec.NolintG706(reason)  // Log injection (prefer the strconv.Quote code fix in
 gosec.NolintG710(reason)  // Open redirect (prefer the url.URL{} code fix instead)
 ```
 
+The `dupl` subpackage provides the equivalent for duplicate-code findings:
+
+```go
+dupl.Nolint(reason)  // Structurally-required duplication (see "dupl" section above)
+```
+
+The `unparam` subpackage provides the equivalent for unused parameter/result findings:
+
+```go
+unparam.Nolint(reason)  // Signature constrained by an interface, callback, or exported API (see "unparam" section above)
+```
+
 ### Common Reasons
 
 Pre-written reason strings for common scenarios:
@@ -193,7 +347,16 @@ gosec.CommonReasons.PathFromCLIFlag           // G703
 gosec.CommonReasons.HttptestServer            // G704
 gosec.CommonReasons.BoundedByValidation       // G115
 gosec.CommonReasons.ParameterNotLiteral       // G101 - config struct field set from a parameter
+gosec.CommonReasons.EnvVarName                // G101 - environment variable name, not a credential
+gosec.CommonReasons.EnumTagNotCredential       // G101 - enum/const identifier matches heuristic, value is a public tag
 gosec.CommonReasons.TestControlledInputNoUntrustedSource // G706 - nolint fallback only; prefer strconv.Quote
+
+dupl.CommonReasons.ParallelResourceWrapper    // sibling wrapper methods over distinct generated types
+dupl.CommonReasons.StandaloneTestClarity      // standalone per-endpoint test, not worth consolidating
+
+unparam.CommonReasons.InterfaceSignature      // parameter required by an interface method set
+unparam.CommonReasons.CallbackSignature       // parameter required by a callback/function-type value
+unparam.CommonReasons.ExportedAPICompat       // parameter kept for exported API compatibility
 ```
 
 ## Documentation

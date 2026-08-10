@@ -87,6 +87,18 @@ func TestRemediationDB_Get(t *testing.T) {
 			wantName: "Deprecated API usage",
 		},
 		{
+			name:     "unparam unused-param",
+			linter:   "unparam",
+			code:     "unused-param",
+			wantName: "Unused function parameter",
+		},
+		{
+			name:     "unparam interface-param",
+			linter:   "unparam",
+			code:     "interface-param",
+			wantName: "Unused parameter required by an interface or callback signature",
+		},
+		{
 			name:    "unknown linter",
 			linter:  "unknown",
 			code:    "X999",
