@@ -1,6 +1,7 @@
 package osutil
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
@@ -174,6 +175,141 @@ func TestSanitizePath(t *testing.T) {
 		}
 		if result != testDir {
 			t.Errorf("SanitizePath() = %q, want %q", result, testDir)
+		}
+	})
+}
+
+func TestValidatePathComponent(t *testing.T) {
+	tests := []struct {
+		name      string
+		component string
+		wantErr   bool
+	}{
+		{"valid alphanumeric", "abc123", false},
+		{"valid with hyphen", "INIT-VISIONSTUDIO-001", false},
+		{"valid with underscore", "period_2026_W30", false},
+		{"empty", "", true},
+		{"dot", ".", true},
+		{"dot-dot", "..", true},
+		{"path traversal", "../../etc/passwd", true},
+		{"forward slash", "foo/bar", true},
+		{"backslash", "foo\\bar", true},
+		{"leading traversal no separator", "..secret", true},
+		{"space", "foo bar", true},
+		{"null byte", "foo\x00bar", true},
+		{"unicode lookalike slash", "foo∕bar", true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := ValidatePathComponent(tt.component)
+			if tt.wantErr && err == nil {
+				t.Errorf("ValidatePathComponent(%q) = nil, want error", tt.component)
+			}
+			if !tt.wantErr && err != nil {
+				t.Errorf("ValidatePathComponent(%q) = %v, want nil", tt.component, err)
+			}
+			if tt.wantErr && err != nil && !errors.Is(err, ErrInvalidPathComponent) {
+				t.Errorf("ValidatePathComponent(%q) error = %v, want wrapped ErrInvalidPathComponent", tt.component, err)
+			}
+		})
+	}
+}
+
+func TestJoinSecure(t *testing.T) {
+	root := filepath.FromSlash("/a/b")
+	tests := []struct {
+		name    string
+		root    string
+		elem    []string
+		want    string
+		wantErr bool
+	}{
+		{"direct child", root, []string{"c"}, filepath.FromSlash("/a/b/c"), false},
+		{"nested child", root, []string{"c", "d.md"}, filepath.FromSlash("/a/b/c/d.md"), false},
+		{"id plus suffix", root, []string{"myid.json"}, filepath.FromSlash("/a/b/myid.json"), false},
+		{"escapes via ..", root, []string{"../../etc/passwd"}, "", true},
+		{"escapes via embedded ..", root, []string{"c/../../etc/passwd"}, "", true},
+		{"sibling that shares a prefix", root, []string{"../bc"}, "", true},
+		// filepath.Join treats every element as a segment to clean, not an
+		// override — an absolute-looking elem still lands under root.
+		{"absolute-looking element still joins under root", root, []string{"/etc/passwd"}, filepath.FromSlash("/a/b/etc/passwd"), false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := JoinSecure(tt.root, tt.elem...)
+			if tt.wantErr {
+				if err == nil {
+					t.Fatalf("JoinSecure(%q, %v) = %q, nil; want error", tt.root, tt.elem, got)
+				}
+				if !errors.Is(err, ErrPathEscapesRoot) {
+					t.Errorf("JoinSecure(%q, %v) error = %v, want wrapped ErrPathEscapesRoot", tt.root, tt.elem, err)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("JoinSecure(%q, %v) unexpected error: %v", tt.root, tt.elem, err)
+			}
+			if got != tt.want {
+				t.Errorf("JoinSecure(%q, %v) = %q, want %q", tt.root, tt.elem, got, tt.want)
+			}
+		})
+	}
+
+	t.Run("exact root with no elem", func(t *testing.T) {
+		dir := t.TempDir()
+		got, err := JoinSecure(dir)
+		if err != nil {
+			t.Fatalf("JoinSecure(root) unexpected error: %v", err)
+		}
+		if filepath.Clean(got) != filepath.Clean(dir) {
+			t.Errorf("JoinSecure(root) = %q, want %q", got, dir)
+		}
+	})
+}
+
+func TestFindFirstExistingSecure(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "real.json"), []byte(`{"ok":true}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	t.Run("finds the first existing candidate", func(t *testing.T) {
+		path, data, err := FindFirstExistingSecure(dir, "missing.json", "real.json", "also-missing.json")
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if filepath.Base(path) != "real.json" {
+			t.Errorf("path = %q, want basename real.json", path)
+		}
+		if string(data) != `{"ok":true}` {
+			t.Errorf("data = %q, want %q", data, `{"ok":true}`)
+		}
+	})
+
+	t.Run("returns ErrNotExist when nothing matches", func(t *testing.T) {
+		_, _, err := FindFirstExistingSecure(dir, "missing.json", "also-missing.json")
+		if !errors.Is(err, os.ErrNotExist) {
+			t.Errorf("err = %v, want os.ErrNotExist", err)
+		}
+	})
+
+	t.Run("skips candidates that escape root instead of erroring", func(t *testing.T) {
+		path, data, err := FindFirstExistingSecure(dir, "../../etc/passwd", "real.json")
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if filepath.Base(path) != "real.json" {
+			t.Errorf("path = %q, want basename real.json (traversal candidate should be skipped)", path)
+		}
+		if string(data) != `{"ok":true}` {
+			t.Errorf("data = %q, want %q", data, `{"ok":true}`)
+		}
+	})
+
+	t.Run("never escapes root even if every safe candidate is missing", func(t *testing.T) {
+		_, _, err := FindFirstExistingSecure(dir, "../../etc/passwd")
+		if !errors.Is(err, os.ErrNotExist) {
+			t.Errorf("err = %v, want os.ErrNotExist", err)
 		}
 	})
 }
