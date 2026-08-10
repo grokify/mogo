@@ -50,6 +50,87 @@ func AbsPathSecure(path string) (string, error) {
 	return AbsFilepath(path)
 }
 
+// ErrInvalidPathComponent is returned when a value contains characters
+// unsafe to use as a single filesystem path component.
+var ErrInvalidPathComponent = errors.New("value is not a valid path component")
+
+// ErrPathEscapesRoot is returned when a joined path resolves outside the
+// root directory it was joined against.
+var ErrPathEscapesRoot = errors.New("path escapes root directory")
+
+// pathComponentPattern allowlists characters safe to use as a single path
+// component: ASCII letters, digits, underscore, and hyphen. It rejects path
+// separators, ".", "..", and any other character that could let a
+// caller-supplied value escape its intended directory when joined into a
+// path — the allowlist form recommended for exactly this purpose (see the
+// path-injection guidance referenced in ValidateNoTraversal above).
+var pathComponentPattern = regexp.MustCompile(`^[A-Za-z0-9_-]+$`)
+
+// ValidatePathComponent checks that component is safe to use as a single
+// filesystem path element: non-empty, containing only ASCII letters,
+// digits, underscore, and hyphen. Use this at the boundary — right after
+// reading a value from a request, URL param, or query string — to reject
+// malformed input early, before it reaches any path construction. Returns
+// ErrInvalidPathComponent if component fails the check.
+//
+// This is deliberately stricter than ValidateNoTraversal (which only
+// rejects ".."): a component is expected to be a single filename-like
+// value, not an arbitrary relative path, so it can't contain "/" or "\"
+// either.
+func ValidatePathComponent(component string) error {
+	if !pathComponentPattern.MatchString(component) {
+		return fmt.Errorf("%w: %s", ErrInvalidPathComponent, component)
+	}
+	return nil
+}
+
+// JoinSecure joins root with elem and confirms the result — resolved
+// relative to root via filepath.Rel — does not escape root. It rejects
+// results that are absolute relative to root, or that require crossing
+// above it (any ".." component surviving Clean), returning
+// ErrPathEscapesRoot in either case.
+//
+// Call this immediately before the joined path is used in a filesystem
+// operation; it's what actually closes off path traversal regardless of
+// what elem contains. ValidatePathComponent at the request boundary is
+// defense in depth, not a substitute — elem may legitimately be a
+// multi-segment relative path (e.g. "source/prd.md"), which
+// ValidatePathComponent would reject.
+func JoinSecure(root string, elem ...string) (string, error) {
+	candidate := filepath.Join(append([]string{root}, elem...)...)
+	rel, err := filepath.Rel(root, candidate)
+	if err != nil {
+		return "", fmt.Errorf("resolve %q relative to %q: %w", candidate, root, err)
+	}
+	if filepath.IsAbs(rel) || rel == ".." || strings.HasPrefix(rel, ".."+string(os.PathSeparator)) {
+		return "", fmt.Errorf("%w: %q", ErrPathEscapesRoot, candidate)
+	}
+	return candidate, nil
+}
+
+// FindFirstExistingSecure tries each of root+relCandidates (each validated
+// with JoinSecure) in order and returns the path and contents of the first
+// one that exists and can be read. Candidates that fail JoinSecure are
+// skipped, not treated as an error. Returns os.ErrNotExist if none of the
+// candidates exist.
+//
+// This is a convenience for the common "try several filename patterns for
+// an ID" lookup — e.g. trying both "<id>.json" and "<id>.<type>.json" — so
+// callers don't have to interleave JoinSecure calls with the existence
+// check themselves.
+func FindFirstExistingSecure(root string, relCandidates ...string) (path string, data []byte, err error) {
+	for _, rel := range relCandidates {
+		p, joinErr := JoinSecure(root, rel)
+		if joinErr != nil {
+			continue
+		}
+		if b, readErr := os.ReadFile(p); readErr == nil {
+			return p, b, nil
+		}
+	}
+	return "", nil, os.ErrNotExist
+}
+
 func IsDir(name string) (bool, error) {
 	if fi, err := os.Stat(name); err != nil {
 		return false, err
