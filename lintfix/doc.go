@@ -51,6 +51,9 @@
 //   - gosec: Security-focused linter
 //   - staticcheck: Go static analysis
 //   - errcheck: Error handling checks
+//   - govet: Go vet diagnostics
+//   - dupl: Duplicate code detection
+//   - unparam: Unused function parameters/results
 //
 // # Documentation
 //

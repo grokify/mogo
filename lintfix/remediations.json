@@ -392,8 +392,49 @@
           "caveats": [
             "Sometimes duplication is intentional for clarity - use judgment",
             "Don't over-abstract: a helper used only twice with different customization needs may not be worth it",
-            "For CLI commands, place helpers in root.go or a dedicated helpers.go file"
+            "For CLI commands, place helpers in root.go or a dedicated helpers.go file",
+            "Generated-client wrappers (ogen, openapi-generator, protoc) commonly have sibling methods per resource kind (Create/Get/Update/Delete x Folder/Request/Response, etc.) whose bodies switch over distinct, unrelated generated response/error types. dupl flags these as duplicates, but there is no common interface to extract a helper over without reflection or a per-type adapter layer - nolint is the correct call there, not a forced refactor. Generate the comment with github.com/grokify/mogo/lintfix/dupl.Nolint(dupl.CommonReasons.ParallelResourceWrapper).",
+            "The same applies to test files: standalone httptest-based tests, one per endpoint, are usually clearer than a table-driven consolidation. Use dupl.CommonReasons.StandaloneTestClarity for those."
+          ],
+          "avoid": [
+            "Forcing a generic or reflection-based abstraction over structurally-similar-but-unrelated generated types just to silence dupl - the resulting indirection is usually harder to follow than the duplication it removes"
           ]
+        }
+      }
+    },
+    "unparam": {
+      "unused-param": {
+        "name": "Unused function parameter",
+        "description": "Parameter always receives the same value across all call sites (or an unexported function's result is never used)",
+        "severity": "low",
+        "category": "maintainability",
+        "remediation": {
+          "type": "code",
+          "summary": "Remove the parameter and hardcode the constant value inside the function, or drop an unused result",
+          "example": "// Before: category is always ClaimStatistical at every call site\nfunc verifiedClaim(id string, category ClaimCategory) Claim {\n    return Claim{ID: id, Category: category}\n}\n\n// After: hardcode the constant value, drop the parameter\nfunc verifiedClaim(id string) Claim {\n    return Claim{ID: id, Category: ClaimStatistical}\n}",
+          "explanation": "unparam flags parameters/results that never actually vary - usually leftover generality from an earlier version of the function, most common in test helpers as call sites accumulate over time. Removing the parameter and inlining the constant is almost always the right fix in unexported code: it's a real simplification, not just linter appeasement.",
+          "when": "The finding is real (a genuinely dead parameter) in unexported code with no external callers.",
+          "avoid": [
+            "Do not delete a parameter that exists to satisfy an interface, function-type variable, or callback signature (e.g. http.HandlerFunc, sort.Interface) even if the current implementation ignores it - use nolint instead (see the interface-param entry below, or github.com/grokify/mogo/lintfix/unparam.Nolint)",
+            "Do not delete a parameter on an exported function/method if removing it would break the public API - use nolint (unparam.CommonReasons.ExportedAPICompat) instead"
+          ],
+          "caveats": [
+            "unparam's \"always receives value X\" finding is about actual call sites today, not a promise the parameter will never vary - reconsider before hardcoding if new call sites with different values are clearly imminent"
+          ]
+        }
+      },
+      "interface-param": {
+        "name": "Unused parameter required by an interface or callback signature",
+        "description": "A parameter unparam considers unused, but the function signature is fixed by an interface, callback type, or exported API it must satisfy",
+        "severity": "low",
+        "category": "maintainability",
+        "remediation": {
+          "type": "nolint",
+          "summary": "Add //nolint:unparam with a reason naming the interface/signature being satisfied",
+          "package": "github.com/grokify/mogo/lintfix/unparam",
+          "function": "Nolint",
+          "example": "func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) { //nolint:unparam // r required by http.Handler\n    w.WriteHeader(http.StatusOK)\n}",
+          "explanation": "unparam cannot see that a signature is constrained by an interface or function-type variable it must implement - the parameter is unused inside this function body but required by the type it satisfies. Generate the comment with unparam.Nolint(unparam.CommonReasons.InterfaceSignature) or .CallbackSignature."
         }
       }
     }
