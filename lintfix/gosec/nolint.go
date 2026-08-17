@@ -24,14 +24,17 @@ func Nolint(rule, reason string) string {
 // Use this when a string, or a struct literal with credential-named fields (ClientSecret,
 // APIKey, Password, Token, etc.), matches gosec's credential heuristic but does not
 // actually contain a hardcoded credential (e.g., URL paths, test fixtures, documentation,
-// or a config struct whose fields are set from caller-supplied parameters rather than
-// literals).
+// a config struct whose fields are set from caller-supplied parameters rather than
+// literals, an environment variable name constant, or an enum/const identifier that merely
+// contains a credential-flagged substring like "secret" or "cred" in its Go name).
 //
 // Example reasons:
 //   - "URL path, not a credential"
 //   - "Test fixture with fake credentials"
 //   - "Documentation example"
 //   - "Field populated from a caller-supplied parameter, not a hardcoded literal"
+//   - "This is an environment variable name, not a credential"
+//   - "Enum/constant identifier matches the credential-name heuristic, but the value is a public tag, not a secret"
 func NolintG101(reason string) string {
 	return Nolint("G101", reason)
 }
@@ -167,18 +170,32 @@ func NolintG124(reason string) string {
 //
 // IMPORTANT: Only use this in cmd/ directories (CLI entry points) where users
 // explicitly provide directories. For library code in pkg/, use os.Root (Go 1.24+)
-// or osutil.ReadDirFilesSecure to perform symlink-safe filesystem operations.
+// or osutil.WalkFilesSecure/osutil.ReadDirFilesSecure to perform symlink-safe
+// filesystem operations.
 //
 // G122 detects TOCTOU (time-of-check-time-of-use) race conditions in
 // filepath.Walk/WalkDir callbacks where filesystem operations use the
 // potentially race-prone path provided by Walk.
 //
-// For pkg/ code, use osutil.ReadDirFilesSecure or os.Root directly:
+// For pkg/ code, use one of the osutil helpers or os.Root directly:
 //
-//	// Option 1: Use osutil helper
+//	// Option 1: Read every file into memory at once
 //	files, err := osutil.ReadDirFilesSecure(dir)
 //
-//	// Option 2: Use os.Root directly
+//	// Option 2: Stream files one at a time, with directory skipping —
+//	// the closest drop-in for a filepath.Walk callback that filters by
+//	// extension and skips vendor/testdata/hidden directories
+//	err := osutil.WalkFilesSecure(dir, func(name string) bool {
+//		return name == "vendor" || name == "testdata" || strings.HasPrefix(name, ".")
+//	}, func(path string, content []byte) error {
+//		if !strings.HasSuffix(path, ".go") {
+//			return nil
+//		}
+//		// ... scan content ...
+//		return nil
+//	})
+//
+//	// Option 3: Use os.Root directly
 //	root, err := os.OpenRoot(dir)
 //	if err != nil { return err }
 //	defer root.Close()
@@ -200,6 +217,8 @@ var CommonReasons = struct {
 	TestFixture          string
 	DocumentationExample string
 	ParameterNotLiteral  string
+	EnvVarName           string
+	EnumTagNotCredential string
 
 	// G115 reasons
 	BoundedByValidation string
@@ -262,6 +281,8 @@ var CommonReasons = struct {
 	TestFixture:          "Test fixture with fake credentials",
 	DocumentationExample: "Documentation example",
 	ParameterNotLiteral:  "Field populated from a caller-supplied parameter, not a hardcoded literal",
+	EnvVarName:           "This is an environment variable name, not a credential",
+	EnumTagNotCredential: "Enum/constant identifier matches the credential-name heuristic, but the value is a public tag, not a secret",
 
 	// G115
 	BoundedByValidation: "Value bounded by prior validation",
