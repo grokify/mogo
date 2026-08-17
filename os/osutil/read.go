@@ -57,28 +57,51 @@ func CloseFileWithError(file *os.File, err error) error {
 //
 // Requires Go 1.24+ for os.Root support.
 func ReadDirFilesSecure(dir string) (map[string][]byte, error) {
+	files := make(map[string][]byte)
+	err := WalkFilesSecure(dir, nil, func(path string, content []byte) error {
+		files[path] = content
+		return nil
+	})
+	return files, err
+}
+
+// WalkFilesSecure walks dir recursively using os.Root for symlink-safe
+// operations, preventing TOCTOU race conditions where a symlink could be
+// swapped between traversal and read (gosec G122). Unlike ReadDirFilesSecure,
+// it doesn't buffer every file in memory at once — fn is called with each
+// regular file's path (relative to dir, forward-slashed) and content as the
+// walk proceeds.
+//
+// skipDir, if non-nil, is called with each directory's base name (not its
+// full path); returning true skips that directory and its contents entirely
+// — use this to exclude vendor/, node_modules/, .git/, testdata/, and
+// similar. A nil skipDir walks every directory.
+//
+// If fn returns an error, the walk stops immediately and that error is
+// returned to the caller.
+//
+// Requires Go 1.24+ for os.Root support.
+func WalkFilesSecure(dir string, skipDir func(name string) bool, fn func(path string, content []byte) error) error {
 	root, err := os.OpenRoot(dir)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	defer root.Close()
 
-	files := make(map[string][]byte)
-
-	err = fs.WalkDir(os.DirFS(dir), ".", func(path string, d fs.DirEntry, err error) error {
+	return fs.WalkDir(os.DirFS(dir), ".", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
 		if d.IsDir() {
+			if path != "." && skipDir != nil && skipDir(d.Name()) {
+				return fs.SkipDir
+			}
 			return nil
 		}
 		content, err := root.ReadFile(path)
 		if err != nil {
 			return err
 		}
-		files[path] = content
-		return nil
+		return fn(path, content)
 	})
-
-	return files, err
 }
