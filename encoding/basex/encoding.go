@@ -96,7 +96,7 @@ func RuneMaps(alphabet string) (map[int]rune, map[rune]int) {
 // AlphabetShuffled shuffles an alphabet to provide a random ordering.
 func AlphabetShuffled(alphabet string) string {
 	letters := strings.Split(alphabet, "")
-	rand.Shuffle(len(letters), func(i, j int) {
+	rand.Shuffle(len(letters), func(i, j int) { //nolint:gosec // G404: Alphabet shuffle for display variety, not a cryptographic or security use
 		letters[i], letters[j] = letters[j], letters[i]
 	})
 	return strings.Join(letters, "")
