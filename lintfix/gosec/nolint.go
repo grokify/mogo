@@ -208,6 +208,24 @@ func NolintG122(reason string) string {
 	return Nolint("G122", reason)
 }
 
+// NolintG404 returns a nolint comment for G404 (weak random number generator).
+//
+// G404 flags any use of math/rand or math/rand/v2, regardless of context — it
+// cannot tell a cryptographic use (session tokens, keys, nonces) from a
+// non-security one (shuffling display data, jitter, sampling, test fixtures).
+// Only suppress this when the value produced is NOT used for anything
+// security-sensitive. If it is (tokens, passwords, keys, nonces), switch to
+// crypto/rand instead of adding a nolint.
+//
+// Example reasons:
+//   - "Shuffling display data, not security-sensitive"
+//   - "Jitter/backoff delay, not security-sensitive"
+//   - "Sampling for load testing or simulation"
+//   - "Test fixture with deterministic seed"
+func NolintG404(reason string) string {
+	return Nolint("G404", reason)
+}
+
 // CommonReasons provides pre-written reason strings for common scenarios.
 //
 //nolint:gosec // G101: These are reason strings, not credentials
@@ -275,6 +293,12 @@ var CommonReasons = struct {
 	// G122 reasons (cmd/ only - use os.Root in pkg/)
 	DirectoryFromCLIFlag string
 	TrustedConfigDir     string
+
+	// G404 reasons (only when the value is NOT security-sensitive)
+	ShufflingDisplayData     string
+	JitterOrBackoffDelay     string
+	SamplingSimulation       string
+	TestFixtureDeterministic string
 }{
 	// G101
 	URLPathNotCredential: "URL path, not a credential",
@@ -339,6 +363,12 @@ var CommonReasons = struct {
 	// G122 (cmd/ only - use os.Root in pkg/)
 	DirectoryFromCLIFlag: "Directory from CLI flag",
 	TrustedConfigDir:     "Walking config directory from trusted source",
+
+	// G404 (only when the value is NOT security-sensitive)
+	ShufflingDisplayData:     "Shuffling display data, not security-sensitive",
+	JitterOrBackoffDelay:     "Jitter/backoff delay, not security-sensitive",
+	SamplingSimulation:       "Sampling for load testing or simulation",
+	TestFixtureDeterministic: "Test fixture with deterministic seed",
 }
 
 // NolintG120 returns a nolint comment for G120 (form parsing without body limit).

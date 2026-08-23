@@ -56,12 +56,42 @@ comment := unparam.Nolint(unparam.CommonReasons.InterfaceSignature)
 
 ## Supported Linters
 
-- **gosec** - Security-focused rules (G101, G112, G115, G117, G118, G120, G122, G124, G401, G501, G601, G703, G704, G705, G706, G710)
+- **gosec** - Security-focused rules (G101, G112, G115, G117, G118, G120, G122, G124, G401, G404, G501, G601, G703, G704, G705, G706, G710)
 - **staticcheck** - Static analysis (SA1019, SA4006, QF1012)
 - **errcheck** - Error handling
 - **govet** - Inline remediation notes
 - **dupl** - Duplicate code detection; see the `dupl` subpackage for nolint generators covering the generated-client-wrapper case
 - **unparam** - Unused function parameters/results; see the `unparam` subpackage for nolint generators covering interface/callback-constrained signatures
+
+## G404: Weak Random Number Generator
+
+G404 flags any use of `math/rand` or `math/rand/v2` — it has no way to tell whether
+the value is used for something security-sensitive (tokens, keys, nonces, passwords)
+or not (shuffling display data, jitter, sampling, non-cryptographic test fixtures).
+Golangci-lint version skew commonly surfaces this: an older locally-installed gosec
+may not flag a call that a newer one (e.g. CI's `version: latest`) does, since gosec's
+G404 detection coverage (which stdlib functions it recognizes, e.g. `rand.Shuffle`)
+has expanded across releases.
+
+**If the value IS security-sensitive** - switch to `crypto/rand`, don't nolint:
+
+```go
+import "crypto/rand"
+
+n, err := rand.Int(rand.Reader, max)
+if err != nil {
+    return err
+}
+```
+
+**If the value is NOT security-sensitive** - nolint with a reason:
+
+```go
+import "math/rand"
+
+//nolint:gosec // G404: Shuffling display data, not security-sensitive
+rand.Shuffle(len(items), func(i, j int) { items[i], items[j] = items[j], items[i] })
+```
 
 ## G703: Path Traversal
 
@@ -316,6 +346,7 @@ gosec.NolintG115(reason)  // Integer overflow (bounded value)
 gosec.NolintG117(reason)  // Secret in JSON response
 gosec.NolintG118(reason)  // context.Background in goroutine
 gosec.NolintG122(reason)  // filepath.Walk TOCTOU race (cmd/ entry point only)
+gosec.NolintG404(reason)  // Weak random number generator (non-security use only; use crypto/rand otherwise)
 gosec.NolintG124(reason)  // Insecure cookie attributes (set dynamically/from config)
 gosec.NolintG703(reason)  // Path traversal (CLI entry point only)
 gosec.NolintG704(reason)  // SSRF (trusted URL)
@@ -350,6 +381,7 @@ gosec.CommonReasons.ParameterNotLiteral       // G101 - config struct field set 
 gosec.CommonReasons.EnvVarName                // G101 - environment variable name, not a credential
 gosec.CommonReasons.EnumTagNotCredential       // G101 - enum/const identifier matches heuristic, value is a public tag
 gosec.CommonReasons.TestControlledInputNoUntrustedSource // G706 - nolint fallback only; prefer strconv.Quote
+gosec.CommonReasons.ShufflingDisplayData       // G404 - non-security use only; use crypto/rand otherwise
 
 dupl.CommonReasons.ParallelResourceWrapper    // sibling wrapper methods over distinct generated types
 dupl.CommonReasons.StandaloneTestClarity      // standalone per-endpoint test, not worth consolidating
