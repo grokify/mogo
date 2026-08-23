@@ -17,12 +17,12 @@ require (
 	github.com/martinlindhe/base36 v1.1.1
 	github.com/microcosm-cc/bluemonday v1.0.27
 	golang.org/x/crypto v0.55.0
-	golang.org/x/exp v0.0.0-20260727155853-b88d891fe743
+	golang.org/x/exp v0.0.0-20260820142414-ca536658362e
 	golang.org/x/image v0.45.0
 	golang.org/x/net v0.58.0
 	golang.org/x/term v0.45.0
 	golang.org/x/text v0.41.0
-	google.golang.org/genproto v0.0.0-20260807164820-c8921c73eeea
+	google.golang.org/genproto v0.0.0-20260819154853-08b0e4226688
 )
 
 require (
@@ -30,5 +30,5 @@ require (
 	github.com/cloudflare/circl v1.6.5 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	golang.org/x/sys v0.47.0 // indirect
-	google.golang.org/protobuf v1.36.11 // indirect
+	google.golang.org/protobuf v1.36.12 // indirect
 )
