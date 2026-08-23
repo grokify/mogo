@@ -122,6 +122,16 @@ func TestNolintG706(t *testing.T) {
 	}
 }
 
+func TestNolintG404(t *testing.T) {
+	got := NolintG404("Shuffling display data, not security-sensitive")
+	if !strings.Contains(got, "G404") {
+		t.Errorf("NolintG404() = %q, does not contain G404", got)
+	}
+	if !strings.Contains(got, "//nolint:gosec") {
+		t.Errorf("NolintG404() = %q, does not contain //nolint:gosec", got)
+	}
+}
+
 func TestCommonReasons(t *testing.T) {
 	// G101 reasons
 	if CommonReasons.URLPathNotCredential == "" {
@@ -205,6 +215,20 @@ func TestCommonReasons(t *testing.T) {
 	if CommonReasons.AlreadySanitizedUpstream == "" {
 		t.Error("CommonReasons.AlreadySanitizedUpstream is empty")
 	}
+
+	// G404 reasons
+	if CommonReasons.ShufflingDisplayData == "" {
+		t.Error("CommonReasons.ShufflingDisplayData is empty")
+	}
+	if CommonReasons.JitterOrBackoffDelay == "" {
+		t.Error("CommonReasons.JitterOrBackoffDelay is empty")
+	}
+	if CommonReasons.SamplingSimulation == "" {
+		t.Error("CommonReasons.SamplingSimulation is empty")
+	}
+	if CommonReasons.TestFixtureDeterministic == "" {
+		t.Error("CommonReasons.TestFixtureDeterministic is empty")
+	}
 }
 
 func TestNolintWithCommonReasons(t *testing.T) {
@@ -240,6 +264,10 @@ func TestNolintWithCommonReasons(t *testing.T) {
 		{
 			name: "G706 with TestControlledInputNoUntrustedSource",
 			got:  NolintG706(CommonReasons.TestControlledInputNoUntrustedSource),
+		},
+		{
+			name: "G404 with ShufflingDisplayData",
+			got:  NolintG404(CommonReasons.ShufflingDisplayData),
 		},
 	}
 
