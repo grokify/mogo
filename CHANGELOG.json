@@ -6,6 +6,60 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.74.8",
+      "date": "2026-08-23",
+      "added": [
+        {
+          "description": "`os/osutil`: add `WalkFilesSecure()` for streaming symlink-safe directory walks",
+          "commit": "35bd2e5"
+        },
+        {
+          "description": "`lintfix/unparam`: add unparam remediation entries and nolint subpackage covering unused-parameter and interface-fixed-signature findings",
+          "commit": "3092fae"
+        },
+        {
+          "description": "`lintfix/gosec`: add `NolintG404()` and `CommonReasons` entries for weak random number generator findings",
+          "commit": "2495a79"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "`encoding/basex`: suppress gosec G404 false positive in `AlphabetShuffled` (non-cryptographic use)",
+          "commit": "2e461bb"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "bump `golang.org/x/net` from 0.57.0 to 0.58.0",
+          "commit": "c90dc73"
+        },
+        {
+          "description": "bump `golang.org/x/text` from 0.40.0 to 0.41.0",
+          "commit": "e5e4929"
+        },
+        {
+          "description": "bump `golang.org/x/image` from 0.44.0 to 0.45.0",
+          "commit": "cc41469"
+        },
+        {
+          "description": "bump `golang.org/x/crypto` from 0.54.0 to 0.55.0",
+          "commit": "561dc27"
+        },
+        {
+          "description": "bump `golang.org/x/exp` to latest pseudo-version",
+          "commit": "20c69d0"
+        },
+        {
+          "description": "bump `google.golang.org/genproto` to latest pseudo-version",
+          "commit": "20c69d0"
+        },
+        {
+          "description": "bump `google.golang.org/protobuf` from 1.36.11 to 1.36.12",
+          "commit": "20c69d0"
+        }
+      ]
+    },
+    {
       "version": "v0.74.7",
       "date": "2026-08-10",
       "added": [
