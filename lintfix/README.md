@@ -57,11 +57,12 @@ comment := unparam.Nolint(unparam.CommonReasons.InterfaceSignature)
 ## Supported Linters
 
 - **gosec** - Security-focused rules (G101, G112, G115, G117, G118, G120, G122, G124, G401, G404, G501, G601, G703, G704, G705, G706, G710)
-- **staticcheck** - Static analysis (SA1019, SA4006, QF1012)
+- **staticcheck** - Static analysis (SA1019, SA4006, QF1003, QF1012)
 - **errcheck** - Error handling
 - **govet** - Inline remediation notes
 - **dupl** - Duplicate code detection; see the `dupl` subpackage for nolint generators covering the generated-client-wrapper case
 - **unparam** - Unused function parameters/results; see the `unparam` subpackage for nolint generators covering interface/callback-constrained signatures
+- **unused** - Dead code (unused functions, vars, consts, types); the fix is deletion, including any import the removed code solely required
 
 ## G404: Weak Random Number Generator
 
@@ -152,6 +153,48 @@ func (s *OAuthService) ConfigureGoogle(clientID, clientSecret, redirectURL strin
 
 There is no code fix here - the struct shape is the point, and gosec cannot see that the
 values are parameters rather than literals. `nolint` is the correct remediation.
+
+## G115: Integer Overflow Conversion — Length-Prefixed External Data
+
+G115's default remediation (a `nolint` backed by "domain knowledge guarantees
+the value fits") is right for small constants/enums, but wrong for a
+length/size prefix read off a file format or wire protocol — there the value
+comes from outside the program and nothing guarantees it fits until you check.
+
+**A common bad shape**: converting through a narrower signed type first, then
+validating the *signed* result:
+
+```go
+n := int(int32(binary.LittleEndian.Uint32(lenBuf[:])))
+if n < 5 {
+    return fmt.Errorf("invalid length %d", n)
+}
+```
+
+This only catches lengths that wrapped negative (raw values ≥ 2^31). Any raw
+value below that — up to `2^31-1`, over two billion — sails through as a
+large *positive* `n` and drives `make([]byte, n)` with an
+attacker-or-corruption-controlled size, unless something downstream happens
+to bound it separately.
+
+**Verified fix — validate the raw unsigned value's range before converting:**
+
+```go
+const maxDocSize = 16 * 1024 * 1024 // real domain ceiling, not an arbitrary guess
+
+raw := binary.LittleEndian.Uint32(lenBuf[:])
+if raw < 5 || raw > maxDocSize {
+    return fmt.Errorf("invalid length %d", raw)
+}
+n := int(raw) // safe: raw is now proven in [5, maxDocSize]
+```
+
+This clears the G115 finding (the conversion now only ever sees a
+pre-validated range) and is a strictly stronger real fix than the nolint
+default: it also closes the unbounded-allocation gap the "check after
+converting" shape left open. Pick `maxDocSize` from a real domain limit (a
+format spec's own max, a protocol's own frame cap) — never an arbitrary
+round number.
 
 ## G706: Log Injection
 

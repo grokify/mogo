@@ -57,7 +57,8 @@
           "pattern": "//nolint:gosec // G115: {reason}",
           "explanation": "Converting between integer types can cause overflow if the source value exceeds the target type's range. Use nolint when prior validation or domain knowledge guarantees the value fits.",
           "when": "Value is bounded by validation, domain constraints, or is a small constant/enum",
-          "example": "b := byte(value) //nolint:gosec // G115: Value bounded by prior validation (0-255)"
+          "example": "b := byte(value) //nolint:gosec // G115: Value bounded by prior validation (0-255)",
+          "alternative": "When the value being converted is a length/size prefix read from external or untrusted binary data (a file format, wire protocol, framing header), prefer validating the raw unsigned value's range BEFORE the narrowing/signed conversion over a nolint - it's a real fix, not linter appeasement, and it also closes the unbounded-allocation risk a bare nolint leaves open: raw := binary.LittleEndian.Uint32(hdr); if raw < minSize || raw > maxSize { return fmt.Errorf(\"invalid length %d\", raw) }; n := int(raw) // safe: raw is now proven in [minSize, maxSize]. Validating after the conversion (e.g. int(int32(raw)) then checking the signed result) is not equivalent: it only catches values that wrapped negative, not merely-too-large positive ones, so an attacker-controlled length can still drive a multi-gigabyte allocation before any check runs."
         },
         "references": [
           "https://cwe.mitre.org/data/definitions/190.html"
@@ -362,6 +363,22 @@
             "buf.WriteString(fmt.Sprintf(...))"
           ]
         }
+      },
+      "QF1003": {
+        "name": "Convert if/else-if chain to a tagged switch",
+        "description": "A sequence of if/else-if comparing the same operand to constants reads more clearly as a tagged switch",
+        "severity": "low",
+        "category": "style",
+        "remediation": {
+          "type": "code",
+          "summary": "Rewrite the if/else-if chain as `switch x { case c1: ...; case c2: ... }`",
+          "explanation": "When every branch compares the same variable against a constant, a tagged switch states the intent directly and lets tooling reason about the cases. Leave any trailing default behavior as the switch's implicit fallthrough (no default needed if the pre-switch value stands in for it).",
+          "example": "icon := \"ok\"\nswitch status {\ncase \"fail\":\n\ticon = \"x\"\ncase \"warning\":\n\ticon = \"!\"\n}",
+          "when": "Every branch tests the same variable against a constant value.",
+          "avoid": [
+            "Do not force a switch when branches test different variables or non-constant boolean expressions; QF1003 does not apply there."
+          ]
+        }
       }
     },
     "errcheck": {
@@ -435,6 +452,25 @@
           "function": "Nolint",
           "example": "func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) { //nolint:unparam // r required by http.Handler\n    w.WriteHeader(http.StatusOK)\n}",
           "explanation": "unparam cannot see that a signature is constrained by an interface or function-type variable it must implement - the parameter is unused inside this function body but required by the type it satisfies. Generate the comment with unparam.Nolint(unparam.CommonReasons.InterfaceSignature) or .CallbackSignature."
+        }
+      }
+    },
+    "unused": {
+      "unused": {
+        "name": "Unused code",
+        "description": "A function, method, variable, constant, or type is never used",
+        "severity": "low",
+        "category": "maintenance",
+        "remediation": {
+          "type": "code",
+          "summary": "Delete the unused declaration, and drop any import it solely required",
+          "explanation": "Dead code should be removed rather than silenced. Deleting the last user of an import means removing that import too. Keep the symbol only if it is exported API or intentionally retained (e.g. used via reflection or build tags), in which case annotate it with //nolint:unused and a documented reason.",
+          "example": "// remove the unused helper and its now-orphaned import:\n// func round(v float64, p int) float64 { ... }  // delete\n// import \"math\"                                  // delete",
+          "when": "The symbol is genuinely dead: not exported API, not referenced via reflection or build-tagged files.",
+          "avoid": [
+            "Do not blank-assign (_ = fn) to silence it; delete it.",
+            "Do not keep an unused unexported helper \"just in case\"."
+          ]
         }
       }
     }
