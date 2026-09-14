@@ -6,6 +6,66 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.74.9",
+      "date": "2026-09-14",
+      "added": [
+        {
+          "description": "`net/http/healthz`: add `Checker`/`CheckerFunc`, `LivenessHandler`, `ReadinessHandler`, and a dependency-free `Probe` client for post-deploy/container health verification",
+          "commit": "fea735c"
+        },
+        {
+          "description": "`lintfix`: add staticcheck QF1003 (if/else-if chain to tagged switch), `unused` (dead-code deletion), and an alternative G115 remediation validating the raw value's range before a narrowing conversion",
+          "commit": "63d2f5a"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "bump `golang.org/x/crypto` from 0.55.0 to 0.56.0",
+          "commit": "46036fa"
+        },
+        {
+          "description": "bump `golang.org/x/crypto` from 0.56.0 to 0.57.0",
+          "commit": "2724804"
+        },
+        {
+          "description": "bump `golang.org/x/net` from 0.58.0 to 0.59.0",
+          "commit": "2724804"
+        },
+        {
+          "description": "bump `golang.org/x/image` from 0.45.0 to 0.46.0",
+          "commit": "2724804"
+        },
+        {
+          "description": "bump `golang.org/x/term` from 0.45.0 to 0.46.0",
+          "commit": "2724804"
+        },
+        {
+          "description": "bump `golang.org/x/text` from 0.41.0 to 0.42.0",
+          "commit": "2724804"
+        },
+        {
+          "description": "bump `golang.org/x/sys` from 0.47.0 to 0.48.0 (indirect)",
+          "commit": "2724804"
+        },
+        {
+          "description": "bump `golang.org/x/exp` to the latest pseudo-version",
+          "commit": "2724804"
+        },
+        {
+          "description": "bump `google.golang.org/genproto` to the latest pseudo-version",
+          "commit": "2724804"
+        },
+        {
+          "description": "add `github.com/spf13/cobra` v1.10.2",
+          "commit": "2724804"
+        },
+        {
+          "description": "bump `github.com/huandu/xstrings` from 1.5.0 to 1.6.0",
+          "commit": "5f236f3"
+        }
+      ]
+    },
+    {
       "version": "v0.74.8",
       "date": "2026-08-23",
       "added": [
