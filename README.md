@@ -21,7 +21,7 @@ MoGo
  [loc-svg]: https://tokei.rs/b1/github/grokify/mogo
  [repo-url]: https://github.com/grokify/mogo
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
- [license-url]: https://github.com/grokify/mogo/blob/master/LICENSE
+ [license-url]: https://github.com/grokify/mogo/blob/main/LICENSE
 
 ## Overview
 
