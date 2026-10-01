@@ -8,6 +8,7 @@ import (
 	"math"
 	"math/big"
 	"math/rand"
+	"reflect"
 
 	"github.com/grokify/mogo/math/mathutil"
 	"github.com/grokify/mogo/type/number"
@@ -59,52 +60,30 @@ func Intn(n int) int {
 */
 
 // CryptoRandIntInRange returns a cryptographically secure random integer in [min, max] (inclusive).
+// It supports any integer type, including named types, and full-width ranges.
 func CryptoRandIntInRange[T number.Integer](min, max T) (T, error) {
 	if min > max {
 		return 0, errors.New("min must be <= max")
 	}
-	span := uint64(max-min) + 1
-	if span == 0 {
-		return 0, errors.New("span overflow")
-	}
+	// mask is the largest value of T's width as an unsigned number. Masking
+	// max-min recovers the true distance even when the subtraction wraps, as
+	// it does for wide ranges of narrow signed types.
+	mask := uint64(math.MaxUint64) >> (64 - reflect.TypeFor[T]().Bits())
+	diff := uint64(max-min) & mask
 
-	var nBytes int
-	var maxUint uint64
-	switch any(min).(type) {
-	case int8, uint8:
-		nBytes = 1
-		maxUint = math.MaxUint8
-	case int16, uint16:
-		nBytes = 2
-		maxUint = math.MaxUint16
-	case int32, uint32:
-		nBytes = 4
-		maxUint = math.MaxUint32
-	case int64, uint64, int, uint:
-		nBytes = 8
-		maxUint = math.MaxUint64
-	default:
-		return 0, errors.New("unsupported type")
-	}
-
-	limit := maxUint - (maxUint % span)
-	b := make([]byte, nBytes)
+	var b [8]byte
 	for {
-		if _, err := crand.Read(b); err != nil {
+		if _, err := crand.Read(b[:]); err != nil {
 			return 0, err
 		}
-		var n uint64
-		switch nBytes {
-		case 1:
-			n = uint64(b[0])
-		case 2:
-			n = uint64(binary.BigEndian.Uint16(b))
-		case 4:
-			n = uint64(binary.BigEndian.Uint32(b))
-		case 8:
-			n = binary.BigEndian.Uint64(b)
+		n := binary.BigEndian.Uint64(b[:]) & mask
+		if diff == mask { // full range: every value of T is valid
+			return min + T(n), nil
 		}
-		if n < limit {
+		// Rejection sampling: accept only below the largest multiple of the
+		// span that fits, so every result is equally likely.
+		span := diff + 1
+		if n < mask-(mask%span) {
 			return min + T(n%span), nil
 		}
 	}
