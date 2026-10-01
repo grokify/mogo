@@ -6,6 +6,126 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.74.10",
+      "date": "2026-10-01",
+      "added": [
+        {
+          "description": "`net/http/retryhttp`: add `Limiter` interface and `WithLimiter()` option for request pacing, with `IntervalLimiter`, `NewIntervalLimiter()`, and `PerSecond()`",
+          "commit": "9ec3e57"
+        },
+        {
+          "description": "`crypto/sshutil`: add `ParseAuthorizedKeyFile()`, `ScanDir()`, and `FindByFingerprint()` for locating SSH public key files by SHA256 fingerprint",
+          "commit": "7ab42dc"
+        },
+        {
+          "description": "`cmd/mogo`: add `mogo` CLI with `ssh list`, `ssh find`, and `version` commands",
+          "commit": "56d2328"
+        },
+        {
+          "description": "`image/imageutil`: add animated GIF support with `ReadGIF()`/`ReadGIFFile()`, `GIFInfoFromGIF()` frame timing metadata, disposal-aware `GIFFrames()` compositing, and `WriteGIFFramesPNG()`, plus a `gifframes` command",
+          "commit": "edb9889"
+        },
+        {
+          "description": "`text/markdown`: add `ShiftHeaders()` and `NormalizeHeaders()` to adjust header levels, skipping fenced code blocks",
+          "commit": "8b33937"
+        },
+        {
+          "description": "`lintfix/dupl`: add `Nolint()` and `CommonReasons` for documented `nolint:dupl` comments",
+          "commit": "1e9eb9b"
+        },
+        {
+          "description": "`net/http/httputilmore`: add RFC 8705 certificate-bound access token checks with `VerifyRFC8705CertificateBinding()`, `EnforceRFC8705MTLSClientCertBinding()` middleware, and `CertificateThumbprintSHA256()`",
+          "commit": "a1e6586"
+        },
+        {
+          "description": "`image/imageutil`: add `DrawText()` for drawing text onto images",
+          "commit": "1bc248f"
+        },
+        {
+          "description": "`image/imageutil/cmd/merge_grid`: add command to merge images into a grid with configurable columns, width, and JPEG quality",
+          "commit": "9813ac7"
+        },
+        {
+          "description": "`licenses`: add `IsMIT()` to detect MIT License text, tolerating title, copyright, whitespace, and case differences",
+          "commit": "95df23b"
+        },
+        {
+          "description": "`crypto/tlsutil`: detect `SecP256r1MLKEM768` and `SecP384r1MLKEM1024` hybrid PQC key exchanges and name pure ML-KEM-1024",
+          "commit": "56f376f"
+        },
+        {
+          "description": "`image/imageutil/cmd/crop`: add command to crop, square, and split images from a file or URL",
+          "commit": "f4cc2ec"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`crypto/tlsutil`: `PQCCurvePreferences()` now offers `SecP256r1MLKEM768` and `SecP384r1MLKEM1024`, and `CheckPQCSupport()` uses `http.NewRequestWithContext` instead of `ctxhttp`",
+          "commit": "56f376f"
+        }
+      ],
+      "deprecated": [
+        {
+          "description": "`crypto/tlsutil`: `X25519MLKEM768`; use `tls.X25519MLKEM768`",
+          "commit": "56f376f"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "`crypto/randutil`: `CryptoRandIntInRange()` no longer hangs on wide narrow-type ranges such as `int8` -100..100 or full `uint8`/`uint16`/`uint32` ranges, no longer errors on full `int8`/`int64`/`uint64` ranges, and supports named integer types",
+          "commit": "26dcc3c"
+        },
+        {
+          "description": "`encoding/jsonutil`: `MarshalFile()` and `UnmarshalFile()` now return file close errors instead of dropping them",
+          "commit": "50df3b4"
+        },
+        {
+          "description": "`crypto/tlsutil`: `CheckPQCSupport()` reports response body close errors instead of discarding them",
+          "commit": "56f376f"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "add base64, mailutil, and urlutil example programs",
+          "commit": "9114110"
+        }
+      ],
+      "tests": [
+        {
+          "description": "`crypto/randutil`: add tests covering every integer width, full ranges, named types, and uniformity",
+          "commit": "92a7e55"
+        },
+        {
+          "description": "`strconv/strconvutil`: add `Atou32()` tests",
+          "commit": "dc69cb3"
+        },
+        {
+          "description": "`encoding/jsonutil`: add file marshal and unmarshal tests",
+          "commit": "4b727ca"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`image/imageutil/cmd/resize_jpeg`: remove commented-out code",
+          "commit": "66db705"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "bump `github.com/ProtonMail/go-crypto` from 1.4.1 to 1.5.1",
+          "commit": "a888eef"
+        },
+        {
+          "description": "bump `github.com/huandu/xstrings` from 1.6.0 to 1.6.1",
+          "commit": "9581a66"
+        },
+        {
+          "description": "bump `google.golang.org/genproto` to the latest pseudo-version",
+          "commit": "454afe5"
+        }
+      ]
+    },
+    {
       "version": "v0.74.9",
       "date": "2026-09-14",
       "added": [
