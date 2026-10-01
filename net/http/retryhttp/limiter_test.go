@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"slices"
 	"sync"
 	"sync/atomic"
 	"testing"
@@ -31,6 +32,7 @@ func TestIntervalLimiterConcurrentCallersAreSerialized(t *testing.T) {
 	var mu sync.Mutex
 	var starts []time.Time
 	var wg sync.WaitGroup
+	begin := time.Now()
 	for i := 0; i < 5; i++ {
 		wg.Add(1)
 		go func() {
@@ -48,17 +50,14 @@ func TestIntervalLimiterConcurrentCallersAreSerialized(t *testing.T) {
 	if len(starts) != 5 {
 		t.Fatalf("got %d starts", len(starts))
 	}
-	// Sort then check gaps.
-	for i := 0; i < len(starts); i++ {
-		for j := i + 1; j < len(starts); j++ {
-			if starts[j].Before(starts[i]) {
-				starts[i], starts[j] = starts[j], starts[i]
-			}
-		}
-	}
-	for i := 1; i < len(starts); i++ {
-		if gap := starts[i].Sub(starts[i-1]); gap < interval-5*time.Millisecond {
-			t.Errorf("gap %d = %v, want about %v", i, gap, interval)
+	slices.SortFunc(starts, time.Time.Compare)
+	// Slots are interval apart, so the k-th caller to return must not do so
+	// before begin + k*interval. Measure from begin rather than between
+	// consecutive returns: goroutine wake-up latency can delay any return
+	// (shrinking the gap to the next one) but can never make one early.
+	for k, s := range starts {
+		if got, want := s.Sub(begin), time.Duration(k)*interval; got < want {
+			t.Errorf("caller %d returned after %v, want at least %v", k, got, want)
 		}
 	}
 }
