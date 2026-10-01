@@ -1,11 +1,16 @@
-// Package retryhttp provides an HTTP RoundTripper with exponential backoff retry logic.
+// Package retryhttp provides an HTTP RoundTripper with exponential backoff
+// retry logic and optional request pacing.
 //
 // This package implements retry functionality at the transport level, making it
-// compatible with any HTTP client including ogen-generated clients.
+// compatible with any HTTP client including ogen-generated clients. A Limiter
+// (for example IntervalLimiter or golang.org/x/time/rate.Limiter) can be
+// attached so that every attempt, including retries, is throttled; this is the
+// shape a polite client of a shared public API needs.
 package retryhttp
 
 import (
 	"bytes"
+	"context"
 	"io"
 	"log/slog"
 	"math"
@@ -48,8 +53,20 @@ type RetryTransport struct {
 	// OnRetry is an optional callback invoked before each retry attempt.
 	OnRetry func(attempt int, req *http.Request, resp *http.Response, err error, backoff time.Duration)
 
+	// Limiter, when set, is consulted before every attempt (including
+	// retries) so a client can throttle itself as well as back off. Any type
+	// with a Wait(ctx) error method satisfies it, including
+	// *golang.org/x/time/rate.Limiter and IntervalLimiter from this package.
+	Limiter Limiter
+
 	// Logger is used for logging errors. If nil, a null logger is used.
 	Logger *slog.Logger
+}
+
+// Limiter paces requests. Wait blocks until the next request may be sent or
+// the context is done.
+type Limiter interface {
+	Wait(ctx context.Context) error
 }
 
 // DefaultRetryableStatusCodes are the status codes that trigger a retry by default.
@@ -140,6 +157,13 @@ func WithOnRetry(fn func(attempt int, req *http.Request, resp *http.Response, er
 	}
 }
 
+// WithLimiter sets a request pacer consulted before each attempt.
+func WithLimiter(l Limiter) Option {
+	return func(rt *RetryTransport) {
+		rt.Limiter = l
+	}
+}
+
 // WithLogger sets the logger for error logging.
 func WithLogger(l *slog.Logger) Option {
 	return func(rt *RetryTransport) {
@@ -192,6 +216,13 @@ func (rt *RetryTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 			req.Body = io.NopCloser(bytes.NewReader(bodyBytes))
 		}
 
+		// Pace before every attempt so retries are throttled too.
+		if rt.Limiter != nil {
+			if err := rt.Limiter.Wait(req.Context()); err != nil {
+				return nil, err
+			}
+		}
+
 		// Clone the request to avoid modifying the original
 		reqCopy := req.Clone(req.Context())
 		if bodyBytes != nil {
@@ -228,11 +259,14 @@ func (rt *RetryTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 			}
 		}
 
-		// Wait for backoff duration or context cancellation
+		// Wait for backoff duration or context cancellation. A stopped timer
+		// avoids leaking the channel when the context wins.
+		timer := time.NewTimer(backoff)
 		select {
 		case <-req.Context().Done():
+			timer.Stop()
 			return nil, req.Context().Err()
-		case <-time.After(backoff):
+		case <-timer.C:
 		}
 	}
 
