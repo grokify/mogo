@@ -6,6 +6,39 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.75.0",
+      "date": "2026-10-01",
+      "highlights": [
+        {
+          "description": "`crypto/aesutil` now uses authenticated AES-GCM encryption; data encrypted by earlier versions must be re-encrypted"
+        }
+      ],
+      "breaking": [
+        {
+          "description": "`crypto/aesutil`: `EncryptAES()`, `DecryptAES()`, and the Base58, JSON, base64, and file helpers built on them now use AES-GCM instead of AES-CFB. Ciphertext from earlier versions, including files written by `WriteFileAES()` and `EncryptDirectoryFilesAES()`, can no longer be decrypted and returns an error; decrypt existing data with v0.74.x and re-encrypt it before upgrading",
+          "commit": "997e933"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`crypto/aesutil`: decryption now rejects tampered, truncated, and wrong-key ciphertext, and plaintext is no longer base64-encoded before encryption, reducing ciphertext size",
+          "commit": "997e933"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "`crypto/aesutil`: `DecryptAES()` no longer overwrites its ciphertext argument",
+          "commit": "997e933"
+        }
+      ],
+      "tests": [
+        {
+          "description": "`crypto/aesutil`: add AES-GCM tests covering all key sizes, fresh nonces, rejection of tampered, wrong-key, and legacy CFB ciphertext, and the file and encoding helpers",
+          "commit": "1282281"
+        }
+      ]
+    },
+    {
       "version": "v0.74.10",
       "date": "2026-10-01",
       "added": [
