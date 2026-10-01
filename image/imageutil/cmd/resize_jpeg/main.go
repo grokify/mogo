@@ -4,8 +4,9 @@ import (
 	"image/jpeg"
 	"log"
 
-	"github.com/grokify/mogo/image/imageutil"
 	flags "github.com/jessevdk/go-flags"
+
+	"github.com/grokify/mogo/image/imageutil"
 )
 
 type cliOptions struct {
@@ -30,31 +31,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	/*
-		isDirSrc, err := osutil.IsDir(opts.Input)
-		logutil.FatalErr(err)
-
-		if isDirSrc {
-			isDirOut, err := osutil.IsDir(opts.Output)
-			logutil.FatalErr(err)
-			if !isDirOut {
-				logutil.FatalErr(errors.New("output must be a directory"))
-			}
-			// write regexp to match .jpg or .jpeg file extensions
-			files, err := osutil.ReadDirMore(opts.Input, imageutil.RxFileExtensionJPG, false, true, false)
-			logutil.FatalErr(err)
-			n := len(files)
-			for i, e := range files {
-				fmt.Printf("Processing %d of %d: %s\n", i+1, n, e.Name())
-				srcPath := filepath.Join(opts.Input, e.Name())
-				outPath := filepath.Join(opts.Output, e.Name())
-				err := imageutil.ResizeFileJPEG(srcPath, outPath, opts.Width, opts.Height, jopts)
-				logutil.FatalErr(err)
-			}
-		} else {
-			err := imageutil.ResizeFileJPEG(opts.Input, opts.Output, opts.Width, opts.Height, jopts)
-			logutil.FatalErr(err)
-		}
-	*/
 }
