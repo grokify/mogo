@@ -82,6 +82,10 @@
         {
           "description": "`crypto/tlsutil`: `CheckPQCSupport()` reports response body close errors instead of discarding them",
           "commit": "56f376f"
+        },
+        {
+          "description": "`crypto/aesutil`: suppress gosec G407 false positive for the random CFB IV in `EncryptAES()`",
+          "commit": "4ed765c"
         }
       ],
       "documentation": [
