@@ -3,11 +3,11 @@ package tlsutil
 import (
 	"context"
 	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"net/http"
 
 	"github.com/grokify/mogo/errors/errorsutil"
-	"golang.org/x/net/context/ctxhttp"
 )
 
 // PQCAlgorithm represents a post-quantum cryptographic algorithm.
@@ -56,14 +56,15 @@ func PQCAlgorithms() []PQCAlgorithmInfo {
 	}
 }
 
-// PQC Curve IDs for hybrid key exchange.
-// X25519MLKEM768 is defined in Go 1.24+ as tls.X25519MLKEM768.
-// For compatibility with Go 1.23, we define the constant here.
-const (
-	// X25519MLKEM768 is the hybrid X25519 + ML-KEM-768 key exchange.
-	// This is the IANA-registered value (0x11ec = 4588).
-	X25519MLKEM768 tls.CurveID = 0x11ec
-)
+// X25519MLKEM768 is the hybrid X25519 + ML-KEM-768 key exchange.
+//
+// Deprecated: use tls.X25519MLKEM768.
+const X25519MLKEM768 = tls.X25519MLKEM768
+
+// curveMLKEM1024 is the pure ML-KEM-1024 key exchange (IANA 0x0202). It is
+// tls.MLKEM1024 in Go 1.27+; it is defined here so results can name it while
+// this module supports Go 1.26.
+const curveMLKEM1024 tls.CurveID = 0x0202
 
 // PQCCheckResult contains the result of a PQC support check.
 type PQCCheckResult struct {
@@ -88,18 +89,27 @@ func CurveIDName(id tls.CurveID) string {
 		return "P-521"
 	case tls.X25519:
 		return "X25519"
-	case X25519MLKEM768:
+	case tls.X25519MLKEM768:
 		return "X25519MLKEM768"
+	case tls.SecP256r1MLKEM768:
+		return "SecP256r1MLKEM768"
+	case tls.SecP384r1MLKEM1024:
+		return "SecP384r1MLKEM1024"
+	case curveMLKEM1024:
+		return "MLKEM1024"
 	default:
 		return fmt.Sprintf("CurveID(%d)", id)
 	}
 }
 
 // CurveIDToPQCAlgorithm returns the PQC algorithm for a curve ID, if any.
+// Hybrid curves map to their ML-KEM component.
 func CurveIDToPQCAlgorithm(id tls.CurveID) (PQCAlgorithm, bool) {
 	switch id {
-	case X25519MLKEM768:
+	case tls.X25519MLKEM768, tls.SecP256r1MLKEM768:
 		return PQCAlgorithmMLKEM768, true
+	case tls.SecP384r1MLKEM1024, curveMLKEM1024:
+		return PQCAlgorithmMLKEM1024, true
 	default:
 		return "", false
 	}
@@ -111,39 +121,59 @@ func IsPQCCurve(id tls.CurveID) bool {
 	return ok
 }
 
-// PQCCurvePreferences returns curve preferences that prioritize PQC hybrid curves.
+// PQCCurvePreferences returns curve preferences that offer the hybrid PQC
+// curves before classical ones.
 func PQCCurvePreferences() []tls.CurveID {
 	return []tls.CurveID{
-		X25519MLKEM768,
+		tls.X25519MLKEM768,
+		tls.SecP256r1MLKEM768,
+		tls.SecP384r1MLKEM1024,
 		tls.X25519,
 		tls.CurveP256,
 		tls.CurveP384,
 	}
 }
 
-// CheckPQCSupport tests if a URL supports PQC key exchange.
-// This requires TLS 1.3 on the server and Go 1.23+ on the client.
-// The check attempts to negotiate a hybrid X25519+ML-KEM-768 key exchange.
+// CheckPQCSupport tests if a URL supports PQC key exchange by connecting with
+// TLS 1.3 and offering the hybrid curves from PQCCurvePreferences.
 func CheckPQCSupport(ctx context.Context, url string) PQCCheckResult {
-	result := PQCCheckResult{URL: url}
+	return checkPQCSupport(ctx, url, nil)
+}
 
-	tlsConfig := &tls.Config{
-		MinVersion:       tls.VersionTLS13,
-		CurvePreferences: PQCCurvePreferences(),
-	}
+// checkPQCSupport implements CheckPQCSupport. rootCAs overrides the system
+// roots when non-nil, which lets tests use a local TLS server.
+func checkPQCSupport(ctx context.Context, url string, rootCAs *x509.CertPool) (result PQCCheckResult) {
+	result.URL = url
 
 	client := &http.Client{
 		Transport: &http.Transport{
-			TLSClientConfig: tlsConfig,
+			TLSClientConfig: &tls.Config{
+				MinVersion:       tls.VersionTLS13,
+				CurvePreferences: PQCCurvePreferences(),
+				RootCAs:          rootCAs,
+			},
 		},
 	}
 
-	resp, err := ctxhttp.Get(ctx, client, url)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		result.Error = errorsutil.Wrapf(err, "invalid request").Error()
+		return result
+	}
+	resp, err := client.Do(req)
 	if err != nil {
 		result.Error = errorsutil.Wrapf(err, "connection failed").Error()
 		return result
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			msg := errorsutil.Wrapf(err, "close response body").Error()
+			if result.Error != "" {
+				msg = result.Error + "; " + msg
+			}
+			result.Error = msg
+		}
+	}()
 
 	if resp.TLS == nil {
 		result.Error = "no TLS connection state"
@@ -152,29 +182,10 @@ func CheckPQCSupport(ctx context.Context, url string) PQCCheckResult {
 
 	result.Supported = true
 	result.TLSVersion = TLSVersion(resp.TLS.Version).String()
-
-	// Note: resp.TLS.CurveID was added in Go 1.21 for TLS 1.3 connections.
-	// It will be 0 for TLS 1.2 connections.
-	if resp.TLS.Version >= tls.VersionTLS13 {
-		// Access the negotiated curve via DidResume and other fields
-		// For Go 1.23+, we can check the curve ID directly
-		result.CurveID = getCurveID(resp.TLS)
-		result.CurveName = CurveIDName(result.CurveID)
-		result.PQCKeyExchange = IsPQCCurve(result.CurveID)
-		if algo, ok := CurveIDToPQCAlgorithm(result.CurveID); ok {
-			result.PQCAlgorithm = algo
-		}
-	}
-
+	result.CurveID = resp.TLS.CurveID
+	result.CurveName = CurveIDName(result.CurveID)
+	result.PQCAlgorithm, result.PQCKeyExchange = CurveIDToPQCAlgorithm(result.CurveID)
 	return result
-}
-
-// getCurveID extracts the curve ID from the TLS connection state.
-// This is a helper to handle the field which was added in Go 1.21.
-func getCurveID(state *tls.ConnectionState) tls.CurveID {
-	// The CurveID field was added in Go 1.21 for TLS 1.3 connections.
-	// We access it directly since we require Go 1.21+.
-	return state.CurveID //nolint:govet // CurveID field exists since Go 1.21
 }
 
 // CheckPQCURLs checks multiple URLs for PQC support.
