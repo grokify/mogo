@@ -57,7 +57,7 @@ func EncryptAES(plaintext []byte, key []byte) ([]byte, error) {
 	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
 		return nil, err
 	}
-	cfb := cipher.NewCFBEncrypter(block, iv)
+	cfb := cipher.NewCFBEncrypter(block, iv) //nolint:gosec // G407: iv is filled from crypto/rand above, not hardcoded
 	cfb.XORKeyStream(ciphertext[aes.BlockSize:], []byte(plaintextBase64))
 	return ciphertext, nil
 }
