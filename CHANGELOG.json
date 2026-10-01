@@ -106,6 +106,10 @@
         {
           "description": "`encoding/jsonutil`: add file marshal and unmarshal tests",
           "commit": "4b727ca"
+        },
+        {
+          "description": "`net/http/retryhttp`: make the concurrent `IntervalLimiter` test robust to goroutine wake-up latency",
+          "commit": "255ea19"
         }
       ],
       "internal": [
