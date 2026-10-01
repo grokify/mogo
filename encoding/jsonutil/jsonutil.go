@@ -197,14 +197,19 @@ func UnmarshalStrict(b []byte, v any) error {
 	return dec.Decode(v)
 }
 
-func UnmarshalFile(filename string, v any) error {
-	if f, err := os.Open(filename); err != nil {
+// UnmarshalFile decodes the JSON value in filename into v. A close error is
+// returned if decoding succeeded.
+func UnmarshalFile(filename string, v any) (err error) {
+	f, err := os.Open(filename)
+	if err != nil {
 		return err
-	} else {
-		defer f.Close()
-		decr := json.NewDecoder(f)
-		return decr.Decode(v)
 	}
+	defer func() {
+		if cerr := f.Close(); cerr != nil && err == nil {
+			err = cerr
+		}
+	}()
+	return json.NewDecoder(f).Decode(v)
 }
 
 func UnmarshalFileWithBytes(filename string, v any) ([]byte, error) {
@@ -215,17 +220,22 @@ func UnmarshalFileWithBytes(filename string, v any) ([]byte, error) {
 	}
 }
 
+// MarshalFile writes v to filename as JSON with the given prefix and indent,
+// creating or truncating the file with perm. A close error is returned if
+// encoding succeeded, since a failed write may first surface on close.
 func MarshalFile(filename string, v any, prefix, indent string, perm fs.FileMode) (err error) {
-	if f, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, perm); err != nil {
+	// Assign the named return rather than declaring a new err with := in an
+	// if statement, which would shadow it and drop the close error below.
+	f, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, perm)
+	if err != nil {
 		return err
-	} else {
-		defer func() {
-			if cerr := f.Close(); cerr != nil && err == nil {
-				err = cerr
-			}
-		}()
-		encr := json.NewEncoder(f)
-		encr.SetIndent(prefix, indent)
-		return encr.Encode(v)
 	}
+	defer func() {
+		if cerr := f.Close(); cerr != nil && err == nil {
+			err = cerr
+		}
+	}()
+	enc := json.NewEncoder(f)
+	enc.SetIndent(prefix, indent)
+	return enc.Encode(v)
 }
