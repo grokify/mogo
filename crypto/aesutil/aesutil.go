@@ -1,15 +1,22 @@
-// aesutil provides AES crypto utilities including writing and reading
-// AES encrypted files
+// Package aesutil provides authenticated AES-GCM encryption utilities,
+// including writing and reading encrypted files.
+//
+// Ciphertext is a random 96-bit nonce followed by the GCM-sealed data and its
+// 16-byte authentication tag, so decryption detects tampering and wrong keys.
+// Keys must be 16, 24, or 32 bytes (AES-128, AES-192, or AES-256), and a key
+// must not encrypt more than 2^32 messages, to keep random nonce collisions
+// negligible.
+//
+// Before v0.75.0 this package used unauthenticated AES-CFB over a base64
+// encoding of the plaintext. Ciphertext produced by those versions cannot be
+// decrypted by this version.
 package aesutil
 
 import (
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
-	"errors"
-	"io"
 	"os"
 	"path"
 
@@ -45,21 +52,14 @@ func DecryptAESBase58(ciphertext []byte, key []byte) ([]byte, error) {
 	return DecryptAES(bytes, key)
 }
 
-// EncryptAes provides a ciphertext byte array given a plaintext bytearray and key.
+// EncryptAES encrypts plaintext with AES-GCM under key, returning the nonce
+// followed by the sealed ciphertext and authentication tag.
 func EncryptAES(plaintext []byte, key []byte) ([]byte, error) {
-	block, err := aes.NewCipher(key)
+	aead, err := newAEAD(key)
 	if err != nil {
 		return nil, err
 	}
-	plaintextBase64 := base64.StdEncoding.EncodeToString(plaintext)
-	ciphertext := make([]byte, aes.BlockSize+len(plaintextBase64))
-	iv := ciphertext[:aes.BlockSize]
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		return nil, err
-	}
-	cfb := cipher.NewCFBEncrypter(block, iv) //nolint:gosec // G407: iv is filled from crypto/rand above, not hardcoded
-	cfb.XORKeyStream(ciphertext[aes.BlockSize:], []byte(plaintextBase64))
-	return ciphertext, nil
+	return aead.Seal(nil, nil, plaintext, nil), nil //nolint:gosec // G407: NewGCMWithRandomNonce requires a nil nonce and generates a random one
 }
 
 func DecryptAESBase64String(ciphertextBase64 string, key []byte) ([]byte, error) {
@@ -70,23 +70,25 @@ func DecryptAESBase64String(ciphertextBase64 string, key []byte) ([]byte, error)
 	return DecryptAES(ciphertext, key)
 }
 
-func DecryptAES(text []byte, key []byte) ([]byte, error) {
+// DecryptAES decrypts ciphertext produced by EncryptAES. It returns an error
+// if the ciphertext is truncated, was modified, or was encrypted under a
+// different key. The ciphertext slice is not modified.
+func DecryptAES(ciphertext []byte, key []byte) ([]byte, error) {
+	aead, err := newAEAD(key)
+	if err != nil {
+		return nil, err
+	}
+	return aead.Open(nil, nil, ciphertext, nil)
+}
+
+// newAEAD returns AES-GCM for key with random nonces that Seal prepends to
+// the ciphertext and Open reads back.
+func newAEAD(key []byte) (cipher.AEAD, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
 	}
-	if len(text) < aes.BlockSize {
-		return nil, errors.New("400: ciphertext is too short")
-	}
-	iv := text[:aes.BlockSize]
-	text = text[aes.BlockSize:]
-	cfb := cipher.NewCFBDecrypter(block, iv)
-	cfb.XORKeyStream(text, text)
-	plaintext, err := base64.StdEncoding.DecodeString(string(text))
-	if err != nil {
-		return nil, err
-	}
-	return plaintext, nil
+	return cipher.NewGCMWithRandomNonce(block)
 }
 
 func ReadFileAES(filename string, key []byte) ([]byte, error) {
@@ -102,7 +104,7 @@ func WriteFileAES(filename string, baFileUnc []byte, perm os.FileMode, key []byt
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(filename, baFileEnc, perm)
+	return os.WriteFile(filename, baFileEnc, perm) //nolint:gosec // G703: caller-supplied output path, as with os.WriteFile
 }
 
 func EncryptFileAES(filenameUnc string, filenameEnc string, perm os.FileMode, key []byte) error {
