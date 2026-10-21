@@ -205,7 +205,7 @@ func WriteGIFFile(filename string, img *gif.GIF, perm os.FileMode) (err error) {
 	if img == nil {
 		return errors.New("param `img` cannot be nil pointer")
 	}
-	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, perm)
+	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, perm)
 	if err != nil {
 		return err
 	}

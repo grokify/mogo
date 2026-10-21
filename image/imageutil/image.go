@@ -113,7 +113,7 @@ func (im Image) WriteGIFFile(filename string) (err error) {
 	if err != nil {
 		return err
 	}
-	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
+	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 	if err != nil {
 		return err
 	}
@@ -164,7 +164,7 @@ func (im Image) WriteJPEGFileSimple(filename string, quality int) error {
 func writeJPEGFile(filename string, img image.Image, opt *JPEGEncodeOptions) (err error) {
 	if img == nil {
 		return ErrImageNotSet
-	} else if w, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600); err != nil {
+	} else if w, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600); err != nil {
 		return err
 	} else {
 		defer func() {
@@ -209,16 +209,20 @@ func (im Image) WritePNGFile(filename string) error {
 	return writePNGFile(filename, im.Image)
 }
 
-func writePNGFile(filename string, img image.Image) error {
+func writePNGFile(filename string, img image.Image) (err error) {
 	if img == nil {
 		return ErrImageNotSet
-	} else if w, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600); err != nil {
-		return err
-	} else if err = png.Encode(w, img); err != nil {
-		return err
-	} else {
-		return w.Close()
 	}
+	w, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if cerr := w.Close(); cerr != nil && err == nil {
+			err = cerr
+		}
+	}()
+	return png.Encode(w, img)
 }
 
 func (im Image) WritePNGResponseWriter(w http.ResponseWriter, addContentTypeHeader bool) error {
