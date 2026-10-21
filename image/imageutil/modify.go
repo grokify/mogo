@@ -289,10 +289,3 @@ func AddBorderAverageColor(img image.Image, width int) image.Image {
 	imgRGBA := ImageToRGBA(img)
 	return AddBorder(imgRGBA, colors.ColorAverageImage(imgRGBA), width)
 }
-
-// Information on rotation:
-//
-// https://www.golangprograms.com/how-to-rotate-an-image-in-golang.html
-// https://code.google.com/archive/p/graphics-go/
-// https://github.com/BurntSushi/graphics-go
-// graphics.Rotate(dstImage, srcImage, &graphics.RotateOptions{math.Pi / 2.0}
