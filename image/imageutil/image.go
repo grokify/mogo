@@ -142,7 +142,8 @@ func writeJPEG(w io.Writer, img image.Image, opt *JPEGEncodeOptions) error {
 			return jpeg.Encode(wexif, img, opt.Options)
 		}
 	}
-	jopt := &jpeg.Options{}
+	// A nil *jpeg.Options makes jpeg.Encode use jpeg.DefaultQuality.
+	var jopt *jpeg.Options
 	if opt != nil {
 		jopt = opt.Options
 	}
