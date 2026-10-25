@@ -132,6 +132,30 @@
           ]
         }
       },
+      "G407": {
+        "name": "Hardcoded IV/nonce",
+        "description": "Use of hardcoded IV/nonce for encryption",
+        "severity": "high",
+        "category": "security",
+        "remediation": {
+          "type": "code",
+          "summary": "Fill the nonce in its own buffer from crypto/rand, then append it to the output prefix",
+          "explanation": "gosec tracks the buffer a nonce is sliced from. A common AEAD wire format puts a version byte before the nonce in one buffer (out[0] = version; rand.Read(out[1:]); nonce := out[1:]), so the hardcoded version byte write taints the nonce and G407 fires even though the nonce is random. Generate the nonce in a dedicated slice filled only by crypto/rand and build the output by appending to it. The wire format and allocation count are unchanged.",
+          "example": "nonce := make([]byte, aead.NonceSize())\nif _, err := rand.Read(nonce); err != nil {\n    return nil, err\n}\nout := make([]byte, 0, 1+len(nonce)+len(plaintext)+aead.Overhead())\nout = append(out, version)\nout = append(out, nonce...)\nreturn aead.Seal(out, nonce, plaintext, aad), nil",
+          "when": "The nonce is random but shares a buffer with hardcoded bytes (version or header prefix), or is sliced from a make()'d buffer written with constants",
+          "avoid": [
+            "out[0] = version; rand.Read(out[1:]); aead.Seal(out, out[1:], plaintext, aad)",
+            "//nolint:gosec on a nonce that is actually random but can be restructured"
+          ],
+          "caveats": [
+            "Reported by the gosec bundled in golangci-lint v2.14.0 but not v2.13.2, so a local lint on an older version can pass while CI pinned to latest fails; match the CI version locally to reproduce",
+            "A genuinely constant or reused nonce is a real vulnerability (AES-GCM loses confidentiality and authenticity on nonce reuse); fix the nonce source, never suppress"
+          ]
+        },
+        "references": [
+          "https://github.com/securego/gosec#available-rules"
+        ]
+      },
       "G501": {
         "name": "Blocklisted import crypto/md5",
         "description": "Import of weak cryptographic package",
