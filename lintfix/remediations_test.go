@@ -63,6 +63,12 @@ func TestRemediationDB_Get(t *testing.T) {
 			wantName: "context.Background in goroutine",
 		},
 		{
+			name:     "gosec G407",
+			linter:   "gosec",
+			code:     "G407",
+			wantName: "Hardcoded IV/nonce",
+		},
+		{
 			name:     "gosec G704",
 			linter:   "gosec",
 			code:     "G704",
