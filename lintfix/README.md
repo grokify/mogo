@@ -56,7 +56,7 @@ comment := unparam.Nolint(unparam.CommonReasons.InterfaceSignature)
 
 ## Supported Linters
 
-- **gosec** - Security-focused rules (G101, G112, G115, G117, G118, G120, G122, G124, G401, G404, G501, G601, G703, G704, G705, G706, G710)
+- **gosec** - Security-focused rules (G101, G112, G115, G117, G118, G120, G122, G124, G401, G404, G407, G501, G601, G703, G704, G705, G706, G710)
 - **staticcheck** - Static analysis (SA1019, SA4006, QF1003, QF1012)
 - **errcheck** - Error handling
 - **govet** - Inline remediation notes
@@ -93,6 +93,42 @@ import "math/rand"
 //nolint:gosec // G404: Shuffling display data, not security-sensitive
 rand.Shuffle(len(items), func(i, j int) { items[i], items[j] = items[j], items[i] })
 ```
+
+## G407: Hardcoded IV/Nonce — Random Nonce Sharing a Prefixed Buffer
+
+G407 tracks the buffer a nonce is sliced from, not just where its bytes come
+from. A common AEAD wire format (`version || nonce || ciphertext`) builds the
+nonce inside the output buffer, and the hardcoded version-byte write taints it:
+
+```go
+out := make([]byte, 1+aead.NonceSize(), 1+aead.NonceSize()+len(plaintext)+aead.Overhead())
+out[0] = sealVersion          // hardcoded write to the same buffer...
+if _, err := rand.Read(out[1:]); err != nil {
+    return nil, err
+}
+nonce := out[1:]              // ...so this random nonce is reported as hardcoded
+return aead.Seal(out, nonce, plaintext, aad), nil
+```
+
+**Fix** - give the nonce its own buffer filled only by `crypto/rand`, then append
+it to the prefix. Same wire format, same allocations, no nolint needed:
+
+```go
+nonce := make([]byte, aead.NonceSize())
+if _, err := rand.Read(nonce); err != nil {
+    return nil, err
+}
+out := make([]byte, 0, 1+len(nonce)+len(plaintext)+aead.Overhead())
+out = append(out, sealVersion)
+out = append(out, nonce...)
+return aead.Seal(out, nonce, plaintext, aad), nil
+```
+
+Version skew surfaces this the same way as G404: golangci-lint v2.14.0 reports
+the pattern above and v2.13.2 does not, so a local run can pass while CI
+(`version: latest`) fails. A nonce that is actually constant or reused is a real
+vulnerability (AES-GCM loses confidentiality and authenticity on reuse), so fix
+the source rather than suppressing it.
 
 ## G703: Path Traversal
 
