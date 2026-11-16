@@ -6,10 +6,10 @@ require (
 	github.com/ProtonMail/go-crypto v1.5.2
 	github.com/btcsuite/btcd/btcutil v1.2.0
 	github.com/btcsuite/btcutil v1.0.2
-	github.com/caarlos0/env/v11 v11.4.1
+	github.com/caarlos0/env/v11 v11.4.2
 	github.com/grokify/base36 v1.0.5
 	github.com/grokify/bitcoinmath v0.1.0
-	github.com/huandu/xstrings v1.6.2
+	github.com/huandu/xstrings v1.6.3
 	github.com/iancoleman/strcase v0.3.0
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/joho/godotenv v1.5.1
