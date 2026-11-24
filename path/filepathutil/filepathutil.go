@@ -103,7 +103,7 @@ func ChangeStripExtension(fp, newext string) string {
 			newext = "." + newext
 		}
 	}
-	if strings.Contains(fp, ".") {
+	if rxExt.MatchString(fp) {
 		fp = rxExt.ReplaceAllString(fp, newext)
 	} else {
 		fp += newext

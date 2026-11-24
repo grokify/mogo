@@ -4,6 +4,33 @@ import (
 	"testing"
 )
 
+func TestChangeStripExtension(t *testing.T) {
+	tests := []struct {
+		name     string
+		path     string
+		ext      string
+		expected string
+	}{
+		{"plain filename", "report", "txt", "report.txt"},
+		{"current directory", "./report", "txt", "./report.txt"},
+		{"parent directory", "../report", ".txt", "../report.txt"},
+		{"dotted directory", "data.v1/report", "txt", "data.v1/report.txt"},
+		{"hidden directory", ".config/report", ".txt", ".config/report.txt"},
+		{"replace extension", "data.v1/report.csv", "txt", "data.v1/report.txt"},
+		{"remove extension", "data.v1/report.csv", "", "data.v1/report"},
+		{"remove missing extension", "data.v1/report", "", "data.v1/report"},
+		{"multiple extensions", "data.v1/archive.tar.gz", ".zip", "data.v1/archive.tar.zip"},
+		{"trailing period", "data.v1/report.", "txt", "data.v1/report.txt"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ChangeStripExtension(tt.path, tt.ext); got != tt.expected {
+				t.Errorf("ChangeStripExtension(%q, %q) = %q, expected %q", tt.path, tt.ext, got, tt.expected)
+			}
+		})
+	}
+}
+
 func TestNormalizePath(t *testing.T) {
 	tests := []struct {
 		name     string

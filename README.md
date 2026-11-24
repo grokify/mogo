@@ -45,6 +45,17 @@ See the following modules for extended functionality (with more dependencies):
 
 Documentation is provided using godoc and available on [GoDoc.org](https://godoc.org/github.com/grokify/mogo).
 
+### File extensions
+
+`path/filepathutil.ChangeStripExtension` accepts an extension with or without a
+leading period, or an empty string to remove the extension:
+
+```go
+filepathutil.ChangeStripExtension("./report", "txt")           // "./report.txt"
+filepathutil.ChangeStripExtension("data.v1/report.csv", ".txt") // "data.v1/report.txt"
+filepathutil.ChangeStripExtension("data.v1/report.csv", "")     // "data.v1/report"
+```
+
 ## Installation
 
 ```bash
